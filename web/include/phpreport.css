@@ -1,0 +1,19 @@
+#sidebar {
+    float: left;
+    padding: 10px 30px;
+}
+
+#auxiliarpanel {
+    float: left;
+    clear: left;
+    padding: 5px;
+}
+
+#content {
+    float: both;
+    margin-left: 200px;
+}
+
+#footer {
+    clear: both;
+}

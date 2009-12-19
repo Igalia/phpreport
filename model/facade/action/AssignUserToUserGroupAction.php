@@ -1,0 +1,81 @@
+<?php
+
+/** File for AssignUserToUserGroupAction
+ *
+ *  This file just contains {@link AssignUserToUserGroupAction}.
+ *
+ * @filesource
+ * @package PhpReport
+ * @subpackage facade
+ * @author Jorge López Fernández <jlopez@igalia.com>
+ */
+
+include_once('phpreport/model/facade/action/Action.php');
+include_once('phpreport/model/dao/DAOFactory.php');
+
+
+/** UserGroup assigning Action
+ *
+ *  This action is used for assigning a User to a User Group by their ids.
+ *
+ * @package PhpReport
+ * @subpackage facade
+ * @author Jorge López Fernández <jlopez@igalia.com>
+ */
+class AssignUserToUserGroupAction extends Action{
+
+    /** The UserGroup id
+     *
+     * This variable contains the id of the UserGroup which we want to assign the User to.
+     *
+     * @var int
+     */
+    private $userGroupId;
+
+    /** The User id
+     *
+     * This variable contains the id of the User we want to assign.
+     *
+     * @var int
+     */
+    private $userId;
+
+    /** AssignUserToUserGroupAction constructor.
+     *
+     * This is just the constructor of this action.
+     *
+     * @param int $userId the id of the User we want to assign.
+     * @param int $userGroupId the UserGroup which we want to assign the User to.
+     */
+    public function __construct($userId, $userGroupId) {
+        $this->userId = $userId;
+        $this->userGroupId = $userGroupId;
+        $this->preActionParameter="ASSIGN_USER_TO_USER_GROUP_PREACTION";
+        $this->postActionParameter="ASSIGN_USER_TO_USER_GROUP_POSTACTION";
+
+    }
+
+    /** Specific code execute.
+     *
+     * This is the function that contains the code that assigns the User to the User Group.
+     *
+     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
+     */
+    protected function doExecute() {
+
+        $dao = DAOFactory::getBelongsDAO();
+
+        return $dao->create($this->userId, $this->userGroupId);
+
+    }
+
+}
+
+
+/*//Test code;
+
+$action= new AssignUserToUserGroupAction(64, 1);
+var_dump($action);
+$result = $action->execute();
+var_dump($result);
+*/

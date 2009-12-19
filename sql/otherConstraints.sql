@@ -1,0 +1,14 @@
+ALTER TABLE project_schedule ADD CONSTRAINT end_after_init_project_schedule CHECK ((init_year < end_year) OR ((init_year = end_year) AND (init_week <= end_week) ));
+ALTER TABLE journey_history ADD CONSTRAINT end_after_init_journey_history CHECK ( (end_date IS NULL) OR (end_date >= init_date));
+ALTER TABLE hour_cost_history ADD CONSTRAINT end_after_init_hour_cost_history CHECK ( (end_date IS NULL) OR (end_date >= init_date));
+ALTER TABLE area_history ADD CONSTRAINT end_after_init_area_history CHECK ( (end_date IS NULL) OR (end_date >= init_date));
+ALTER TABLE city_history ADD CONSTRAINT end_after_init_city_history CHECK ( (end_date IS NULL) OR (end_date >= init_date));
+ALTER TABLE task ADD CONSTRAINT end_after_init_task CHECK ((_end >= init) AND (init >= 0));
+ALTER TABLE project ADD CONSTRAINT positive_est_hours_project CHECK (est_hours >= 0);
+ALTER TABLE custom_event ADD CONSTRAINT positive_hours_custom CHECK (hours >= 0);
+ALTER TABLE iteration ADD CONSTRAINT end_after_init_iteration CHECK (_end >= init);
+ALTER TABLE task_story ADD CONSTRAINT end_after_init_task_story CHECK ((_end IS NULL) OR (_end >= init));
+ALTER TABLE task_story ADD CONSTRAINT est_end_after_init_task_story CHECK ((est_end IS NULL) OR (est_end >= init));
+ALTER TABLE task_story ADD CONSTRAINT positive_est_hours_task_story CHECK (est_hours >= 0);
+ALTER TABLE module ADD CONSTRAINT end_after_init_iteration CHECK (_end >= init);
+ALTER TABLE task_section ADD CONSTRAINT positive_est_hours_task_story CHECK (est_hours >= 0);

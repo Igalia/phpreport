@@ -1,0 +1,192 @@
+<?php
+
+   include_once('phpreport/web/services/WebServicesFunctions.php');
+   include_once('phpreport/model/facade/TasksFacade.php');
+   include_once('phpreport/model/facade/CustomersFacade.php');
+   include_once('phpreport/model/vo/ProjectVO.php');
+
+    $projectId = $_GET['pid'];
+
+    $init = $_GET['init'];
+
+    $end = $_GET['end'];
+
+    $dateFormat = $_GET['dateFormat'];
+
+    $login = $_GET['login'];
+
+    $sid = $_GET['sid'];
+
+    do {
+
+        $response[pid] = $projectId;
+
+
+        /* We check authentication and authorization */
+        require_once('phpreport/util/LoginManager.php');
+
+        if (!LoginManager::isLogged($sid))
+        {
+            if ($init!="")
+                $response[init] = $init;
+            if ($end!="")
+                $response[end] = $end;
+            $response[success] = false;
+            $error[id] = 2;
+            $error[message] = "You must be logged in";
+            $json[error] = $error;
+            break;
+        }
+
+        if (!LoginManager::isAllowed($sid))
+        {
+            if ($init!="")
+                $response[init] = $init;
+            if ($end!="")
+                $response[end] = $end;
+            $response[success] = false;
+            $error[id] = 3;
+            $error[message] = "Forbidden service for this User";
+            $json[error] = $error;
+            break;
+        }
+
+        if ($dateFormat=="")
+            $dateFormat = "Y-m-d";
+
+        if ($init!="")
+        {
+            $response[init] = $init;
+
+            $initParse = date_parse_from_format($dateFormat, $init);
+
+            $init = "{$initParse['year']}-{$initParse['month']}-{$initParse['day']}";
+
+            $init = date_create($init);
+
+        } else $init = NULL;
+
+
+        if ($end!="")
+        {
+            $response[end] = $end;
+
+            $endParse = date_parse_from_format($dateFormat, $end);
+
+            $end = "{$endParse['year']}-{$endParse['month']}-{$endParse['day']}";
+
+            $end = date_create($end);
+
+        } else $end = NULL;
+
+        $projectVO = new ProjectVO();
+
+        $projectVO->setId($projectId);
+
+        $report = TasksFacade::GetProjectUserCustomerReport($projectVO, $init, $end);
+
+            $count = 0;
+
+            $totalHours[total] = 0;
+
+        foreach((array) $report as $login => $report2)
+        {
+            $count += count($report2);
+
+            $record = array();
+
+            $totalHours[$login] = 0;
+            $record[login] = $login;
+
+            foreach((array) $report2 as $customer => $hours)
+            {
+                if ($customerId != "")
+                {
+                    $customerVO = CustomersFacade::GetCustomer($customerId);
+                    $customerName = $customerVO->getName();
+                } else $customerName = "-- Unknown --";
+
+                $customers[$customerName] = true;
+                $record[$customerName] = round($hours, 2, PHP_ROUND_HALF_DOWN);
+                $totalHours[$login] += round($hours, 2, PHP_ROUND_HALF_DOWN);
+                $totalHours[total] += round($hours, 2, PHP_ROUND_HALF_DOWN);
+
+            }
+
+            $record[total] = $totalHours[$login];
+
+            $records[] = $record;
+                }
+
+              foreach($records as $record)
+                {
+                    $record[percentage] = round(100 * $totalHours[$record[login]]/$totalHours[total], 2, PHP_ROUND_HALF_DOWN);
+          $response[records][] = $record;
+                }
+
+        $response[total] = $count;
+
+        $metaData[totalProperty] = "total";
+        $metaData[root] = "records";
+        $metaData[id] = "login";
+
+                $metaData[sortInfo][field] = 'login';
+                $metaData[sortInfo][direction] = 'ASC';
+
+        $field[name] = "login";
+                $field[type] = "string";
+
+        $metaData[fields][] = $field;
+
+        $field[name] = "total";
+                $field[type] = "float";
+
+        $metaData[fields][] = $field;
+
+        $field[name] = "percentage";
+                $field[type] = "float";
+
+        $metaData[fields][] = $field;
+
+        $column[header] = "Login";
+        $column[dataIndex] = "login";
+        $column[sortable] = true;
+
+                $response[columns][] = $column;
+
+        $field[type] = "float";
+
+        foreach((array)$customers as $name => $dumber)
+        {
+            $field[name] = $name;
+            $metaData[fields][] = $field;
+
+            $column[header] = $name;
+            $column[dataIndex] = $name;
+            $response[columns][] = $column;
+        }
+
+
+        $column[header] = "Total";
+        $column[dataIndex] = "total";
+        $column[sortable] = true;
+
+                $response[columns][] = $column;
+
+        $column[header] = "Percentage";
+        $column[dataIndex] = "percentage";
+        $column[sortable] = true;
+
+                $response[columns][] = $column;
+
+                $response[metaData] = $metaData;
+
+        $response[success] = true;
+
+    } while (False);
+
+   // make it into a proper Json document with header etc
+    $json = json_encode($response);
+
+   // output correctly formatted Json
+    echo $json;

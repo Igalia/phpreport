@@ -1,0 +1,115 @@
+<?php
+
+    include_once('phpreport/web/services/WebServicesFunctions.php');
+    include_once('phpreport/model/facade/ProjectsFacade.php');
+
+    $customerId = $_GET['cid'];
+
+    $active = $_GET['active'];
+
+    if (strtolower($active) == "true")
+        $active = True;
+    else
+        $active = False;
+
+    $login = $_GET['login'];
+
+    $sid = $_GET['sid'];
+
+    $onlyUser = $_GET['onlyUser'];
+
+    if (strtolower($onlyUser) == "true")
+        $onlyUser = True;
+    else
+        $onlyUser = False;
+
+
+    do {
+        /* We check authentication and authorization */
+        require_once('phpreport/util/LoginManager.php');
+
+        if (!LoginManager::isLogged($sid))
+        {
+            $string = "<projects";
+            if ($customerId!="")
+            $string = $string . " cid='" . $customerId . "'";
+            if ($active)
+            $string = $string . " active = 'True'";
+            if ($onlyUser)
+            $string = $string . " onlyUser = 'True'";
+            $string = $string . "><error id='2'>You must be logged in</error></projects>";
+            break;
+        }
+
+        if (!LoginManager::isAllowed($sid))
+        {
+            $string = "<projects";
+            if ($customerId!="")
+            $string = $string . " cid='" . $customerId . "'";
+            if ($active)
+            $string = $string . " active = 'True'";
+            if ($onlyUser)
+            $string = $string . " onlyUser = 'True'";
+            $string = $string . "><error id='3'>Forbidden service for this User</error></projects>";
+            break;
+        }
+
+        if ($customerId == "")
+        {
+        $projects = ProjectsFacade::GetProjectsByCustomerUserLogin(NULL, NULL, $active);
+            $string = "<projects";
+        if ($active)
+            $string = $string . " active = 'True'>";
+        else
+            $string = $string . ">";
+        }
+        else
+        {
+            if ($onlyUser)
+            {
+                $projects = ProjectsFacade::GetProjectsByCustomerUserLogin($customerId, $login, $active);
+                $string = "<projects cid='" . $customerId . "' login='" . $login . "'";
+
+            } else
+            {
+            $projects = ProjectsFacade::GetProjectsByCustomerUserLogin($customerId, NULL, $active);
+                $string = "<projects cid='" . $customerId . "'";
+            }
+
+            if ($active)
+            $string = $string . " active = 'True'>";
+            else
+            $string = $string . ">";
+
+
+        }
+
+        foreach((array) $projects as $project)
+        {
+
+        $string = $string . "<project><id>{$project->getId()}</id><areaId>{$project->getAreaId()}</areaId><activation>{$project->getActivation()}</activation><description>" . escape_string($project->getDescription()) . "</description><invoice>{$project->getInvoice()}</invoice>";
+
+        if (!is_null($project->getInit()))
+            $string = $string . "<initDate format='Y-m-d'>{$project->getInit()->format("Y-m-d")}</initDate>";
+        else    $string = $string . "<initDate/>";
+
+        if (!is_null($project->getEnd()))
+            $string = $string . "<endDate format='Y-m-d'>{$project->getEnd()->format("Y-m-d")}</endDate>";
+        else    $string = $string . "<endDate/>";
+
+        $string = $string . "<estHours>{$project->getEstHours()}</estHours><type>" . escape_string($project->getType()) . "</type><movedHours>{$project->getMovedHours()}</movedHours><schedType>" . escape_string($project->getSchedType()) . "</schedType></project>";
+
+        }
+
+        $string = $string . "</projects>";
+
+    } while (False);
+
+    // make it into a proper XML document with header etc
+    $xml = simplexml_load_string($string);
+
+   // send an XML mime header
+    header("Content-type: text/xml");
+
+   // output correctly formatted XML
+    echo $xml->asXML();
