@@ -60,7 +60,7 @@
  * @name DB_NAME
  * @global string DB name
  */
-define('DB_NAME', 'phpreportproduccion');
+define('DB_NAME', 'phpreport');
 
 /**
  * @name DB_USER
@@ -121,22 +121,25 @@ define('DAO_BACKEND', 'PostgreSQL');
    functionality to PhpReport
 */
 
-// uncomment the next line to enable LDAP user authentication
+// uncomment the next lines to enable LDAP user authentication
+
 /**
  * @name USER_DAO
  * @global string User DAO implementation used
  */
-define('USER_DAO', 'HybridUserDAO');
+//define('USER_DAO', 'HybridUserDAO');
 /**
  * @name USER_GROUP_DAO
  * @global string User Group DAO implementation used
  */
-define('USER_GROUP_DAO', 'LDAPUserGroupDAO');
+//define('USER_GROUP_DAO', 'LDAPUserGroupDAO');
 /**
  * @name BELONGS_DAO
  * @global string Belongs DAO implementation used
  */
-define('BELONGS_DAO', 'LDAPBelongsDAO');
+//define('BELONGS_DAO', 'LDAPBelongsDAO');
+
+// end lines for LDAP user authentication
 
 /*
     Plugin definitions
@@ -161,7 +164,7 @@ define ('YEARLY_HOLIDAY_HOURS', 184);
  * @name ALL_USERS_GROUP
  * @global string users group used for retrieving all users
  */
-define('ALL_USERS_GROUP', 'informesdedic');
+define('ALL_USERS_GROUP', 'staff');
 
 /**
  * @name VACATIONS_PROJECT
