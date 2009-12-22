@@ -27,6 +27,15 @@ include_once('phpreport/model/facade/UsersFacade.php');
 include_once('phpreport/model/vo/UserVO.php');
 require_once('phpreport/util/LoginManager.php');
 
+/* There are Http authentication data: we try to log in*/
+if (isset($_SERVER['PHP_AUTH_USER']))
+    if(LoginManager::login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']))
+        header("Location: tasks.php");
+    else
+        echo _("Incorrect login information");
+
+
+
 /* There are POST data: we try to log in */
 if(isset($_POST["enter"])) {
     if(LoginManager::login($_POST["login"], $_POST["password"]))
