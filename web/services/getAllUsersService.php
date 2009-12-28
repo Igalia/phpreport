@@ -31,23 +31,13 @@
 
         if (!LoginManager::isLogged($sid))
         {
-            $string = "<report";
-            if ($init!="")
-                $string = $string . " init='" . $init . "'";
-            if ($end!="")
-                $string = $string . " end='" . $end . "'";
-            $string = $string . "><error id='2'>You must be logged in</error></report>";
+            $string = "<users><error id='2'>You must be logged in</error></users>";
             break;
         }
 
         if (!LoginManager::isAllowed($sid))
         {
-            $string = "<report";
-            if ($init!="")
-                $string = $string . " init='" . $init . "'";
-            if ($end!="")
-                $string = $string . " end='" . $end . "'";
-            $string = $string . "><error id='3'>Forbidden service for this User</error></report>";
+            $string = "<users><error id='3'>Forbidden service for this User</error></users>";
             break;
         }
 
