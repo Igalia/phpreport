@@ -478,8 +478,10 @@ Ext.onReady(function(){
     var hourCostEditor = new editor();
 
     var hourCostGrid = new inlineEditionPanel({
-        inlineEditor: hourCostEditor,
-        plugins: [hourCostEditor],
+        <?php
+              if ($admin)  echo "inlineEditor: hourCostEditor,
+                    plugins: [hourCostEditor],";
+        ?>
         id: 'hourCostGrid',
         iconCls: 'silk-money',
         width: 300,
@@ -517,9 +519,12 @@ Ext.onReady(function(){
         },
     });
 
+    <?php if ($admin) { ?>
+
     hourCostGrid.getSelectionModel().on('selectionchange', function(sm){
         hourCostGrid.deleteBtn.setDisabled(sm.getCount() < 1);
     });
+    <?php } ?>
 
 
     /* Schema of the information about Journey History */
@@ -622,8 +627,9 @@ Ext.onReady(function(){
     var journeyEditor = new editor();
 
     var journeyGrid = new inlineEditionPanel({
-        inlineEditor: journeyEditor,
-        plugins: [journeyEditor],
+        <?php if ($admin) echo "inlineEditor: journeyEditor,
+            plugins: [journeyEditor],";
+        ?>
         id: 'journeyGrid',
         iconCls: 'silk-time',
         width: 300,
@@ -660,9 +666,11 @@ Ext.onReady(function(){
         },
     });
 
+    <?php if ($admin) { ?>
     journeyGrid.getSelectionModel().on('selectionchange', function(sm){
         journeyGrid.deleteBtn.setDisabled(sm.getCount() < 1);
     });
+    <?php } ?>
 
 
     /* Schema of the information about Area History */
@@ -772,8 +780,9 @@ Ext.onReady(function(){
     var areaEditor = new editor();
 
     var areaGrid = new inlineEditionPanel({
-        inlineEditor: areaEditor,
-        plugins: [areaEditor],
+        <?php if ($admin) echo "inlineEditor: areaEditor,
+            plugins: [areaEditor],";
+        ?>
         id: 'areaGrid',
         iconCls: 'silk-group',
         width: 300,
@@ -810,9 +819,11 @@ Ext.onReady(function(){
         },
     });
 
+    <?php if ($admin) { ?>
     areaGrid.getSelectionModel().on('selectionchange', function(sm){
         areaGrid.deleteBtn.setDisabled(sm.getCount() < 1);
     });
+    <?php } ?>
 
 
     /* Schema of the information about City History */
@@ -922,8 +933,10 @@ Ext.onReady(function(){
     var cityEditor = new editor();
 
     var cityGrid = new inlineEditionPanel({
-        inlineEditor: cityEditor,
-        plugins: [cityEditor],
+        <?php
+        if ($admin) echo "inlineEditor: cityEditor,
+            plugins: [cityEditor],";
+        ?>
         id: 'cityGrid',
         iconCls: 'silk-building',
         width: 300,
@@ -960,9 +973,11 @@ Ext.onReady(function(){
         },
     });
 
+    <?php if ($admin) { ?>
     cityGrid.getSelectionModel().on('selectionchange', function(sm){
         cityGrid.deleteBtn.setDisabled(sm.getCount() < 1);
     });
+    <?php } ?>
 
     var historyTabs = new Ext.TabPanel({
         autoWidth: true,
