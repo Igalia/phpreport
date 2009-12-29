@@ -45,11 +45,11 @@
 
         $string = "<users>";
 
-        foreach((array) $users as $user)
+        foreach((array) $users as $retrievedUser)
         {
-            $string = $string . "<user><id>{$user->getId()}</id><login>{$user->getLogin()}</login><userGroups>";
+            $string = $string . "<user><id>{$retrievedUser->getId()}</id><login>{$retrievedUser->getLogin()}</login><userGroups>";
 
-            foreach ((array) $user->getGroups() as $group)
+            foreach ((array) $retrievedUser->getGroups() as $group)
                 $string = $string . "<{$group->getName()}>true</{$group->getName()}>";
 
             $string = $string . "</userGroups></user>";
