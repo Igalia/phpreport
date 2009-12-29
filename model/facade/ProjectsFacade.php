@@ -81,6 +81,21 @@ abstract class ProjectsFacade {
 
     }
 
+     /** Get all Projects Function
+     *
+     *  This action is used for retrieving all Projects.
+     *
+     * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
+     * and ordered ascendantly by their database internal identifier.
+     */
+    static function GetAllProjects() {
+
+        $action = new GetAllProjectsAction();
+
+        return $action->execute();
+
+    }
+
     /** Create Project Function
      *
      *  This function is used for creating a new Project.
