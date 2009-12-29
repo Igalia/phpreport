@@ -75,7 +75,7 @@ var menuPanel = new Ext.Panel({
             },{
                 text: 'Management indexes', handler: onItemClick,
             },{
-                text: 'Projects management', handler: onItemClick,
+                text: 'Projects management', handler: onItemClick, destination: 'viewProjects.php', iconCls: 'silk-book',
             }],
         },{
             text: 'Clients',
