@@ -124,8 +124,6 @@ Ext.onReady(function(){
 
     };
 
-    var windowCreate;
-
     editor = Ext.extend(Ext.ux.grid.RowEditor, {
         saveText: 'Accept',
         listeners: {
@@ -244,7 +242,7 @@ Ext.onReady(function(){
     });
 
 
-    /* Schema of the information about task stories */
+    /* Schema of the information about users */
     var userRecord = new Ext.data.Record.create([
             {name: 'id', type: 'int'},
             {name: "login", type: 'string'}<?php

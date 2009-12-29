@@ -25,6 +25,9 @@
 .silk-asterisk-orange { background-image: url(icons/asterisk_orange.png) !important; background-repeat: no-repeat; }
 .silk-bell { background-image: url(icons/bell.png) !important; background-repeat: no-repeat; }
 .silk-book { background-image: url(icons/book.png) !important; background-repeat: no-repeat; }
+.silk-book-add { background-image: url(icons/book_add.png) !important; background-repeat: no-repeat; }
+.silk-book-delete { background-image: url(icons/book_delete.png) !important; background-repeat: no-repeat; }
+.silk-book-edit { background-image: url(icons/book_edit.png) !important; background-repeat: no-repeat; }
 .silk-book-open { background-image: url(icons/book_open.png) !important; background-repeat: no-repeat; }
 .silk-building-go { background-image: url(icons/building_go.png) !important; background-repeat: no-repeat; }
 .silk-building { background-image: url(icons/building.png) !important; background-repeat: no-repeat; }

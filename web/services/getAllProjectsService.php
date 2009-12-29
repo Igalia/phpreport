@@ -51,12 +51,12 @@
             $string = $string . "<project><id>{$project->getId()}</id><areaId>{$project->getAreaId()}</areaId><activation>{$project->getActivation()}</activation><description>" . escape_string($project->getDescription()) . "</description><invoice>{$project->getInvoice()}</invoice>";
 
             if (!is_null($project->getInit()))
-                $string = $string . "<initDate format='Y-m-d'>{$project->getInit()->format("Y-m-d")}</initDate>";
-            else $string = $string . "<initDate/>";
+                $string = $string . "<init format='Y-m-d'>{$project->getInit()->format("Y-m-d")}</init>";
+            else $string = $string . "<init/>";
 
             if (!is_null($project->getEnd()))
-                $string = $string . "<endDate format='Y-m-d'>{$project->getEnd()->format("Y-m-d")}</endDate>";
-            else $string = $string . "<endDate/>";
+                $string = $string . "<end format='Y-m-d'>{$project->getEnd()->format("Y-m-d")}</end>";
+            else $string = $string . "<end/>";
 
             $string = $string . "<estHours>{$project->getEstHours()}</estHours><type>" . escape_string($project->getType()) . "</type><movedHours>{$project->getMovedHours()}</movedHours><schedType>" . escape_string($project->getSchedType()) . "</schedType></project>";
 
