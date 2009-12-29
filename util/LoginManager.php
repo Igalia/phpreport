@@ -136,4 +136,41 @@ class LoginManager {
     return false;
 
   }
+
+
+  /** Admin authorization utility function
+   *
+   * It checks the logged user against the admin permissions array. It
+   * will retrieve the user groups and check the permissions of
+   * each one to access the current url. If the parameter $sid
+   * is passed, it will try to retrieve the data from the session
+   * with that identifier.
+   *
+   * @param string $sid Session identifier (optional).
+   * @return boolean true if the user belongs to a admin group for
+   * the current url, false otherwise.
+   */
+  public static function isAdmin($sid=NULL) {
+
+    /* We include the file with the array of permissions */
+    require('phpreport/config/permissions.php');
+
+    if ($sid!=NULL)
+      session_id($sid);
+
+    session_start();
+
+    if (isset($_SESSION['user'])) {
+      $user=$_SESSION['user'];
+
+      foreach ($user->getGroups() as $group) {
+        $url = explode($urlHeader, $_SERVER["SCRIPT_NAME"]);
+        if (in_array($url[1], $adminPermissions[$group->getName()]))
+          return true;
+      }
+    }
+    return false;
+
+  }
+
 }

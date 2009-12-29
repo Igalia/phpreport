@@ -30,11 +30,14 @@ include_once("include/header.php");
 include_once("include/sidebar.php");
 include_once('phpreport/util/ConfigurationParametersManager.php');
 include_once('phpreport/util/UnknownParameterException.php');
+include_once('phpreport/util/LoginManager.php');
 include_once('phpreport/model/vo/UserVO.php');
 include_once('phpreport/model/vo/UserGroupVO.php');
 include_once('phpreport/model/facade/UsersFacade.php');
 include_once('phpreport/model/facade/AdminFacade.php');
 include_once('phpreport/web/services/WebServicesFunctions.php');
+
+$admin = LoginManager::IsAdmin($sid);
 
 // We retrieve the User Groups, Areas and Cities
 $cities = AdminFacade::GetAllCities();
@@ -159,9 +162,13 @@ Ext.onReady(function(){
             this.relayEvents(this.store, ['destroy', 'save', 'update']);
 
             // build toolbars and buttons.
-            this.tbar = this.buildTopToolbar();
+            <?php
+                if ($admin)
+                    echo "this.tbar = this.buildTopToolbar();
 
-            this.bbar = this.buildBottomToolbar();
+            this.bbar = this.buildBottomToolbar();";
+
+            ?>
 
 
             // super
@@ -316,8 +323,11 @@ Ext.onReady(function(){
     var userGrid = new inlineEditionPanel({
         id: 'userGrid',
         height: 300,
-        inlineEditor: usersEditor,
-        plugins: [usersEditor],
+        <?php
+                if ($admin)
+                    echo "inlineEditor: usersEditor,
+                    plugins: [usersEditor],";
+        ?>
         iconCls: 'silk-user',
         width: userColModel.getTotalWidth(false),
         store: usersStore,
@@ -345,7 +355,10 @@ Ext.onReady(function(){
     });
 
     userGrid.getSelectionModel().on('selectionchange', function(sm){
-        userGrid.deleteBtn.setDisabled(sm.getCount() < 1);
+        <?php
+                if ($admin)
+                    echo "userGrid.deleteBtn.setDisabled(sm.getCount() < 1);";
+        ?>
         historiesPanel.setDisabled(sm.getCount() != 1);
         if ((sm.getCount() == 1) && (!historiesPanel.collapsed))
             if (!sm.getSelected().phantom)
