@@ -167,6 +167,13 @@ define ('YEARLY_HOLIDAY_HOURS', 184);
 define('ALL_USERS_GROUP', 'staff');
 
 /**
+ * @name USER_GROUPS
+ * @global string all user groups for displaying on the interfaces as
+ * a serialized array, compulsory when using LDAP user authentication
+ */
+define('USER_GROUPS', serialize(array('staff')));
+
+/**
  * @name VACATIONS_PROJECT
  * @global string project used for identifying vacations tasks
  */

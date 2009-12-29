@@ -28,15 +28,31 @@ require_once('phpreport/web/auth.php');
 define(PAGE_TITLE, "PhpReport - Users Management");
 include_once("include/header.php");
 include_once("include/sidebar.php");
+include_once('phpreport/util/ConfigurationParametersManager.php');
+include_once('phpreport/util/UnknownParameterException.php');
 include_once('phpreport/model/vo/UserVO.php');
+include_once('phpreport/model/vo/UserGroupVO.php');
 include_once('phpreport/model/facade/UsersFacade.php');
 include_once('phpreport/model/facade/AdminFacade.php');
 include_once('phpreport/web/services/WebServicesFunctions.php');
 
 // We retrieve the User Groups, Areas and Cities
-$groups = UsersFacade::GetAllUserGroups();
 $cities = AdminFacade::GetAllCities();
 $areas = AdminFacade::GetAllAreas();
+
+try{
+
+    $groupNames = unserialize(ConfigurationParametersManager::getParameter('USER_GROUPS'));
+    foreach ($groupNames as $groupName)
+    {
+        $group = new UserGroupVO();
+        $group->setName($groupName);
+        $groups[]=$group;
+    }
+
+} catch (UnknownParameterException $e) {
+     $groups = UsersFacade::GetAllUserGroups();
+}
 
 ?>
 
