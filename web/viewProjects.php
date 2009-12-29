@@ -105,6 +105,7 @@ Ext.onReady(function(){
 
             // build toolbars and buttons.
             this.tbar = this.buildTopToolbar();
+            this.bbar = this.buildBottomToolbar();
 
             // super
             editionPanel.superclass.initComponent.call(this);
@@ -138,6 +139,21 @@ Ext.onReady(function(){
                 handler: this.onDelete,
                 scope: this
                 }, '-']
+        },
+
+        /**
+         * buildBottomToolbar
+         */
+        buildBottomToolbar : function() {
+            return ['->', {
+                text: 'Assign People',
+                id: this.id + 'AssignBtn',
+                ref: '../assignBtn',
+                disabled: true,
+                iconCls: 'silk-group-gear',
+                handler: this.onAssign,
+                scope: this
+                }]
         },
 
         onAdd: function() {
@@ -693,6 +709,7 @@ Ext.onReady(function(){
     projectGrid.getSelectionModel().on('selectionchange', function(sm){
         projectGrid.deleteBtn.setDisabled(sm.getCount() < 1);
         projectGrid.editBtn.setDisabled(sm.getCount() < 1);
+        projectGrid.assignBtn.setDisabled(sm.getCount() < 1);
     });
 
 });
