@@ -65,9 +65,9 @@ class PostgreSQLBelongsDAO extends BelongsDAO{
 
     $userVO = new UserVO();
 
-        $userVO->setId($row[id]);
-        $userVO->setLogin($row[login]);
-        $userVO->setPassword($row[password]);
+        $userVO->setId($row['id']);
+        $userVO->setLogin($row['login']);
+        $userVO->setPassword($row['password']);
 
     return $userVO;
     }
@@ -84,8 +84,8 @@ class PostgreSQLBelongsDAO extends BelongsDAO{
 
     $userGroupVO = new UserGroupVO();
 
-        $userGroupVO->setId($row[id]);
-        $userGroupVO->setName($row[name]);
+        $userGroupVO->setId($row['id']);
+        $userGroupVO->setName($row['name']);
 
     return $userGroupVO;
     }

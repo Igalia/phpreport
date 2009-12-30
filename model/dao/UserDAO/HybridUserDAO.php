@@ -81,9 +81,9 @@ class HybridUserDAO extends UserDAO{
 
     $userVO = new UserVO();
 
-        $userVO->setId($row[id]);
-        $userVO->setLogin($row[login]);
-        $userVO->setPassword($row[password]);
+        $userVO->setId($row['id']);
+        $userVO->setLogin($row['login']);
+        $userVO->setPassword($row['password']);
     $userVO->setGroups((array) $this->getGroupsByLogin($userVO->getLogin()));
 
     return $userVO;

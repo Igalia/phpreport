@@ -83,7 +83,7 @@ abstract class UserDAO extends BaseDAO{
      */
     public abstract function getByUserLogin($userLogin);
 
-    /** User retriever by Area and date for PostgreSQL.
+    /** User retriever by Area and date.
      *
      * This function retrieves the row from User table assigned to an Area on a date.
      *
