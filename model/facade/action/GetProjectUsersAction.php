@@ -19,9 +19,9 @@
  */
 
 
-/** File for GetUserProjectsAction
+/** File for GetProjectUsersAction
  *
- *  This file just contains {@link GetUserProjectsAction}.
+ *  This file just contains {@link GetProjectUsersAction}.
  *
  * @filesource
  * @package PhpReport
