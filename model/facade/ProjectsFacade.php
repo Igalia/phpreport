@@ -31,6 +31,8 @@
 
 include_once('phpreport/model/facade/action/CreateProjectAction.php');
 include_once('phpreport/model/facade/action/GetAllProjectsAction.php');
+include_once('phpreport/model/facade/action/GetUserProjectsAction.php');
+include_once('phpreport/model/facade/action/GetProjectUsersAction.php');
 include_once('phpreport/model/facade/action/GetProjectExtraDataAction.php');
 include_once('phpreport/model/facade/action/GetProjectAction.php');
 include_once('phpreport/model/facade/action/DeleteProjectAction.php');
@@ -166,7 +168,7 @@ abstract class ProjectsFacade {
 
     }
 
-    /** Projects retriever by id (relationship ProjectUser) for PostgreSQL.
+    /** Projects retriever by User id (relationship ProjectUser) for PostgreSQL.
      *
      * This function retrieves the rows from Project table that are assigned through relationship ProjectUser to the User with
      * the id <var>$userId</var> and creates a {@link ProjectVO} with data from each row.
@@ -178,6 +180,23 @@ abstract class ProjectsFacade {
     public function GetUserProjects($userId) {
 
     $action = new GetUserProjectsAction($userId);
+
+    return $action->execute();
+
+    }
+
+    /** Users retriever by Project id (relationship ProjectUser) for PostgreSQL.
+     *
+     * This function retrieves the rows from User table that are assigned through relationship ProjectUser to the
+     * Project with the id <var>$projectId</var> and creates a {@link UserVO} with data from each row.
+     *
+     * @param int $projectId the id of the Project whose Userss we want to retrieve.
+     * @return array an array with value objects {@link UserVO} with their properties set to the values from the rows
+     * and ordered ascendantly by their database internal identifier.
+     */
+    public function GetProjectUsers($projectId) {
+
+    $action = new GetProjectUsersAction($projectId);
 
     return $action->execute();
 
@@ -258,4 +277,4 @@ abstract class ProjectsFacade {
 
 }
 
-//var_dump(ProjectsFacade::GetProjectsByCustomerUserLogin(10,'jaragunde'));
+//var_dump(ProjectsFacade::GetProjectUsers(4));
