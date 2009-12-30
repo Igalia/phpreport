@@ -65,9 +65,9 @@ class PostgreSQLProjectUserDAO extends ProjectUserDAO{
 
     $userVO = new UserVO();
 
-        $userVO->setId($row[id]);
-        $userVO->setLogin($row[login]);
-        $userVO->setPassword($row[password]);
+        $userVO->setId($row['id']);
+        $userVO->setLogin($row['login']);
+        $userVO->setPassword($row['password']);
 
     return $userVO;
     }
@@ -84,17 +84,17 @@ class PostgreSQLProjectUserDAO extends ProjectUserDAO{
 
     $projectVO = new ProjectVO();
 
-        $projectVO->setId($row[id]);
-        $projectVO->setActivation($row[activation]);
-    $projectVO->setInit(date_create($row[init]));
-        $projectVO->setEnd(date_create($row[_end]));
-        $projectVO->setInvoice($row[invoice]);
-        $projectVO->setEstHours($row[est_hours]);
-    $projectVO->setAreaId($row[areaid]);
-        $projectVO->setType($row[type]);
-        $projectVO->setDescription($row[description]);
-        $projectVO->setMovedHours($row[moved_hours]);
-    $projectVO->setSchedType($row[sched_type]);
+        $projectVO->setId($row['id']);
+        $projectVO->setActivation($row['activation']);
+    $projectVO->setInit(date_create($row['init']));
+        $projectVO->setEnd(date_create($row['_end']));
+        $projectVO->setInvoice($row['invoice']);
+        $projectVO->setEstHours($row['est_hours']);
+    $projectVO->setAreaId($row['areaid']);
+        $projectVO->setType($row['type']);
+        $projectVO->setDescription($row['description']);
+        $projectVO->setMovedHours($row['moved_hours']);
+    $projectVO->setSchedType($row['sched_type']);
 
     return $projectVO;
     }
