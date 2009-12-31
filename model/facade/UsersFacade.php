@@ -33,6 +33,7 @@ include_once('phpreport/model/facade/action/CreateUserAction.php');
 include_once('phpreport/model/facade/action/DeleteUserAction.php');
 include_once('phpreport/model/facade/action/GetUserAction.php');
 include_once('phpreport/model/facade/action/GetAllUsersAction.php');
+include_once('phpreport/model/facade/action/GetUsersByAreaIdDateAction.php');
 include_once('phpreport/model/facade/action/GetUserByLoginAction.php');
 include_once('phpreport/model/facade/action/UpdateUserAction.php');
 include_once('phpreport/model/facade/action/ExtraHoursReportAction.php');
@@ -251,6 +252,26 @@ abstract class UsersFacade {
     $action = new GetIterationProjectAreaTodayUsersAction($iterationid);
 
     return $action->execute();
+
+    }
+
+    /** Users retriever By Area Id and Date function
+     *
+     *  This function is used for retrieving all Users that are assigned to an
+     *  Area on a specific date.
+     *
+     * @param int $areaId the database identifier of the Area whose related
+     * Users we want to retieve.
+     * @param DateTime $date the date when we want to check the Area
+     * assignment.
+     * @return array an array with value objects {@link UserVO} with their properties set to the values from the rows
+     * and ordered ascendantly by their database internal identifier.
+     */
+    static function GetUsersByAreaIdDate($areaId, $date) {
+
+        $action = new GetUsersByAreaIdDateAction($areaId, $date);
+
+        return $action->execute();
 
     }
 
@@ -773,3 +794,5 @@ abstract class UsersFacade {
 
 
 }
+
+//var_dump(UsersFacade::GetUsersByAreaIdDate(2, new DateTime()));
