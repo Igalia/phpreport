@@ -109,6 +109,7 @@ abstract class BaseRelationshipDAO {
      */
     protected function execute($sql) {
         $res = @pg_query($this->connect, $sql);
+        $VO = array();
     if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
 
         if(pg_num_rows($res) > 0) {
