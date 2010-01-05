@@ -35,6 +35,8 @@ include_once('phpreport/model/facade/action/GetUserProjectsAction.php');
 include_once('phpreport/model/facade/action/GetProjectUsersAction.php');
 include_once('phpreport/model/facade/action/GetProjectExtraDataAction.php');
 include_once('phpreport/model/facade/action/GetProjectAction.php');
+include_once('phpreport/model/facade/action/AssignUserToProjectAction.php');
+include_once('phpreport/model/facade/action/DeassignUserFromProjectAction.php');
 include_once('phpreport/model/facade/action/DeleteProjectAction.php');
 include_once('phpreport/model/facade/action/UpdateProjectAction.php');
 include_once('phpreport/model/facade/action/PartialUpdateProjectAction.php');
@@ -165,6 +167,42 @@ abstract class ProjectsFacade {
             return -1;
 
     return 0;
+
+    }
+
+    /** Project Assigning
+     *
+     *  This function is used for assigning a User to a Project by their ids.
+     *
+     * @param int $userId the id of the User we want to assign.
+     * @param int $projectId the Project which we want to assign the User to.
+     *
+     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
+     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
+     */
+    static function AssignUserToProject($userId, $projectId) {
+
+        $action = new AssignUserToProjectAction($userId, $projectId);
+
+        return $action->execute();
+
+    }
+
+    /** Project Deassigning
+     *
+     *  This function is used for deassigning a User from a Project by their ids.
+     *
+     * @param int $userId the id of the User we want to deassign.
+     * @param int $projectId the UserGroup which we want to deassign the Project from.
+     *
+     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
+     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
+     */
+    static function DeassignUserFromProject($userId, $projectId) {
+
+        $action = new DeassignUserFromProjectAction($userId, $projectId);
+
+        return $action->execute();
 
     }
 
