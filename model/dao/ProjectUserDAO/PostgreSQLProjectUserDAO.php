@@ -114,7 +114,7 @@ class PostgreSQLProjectUserDAO extends ProjectUserDAO{
     if (!is_numeric($projectId))
         throw new SQLIncorrectTypeException($projectId);
         $sql = "SELECT * FROM project_usr WHERE usrid=" . $userId . " AND projectid=" . $projectId;
-    $result = $this->executeFromA($sql);
+    $result = $this->execute($sql);
     return $result;
     }
 
