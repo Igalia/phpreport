@@ -233,7 +233,7 @@ Ext.onReady(function(){
 
                 },
                 scope: this,
-                animEl: this.deleteBtn,
+                animEl: this.id + "DeleteBtn",
                 icon: Ext.Msg.QUESTION,
                 closable: false,
             });
