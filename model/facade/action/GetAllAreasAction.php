@@ -57,7 +57,7 @@ class GetAllAreasAction extends Action{
      *
      * This is the function that contains the code that retrieves the Areas from persistent storing.
      *
-     * @return array an array with value objects {@link UserVO} with their properties set to the values from the rows
+     * @return array an array with value objects {@link AreaVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      */
     protected function doExecute() {
