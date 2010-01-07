@@ -185,6 +185,7 @@
 .silk-table-edit { background-image: url(icons/table_edit.png) !important; background-repeat: no-repeat; }
 .silk-table-multiple { background-image: url(icons/table_multiple.png) !important; background-repeat: no-repeat; }
 .silk-table-refresh { background-image: url(icons/table_refresh.png) !important; background-repeat: no-repeat; }
+.silk-table-relationship { background-image: url(icons/table_relationship.png) !important; background-repeat: no-repeat; }
 .silk-tag-blue-edit { background-image: url(icons/tag_blue_edit.png) !important; background-repeat: no-repeat; }
 .silk-tag { background-image: url(icons/tag.png) !important; background-repeat: no-repeat; }
 .silk-telephone { background-image: url(icons/telephone.png) !important; background-repeat: no-repeat; }
@@ -201,6 +202,8 @@
 .silk-user-edit { background-image: url(icons/user_edit.png) !important; background-repeat: no-repeat; }
 .silk-user-go { background-image: url(icons/user_go.png) !important; background-repeat: no-repeat; }
 .silk-vcard { background-image: url(icons/vcard.png) !important; background-repeat: no-repeat; }
+.silk-vcard-add { background-image: url(icons/vcard_add.png) !important; background-repeat: no-repeat; }
+.silk-vcard-delete { background-image: url(icons/vcard_delete.png) !important; background-repeat: no-repeat; }
 .silk-vector { background-image: url(icons/vector.png) !important; background-repeat: no-repeat; }
 .silk-wrench { background-image: url(icons/wrench.png) !important; background-repeat: no-repeat; }
 .silk-world { background-image: url(icons/world.png) !important; background-repeat: no-repeat; }

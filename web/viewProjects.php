@@ -750,7 +750,7 @@ Ext.onReady(function(){
                      id: 'windowAssign',
                      name: 'windowAssign',
                      title: 'Assign People',
-                     iconCls: 'silk-application-form-edit',
+                     iconCls: 'silk-table-relationship',
                      closeAction: 'hide',
                      closable: false,
                      animateTarget: 'projectGridAssignBtn',
