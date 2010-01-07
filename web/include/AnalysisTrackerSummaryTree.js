@@ -17,7 +17,7 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var TrackerSummaryTree = Ext.extend(Ext.ux.tree.ColumnTree, {
+var AnalysisTrackerSummaryTree = Ext.extend(Ext.ux.tree.ColumnTree, {
 
     // these parameters are configurable
     projectId: "",
@@ -79,7 +79,7 @@ text:'Tasks', draggable:false,expanded:false, id:'root'
         });
 
         // call parent
-        TrackerSummaryTree.superclass.initComponent.apply(this, arguments);
+        AnalysisTrackerSummaryTree.superclass.initComponent.apply(this, arguments);
 
         // install event handler
         this.on('click', function(n) {
