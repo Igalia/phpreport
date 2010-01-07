@@ -27,13 +27,15 @@
 
     $request = trim(file_get_contents('php://input'));
 
+    /*$request = '<?xml version="1.0" encoding="ISO-8859-15"?><users projectId="1"><user><id>65</id></user><user><id>1</id></user></users>';*/
+
     $parser->XML($request);
 
     do {
 
         $parser->read();
 
-        if ($parser->name == 'deassignations')
+        if ($parser->name == 'users')
         {
 
             $sid = $parser->getAttribute("sid");
