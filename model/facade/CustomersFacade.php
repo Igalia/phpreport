@@ -36,6 +36,7 @@ include_once('phpreport/model/facade/action/UpdateCustomerAction.php');
 include_once('phpreport/model/facade/action/CreateSectorAction.php');
 include_once('phpreport/model/facade/action/DeleteSectorAction.php');
 include_once('phpreport/model/facade/action/UpdateSectorAction.php');
+include_once('phpreport/model/facade/action/GetAllSectorsAction.php');
 include_once('phpreport/model/facade/action/GetCustomersByProjectUserAction.php');
 include_once('phpreport/model/dao/DAOFactory.php');
 include_once('phpreport/model/vo/CustomerVO.php');
@@ -174,6 +175,21 @@ abstract class CustomersFacade {
     static function UpdateSector(SectorVO $sector) {
 
     $action = new UpdateSectorAction($sector);
+
+    return $action->execute();
+
+    }
+
+    /** Get all Sectors Function
+     *
+     *  This action is used for retrieving all Sectors.
+     *
+     * @return array an array with value objects {@link SectorVO} with their properties set to the values from the rows
+     * and ordered ascendantly by their database internal identifier.
+     */
+    static function GetAllSectors() {
+
+    $action = new GetAllSectorsAction();
 
     return $action->execute();
 
