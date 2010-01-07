@@ -376,7 +376,7 @@ Ext.onReady(function(){
     };
 
 
-    /* Schema of the information about task stories */
+    /* Schema of the information about Hour Cost History */
     var hourCostRecord = new Ext.data.Record.create([
             {name: 'id', type: 'int'},
             {name: 'hourCost', type: 'float'},
@@ -384,7 +384,7 @@ Ext.onReady(function(){
             {name: 'end', type: 'date', dateFormat: 'Y-m-d', sortDir:'DESC'},
     ]);
 
-    /* Proxy to the services related with load/save Users */
+    /* Proxy to the services related with load/save Hour Cost History */
     var hourCostProxy = new Ext.data.HttpProxy({
     method: 'POST',
         api: {
