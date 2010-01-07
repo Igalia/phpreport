@@ -76,18 +76,58 @@ Ext.onReady(function(){
 
     };
 
-    var sectorsStore = new Ext.data.ArrayStore({
-            id: 0,
-            fields: ['id', 'name'],
-            data : [
-    <?php
+    /* Schema of the information about sectors */
+    var sectorRecord = new Ext.data.Record.create([
+            {name: 'id', type: 'int'},
+            {name: "name", type: 'string'},
+            ]
+    );
 
-        foreach((array)$sectors as $sector)
-            echo "[{$sector->getId()}, '{$sector->getName()}'],";
 
-    ?>]});
 
-        function sectors(val){
+    /* Proxy to the services related with load/save Sectors */
+    var sectorProxy = new Ext.data.HttpProxy({
+    method: 'POST',
+        api: {
+            read    : {url: 'services/getAllSectorsService.php', method: 'GET'},
+            create  : 'services/createSectorsService.php',
+            update  : 'services/updateSectorsService.php',
+            destroy : 'services/deleteSectorsService.php'
+
+        },
+    });
+
+    /* Store to load/save Sectors */
+    var sectorsStore = new Ext.data.Store({
+        id: 'sectorsStore',
+        autoLoad: true,  //initial data are loaded in the application init
+        autoSave: false, //if set true, changes will be sent instantly
+        baseParams: {<?php if ($sid) {?>
+            'sid': sessionId <?php } ?>
+        },
+        storeId: 'sectors',
+        proxy: sectorProxy,
+        reader:new Ext.data.XmlReader({record: 'sector', idProperty:'id' }, sectorRecord),
+        writer:new Ext.data.XmlWriter({encode: true, writeAllFields: true, root: 'sectors', tpl: '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><{name}>{value}</{name}></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, sectorRecord),
+        remoteSort: false,
+        sortInfo: {
+            field: 'name',
+            direction: 'ASC',
+        },
+        listeners: {
+            'write': function() {
+                App.setAlert(true, "Sectors Changes Saved");
+            },
+            'exception': function(){
+                App.setAlert(false, "Some Error Occurred While Saving The Changes");
+            },
+            'update': function() {
+                this.save();
+            }
+        }
+    });
+
+    function sectors(val){
 
         var record =  sectorsStore.getById(val);
 
@@ -366,6 +406,56 @@ Ext.onReady(function(){
 
     customerGrid.getSelectionModel().on('selectionchange', function(sm){
         customerGrid.deleteBtn.setDisabled(sm.getCount() < 1);
+    });
+
+    var sectorColModel =  new Ext.grid.ColumnModel([
+        {
+            header: "Name",
+            width: 250,
+            sortable: true,
+            dataIndex: 'name',
+            editor: {
+                xtype: 'textfield',
+                allowBlank: false
+            }
+        },
+    ]);
+
+    var sectorsEditor = new editor();
+
+    var sectorGrid = new inlineEditionPanel({
+        id: 'sectorGrid',
+        height: 300,
+        inlineEditor: sectorsEditor,
+        plugins: [sectorsEditor],
+        iconCls: 'silk-table',
+        width: sectorColModel.getTotalWidth(false),
+        store: sectorsStore,
+        frame: true,
+        title: 'Sectors',
+        style: 'margin-top: 10px',
+        renderTo: 'content',
+        loadMask: true,
+        colModel: sectorColModel,
+        delMsg: 'Are you sure you want to delete the selected Sectors?',
+
+        /**
+         * onAdd
+         */
+        onAdd: function(btn, ev) {
+            var u = new sectorRecord({
+                name: 'New Sector',
+            });
+            this.inlineEditor.stopEditing();
+            this.store.insert(0, u);
+            this.getView().refresh();
+            this.getSelectionModel().selectRow(0);
+            this.inlineEditor.startEditing(0);
+        },
+    });
+
+    sectorGrid.getSelectionModel().on('selectionchange', function(sm){
+        sectorGrid.deleteBtn.setDisabled(sm.getCount() < 1);
     });
 
 });
