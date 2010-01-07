@@ -1038,6 +1038,7 @@ Ext.onReady(function(){
         renderTo: 'content',
         loadMask: true,
         colModel: projectColModel,
+        columnLines: true,
         delMsg: 'Are you sure you want to delete the selected Projects?',
     });
 
