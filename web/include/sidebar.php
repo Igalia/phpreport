@@ -82,7 +82,7 @@ var menuPanel = new Ext.Panel({
             menu: [{
                 text: 'Clients summary', handler: onItemClick,
             },{
-                text: 'Clients management', handler: onItemClick,
+                text: 'Clients management', handler: onItemClick, destination: 'viewCustomers.php', iconCls: 'silk-vcard',
             }],
         },{
             text: 'Areas',
