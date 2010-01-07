@@ -147,20 +147,20 @@
 
 
         if (count($createUsers) >= 1)
-            foreach((array)$createUsers as $user)
+            foreach((array)$createUsers as $createUser)
             {
-                if (UsersFacade::CreateUser($user) == -1)
+                if (UsersFacade::CreateUser($createUser) == -1)
                 {
                     $string = "<return service='createUsers'><error id='1'>There was some error while updating the users</error></return>";
                     break;
                 }
 
-                foreach((array) $user->getGroups() as $group)
+                foreach((array) $createUser->getGroups() as $group)
                 {
 
                     $group = UsersFacade::GetUserGroupByName($group->getName());
 
-                    if (UsersFacade::AssignUserToUserGroup($user->getId(), $group->getId()) == -1)
+                    if (UsersFacade::AssignUserToUserGroup($createUser->getId(), $group->getId()) == -1)
                     {
                         $string = "<return service='createUsers'><error id='1'>There was some error while updating the user groups new assignements</error></return>";
                         break;
@@ -176,12 +176,12 @@
 
             $string = "<return service='createUsers'><ok>Operation Success!</ok><users>";
 
-            foreach((array) $createUsers as $user)
+            foreach((array) $createUsers as $createUser)
             {
 
-                $string = $string . "<user><id>{$user->getId()}</id><login>{$user->getLogin()}</login><userGroups>";
+                $string = $string . "<user><id>{$createUser->getId()}</id><login>{$createUser->getLogin()}</login><userGroups>";
 
-                foreach ((array) $user->getGroups() as $group)
+                foreach ((array) $createUser->getGroups() as $group)
                     $string = $string . "<{$group->getName()}>true</{$group->getName()}>";
 
                 $string = $string . "</userGroups></user>";
