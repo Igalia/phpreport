@@ -65,12 +65,13 @@ class PostgreSQLSectorDAO extends SectorDAO{
     protected function setValues($row)
     {
 
-    $sectorVO = new SectorVO();
+        $sectorVO = new SectorVO();
 
-        $sectorVO->setId($row[id]);
-        $sectorVO->setName($row[name]);
+        $sectorVO->setId($row['id']);
+        $sectorVO->setName($row['name']);
 
-    return $sectorVO;
+        return $sectorVO;
+
     }
 
     /** Sector retriever by id for PostgreSQL.
