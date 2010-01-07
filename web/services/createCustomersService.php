@@ -49,7 +49,7 @@
 
         $user = LoginManager::isLogged($sid);
 
-        if (!user)
+        if (!$user)
         {
             $string = "<return service='createCustomers'><error id='2'>You must be logged in</error></return>";
             break;
@@ -135,7 +135,7 @@
             {
                 if (CustomersFacade::CreateCustomer($createCustomer) == -1)
                 {
-                    $string = "<return service='createCustomers'><error id='1'>There was some error while updating the users</error></return>";
+                    $string = "<return service='createCustomers'><error id='1'>There was some error while updating the customers</error></return>";
                     break;
                 }
 
@@ -149,12 +149,9 @@
             $string = "<return service='createCustomers'><ok>Operation Success!</ok><customers>";
 
             foreach((array) $createCustomers as $createCustomer)
-            {
-
                 $string = $string . "<customer><id>{$createCustomer->getId()}</id><name>{$createCustomer->getName()}</name><sectorId>{$createCustomer->getSectorId()}</sectorId><type>{$createCustomer->getType()}</type><url>{$createCustomer->getUrl()}</url></customer>";
 
-                $string = $string . "</customers></return>";
-            }
+            $string = $string . "</customers></return>";
 
         }
 

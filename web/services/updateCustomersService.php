@@ -49,7 +49,7 @@
 
         $user = LoginManager::isLogged($sid);
 
-        if (!user)
+        if (!$user)
         {
             $string = "<return service='updateCustomers'><error id='2'>You must be logged in</error></return>";
             break;
@@ -158,12 +158,9 @@
             $string = "<return service='updateCustomers'><ok>Operation Success!</ok><customers>";
 
             foreach((array) $updateCustomers as $updateCustomer)
-            {
-
                 $string = $string . "<customer><id>{$updateCustomer->getId()}</id><name>{$updateCustomer->getName()}</name><sectorId>{$updateCustomer->getSectorId()}</sectorId><type>{$updateCustomer->getType()}</type><url>{$updateCustomer->getUrl()}</url></customer>";
 
                 $string = $string . "</customers></return>";
-            }
 
         }
 
