@@ -30,6 +30,7 @@
  */
 
 include_once('phpreport/util/SQLIncorrectTypeException.php');
+include_once('phpreport/util/SQLUniqueViolationException.php');
 include_once('phpreport/util/DBPostgres.php');
 include_once('phpreport/model/vo/AreaVO.php');
 include_once('phpreport/model/dao/AreaDAO/AreaDAO.php');
