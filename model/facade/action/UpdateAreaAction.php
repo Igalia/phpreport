@@ -41,7 +41,7 @@ include_once('phpreport/model/vo/UserVO.php');
  * @subpackage facade
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
-class UpdateSectorAction extends Action{
+class UpdateAreaAction extends Action{
 
     /** The Area
      *
