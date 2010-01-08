@@ -91,7 +91,7 @@ var menuPanel = new Ext.Panel({
             },{
                 text: 'Turnover goals', handler: onItemClick,
             },{
-                text: 'Areas management', handler: onItemClick,
+                text: 'Areas management', handler: onItemClick, destination: 'viewAreas.php',
             }],
         }],
     }]
