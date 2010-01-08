@@ -123,6 +123,9 @@ Ext.onReady(function(){
             },
             'update': function() {
                 this.save();
+            },
+            'load': function() {
+                customersStore.load();
             }
         }
     });
@@ -279,7 +282,7 @@ Ext.onReady(function(){
     /* Store to load/save Customers */
     var customersStore = new Ext.data.Store({
         id: 'customersStore',
-        autoLoad: true,  //initial data are loaded in the application init
+        autoLoad: false,
         autoSave: false, //if set true, changes will be sent instantly
         baseParams: {<?php if ($sid) {?>
             'sid': sessionId <?php } ?>
@@ -320,7 +323,7 @@ Ext.onReady(function(){
         },
         {
             header: "Sector",
-            width: 130,
+            width: 250,
             sortable: true,
             dataIndex: 'sectorId',
             renderer: sectors,
@@ -340,7 +343,7 @@ Ext.onReady(function(){
         },
         {
             header: "Type",
-            width: 100,
+            width: 70,
             sortable: true,
             dataIndex: 'type',
             renderer: types,
