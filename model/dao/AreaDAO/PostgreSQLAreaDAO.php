@@ -66,10 +66,10 @@ class PostgreSQLAreaDAO extends AreaDAO{
     protected function setValues($row)
     {
 
-    $areaVO = new AreaVO();
+        $areaVO = new AreaVO();
 
-        $areaVO->setId($row[id]);
-        $areaVO->setName($row[name]);
+        $areaVO->setId($row['id']);
+        $areaVO->setName($row['name']);
 
     return $areaVO;
     }
