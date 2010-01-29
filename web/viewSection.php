@@ -69,8 +69,8 @@ Ext.onReady(function(){
             data : [
             <?php
 
-                foreach((array)$users as $user)
-                    echo "[{$user->getId()}, '{$user->getLogin()}'],";
+                foreach((array)$users as $auxUser)
+                    echo "[{$auxUser->getId()}, '{$auxUser->getLogin()}'],";
 
             ?>]});
 

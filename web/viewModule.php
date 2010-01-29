@@ -24,7 +24,6 @@ $moduleId = $_GET["mid"];
 /* We check authentication and authorization */
 require_once('phpreport/web/auth.php');
 
-$module = CoordinationFacade::GetModule($moduleId);
 
 /* Include the generic header and sidebar*/
 define(PAGE_TITLE, "PhpReport - Module Data");
@@ -35,6 +34,8 @@ include_once('phpreport/model/facade/ProjectsFacade.php');
 include_once('phpreport/model/vo/ModuleVO.php');
 include_once('phpreport/web/services/WebServicesFunctions.php');
 
+
+$module = CoordinationFacade::GetModule($moduleId);
 
 ?><link rel="stylesheet" type="text/css" href="include/ColumnNodeUI.css" />
 <script type="text/javascript" src="include/ColumnNodeUI.js"></script>
@@ -75,19 +76,19 @@ Ext.onReady(function(){
               name:'startDate',
                 fieldLabel: 'Start Date',
         <?php
-                    echo "value:'" . $module->getInit()->format("d-m-Y") . "'";
+              echo "value:'" . $module->getInit()->format("d-m-Y") . "'";
         ?>
         },{
               id: 'endDate',
                 name: 'endDate',
                 fieldLabel: 'End Date',
         <?php
-                    echo "value:'" . $module->getEnd()->format("d-m-Y") . "'";
+              echo "value:'" . $module->getEnd()->format("d-m-Y") . "'";
         ?>
         }]
     });
 
-    var trackerSummaryTree = new TrackerSummaryTree({
+    var trackerSummaryTree = new AnalysisTrackerSummaryTree({
         <?php
 
         $project = ProjectsFacade::GetProject($module->getProjectId());

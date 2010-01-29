@@ -118,6 +118,11 @@ Ext.onReady(function(){
     // obtain the GET variables
     var urlVars = Ext.urlDecode(window.location.href.slice(window.location.href.indexOf('?') + 1));
 
+    <?php if ((isset($_POST["name"])) && ($_POST["start"] != "") && ($_POST["name"] != ""))
+            echo "window.location = 'viewModule.php?mid={$module->getId()}';";
+
+    ?>
+
     // turn on validation errors beside the field globally
     Ext.form.Field.prototype.msgTarget = 'side';
 
