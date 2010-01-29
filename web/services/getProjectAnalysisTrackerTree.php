@@ -66,7 +66,7 @@
             $moduleJson = array();
 
             $moduleJson[id] = "module-{$module->getId()}";
-            $moduleJson[InternalId] = "{$module->getId()}";
+            $moduleJson[internalId] = "{$module->getId()}";
             if ($module->getId() == $moduleId)
                 $moduleJson[expanded] = true;
             $moduleJson[task] = $module->getName();
