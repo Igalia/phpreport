@@ -34,6 +34,7 @@ var AnalysisTrackerSummaryTree = Ext.extend(Ext.ux.tree.ColumnTree, {
             height: 300,
             rootVisible:false,
             autoScroll:true,
+            useArrows: true,
             title: 'Project: ' + this.projectName,
 
             columns:[{
@@ -74,24 +75,110 @@ var AnalysisTrackerSummaryTree = Ext.extend(Ext.ux.tree.ColumnTree, {
             ),
 
             root: new Ext.tree.AsyncTreeNode({
-text:'Tasks', draggable:false,expanded:false, id:'root'
-            })
+                text:'Tasks', draggable:false,expanded:false, id:'root'
+            }),
+
+            /**
+             * buildBottomToolbar
+             */
+            buildBottomToolbar : function() {
+                return [{
+                    text: 'Create Root',
+                    id: this.id + 'RootBtn',
+                    ref: '../rootBtn',
+                    //iconCls: 'root-add',
+                    handler: this.onRoot,
+                    hidden: true,
+                    scope: this
+                    }, {
+                    text: 'Create Brother',
+                    id: this.id + 'BrotherBtn',
+                    ref: '../brotherBtn',
+                    disabled: true,
+                    //iconCls: 'silk-arrow-down',
+                    handler: this.onBrother,
+                    scope: this
+                    }, '-', {
+                    text: 'Create Son',
+                    id: this.id + 'SonBtn',
+                    ref: '../sonBtn',
+                    disabled: true,
+                    //iconCls: 'silk-arrow-right',
+                    handler: this.onSon,
+                    scope: this
+                }, '-'];
+            },
+
+            /**
+             * onRoot
+             */
+            onRoot: function() {
+                window.location = 'moduleForm.php?pid=' + this.projectId;
+            },
+
+            /**
+             * onBrother
+             */
+            onBrother: function() {
+
+                var node = this.getSelectionModel().getSelectedNode();
+
+                if(node.attributes.class=='module')
+                    window.location = 'moduleForm.php?pid=' + this.projectId;
+                if(node.attributes.class=='section')
+                    window.location = 'sectionForm.php?mid=' + node.parentNode.attributes.internalId;
+                if(node.attributes.class=='task-section')
+                    window.location = 'viewSection.php?scid=' + node.parentNode.attributes.internalId;
+            },
+
+            /**
+             * onSon
+             */
+            onSon: function() {
+
+                var node = this.getSelectionModel().getSelectedNode();
+
+                if(node.attributes.class=='module')
+                    window.location = 'sectionForm.php?mid=' + node.attributes.internalId;
+                if(node.attributes.class=='section')
+                    window.location = 'viewSection.php?scid=' + node.attributes.internalId;
+            }
+
         });
+
+        // build toolbars and buttons.
+        this.bbar = this.buildBottomToolbar();
 
         // call parent
         AnalysisTrackerSummaryTree.superclass.initComponent.apply(this, arguments);
 
         // install event handler
-        this.on('click', function(n) {
+        this.on('dblclick', function(n) {
             if(n.attributes.class=='module')
-                window.location = 'viewModule.php?mid=' + n.attributes.internalId
-                                                   '&login=' + this.user;
+                window.location = 'viewModule.php?mid=' + n.attributes.internalId;
             if(n.attributes.class=='section')
-                window.location = 'viewSection.php?scid=' + n.attributes.internalId
-                                               '&login=' + this.user;
+                window.location = 'viewSection.php?scid=' + n.attributes.internalId;
             if(n.attributes.class=='task-section')
-                window.location = 'viewSection.php?scid=' + n.parentNode.attributes.internalId
-                                               '&login=' + this.user;
+                window.location = 'viewSection.php?scid=' + n.parentNode.attributes.internalId;
         });
+
+        this.on('load', function(node) {
+                if(this.getRootNode().firstChild == null)
+                {
+                    this.getBottomToolbar().getComponent(0).show();
+                    this.getBottomToolbar().getComponent(1).hide();
+                    this.getBottomToolbar().getComponent(2).hide();
+                    this.getBottomToolbar().getComponent(3).hide();
+                }
+                this.expandAll();
+                //this.collapseAll();
+        });
+
+        // install event handler
+        this.getSelectionModel().on('selectionchange', function(sm){
+            this.sonBtn.setDisabled((sm.getSelectedNode().attributes.class=='task-section'));
+            this.brotherBtn.enable();
+        }, this);
+
     },
 });
