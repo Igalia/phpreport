@@ -20,6 +20,7 @@
 
 
 include_once('phpreport/model/facade/action/ExtraHoursReportAction.php');
+include_once('phpreport/model/vo/UserVO.php');
 include_once('phpreport/model/dao/UserDAO/PostgreSQLUserDAO.php');
 
 // Special sector name (used in case we find a non-matching sector id)
@@ -1409,6 +1410,10 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
   $res=@pg_query($cnx2,$query="SELECT * FROM extra_hour WHERE usrid ='{$row2["id"]}' AND _date = '{$row["_end"]}'")
   or die($die2);
+
+  $user = new UserVO();
+
+  $user->setId($row2["id"]);
 
   if (pg_num_rows($res) == 0)
   {
