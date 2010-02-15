@@ -20,8 +20,8 @@
 
 
 include_once('phpreport/model/facade/action/ExtraHoursReportAction.php');
-include_once('phpreport/model/vo/UserVO.php');
 include_once('phpreport/model/dao/UserDAO/PostgreSQLUserDAO.php');
+include_once('phpreport/util/DBPostgres.php');
 
 // Special sector name (used in case we find a non-matching sector id)
 $unidentified_sector = "others";
@@ -86,7 +86,7 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
  if ($row["password"] != NULL)
     $password = "'{$row["password"]}'";
 
-  if (!$result2=@pg_query($cnx2,"INSERT INTO usr(password, login) VALUES ($password, '{$row["uid"]}')")) {
+  if (!$result2=@pg_query($cnx2,"INSERT INTO usr(password, login) VALUES ($password, " . DBPostgres::checkNull($row["uid"]) . ")")) {
     $error=("It has not been possible to insert the new user from values ($password, '{$row["uid"]}').\n");
     print ($error);
    }
@@ -94,7 +94,7 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
   // We look for the stored user in order to have its identifier
 
-  $result2=@pg_query($cnx2,$query="SELECT * FROM usr where login ='{$row["uid"]}'")
+  $result2=@pg_query($cnx2,$query="SELECT * FROM usr where login =" . DBPostgres::checkStringNull($row["uid"]))
   or die($die2);
 
   $row2=@pg_fetch_array($result2);
@@ -129,11 +129,11 @@ or die($die1);
 
 while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
-  $result2=@pg_query($cnx2,$query="SELECT * FROM usr where login ='{$row["uid"]}'")
+  $result2=@pg_query($cnx2,$query="SELECT * FROM usr where login =" . DBPostgres::checkStringNull($row["uid"]))
   or die($die2);
 
   $row2=@pg_fetch_array($result2);
-  if (!$result2=@pg_query($cnx2,"INSERT INTO extra_hour(_date, hours, usrid) VALUES ('{$row["date"]}', '{$row["hours"]}', '{$row2["id"]}')")) {
+  if (!$result2=@pg_query($cnx2,"INSERT INTO extra_hour(_date, hours, usrid) VALUES ('{$row["date"]}', " . DBPostgres::checkNull($row["hours"]) . ", " . DBPostgres::checkNull($row2["id"]) . ")")) {
     $error=("It has not been possible to insert the new extra hour for user '{$row["uid"]}' from values ('{$row["date"]}', '{$row["hours"]}', '{$row2["id"]}').\n");
     print ($error);
    }
@@ -156,7 +156,7 @@ or die($die1);
 
 while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
- if (!$result2=@pg_query($cnx2,"INSERT INTO sector(name, id_ant) VALUES ('{$row["description"]}', '{$row["code"]}')")) {
+ if (!$result2=@pg_query($cnx2,"INSERT INTO sector(name, id_ant) VALUES ( " . DBPostgres::checkStringNull($row["description"]) . ", " . DBPostgres::checkStringNull($row["code"]) . ")")) {
     $error=("It has not been possible to insert the new sector from values ('{$row["description"]}', '{$row["code"]}').\n");
     print ($error);
    }
@@ -186,7 +186,7 @@ or die($die1);
 
 while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
- if (!$result2=@pg_query($cnx2,"INSERT INTO area(name, id_ant) VALUES ('{$row["description"]}', '{$row["code"]}')")) {
+ if (!$result2=@pg_query($cnx2,"INSERT INTO area(name, id_ant) VALUES (" . DBPostgres::checkStringNull($row["description"]) . ", " . DBPostgres::checkStringNull($row["code"]) . ")")) {
     $error=("It has not been possible to insert the new area from values ('{$row["description"]}', '{$row["code"]}').\n");
     print ($error);
    }
@@ -224,8 +224,8 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
  if ($row["url"] != NULL)
     $url = "'{$row["url"]}'";
 
- $result2=@pg_query($cnx2,$query="SELECT * FROM sector WHERE id_ant ='{$row["sector"]}'")
-      or die($die2);
+ $result2=@pg_query($cnx2,$query="SELECT * FROM sector WHERE id_ant =" . DBPostgres::checkStringNull($row["sector"]))
+    or die($die2);
 
  $row2=@pg_fetch_array($result2);
 
@@ -235,13 +235,13 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
     print ("Sector with old id '{$row["sector"]}' does not exist. Customer '{$row["name"]}' will be assigned to sector '$unidentified_sector'.\n");
 
     $result2=@pg_query($cnx2,$query="SELECT * FROM sector WHERE id_ant ='$unidentified_sector'")
-      or die($die2);
+    or die($die2);
 
-     $row2=@pg_fetch_array($result2);
+    $row2=@pg_fetch_array($result2);
 
  }
 
- if (!$result2=@pg_query($cnx2,"INSERT INTO customer(name, type, sectorid, url, id_ant) VALUES ('{$row["name"]}', '{$row["type"]}', '{$row2["id"]}',  $url, '{$row["id"]}')")) {
+ if (!$result2=@pg_query($cnx2,"INSERT INTO customer(name, type, sectorid, url, id_ant) VALUES (" . DBPostgres::checkStringNull($row["name"]) . ", " . DBPostgres::checkStringNull($row["type"]) . ", '{$row2["id"]}', " . DBPostgres::checkStringNull($url) . ", '{$row["id"]}')")) {
     $error=("It has not been possible to insert the new customer from values ('{$row["name"]}', '{$row["type"]}', '{$row2["id"]}',  $url, '{$row["id"]}').\n");
     print ($error);
    }
@@ -290,7 +290,7 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
  {
 
   $result2=@pg_query($cnx2,$query="SELECT * FROM area WHERE id_ant ='Not assigned'")
-      or die($die2);
+    or die($die2);
 
   $row2=@pg_fetch_array($result2);
 
@@ -300,8 +300,8 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
  else
  {
 
-  $result2=@pg_query($cnx2,$query="SELECT * FROM area WHERE id_ant ='{$row["area"]}'")
-      or die($die2);
+  $result2=@pg_query($cnx2,$query="SELECT * FROM area WHERE id_ant =" . DBPostgres::checkStringNull($row["area"]))
+    or die($die2);
 
   $row2=@pg_fetch_array($result2);
 
@@ -311,9 +311,9 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
     print ("Area with old id '{$row["area"]}' does not exist. Project '{$row["id_ant"]}' will be assigned to area '$unidentified_area'.\n");
 
     $result2=@pg_query($cnx2,$query="SELECT * FROM area WHERE id_ant = '$unidentified_area'")
-      or die($die2);
+    or die($die2);
 
-     $row2=@pg_fetch_array($result2);
+    $row2=@pg_fetch_array($result2);
 
   }
 
@@ -334,7 +334,7 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
     $sched_type = "'{$row["sched_type"]}'";
 
 
- if (!$result2=@pg_query($cnx2,"INSERT INTO project(activation, init, _end, invoice, est_hours, areaid, description, type, moved_hours, sched_type, id_ant) VALUES ('{$row["activation"]}', $init, $_end,  $invoice, $est_hours, $area, $description, $type, $moved_hours, $sched_type, '{$row["id"]}')")) {
+ if (!$result2=@pg_query($cnx2,"INSERT INTO project(activation, init, _end, invoice, est_hours, areaid, description, type, moved_hours, sched_type, id_ant) VALUES (" . DBPostgres::boolToString($row["activation"]) . ", $init, $_end, " . DBPostgres::checkNull($invoice) . ", " . DBPostgres::checkNull($est_hours) . ", $area, " . DBPostgres::checkStringNull($description) . ", " . DBPostgres::checkStringNull($type) . ", " . DBPostgres::checkNull($moved_hours) . ", " . DBPostgres::checkStringNull($sched_type) . ", '{$row["id"]}')")) {
     $error=("It has not been possible to insert the new project from values ('{$row["activation"]}', $init, $_end,  $invoice, $est_hours, $area, $description, $type, $moved_hours, $sched_type, '{$row["id"]}').\n");
     print ($error);
    }
@@ -344,19 +344,19 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
  if ($row["customer"] != NULL)
  {
     $result2=@pg_query($cnx2,$query="SELECT * FROM customer WHERE id_ant ='{$row["customer"]}'")
-      or die($die2);
+    or die($die2);
 
     $row2=@pg_fetch_array($result2);
 
     $result2=@pg_query($cnx2,$query="SELECT * FROM project WHERE id_ant ='{$row["id"]}'")
-      or die($die2);
+    or die($die2);
 
     $row3=@pg_fetch_array($result2);
 
     if (!$result2=@pg_query($cnx2,"INSERT INTO requests(customerid, projectid) VALUES ('{$row2["id"]}', '{$row3["id"]}')")) {
             $error=("It has not been possible to insert the new relation requests from values ('{$row2["id"]}', '{$row3["id"]}').\n");
             print ($error);
-       }
+    }
 
  }
 
@@ -399,14 +399,14 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 // --------------------------------- LABELS MIGRATION
 
 $result2=@pg_query($cnx2,$query="SELECT * FROM area WHERE id_ant = '$unidentified_area'")
-      or die($die2);
+    or die($die2);
 
 $row2=@pg_fetch_array($result2);
 
 $unidentifiedArea = $row2["id"];
 
 $result2=@pg_query($cnx2,$query="SELECT * FROM sector WHERE id_ant ='$unidentified_sector'")
-      or die($die2);
+    or die($die2);
 
 $row2=@pg_fetch_array($result2);
 
@@ -416,12 +416,12 @@ $typeProjects = array ();
 $typeCustomers = array();
 
 $result=@pg_query($cnx1,$query="SELECT DISTINCT (type) FROM task")
-      or die($die2);
+    or die($die2);
 
 while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
     $result2=@pg_query($cnx1,$query="SELECT * FROM label WHERE code = '{$row["type"]}'")
-      or die($die2);
+    or die($die2);
 
     $row2=@pg_fetch_array($result2);
 
@@ -441,22 +441,22 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
                 if (is_null($newCustomer))
                     $newCustomer = $row["type"];
 
-                $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name ='$newCustomer'")
-                  or die($die2);
+                $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
+                or die($die2);
 
                 $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
 
                 if (is_null($row3["id"]))
                 {
-                    if (!$result4=@pg_query($cnx2,"INSERT INTO customer(sectorid, name, type) VALUES ('$unidentifiedSector', '$newCustomer', 'internal')"))
+                    if (!$result4=@pg_query($cnx2,"INSERT INTO customer(sectorid, name, type) VALUES ('$unidentifiedSector', " . DBPostgres::checkStringNull($newCustomer) . ", 'internal')"))
                     {
                             $error=("It has not been possible to insert the new customer from values ('$unidentifiedSector', '$newCustomer', 'internal').\n");
                             print ($error);
                         break;
-                       }
+                    }
 
-                    $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name ='$newCustomer'")
-                      or die($die2);
+                    $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
+                    or die($die2);
 
                     $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
                 }
@@ -471,22 +471,22 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
                 if ($newProject == "")
                     $newProject = $row["type"];
 
-                $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description ='$newProject'")
-                  or die($die2);
+                $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
+                or die($die2);
 
                 $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
 
                 if (is_null($row3["id"]))
                 {
-                    if (!$result4=@pg_query($cnx2,"INSERT INTO project(areaid, description) VALUES ('$unidentifiedArea', '$newProject')"))
+                    if (!$result4=@pg_query($cnx2,"INSERT INTO project(areaid, description) VALUES ('$unidentifiedArea', " . DBPostgres::checkStringNull($newProject) . ")"))
                     {
-                            $error=("It has not been possible to insert the new project from values ('$unidentifiedArea', '$newProject').\n");
+                            $error=("It has not been possible to insert the new project from values ('$unidentifiedArea', " . DBPostgres::checkStringNull($newCustomer) . ").\n");
                             print ($error);
                         break;
-                       }
+                    }
 
-                    $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description ='$newProject'")
-                      or die($die2);
+                    $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
+                    or die($die2);
 
                     $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
                 }
@@ -499,22 +499,22 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
                 if (is_null($newCustomer))
                     $newCustomer = $newProject;
 
-                $result4=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name ='$newCustomer'")
-                  or die($die2);
+                $result4=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
+                or die($die2);
 
                 $row4=@pg_fetch_array($result4,NULL,PGSQL_ASSOC);
 
                 if (is_null($row4["id"]))
                 {
-                    if (!$result4=@pg_query($cnx2,"INSERT INTO customer(sectorid, name, type) VALUES ('$unidentifiedSector', '$newCustomer', 'internal')"))
+                    if (!$result4=@pg_query($cnx2,"INSERT INTO customer(sectorid, name, type) VALUES ('$unidentifiedSector', " . DBPostgres::checkStringNull($newCustomer) . ", 'internal')"))
                     {
-                            $error=("It has not been possible to insert the new customer from values ('$unidentifiedSector', '$newCustomer', 'internal').\n");
+                            $error=("It has not been possible to insert the new customer from values ('$unidentifiedSector', " . DBPostgres::checkStringNull($newCustomer) . ", 'internal').\n");
                             print ($error);
                         break;
-                       }
+                    }
 
-                    $result4=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name ='$newCustomer'")
-                      or die($die2);
+                    $result4=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
+                    or die($die2);
 
                     $row4=@pg_fetch_array($result4,NULL,PGSQL_ASSOC);
                 }
@@ -522,7 +522,7 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
                 if (!$result2=@pg_query($cnx2,"INSERT INTO requests(customerid, projectid) VALUES ('{$row4["id"]}', '{$row3["id"]}')")) {
                         $error=("It has not been possible to insert the new relation requests from values ('{$row4["id"]}', '{$row3["id"]}').\n");
                         print ($error);
-                   }
+                }
 
                 break;
 
@@ -551,7 +551,7 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
  $row["uid"] = trim($row["uid"]);
 
- $result2=@pg_query($cnx2,$query="SELECT * FROM usr WHERE login ='{$row["uid"]}'")
+ $result2=@pg_query($cnx2,$query="SELECT * FROM usr WHERE login =" . DBPostgres::checkStringNull($row["uid"]))
   or die($die2);
 
   $row2=@pg_fetch_array($result2);
@@ -564,14 +564,14 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
     print "\n";
 
     if (($newUser == "Y") || ($newUser == "y"))
-    {    if (!$result2=@pg_query($cnx2,"INSERT INTO usr(login) VALUES ('{$row["uid"]}')")){
+    {   if (!$result2=@pg_query($cnx2,"INSERT INTO usr(login) VALUES (" . DBPostgres::checkStringNull($row["uid"]) . ")")){
                 $error=("It has not been possible to insert the new user from values ('{$row["uid"]}').\n");
                 print ($error);
         }
-        $result2=@pg_query($cnx2,$query="SELECT * FROM usr WHERE login ='{$row["uid"]}'")
-          or die($die2);
+        $result2=@pg_query($cnx2,$query="SELECT * FROM usr WHERE login =" . DBPostgres::checkStringNull($row["uid"]))
+        or die($die2);
 
-          $row2=@pg_fetch_array($result2);
+        $row2=@pg_fetch_array($result2);
 
     }
     else
@@ -609,10 +609,10 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
     $projectid = "NULL";
   else
   {
-      $result2=@pg_query($cnx2,$query="SELECT * FROM project WHERE id_ant ='{$row["name"]}'")
-      or die($die2);
+    $result2=@pg_query($cnx2,$query="SELECT * FROM project WHERE id_ant =" . DBPostgres::checkStringNull($row["name"]))
+    or die($die2);
 
-      $row3=@pg_fetch_array($result2);
+    $row3=@pg_fetch_array($result2);
 
     $projectid = "'{$row3["id"]}'";
   }
@@ -623,12 +623,12 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
   else
   {
 
-     $result2=@pg_query($cnx2,$query="SELECT * FROM customer WHERE id_ant ='{$row["customer"]}'")
-      or die($die2);
+    $result2=@pg_query($cnx2,$query="SELECT * FROM customer WHERE id_ant =" . DBPostgres::checkStringNull($row["customer"]))
+    or die($die2);
 
     $row4=@pg_fetch_array($result2);
 
-     $customerid = "'{$row4["id"]}'";
+    $customerid = "'{$row4["id"]}'";
 
   }
 
@@ -651,22 +651,22 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
                 if (is_null($newCustomer))
                     $newCustomer = $row["type"];
 
-                $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name ='$newCustomer'")
-                  or die($die2);
+                $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
+                or die($die2);
 
                 $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
 
                 if (is_null($row3["id"]))
                 {
-                    if (!$result2=@pg_query($cnx2,"INSERT INTO customer(sectorid, name, type) VALUES ('$unidentifiedSector', '$newCustomer', 'internal')"))
+                    if (!$result2=@pg_query($cnx2,"INSERT INTO customer(sectorid, name, type) VALUES ('$unidentifiedSector', " . DBPostgres::checkStringNull($newCustomer) . ", 'internal')"))
                     {
-                            $error=("It has not been possible to insert the new customer from values ('$unidentifiedSector', '$newCustomer', 'internal').\n");
+                            $error=("It has not been possible to insert the new customer from values ('$unidentifiedSector', " . DBPostgres::checkStringNull($newCustomer) . ", 'internal').\n");
                             print ($error);
                         break;
-                       }
+                    }
 
-                    $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name ='$newCustomer'")
-                      or die($die2);
+                    $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
+                    or die($die2);
 
                     $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
                 }
@@ -683,22 +683,22 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
                 if ($newProject == "")
                     $newProject = $row["type"];
 
-                $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description ='$newProject'")
-                  or die($die2);
+                $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
+                or die($die2);
 
                 $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
 
                 if (is_null($row3["id"]))
                 {
-                    if (!$result2=@pg_query($cnx2,"INSERT INTO project(areaid, description) VALUES ('$unidentifiedArea', '$newProject')"))
+                    if (!$result2=@pg_query($cnx2,"INSERT INTO project(areaid, description) VALUES ('$unidentifiedArea', " . DBPostgres::checkStringNull($newProject) . ")"))
                     {
-                            $error=("It has not been possible to insert the new project from values ('$unidentifiedArea', '$newProject').\n");
+                            $error=("It has not been possible to insert the new project from values ('$unidentifiedArea', " . DBPostgres::checkStringNull($newCustomer) . ").\n");
                             print ($error);
                         break;
-                       }
+                    }
 
-                    $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description ='$newProject'")
-                      or die($die2);
+                    $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
+                    or die($die2);
 
                     $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
                 }
@@ -722,22 +722,22 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
                 if ($newProject == "")
                     $newProject = $row["type"];
 
-                $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description ='$newProject'")
-                  or die($die2);
+                $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
+                or die($die2);
 
                 $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
 
                 if (is_null($row3["id"]))
                 {
-                    if (!$result2=@pg_query($cnx2,"INSERT INTO project(areaid, description) VALUES ('$unidentifiedArea', '$newProject')"))
+                    if (!$result2=@pg_query($cnx2,"INSERT INTO project(areaid, description) VALUES ('$unidentifiedArea', " . DBPostgres::checkStringNull($newProject) . ")"))
                     {
-                            $error=("It has not been possible to insert the new project from values ('$unidentifiedArea', '$newProject').\n");
+                            $error=("It has not been possible to insert the new project from values ('$unidentifiedArea', " . DBPostgres::checkStringNull($newCustomer) . ").\n");
                             print ($error);
                         break;
-                       }
+                    }
 
-                    $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description ='$newProject'")
-                      or die($die2);
+                    $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
+                    or die($die2);
 
                     $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
                 }
@@ -760,22 +760,22 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
             if (is_null($newCustomer))
                 $newCustomer = $row["type"];
 
-            $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name ='$newCustomer'")
-              or die($die2);
+            $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
+            or die($die2);
 
             $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
 
             if (is_null($row3["id"]))
             {
-                if (!$result2=@pg_query($cnx2,"INSERT INTO customer(sectorid, name, type) VALUES ('$unidentifiedSector', '$newCustomer', 'internal')"))
+                if (!$result2=@pg_query($cnx2,"INSERT INTO customer(sectorid, name, type) VALUES ('$unidentifiedSector', " . DBPostgres::checkStringNull($newCustomer) . ", 'internal')"))
                 {
                         $error=("It has not been possible to insert the new customer from values ('$unidentifiedSector', '$newCustomer', 'internal').\n");
                         print ($error);
                     break;
-                   }
+                }
 
-                $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name ='$newCustomer'")
-                  or die($die2);
+                $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
+                or die($die2);
 
                 $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
             }
@@ -801,22 +801,22 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
                 if ($newProject == "")
                     $newProject = $row["type"];
 
-                $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description ='$newProject'")
-                  or die($die2);
+                $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
+                or die($die2);
 
                 $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
 
                 if (is_null($row3["id"]))
                 {
-                    if (!$result2=@pg_query($cnx2,"INSERT INTO project(areaid, description) VALUES ('$unidentifiedArea', '$newProject')"))
+                    if (!$result2=@pg_query($cnx2,"INSERT INTO project(areaid, description) VALUES ('$unidentifiedArea', " . DBPostgres::checkStringNull($newProject) . ")"))
                     {
-                            $error=("It has not been possible to insert the new project from values ('$unidentifiedArea', '$newProject').\n");
+                            $error=("It has not been possible to insert the new project from values ('$unidentifiedArea', " . DBPostgres::checkStringNull($newCustomer) . ").\n");
                             print ($error);
                         break;
-                       }
+                    }
 
-                    $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description ='$newProject'")
-                      or die($die2);
+                    $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
+                    or die($die2);
 
                     $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
                 }
@@ -838,22 +838,22 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
             if (is_null($newCustomer))
                 $newCustomer = $row["type"];
 
-            $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name ='$newCustomer'")
-              or die($die2);
+            $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
+            or die($die2);
 
             $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
 
             if (is_null($row3["id"]))
             {
-                if (!$result2=@pg_query($cnx2,"INSERT INTO customer(sectorid, name, type) VALUES ('$unidentifiedSector', '$newCustomer', 'internal')"))
+                if (!$result2=@pg_query($cnx2,"INSERT INTO customer(sectorid, name, type) VALUES ('$unidentifiedSector', " . DBPostgres::checkStringNull($newCustomer) . ", 'internal')"))
                 {
                         $error=("It has not been possible to insert the new customer from values ('$unidentifiedSector', '$newCustomer', 'internal').\n");
                         print ($error);
                     break;
-                   }
+                }
 
-                $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name ='$newCustomer'")
-                  or die($die2);
+                $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
+                or die($die2);
 
                 $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
             }
@@ -877,22 +877,22 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
             if (is_null($newCustomer))
                 $newCustomer = $row["type"];
 
-            $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name ='$newCustomer'")
-              or die($die2);
+            $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
+            or die($die2);
 
             $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
 
             if (is_null($row3["id"]))
             {
-                if (!$result2=@pg_query($cnx2,"INSERT INTO customer(sectorid, name, type) VALUES ('$unidentifiedSector', '$newCustomer', 'internal')"))
+                if (!$result2=@pg_query($cnx2,"INSERT INTO customer(sectorid, name, type) VALUES ('$unidentifiedSector', " . DBPostgres::checkStringNull($newCustomer) . ", 'internal')"))
                 {
                         $error=("It has not been possible to insert the new customer from values ('$unidentifiedSector', '$newCustomer', 'internal').\n");
                         print ($error);
                     break;
-                   }
+                }
 
-                $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name ='$newCustomer'")
-                  or die($die2);
+                $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
+                or die($die2);
 
                 $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
             }
@@ -914,22 +914,22 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
             if (is_null($newCustomer))
                 $newCustomer = $row["type"];
 
-            $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name ='$newCustomer'")
-              or die($die2);
+            $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
+            or die($die2);
 
             $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
 
             if (is_null($row3["id"]))
             {
-                if (!$result2=@pg_query($cnx2,"INSERT INTO customer(sectorid, name, type) VALUES ('$unidentifiedSector', '$newCustomer', 'internal')"))
+                if (!$result2=@pg_query($cnx2,"INSERT INTO customer(sectorid, name, type) VALUES ('$unidentifiedSector', " . DBPostgres::checkStringNull($newCustomer) . ", 'internal')"))
                 {
                         $error=("It has not been possible to insert the new customer from values ('$unidentifiedSector', '$newCustomer', 'internal').\n");
                         print ($error);
                     break;
-                   }
+                }
 
-                $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name ='$newCustomer'")
-                  or die($die2);
+                $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
+                or die($die2);
 
                 $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
             }
@@ -946,22 +946,22 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
             if ($newProject == "")
                 $newProject = $row["type"];
 
-            $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description ='$newProject'")
-              or die($die2);
+            $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
+            or die($die2);
 
             $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
 
             if (is_null($row3["id"]))
             {
-                if (!$result2=@pg_query($cnx2,"INSERT INTO project(areaid, description) VALUES ('$unidentifiedArea', '$newProject')"))
+                if (!$result2=@pg_query($cnx2,"INSERT INTO project(areaid, description) VALUES ('$unidentifiedArea', " . DBPostgres::checkStringNull($newCustomer) . ")"))
                 {
-                        $error=("It has not been possible to insert the new project from values ('$unidentifiedArea', '$newProject').\n");
+                        $error=("It has not been possible to insert the new project from values ('$unidentifiedArea', '$newCustomer').\n");
                         print ($error);
                     break;
-                   }
+                }
 
-                $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description ='$newProject'")
-                  or die($die2);
+                $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
+                or die($die2);
 
                 $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
             }
@@ -985,22 +985,22 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
             if ($newProject == "")
                 $newProject = $row["type"];
 
-            $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description ='$newProject'")
-              or die($die2);
+            $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
+            or die($die2);
 
             $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
 
             if (is_null($row3["id"]))
             {
-                if (!$result2=@pg_query($cnx2,"INSERT INTO project(areaid, description) VALUES ('$unidentifiedArea', '$newProject')"))
+                if (!$result2=@pg_query($cnx2,"INSERT INTO project(areaid, description) VALUES ('$unidentifiedArea', " . DBPostgres::checkStringNull($newCustomer) . ")"))
                 {
-                        $error=("It has not been possible to insert the new project from values ('$unidentifiedArea', '$newProject').\n");
+                        $error=("It has not been possible to insert the new project from values ('$unidentifiedArea', '$newCustomer').\n");
                         print ($error);
                     break;
-                   }
+                }
 
-                $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description ='$newProject'")
-                  or die($die2);
+                $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
+                or die($die2);
 
                 $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
             }
@@ -1026,22 +1026,22 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
                 if ($newProject == "")
                     $newProject = 'default';
 
-                $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description ='$newProject'")
-                  or die($die2);
+                $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
+                or die($die2);
 
                 $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
 
                 if (is_null($row3["id"]))
                 {
-                    if (!$result2=@pg_query($cnx2,"INSERT INTO project(areaid, description) VALUES ('$unidentifiedArea', '$newProject')"))
+                    if (!$result2=@pg_query($cnx2,"INSERT INTO project(areaid, description) VALUES ('$unidentifiedArea', " . DBPostgres::checkStringNull($newCustomer) . ")"))
                     {
-                            $error=("It has not been possible to insert the new project from values ('$unidentifiedArea', '$newProject').\n");
+                            $error=("It has not been possible to insert the new project from values ('$unidentifiedArea', '$newCustomer').\n");
                             print ($error);
                         break;
-                       }
+                    }
 
-                    $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description ='$newProject'")
-                      or die($die2);
+                    $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
+                    or die($die2);
 
                     $row3=@pg_fetch_array($result3,NULL,PGSQL_ASSOC);
                 }
@@ -1059,7 +1059,7 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
   }
 
 
- if (!$result2=@pg_query($cnx2,"INSERT INTO task(_date, init, _end, story, telework, text, ttype, phase, usrid, projectid, customerid) VALUES ('{$row["_date"]}', '{$row["init"]}', '{$row["_end"]}', $story, $telework, $text, $ttype, $phase, '{$row2["id"]}', $projectid, $customerid)")) {
+ if (!$result2=@pg_query($cnx2,"INSERT INTO task(_date, init, _end, story, telework, text, ttype, phase, usrid, projectid, customerid) VALUES ('{$row["_date"]}', '{$row["init"]}', '{$row["_end"]}', " . DBPostgres::checkStringNull($story) . ", " . DBPostgres::boolToString($telework) . ", " . DBPostgres::checkStringNull($text) . ", " . DBPostgres::checkStringNull($ttype) . ", " . DBPostgres::checkStringNull($phase) . ", '{$row2["id"]}', $projectid, $customerid)")) {
     $error=("It has not been possible to insert the new task for user '{$row["uid"]}' from values ('{$row["_date"]}', '{$row["init"]}', '{$row["_end"]}', $story, $telework, $text, $ttype, $phase, '{$row2["id"]}', $projectid, $customerid).\n");
     print ($error);
    }
@@ -1078,7 +1078,7 @@ or die($die1);
 
 while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
- if (!$result2=@pg_query($cnx2,"INSERT INTO city(name) VALUES ('{$row["city"]}')")) {
+ if (!$result2=@pg_query($cnx2,"INSERT INTO city(name) VALUES (" . DBPostgres::checkStringNull($row["city"]) . ")")) {
     $error=("It has not been possible to insert the new city from values ('{$row["city"]}').\n");
     print ($error);
    }
@@ -1098,8 +1098,8 @@ or die($die1);
 
 while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
- $result2=@pg_query($cnx2,$query="SELECT * FROM city WHERE name ='{$row["city"]}'")
-      or die($die2);
+ $result2=@pg_query($cnx2,$query="SELECT * FROM city WHERE name =" . DBPostgres::checkStringNull($row["city"]))
+    or die($die2);
 
  $row2=@pg_fetch_array($result2);
 
@@ -1123,12 +1123,12 @@ or die($die1);
 
 while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
- $result2=@pg_query($cnx2,$query="SELECT * FROM usr WHERE login ='{$row["uid"]}'")
-      or die($die2);
+ $result2=@pg_query($cnx2,$query="SELECT * FROM usr WHERE login =" . DBPostgres::checkStringNull($row["uid"]))
+    or die($die2);
 
  $row2=@pg_fetch_array($result2);
 
- if (!$result2=@pg_query($cnx2,"INSERT INTO custom_event(_date, hours, type, usrid) VALUES ('{$row["date"]}', '{$row["hours"]}', '{$row["ev_type"]}', '{$row2["id"]}')")) {
+ if (!$result2=@pg_query($cnx2,"INSERT INTO custom_event(_date, hours, type, usrid) VALUES ('{$row["date"]}', " . DBPostgres::checkNull($row["hours"]) . ", " . DBPostgres::checkStringNull($row["ev_type"]) . ", '{$row2["id"]}')")) {
     $error=("It has not been possible to insert the new custom event for user '{$row["uid"]}' from values ('{$row["date"]}', '{$row["hours"]}', '{$row["ev_type"]}', '{$row2["id"]}').\n");
     print ($error);
    }
@@ -1147,7 +1147,7 @@ or die($die2);
 
 while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
-    $result2=@pg_query($cnx1,$query="SELECT * FROM periods WHERE uid = '{$row["login"]}' ORDER BY init ASC")
+    $result2=@pg_query($cnx1,$query="SELECT * FROM periods WHERE uid = " . DBPostgres::checkStringNull($row["login"]) . " ORDER BY init ASC")
     or die($die1);
 
 
@@ -1176,7 +1176,7 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
          if (is_null($row2["city"]))
             $city_ant = "NULL";
-          else $city_ant = "'{$row2["city"]}'";
+         else $city_ant = "'{$row2["city"]}'";
 
          if ($row2["journey"] == NULL)
             $journey_ant = "NULL";
@@ -1242,16 +1242,16 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
                     print ("Area with old id '$area_ant' does not exist. Area history for user '{$row["login"]}' and init date '{$row2["_end"]}'  will be assigned to area '$unidentified_area'.\n");
 
                     $result3=@pg_query($cnx2,$query="SELECT * FROM area WHERE id_ant = '$unidentified_area'")
-                      or die($die2);
+                    or die($die2);
 
-                     $row3=@pg_fetch_array($result3);
+                    $row3=@pg_fetch_array($result3);
 
                   }
 
                 if (!$result3=@pg_query($cnx2,"INSERT INTO area_history(areaid, init_date, end_date, usrid) VALUES ('{$row3["id"]}', $area_ant_date, '{$row2["init"]}', '{$row["id"]}')")) {
                         $error=("It has not been possible to insert the new area period for user '{$row["login"]}' from values ('{$row3["id"]}',  $area_ant_date, '{$row2["init"]}', '{$row["id"]}').\n");
                         print ($error);
-                   }
+                }
             }
 
             if ($row2["area"] == NULL)
@@ -1267,10 +1267,10 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
         if ((($journey_ant != "'{$row2["journey"]}'") && !(($journey_ant == "NULL") && ($row2["journey"] == NULL))) || $longTimeAgo ){
 
             if ($journey_ant != "NULL")
-                if (!$result3=@pg_query($cnx2,"INSERT INTO journey_history(journey, init_date, end_date, usrid) VALUES ($journey_ant, $journey_ant_date, '$last_date', '{$row["id"]}')")) {
+                if (!$result3=@pg_query($cnx2,"INSERT INTO journey_history(journey, init_date, end_date, usrid) VALUES (" . DBPostgres::checkNull($journey_ant) . ", $journey_ant_date, '$last_date', '{$row["id"]}')")) {
                         $error=("It has not been possible to insert the new journey period for user '{$row["login"]}' from values ($journey_ant, $journey_ant_date, '$last_date', '{$row["id"]}').\n");
                         print ($error);
-                   }
+                }
             if ($row2["journey"] == NULL)
                 $journey_ant = "NULL";
             else
@@ -1282,16 +1282,16 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
         if ((($hour_cost_ant != "'{$row2["hour_cost"]}'") && !(($hour_cost_ant == "NULL") &&($row2["hour_cost"] == NULL))) || $longTimeAgo ){
             if ($hour_cost_ant != "NULL")
-                if (!$result3=@pg_query($cnx2,"INSERT INTO hour_cost_history(hour_cost, init_date, end_date, usrid) VALUES ($hour_cost_ant, $hour_cost_ant_date, '$last_date', '{$row["id"]}')")) {
+                if (!$result3=@pg_query($cnx2,"INSERT INTO hour_cost_history(hour_cost, init_date, end_date, usrid) VALUES (" . DBPostgres::checkNull($hour_cost_ant) . ", $hour_cost_ant_date, '$last_date', '{$row["id"]}')")) {
                         $error=("It has not been possible to insert the new hour cost period for user '{$row["login"]}' from values ($hour_cost_ant, $hour_cost_ant_date, '$last_date', '{$row["id"]}').\n");
                         print ($error);
-                   }
+                }
             if (is_null($row2["hour_cost"]))
-             {
+            {
                 print "A NULL value for hour cost has been detected. It'll be changed to '0'.\n";
                 $hour_cost_ant = "'0'";
-             }
-             else $hour_cost_ant = "'{$row2["hour_cost"]}'";
+            }
+            else $hour_cost_ant = "'{$row2["hour_cost"]}'";
             $hour_cost_ant_date = "'{$row2["init"]}'";
         } elseif ($hour_cost_ant_date == "NULL")
             $hour_cost_ant_date = "'{$row2["init"]}'";
@@ -1303,19 +1303,19 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
             {
 
                 $result3=@pg_query($cnx2,$query="SELECT * FROM city WHERE name = $city_ant")
-                    or die($die2);
+                or die($die2);
 
-                 $row3=@pg_fetch_array($result3);
+                $row3=@pg_fetch_array($result3);
 
                 if (!$result3=@pg_query($cnx2,"INSERT INTO city_history(cityid, init_date, end_date, usrid) VALUES ('{$row3["id"]}',  $city_ant_date, '$last_date', '{$row["id"]}')")) {
                         $error=("It has not been possible to insert the new city period for user '{$row["login"]}'from values ('{$row3["id"]}', $city_ant_date, '$last_date', '{$row["id"]}'). City name= $city_ant\n");
                         print ($error);
-                   }
+                }
             }
 
             if (is_null($row2["city"]))
                 $city_ant = "NULL";
-             else $city_ant = "'{$row2["city"]}'";
+            else $city_ant = "'{$row2["city"]}'";
 
             $city_ant_date = "'{$row2["init"]}'";
         } elseif ($city_ant_date == "NULL")
@@ -1351,42 +1351,42 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
             print ("Area with old id '$area_ant' does not exist. Area history for user '{$row["login"]}' and init date $last_date  will be assigned to area '$unidentified_area'.\n");
 
             $result2=@pg_query($cnx2,$query="SELECT * FROM area WHERE id_ant = '$unidentified_area'")
-              or die($die2);
+            or die($die2);
 
-             $row2=@pg_fetch_array($result2);
+            $row2=@pg_fetch_array($result2);
 
           }
 
         if (!$result3=@pg_query($cnx2,"INSERT INTO area_history(areaid, init_date, end_date, usrid) VALUES ('{$row2["id"]}' , $area_ant_date, $last_date, '{$row["id"]}')")) {
             $error=("It has not been possible to insert the last area period for user '{$row["login"]}' from values ('{$row2["id"]}' ,  $area_ant_date, $last_date, '{$row["id"]}').\n");
                 print ($error);
-           }
+        }
 
-        if (!$result3=@pg_query($cnx2,"INSERT INTO journey_history(journey, init_date, end_date, usrid) VALUES ($journey_ant, $journey_ant_date, $last_date, '{$row["id"]}')")) {
+        if (!$result3=@pg_query($cnx2,"INSERT INTO journey_history(journey, init_date, end_date, usrid) VALUES (" . DBPostgres::checkNull($journey_ant) . ", $journey_ant_date, $last_date, '{$row["id"]}')")) {
                 $error=("It has not been possible to insert the last journey period for user '{$row["login"]}' from values ($journey_ant, $journey_ant_date, $last_date, '{$row["id"]}').\n");
                 print ($error);
-           }
+        }
 
         if ($hour_cost_ant == "NULL")
-         {
+        {
             print "A NULL value for hour cost has been detected. It'll be changed to '0'.\n";
             $hour_cost_ant = "'0'";
-         }
+        }
 
-        if (!$result3=@pg_query($cnx2,"INSERT INTO hour_cost_history(hour_cost, init_date, end_date, usrid) VALUES ($hour_cost_ant, $hour_cost_ant_date, $last_date, '{$row["id"]}')")) {
+        if (!$result3=@pg_query($cnx2,"INSERT INTO hour_cost_history(hour_cost, init_date, end_date, usrid) VALUES (" . DBPostgres::checkNull($hour_cost_ant) . ", $hour_cost_ant_date, $last_date, '{$row["id"]}')")) {
                 $error=("It has not been possible to insert the last hour cost period for user '{$row["login"]}' from values ($hour_cost_ant, $hour_cost_ant_date, $last_date, '{$row["id"]}').\n");
                 print ($error);
-           }
+        }
 
         $result3=@pg_query($cnx2,$query="SELECT * FROM city WHERE name = $city_ant")
-              or die($die2);
+            or die($die2);
 
-         $row3=@pg_fetch_array($result3);
+        $row3=@pg_fetch_array($result3);
 
         if (!$result3=@pg_query($cnx2,"INSERT INTO city_history(cityid, init_date, end_date, usrid) VALUES ('{$row3["id"]}', $city_ant_date, $last_date, '{$row["id"]}')")) {
                 $error=("It has not been possible to insert the last city period for user '{$row["login"]}' from values ('{$row3["id"]}', $city_ant_date, $last_date, '{$row["id"]}'). City name= $city_ant\n");
                 print ($error);
-           }
+        }
     }
 }
 
@@ -1403,17 +1403,13 @@ or die($die1);
 
 while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
-  $result2=@pg_query($cnx2,$query="SELECT * FROM usr WHERE login ='{$row["uid"]}'")
+  $result2=@pg_query($cnx2,$query="SELECT * FROM usr WHERE login =" . DBPostgres::checkStringNull($row["uid"]))
   or die($die2);
 
   $row2=@pg_fetch_array($result2);
 
   $res=@pg_query($cnx2,$query="SELECT * FROM extra_hour WHERE usrid ='{$row2["id"]}' AND _date = '{$row["_end"]}'")
   or die($die2);
-
-  $user = new UserVO();
-
-  $user->setId($row2["id"]);
 
   if (pg_num_rows($res) == 0)
   {
@@ -1423,10 +1419,10 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
     $hours = $report[1][$row["uid"]]["total_extra_hours"] - $row["hours"];
 
-    if (!$result3=@pg_query($cnx2,"INSERT INTO extra_hour(_date, hours, usrid) VALUES ('{$row["_end"]}', '$hours', '{$row2["id"]}')")) {
+    if (!$result3=@pg_query($cnx2,"INSERT INTO extra_hour(_date, hours, usrid) VALUES ('{$row["_end"]}', " . DBPostgres::checkNull($hours) . ", '{$row2["id"]}')")) {
             $error=("It has not been possible to insert the new extra hour for user '{$row2["login"]}' from values ('{$row["_end"]}', '$hours', '{$row2["id"]}') and from compensation ('{$row["uid"]}', '{$row["init"]}', '{$row["_end"]}', '{$row["hours"]}', '{$row["paid"]}').\n");
             print ($error);
-       }
+    }
   }
 
 }
