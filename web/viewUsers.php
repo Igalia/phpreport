@@ -278,7 +278,7 @@ Ext.onReady(function(){
         storeId: 'users',
         proxy: userProxy,
         reader:new Ext.data.XmlReader({record: 'user', idProperty:'id' }, userRecord),
-        writer:new Ext.data.XmlWriter({encode: true, writeAllFields: true, root: 'users', tpl: '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><tpl if="name==\'id\'"><{name}>{value}</{name}></tpl><tpl if="name==\'login\'"><{name}>{value}</{name}></tpl></tpl><userGroups><tpl for="fields"><tpl if="name!=\'id\'"><tpl if="name!=\'login\'"><{[values.name.replace("userGroups/", "")]}>{value}</{[values.name.replace("userGroups/", "")]}></tpl></tpl></tpl></userGroups></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, userRecord),
+        writer:new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: true, root: 'users', tpl: '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><tpl if="name==\'id\'"><{name}>{value}</{name}></tpl><tpl if="name==\'login\'"><{name}>{value}</{name}></tpl></tpl><userGroups><tpl for="fields"><tpl if="name!=\'id\'"><tpl if="name!=\'login\'"><{[values.name.replace("userGroups/", "")]}>{value}</{[values.name.replace("userGroups/", "")]}></tpl></tpl></tpl></userGroups></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, userRecord),
         remoteSort: false,
         sortInfo: {
             field: 'login',
@@ -405,7 +405,7 @@ Ext.onReady(function(){
         storeId: 'hourCost',
         proxy: hourCostProxy,
         reader: new Ext.data.XmlReader({record: 'hourCostHistory', idProperty:'id' }, hourCostRecord),
-        writer: new Ext.data.XmlWriter({encode: true, writeAllFields: true, root: 'hourCostHistories'}, hourCostRecord),
+        writer: new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: true, root: 'hourCostHistories'}, hourCostRecord),
         remoteSort: false,
         sortInfo: {
             field: 'init',
@@ -554,7 +554,7 @@ Ext.onReady(function(){
         storeId: 'journeyCost',
         proxy: journeyProxy,
         reader: new Ext.data.XmlReader({record: 'journeyHistory', idProperty:'id' }, journeyRecord),
-        writer: new Ext.data.XmlWriter({encode: true, writeAllFields: true, root: 'journeyHistories'}, journeyRecord),
+        writer: new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: true, root: 'journeyHistories'}, journeyRecord),
         remoteSort: false,
         sortInfo: {
             field: 'init',
@@ -700,7 +700,7 @@ Ext.onReady(function(){
         storeId: 'areaCost',
         proxy: areaProxy,
         reader: new Ext.data.XmlReader({record: 'areaHistory', idProperty:'id' }, areaRecord),
-        writer: new Ext.data.XmlWriter({encode: true, writeAllFields: true, root: 'areaHistories'}, areaRecord),
+        writer: new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: true, root: 'areaHistories'}, areaRecord),
         remoteSort: false,
         sortInfo: {
             field: 'init',
@@ -853,7 +853,7 @@ Ext.onReady(function(){
         storeId: 'cityCost',
         proxy: cityProxy,
         reader: new Ext.data.XmlReader({record: 'cityHistory', idProperty:'id' }, cityRecord),
-        writer: new Ext.data.XmlWriter({encode: true, writeAllFields: true, root: 'cityHistories'}, cityRecord),
+        writer: new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: true, root: 'cityHistories'}, cityRecord),
         remoteSort: false,
         sortInfo: {
             field: 'init',

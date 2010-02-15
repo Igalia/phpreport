@@ -87,7 +87,7 @@ Ext.onReady(function(){
         storeId: 'areas',
         proxy: areaProxy,
         reader:new Ext.data.XmlReader({record: 'area', idProperty:'id' }, areaRecord),
-        writer:new Ext.data.XmlWriter({encode: true, writeAllFields: true, root: 'areas', tpl: '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><{name}>{value}</{name}></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, areaRecord),
+        writer:new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: true, root: 'areas', tpl: '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><{name}>{value}</{name}></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, areaRecord),
         remoteSort: false,
         sortInfo: {
             field: 'name',

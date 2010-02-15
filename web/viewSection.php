@@ -627,7 +627,7 @@ Ext.onReady(function(){
         storeId: 'id',
         proxy: myProxy,
         reader:new Ext.data.XmlReader({record: 'taskSection', idProperty:'id' }, taskSectionRecord),
-        writer:new Ext.data.XmlWriter({encode: true, writeAllFields: true, root: 'taskSections', tpl:'<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><sectionId>' + sectionId  + '</sectionId><tpl for="fields"><tpl if="name!=\'developer/login\'"><tpl if="name==\'developer/id\'"><userId>{value}</userId></tpl><tpl if="name!=\'developer/id\'"><{name}>{value}</{name}></tpl></tpl></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, taskSectionRecord),
+        writer:new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: true, root: 'taskSections', tpl:'<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><sectionId>' + sectionId  + '</sectionId><tpl for="fields"><tpl if="name!=\'developer/login\'"><tpl if="name==\'developer/id\'"><userId>{value}</userId></tpl><tpl if="name!=\'developer/id\'"><{name}>{value}</{name}></tpl></tpl></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, taskSectionRecord),
         remoteSort: false,
         listeners: {
             'write': function() {

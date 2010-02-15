@@ -118,7 +118,7 @@ Ext.onReady(function(){
         storeId: 'assignedUsers',
         proxy: assignedUsersProxy,
         reader:new Ext.data.XmlReader({record: 'user', idProperty:'id' }, userRecord),
-        writer:new Ext.data.XmlWriter({encode: true, writeAllFields: true, root: 'users', tpl: '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><tpl if="name==\'id\'"><{name}>{value}</{name}></tpl><tpl if="name==\'login\'"><{name}>{value}</{name}></tpl></tpl><userGroups><tpl for="fields"><tpl if="name!=\'id\'"><tpl if="name!=\'login\'"><{[values.name.replace("userGroups/", "")]}>{value}</{[values.name.replace("userGroups/", "")]}></tpl></tpl></tpl></userGroups></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, userRecord),
+        writer:new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: true, root: 'users', tpl: '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><tpl if="name==\'id\'"><{name}>{value}</{name}></tpl><tpl if="name==\'login\'"><{name}>{value}</{name}></tpl></tpl><userGroups><tpl for="fields"><tpl if="name!=\'id\'"><tpl if="name!=\'login\'"><{[values.name.replace("userGroups/", "")]}>{value}</{[values.name.replace("userGroups/", "")]}></tpl></tpl></tpl></userGroups></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, userRecord),
         remoteSort: false,
         sortInfo: {
             field: 'login',
@@ -938,7 +938,7 @@ Ext.onReady(function(){
         storeId: 'projects',
         proxy: projectProxy,
         reader:new Ext.data.XmlReader({record: 'project', idProperty:'id' }, projectRecord),
-        writer:new Ext.data.XmlWriter({encode: true, writeAllFields: true, root: 'projects', tpl: '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><tpl if="name==\'init\'"><tpl if="value"><init>{[values.value.format("Y-m-d")]}</init></tpl></tpl><tpl if="name!=\'init\'"><tpl if="name==\'end\'"><tpl if="value"><end>{[values.value.format("Y-m-d")]}</end></tpl></tpl><tpl if="name!=\'end\'"><{name}>{value}</{name}></tpl></tpl></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, projectRecord),
+        writer:new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: true, root: 'projects', tpl: '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><tpl if="name==\'init\'"><tpl if="value"><init>{[values.value.format("Y-m-d")]}</init></tpl></tpl><tpl if="name!=\'init\'"><tpl if="name==\'end\'"><tpl if="value"><end>{[values.value.format("Y-m-d")]}</end></tpl></tpl><tpl if="name!=\'end\'"><{name}>{value}</{name}></tpl></tpl></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, projectRecord),
         remoteSort: false,
         sortInfo: {
             field: 'init',
