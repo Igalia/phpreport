@@ -305,8 +305,13 @@ Ext.onReady(function(){
             },
             'update': function() {
                 this.save();
+            },
+            'dblclick': function(n) {
+                if(n.attributes.url!=NULL)
+                    window.location = n.attributes.url;
             }
         }
+
     });
 
 
@@ -405,10 +410,46 @@ Ext.onReady(function(){
             this.getSelectionModel().selectRow(0);
             this.inlineEditor.startEditing(0);
         },
+
+        /**
+         * buildBottomToolbar
+         */
+        buildBottomToolbar : function() {
+
+            return new Ext.Toolbar({
+                items:[{
+                    iconCls: 'silk-help',
+                    id: 'editHelp',
+                    text: 'How Do I Edit?',
+                    tooltip: editTooltipConf
+                }, '-', {
+                    id: this.id + 'UrlBtn',
+                    iconCls: 'silk-world',
+                    text: 'Browse URL',
+                    ref: '../urlBtn',
+                    disabled: true,
+                    handler: this.onBrowse,
+                    scope: this
+                }
+            ]});
+
+        },
+
+        /**
+         * onBrowse
+         */
+        onBrowse: function() {
+            if (this.getSelectionModel().getSelected().data.url != '')
+                    window.open(this.getSelectionModel().getSelected().data.url);
+        },
+
     });
 
     customerGrid.getSelectionModel().on('selectionchange', function(sm){
         customerGrid.deleteBtn.setDisabled(sm.getCount() < 1);
+        customerGrid.urlBtn.setDisabled(sm.getCount() != 1);
+        if (sm.getCount()==1)
+            customerGrid.urlBtn.setDisabled(sm.getSelected().data.url=='');
     });
 
     var sectorColModel =  new Ext.grid.ColumnModel([
