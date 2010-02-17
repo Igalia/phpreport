@@ -219,10 +219,7 @@ or die($die2);// We just get the data from the old table and put it in the new o
 
 while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
- $url = "NULL";
-
- if ($row["url"] != NULL)
-    $url = "'{$row["url"]}'";
+ $url = "{$row["url"]}";
 
  $result2=@pg_query($cnx2,$query="SELECT * FROM sector WHERE id_ant =" . DBPostgres::checkStringNull($row["sector"]))
     or die($die2);
@@ -266,13 +263,6 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
  $init = "NULL";
  $_end = "NULL";
- $invoice = "NULL";
- $est_hours = "NULL";
- $area = "NULL";
- $description = "NULL";
- $type = "NULL";
- $moved_hours = "NULL";
- $sched_type = "NULL";
 
  if ($row["init"] != NULL)
     $init = "'{$row["init"]}'";
@@ -280,11 +270,9 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
  if ($row["_end"] != NULL)
     $_end = "'{$row["_end"]}'";
 
- if ($row["invoice"] != NULL)
-    $invoice = "'{$row["invoice"]}'";
+ $invoice = "{$row["invoice"]}";
 
- if ($row["est_hours"] != NULL)
-    $est_hours = "'{$row["est_hours"]}'";
+ $est_hours = "{$row["est_hours"]}";
 
  if ($row["area"] == NULL)
  {
@@ -321,17 +309,13 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
  }
 
- if ($row["description"] != NULL)
-    $description = "'{$row["description"]}'";
+ $description = "{$row["description"]}";
 
- if ($row["type"] != NULL)
-    $type = "'{$row["type"]}'";
+ $type = "{$row["type"]}";
 
- if ($row["moved_hours"] != NULL)
-    $moved_hours = "'{$row["moved_hours"]}'";
+ $moved_hours = "{$row["moved_hours"]}";
 
- if ($row["sched_type"] != NULL)
-    $sched_type = "'{$row["sched_type"]}'";
+ $sched_type = "{$row["sched_type"]}";
 
 
  if (!$result2=@pg_query($cnx2,"INSERT INTO project(activation, init, _end, invoice, est_hours, areaid, description, type, moved_hours, sched_type, id_ant) VALUES (" . DBPostgres::boolToString($row["activation"]) . ", $init, $_end, " . DBPostgres::checkNull($invoice) . ", " . DBPostgres::checkNull($est_hours) . ", $area, " . DBPostgres::checkStringNull($description) . ", " . DBPostgres::checkStringNull($type) . ", " . DBPostgres::checkNull($moved_hours) . ", " . DBPostgres::checkStringNull($sched_type) . ", '{$row["id"]}')")) {
