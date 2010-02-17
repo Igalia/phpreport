@@ -352,7 +352,7 @@ Ext.onReady(function(){
                         defaults: {labelStyle: 'text-align: right; width: 125px;', width: 200},
                         defaultType: 'textfield',
                         items: [{
-                            fieldLabel: 'Description <font color="red">*</font>',
+                            fieldLabel: 'Name <font color="red">*</font>',
                             name: 'description',
                             id: 'winDescription',
                             allowBlank:false
@@ -533,7 +533,7 @@ Ext.onReady(function(){
                         defaultType: 'textfield',
 
                         items: [{
-                            fieldLabel: 'Description <font color="red">*</font>',
+                            fieldLabel: 'Name <font color="red">*</font>',
                             name: 'description',
                             id: 'win2Description',
                             allowBlank:false,
@@ -957,7 +957,7 @@ Ext.onReady(function(){
 
     var projectColModel =  new Ext.grid.ColumnModel([
         {
-            header: 'Description',
+            header: 'Name',
             width: 300,
             sortable: true,
             dataIndex: 'description',
