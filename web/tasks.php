@@ -73,6 +73,7 @@ var taskRecord = new Ext.data.Record.create([
     {name:'userId'},
     {name:'projectId'},
     {name:'customerId'},
+    {name:'taskStoryId'}
 ]);
 
 /* Schema of the information about customers */
