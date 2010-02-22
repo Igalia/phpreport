@@ -71,18 +71,10 @@
             $iterationJson[summary] = $iteration->getSummary();
 
             if (!is_null($iteration->getInit()))
-            {
-                $date[format] = 'Y-m-d';
-                $date[value] = $iteration->getInit()->format("Y-m-d");
-                $iterationJson[init] = $date;
-            }
+                $iterationJson[init] = $iteration->getInit()->format("Y-m-d");
 
             if (!is_null($iteration->getEnd()))
-            {
-                $date[format] = 'Y-m-d';
-                $date[value] = $iteration->getEnd()->format("Y-m-d");
-                $iterationJson[end] = $date;
-            }
+                $iterationJson[end] = $iteration->getEnd()->format("Y-m-d");
 
             $iterationChildren = array();
 
@@ -126,18 +118,10 @@
                         $taskStoryJson[user] = $developer->getLogin();
 
                     if (!is_null($taskStory->getInit()))
-                    {
-                        $date[format] = 'Y-m-d';
-                        $date[value] = $taskStory->getInit()->format("Y-m-d");
-                        $taskStoryJson[init] = $date;
-                    }
+                        $taskStoryJson[init] = $taskStory->getInit()->format("Y-m-d");
 
                     if (!is_null($taskStory->getEnd()))
-                    {
-                        $date[format] = 'Y-m-d';
-                        $date[value] = $taskStory->getEnd()->format("Y-m-d");
-                        $taskStoryJson[end] = $date;
-                    }
+                        $taskStoryJson[end] = $taskStory->getEnd()->format("Y-m-d");
 
                     if (!is_null($taskStory->getEstEnd()))
                     {

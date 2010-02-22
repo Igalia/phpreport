@@ -73,18 +73,10 @@
             $moduleJson[summary] = $module->getSummary();
 
             if (!is_null($module->getInit()))
-            {
-                $date[format] = 'Y-m-d';
-                $date[value] = $module->getInit()->format("Y-m-d");
-                $moduleJson[init] = $date;
-            }
+                $moduleJson[init] = $module->getInit()->format("Y-m-d");
 
             if (!is_null($module->getEnd()))
-            {
-                $date[format] = 'Y-m-d';
-                $date[value] = $module->getEnd()->format("Y-m-d");
-                $moduleJson[end] = $date;
-            }
+                $moduleJson[end] = $module->getEnd()->format("Y-m-d");
 
             $moduleChildren = array();
 

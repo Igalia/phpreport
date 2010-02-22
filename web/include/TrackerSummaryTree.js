@@ -30,7 +30,7 @@ var TrackerSummaryTree = Ext.extend(Ext.ux.tree.ColumnTree, {
         // configure widget
         Ext.apply(this, {
             collapsible: true,
-            width: 750,
+            width: 950,
             height: 300,
             rootVisible:false,
             autoScroll:true,
@@ -44,15 +44,29 @@ var TrackerSummaryTree = Ext.extend(Ext.ux.tree.ColumnTree, {
             },{
                 header:'Estimated',
                 width:100,
-                dataIndex:'duration'
+                dataIndex:'duration',
+                xtype: 'numbercolumn',
             },{
                 header:'Spent',
                 width:100,
-                dataIndex:'spent'
+                dataIndex:'spent',
+                xtype: 'numbercolumn',
             },{
                 header:'To do',
                 width:100,
                 dataIndex:'toDo'
+            },{
+                header: 'Init Date',
+                width:100,
+                dataIndex: 'init',
+                xtype: 'datecolumn',
+                format: 'Y-m-d',
+            },{
+                header: 'End Date',
+                width:100,
+                dataIndex: 'end',
+                xtype: 'datecolumn',
+                format: 'Y-m-d',
             },{
                 header:'Assigned To',
                 width:100,
@@ -70,7 +84,7 @@ var TrackerSummaryTree = Ext.extend(Ext.ux.tree.ColumnTree, {
                 preloadChildren: true,
                 uiProviders:{
                     'col': Ext.ux.tree.ColumnNodeUI
-                }
+                },
             }
             ),
 
