@@ -92,6 +92,8 @@ var taskStoryRecord = new Ext.data.Record.create([
     {name:'friendlyName'},
 ]);
 
+var tab = 3;
+
 /*  Class that stores a taskRecord element and shows it on screen.
     It keeps the taskRecord in synch with the content of the form on screen,
     in real-time (as soon as it changes). */
@@ -118,6 +120,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 increment: 15,
                 initTimeField: true,
                 vtype: 'timerange',
+                tabIndex: tab++,
                 listeners: {
                     'change': function() {
                         this.parent.taskRecord.set('initTime',this.getValue());
@@ -135,6 +138,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 increment: 15,
                 endTimeField: true,
                 vtype: 'timerange',
+                tabIndex: tab++,
                 listeners: {
                     'change': function() {
                         if (this.getValue() == '00:00')
@@ -143,58 +147,9 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     }
                 },
             }),
-            taskTypeField: new Ext.form.Field({
-                parent: this,
-                value: this.taskRecord.data['ttype'],
-                listeners: {
-                    'change': function() {
-                        this.parent.taskRecord.set('ttype',this.getValue());
-                    }
-	        }
-            }),
-            storyField: new Ext.form.Field({
-                parent: this,
-                value: this.taskRecord.data['story'],
-                listeners: {
-                    'change': function() {
-                        this.parent.taskRecord.set('story',this.getValue());
-                    }
-                }
-            }),
-            descriptionTextArea: new Ext.form.TextArea({
-                parent: this,
-                height:205,
-                value: this.taskRecord.data['text'],
-                listeners: {
-                    'change': function() {
-                        this.parent.taskRecord.set('text',this.getValue());
-                    }
-                }
-            }),
-            teleworkCheckBox: new Ext.form.Checkbox({
-                parent: this,
-                value: (this.taskRecord.data['telework']=='true')?true:false,
-                listeners: {
-                    'change': function() {
-                        this.parent.taskRecord.set('telework',this.getValue());
-                    }
-                }
-            }),
-            deleteButton: new Ext.Button({
-                parent: this,
-                text:'Delete',
-                width: 60,
-                margins: "7px 0 0 85px",
-                handler: function() {
-                    // We remove the TaskRecord from the Store, the TaskPanel
-                    // from the parent panel and reload it
-                    this.parent.store.remove(this.parent.taskRecord);
-                    this.parent.parent.remove(this.parent);
-                    this.parent.parent.doLayout();
-                }
-            }),
             customerComboBox: new Ext.form.ComboBox({
                 parent: this,
+                tabIndex: tab++,
                 store: new Ext.data.Store({
                     parent: this,
                     autoLoad: true,  //initial data are loaded in the application init
@@ -230,6 +185,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
             projectComboBox: new Ext.form.ComboBox({
                 parent: this,
+                tabIndex: tab++,
                 store: new Ext.data.Store({
                     parent: this,
                     autoLoad: true,  //initial data are loaded in the application init
@@ -264,8 +220,29 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     },
                 }
             }),
+            taskTypeField: new Ext.form.Field({
+                parent: this,
+                value: this.taskRecord.data['ttype'],
+                tabIndex: tab++,
+                listeners: {
+                    'change': function() {
+                        this.parent.taskRecord.set('ttype',this.getValue());
+                    }
+	        }
+            }),
+            storyField: new Ext.form.Field({
+                parent: this,
+                value: this.taskRecord.data['story'],
+                tabIndex: tab++,
+                listeners: {
+                    'change': function() {
+                        this.parent.taskRecord.set('story',this.getValue());
+                    }
+                }
+            }),
             taskStoryComboBox: new Ext.form.ComboBox({
                 parent: this,
+                tabIndex: tab++,
                 store: new Ext.data.Store({
                     parent: this,
                     autoLoad: true,  //initial data are loaded in the application init
@@ -294,6 +271,41 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     'change': function() {
                         this.parent.taskRecord.set('taskStoryId',this.getValue());
                     },
+                }
+            }),
+            teleworkCheckBox: new Ext.form.Checkbox({
+                parent: this,
+                value: (this.taskRecord.data['telework']=='true')?true:false,
+                tabIndex: tab++,
+                listeners: {
+                    'change': function() {
+                        this.parent.taskRecord.set('telework',this.getValue());
+                    }
+                }
+            }),
+            descriptionTextArea: new Ext.form.TextArea({
+                parent: this,
+                height:205,
+                tabIndex: tab++,
+                value: this.taskRecord.data['text'],
+                listeners: {
+                    'change': function() {
+                        this.parent.taskRecord.set('text',this.getValue());
+                    }
+                }
+            }),
+            deleteButton: new Ext.Button({
+                parent: this,
+                text:'Delete',
+                width: 60,
+                tabIndex: tab++,
+                margins: "7px 0 0 85px",
+                handler: function() {
+                    // We remove the TaskRecord from the Store, the TaskPanel
+                    // from the parent panel and reload it
+                    this.parent.store.remove(this.parent.taskRecord);
+                    this.parent.parent.remove(this.parent);
+                    this.parent.parent.doLayout();
                 }
             }),
         });
@@ -467,8 +479,8 @@ Ext.onReady(function(){
 
 <div id="content">
     <div id="tasks"></div>
-    <input type="submit" id="newTask" value="New Task">
-    <input type="submit" id="save" value="Save">
+    <input type="submit" id="newTask" value="New Task" tabindex=1>
+    <input type="submit" id="save" value="Save" tabindex=2>
 </div>
 
 <?php
