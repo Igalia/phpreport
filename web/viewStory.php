@@ -451,7 +451,6 @@ Ext.onReady(function(){
                         name: 'btnResetCreate',
                         id: 'btnResetCreate',
                         tooltip: 'Resets all the fields to empty values.',
-                        tabIndex:1,
                         handler: function(){
                             Ext.getCmp('winEndDate').reset();
                             Ext.getCmp('winStartDate').reset();
@@ -468,7 +467,6 @@ Ext.onReady(function(){
                        name: "btnAcceptCreate",
                        id: "btnAcceptCreate",
                        disabled: true,
-                       tabIndex: 2,
                        handler: function(){
                             var newRecord = new taskStoryRecord({
 
@@ -497,7 +495,6 @@ Ext.onReady(function(){
                        text: 'Cancel',
                        name: "btnCancelCreate",
                        id: "btnCancelCreate",
-                       tabIndex: 3,
                        handler: function(){
                             Ext.getCmp("windowCreate").hide();
                        }
@@ -663,7 +660,6 @@ Ext.onReady(function(){
                         name: 'btnResetUpdate',
                         id: 'btnResetUpdate',
                                     tooltip: 'Resets all the fields to their original values.',
-                        tabIndex:1,
                         handler: function(){
                             Ext.getCmp('win2PendHours').reset();
                             Ext.getCmp('win2EstHours').reset();
@@ -689,7 +685,6 @@ Ext.onReady(function(){
                        text: 'Accept',
                        name: "btnAcceptUpdate",
                        id: "btnAcceptUpdate",
-                       tabIndex: 2,
                        handler: function(){
 
                         selected.set('endDate', Ext.getCmp('win2EndDate').getValue());
@@ -713,7 +708,6 @@ Ext.onReady(function(){
                        text: 'Cancel',
                        name: "btnCancelUpdate",
                        id: "btnCancelUpdate",
-                       tabIndex: 3,
                        handler: function(){
                              Ext.getCmp("windowUpdate").hide();
                        }
