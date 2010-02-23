@@ -108,7 +108,8 @@ var TaskPanel = Ext.extend(Ext.Panel, {
 
             /* Inputs of the task form */
             initTimeField: new Ext.form.TimeField({
-	        parent: this,
+                parent: this,
+                ref: '../initField',
                 allowBlank: false,
                 width: 60,
                 format: 'H:i',
@@ -125,6 +126,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
             endTimeField: new Ext.form.TimeField({
                 parent: this,
+                ref: '../endField',
                 allowBlank: false,
                 width: 60,
                 format: 'H:i',
@@ -135,6 +137,8 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 vtype: 'timerange',
                 listeners: {
                     'change': function() {
+                        if (this.getValue() == '00:00')
+                            this.setValue('23:59');
                         this.parent.taskRecord.set('endTime',this.getValue());
                     }
                 },
