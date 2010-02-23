@@ -360,7 +360,13 @@ Ext.onReady(function(){
                             name: 'estHours',
                             id: 'winEstHours',
                             xtype: 'numberfield',
-                            allowBlank: false
+                            allowBlank: false,
+                            listeners: {
+                                'change': function() {
+                                    if ((Ext.getCmp('winPendHours').getValue() == '') && (this.getValue() != ''))
+                                        Ext.getCmp('winPendHours').setValue(this.getValue());
+                                }
+                            },
                         },{
                             fieldLabel: 'Pending Hours',
                             name: 'pendHours',
