@@ -17,3 +17,15 @@
 #footer {
     clear: both;
 }
+
+.started-task {
+    background: yellow;
+}
+
+.not-started-task {
+    background: #FE454B;
+}
+
+.finished-task {
+    background: #80FF00;
+}

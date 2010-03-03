@@ -40,7 +40,17 @@ var AnalysisTrackerSummaryTree = Ext.extend(Ext.ux.tree.ColumnTree, {
             columns:[{
                 header:'Task',
                 width:330,
-                dataIndex:'task'
+                dataIndex:'task',
+                renderer: function(value, metaData, record, rowIndex, colIndex, store){
+                    if (record.class != 'task-story') return value;
+                    state = 'started-task';
+                    if (!(record.spent > 0)) {
+                        state = 'not-started-task';
+                    } else if (!(record.toDo > 0)) {
+                        state = 'finished-task';
+                    }
+                    return "<font class=" + state + ">" + value + "</font>";
+                },
             },{
                 header:'Estimated',
                 width:100,
