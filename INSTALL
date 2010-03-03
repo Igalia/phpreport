@@ -26,9 +26,10 @@ the web server (usually it would be /var/www/phpreport). If you changed any
 data on the previous step, edit the file config/config.php and set the correct
 values for the DB name, user, password, host, etc.
 
-You will also have to download the ExtJS library, version 3.1 (www.extjs.com)
-and extract it to the directory web/ext/. You can get the library in the following URL:
-http://www.extjs.com/products/extjs/download.php?dl=extjs310
+You will also have to download the ExtJS library, version 3.0.3 (www.extjs.com)
+and extract it to the directory web/ext/. Please note you need exactly that version,
+not an older nor a newer one. You can get the library in the following URL:
+http://www.extjs.com/products/extjs/download.php?dl=extjs303
 
 3. Setting up PHP
 
