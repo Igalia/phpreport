@@ -33,10 +33,12 @@ include_once('phpreport/model/facade/action/CreateCustomerAction.php');
 include_once('phpreport/model/facade/action/GetCustomerAction.php');
 include_once('phpreport/model/facade/action/DeleteCustomerAction.php');
 include_once('phpreport/model/facade/action/UpdateCustomerAction.php');
+include_once('phpreport/model/facade/action/GetSectorAction.php');
 include_once('phpreport/model/facade/action/CreateSectorAction.php');
 include_once('phpreport/model/facade/action/DeleteSectorAction.php');
 include_once('phpreport/model/facade/action/UpdateSectorAction.php');
 include_once('phpreport/model/facade/action/GetAllSectorsAction.php');
+include_once('phpreport/model/facade/action/GetAllCustomersAction.php');
 include_once('phpreport/model/facade/action/GetCustomersByProjectUserAction.php');
 include_once('phpreport/model/dao/DAOFactory.php');
 include_once('phpreport/model/vo/CustomerVO.php');
@@ -63,6 +65,21 @@ abstract class CustomersFacade {
     static function GetCustomer($customerId) {
 
     $action = new GetCustomerAction($customerId);
+
+    return $action->execute();
+
+    }
+
+    /** Get all Customers Function
+     *
+     *  This action is used for retrieving all Customers.
+     *
+     * @return array an array with value objects {@link CustomersVO} with their properties set to the values from the rows
+     * and ordered ascendantly by their database internal identifier.
+     */
+    static function GetAllCustomers() {
+
+    $action = new GetAllCustomersAction();
 
     return $action->execute();
 
@@ -127,6 +144,21 @@ abstract class CustomersFacade {
     static function GetCustomersByProjectUser(UserVO $user=NULL, $active = False) {
 
     $action = new GetCustomersByProjectUserAction($user, $active);
+
+    return $action->execute();
+
+    }
+
+    /** Get Sector Function
+     *
+     *  This action is used for retrieving a Sector.
+     *
+     * @param int $id the database identifier of the Sector we want to retieve.
+     * @return SectorVO the Sector as a {@link SectorVO} with its properties set to the values from the row.
+     */
+    static function GetSector($customerId) {
+
+    $action = new GetSectorAction($customerId);
 
     return $action->execute();
 
