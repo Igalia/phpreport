@@ -33,6 +33,7 @@ include_once('phpreport/model/facade/action/CreateProjectAction.php');
 include_once('phpreport/model/facade/action/GetAllProjectsAction.php');
 include_once('phpreport/model/facade/action/GetUserProjectsAction.php');
 include_once('phpreport/model/facade/action/GetProjectUsersAction.php');
+include_once('phpreport/model/facade/action/GetProjectCustomersAction.php');
 include_once('phpreport/model/facade/action/GetProjectExtraDataAction.php');
 include_once('phpreport/model/facade/action/GetProjectAction.php');
 include_once('phpreport/model/facade/action/AssignUserToProjectAction.php');
@@ -228,13 +229,30 @@ abstract class ProjectsFacade {
      * This function retrieves the rows from User table that are assigned through relationship ProjectUser to the
      * Project with the id <var>$projectId</var> and creates a {@link UserVO} with data from each row.
      *
-     * @param int $projectId the id of the Project whose Userss we want to retrieve.
+     * @param int $projectId the id of the Project whose Users we want to retrieve.
      * @return array an array with value objects {@link UserVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      */
     public function GetProjectUsers($projectId) {
 
     $action = new GetProjectUsersAction($projectId);
+
+    return $action->execute();
+
+    }
+
+    /** Customers retriever by Project id for PostgreSQL.
+     *
+     * This function retrieves the rows from Customer table that are assigned through relationship Requests to the
+     * Project with the id <var>$projectId</var> and creates a {@link CustomerVO} with data from each row.
+     *
+     * @param int $projectId the id of the Project whose Customers we want to retrieve.
+     * @return array an array with value objects {@link CustomerVO} with their properties set to the values from the rows
+     * and ordered ascendantly by their database internal identifier.
+     */
+    public function GetProjectCustomers($projectId) {
+
+    $action = new GetProjectCustomersAction($projectId);
 
     return $action->execute();
 
