@@ -58,9 +58,12 @@ Ext.onReady(function(){
     // Flag for stores loading coordination
     var storesLoaded = false;
 
+    // Flag for stores loading coordination
+    var storesLoaded2 = false;
+
     Ext.QuickTips.init();
 
-    var windowCreate, windowAssign;
+    var windowCreate, windowAssign, windowAssign2;
 
     var areasStore = new Ext.data.ArrayStore({
         id: 0,
@@ -85,14 +88,23 @@ Ext.onReady(function(){
     };
 
 
-    // Generic fields array to use in both store defs.
+    // Generic fields array to use in both store defs. related to Users
     var fields = [
         {name: 'id', type: 'int'},
         {name: 'login', type: 'string'},
     ];
 
-    // Generic fields array to use in both store defs.
+    // Generic fields array to use in the store defs. for Customers
+    var fields2 = [
+        {name: 'id', type: 'int'},
+        {name: 'name', type: 'string'},
+    ];
+
+    // Generic fields array to use in both store defs. related to Users
     var userRecord = new Ext.data.Record.create(fields);
+
+    // Generic fields array to use in the store def. related to Customers
+    var customerRecord = new Ext.data.Record.create(fields2);
 
 
     /* Proxy to the services related with load/save assigned Users */
@@ -253,6 +265,164 @@ Ext.onReady(function(){
         ],
     });
 
+    /* Proxy to the services related with load/save assigned Customers */
+    var assignedCustomersProxy = new Ext.data.HttpProxy({
+    method: 'POST',
+        api: {
+            read    : {url: 'services/getProjectCustomersService.php', method: 'GET'},
+            create  : 'services/assignCustomersToProjectService.php',
+            destroy : 'services/deassignCustomersFromProjectService.php'
+
+        },
+    });
+
+    /* Store to load/save assigned Customers */
+    var firstGridStore2 = new Ext.data.Store({
+        id: 'assignedCustomersStore',
+        autoLoad: false,  //initial data are loaded in the application init
+        autoSave: false, //if set true, changes will be sent instantly
+        baseParams: {
+            <?php if ($sid) {?>
+            'sid': sessionId <?php } ?>
+        },
+        storeId: 'assignedCustomers',
+        proxy: assignedCustomersProxy,
+        reader:new Ext.data.XmlReader({record: 'customer', idProperty:'id' }, customerRecord),
+        writer:new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: true, root: 'customers', tpl: '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><tpl if="name==\'id\'"><{name}>{value}</{name}></tpl></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, customerRecord),
+        remoteSort: false,
+        sortInfo: {
+            field: 'name',
+            direction: 'ASC',
+        },
+        listeners: {
+            'write': function() {
+                App.setAlert(true, "Assigned Customers Changes Saved");
+            },
+            'exception': function(){
+                App.setAlert(false, "Some Error Occurred While Saving The Changes");
+            },
+            'load': function(){
+                // We only execute the following code when both stores have
+                // loaded their data.
+                if (storesLoaded2)
+                {
+                    // We remove the assigned Customers from the available ones.
+                    firstGridStore2.each( function(record){
+                        secondGridStore2.remove(secondGridStore2.getById(record.get('id')));
+                    });
+
+                    // We mark all available Customers as dirty records, because
+                    // we only care about their status against the assigned
+                    // ones' store, and this way it's easier.
+                    secondGridStore2.each( function(record){
+                        record.markDirty();
+                    });
+
+                    storesLoaded2 = false;
+                } else storesLoaded2 = true;
+            }
+        }
+    });
+
+    /* Proxy to the services related with retrieving available Customers */
+    var availableCustomersProxy = new Ext.data.HttpProxy({
+    method: 'POST',
+        api: {
+            read    : {url: 'services/getAllCustomersService.php', method: 'GET'},
+        },
+    });
+
+    /* Store with available Customers */
+    var secondGridStore2 = new Ext.data.Store({
+        id: 'availableCustomersStore',
+        autoLoad: false,  //initial data are loaded in the application init
+        autoSave: false, //if set true, changes will be sent instantly
+        baseParams: {
+            <?php if ($sid) {?>
+            'sid': sessionId <?php } ?>
+        },
+        storeId: 'availableCustomers',
+        proxy: availableCustomersProxy,
+        reader:new Ext.data.XmlReader({record: 'customer', idProperty:'id' }, customerRecord),
+        remoteSort: false,
+        sortInfo: {
+            field: 'name',
+            direction: 'ASC',
+        },
+        listeners: {
+            'load': function(){
+                // We only execute the following code when both stores have
+                // loaded their data.
+                if (storesLoaded2)
+                {
+
+                    // We remove the assigned Customers from the available ones.
+                    firstGridStore2.each( function(record){
+                        secondGridStore2.remove(secondGridStore2.getById(record.get('id')));
+                    });
+
+                    // We mark all available Customers as dirty records, because
+                    // we only care about their status against the assigned
+                    // ones' store, and this way it's easier.
+                    secondGridStore2.each( function(record){
+                        record.phantom = true;
+                    });
+
+                    storesLoaded2 = false;
+                } else storesLoaded2 = true;
+            }
+        }
+    });
+
+    // Column Model shortcut array
+    var cols2 = [
+        { id : 'name', header: "Name", width: 260, sortable: true, dataIndex: 'name'},
+    ];
+
+    // declare the source Grid
+    var firstGrid2 = new Ext.grid.GridPanel({
+        ddGroup          : 'secondGridDDGroup2',
+        store            : firstGridStore2,
+        columns          : cols2,
+        enableDragDrop   : true,
+        stripeRows       : true,
+        autoExpandColumn : 'name',
+        title            : 'Assigned Customers',
+        loadMask         : true,
+        filter           : new Array(),
+        filtering        : function(record){
+                                if (this.filter[record.get('id')])
+                                    return false;
+                                else return true;
+                           }
+    });
+
+    // create the destination Grid
+    var secondGrid2 = new Ext.grid.GridPanel({
+        ddGroup          : 'firstGridDDGroup2',
+        store            : secondGridStore2,
+        columns          : cols2,
+        enableDragDrop   : true,
+        stripeRows       : true,
+        autoExpandColumn : 'name',
+        title            : 'Available Customers',
+        loadMask         : true,
+    });
+
+
+    //Simple 'border layout' panel to house both grids
+    var displayPanel2 = new Ext.Panel({
+        width        : 500,
+        height       : 300,
+        layout       : 'hbox',
+        defaults     : { flex : 1 }, //auto stretch
+        layoutConfig : { align : 'stretch' },
+        items        : [
+            firstGrid2,
+            secondGrid2
+        ],
+    });
+
 
     editionPanel = Ext.extend(Ext.grid.GridPanel, {
         renderTo: 'content',
@@ -313,11 +483,19 @@ Ext.onReady(function(){
          */
         buildBottomToolbar : function() {
             return ['->', {
+                text: 'Assign Customers',
+                id: this.id + 'AssignBtn2',
+                ref: '../assignBtn2',
+                disabled: true,
+                iconCls: 'silk-vcard-link',
+                handler: this.onAssign2,
+                scope: this
+                }, '-', {
                 text: 'Assign People',
                 id: this.id + 'AssignBtn',
                 ref: '../assignBtn',
                 disabled: true,
-                iconCls: 'silk-group-gear',
+                iconCls: 'silk-group-link',
                 handler: this.onAssign,
                 scope: this
                 }]
@@ -888,7 +1066,168 @@ Ext.onReady(function(){
             }
         },
 
+            /**
+             * onAssign2
+             */
+        onAssign2: function(btn, ev) {
+            if (this.getSelectionModel().getCount() > 0)
+            {
+                var selected = this.getSelectionModel().getSelected();
+
+                var projectId = selected.get('id');
+
+                if (!windowAssign2)
+                {
+                windowAssign2 = new Ext.Window({
+                     id: 'windowAssign2',
+                     name: 'windowAssign2',
+                     title: 'Assign Customers',
+                     iconCls: 'silk-table-relationship',
+                     closeAction: 'hide',
+                     closable: false,
+                     animateTarget: 'projectGridAssignBtn2',
+                     modal: true,
+                     width:514,
+                     stateful: false,
+                     constrainHeader: true,
+                     resizable: false,
+                     layout: 'form',
+                     autoHeight: true,
+                     plain: false,
+                    items: [
+                      displayPanel2
+                      ],
+                      listeners: {
+                          'show': function(){
+                              // We create a new array for filtering when
+                              // the window shows
+                              firstGrid2.filter = new Array();
+                          }
+                      },
+                     buttons: [{
+                        text: 'Reset',
+                        name: 'btnResetAssign',
+                        id: 'btnResetAssign2',
+                        tooltip: 'Resets the Customers\' assignation to it\'s original state .',
+                        tabIndex:1,
+                        handler: function(){
+                            firstGridStore2.reload();
+                            // We are resetting, so no filtering
+                            firstGrid2.filter = new Array();
+                            secondGridStore2.reload();
+                        }
+                     },{
+                       text: 'Accept',
+                       name: "btnAcceptAssign",
+                       id: "btnAcceptAssign2",
+                       tabIndex: 2,
+                       handler: function(){
+
+                           // We nullify the filtering for having all
+                           // records
+                           firstGridStore2.filterBy(function(){return true;});
+
+                           // If a record is a member of the filter, then we
+                           // remove it
+                           firstGridStore2.each(function(record){
+                               if (firstGrid2.filter[record.get('id')])
+                                   firstGrid2.store.remove(record);
+                           });
+
+                           firstGridStore2.save();
+
+                           windowAssign2.hide();
+
+                      }
+                     },{
+                       text: 'Cancel',
+                       name: "btnCancelAssign",
+                       id: "btnCancelAssign2",
+                       tabIndex: 3,
+                       handler: function(){
+                            windowAssign2.hide();
+                       }
+                     }],
+                }).show();
+
+                /****
+                * Setup Drop Targets
+                ***/
+                    // This will make sure we only drop to the  view scroller element
+                var firstGridDropTargetEl2 =  firstGrid2.getView().scroller.dom;
+                var firstGridDropTarget2 = new Ext.dd.DropTarget(firstGridDropTargetEl2, {
+                        ddGroup    : 'firstGridDDGroup2',
+                        notifyDrop : function(ddSource, e, data){
+                                var records =  ddSource.dragData.selections;
+                                Ext.each(records, ddSource.grid.store.remove, ddSource.grid.store);
+                                for (var index = 0; index<records.length; index++)
+                                {
+                                    var record = records[index];
+                                    // If a record is no phantom, then it
+                                    // was originally assigned, so it's not
+                                    // added. Instead, we stop using it's id for
+                                    // filtering in order to show it
+                                    if (!record.phantom)
+                                        firstGrid2.filter[record.get('id')] = false;
+                                    else // Otherwise, we add it
+                                        firstGrid2.store.add(record);
+                                }
+                                firstGrid2.store.filterBy(firstGrid2.filtering, firstGrid2);
+                                // We nullify the modified data marking
+                                firstGrid2.store.each(function(record){
+                                    if (record.modified != null)
+                                        record.modified['name'] = undefined;
+                                });
+                                firstGrid2.store.sort('name', 'ASC');
+                                return true
+                        }
+                });
+
+
+                // This will make sure we only drop to the view scroller element
+                var secondGridDropTargetEl2 = secondGrid2.getView().scroller.dom;
+                    var secondGridDropTarget2 = new Ext.dd.DropTarget(secondGridDropTargetEl2, {
+                        ddGroup    : 'secondGridDDGroup2',
+                        notifyDrop : function(ddSource, e, data){
+                                var records =  ddSource.dragData.selections;
+                                for (var index = 0; index<records.length; index++)
+                                {
+                                    var record = records[index];
+                                    // If a record is no phantom, then it
+                                    // was originally assigned, so it's not
+                                    // removed. Instead, we use it's id for
+                                    // filtering in order to hide it
+                                    if (!record.phantom)
+                                        firstGrid2.filter[record.get('id')] = true;
+                                    else // Otherwise, we remove it
+                                        firstGrid2.store.remove(record);
+                                }
+                                firstGrid2.store.filterBy(firstGrid2.filtering, firstGrid2);
+                                secondGrid2.store.add(records);
+                                // We nullify the modified data marking
+                                secondGrid2.store.each(function(record){
+                                    if (record.modified != null)
+                                        record.modified['name'] = undefined;
+                                });
+                                secondGrid2.store.sort('name', 'ASC');
+                                return true
+                        }
+                        });
+            } else {
+                windowAssign2.center();
+            }
+
+                tpl = '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root} projectId="' + projectId + '"><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><{name}>{value}</{name}></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>';
+                firstGridStore2.writer.tpl = new Ext.XTemplate(tpl).compile();
+                firstGridStore2.load({params: {'pid': projectId}});
+                secondGridStore2.load();
+                windowAssign2.show();
+
+            }
+        },
+
     });
+
 
 
     /* Schema of the information about projects */
@@ -1040,6 +1379,7 @@ Ext.onReady(function(){
         projectGrid.deleteBtn.setDisabled(sm.getCount() < 1);
         projectGrid.editBtn.setDisabled(sm.getCount() < 1);
         projectGrid.assignBtn.setDisabled(sm.getCount() < 1);
+        projectGrid.assignBtn2.setDisabled(sm.getCount() < 1);
     });
 
 });
