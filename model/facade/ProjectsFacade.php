@@ -38,6 +38,8 @@ include_once('phpreport/model/facade/action/GetProjectExtraDataAction.php');
 include_once('phpreport/model/facade/action/GetProjectAction.php');
 include_once('phpreport/model/facade/action/AssignUserToProjectAction.php');
 include_once('phpreport/model/facade/action/DeassignUserFromProjectAction.php');
+include_once('phpreport/model/facade/action/AssignCustomerToProjectAction.php');
+include_once('phpreport/model/facade/action/DeassignCustomerFromProjectAction.php');
 include_once('phpreport/model/facade/action/DeleteProjectAction.php');
 include_once('phpreport/model/facade/action/UpdateProjectAction.php');
 include_once('phpreport/model/facade/action/PartialUpdateProjectAction.php');
@@ -171,7 +173,7 @@ abstract class ProjectsFacade {
 
     }
 
-    /** Project Assigning
+    /** Project Users Assigning
      *
      *  This function is used for assigning a User to a Project by their ids.
      *
@@ -189,7 +191,7 @@ abstract class ProjectsFacade {
 
     }
 
-    /** Project Deassigning
+    /** Project Users Deassigning
      *
      *  This function is used for deassigning a User from a Project by their ids.
      *
@@ -238,6 +240,42 @@ abstract class ProjectsFacade {
     $action = new GetProjectUsersAction($projectId);
 
     return $action->execute();
+
+    }
+
+    /** Project Customer Assigning
+     *
+     *  This function is used for assigning a Customer to a Project by their ids.
+     *
+     * @param int $customerId the id of the Customer we want to assign.
+     * @param int $projectId the Project which we want to assign the User to.
+     *
+     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
+     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
+     */
+    static function AssignCustomerToProject($customerId, $projectId) {
+
+        $action = new AssignCustomerToProjectAction($customerId, $projectId);
+
+        return $action->execute();
+
+    }
+
+    /** Project Customer Deassigning
+     *
+     *  This function is used for deassigning a Customer from a Project by their ids.
+     *
+     * @param int $customerId the id of the Customer we want to deassign.
+     * @param int $projectId the UserGroup which we want to deassign the Project from.
+     *
+     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
+     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
+     */
+    static function DeassignCustomerFromProject($customerId, $projectId) {
+
+        $action = new DeassignCustomerFromProjectAction($customerId, $projectId);
+
+        return $action->execute();
 
     }
 
