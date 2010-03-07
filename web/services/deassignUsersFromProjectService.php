@@ -112,7 +112,7 @@
 
 
         if (!$string)
-            $string = "<return service='deassignUsersToProject'><ok>Operation Success!</ok></return>";
+            $string = "<return service='deassignUsersFromProject'><ok>Operation Success!</ok></return>";
 
 
     } while (false);
