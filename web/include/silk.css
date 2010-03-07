@@ -108,6 +108,7 @@
 .silk-flag-blue { background-image: url(icons/flag_blue.png) !important; background-repeat: no-repeat; }
 .silk-group { background-image: url(icons/group.png) !important; background-repeat: no-repeat; }
 .silk-group-gear { background-image: url(icons/group_gear.png) !important; background-repeat: no-repeat; }
+.silk-group-link { background-image: url(icons/group_link.png) !important; background-repeat: no-repeat; }
 .silk-group-add { background-image: url(icons/group_add.png) !important; background-repeat: no-repeat; }
 .silk-group-delete { background-image: url(icons/group_delete.png) !important; background-repeat: no-repeat; }
 .silk-lorry-flatbed { background-image: url(icons/lorry_flatbed.png) !important; background-repeat: no-repeat; }
@@ -204,6 +205,7 @@
 .silk-vcard { background-image: url(icons/vcard.png) !important; background-repeat: no-repeat; }
 .silk-vcard-add { background-image: url(icons/vcard_add.png) !important; background-repeat: no-repeat; }
 .silk-vcard-delete { background-image: url(icons/vcard_delete.png) !important; background-repeat: no-repeat; }
+.silk-vcard-link { background-image: url(icons/vcard_link.png) !important; background-repeat: no-repeat; }
 .silk-vector { background-image: url(icons/vector.png) !important; background-repeat: no-repeat; }
 .silk-wrench { background-image: url(icons/wrench.png) !important; background-repeat: no-repeat; }
 .silk-world { background-image: url(icons/world.png) !important; background-repeat: no-repeat; }
