@@ -65,11 +65,11 @@ class PostgreSQLRequestsDAO extends RequestsDAO{
 
     $customerVO = new CustomerVO();
 
-        $customerVO->setId($row[id]);
-        $customerVO->setName($row[name]);
-    $customerVO->setType($row[type]);
-    $customerVO->setUrl($row[url]);
-    $customerVO->setSectorId($row[sectorid]);
+    $customerVO->setId($row['id']);
+    $customerVO->setName($row['name']);
+    $customerVO->setType($row['type']);
+    $customerVO->setUrl($row['url']);
+    $customerVO->setSectorId($row['sectorid']);
 
     return $customerVO;
     }
