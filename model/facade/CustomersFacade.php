@@ -133,14 +133,14 @@ abstract class CustomersFacade {
 
     }
 
-    /** Create Customer Function
-     *
-     *  This function is used for creating a new Customer.
-     *
-     * @param CustomerVO $customer the Customer value object we want to create.
-     * @param bool $active optional parameter for obtaining only the active projects (by default it returns all them).
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     */
+   /** Get Customers from a User's Projects Action
+    *
+    *  This action is used for retrieving information about Customers of Projects done by a User. If no User is specified, it returns all customers.
+    *  @param UserVO $userVO the User whose Projects' Customers we want to retrieve.
+    *  @param bool $active optional parameter for obtaining only data related to active Projects (by default it returns all them).
+    *  @return array an array with value objects {@link CustomerVO} with their properties set to the values from the rows
+    *  and ordered ascendantly by their database internal identifier.
+    */
     static function GetCustomersByProjectUser(UserVO $user=NULL, $active = False) {
 
     $action = new GetCustomersByProjectUserAction($user, $active);

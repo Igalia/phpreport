@@ -33,7 +33,7 @@ include_once('phpreport/model/facade/action/Action.php');
 include_once('phpreport/model/dao/DAOFactory.php');
 include_once('phpreport/model/vo/UserVO.php');
 
-/** Get Customers a User's Projects Action
+/** Get Customers from a User's Projects Action
  *
  *  This action is used for retrieving information about Customers of Projects done by a User. If no User is specified, it returns all Customers.
  *
