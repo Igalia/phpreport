@@ -70,22 +70,22 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
     $taskVO = new TaskVO();
 
-    $taskVO->setId($row[id]);
-    $taskVO->setDate(date_create($row[_date]));
-    $taskVO->setInit($row[init]);
-    $taskVO->setEnd($row[_end]);
-    $taskVO->setStory($row[story]);
-    if (strtolower($row[telework]) == "t")
+    $taskVO->setId($row['id']);
+    $taskVO->setDate(date_create($row['_date']));
+    $taskVO->setInit($row['init']);
+    $taskVO->setEnd($row['_end']);
+    $taskVO->setStory($row['story']);
+    if (strtolower($row['telework']) == "t")
         $taskVO->setTelework(True);
-    elseif (strtolower($row[telework]) == "f")
+    elseif (strtolower($row['telework']) == "f")
         $taskVO->setTelework(False);
-    $taskVO->setText($row[text]);
-    $taskVO->setTtype($row[ttype]);
-    $taskVO->setPhase($row[phase]);
-    $taskVO->setUserId($row[usrid]);
-    $taskVO->setProjectId($row[projectid]);
-    $taskVO->setCustomerId($row[customerid]);
-    $taskVO->setTaskStoryId($row[task_storyid]);
+    $taskVO->setText($row['text']);
+    $taskVO->setTtype($row['ttype']);
+    $taskVO->setPhase($row['phase']);
+    $taskVO->setUserId($row['usrid']);
+    $taskVO->setProjectId($row['projectid']);
+    $taskVO->setCustomerId($row['customerid']);
+    $taskVO->setTaskStoryId($row['task_storyid']);
 
     return $taskVO;
     }
