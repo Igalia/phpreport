@@ -465,7 +465,7 @@ Ext.onReady(function(){
         renderTo: Ext.get("auxiliarpanel"),
         items: [{
             xtype: 'datepicker',
-            value: Date.parseDate(date, 'd-m-Y'),
+            value: Date.parseDate(date, 'Y-m-d'),
             listeners: {'select': function (item, date) {
                 window.location = "tasks.php?date=" + date.format('Y-m-d');
             }}
