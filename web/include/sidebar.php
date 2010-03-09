@@ -38,11 +38,9 @@ var menuPanel = new Ext.Panel({
             text: 'Coordination',
             menu: [
             {
-                text: 'XP Tracker', handler: onItemClick,
-                destination: "xptracker-summary.php",
+                text: 'XP Tracker', handler: onItemClick, destination: "xptracker-summary.php", iconCls: 'silk-sitemap',
             },{
-                text: 'Analysis Tracker', handler: onItemClick,
-                destination: "analysistracker-summary.php",
+                text: 'Analysis Tracker', handler: onItemClick, destination: "analysistracker-summary.php", iconCls: 'silk-sitemap-color',
             },{
                 text: 'My agenda', handler: onItemClick,
             },{
@@ -62,7 +60,7 @@ var menuPanel = new Ext.Panel({
               {
                 text: 'User evaluation', handler: onItemClick, iconCls: 'silk-user',
             },{
-                text: 'Acc hours report', handler: onItemClick, destination: 'viewWorkingHoursResultsReport.php', iconCls: 'silk-time',
+                text: 'Acc hours report', handler: onItemClick, destination: 'viewWorkingHoursResultsReport.php', iconCls: 'silk-report-user',
             },{
                 text: 'Users management', handler: onItemClick, destination: 'viewUsers.php', iconCls: 'silk-user-edit',
             }],
@@ -71,18 +69,18 @@ var menuPanel = new Ext.Panel({
             menu: [{
                 text: 'Project evaluation', handler: onItemClick,
             },{
-                text: 'Projects summary', handler: onItemClick,
+                text: 'Projects summary', handler: onItemClick, destination: 'projectsSummary.php', iconCls: 'silk-book-open',
             },{
                 text: 'Management indexes', handler: onItemClick,
             },{
-                text: 'Projects management', handler: onItemClick, destination: 'viewProjects.php', iconCls: 'silk-book',
+                text: 'Projects management', handler: onItemClick, destination: 'viewProjects.php', iconCls: 'silk-book-edit',
             }],
         },{
             text: 'Clients',
             menu: [{
                 text: 'Clients summary', handler: onItemClick,
             },{
-                text: 'Clients management', handler: onItemClick, destination: 'viewCustomers.php', iconCls: 'silk-vcard',
+                text: 'Clients management', handler: onItemClick, destination: 'viewCustomers.php', iconCls: 'silk-vcard-edit',
             }],
         },{
             text: 'Areas',
@@ -91,7 +89,7 @@ var menuPanel = new Ext.Panel({
             },{
                 text: 'Turnover goals', handler: onItemClick,
             },{
-                text: 'Areas management', handler: onItemClick, destination: 'viewAreas.php',
+                text: 'Areas management', handler: onItemClick, destination: 'viewAreas.php', iconCls: 'silk-brick-edit',
             }],
         }],
     }]

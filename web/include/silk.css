@@ -29,6 +29,7 @@
 .silk-book-delete { background-image: url(icons/book_delete.png) !important; background-repeat: no-repeat; }
 .silk-book-edit { background-image: url(icons/book_edit.png) !important; background-repeat: no-repeat; }
 .silk-book-open { background-image: url(icons/book_open.png) !important; background-repeat: no-repeat; }
+.silk-book-key { background-image: url(icons/book_key.png) !important; background-repeat: no-repeat; }
 .silk-building-go { background-image: url(icons/building_go.png) !important; background-repeat: no-repeat; }
 .silk-building { background-image: url(icons/building.png) !important; background-repeat: no-repeat; }
 .silk-cancel { background-image: url(icons/cancel.png) !important; background-repeat: no-repeat; }
@@ -62,6 +63,7 @@
 .silk-box { background-image: url(icons/box.png) !important; background-repeat: no-repeat; }
 .silk-bricks { background-image: url(icons/bricks.png) !important; background-repeat: no-repeat; }
 .silk-brick { background-image: url(icons/brick.png) !important; background-repeat: no-repeat; }
+.silk-brick-edit { background-image: url(icons/brick_edit.png) !important; background-repeat: no-repeat; }
 .silk-building { background-image: url(icons/building.png) !important; background-repeat: no-repeat; }
 .silk-building-add { background-image: url(icons/building_add.png) !important; background-repeat: no-repeat; }
 .silk-building-delete { background-image: url(icons/building_delete.png) !important; background-repeat: no-repeat; }
@@ -170,6 +172,7 @@
 .silk-plugin-disabled { background-image: url(icons/plugin_disabled.png) !important; background-repeat: no-repeat; }
 .silk-printer { background-image: url(icons/printer.png) !important; background-repeat: no-repeat; }
 .silk-report { background-image: url(icons/report.png) !important; background-repeat: no-repeat; }
+.silk-report-user { background-image: url(icons/report_user.png) !important; background-repeat: no-repeat; }
 .silk-resultset-first { background-image: url(icons/resultset_first.png) !important; background-repeat: no-repeat; }
 .silk-resultset-last { background-image: url(icons/resultset_last.png) !important; background-repeat: no-repeat; }
 .silk-resultset-next { background-image: url(icons/resultset_next.png) !important; background-repeat: no-repeat; }
@@ -177,6 +180,7 @@
 .silk-script { background-image: url(icons/script.png) !important; background-repeat: no-repeat; }
 .silk-shield { background-image: url(icons/shield.png) !important; background-repeat: no-repeat; }
 .silk-sitemap { background-image: url(icons/sitemap.png) !important; background-repeat: no-repeat; }
+.silk-sitemap-color { background-image: url(icons/sitemap_color.png) !important; background-repeat: no-repeat; }
 .silk-shape-handles { background-image: url(icons/shape_handles.png) !important; background-repeat: no-repeat; }
 .silk-shape-align-bottom { background-image: url(icons/shape_align_bottom.png) !important; background-repeat: no-repeat; }
 .silk-stop { background-image: url(icons/stop.png) !important; background-repeat: no-repeat; }
@@ -205,6 +209,7 @@
 .silk-vcard { background-image: url(icons/vcard.png) !important; background-repeat: no-repeat; }
 .silk-vcard-add { background-image: url(icons/vcard_add.png) !important; background-repeat: no-repeat; }
 .silk-vcard-delete { background-image: url(icons/vcard_delete.png) !important; background-repeat: no-repeat; }
+.silk-vcard-edit { background-image: url(icons/vcard_edit.png) !important; background-repeat: no-repeat; }
 .silk-vcard-link { background-image: url(icons/vcard_link.png) !important; background-repeat: no-repeat; }
 .silk-vector { background-image: url(icons/vector.png) !important; background-repeat: no-repeat; }
 .silk-wrench { background-image: url(icons/wrench.png) !important; background-repeat: no-repeat; }
