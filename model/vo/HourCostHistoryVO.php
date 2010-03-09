@@ -50,7 +50,7 @@ class HourCostHistoryVO extends BaseHistoryVO
     protected $hourCost = NULL;
 
     public function setHourCost($hourCost) {
-        if (is_null($id))
+        if (is_null($hourCost))
         $this->hourCost = $hourCost;
     else
             $this->hourCost = (double) $hourCost;
