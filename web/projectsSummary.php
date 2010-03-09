@@ -93,6 +93,14 @@ Ext.onReady(function(){
 
     }
 
+    function profit(val){
+
+        if(val > 0)
+            return '<span style="color:green;">' + Ext.util.Format.number(val, '0,000.00') + '</span>';
+        else return '<span style="color:red;">' + Ext.util.Format.number(val, '0,000.00') + '</span>';
+
+    }
+
 
     editionPanel = Ext.extend(Ext.grid.GridPanel, {
         renderTo: 'content',
@@ -197,6 +205,20 @@ Ext.onReady(function(){
             sortable: true,
             dataIndex: 'description',
         },{
+            header: 'Start Date',
+            width: 80,
+            xtype: 'datecolumn',
+            format: 'd/m/Y',
+            sortable: true,
+            dataIndex: 'init',
+        },{
+            header: 'End Date',
+            width: 80,
+            xtype: 'datecolumn',
+            format: 'd/m/Y',
+            sortable: true,
+            dataIndex: 'end',
+        },{
             header: 'Activation',
             width: 65,
             sortable: true,
@@ -204,6 +226,12 @@ Ext.onReady(function(){
             xtype: 'booleancolumn',
             trueText: "<span style='color:green;'>Yes</span>",
             falseText: "<span style='color:red;'>No</span>",
+        },{
+            header: 'Area',
+            width: 85,
+            sortable: true,
+            dataIndex: 'areaId',
+            renderer: areas,
         },{
             header: 'Invoice',
             width: 70,
@@ -221,7 +249,7 @@ Ext.onReady(function(){
             width: 80,
             sortable: true,
             dataIndex: 'totalProfit',
-            xtype: 'numbercolumn',
+            renderer: profit,
         },{
             header: 'Estimated Hours',
             width: 95,
@@ -269,27 +297,7 @@ Ext.onReady(function(){
             width: 70,
             sortable: true,
             dataIndex: 'hourProfit',
-            xtype: 'numbercolumn',
-        },{
-            header: 'Area',
-            width: 85,
-            sortable: true,
-            dataIndex: 'areaId',
-            renderer: areas,
-        },{
-            header: 'Start Date',
-            width: 80,
-            xtype: 'datecolumn',
-            format: 'd/m/Y',
-            sortable: true,
-            dataIndex: 'init',
-        },{
-            header: 'End Date',
-            width: 80,
-            xtype: 'datecolumn',
-            format: 'd/m/Y',
-            sortable: true,
-            dataIndex: 'end',
+            renderer: profit,
         },{
             header: 'Schedule',
             width: 60,
