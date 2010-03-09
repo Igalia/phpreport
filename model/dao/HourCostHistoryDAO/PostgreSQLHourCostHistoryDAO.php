@@ -64,18 +64,18 @@ class PostgreSQLHourCostHistoryDAO extends HourCostHistoryDAO{
     protected function setValues($row)
     {
 
-    $hourCostHistoryVO = new HourCostHistoryVO();
+        $hourCostHistoryVO = new HourCostHistoryVO();
 
-        $hourCostHistoryVO->setId($row[id]);
-        $hourCostHistoryVO->setInitDate(date_create($row[init_date]));
-    $hourCostHistoryVO->setUserId($row[usrid]);
-    if (is_null($row[end_date]))
+        $hourCostHistoryVO->setId($row['id']);
+        $hourCostHistoryVO->setInitDate(date_create($row['init_date']));
+        $hourCostHistoryVO->setUserId($row['usrid']);
+        if (is_null($row['end_date']))
             $hourCostHistoryVO->setEndDate(NULL);
-    else
-        $hourCostHistoryVO->setEndDate(date_create($row[end_date]));
-    $hourCostHistoryVO->setHourCost($row[hour_cost]);
+        else
+            $hourCostHistoryVO->setEndDate(date_create($row['end_date']));
+        $hourCostHistoryVO->setHourCost($row['hour_cost']);
 
-    return $hourCostHistoryVO;
+        return $hourCostHistoryVO;
     }
 
     /** Hour Cost History retriever by id for PostgreSQL.
