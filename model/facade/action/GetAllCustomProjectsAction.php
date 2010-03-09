@@ -29,7 +29,7 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/model/facade/action/GetCustomProjectAction.php');
+include_once('phpreport/model/facade/action/Action.php');
 include_once('phpreport/model/dao/DAOFactory.php');
 
 /** Get All Custom Projects Action
@@ -40,7 +40,7 @@ include_once('phpreport/model/dao/DAOFactory.php');
  * @subpackage facade
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
-class GetAllCustomProjectsAction extends GetCustomProjectAction{
+class GetAllCustomProjectsAction extends Action{
 
     /** Active projects flag
      *
@@ -57,6 +57,7 @@ class GetAllCustomProjectsAction extends GetCustomProjectAction{
      * @param bool $active optional parameter for obtaining only the active projects (by default it returns all them).
      */
     public function __construct($active = False) {
+
         $this->preActionParameter="GET_ALL_CUSTOM_PROJECTS_PREACTION";
         $this->postActionParameter="GET_ALL_CUSTOM_PROJECTS_POSTACTION";
         $this->active = $active;
@@ -73,9 +74,7 @@ class GetAllCustomProjectsAction extends GetCustomProjectAction{
 
         $dao = DAOFactory::getProjectDAO();
 
-        $projects = $dao->getAll($this->active);
-
-        return $this->ProjectsToCustomProjects($projects);
+        return $dao->getAllCustom($this->active);;
 
     }
 
