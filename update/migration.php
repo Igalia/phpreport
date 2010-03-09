@@ -317,9 +317,12 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
  $sched_type = "{$row["sched_type"]}";
 
+ if (strtolower($row['activation']) == "t")
+    $activation = True;
+ else $activation = False;
 
- if (!$result2=@pg_query($cnx2,"INSERT INTO project(activation, init, _end, invoice, est_hours, areaid, description, type, moved_hours, sched_type, id_ant) VALUES (" . DBPostgres::boolToString($row["activation"]) . ", $init, $_end, " . DBPostgres::checkNull($invoice) . ", " . DBPostgres::checkNull($est_hours) . ", $area, " . DBPostgres::checkStringNull($description) . ", " . DBPostgres::checkStringNull($type) . ", " . DBPostgres::checkNull($moved_hours) . ", " . DBPostgres::checkStringNull($sched_type) . ", '{$row["id"]}')")) {
-    $error=("It has not been possible to insert the new project from values ('{$row["activation"]}', $init, $_end,  $invoice, $est_hours, $area, $description, $type, $moved_hours, $sched_type, '{$row["id"]}').\n");
+ if (!$result2=@pg_query($cnx2,"INSERT INTO project(activation, init, _end, invoice, est_hours, areaid, description, type, moved_hours, sched_type, id_ant) VALUES (" . DBPostgres::boolToString($activation) . ", $init, $_end, " . DBPostgres::checkNull($invoice) . ", " . DBPostgres::checkNull($est_hours) . ", $area, " . DBPostgres::checkStringNull($description) . ", " . DBPostgres::checkStringNull($type) . ", " . DBPostgres::checkNull($moved_hours) . ", " . DBPostgres::checkStringNull($sched_type) . ", '{$row["id"]}')")) {
+    $error=("It has not been possible to insert the new project from values ('{$activation}', $init, $_end,  $invoice, $est_hours, $area, $description, $type, $moved_hours, $sched_type, '{$row["id"]}').\n");
     print ($error);
    }
 
@@ -409,7 +412,7 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
     $row2=@pg_fetch_array($result2);
 
-    if ($row2["activation"] == TRUE)
+    if (strtolower($row2['activation']) == "t")
     {
 
           switch ($row["type"])
@@ -585,8 +588,9 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
   if ($row["story"] != NULL)
     $story ="'" . pg_escape_string($row["story"]) . "'";
 
-  if ($row["telework"] != NULL)
-    $telework = "'{$row["telework"]}'";
+  if (strtolower($row["telework"]) == 't')
+    $telework = true;
+  else $telework = false;
 
 
   if ($row["name"] == NULL)
