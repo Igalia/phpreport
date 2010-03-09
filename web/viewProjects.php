@@ -296,7 +296,7 @@ Ext.onReady(function(){
         },
         listeners: {
             'write': function() {
-                App.setAlert(true, "Assigned Customers Changes Saved");
+                App.setAlert(true, "Assigned Clients Changes Saved");
             },
             'exception': function(){
                 App.setAlert(false, "Some Error Occurred While Saving The Changes");
@@ -387,7 +387,7 @@ Ext.onReady(function(){
         enableDragDrop   : true,
         stripeRows       : true,
         autoExpandColumn : 'name',
-        title            : 'Assigned Customers',
+        title            : 'Assigned Clients',
         loadMask         : true,
         filter           : new Array(),
         filtering        : function(record){
@@ -405,7 +405,7 @@ Ext.onReady(function(){
         enableDragDrop   : true,
         stripeRows       : true,
         autoExpandColumn : 'name',
-        title            : 'Available Customers',
+        title            : 'Available Clients',
         loadMask         : true,
     });
 
@@ -483,7 +483,7 @@ Ext.onReady(function(){
          */
         buildBottomToolbar : function() {
             return ['->', {
-                text: 'Assign Customers',
+                text: 'Assign Clients',
                 id: this.id + 'AssignBtn2',
                 ref: '../assignBtn2',
                 disabled: true,
@@ -1081,7 +1081,7 @@ Ext.onReady(function(){
                 windowAssign2 = new Ext.Window({
                      id: 'windowAssign2',
                      name: 'windowAssign2',
-                     title: 'Assign Customers',
+                     title: 'Assign Clients',
                      iconCls: 'silk-table-relationship',
                      closeAction: 'hide',
                      closable: false,
@@ -1108,7 +1108,7 @@ Ext.onReady(function(){
                         text: 'Reset',
                         name: 'btnResetAssign',
                         id: 'btnResetAssign2',
-                        tooltip: 'Resets the Customers\' assignation to it\'s original state .',
+                        tooltip: 'Resets the Clients\' assignation to it\'s original state .',
                         tabIndex:1,
                         handler: function(){
                             firstGridStore2.reload();
