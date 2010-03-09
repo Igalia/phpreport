@@ -36,6 +36,7 @@ var TrackerSummaryTree = Ext.extend(Ext.ux.tree.ColumnTree, {
             autoScroll:true,
             useArrows: true,
             title: 'Project: ' + this.projectName,
+            iconCls: 'silk-sitemap',
 
             columns:[{
                 header:'Task',
