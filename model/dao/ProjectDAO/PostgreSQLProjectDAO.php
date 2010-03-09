@@ -32,6 +32,7 @@
 include_once('phpreport/util/SQLIncorrectTypeException.php');
 include_once('phpreport/util/DBPostgres.php');
 include_once('phpreport/model/vo/ProjectVO.php');
+include_once('phpreport/model/vo/CustomProjectVO.php');
 include_once('phpreport/model/dao/ProjectDAO/ProjectDAO.php');
 include_once('phpreport/model/dao/ProjectUserDAO/PostgreSQLProjectUserDAO.php');
 include_once('phpreport/model/dao/WorksDAO/PostgreSQLWorksDAO.php');
@@ -96,6 +97,77 @@ class PostgreSQLProjectDAO extends ProjectDAO {
 
     }
 
+    /** SQL retrieving data sentences performer for Custom Project.
+     *
+     * This function executes the retrieving data sentence in <var>$sql</var> and calls the function {@link setCustomValues()} in order to
+     * create a custom value object with each row, and returning them in an array afterwards. It uses the connection stored in <var>{@link $connect}</var>.
+     * It's simply an alternative to {@link execute()} for creating Custom VO on the same DAO.
+     *
+     * @param string $sql a simple SQL 'select' sentence as a string.
+     * @return array an associative array of custom value objects created with the data retrieved with <var>$sql</var>.
+     * @throws {@link SQLQueryErrorException}
+     * @see setCustomValues()
+     */
+    protected function customExecute($sql) {
+        $res = @pg_query($this->connect, $sql);
+        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
+
+        $VO = array();
+
+        if(pg_num_rows($res) > 0) {
+            for($i = 0; $i < pg_num_rows($res); $i++) {
+                $row = @pg_fetch_array($res);
+                $VO[$i] = $this->setCustomValues($row);
+            }
+        }
+
+        @pg_freeresult($res);
+
+        return $VO;
+    }
+
+
+    /** Custom Project value object constructor for PostgreSQL.
+     *
+     * This function creates a new {@link CustomProjectVO} with data retrieved from database.
+     *
+     * @param array $row an array with the Project values from a row, and additional data.
+     * @return CustomProjectVO an {@link CustomProjectVO} with its properties set to the values from <var>$row</var>.
+     * @see CustomProjectVO
+     */
+    protected function setCustomValues($row)
+    {
+
+        $projectVO = new CustomProjectVO();
+
+        $projectVO->setId($row['id']);
+
+        if (strtolower($row['activation']) == "t")
+            $projectVO->setActivation(True);
+        else $projectVO->setActivation(False);
+
+        if (is_null($row['init']))
+            $projectVO->setInit(NULL);
+        else $projectVO->setInit(date_create($row['init']));
+
+        if (is_null($row['_end']))
+            $projectVO->setEnd(NULL);
+        else $projectVO->setEnd(date_create($row['_end']));
+
+        $projectVO->setInvoice($row['invoice']);
+        $projectVO->setEstHours($row['est_hours']);
+        $projectVO->setAreaId($row['areaid']);
+        $projectVO->setType($row['type']);
+        $projectVO->setDescription($row['description']);
+        $projectVO->setMovedHours($row['moved_hours']);
+        $projectVO->setSchedType($row['sched_type']);
+        $projectVO->setWorkedHours($row['worked_hours']);
+        $projectVO->setTotalCost($row['total_cost']);
+
+        return $projectVO;
+
+    }
+
     /** Project retriever by id for PostgreSQL.
      *
      * This function retrieves the row from Project table with the id <var>$projectId</var> and creates a {@link ProjectVO} with its data.
@@ -109,6 +181,24 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         throw new SQLIncorrectTypeException($projectId);
         $sql = "SELECT * FROM project WHERE id=".$projectId;
     $result = $this->execute($sql);
+    return $result[0];
+    }
+
+    /** Custom Project retriever by id for PostgreSQL.
+     *
+     * This function retrieves the row from Project table with the id <var>$projectId</var> with additional data
+     * and creates a {@link CustomProjectVO} with its data.
+     *
+     * @param int $projectId the id of the row we want to retrieve.
+     * @return CustomProjectVO a value object {@link CustomProjectVO} with its properties set to the values from the row
+     * and the additional data.
+     * @throws {@link SQLQueryErrorException}
+     */
+    public function getCustomById($projectId) {
+    if (!is_numeric($projectId))
+        throw new SQLIncorrectTypeException($projectId);
+    $sql = "SELECT project.*, SUM((task._end-task.init)/60.0) AS worked_hours, SUM(((task._end-task.init)/60.0) * hour_cost) AS total_cost FROM project LEFT JOIN task ON project.id = task.projectid LEFT JOIN hour_cost_history ON hour_cost_history.usrid = task.usrid AND task._date >= hour_cost_history.init_date AND task._date <= hour_cost_history.end_date WHERE project.id= {$projectId} GROUP BY project.id, project.description, project.activation, project.init, project._end, project.invoice, project.est_hours, project.areaid, project.description, project.type, project.moved_hours, project.sched_type";
+    $result = $this->customExecute($sql);
     return $result[0];
     }
 
@@ -362,6 +452,24 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         return $this->execute($sql);
     }
 
+    /** Custom Projects retriever for PostgreSQL.
+     *
+     * This function retrieves all rows from Project table and creates a {@link CustomProjectVO} with data from each row,
+     * and additional ones.
+     *
+     * @param bool $active optional parameter for obtaining only the active projects (by default it returns all them).
+     * @return array an array with value objects {@link CustomProjectVO} with their properties set to the values from the rows
+     * and the additional data, and ordered ascendantly by their database internal identifier.
+     * @throws {@link SQLQueryErrorException}
+     */
+    public function getAllCustom($active = False) {
+        $sql = "SELECT project.*, SUM((task._end-task.init)/60.0) AS worked_hours, SUM(((task._end-task.init)/60.0) * hour_cost) AS total_cost FROM project LEFT JOIN task ON project.id = task.projectid LEFT JOIN hour_cost_history ON hour_cost_history.usrid = task.usrid AND task._date >= hour_cost_history.init_date AND task._date <= hour_cost_history.end_date ";
+        if ($active)
+            $sql = $sql . " WHERE project.activation= 'True'";
+        $sql = $sql . " GROUP BY project.id, project.description, project.activation, project.init, project._end, project.invoice, project.est_hours, project.areaid, project.description, project.type, project.moved_hours, project.sched_type ORDER BY project.id ASC";
+        return $this->customExecute($sql);
+    }
+
     /** Project partial updater for PostgreSQL.
      *
      * This function updates only some fields of the data of a Project by its {@link ProjectVO}, reading
@@ -523,10 +631,9 @@ class PostgreSQLProjectDAO extends ProjectDAO {
 /*//Uncomment these lines in order to do a simple test of the Dao
 
 
-
 $dao = new PostgreSQLProjectDAO();
 
-$projs = $dao->getByCustomerUserLogin(10, 'jaragunde');
+$projs = $dao->getAllCustom();
 
 var_dump($projs);
 
