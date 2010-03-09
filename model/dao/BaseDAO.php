@@ -99,7 +99,9 @@ abstract class BaseDAO {
      */
     protected function execute($sql) {
         $res = @pg_query($this->connect, $sql);
-    if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
+        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
+
+        $VO = array();
 
         if(pg_num_rows($res) > 0) {
             for($i = 0; $i < pg_num_rows($res); $i++) {

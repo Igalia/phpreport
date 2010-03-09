@@ -31,11 +31,13 @@
 
 include_once('phpreport/model/facade/action/CreateProjectAction.php');
 include_once('phpreport/model/facade/action/GetAllProjectsAction.php');
+include_once('phpreport/model/facade/action/GetAllCustomProjectsAction.php');
 include_once('phpreport/model/facade/action/GetUserProjectsAction.php');
 include_once('phpreport/model/facade/action/GetProjectUsersAction.php');
 include_once('phpreport/model/facade/action/GetProjectCustomersAction.php');
 include_once('phpreport/model/facade/action/GetProjectExtraDataAction.php');
 include_once('phpreport/model/facade/action/GetProjectAction.php');
+include_once('phpreport/model/facade/action/GetCustomProjectAction.php');
 include_once('phpreport/model/facade/action/AssignUserToProjectAction.php');
 include_once('phpreport/model/facade/action/DeassignUserFromProjectAction.php');
 include_once('phpreport/model/facade/action/AssignCustomerToProjectAction.php');
@@ -98,6 +100,37 @@ abstract class ProjectsFacade {
     static function GetAllProjects() {
 
         $action = new GetAllProjectsAction();
+
+        return $action->execute();
+
+    }
+
+    /** Get Custom Project Function
+     *
+     *  This function is used for retrieving a Project with additional data.
+     *
+     * @param int $id the database identifier of the Project whose Custom Project we want to retieve.
+     * @return ProjectVO the Project as a {@link CustomProjectVO} with its properties set to the values from the row
+     * and additional data.
+     */
+    static function GetCustomProject($projectId) {
+
+    $action = new GetCustomProjectAction($projectId);
+
+    return $action->execute();
+
+    }
+
+     /** Get all Custom Projects Function
+     *
+     *  This action is used for retrieving all Projects with additional data.
+     *
+     * @return array an array with value objects {@link CustomProjectVO} with their properties set to the values from the rows
+     * and with additional data, and ordered ascendantly by their database internal identifier.
+     */
+    static function GetAllCustomProjects() {
+
+        $action = new GetAllCustomProjectsAction();
 
         return $action->execute();
 
