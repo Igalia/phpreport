@@ -1302,12 +1302,6 @@ Ext.onReady(function(){
             xtype: 'booleancolumn',
             trueText: "<span style='color:green;'>Yes</span>",
             falseText: "<span style='color:red;'>No</span>",
-            width: 65,
-            sortable: true,
-            dataIndex: 'activation',
-            xtype: 'booleancolumn',
-            trueText: "<span style='color:green;'>Yes</span>",
-            falseText: "<span style='color:red;'>No</span>",
         },{
             header: 'Invoice',
             width: 70,
