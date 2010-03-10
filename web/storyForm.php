@@ -138,7 +138,11 @@ Ext.onReady(function(){
     <?php
 
         foreach((array)$users as $user)
+        {
             echo "[{$user->getId()}, '{$user->getLogin()}'],";
+            if ($user->getId() == $_SESSION['user']->getId())
+                $currentReviewer = true;
+        }
 
         ?>]});
 
@@ -193,26 +197,30 @@ Ext.onReady(function(){
             fieldLabel: 'Reviewer <font color="red">*</font>',
             name: 'reviewer',
             id: 'reviewer',
-                        xtype: 'combo',
-                        forceSelection: true,
+            xtype: 'combo',
+            forceSelection: true,
             allowBlank:false,
-                        displayField: 'login',
-                        valueField: 'id',
-                        hiddenName: 'hiddenReviewer',
+            displayField: 'login',
+            valueField: 'id',
+            hiddenName: 'hiddenReviewer',
             store: usersStore,
             typeAhead: true,
             mode: 'local',
             triggerAction: 'all',
             emptyText:'Select a reviewer...',
+            <?php
+                if (($storyId == "") && ($currentReviewer))
+                         echo "value: {$_SESSION['user']->getId()},";
+            ?>
             selectOnFocus:true
 
         },{
             fieldLabel: 'Next Story',
             name: 'nextStory',
             xtype: 'combo',
-                        displayField: 'name',
-                        valueField: 'id',
-                        hiddenName: 'hiddenStory',
+            displayField: 'name',
+            valueField: 'id',
+            hiddenName: 'hiddenStory',
             id: 'nextStory',
             store: storiesStore,
             typeAhead: true,

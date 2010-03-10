@@ -129,7 +129,11 @@ Ext.onReady(function(){
     <?php
 
         foreach((array)$users as $auxUser)
+        {
             echo "[{$auxUser->getId()}, '{$auxUser->getLogin()}'],";
+            if ($auxUser->getId() == $_SESSION['user']->getId())
+                $currentReviewer = true;
+        }
 
         ?>]});
 
@@ -190,6 +194,10 @@ Ext.onReady(function(){
             mode: 'local',
             triggerAction: 'all',
             emptyText:'Select a reviewer...',
+            <?php
+                if (($sectionId == "") && ($currentReviewer))
+                         echo "value: {$_SESSION['user']->getId()},";
+            ?>
             selectOnFocus:true
 
                 },{
