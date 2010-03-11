@@ -395,20 +395,29 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
     $sql = "SELECT ";
 
-    if (!is_null($this->groupFields[$groupField1]))
+    if (!is_null($groupField1))
     {
-        $sql = $sql . $this->groupFields[$groupField1] . ", ";
-        if (!is_null($this->groupFields[$groupField2]))
+        if (!is_null($this->groupFields[$groupField1]))
         {
-            $sql = $sql . $this->groupFields[$groupField2] . ", ";
-            if(!is_null($this->groupFields[$groupField3]))
-                $sql = $sql . $this->groupFields[$groupField3] . ", ";
-            elseif (!is_null($groupField3))
-                throw new TaskReportInvalidParameterException($groupField3);
-        } elseif (!is_null($groupField2))
-            throw new TaskReportInvalidParameterException($groupField2);
-    }
-    else throw new TaskReportInvalidParameterException($groupField1);
+            $sql = $sql . $this->groupFields[$groupField1] . ", ";
+            if (!is_null($groupField2))
+            {
+                if (!is_null($this->groupFields[$groupField2]))
+                {
+                    $sql = $sql . $this->groupFields[$groupField2] . ", ";
+                    if (!is_null($groupField3))
+                    {
+                        if(!is_null($this->groupFields[$groupField3]))
+                            $sql = $sql . $this->groupFields[$groupField3] . ", ";
+                        elseif (!is_null($groupField3))
+                            throw new TaskReportInvalidParameterException($groupField3);
+                    }
+                } elseif (!is_null($groupField2))
+                    throw new TaskReportInvalidParameterException($groupField2);
+            }
+        }
+        else throw new TaskReportInvalidParameterException($groupField1);
+    } else throw new TaskReportInvalidParameterException($groupField1);
 
     $sql = $sql . "SUM( _end - init ) / 60.0 AS add_hours FROM task ";
 
@@ -419,28 +428,22 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
     $sql = $sql . "GROUP BY ";
 
-    if (!is_null($this->groupFields[$groupField1]))
+    $sql = $sql . $this->groupFields[$groupField1];
+    if (!is_null($groupField2))
     {
-        $sql = $sql . $this->groupFields[$groupField1];
-        if (!is_null($this->groupFields[$groupField2]))
-        {
-            $sql = $sql . ", " . $this->groupFields[$groupField2];
-            if (!is_null($this->groupFields[$groupField3]))
-                $sql = $sql . ", " . $this->groupFields[$groupField3];
-        }
+        $sql = $sql . ", " . $this->groupFields[$groupField2];
+        if (!is_null($groupField3))
+            $sql = $sql . ", " . $this->groupFields[$groupField3];
     }
 
     $sql = $sql . " ORDER BY ";
 
-    if (!is_null($this->groupFields[$groupField1]))
+    $sql = $sql . $this->groupFields[$groupField1];
+    if (!is_null($groupField2))
     {
-        $sql = $sql . $this->groupFields[$groupField1];
-        if (!is_null($this->groupFields[$groupField2]))
-        {
-            $sql = $sql . ", " . $this->groupFields[$groupField2];
-            if (!is_null($this->groupFields[$groupField3]))
-                $sql = $sql . ", " . $this->groupFields[$groupField3];
-        }
+        $sql = $sql . ", " . $this->groupFields[$groupField2];
+        if (!is_null($groupField3))
+            $sql = $sql . ", " . $this->groupFields[$groupField3];
     }
 
     $res = @pg_query($this->connect, $sql);
