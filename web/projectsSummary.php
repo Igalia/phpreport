@@ -51,7 +51,6 @@
              * Any suggestions are welcome
              */
             var config = {
-              //viewConfig: {autoFill: true},
               stateful: true,
               stateId: 'projectCustomerGrid',
               loadMask: true,
@@ -77,8 +76,8 @@
           }
         });
 
-        var grid = new Ext.ux.DynamicGridPanel({
-            id: 'my-grid',
+        var customersGrid = new Ext.ux.DynamicGridPanel({
+            id: 'CustomersGrid',
             storeUrl: 'services/getProjectCustomerReportJsonService.php?<?php
 
                 if ($sid!="")
@@ -93,36 +92,36 @@
         });
 
 
-            grid.store.on('load', function(){
+            customersGrid.store.on('load', function(){
               /**
                * Thats the magic!
                *
                * JSON data returned from server has the column definitions
                */
-              if(typeof(grid.store.reader.jsonData.columns) === 'object') {
+              if(typeof(customersGrid.store.reader.jsonData.columns) === 'object') {
                 var columns = [];
 
                   /**
                    * Adding RowNumberer or setting selection model as CheckboxSelectionModel
                    * We need to add them before other columns to display first
                    */
-                if(grid.rowNumberer) { columns.push(new Ext.grid.RowNumberer()); }
-                if(grid.checkboxSelModel) { columns.push(new Ext.grid.CheckboxSelectionModel()); }
+                if(customersGrid.rowNumberer) { columns.push(new Ext.grid.RowNumberer()); }
+                if(customersGrid.checkboxSelModel) { columns.push(new Ext.grid.CheckboxSelectionModel()); }
 
-                Ext.each(grid.store.reader.jsonData.columns, function(column){
+                Ext.each(customersGrid.store.reader.jsonData.columns, function(column){
                   columns.push(column);
                 });
 
               /**
                * Setting column model configuration
                */
-                grid.getColumnModel().setConfig(columns);
+                customersGrid.getColumnModel().setConfig(columns);
 
                 // We add 33 pixels to the width because it doesn't count
                 // the vertical scroll bar
-                grid.setSize(grid.getColumnModel().getTotalWidth() + 33, 500);
+                customersGrid.setSize(customersGrid.getColumnModel().getTotalWidth() + 33, 500);
 
-                summaryTabs.setSize(grid.getColumnModel().getTotalWidth() + 33, 500);
+                summaryTabs.setSize(customersGrid.getColumnModel().getTotalWidth() + 33, 500);
 
                 if (!summaryTabs.rendered)
                     summaryTabs.render(Ext.get("content"));
@@ -131,17 +130,72 @@
 
             }, this);
 
+        var usersGrid = new Ext.ux.DynamicGridPanel({
+            id: 'UsersGrid',
+            storeUrl: 'services/getProjectUserReportJsonService.php?<?php
 
-    var summaryTabs = new Ext.TabPanel({
-        activeTab: 0,
-        frame: true,
-        plain: true,
-        items:[
-            grid,
-            ]
-    });
+                if ($sid!="")
+                    echo "&sid=" . $sid;?>',
+            rowNumberer: false,
+            checkboxSelModel: false,
+            loadMask: true,
+            columnLines: true,
+            frame: true,
+            title: 'Project - User Worked Hours Report',
+            iconCls: 'silk-table',
+        });
 
-    grid.store.load();
+
+            usersGrid.store.on('load', function(){
+              /**
+               * Thats the magic!
+               *
+               * JSON data returned from server has the column definitions
+               */
+              if(typeof(usersGrid.store.reader.jsonData.columns) === 'object') {
+                var columns = [];
+
+                  /**
+                   * Adding RowNumberer or setting selection model as CheckboxSelectionModel
+                   * We need to add them before other columns to display first
+                   */
+                if(usersGrid.rowNumberer) { columns.push(new Ext.grid.RowNumberer()); }
+                if(usersGrid.checkboxSelModel) { columns.push(new Ext.grid.CheckboxSelectionModel()); }
+
+                Ext.each(usersGrid.store.reader.jsonData.columns, function(column){
+                  columns.push(column);
+                });
+
+              /**
+               * Setting column model configuration
+               */
+                usersGrid.getColumnModel().setConfig(columns);
+
+                // We add 33 pixels to the width because it doesn't count
+                // the vertical scroll bar
+                usersGrid.setSize(usersGrid.getColumnModel().getTotalWidth() + 33, 500);
+
+              }
+
+            }, this);
+
+
+        var summaryTabs = new Ext.TabPanel({
+            activeTab: 0,
+            frame: true,
+            plain: true,
+            items:[
+                customersGrid,
+                usersGrid
+            ],
+            listeners: { 'tabchange' : function(tabPanel, tab){
+                    tabPanel.setSize(tab.getColumnModel().getTotalWidth() + 33, 500);
+                }
+            }
+        });
+
+        customersGrid.store.load();
+        usersGrid.store.load();
 
     })
 
