@@ -46,7 +46,7 @@
             $response['success'] = false;
             $error['id'] = 2;
             $error['message'] = "You must be logged in";
-            $json['error'] = $error;
+            $response['error'] = $error;
             break;
         }
 
@@ -59,7 +59,7 @@
             $response['success'] = false;
             $error['id'] = 3;
             $error['message'] = "Forbidden service for this User";
-            $json['error'] = $error;
+            $response['error'] = $error;
             break;
         }
 
