@@ -53,5 +53,5 @@
 <body>
 
     <div id="header">
-        <h1>PhpReport</h1>
+        <img alt="PhpReport" src="include/images/phpreport-logo.png" />
     </div>

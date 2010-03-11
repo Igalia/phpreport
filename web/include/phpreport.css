@@ -1,3 +1,7 @@
+#header {
+    background: transparent url('images/phpreport-header-background.png') repeat-x;
+}
+
 #sidebar {
     float: left;
     padding: 10px 30px;
