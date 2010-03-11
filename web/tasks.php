@@ -21,6 +21,7 @@
 
 /* We check authentication and authorization */
 require_once('phpreport/web/auth.php');
+include_once('phpreport/model/facade/TasksFacade.php');
 
 $user = $_SESSION['user'];
 
@@ -34,6 +35,8 @@ if(isset($_GET["date"]))
     $date = $_GET["date"];
 else
     $date = date("Y-m-d");
+
+$summary = TasksFacade::GetPersonalSummaryByUserIdDate($user->getId(), date_create($date));
 
 ?>
 <script type="text/javascript">
@@ -471,6 +474,46 @@ Ext.onReady(function(){
             }}
         }],
     });
+
+
+    // Summary Panel
+    var summaryPanel = new Ext.FormPanel({
+        width: 137,
+        labelWidth: 75,
+        renderTo: Ext.get('auxiliarpanel'),
+        frame:true,
+        title: 'User Work Summary',
+        bodyStyle: 'padding:5px 5px 0px 5px;',
+        defaults: {
+            width: 100,
+            labelStyle: 'text-align: right; width: 75; font-weight:bold; padding: 0 0 0 0;',
+        },
+        defaultType:'displayfield',
+        items: [{
+            id:'day',
+            name: 'day',
+            fieldLabel:'Today',
+            value: '<?php
+                 echo $summary['day'];
+            ?>'
+        },{
+            id:'week',
+            name: 'week',
+            fieldLabel:'This week',
+            value: '<?php
+                 echo $summary['week'];
+            ?>'
+        },{
+            id:'month',
+            name: 'month',
+            fieldLabel:'This month',
+            value: '<?php
+                 echo $summary['month'];
+            ?>'
+        }
+        ]
+    });
+
 });
 </script>
 
