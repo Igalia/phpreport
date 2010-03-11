@@ -69,7 +69,7 @@ var menuPanel = new Ext.Panel({
             menu: [{
                 text: 'Project evaluation', handler: onItemClick, destination: 'projectsEvaluation.php', iconCls: 'silk-book-open',
             },{
-                text: 'Projects summary', handler: onItemClick,
+                text: 'Projects summary', handler: onItemClick, destination: 'projectsSummary.php', iconCls: 'silk-book',
             },{
                 text: 'Management indexes', handler: onItemClick,
             },{
