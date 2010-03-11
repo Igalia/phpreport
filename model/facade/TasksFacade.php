@@ -274,8 +274,8 @@ abstract class TasksFacade {
      *
      * @param DateTime $init the initial date of the interval whose Tasks report we want to retrieve.
      * @param DateTime $end the ending date of the interval whose Tasks report we want to retrieve.
-     * @return array an array with the resulting rows of computing the extra hours as associative arrays (they contain a field
-     * <i>add_hours</i> with that result and fields for the grouping fields <i>projectid</i> and <i>customerid</i>).
+     * @return array an associative array with the worked hours data, with the Project name as first level key and the Customer name
+     * as second level one.
      */
     static function GetGlobalProjectsCustomersReport(DateTime $init = NULL, DateTime $end = NULL) {
 

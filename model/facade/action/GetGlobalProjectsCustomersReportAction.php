@@ -87,19 +87,49 @@ class GetGlobalProjectsCustomersReportAction extends Action{
      *
      * This is the function that contains the code that returns the Tasks reports.
      *
-     * @return array an array with the resulting rows of computing the worked hours as associative arrays (they contain a field
-     * <i>add_hours</i> with that result and fields for the grouping fields <i>projectid</i> and <i>customerid</i>).
+     * @return array an associative array with the worked hours data, with the Project name as first level key and the Customer name
+     * as second level one.
      */
     protected function doExecute() {
 
         $dao = DAOFactory::getTaskDAO();
 
-        return $dao->getGlobalTaskReport($this->init, $this->end, "PROJECT", "CUSTOMER");
+        $dao2 = DAOFactory::getProjectDAO();
+
+        $dao3 = DAOFactory::getCustomerDAO();
+
+        $doubleResults = $dao->getGlobalTaskReport($this->init, $this->end, "PROJECT", "CUSTOMER");
+
+        foreach ($doubleResults as $doubleResult)
+        {
+
+            if (is_null($doubleResult['projectid']))
+                $projectName = '--- Unknown ---';
+            else
+            {
+                $project = $dao2->getById($doubleResult['projectid']);
+
+                $projectName = $project->getDescription();
+            }
+
+            if (is_null($doubleResult['customerid']))
+                $customerName = '--- Unknown ---';
+            else
+            {
+                $customer = $dao3->getById($doubleResult['customerid']);
+
+                $customerName = $customer->getName();
+            }
+
+            $results[$project->getDescription()][$customer->getName()] =  $doubleResult['add_hours'];
+
+        }
+
+        return $results;
 
     }
 
 }
-
 
 /*//Test code;
 
