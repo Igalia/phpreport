@@ -192,7 +192,7 @@
 
                 $response[columns][] = $column;
 
-        $column[header] = "Percentage";
+        $column[header] = "%";
         $column[dataIndex] = "percentage";
         $column[sortable] = true;
 
