@@ -83,7 +83,7 @@ abstract class TaskDAO extends BaseDAO{
      */
     public abstract function getByUserId($userId);
 
-    /** Tasks User Id checker for PostgreSQL.
+    /** Tasks User Id checker.
      *
      * This function retrieves the row from Task table with the id <var>$taskId</var> and checks it's User id
      * vs. the passed one, <var>$userId</var>.
@@ -95,7 +95,7 @@ abstract class TaskDAO extends BaseDAO{
      */
     public abstract function checkUserId($taskId, $userId);
 
-    /** Tasks retriever by User id and date for PostgreSQL.
+    /** Tasks retriever by User id and date.
      *
      * This function retrieves the rows from Task table that are associated with the User with
      * the id <var>$userId</var> and for date <var>$date</var> and creates a {@link TaskVO} with data from each row.
@@ -199,25 +199,27 @@ abstract class TaskDAO extends BaseDAO{
      */
     public abstract function getTaskReport($reportObject, DateTime $initDate = NULL, DateTime $endDate = NULL, $groupField1 = NULL, $groupField2 = NULL);
 
-    /** Tasks global report generator for PostgreSQL.
+    /** Tasks global report generator.
      *
      * This function generates a report of the hours users have worked in all Tasks. Two optional dates can also be passed, <var>$initDate</var>
      * and <var>$endDate</var>, to limit the dates of the tasks retrieved (if they are not passed, it returns the result for tasks of any date),
-     * and two group fields, <var>$groupField1</var> and <var>$groupField2</var>, that only are used for making groups with the
-     * results if they are passed. This function works very likely {@link getTaskReport()}, but for all tasks and grouping the results by users.
+     * and three group fields, <var>$groupField1</var>, <var>$groupField2</var> and <var>$groupField3</var>, that only are used for making groups with the
+     * results (first is mandatory, the other two are optional) if they are passed. This function works very likely {@link getTaskReport()}, but for all tasks.
      *
      * @param DateTime $initDate the optional DateTime object that represents the beginning of the date interval.
      * @param DateTime $endDate the optional DateTime object that represents the end of the date interval (included).
-     * @param string $groupField1 the optional first field for grouping the data (valid values are stored in {@link $groupFields}).
+     * @param string $groupField1 the mandatory first field for grouping the data (valid values are stored in {@link $groupFields}).
      * @param string $groupField2 the optional second field for grouping the data (valid values are stored in {@link $groupFields}).
+     * @param string $groupField3 the optional third field for grouping the data (valid values are stored in {@link $groupFields}).
      * @return array an array with the resulting rows of computing the extra hours as associative arrays (they contain a field
-     * <i>add_hours</i> with that result and fields for the grouping fields, <i>usrid</i> and others if they were passed).
+     * <i>add_hours</i> with that result and fields for the grouping fields).
      * @todo write examples of usage and result.
-     * @throws {@link OperationErrorException}
+     * @throws {@link TaskReportInvalidParameterException}
+     * @throws {@link SQLQueryErrorException}
      */
-    public abstract function getGlobalTaskReport(DateTime $initDate = NULL, DateTime $endDate = NULL, $groupField1 = NULL, $groupField2 = NULL);
+    public abstract function getGlobalTaskReport(DateTime $initDate = NULL, DateTime $endDate = NULL, $groupField1, $groupField2 = NULL, $groupField3 = NULL);
 
-    /** Vacations report generator for PostgreSQL.
+    /** Vacations report generator.
      *
      * This function generates a report of the vacations hours a user {@link UserVO} has spent as for today. Two optional DateTime parameters can be passed,
      * <var>$initDate</var> and <var>$endDate</var>, to limit the dates of the vacation hours retrieved.
@@ -230,7 +232,7 @@ abstract class TaskDAO extends BaseDAO{
      */
     public abstract function getVacations(UserVO $userVO, DateTime $initDate = NULL, DateTime $endDate = NULL);
 
-    /** Task partial updater for PostgreSQL.
+    /** Task partial updater.
      *
      * This function updates only some fields of the data of a Task by its {@link TaskVO}, reading
      * the flags on the associative array <var>$update</var>.

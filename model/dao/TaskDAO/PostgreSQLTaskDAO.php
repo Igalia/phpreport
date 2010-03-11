@@ -377,20 +377,21 @@ class PostgreSQLTaskDAO extends TaskDAO{
      *
      * This function generates a report of the hours users have worked in all Tasks. Two optional dates can also be passed, <var>$initDate</var>
      * and <var>$endDate</var>, to limit the dates of the tasks retrieved (if they are not passed, it returns the result for tasks of any date),
-     * and two group fields, <var>$groupField1</var> and <var>$groupField2</var>, that only are used for making groups with the
-     * results if they are passed. This function works very likely {@link getTaskReport()}, but for all tasks and grouping the results by users.
+     * and three group fields, <var>$groupField1</var>, <var>$groupField2</var> and <var>$groupField3</var>, that only are used for making groups with the
+     * results (first is mandatory, the other two are optional) if they are passed. This function works very likely {@link getTaskReport()}, but for all tasks.
      *
      * @param DateTime $initDate the optional DateTime object that represents the beginning of the date interval.
      * @param DateTime $endDate the optional DateTime object that represents the end of the date interval (included).
-     * @param string $groupField1 the optional first field for grouping the data (valid values are stored in {@link $groupFields}).
+     * @param string $groupField1 the mandatory first field for grouping the data (valid values are stored in {@link $groupFields}).
      * @param string $groupField2 the optional second field for grouping the data (valid values are stored in {@link $groupFields}).
+     * @param string $groupField3 the optional third field for grouping the data (valid values are stored in {@link $groupFields}).
      * @return array an array with the resulting rows of computing the extra hours as associative arrays (they contain a field
-     * <i>add_hours</i> with that result and fields for the grouping fields, <i>usrid</i> and others if they were passed).
+     * <i>add_hours</i> with that result and fields for the grouping fields).
      * @todo write examples of usage and result.
      * @throws {@link TaskReportInvalidParameterException}
      * @throws {@link SQLQueryErrorException}
      */
-    public function getGlobalTaskReport(DateTime $initDate = NULL, DateTime $endDate = NULL, $groupField1 = NULL, $groupField2 = NULL) {
+    public function getGlobalTaskReport(DateTime $initDate = NULL, DateTime $endDate = NULL, $groupField1, $groupField2 = NULL, $groupField3 = NULL) {
 
     $sql = "SELECT ";
 
@@ -398,38 +399,51 @@ class PostgreSQLTaskDAO extends TaskDAO{
     {
         $sql = $sql . $this->groupFields[$groupField1] . ", ";
         if (!is_null($this->groupFields[$groupField2]))
+        {
             $sql = $sql . $this->groupFields[$groupField2] . ", ";
-        elseif (!is_null($groupField2))
+            if(!is_null($this->groupFields[$groupField3]))
+                $sql = $sql . $this->groupFields[$groupField3] . ", ";
+            elseif (!is_null($groupField3))
+                throw new TaskReportInvalidParameterException($groupField3);
+        } elseif (!is_null($groupField2))
             throw new TaskReportInvalidParameterException($groupField2);
     }
-    elseif (!is_null($groupField1))
-        throw new TaskReportInvalidParameterException($groupField1);
+    else throw new TaskReportInvalidParameterException($groupField1);
 
-    $sql = $sql . $this->groupFields['USER']. ", SUM( _end - init ) / 60.0 AS add_hours FROM task ";
+    $sql = $sql . "SUM( _end - init ) / 60.0 AS add_hours FROM task ";
 
     if (!is_null($initDate) && !is_null($endDate))
     {
         $sql = $sql . "WHERE _date >= " . DBPostgres::formatDate($initDate) . " AND _date <= " . DBPostgres::formatDate($endDate) . " ";
     }
 
-    $sql = $sql . "GROUP BY " . $this->groupFields['USER'];
+    $sql = $sql . "GROUP BY ";
 
     if (!is_null($this->groupFields[$groupField1]))
     {
-        $sql = $sql . ", " . $this->groupFields[$groupField1];
+        $sql = $sql . $this->groupFields[$groupField1];
         if (!is_null($this->groupFields[$groupField2]))
+        {
             $sql = $sql . ", " . $this->groupFields[$groupField2];
+            if (!is_null($this->groupFields[$groupField3]))
+                $sql = $sql . ", " . $this->groupFields[$groupField3];
+        }
     }
 
-    $sql = $sql . " ORDER BY " . $this->groupFields['USER'];
+    $sql = $sql . " ORDER BY ";
 
     if (!is_null($this->groupFields[$groupField1]))
     {
-        $sql = $sql . ", " . $this->groupFields[$groupField1];
+        $sql = $sql . $this->groupFields[$groupField1];
         if (!is_null($this->groupFields[$groupField2]))
+        {
             $sql = $sql . ", " . $this->groupFields[$groupField2];
-
+            if (!is_null($this->groupFields[$groupField3]))
+                $sql = $sql . ", " . $this->groupFields[$groupField3];
+        }
     }
+
+    print $sql;
 
     $res = @pg_query($this->connect, $sql);
 
@@ -437,9 +451,9 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
         if(pg_num_rows($res) > 0) {
             for($i = 0; $i < pg_num_rows($res); $i++)
-        {
+            {
                 $rows[$i] = @pg_fetch_array($res);
-        }
+            }
         }
 
     return $rows;

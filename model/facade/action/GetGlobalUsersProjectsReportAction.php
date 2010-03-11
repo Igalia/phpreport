@@ -93,7 +93,7 @@ class GetGlobalUsersProjectsReportAction extends Action{
 
     $dao = DAOFactory::getTaskDAO();
 
-        return $dao->getGlobalTaskReport($this->init, $this->end, "PROJECT");
+        return $dao->getGlobalTaskReport($this->init, $this->end, "USER", "PROJECT");
 
     }
 
@@ -103,7 +103,7 @@ class GetGlobalUsersProjectsReportAction extends Action{
 /*//Test code;
 
 $action= new GetGlobalUsersProjectsReportAction();
-var_dump($action);
+//var_dump($action);
 $result = $action->execute();
 var_dump($result);
 */
