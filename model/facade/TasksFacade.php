@@ -35,6 +35,7 @@ include_once('phpreport/model/facade/action/UpdateReportAction.php');
 include_once('phpreport/model/facade/action/PartialUpdateReportAction.php');
 include_once('phpreport/model/facade/action/GetUserTasksAction.php');
 include_once('phpreport/model/facade/action/GetGlobalUsersProjectsReportAction.php');
+include_once('phpreport/model/facade/action/GetGlobalProjectsCustomersReportAction.php');
 include_once('phpreport/model/facade/action/GetGlobalUsersProjectsCustomersReportAction.php');
 include_once('phpreport/model/facade/action/GetUserProjectCustomerReportAction.php');
 include_once('phpreport/model/facade/action/GetProjectTtypeReportAction.php');
@@ -261,6 +262,24 @@ abstract class TasksFacade {
     static function GetGlobalUsersProjectsReport(DateTime $init = NULL, DateTime $end = NULL) {
 
     $action = new GetGlobalUsersProjectsReportAction($init, $end);
+
+    return $action->execute();
+
+    }
+
+    /**  Get Global Projects Customers Report Action
+     *
+     *  This function is used for retrieving information about Tasks done for each Project and each Customer. We can pass dates
+     *  with optional parameters <var>$init</var> and <var>$end</var> if we want to retrieve information about only an interval.
+     *
+     * @param DateTime $init the initial date of the interval whose Tasks report we want to retrieve.
+     * @param DateTime $end the ending date of the interval whose Tasks report we want to retrieve.
+     * @return array an array with the resulting rows of computing the extra hours as associative arrays (they contain a field
+     * <i>add_hours</i> with that result and fields for the grouping fields <i>projectid</i> and <i>customerid</i>).
+     */
+    static function GetGlobalProjectsCustomersReport(DateTime $init = NULL, DateTime $end = NULL) {
+
+    $action = new GetGlobalProjectsCustomersReportAction($init, $end);
 
     return $action->execute();
 
