@@ -120,6 +120,12 @@ Ext.onReady(function(){
 
             // super
             editionPanel.superclass.initComponent.call(this);
+
+            // install event handler
+            this.on('rowdblclick', function(grid, n, e) {
+                window.location = 'viewProjectDetails.php?pid=' + grid.store.getAt(n).get('id');
+            });
+
         },
 
         /**
@@ -269,7 +275,7 @@ Ext.onReady(function(){
             dataIndex: 'absDev',
             renderer: deviation,
         },{
-            header: '% Deviation',
+            header: 'Deviation %',
             width: 75,
             sortable: true,
             dataIndex: 'percDev',
