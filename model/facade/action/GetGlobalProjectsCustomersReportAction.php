@@ -121,7 +121,7 @@ class GetGlobalProjectsCustomersReportAction extends Action{
                 $customerName = $customer->getName();
             }
 
-            $results[$project->getDescription()][$customer->getName()] =  $doubleResult['add_hours'];
+            $results[$projectName][$customerName] =  $doubleResult['add_hours'];
 
         }
 
