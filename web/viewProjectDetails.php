@@ -176,7 +176,7 @@
                         fieldLabel: 'Work Deviation %',
                         <?php
 
-                            echo "value:'" . round(100*($extraData[total]-$project->getEstHours())/$extraData[total], 2, PHP_ROUND_HALF_DOWN) . "'";
+                            echo "value:'" . round(100*($extraData[total]-$project->getEstHours())/$project->getEstHours(), 2, PHP_ROUND_HALF_DOWN) . "'";
 
                         ?>
                     }
