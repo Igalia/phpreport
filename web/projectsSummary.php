@@ -89,7 +89,7 @@
             columnLines: true,
             frame: true,
             title: 'Project - Customer Worked Hours Report',
-            iconCls: 'icon-grid',
+            iconCls: 'silk-table',
         });
 
 

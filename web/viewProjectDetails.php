@@ -293,7 +293,7 @@
             height: 250,
             frame: false,
             title: 'Project Worked Hours Report',
-            iconCls: 'icon-grid',
+            iconCls: 'silk-table',
         });
 
 
