@@ -95,6 +95,19 @@ abstract class TaskDAO extends BaseDAO{
      */
     public abstract function checkUserId($taskId, $userId);
 
+    /** Work Personal Summary retriever.
+     *
+     * This function retrieves the amount of hours the User with id <var>$userId<var> has worked on
+     * the day <var>$date</var>, its week and its month.
+     *
+     * @param int $userId the id of the User whose summary we want to retrieve.
+     * @param DateTime $date the date on which we want to retrieve the summary.
+     * @return array an array with the values related to the keys 'day', 'week' and 'month'.
+     * @throws {@link SQLIncorrectTypeException}
+     * @throws {@link SQLQueryErrorException}
+     */
+    public abstract function getPersonalSummary($userId, DateTime $date);
+
     /** Tasks retriever by User id and date.
      *
      * This function retrieves the rows from Task table that are associated with the User with

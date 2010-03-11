@@ -259,6 +259,36 @@ class PostgreSQLTaskDAO extends TaskDAO{
     return $result;
     }
 
+    /** Work Personal Summary retriever for PostgreSQL.
+     *
+     * This function retrieves the amount of hours the User with id <var>$userId<var> has worked on
+     * the day <var>$date</var>, its week and its month.
+     *
+     * @param int $userId the id of the User whose summary we want to retrieve.
+     * @param DateTime $date the date on which we want to retrieve the summary.
+     * @return array an array with the values related to the keys 'day', 'week' and 'month'.
+     * @throws {@link SQLIncorrectTypeException}
+     * @throws {@link SQLQueryErrorException}
+     */
+    public function getPersonalSummary($userId, DateTime $date) {
+        if (!is_numeric($userId))
+            throw new SQLIncorrectTypeException($userId);
+        $sql ="SELECT * FROM (SELECT COALESCE(SUM((_end-init)/60.0), 0.0) AS WEEK FROM task WHERE usrid=" . $userId  . " AND EXTRACT(WEEK FROM _date) = EXTRACT(WEEK FROM date " . DBPostgres::formatDate($date)  . ")) a , (SELECT COALESCE(SUM((_end-init)/60.0), 0.0) AS MONTH FROM task WHERE usrid=" . $userId . " AND EXTRACT(MONTH FROM _date) = EXTRACT(MONTH FROM date " . DBPostgres::formatDate($date)  . ")) b , (SELECT COALESCE(SUM((_end-init)/60.0), 0.0) AS day FROM task WHERE usrid=" . $userId  . " AND _date = " . DBPostgres::formatDate($date)  . ") c;";
+
+        $res = @pg_query($this->connect, $sql);
+
+        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
+
+        if(pg_num_rows($res) > 0) {
+            for($i = 0; $i < pg_num_rows($res); $i++)
+            {
+                $rows[$i] = @pg_fetch_array($res);
+            }
+        }
+
+        return $rows[0];
+    }
+
     /** Tasks retriever by Story id for PostgreSQL.
      *
      * This function retrieves the rows from Task table that are associated with the Story with
@@ -678,11 +708,11 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
 
 //Uncomment these lines in order to do a simple test of the Dao
-
+/*
 
 $dao = new PostgreSQLTaskDAO();
 
-/*// We create a new task
+// We create a new task
 
 $task = new TaskVO();
 
