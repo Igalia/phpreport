@@ -328,6 +328,7 @@ Ext.onReady(function(){
         style: 'margin-top: 10px',
         renderTo: 'content',
         loadMask: true,
+        stripeRows: true,
         colModel: projectColModel,
         columnLines: true,
     });
