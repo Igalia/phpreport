@@ -46,30 +46,34 @@
 
     // Main Panel
     var mainPanel = new Ext.FormPanel({
-      autoWidth: true,
+        width: 426,
         labelWidth: 125,
             frame:true,
             layout: 'table',
             layoutConfig:{
-                columns: 2
+                columns: 2,
+                tableAttrs: {
+                    style: {
+                        width: '100%'
+                    }
+                }
             },
-        title: 'Project Data',
+            title: 'Project Data',
             bodyStyle: 'padding:5px 5px 0px 5px;',
-        defaults: {
-                 autoWidth: true,
-                 labelStyle: 'text-align: right; width: 125; font-weight:bold; padding: 0 0 0 0;',
-         colspan: 2,
-        },
-        defaultType: 'fieldset',
+            defaults: {
+                 colspan: 2,
+            },
+            defaultType: 'fieldset',
             items:[{
                 xtype: 'fieldset',
-              columnWidth: 0.5,
+                autoWidth: true,
+                columnWidth: 0.5,
                 title: 'Basic Data',
                 collapsible: true,
                 autoHeight: true,
                 defaults: {
-                     width: 200,
-                     labelStyle: 'width: 125; font-weight:bold; padding: 0 0 0 0;'
+                     width: 250,
+                     labelStyle: 'width: 125; font-weight:bold; padding: 0 0 0 0;',
                 },
                 defaultType:'displayfield',
                 items: [{
@@ -142,14 +146,15 @@
                 ]
             },{
                 xtype: 'fieldset',
-        columnWidth: 0.5,
+                columnWidth: 0.5,
                 title: 'Current Work Data',
+                width: 200,
                 collapsible: true,
                 colspan: 1,
                 autoHeight: true,
                 defaults: {
-                     width: 70,
-                     labelStyle: 'width: 125; font-weight:bold; padding: 0 0 0 0;'
+                     width: 50,
+                     labelStyle: 'width: 125; font-weight:bold; padding: 0 0 0 0;',
                 },
                 defaultType:'displayfield',
                 items: [{
@@ -184,13 +189,14 @@
             },{
                 xtype: 'fieldset',
                 columnWidth: 0.5,
+                width: 200,
                 title: 'Current Invoice Data',
                 collapsible: true,
                 colspan:1,
                 autoHeight: true,
                 defaults: {
-                     width: 70,
-                     labelStyle: 'text-align: right; width: 125; font-weight:bold; padding: 0 0 0 0;'
+                     width: 50,
+                     labelStyle: 'width: 125; font-weight:bold; padding: 0 0 0 0;',
                 },
                 defaultType:'displayfield',
                 items: [{
