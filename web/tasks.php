@@ -479,14 +479,14 @@ Ext.onReady(function(){
     // Summary Panel
     var summaryPanel = new Ext.FormPanel({
         width: 137,
-        labelWidth: 75,
+        labelWidth: 70,
         renderTo: Ext.get('auxiliarpanel'),
         frame:true,
         title: 'User Work Summary',
         bodyStyle: 'padding:5px 5px 0px 5px;',
         defaults: {
             width: 100,
-            labelStyle: 'text-align: right; width: 75; font-weight:bold; padding: 0 0 0 0;',
+            labelStyle: 'text-align: right; width: 70; font-weight:bold; padding: 0 0 0 0;',
         },
         defaultType:'displayfield',
         items: [{
@@ -494,22 +494,22 @@ Ext.onReady(function(){
             name: 'day',
             fieldLabel:'Today',
             value: '<?php
-                 echo $summary['day'];
-            ?>'
+                 echo round($summary['day'], 2);
+            ?> h'
         },{
             id:'week',
             name: 'week',
             fieldLabel:'This week',
             value: '<?php
-                 echo $summary['week'];
-            ?>'
+                 echo round($summary['week'], 2);
+            ?> h'
         },{
             id:'month',
             name: 'month',
             fieldLabel:'This month',
             value: '<?php
-                 echo $summary['month'];
-            ?>'
+                 echo round($summary['month'], 2);
+            ?> h'
         }
         ]
     });
