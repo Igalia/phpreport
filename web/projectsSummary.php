@@ -118,16 +118,28 @@
                */
                 grid.getColumnModel().setConfig(columns);
 
-                // We add 31 pixels to the width because it doesn't count
+                // We add 33 pixels to the width because it doesn't count
                 // the vertical scroll bar
-                grid.setSize(grid.getColumnModel().getTotalWidth() + 31, 750);
+                grid.setSize(grid.getColumnModel().getTotalWidth() + 33, 500);
 
-                if (!grid.rendered)
-                    grid.render(Ext.get("content"));
+                summaryTabs.setSize(grid.getColumnModel().getTotalWidth() + 33, 500);
+
+                if (!summaryTabs.rendered)
+                    summaryTabs.render(Ext.get("content"));
 
               }
 
             }, this);
+
+
+    var summaryTabs = new Ext.TabPanel({
+        activeTab: 0,
+        frame: true,
+        plain: true,
+        items:[
+            grid,
+            ]
+    });
 
     grid.store.load();
 
