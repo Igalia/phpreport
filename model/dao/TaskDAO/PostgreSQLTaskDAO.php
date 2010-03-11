@@ -443,8 +443,6 @@ class PostgreSQLTaskDAO extends TaskDAO{
         }
     }
 
-    print $sql;
-
     $res = @pg_query($this->connect, $sql);
 
     if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
