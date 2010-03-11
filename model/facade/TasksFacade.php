@@ -35,6 +35,7 @@ include_once('phpreport/model/facade/action/UpdateReportAction.php');
 include_once('phpreport/model/facade/action/PartialUpdateReportAction.php');
 include_once('phpreport/model/facade/action/GetUserTasksAction.php');
 include_once('phpreport/model/facade/action/GetGlobalUsersProjectsReportAction.php');
+include_once('phpreport/model/facade/action/GetGlobalProjectsUsersReportAction.php');
 include_once('phpreport/model/facade/action/GetGlobalProjectsCustomersReportAction.php');
 include_once('phpreport/model/facade/action/GetGlobalUsersProjectsCustomersReportAction.php');
 include_once('phpreport/model/facade/action/GetUserProjectCustomerReportAction.php');
@@ -285,6 +286,25 @@ abstract class TasksFacade {
 
     }
 
+    /**  Get Global Projects Users Report Action
+     *
+     *  This function is used for retrieving information about Tasks done for each Project by each User. We can pass dates
+     *  with optional parameters <var>$init</var> and <var>$end</var> if we want to retrieve information about only an interval.
+     *
+     * @param DateTime $init the initial date of the interval whose Tasks report we want to retrieve.
+     * @param DateTime $end the ending date of the interval whose Tasks report we want to retrieve.
+     * @return array an associative array with the worked hours data, with the Project name as first level key and the User login
+     * as second level one.
+     */
+    static function GetGlobalProjectsUsersReport(DateTime $init = NULL, DateTime $end = NULL) {
+
+        $action = new GetGlobalProjectsUsersReportAction($init, $end);
+
+        return $action->execute();
+
+    }
+
+    /**  Get Project User Customer Report Action
     /**  Get Project User Customer Report Action
      *
      *  This function is used for retrieving information about worked hours in Tasks related to a Project, grouped by User and Customer.
