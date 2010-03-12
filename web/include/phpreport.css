@@ -1,3 +1,7 @@
+body {
+    background: transparent url('images/phpreport-footer-background.png') repeat-x 0 bottom;
+}
+
 #header {
     background: transparent url('images/phpreport-header-background.png') repeat-x;
 }

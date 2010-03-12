@@ -22,7 +22,6 @@
 ?>
 
     <div id="footer">
-        &copy; 2009 Igalia S.L.
     </div>
 
 </body>
