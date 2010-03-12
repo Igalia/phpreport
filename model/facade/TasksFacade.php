@@ -34,6 +34,7 @@ include_once('phpreport/model/facade/action/DeleteReportAction.php');
 include_once('phpreport/model/facade/action/UpdateReportAction.php');
 include_once('phpreport/model/facade/action/PartialUpdateReportAction.php');
 include_once('phpreport/model/facade/action/GetUserTasksAction.php');
+include_once('phpreport/model/facade/action/GetPersonalSummaryByUserIdDateAction.php');
 include_once('phpreport/model/facade/action/GetGlobalUsersProjectsReportAction.php');
 include_once('phpreport/model/facade/action/GetGlobalProjectsUsersReportAction.php');
 include_once('phpreport/model/facade/action/GetGlobalProjectsCustomersReportAction.php');
@@ -198,6 +199,23 @@ abstract class TasksFacade {
             return -1;
 
     return 0;
+
+    }
+
+    /** Get Personal Work Summary by User Id and Date Function
+     *
+     *  This action is used for retrieving data about work done by a User on a date,
+     *  its week and its month by his/her user Id.
+     *
+     * @param int $userId the id of the User whose summary we want to retrieve.
+     * @param DateTime $date the date on which we want to compute the summary.
+     * @return array an array with the values related to the keys 'day', 'week' and 'month'.
+     */
+    static function GetPersonalSummaryByUserIdDate($userId, DateTime $date) {
+
+        $action = new GetPersonalSummaryByUserIdDateAction($userId, $date);
+
+        return $action->execute();
 
     }
 
@@ -376,6 +394,8 @@ abstract class TasksFacade {
     }
 
 }
+
+//var_dump(TasksFacade::GetPersonalSummaryByUserIdDate(60, new DateTime()));
 
 /*$task = new TaskVO();
 
