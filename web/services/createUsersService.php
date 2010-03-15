@@ -50,7 +50,7 @@
 
         $user = LoginManager::isLogged($sid);
 
-        if (!user)
+        if (!$user)
         {
             $string = "<return service='createUsers'><error id='2'>You must be logged in</error></return>";
             break;
