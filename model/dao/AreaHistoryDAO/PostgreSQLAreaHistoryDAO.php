@@ -66,14 +66,14 @@ class PostgreSQLAreaHistoryDAO extends AreaHistoryDAO{
 
     $areaHistoryVO = new AreaHistoryVO();
 
-        $areaHistoryVO->setId($row[id]);
-        $areaHistoryVO->setInitDate(date_create($row[init_date]));
-    $areaHistoryVO->setUserId($row[usrid]);
-    if (is_null($row[end_date]))
+        $areaHistoryVO->setId($row['id']);
+        $areaHistoryVO->setInitDate(date_create($row['init_date']));
+    $areaHistoryVO->setUserId($row['usrid']);
+    if (is_null($row['end_date']))
             $areaHistoryVO->setEndDate(NULL);
     else
-        $areaHistoryVO->setEndDate(date_create($row[end_date]));
-    $areaHistoryVO->setAreaId($row[areaid]);
+        $areaHistoryVO->setEndDate(date_create($row['end_date']));
+    $areaHistoryVO->setAreaId($row['areaid']);
 
     return $areaHistoryVO;
     }

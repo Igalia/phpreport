@@ -66,14 +66,14 @@ class PostgreSQLCityHistoryDAO extends CityHistoryDAO{
 
     $cityHistoryVO = new CityHistoryVO();
 
-        $cityHistoryVO->setId($row[id]);
-        $cityHistoryVO->setInitDate(date_create($row[init_date]));
-    $cityHistoryVO->setUserId($row[usrid]);
-    if (is_null($row[end_date]))
+        $cityHistoryVO->setId($row['id']);
+        $cityHistoryVO->setInitDate(date_create($row['init_date']));
+    $cityHistoryVO->setUserId($row['usrid']);
+    if (is_null($row['end_date']))
             $cityHistoryVO->setEndDate(NULL);
     else
-        $cityHistoryVO->setEndDate(date_create($row[end_date]));
-    $cityHistoryVO->setCityId($row[cityid]);
+        $cityHistoryVO->setEndDate(date_create($row['end_date']));
+    $cityHistoryVO->setCityId($row['cityid']);
 
     return $cityHistoryVO;
     }

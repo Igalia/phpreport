@@ -66,10 +66,10 @@ class PostgreSQLExtraHourDAO extends ExtraHourDAO{
 
         $extraHourVO = new ExtraHourVO();
 
-        $extraHourVO->setId($row[id]);
-        $extraHourVO->setDate(date_create($row[_date]));
-        $extraHourVO->setHours($row[hours]);
-        $extraHourVO->setUserId($row[usrid]);
+        $extraHourVO->setId($row['id']);
+        $extraHourVO->setDate(date_create($row['_date']));
+        $extraHourVO->setHours($row['hours']);
+        $extraHourVO->setUserId($row['usrid']);
 
     return $extraHourVO;
     }

@@ -66,9 +66,9 @@ class PostgreSQLCommonEventDAO extends CommonEventDAO{
 
     $commonEventVO = new CommonEventVO();
 
-        $commonEventVO->setId($row[id]);
-        $commonEventVO->setDate(date_create($row[_date]));
-    $commonEventVO->setCityId($row[cityid]);
+        $commonEventVO->setId($row['id']);
+        $commonEventVO->setDate(date_create($row['_date']));
+    $commonEventVO->setCityId($row['cityid']);
 
     return $commonEventVO;
     }

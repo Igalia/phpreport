@@ -66,14 +66,14 @@ class PostgreSQLJourneyHistoryDAO extends JourneyHistoryDAO{
 
     $journeyHistoryVO = new JourneyHistoryVO();
 
-        $journeyHistoryVO->setId($row[id]);
-    $journeyHistoryVO->setInitDate(date_create($row[init_date]));
-    $journeyHistoryVO->setUserId($row[usrid]);
-    if (is_null($row[end_date]))
+        $journeyHistoryVO->setId($row['id']);
+    $journeyHistoryVO->setInitDate(date_create($row['init_date']));
+    $journeyHistoryVO->setUserId($row['usrid']);
+    if (is_null($row['end_date']))
             $journeyHistoryVO->setEndDate(NULL);
     else
-        $journeyHistoryVO->setEndDate(date_create($row[end_date]));
-    $journeyHistoryVO->setJourney($row[journey]);
+        $journeyHistoryVO->setEndDate(date_create($row['end_date']));
+    $journeyHistoryVO->setJourney($row['journey']);
 
     return $journeyHistoryVO;
     }
