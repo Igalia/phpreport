@@ -569,24 +569,10 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
   if ($userIgnore[$row["uid"]] != TRUE)
   {
 
-  $phase = "NULL";
-  $ttype = "NULL";
-  $text = "NULL";
-  $story = "NULL";
-  $telework = "NULL";
-
-
-  if ($row["ttype"] != NULL)
-    $ttype = "'{$row["ttype"]}'";
-
-  if ($row["phase"] != NULL)
-    $phase = "'{$row["phase"]}'";
-
-  if ($row["text"] != NULL)
-    $text ="'" . pg_escape_string($row["text"]) . "'";
-
-  if ($row["story"] != NULL)
-    $story ="'" . pg_escape_string($row["story"]) . "'";
+  $ttype = $row["ttype"];
+  $phase = $row["phase"];
+  $text = $row["text"];
+  $story = $row["story"];
 
   if (strtolower($row["telework"]) == 't')
     $telework = true;
