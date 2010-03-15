@@ -86,7 +86,7 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
  if ($row["password"] != NULL)
     $password = "'{$row["password"]}'";
 
-  if (!$result2=@pg_query($cnx2,"INSERT INTO usr(password, login) VALUES ($password, " . DBPostgres::checkNull($row["uid"]) . ")")) {
+  if (!$result2=@pg_query($cnx2,"INSERT INTO usr(password, login) VALUES ($password, " . DBPostgres::checkStringNull($row["uid"]) . ")")) {
     $error=("It has not been possible to insert the new user from values ($password, '{$row["uid"]}').\n");
     print ($error);
    }
@@ -270,9 +270,9 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
  if ($row["_end"] != NULL)
     $_end = "'{$row["_end"]}'";
 
- $invoice = "{$row["invoice"]}";
+ $invoice = $row["invoice"];
 
- $est_hours = "{$row["est_hours"]}";
+ $est_hours = $row["est_hours"];
 
  if ($row["area"] == NULL)
  {
@@ -309,13 +309,13 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
  }
 
- $description = "{$row["description"]}";
+ $description = $row["description"];
 
- $type = "{$row["type"]}";
+ $type = $row["type"];
 
- $moved_hours = "{$row["moved_hours"]}";
+ $moved_hours = $row["moved_hours"];
 
- $sched_type = "{$row["sched_type"]}";
+ $sched_type = $row["sched_type"];
 
  if (strtolower($row['activation']) == "t")
     $activation = True;
@@ -425,7 +425,7 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
                 print("\n\n---> Customer for type '{$row["type"]}' is not assigned.");
                 $newCustomer = readline("\nType a name for it (if it doesn't exist in DB, it'll be created; if you leave it in blank, it will be named '{$row["type"]}'): ");
-                if (is_null($newCustomer))
+                if (!$newCustomer)
                     $newCustomer = $row["type"];
 
                 $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
@@ -455,7 +455,7 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
                 print("\n\n---> Project for type '{$row["type"]}' is not assigned.");
                 $newProject = readline("\nType a name for it (if it doesn't exist in DB, it'll be created; if you leave it in blank, it will be named '{$row["type"]}'): ");
-                if ($newProject == "")
+                if (!$newProject)
                     $newProject = $row["type"];
 
                 $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
@@ -483,7 +483,7 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
                 print("\n\n---> Customer for project '$newProject' is not assigned.");
                 $newCustomer = readline("\nType a name for it (if it doesn't exist in DB, it'll be created; if you leave it in blank, it will be named '$newProject'): ");
-                if (is_null($newCustomer))
+                if (!$newCustomer)
                     $newCustomer = $newProject;
 
                 $result4=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
@@ -543,7 +543,14 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
   $row2=@pg_fetch_array($result2);
 
-   if (is_null($row2["id"]) && ($userIgnore[$row["uid"]] != TRUE))
+   if (isset($userIgnore[$row["uid"]]))
+   {
+      if ($userIgnore[$row["uid"]] != TRUE)
+          $ignore = false;
+      else $ignore = true;
+   } else $ignore = false;
+
+   if (is_null($row2["id"]) && (!$ignore))
    {
     $newUser = readline("\n\n---> User with 'uid' = '{$row["uid"]}' does not exist in DB. Do you want to create him/her? (otherwise, his/her tasks will be ignored)  (Y/N): ");
     while (($newUser != "Y") && ($newUser != "y") && ($newUser != "N") && ($newUser != "n"))
@@ -566,7 +573,14 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
    }
 
-  if ($userIgnore[$row["uid"]] != TRUE)
+ if (isset($userIgnore[$row["uid"]]))
+ {
+    if ($userIgnore[$row["uid"]] != TRUE)
+        $ignore = false;
+    else $ignore = true;
+ } else $ignore = false;
+
+  if (!$ignore)
   {
 
   $ttype = $row["ttype"];
@@ -618,11 +632,11 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
         if (($customerid == "NULL")&&($projectid == "NULL"))
         {
 
-            if (is_null($typeCustomers[$row["type"]]))
+            if (!isset($typeCustomers[$row["type"]]))
             {
                 print("\n\n---> Customer for type '{$row["type"]}' is not assigned.");
                 $newCustomer = readline("\nType a name for it (if it doesn't exist in DB, it'll be created; if you leave it in blank, it will be named '{$row["type"]}'): ");
-                if (is_null($newCustomer))
+                if (!$newCustomer)
                     $newCustomer = $row["type"];
 
                 $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
@@ -650,11 +664,11 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
             $customerid = $typeCustomers[$row["type"]];
 
-            if (is_null($typeProjects[$row["type"]]))
+            if (!isset($typeProjects[$row["type"]]))
             {
                 print("\n\n---> Project for type '{$row["type"]}' is not assigned.");
                 $newProject = readline("\nType a name for it (if it doesn't exist in DB, it'll be created; if you leave it in blank, it will be named '{$row["type"]}'): ");
-                if ($newProject == "")
+                if (!$newProject)
                     $newProject = $row["type"];
 
                 $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
@@ -689,11 +703,11 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
         if ($projectid == "NULL")
         {
 
-            if (is_null($typeProjects[$row["type"]]))
+            if (!isset($typeProjects[$row["type"]]))
             {
                 print("\n\n---> Project for type '{$row["type"]}' is not assigned.");
                 $newProject = readline("\nType a name for it (if it doesn't exist in DB, it'll be created; if you leave it in blank, it will be named '{$row["type"]}'): ");
-                if ($newProject == "")
+                if (!$newProject)
                     $newProject = $row["type"];
 
                 $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
@@ -727,11 +741,11 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
         }
 
-        if (is_null($typeCustomers[$row["type"]]))
+        if (!isset($typeCustomers[$row["type"]]))
         {
             print("\n\n---> Customer for type '{$row["type"]}' is not assigned.");
             $newCustomer = readline("\nType a name for it (if it doesn't exist in DB, it'll be created; if you leave it in blank, it will be named '{$row["type"]}'): ");
-            if (is_null($newCustomer))
+            if (!$newCustomer)
                 $newCustomer = $row["type"];
 
             $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
@@ -768,11 +782,11 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
         if ($projectid == "NULL")
         {
 
-            if (is_null($typeProjects[$row["type"]]))
+            if (!isset($typeProjects[$row["type"]]))
             {
                 print("\n\n---> Project for type '{$row["type"]}' is not assigned.");
                 $newProject = readline("\nType a name for it (if it doesn't exist in DB, it'll be created; if you leave it in blank, it will be named '{$row["type"]}'): ");
-                if ($newProject == "")
+                if (!$newProject)
                     $newProject = $row["type"];
 
                 $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
@@ -805,11 +819,11 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
         }
 
 
-        if (is_null($typeCustomers[$row["type"]]))
+        if (!isset($typeCustomers[$row["type"]]))
         {
             print("\n\n---> Customer for type '{$row["type"]}' is not assigned.");
             $newCustomer = readline("\nType a name for it (if it doesn't exist in DB, it'll be created; if you leave it in blank, it will be named '{$row["type"]}'): ");
-            if (is_null($newCustomer))
+            if (!$newCustomer)
                 $newCustomer = $row["type"];
 
             $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
@@ -844,11 +858,11 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
     case "pin":
 
-        if (is_null($typeCustomers[$row["type"]]))
+        if (!isset($typeCustomers[$row["type"]]))
         {
             print("\n\n---> Customer for type '{$row["type"]}' is not assigned.");
             $newCustomer = readline("\nType a name for it (if it doesn't exist in DB, it'll be created; if you leave it in blank, it will be named '{$row["type"]}'): ");
-            if (is_null($newCustomer))
+            if (!$newCustomer)
                 $newCustomer = $row["type"];
 
             $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
@@ -881,11 +895,11 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
     case "coge":
     case "asam":
 
-        if (is_null($typeCustomers[$row["type"]]))
+        if (!isset($typeCustomers[$row["type"]]))
         {
             print("\n\n---> Customer for type '{$row["type"]}' is not assigned.");
             $newCustomer = readline("\nType a name for it (if it doesn't exist in DB, it'll be created; if you leave it in blank, it will be named '{$row["type"]}'): ");
-            if (is_null($newCustomer))
+            if (!$newCustomer)
                 $newCustomer = $row["type"];
 
             $result3=@pg_query($cnx2,$query="SELECT * FROM customer WHERE name =" . DBPostgres::checkStringNull($newCustomer))
@@ -913,11 +927,11 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
         $customerid = $typeCustomers[$row["type"]];
 
-        if (is_null($typeProjects[$row["type"]]))
+        if (!isset($typeProjects[$row["type"]]))
         {
             print("\n\n---> Project for type '{$row["type"]}' is not assigned.");
             $newProject = readline("\nType a name for it (if it doesn't exist in DB, it'll be created; if you leave it in blank, it will be named '{$row["type"]}'): ");
-            if ($newProject == "")
+            if (!$newProject)
                 $newProject = $row["type"];
 
             $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
@@ -952,11 +966,11 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
     case "ap":
     case "hac":
 
-        if (is_null($typeProjects[$row["type"]]))
+        if (!isset($typeProjects[$row["type"]]))
         {
             print("\n\n---> Project for type '{$row["type"]}' is not assigned.");
             $newProject = readline("\nType a name for it (if it doesn't exist in DB, it'll be created; if you leave it in blank, it will be named '{$row["type"]}'): ");
-            if ($newProject == "")
+            if (!$newProject)
                 $newProject = $row["type"];
 
             $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
@@ -991,13 +1005,13 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
         if ($projectid != "NULL")
             break;
 
-        if (is_null($typeProjects[$row["type"]]))
-        {
-            if (is_null($typeProjects["__default__"]))
+         if (!isset($typeProjects[$row["type"]]))
+         {
+            if (!isset($typeProjects["__default__"]))
             {
                 print("\n\n---> Project for other types is not assigned.");
                 $newProject = readline("\nType a name for it (if it doesn't exist in DB, it'll be created; if you leave it in blank, it will be named 'default'): ");
-                if ($newProject == "")
+                if (!$newProject)
                     $newProject = 'default';
 
                 $result3=@pg_query($cnx2,$query="SELECT * FROM project WHERE description =" . DBPostgres::checkStringNull($newProject))
@@ -1007,9 +1021,9 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
 
                 if (is_null($row3["id"]))
                 {
-                    if (!$result2=@pg_query($cnx2,"INSERT INTO project(areaid, description) VALUES ('$unidentifiedArea', " . DBPostgres::checkStringNull($newCustomer) . ")"))
+                    if (!$result2=@pg_query($cnx2,"INSERT INTO project(areaid, description) VALUES ('$unidentifiedArea', " . DBPostgres::checkStringNull($newProject) . ")"))
                     {
-                            $error=("It has not been possible to insert the new project from values ('$unidentifiedArea', '$newCustomer').\n");
+                            $error=("It has not been possible to insert the new project from values ('$unidentifiedArea', '$newProject').\n");
                             print ($error);
                         break;
                     }
@@ -1024,8 +1038,8 @@ while ($row=@pg_fetch_array($result,NULL,PGSQL_ASSOC)) {
             }
 
             $projectid = $typeProjects["__default__"];
-        }
-        else $projectid = $typeProjects[$row["type"]];
+         }
+         else $projectid = $typeProjects[$row["type"]];
 
 
         break;
