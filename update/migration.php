@@ -23,6 +23,11 @@ include_once('phpreport/model/facade/action/ExtraHoursReportAction.php');
 include_once('phpreport/model/dao/UserDAO/PostgreSQLUserDAO.php');
 include_once('phpreport/util/DBPostgres.php');
 
+function readline($prompt) {
+    echo $prompt;
+    return substr(fgets(STDIN),0, -1);
+}
+
 // Special sector name (used in case we find a non-matching sector id)
 $unidentified_sector = "others";
 
