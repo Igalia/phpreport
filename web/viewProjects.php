@@ -444,6 +444,10 @@ Ext.onReady(function(){
             this.tbar = this.buildTopToolbar();
             this.bbar = this.buildBottomToolbar();
 
+            this.on('rowdblclick', function(g, n) {
+                window.location = 'viewProjectDetails.php?pid=' + g.getStore().getAt(n).get('id');
+            });
+
             // super
             editionPanel.superclass.initComponent.call(this);
         },
