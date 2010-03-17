@@ -402,7 +402,7 @@ Ext.onReady(function(){
         storeId: 'id',
         proxy: myProxy,
         reader:new Ext.data.XmlReader({record: 'task', idProperty:'id' }, taskRecord),
-        writer:new Ext.data.XmlWriter({encode: true, writeAllFields: false, root: 'tasks', tpl:'<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><date>' + date  + '</date><tpl for="fields"><{name}>{value}</{name}></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, taskRecord),
+        writer:new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: false, root: 'tasks', tpl:'<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><date>' + date  + '</date><tpl for="fields"><{name}>{value}</{name}></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, taskRecord),
         remoteSort: false,
         sortInfo: {
             field: 'initTime',
