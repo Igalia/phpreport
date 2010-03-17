@@ -36,8 +36,6 @@ if(isset($_GET["date"]))
 else
     $date = date("Y-m-d");
 
-$summary = TasksFacade::GetPersonalSummaryByUserIdDate($user->getId(), date_create($date));
-
 ?>
 <script type="text/javascript">
 
@@ -93,6 +91,12 @@ var projectRecord = new Ext.data.Record.create([
 var taskStoryRecord = new Ext.data.Record.create([
     {name:'id'},
     {name:'friendlyName'},
+]);
+/* Schema of the information of the personal summary */
+var summaryRecord = new Ext.data.Record.create([
+    {name:'day'},
+    {name:'month'},
+    {name:'week'},
 ]);
 
 var tab = 3;
@@ -418,10 +422,37 @@ Ext.onReady(function(){
             },
             'write': function() {
                 App.setAlert(true, "Task Records Changes Saved");
+                summaryStore.load();
             },
             'exception': function(){
                 App.setAlert(false, "Some Error Occurred While Saving The Changes (please check you haven't clipped working hours)");
             }
+        }
+    });
+
+    /* Proxy to load the personal summary */
+    var summaryProxy = new Ext.data.HttpProxy({
+    method: 'GET',
+        api: {
+            read    : 'services/getPersonalSummaryByDateService.php',
+        },
+    });
+    /* Store to load the personal summary */
+    var summaryStore = new Ext.data.Store({
+        baseParams: {
+            'date': date,
+            'dateFormat': 'Y-m-d',
+        },
+        storeId: 'summaryStore',
+        proxy: summaryProxy,
+        reader:new Ext.data.XmlReader({record: 'hours', idProperty:'month' }, summaryRecord),
+        remoteSort: false,
+        listeners: {
+            'load': function () {
+                Ext.getCmp('month').setValue(Math.round(summaryStore.getAt(0).get('month') * 100)/100 + " h");
+                Ext.getCmp('day').setValue(Math.round(summaryStore.getAt(0).get('day') * 100)/100 + " h");
+                Ext.getCmp('week').setValue(Math.round(summaryStore.getAt(0).get('week') * 100)/100 + " h");
+            },
         }
     });
 
@@ -493,26 +524,19 @@ Ext.onReady(function(){
             id:'day',
             name: 'day',
             fieldLabel:'Today',
-            value: '<?php
-                 echo round($summary['day'], 2);
-            ?> h'
         },{
             id:'week',
             name: 'week',
             fieldLabel:'This week',
-            value: '<?php
-                 echo round($summary['week'], 2);
-            ?> h'
         },{
             id:'month',
             name: 'month',
             fieldLabel:'This month',
-            value: '<?php
-                 echo round($summary['month'], 2);
-            ?> h'
         }
         ]
     });
+
+    summaryStore.load();
 
 });
 </script>
