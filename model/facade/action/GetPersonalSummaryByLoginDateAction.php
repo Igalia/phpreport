@@ -19,9 +19,9 @@
  */
 
 
-/** File for GetPersonalSummaryByUserIdDateAction
+/** File for GetPersonalSummaryByLoginDateAction
  *
- *  This file just contains {@link GetPersonalSummaryByUserIdDateAction}.
+ *  This file just contains {@link GetPersonalSummaryByLoginDateAction}.
  *
  * @filesource
  * @package PhpReport
@@ -33,25 +33,25 @@ include_once('phpreport/model/facade/action/Action.php');
 include_once('phpreport/model/dao/DAOFactory.php');
 include_once('phpreport/model/vo/UserVO.php');
 
-/** Get Personal Work Summary by User Id and Date Action
+/** Get Personal Work Summary by Login and Date Action
  *
  *  This action is used for retrieving data about work done by a User on a date,
- *  its week and its month by his/her user Id.
+ *  its week and its month by his/her login (user Id also works).
  *
  * @package PhpReport
  * @subpackage facade
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
-class GetPersonalSummaryByUserIdDateAction extends Action{
+class GetPersonalSummaryByLoginDateAction extends Action{
 
-    /** The User Id
+    /** The User
      *
-     * This variable contains the id of the User whose summary we want to
+     * This variable contains the the User whose summary we want to
      * obtain.
      *
-     * @var int
+     * @var UserVO
      */
-    private $userId;
+    private $userVO;
 
     /** The date
      *
@@ -65,14 +65,14 @@ class GetPersonalSummaryByUserIdDateAction extends Action{
      *
      * This is just the constructor of this action.
      *
-     * @param int $userId the id of the User whose summary we want to retrieve.
+     * @param UserVO $userVO the User whose summary we want to retrieve.
      * @param DateTime $date the date on which we want to compute the summary.
      */
-    public function __construct($userId, DateTime $date) {
-        $this->userId = $userId;
+    public function __construct(UserVO $userVO, DateTime $date) {
+        $this->userVO = $userVO;
         $this->date = $date;
-        $this->preActionParameter="GET_PERSONAL_SUMMARY_BY_USER_ID_DATE_PREACTION";
-        $this->postActionParameter="GET_PERSONAL_SUMMARY_BY_USER_ID_DATE_POSTACTION";
+        $this->preActionParameter="GET_PERSONAL_SUMMARY_BY_USER_LOGIN_DATE_PREACTION";
+        $this->postActionParameter="GET_PERSONAL_SUMMARY_BY_USER_LOGIN_DATE_POSTACTION";
 
     }
 
@@ -86,7 +86,21 @@ class GetPersonalSummaryByUserIdDateAction extends Action{
 
         $dao = DAOFactory::getTaskDAO();
 
-        return $dao->getPersonalSummary($this->userId, $this->date);
+        $user = $this->userVO;
+
+        if (is_null($user->getId()))
+        {
+
+            $dao2 = DAOFactory::getUserDAO();
+
+            $user = $dao2->getByUserLogin($user->getLogin());
+
+            if (is_null($user))
+                return NULL;
+
+        }
+
+        return $dao->getPersonalSummary($user->getId(), $this->date);
 
     }
 
@@ -94,8 +108,10 @@ class GetPersonalSummaryByUserIdDateAction extends Action{
 
 /*//Test code
 
-$action = new GetPersonalSummaryByUserIdDateAction(60, date_create('2009-12-01'));
+$user = new UserVO();
+$user->setLogin('jaragunde');
+$action = new GetPersonalSummaryByUserIdDateAction($user, date_create('2009-12-01'));
 //var_dump($action);
-$action->execute();
-var_dump($action);
+$result = $action->execute();
+var_dump($result);
 */
