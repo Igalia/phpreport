@@ -131,8 +131,31 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 listeners: {
                     'change': function() {
                         this.parent.taskRecord.set('initTime',this.getValue());
+                        // We write the Task's length label
+                        if (this.getRawValue()!='' && this.parent.endTimeField.getRawValue()!='' && this.parent.endTimeField.isValid() && this.isValid()) {
+                            init = this.getRawValue().split(':');
+                            initHour = init[0];
+                            initMinute = init[1];
+                            end = this.parent.endTimeField.getRawValue().split(':');
+                            endHour = end[0];
+                            endMinute = end[1];
+                            diffHour = endHour - initHour;
+                            diffMinute = endMinute - initMinute;
+                            if (diffMinute < 0)
+                            {
+                                diffHour--;
+                                diffMinute += 60;
+                            }
+                            if (diffMinute < 10)
+                                diffMinute = "0" + diffMinute;
+                            this.parent.length.setText(diffHour + ":" + diffMinute + " h");
+                        }
                     }
                 },
+            }),
+            length: new Ext.form.Label({
+                parent: this,
+                ref: '../length'
             }),
             endTimeField: new Ext.form.TimeField({
                 parent: this,
@@ -151,6 +174,25 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         if (this.getValue() == '00:00')
                             this.setValue('23:59');
                         this.parent.taskRecord.set('endTime',this.getValue());
+                        // We write the Task's length label
+                        if (this.getRawValue()!='' && this.parent.initTimeField.getRawValue()!='' && this.parent.initTimeField.isValid() && this.isValid()) {
+                            end = this.getRawValue().split(':');
+                            endHour = end[0];
+                            endMinute = end[1];
+                            init = this.parent.initTimeField.getRawValue().split(':');
+                            initHour = init[0];
+                            initMinute = init[1];
+                            diffHour = endHour - initHour;
+                            diffMinute = endMinute - initMinute;
+                            if (diffMinute < 0)
+                            {
+                                diffHour--;
+                                diffMinute += 60;
+                            }
+                            if (diffMinute < 10)
+                                diffMinute = "0" + diffMinute;
+                            this.parent.length.setText(diffHour + ":" + diffMinute + " h");
+                        }
                     }
                 },
             }),
@@ -394,6 +436,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         this.initTimeField,
                         new Ext.form.Label({text: ' - '}),
                         this.endTimeField,
+                        this.length,
                     ]
                 }),
                 new Ext.form.Label({text: 'Customer'}),
@@ -483,6 +526,24 @@ Ext.onReady(function(){
                     taskPanel.initTimeField.validate();
                     taskPanel.endTimeField.setRawValue(r.data['endTime']);
                     taskPanel.endTimeField.validate();
+
+                    // We write the task's length label
+                    init = taskPanel.initTimeField.getRawValue().split(':');
+                    initHour = init[0];
+                    initMinute = init[1];
+                    end = taskPanel.endTimeField.getRawValue().split(':');
+                    endHour = end[0];
+                    endMinute = end[1];
+                    diffHour = endHour - initHour;
+                    diffMinute = endMinute - initMinute;
+                    if (diffMinute < 0)
+                    {
+                        diffHour--;
+                        diffMinute += 60;
+                    }
+                    if (diffMinute < 10)
+                        diffMinute = "0" + diffMinute;
+                    taskPanel.length.setText(diffHour + ":" + diffMinute + " h");
                 })
             },
             'write': function() {
