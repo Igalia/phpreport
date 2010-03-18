@@ -341,13 +341,38 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 text:'Delete',
                 width: 60,
                 tabIndex: tab++,
-                margins: "7px 0 0 85px",
+                margins: "7px 0 0 13px",
                 handler: function() {
                     // We remove the TaskRecord from the Store, the TaskPanel
                     // from the parent panel and reload it
                     this.parent.store.remove(this.parent.taskRecord);
                     this.parent.parent.remove(this.parent);
                     this.parent.parent.doLayout();
+                }
+            }),
+            cloneButton: new Ext.Button({
+                parent: this,
+                text:'Clone',
+                width: 60,
+                tabIndex: tab++,
+                margins: "7px 0 0 13px",
+                handler: function() {
+                    newTask = this.parent.taskRecord.copy();
+                    Ext.data.Record.id(newTask);
+                    this.parent.store.add(newTask);
+                    taskPanel = new TaskPanel({parent: this.parent.parent, taskRecord:newTask, store: this.parent.store});
+                    this.parent.parent.add(taskPanel);
+                    taskPanel.doLayout();
+                    this.parent.parent.doLayout();
+
+                    // We set the current time as end, and do focus on it in order to
+                    // save the field as 'changed'
+                    var now = new Date();
+                    taskPanel.endTimeField.setRawValue(now.format('H:i'));
+                    taskPanel.endTimeField.validate();
+                    taskPanel.endTimeField.focus();
+                    taskPanel.initTimeField.setRawValue('');
+                    taskPanel.initTimeField.focus();
                 }
             }),
         });
@@ -387,7 +412,8 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     items:[
                         new Ext.form.Label({text: 'Telework'}),
                         this.teleworkCheckBox,
-                        this.deleteButton
+                        this.deleteButton,
+                        this.cloneButton,
                     ]
                 })
             ],
