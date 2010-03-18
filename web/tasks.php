@@ -180,6 +180,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 valueField: 'id',
                 displayField: 'name',
                 triggerAction: 'all',
+                forceSelection: true,
                 listeners: {
                     'change': function() {
                         this.parent.taskRecord.set('customerId',this.getValue());
@@ -216,7 +217,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 typeAhead: true,
                 triggerAction: 'all',
                 displayField: 'description',
-                valueNotFoundText: '',
+                forceSelection: true,
                 listeners: {
                     'change': function() {
                         this.parent.taskRecord.set('projectId',this.getValue());
@@ -236,7 +237,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 mode: 'local',
                 typeAhead: true,
                 triggerAction: 'all',
-                valueNotFoundText: '',
+                forceSelection: true,
                 store: new Ext.data.ArrayStore({
                     fields: [
                         'value',
@@ -307,7 +308,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 typeAhead: true,
                 triggerAction: 'all',
                 displayField: 'friendlyName',
-                valueNotFoundText: '',
+                forceSelection: true,
                 listeners: {
                     'change': function() {
                         this.parent.taskRecord.set('taskStoryId',this.getValue());
