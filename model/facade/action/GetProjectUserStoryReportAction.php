@@ -97,14 +97,27 @@ class GetProjectUserStoryReportAction extends Action{
      *
      * This is the function that contains the code that returns the Tasks reports.
      *
-     * @return array an array with the resulting rows of computing the worked hours as associative arrays (they contain a field
-     * <i>add_hours</i> with that result and fields for the grouping fields <i>usrid</i> and <i>story</i>).
+     * @return array an associative array with the worked hours data, with the User login as first level key and the Story
+     * as second level one.
      */
     protected function doExecute() {
 
-    $dao = DAOFactory::getTaskDAO();
+        $dao = DAOFactory::getTaskDAO();
 
-    return $dao->getTaskReport($this->projectVO, $this->init, $this->end, "STORY", "USER");
+        $dao2 = DAOFactory::getUserDAO();
+
+        $doubleResults = $dao->getTaskReport($this->projectVO, $this->init, $this->end, "STORY", "USER");
+
+        foreach ($doubleResults as $doubleResult)
+        {
+
+            $user = $dao2->getById($doubleResult['usrid']);
+
+            $results[$user->getLogin()][$doubleResult['story']] =  $doubleResult['add_hours'];
+
+        }
+
+        return $results;
 
     }
 
@@ -117,8 +130,8 @@ $dao = DAOFactory::getProjectDAO();
 
 $project = $dao->getById(138);
 
-$action= new GetProjectReportAction($project);
-var_dump($action);
+$action= new GetProjectUserStoryReportAction($project);
+//var_dump($action);
 $result = $action->execute();
 var_dump($result);
 */

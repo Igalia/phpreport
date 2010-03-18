@@ -42,6 +42,7 @@ include_once('phpreport/model/facade/action/GetGlobalUsersProjectsCustomersRepor
 include_once('phpreport/model/facade/action/GetUserProjectCustomerReportAction.php');
 include_once('phpreport/model/facade/action/GetProjectTtypeReportAction.php');
 include_once('phpreport/model/facade/action/GetProjectUserCustomerReportAction.php');
+include_once('phpreport/model/facade/action/GetProjectUserStoryReportAction.php');
 include_once('phpreport/model/facade/action/GetUserTasksByDateAction.php');
 include_once('phpreport/model/facade/action/GetUserTasksByLoginDateAction.php');
 include_once('phpreport/model/dao/DAOFactory.php');
@@ -324,7 +325,6 @@ abstract class TasksFacade {
     }
 
     /**  Get Project User Customer Report Action
-    /**  Get Project User Customer Report Action
      *
      *  This function is used for retrieving information about worked hours in Tasks related to a Project, grouped by User and Customer.
      *
@@ -337,6 +337,24 @@ abstract class TasksFacade {
     static function GetProjectUserCustomerReport(ProjectVO $projectVO, DateTime $init = NULL, DateTime $end = NULL) {
 
     $action = new GetProjectUserCustomerReportAction($projectVO, $init, $end);
+
+    return $action->execute();
+
+    }
+
+    /**  Get Project User Story Report Action
+     *
+     *  This function is used for retrieving information about worked hours in Tasks related to a Project, grouped by User and Story.
+     *
+     * @param ProjectVO $projectVO the Project whose Tasks report we want to retrieve.
+     * @param DateTime $init the initial date of the interval whose Tasks report we want to retrieve.
+     * @param DateTime $end the ending date of the interval whose Tasks report we want to retrieve.
+     * @return array an associative array with the worked hours data, with the User login as first level key and the Story
+     * as second level one.
+     */
+    static function GetProjectUserStoryReport(ProjectVO $projectVO, DateTime $init = NULL, DateTime $end = NULL) {
+
+    $action = new GetProjectUserStoryReportAction($projectVO, $init, $end);
 
     return $action->execute();
 
