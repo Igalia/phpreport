@@ -227,10 +227,44 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     },
                 }
             }),
-            taskTypeField: new Ext.form.Field({
+            taskTypeComboBox: new Ext.form.ComboBox({
                 parent: this,
                 value: this.taskRecord.data['ttype'],
                 tabIndex: tab++,
+                valueField: 'value',
+                displayField: 'displayText',
+                mode: 'local',
+                typeAhead: true,
+                triggerAction: 'all',
+                valueNotFoundText: '',
+                store: new Ext.data.ArrayStore({
+                    fields: [
+                        'value',
+                        'displayText'
+                    ],
+                    data: [
+                        ['administration', 'Administration'],
+                        ['analysis', 'Analysis'],
+                        ['community', 'Community'],
+                        ['coordination', 'Coordination'],
+                        ['demonstration', 'Demonstration'],
+                        ['deployment', 'Deployment'],
+                        ['design', 'Design'],
+                        ['documentation', 'Documentation'],
+                        ['environment', 'Environment'],
+                        ['implementation', 'Implementation'],
+                        ['maintenance', 'Maintenance'],
+                        ['publication', 'Publication'],
+                        ['requirements', 'Requirements'],
+                        ['sales', 'Sales'],
+                        ['sys_maintenance', 'Systems maintenance'],
+                        ['teaching', 'Teaching'],
+                        ['technology', 'Technology'],
+                        ['test', 'Test'],
+                        ['training', 'Training'],
+                        ['traveling', 'Traveling'],
+                    ],
+                }),
                 listeners: {
                     'change': function() {
                         this.parent.taskRecord.set('ttype',this.getValue());
@@ -341,7 +375,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 new Ext.form.Label({text: 'Project'}),
                 this.projectComboBox,
                 new Ext.form.Label({text: 'Task type'}),
-                this.taskTypeField,
+                this.taskTypeComboBox,
                 new Ext.form.Label({text: 'Story'}),
                 this.storyField,
                 new Ext.form.Label({text: 'TaskStory'}),
