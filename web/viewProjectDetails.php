@@ -253,7 +253,6 @@
             var config = {
               viewConfig: {forceFit: true},
               stateful: true,
-              stateId: 'projectUserCustomerGrid',
               loadMask: true,
               stripeRows: true,
               ds: new Ext.data.Store({
@@ -278,7 +277,8 @@
         });
 
         var grid = new Ext.ux.DynamicGridPanel({
-            id: 'my-grid',
+            id: 'projectUserCustomerGrid',
+            stateId: 'projectUserCustomerGrid',
             storeUrl: 'services/getProjectUserCustomerReportJsonService.php?<?php
 
                 echo "login=" . $login;
@@ -291,8 +291,9 @@
             checkboxSelModel: false,
             width: 400,
             height: 250,
+            columnLines: true,
             frame: false,
-            title: 'Project Worked Hours Report',
+            title: 'Project User-Customer Worked Hours Report',
             iconCls: 'silk-table',
         });
 
@@ -322,8 +323,70 @@
                */
                 grid.getColumnModel().setConfig(columns);
 
+                // We add 33 pixels to the width because it doesn't count
+                // the vertical scroll bar
+                grid.setSize(grid.getColumnModel().getTotalWidth() + 33, 250);
+
                 if (!grid.rendered)
                     grid.render(Ext.get("content"));
+
+              }
+
+            }, this);
+
+        var grid2 = new Ext.ux.DynamicGridPanel({
+            id: 'projectUserStoryGrid',
+            stateId: 'projectUserStoryGrid',
+            storeUrl: 'services/getProjectUserStoryReportJsonService.php?<?php
+
+                echo "login=" . $login;
+
+                if ($sid!="")
+                    echo "&sid=" . $sid;
+
+                echo "&pid=" . $pid;?>',
+            rowNumberer: false,
+            columnLines: true,
+            checkboxSelModel: false,
+            width: 400,
+            height: 250,
+            frame: false,
+            title: 'Project User-Story Worked Hours Report',
+            iconCls: 'silk-table',
+        });
+
+
+            grid2.store.on('load', function(){
+              /**
+               * Thats the magic!
+               *
+               * JSON data returned from server has the column definitions
+               */
+              if(typeof(grid2.store.reader.jsonData.columns) === 'object') {
+                var columns = [];
+
+                  /**
+                   * Adding RowNumberer or setting selection model as CheckboxSelectionModel
+                   * We need to add them before other columns to display first
+                   */
+                if(grid2.rowNumberer) { columns.push(new Ext.grid2.RowNumberer()); }
+                if(grid2.checkboxSelModel) { columns.push(new Ext.grid2.CheckboxSelectionModel()); }
+
+                Ext.each(grid2.store.reader.jsonData.columns, function(column){
+                  columns.push(column);
+                });
+
+              /**
+               * Setting column model configuration
+               */
+                grid2.getColumnModel().setConfig(columns);
+
+                // We add 33 pixels to the width because it doesn't count
+                // the vertical scroll bar
+                grid2.setSize(grid2.getColumnModel().getTotalWidth() + 33, 250);
+
+                if (!grid2.rendered)
+                    grid2.render(Ext.get("content"));
 
               }
 
@@ -387,11 +450,25 @@
 
                 grid.store.load();
 
+                grid2.store.proxy.conn.url= 'services/getProjectUserStoryReportJsonService.php?<?php
+
+                    echo "login=" . $login;
+
+                    if ($sid!="")
+                        echo "&sid=" . $sid;
+
+                                        echo "&pid=" . $pid;
+
+                ?>&init=' + init.getFullYear() + "-" + (init.getMonth()+1) + "-" + init.getDate()  + "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
+
+                grid2.store.load();
+
         }
         }],
         });
 
     grid.store.load();
+    grid2.store.load();
 
     })
 
