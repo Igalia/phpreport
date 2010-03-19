@@ -64,7 +64,25 @@
 
         $summary = TasksFacade::GetPersonalSummaryByLoginDate($userVO, $date);
 
-        $string = "<personalSummary login='" . $userVO->getLogin() . "' date='" . $date->format($dateFormat) . "'><hours><day>" . $summary['day']  . "</day><week>" . $summary['week']  . "</week><month>" . $summary['month']  . "</month></hours></personalSummary>";
+        $dayHours = floor($summary['day']/60);
+        $dayMinutes = $summary['day']-($dayHours*60);
+        if ($dayMinutes < 10)
+            $dayMinutes = "0" . $dayMinutes;
+        $day = $dayHours . ":" . $dayMinutes;
+
+        $weekHours = floor($summary['week']/60);
+        $weekMinutes = $summary['week']-($weekHours*60);
+        if ($weekMinutes < 10)
+             $weekMinutes = "0" . $weekMinutes;
+        $week = $weekHours . ":" . $weekMinutes;
+
+        $monthHours = floor($summary['month']/60);
+        $monthMinutes = $summary['month']-($monthHours*60);
+        if ($monthMinutes < 10)
+            $monthMinutes = "0" . $monthMinutes;
+        $month = $monthHours . ":" . $monthMinutes;
+
+        $string = "<personalSummary login='" . $userVO->getLogin() . "' date='" . $date->format($dateFormat) . "'><hours><day>" . $day  . "</day><week>" . $week  . "</week><month>" . $month  . "</month></hours></personalSummary>";
 
     } while(false);
 

@@ -575,9 +575,9 @@ Ext.onReady(function(){
         remoteSort: false,
         listeners: {
             'load': function () {
-                Ext.getCmp('month').setValue(Math.round(summaryStore.getAt(0).get('month') * 100)/100 + " h");
-                Ext.getCmp('day').setValue(Math.round(summaryStore.getAt(0).get('day') * 100)/100 + " h");
-                Ext.getCmp('week').setValue(Math.round(summaryStore.getAt(0).get('week') * 100)/100 + " h");
+                Ext.getCmp('month').setValue(summaryStore.getAt(0).get('month') + " h");
+                Ext.getCmp('day').setValue(summaryStore.getAt(0).get('day') + " h");
+                Ext.getCmp('week').setValue(summaryStore.getAt(0).get('week') + " h");
             },
         }
     });
