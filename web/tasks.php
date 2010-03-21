@@ -101,6 +101,34 @@ var summaryRecord = new Ext.data.Record.create([
 
 var tab = 3;
 
+function updateTitle(p){
+    var title = 'Task';
+
+    if (this.initTimeField.getRawValue() != '')
+    {
+        title += " [ " + this.initTimeField.getRawValue();
+    } else title += " [ ?";
+
+    if (this.endTimeField.getRawValue() != '')
+    {
+        title += " - " + this.endTimeField.getRawValue() + " ]";
+    } else title += " - ? ]";
+
+    if (this.descriptionTextArea.getValue() != '')
+    {
+        var text = this.descriptionTextArea.getValue();
+        if (text.length > 115)
+            text = text.substr(0,115) + " [...]";
+        title += " - " + text;
+    }
+
+    this.setTitle(title);
+};
+
+function simplifyTitle(p){
+    this.setTitle('Task');
+}
+
 /*  Class that stores a taskRecord element and shows it on screen.
     It keeps the taskRecord in synch with the content of the form on screen,
     in real-time (as soon as it changes). */
@@ -402,7 +430,15 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     newTask = this.parent.taskRecord.copy();
                     Ext.data.Record.id(newTask);
                     this.parent.store.add(newTask);
-                    taskPanel = new TaskPanel({parent: this.parent.parent, taskRecord:newTask, store: this.parent.store});
+                    taskPanel = new TaskPanel({
+                        parent: this.parent.parent,
+                        taskRecord:newTask,
+                        store: this.parent.store,
+                        listeners: {
+                            'collapse': updateTitle,
+                            'beforeexpand': simplifyTitle,
+                        },
+                    });
                     this.parent.parent.add(taskPanel);
                     taskPanel.doLayout();
                     this.parent.parent.doLayout();
@@ -515,7 +551,15 @@ Ext.onReady(function(){
         listeners: {
             'load': function () {
                 this.each(function(r) {
-                    taskPanel = new TaskPanel({parent: tasksScrollArea, store: myStore, taskRecord:r});
+                    taskPanel = new TaskPanel({
+                        parent: tasksScrollArea,
+                        store: myStore,
+                        taskRecord:r,
+                        listeners: {
+                            'collapse': updateTitle,
+                            'beforeexpand': simplifyTitle,
+                        },
+                    });
                     tasksScrollArea.add(taskPanel);
                     taskPanel.doLayout();
                     tasksScrollArea.doLayout();
@@ -586,7 +630,15 @@ Ext.onReady(function(){
     Ext.get('newTask').on('click', function(){
         newTask = new taskRecord();
         myStore.add(newTask);
-        taskPanel = new TaskPanel({parent: tasksScrollArea, taskRecord:newTask, store: myStore});
+        taskPanel = new TaskPanel({
+            parent: tasksScrollArea,
+            taskRecord:newTask,
+            store: myStore,
+            listeners: {
+                'collapse': updateTitle,
+                'beforeexpand': simplifyTitle,
+            },
+        });
         tasksScrollArea.add(taskPanel);
         taskPanel.doLayout();
         tasksScrollArea.doLayout();
