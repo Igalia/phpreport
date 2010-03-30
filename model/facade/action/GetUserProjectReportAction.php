@@ -19,9 +19,9 @@
  */
 
 
-/** File for GetGlobalUsersProjectsReportAction
+/** File for GetUserProjectReportAction
  *
- *  This file just contains {@link GetGlobalUsersProjectsReportAction}.
+ *  This file just contains {@link GetUserProjectReportAction}.
  *
  * @filesource
  * @package PhpReport
@@ -31,16 +31,25 @@
 
 include_once('phpreport/model/facade/action/Action.php');
 include_once('phpreport/model/dao/DAOFactory.php');
+include_once('phpreport/model/vo/UserVO.php');
 
-/** Get Global Users Projects Report Action
+/** Get User Project Report Action
  *
- *  This action is used for retrieving information about worked hours in Tasks done by Users for each Project.
+ *  This action is used for retrieving information about worked hours in Tasks done by a User for each Project.
  *
  * @package PhpReport
  * @subpackage facade
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
-class GetGlobalUsersProjectsReportAction extends Action{
+class GetUserProjectReportAction extends Action{
+
+    /** The User.
+     *
+     * This variable contains the User whose Tasks report we want to retrieve.
+     *
+     * @var UserVO
+     */
+    private $userVO;
 
     /** The date interval init.
      *
@@ -58,27 +67,31 @@ class GetGlobalUsersProjectsReportAction extends Action{
      */
     private $end;
 
-    /** GetGlobalUsersProjectsReportAction constructor.
+    /** GetUserProjectReportAction constructor.
      *
      * This is just the constructor of this action. We can pass dates with optional parameters <var>$init</var> and <var>$end</var>
      * if we want to retrieve information about only an interval.
      *
+     * @param UserVO $userVO the User whose tasks' report we want to retrieve.
      * @param DateTime $init the initial date of the interval whose Tasks report we want to retrieve.
      * @param DateTime $end the ending date of the interval whose Tasks report we want to retrieve.
      */
-    public function __construct(DateTime $init = NULL, DateTime $end = NULL) {
+    public function __construct(UserVO $userVO, DateTime $init = NULL, DateTime $end = NULL) {
+
+        $this->userVO = $userVO;
+
         if (is_null($init))
-        $this->init =  date_create("1900-01-01");
-    else
-        $this->init = $init;
+            $this->init =  date_create("1900-01-01");
+        else
+            $this->init = $init;
 
-    if (is_null($end))
-        $this->end =  new DateTime();
-    else
-        $this->end = $end;
+        if (is_null($end))
+            $this->end =  new DateTime();
+        else
+            $this->end = $end;
 
-        $this->preActionParameter="GET_GLOBAL_USERS_PROJECTS_REPORT_PREACTION";
-        $this->postActionParameter="GET_GLOBAL_USERS_PROJECTS_REPORT_POSTACTION";
+        $this->preActionParameter="GET_USER_PROJECT_REPORT_PREACTION";
+        $this->postActionParameter="GET_USER_PROJECT_REPORT_POSTACTION";
 
     }
 
@@ -86,18 +99,26 @@ class GetGlobalUsersProjectsReportAction extends Action{
      *
      * This is the function that contains the code that returns the Tasks reports.
      *
-     * @return array an array with the resulting rows of computing the worked hours as associative arrays (they contain a field
-     * <i>add_hours</i> with that result and fields for the grouping fields <i>userid</i> and <i>projectid</i>).
+     *@return array an associative array with the worked hours data, with the User login as first level key and
+     * the Project description as second level one.
      */
     protected function doExecute() {
 
-$dao = DAOFactory::getTaskDAO();
+        if (is_null($this->userVO->getLogin()))
+        {
+            $dao = DAOFactory::getUserDAO();
+            $this->userVO = $dao->getById($this->userVO->getId());
+        } elseif (is_null($this->userVO->getId()))
+        {
+            $dao = DAOFactory::getUserDAO();
+            $this->userVO = $dao->getByUserLogin($this->userVO->getLogin());
+        }
+
+        $dao = DAOFactory::getTaskDAO();
 
         $dao2 = DAOFactory::getProjectDAO();
 
-        $dao3 = DAOFactory::getUserDAO();
-
-        $doubleResults = $dao->getGlobalTaskReport($this->init, $this->end, "USER", "PROJECT");
+        $doubleResults = $dao->getTaskReport($this->userVO, $this->init, $this->end, "PROJECT");
 
         foreach ($doubleResults as $doubleResult)
         {
@@ -108,14 +129,7 @@ $dao = DAOFactory::getTaskDAO();
                 $project = $dao2->getById($doubleResult['projectid']);
                 $projectName = $project->getDescription();
             }
-            if (is_null($doubleResult['usrid']))
-                $userLogin = '--- Unknown ---';
-            else
-            {
-                $user = $dao3->getById($doubleResult['usrid']);
-                $userLogin = $user->getLogin();
-            }
-            $results[$userLogin][$projectName] =  $doubleResult['add_hours'];
+            $results[$this->userVO->getLogin()][$projectName] =  $doubleResult['add_hours'];
         }
         return $results;
 
@@ -126,7 +140,11 @@ $dao = DAOFactory::getTaskDAO();
 
 /*//Test code;
 
-$action= new GetGlobalUsersProjectsReportAction();
+$user = new UserVO();
+
+$user->setId(31);
+
+$action= new GetUserProjectReportAction($user);
 //var_dump($action);
 $result = $action->execute();
 var_dump($result);

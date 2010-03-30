@@ -29,7 +29,7 @@
 
     $dateFormat = $_GET['dateFormat'];
 
-    $login = $_GET['login'];
+    $uid = $_GET['uid'];
 
     $sid = $_GET['sid'];
 
@@ -59,6 +59,13 @@
             break;
         }
 
+        $string = "<workedHours";
+        if ($init!="")
+                $string .= " init='" . $init . "'";
+        if ($end!="")
+                $string .= " end='" . $end . "'";
+        $string .= ">";
+
         if ($dateFormat=="")
         $dateFormat = "Y-m-d";
 
@@ -80,19 +87,31 @@
 
             $end = date_create($end);
         } else
-        $end = new DateTime();
+            $end = new DateTime();
 
-
-        $report = TasksFacade::GetGlobalUsersProjectsReport($init, $end);
-
-        $string = "<report>";
-
-        foreach((array) $report as $entry)
+        if (is_null($uid))
+            $report = TasksFacade::GetGlobalUsersProjectsReport($init, $end);
+        else
         {
-        $string = $string . "<workedHours projectId='{$entry["projectid"]}' userId='{$entry["usrid"]}'>{$entry["add_hours"]}</workedHours>";
+            $user = new UserVO();
+            $user->setLogin($uid);
+            $report = TasksFacade::GetUserProjectReport($user, $init, $end);
         }
 
-        $string = $string . "</report>";
+        foreach((array) $report as $userLogin => $entry)
+        {
+            $total = 0;
+            $string = $string . "<user login='" . escape_string($userLogin) . "'>";
+            foreach((array) $entry as $project => $hours)
+            {
+                $string = $string . "<project name='" . escape_string($project) . "'>$hours</project>";
+                $total += $hours;
+            }
+            $string = $string . "<total>$total</total>";
+            $string = $string . "</user>";
+        }
+
+        $string = $string . "</workedHours>";
 
     } while (False);
 
