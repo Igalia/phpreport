@@ -55,13 +55,14 @@ class LDAPBelongsDAO extends BelongsDAO{
      */
     function __construct() {
 
-    parent::__construct();
+        parent::__construct();
 
-    $parameters[] = ConfigurationParametersManager::getParameter('LDAP_SERVER');
-    $parameters[] = ConfigurationParametersManager::getParameter('LDAP_PORT');
+        $parameters[] = ConfigurationParametersManager::getParameter('LDAP_SERVER');
+        $parameters[] = ConfigurationParametersManager::getParameter('LDAP_PORT');
 
-    $this->ldapConnect = ldap_connect($parameters[0], $parameters[1]);
-     if ($this->ldapConnect == NULL) throw new LDAPConnectionErrorException("Server:" . $parameters[0] . " | Port:" . $parameters[1]);
+        $this->ldapConnect = ldap_connect($parameters[0], $parameters[1]);
+        if ($this->ldapConnect == NULL)
+            throw new LDAPConnectionErrorException("Server:" . $parameters[0] . " | Port:" . $parameters[1]);
 
     }
 
@@ -75,14 +76,14 @@ class LDAPBelongsDAO extends BelongsDAO{
     protected function setAValues($row)
     {
 
-    $userVO = new UserVO();
+        $userVO = new UserVO();
 
         $userVO->setId($row['id']);
         $userVO->setLogin($row['login']);
         $userVO->setPassword($row['password']);
-    $userVO->setGroups((array) $this->getByUserLogin($userVO->getLogin()));
+        $userVO->setGroups((array) $this->getByUserLogin($userVO->getLogin()));
 
-    return $userVO;
+        return $userVO;
     }
 
     /** Value object constructor from edge B for LDAP.
@@ -95,11 +96,11 @@ class LDAPBelongsDAO extends BelongsDAO{
     protected function setBValues($row)
     {
 
-    $userGroupVO = new UserGroupVO();
+        $userGroupVO = new UserGroupVO();
 
         $userGroupVO->setName($row['name']);
 
-    return $userGroupVO;
+        return $userGroupVO;
     }
 
     /** Belongs entry retriever by id's for LDAP.
@@ -141,21 +142,21 @@ class LDAPBelongsDAO extends BelongsDAO{
      */
     public function getByUserLogin($userLogin) {
 
-    if (!$sr=@ldap_list($this->ldapConnect,"ou=Group," . ConfigurationParametersManager::getParameter('LDAP_BASE'),
-            "(&(objectClass=posixGroup)(uniqueMember=uid=$userLogin,ou=People," . ConfigurationParametersManager::getParameter('LDAP_BASE') . "))",
-            array("cn")
-        )) {
-        print("Can't get the LDAP's groups of this user\n");
-    }
+        if (!$sr=@ldap_list($this->ldapConnect,"ou=Group," . ConfigurationParametersManager::getParameter('LDAP_BASE'),
+                "(&(objectClass=posixGroup)(uniqueMember=uid=$userLogin,ou=People," . ConfigurationParametersManager::getParameter('LDAP_BASE') . "))",
+                array("cn")
+            )) {
+            print("Can't get the LDAP's groups of this user\n");
+        }
 
-    $info = @ldap_get_entries($this->ldapConnect, $sr);
-    $groups=array();
-    for ($i=0;$i<$info["count"];$i++) {
-        $group["name"]=$info[$i]["cn"][0];
-        $groups[] = $this->setBValues($group);
-    }
+        $info = @ldap_get_entries($this->ldapConnect, $sr);
+        $groups=array();
+        for ($i=0;$i<$info["count"];$i++) {
+            $group["name"]=$info[$i]["cn"][0];
+            $groups[] = $this->setBValues($group);
+        }
 
-    return $groups;
+        return $groups;
 
     }
 
@@ -184,33 +185,33 @@ class LDAPBelongsDAO extends BelongsDAO{
      */
     public function getByUserGroupName($userGroupName) {
 
-       if (!$sr=ldap_list($this->ldapConnect,"ou=Group," . ConfigurationParametersManager::getParameter('LDAP_BASE'),
-        "(&(objectClass=posixGroup)(cn=" . $userGroupName . "))",
-        array("uniqueMember")
-        ))
-        throw new LDAPOperationErrorException("getByUserGroupName($userGroupName)");
+        if (!$sr=ldap_list($this->ldapConnect,"ou=Group," . ConfigurationParametersManager::getParameter('LDAP_BASE'),
+                "(&(objectClass=posixGroup)(cn=" . $userGroupName . "))",
+                array("uniqueMember")
+            ))
+            throw new LDAPOperationErrorException("getByUserGroupName($userGroupName)");
 
-    $info = ldap_get_entries($this->ldapConnect, $sr);
+        $info = ldap_get_entries($this->ldapConnect, $sr);
 
-    for ($i=0;$i<$info[0]["uniquemember"]["count"];$i++) {
-        strtok($info[0]["uniquemember"][$i],"=,");
-        $user["login"]=strtok("=,");
-        $usersLDAP[]=$this->setAValues($user);
-    }
+        for ($i=0;$i<$info[0]["uniquemember"]["count"];$i++) {
+            strtok($info[0]["uniquemember"][$i],"=,");
+            $user["login"]=strtok("=,");
+            $usersLDAP[]=$this->setAValues($user);
+        }
 
-    $sql = "SELECT * FROM usr ORDER BY id ASC";
+        $sql = "SELECT * FROM usr ORDER BY id ASC";
 
-    $usersDB = $this->executeFromB($sql);
+        $usersDB = $this->executeFromB($sql);
 
-    foreach($usersLDAP as $userLDAP)
-        foreach($usersDB as $userDB)
-            if ($userLDAP->getLogin() == $userDB->getLogin())
-            {
-                $userLDAP->setId($userDB->getId());
-                $userLDAP->setPassword($userDB->getPassword());
-            }
+        foreach($usersLDAP as $userLDAP)
+            foreach($usersDB as $userDB)
+                if ($userLDAP->getLogin() == $userDB->getLogin())
+                {
+                    $userLDAP->setId($userDB->getId());
+                    $userLDAP->setPassword($userDB->getPassword());
+                }
 
-    return $usersLDAP;
+        return $usersLDAP;
 
     }
 
