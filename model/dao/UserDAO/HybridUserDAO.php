@@ -58,13 +58,13 @@ class HybridUserDAO extends UserDAO{
      */
     function __construct() {
 
-    parent::__construct();
+        parent::__construct();
 
-    $parameters[] = ConfigurationParametersManager::getParameter('LDAP_SERVER');
-    $parameters[] = ConfigurationParametersManager::getParameter('LDAP_PORT');
+        $parameters[] = ConfigurationParametersManager::getParameter('LDAP_SERVER');
+        $parameters[] = ConfigurationParametersManager::getParameter('LDAP_PORT');
 
-    $this->ldapConnect = ldap_connect($parameters[0], $parameters[1]);
-     if ($this->ldapConnect == NULL) throw new LDAPConnectionErrorException("Server:" . $parameters[0] . " | Port:" . $parameters[1]);
+        $this->ldapConnect = ldap_connect($parameters[0], $parameters[1]);
+        if ($this->ldapConnect == NULL) throw new LDAPConnectionErrorException("Server:" . $parameters[0] . " | Port:" . $parameters[1]);
 
     }
 
@@ -79,14 +79,14 @@ class HybridUserDAO extends UserDAO{
     protected function setValues($row)
     {
 
-    $userVO = new UserVO();
+        $userVO = new UserVO();
 
         $userVO->setId($row['id']);
         $userVO->setLogin($row['login']);
         $userVO->setPassword($row['password']);
-    $userVO->setGroups((array) $this->getGroupsByLogin($userVO->getLogin()));
+        $userVO->setGroups((array) $this->getGroupsByLogin($userVO->getLogin()));
 
-    return $userVO;
+        return $userVO;
     }
 
     /** Login for LDAP/PostgreSQL Hybrid.
@@ -100,13 +100,13 @@ class HybridUserDAO extends UserDAO{
      */
     public function login($login, $password) {
 
-    if (!$bn=@ldap_bind($this->ldapConnect,"uid=$login,ou=People," . ConfigurationParametersManager::getParameter('LDAP_BASE'),$password))
-        throw new IncorrectLoginException("login - " . $login . " | password - " . $password);
+        if (!$bn=@ldap_bind($this->ldapConnect,"uid=$login,ou=People," . ConfigurationParametersManager::getParameter('LDAP_BASE'),$password))
+            throw new IncorrectLoginException("login - " . $login . " | password - " . $password);
 
-    $sql = "SELECT * FROM usr WHERE login='". $login . "'";
-    $result = $this->execute($sql);
+        $sql = "SELECT * FROM usr WHERE login='". $login . "'";
+        $result = $this->execute($sql);
 
-    return $this->getByUserLogin($login);
+        return $this->getByUserLogin($login);
 
     }
 
@@ -120,10 +120,10 @@ class HybridUserDAO extends UserDAO{
      */
     public function getById($userId) {
         if (!is_numeric($userId))
-        throw new SQLIncorrectTypeException($userId);
+            throw new SQLIncorrectTypeException($userId);
         $sql = "SELECT * FROM usr WHERE id=". (int) $userId;
-    $result = $this->execute($sql);
-    return $result[0];
+        $result = $this->execute($sql);
+        return $result[0];
     }
 
     /** User retriever by login for LDAP/PostgreSQL Hybrid.
@@ -136,21 +136,21 @@ class HybridUserDAO extends UserDAO{
      */
     public function getByUserLogin($userLogin) {
 
-    $groups = $this->getGroupsByLogin($userLogin);
+        $groups = $this->getGroupsByLogin($userLogin);
 
-    if (is_null($groups))
-        return NULL;
+        if (is_null($groups))
+            return NULL;
 
-    $user = new UserVO();
+        $user = new UserVO();
 
-    $sql = "SELECT * FROM usr WHERE login='". $userLogin . "'";
-    $result = $this->execute($sql);
+        $sql = "SELECT * FROM usr WHERE login='". $userLogin . "'";
+        $result = $this->execute($sql);
 
-    $user->setLogin($userLogin);
-    $user->setGroups($groups);
-    $user->setId($result[0]->getId());
+        $user->setLogin($userLogin);
+        $user->setGroups($groups);
+        $user->setId($result[0]->getId());
 
-    return $user;
+        return $user;
 
     }
 
@@ -166,10 +166,12 @@ class HybridUserDAO extends UserDAO{
      */
     public function getByAreaDate($areaId, DateTime $date) {
         if (!is_numeric($areaId))
-        throw new SQLIncorrectTypeException($areaId);
-        $sql = "SELECT * FROM usr WHERE id IN (SELECT usrid FROM area_history WHERE ((init_date <= " . DBPostgres::formatDate($date) . " OR init_date IS NULL) AND (end_date >= " . DBPostgres::formatDate($date) . " OR end_date IS NULL) AND areaid = " . $areaId  . "))";
-    $result = $this->execute($sql);
-    return $result;
+            throw new SQLIncorrectTypeException($areaId);
+        $sql = "SELECT * FROM usr WHERE id IN (SELECT usrid FROM area_history WHERE ((init_date <= " .
+            DBPostgres::formatDate($date) . " OR init_date IS NULL) AND (end_date >= " .
+            DBPostgres::formatDate($date) . " OR end_date IS NULL) AND areaid = " . $areaId  . "))";
+        $result = $this->execute($sql);
+        return $result;
     }
 
     /** User retriever by Iteration Project Area for PostgreSQL.
@@ -183,10 +185,12 @@ class HybridUserDAO extends UserDAO{
      */
     public function getByIterationProjectAreaToday($iterationid) {
         if (!is_numeric($iterationid))
-        throw new SQLIncorrectTypeException($iterationid);
-        $sql = "SELECT usr.* FROM usr LEFT JOIN area_history on usr.id=usrid WHERE (((current_date > init_date) AND ((current_date < end_date) OR (end_date IS NULL))) AND areaid = (SELECT areaid FROM project LEFT JOIN iteration ON project.id=projectid WHERE iteration.id=" . $iterationid . "))";
-    $result = $this->execute($sql);
-    return $result;
+            throw new SQLIncorrectTypeException($iterationid);
+        $sql = "SELECT usr.* FROM usr LEFT JOIN area_history on usr.id=usrid " .
+            "WHERE (((current_date > init_date) AND ((current_date < end_date) OR (end_date IS NULL))) " .
+            "AND areaid = (SELECT areaid FROM project LEFT JOIN iteration ON project.id=projectid WHERE iteration.id=" . $iterationid . "))";
+        $result = $this->execute($sql);
+        return $result;
     }
 
     /** User retriever by Module Project Area.
@@ -200,8 +204,10 @@ class HybridUserDAO extends UserDAO{
      */
     public function getByModuleProjectAreaToday($moduleid) {
         if (!is_numeric($moduleid))
-        throw new SQLIncorrectTypeException($moduleid);
-        $sql = "SELECT usr.* FROM usr LEFT JOIN area_history on usr.id=usrid WHERE (((current_date > init_date) AND ((current_date < end_date) OR (end_date IS NULL))) AND areaid = (SELECT areaid FROM project LEFT JOIN module ON project.id=projectid WHERE module.id=" . $moduleid . "))";
+            throw new SQLIncorrectTypeException($moduleid);
+        $sql = "SELECT usr.* FROM usr LEFT JOIN area_history on usr.id=usrid " .
+            "WHERE (((current_date > init_date) AND ((current_date < end_date) OR (end_date IS NULL))) " .
+            "AND areaid = (SELECT areaid FROM project LEFT JOIN module ON project.id=projectid WHERE module.id=" . $moduleid . "))";
         $result = $this->execute($sql);
         return $result;
     }
@@ -217,10 +223,13 @@ class HybridUserDAO extends UserDAO{
      */
     public function getByStoryIterationProjectAreaToday($storyid) {
         if (!is_numeric($storyid))
-        throw new SQLIncorrectTypeException($storyid);
-        $sql = "SELECT usr.* FROM usr LEFT JOIN area_history on usr.id=usrid WHERE (((current_date > init_date) AND ((current_date < end_date) OR (end_date IS NULL))) AND areaid = (SELECT areaid FROM project LEFT JOIN iteration ON project.id=projectid WHERE iteration.id=(SELECT iterationid FROM story where id=" . $storyid . ")))";
-    $result = $this->execute($sql);
-    return $result;
+            throw new SQLIncorrectTypeException($storyid);
+        $sql = "SELECT usr.* FROM usr LEFT JOIN area_history on usr.id=usrid " .
+            "WHERE (((current_date > init_date) AND ((current_date < end_date) OR (end_date IS NULL))) " .
+            "AND areaid = (SELECT areaid FROM project LEFT JOIN iteration ON project.id=projectid " .
+                "WHERE iteration.id=(SELECT iterationid FROM story where id=" . $storyid . ")))";
+        $result = $this->execute($sql);
+        return $result;
     }
 
     /** User retriever by Section Module Project Area.
@@ -234,8 +243,11 @@ class HybridUserDAO extends UserDAO{
      */
     public function getBySectionModuleProjectAreaToday($sectionid) {
         if (!is_numeric($sectionid))
-        throw new SQLIncorrectTypeException($sectionid);
-        $sql = "SELECT usr.* FROM usr LEFT JOIN area_history on usr.id=usrid WHERE (((current_date > init_date) AND ((current_date < end_date) OR (end_date IS NULL))) AND areaid = (SELECT areaid FROM project LEFT JOIN module ON project.id=projectid WHERE module.id=(SELECT moduleid FROM section where id=" . $sectionid . ")))";
+            throw new SQLIncorrectTypeException($sectionid);
+        $sql = "SELECT usr.* FROM usr LEFT JOIN area_history on usr.id=usrid " .
+            "WHERE (((current_date > init_date) AND ((current_date < end_date) OR (end_date IS NULL))) " .
+            "AND areaid = (SELECT areaid FROM project LEFT JOIN module ON project.id=projectid " .
+                "WHERE module.id=(SELECT moduleid FROM section where id=" . $sectionid . ")))";
         $result = $this->execute($sql);
         return $result;
     }
@@ -253,33 +265,33 @@ class HybridUserDAO extends UserDAO{
 
         $dao = DAOFactory::getBelongsDAO();
 
-    $usersLDAP = $dao->getByUserGroupName(ConfigurationParametersManager::getParameter("ALL_USERS_GROUP"));
+        $usersLDAP = $dao->getByUserGroupName(ConfigurationParametersManager::getParameter("ALL_USERS_GROUP"));
 
-    $sql = "SELECT * FROM usr ORDER BY id ASC";
+        $sql = "SELECT * FROM usr ORDER BY id ASC";
 
-    $usersDB = $this->execute($sql);
+        $usersDB = $this->execute($sql);
 
-    foreach((array) $usersLDAP as $userLDAP)
-        foreach((array) $usersDB as $userDB)
-            if ($userLDAP->getLogin() == $userDB->getLogin())
-                $userLDAP->setId($userDB->getId());
-
-    foreach((array) $usersDB as $userDB)
-    {
         foreach((array) $usersLDAP as $userLDAP)
-        {
-            $exists = FALSE;
-            if ($userDB->getLogin() == $userLDAP->getLogin())
-            {
-                $exists = TRUE;
-                break;
-            }
-        }
-        if (!$exists)
-            $usersLDAP[]=$userDB;
-    }
+            foreach((array) $usersDB as $userDB)
+                if ($userLDAP->getLogin() == $userDB->getLogin())
+                    $userLDAP->setId($userDB->getId());
 
-    return $usersLDAP;
+        foreach((array) $usersDB as $userDB)
+        {
+            foreach((array) $usersLDAP as $userLDAP)
+            {
+                $exists = FALSE;
+                if ($userDB->getLogin() == $userLDAP->getLogin())
+                {
+                    $exists = TRUE;
+                    break;
+                }
+            }
+            if (!$exists)
+                $usersLDAP[]=$userDB;
+        }
+
+        return $usersLDAP;
 
     }
 
@@ -296,8 +308,8 @@ class HybridUserDAO extends UserDAO{
      */
     public function getProjectsUser($userId) {
 
-    $dao = DAOFactory::getProjectUserDAO();
-    return $dao->getByUserId($userId);
+        $dao = DAOFactory::getProjectUserDAO();
+        return $dao->getByUserId($userId);
 
     }
 
@@ -314,8 +326,8 @@ class HybridUserDAO extends UserDAO{
      */
     public function addProjectUser($userId, $projectId) {
 
-    $dao = DAOFactory::getProjectUserDAO();
-    return $dao->create($userId, $projectId);
+        $dao = DAOFactory::getProjectUserDAO();
+        return $dao->create($userId, $projectId);
 
     }
 
@@ -332,8 +344,8 @@ class HybridUserDAO extends UserDAO{
      */
     public function removeProjectUser($userId, $projectId) {
 
-    $dao = DAOFactory::getProjectUserDAO();
-    return $dao->delete($userId, $projectId);
+        $dao = DAOFactory::getProjectUserDAO();
+        return $dao->delete($userId, $projectId);
 
     }
 
@@ -350,8 +362,8 @@ class HybridUserDAO extends UserDAO{
      */
     public function getProjectsWorks($userId) {
 
-    $dao = DAOFactory::getWorksDAO();
-    return $dao->getByUserId($userId);
+        $dao = DAOFactory::getWorksDAO();
+        return $dao->getByUserId($userId);
 
     }
 
@@ -368,8 +380,8 @@ class HybridUserDAO extends UserDAO{
      */
     public function addProjectWorks($userId, $projectId) {
 
-    $dao = DAOFactory::getWorksDAO();
-    return $dao->create($userId, $projectId);
+        $dao = DAOFactory::getWorksDAO();
+        return $dao->create($userId, $projectId);
 
     }
 
@@ -386,8 +398,8 @@ class HybridUserDAO extends UserDAO{
      */
     public function removeProjectWorks($userId, $projectId) {
 
-    $dao = DAOFactory::getWorksDAO();
-    return $dao->delete($userId, $projectId);
+        $dao = DAOFactory::getWorksDAO();
+        return $dao->delete($userId, $projectId);
 
     }
 
@@ -404,8 +416,8 @@ class HybridUserDAO extends UserDAO{
      */
     public function getGroups($userId) {
 
-    $dao = DAOFactory::getBelongsDAO();
-    return $dao->getByUserId($userId);
+        $dao = DAOFactory::getBelongsDAO();
+        return $dao->getByUserId($userId);
 
     }
 
@@ -422,8 +434,8 @@ class HybridUserDAO extends UserDAO{
      */
     public function getGroupsByLogin($userLogin) {
 
-    $dao = DAOFactory::getBelongsDAO();
-    return $dao->getByUserLogin($userLogin);
+        $dao = DAOFactory::getBelongsDAO();
+        return $dao->getByUserLogin($userLogin);
 
     }
 
@@ -440,8 +452,8 @@ class HybridUserDAO extends UserDAO{
      */
     public function addGroup($userId, $groupId) {
 
-    $dao = DAOFactory::getBelongsDAO();
-    return $dao->create($userId, $groupId);
+        $dao = DAOFactory::getBelongsDAO();
+        return $dao->create($userId, $groupId);
 
     }
 
@@ -458,8 +470,8 @@ class HybridUserDAO extends UserDAO{
      */
     public function removeGroup($userId, $groupId) {
 
-    $dao = DAOFactory::getBelongsDAO();
-    return $dao->delete($userId, $groupId);
+        $dao = DAOFactory::getBelongsDAO();
+        return $dao->delete($userId, $groupId);
 
     }
 
@@ -476,8 +488,8 @@ class HybridUserDAO extends UserDAO{
      */
     public function getTasks($userId) {
 
-    $dao = DAOFactory::getTaskDAO();
-    return $dao->getByUserId($userId);
+        $dao = DAOFactory::getTaskDAO();
+        return $dao->getByUserId($userId);
 
     }
 
@@ -494,8 +506,8 @@ class HybridUserDAO extends UserDAO{
      */
     public function getExtraHours($userId) {
 
-    $dao = DAOFactory::getExtraHourDAO();
-    return $dao->getByUserId($userId);
+        $dao = DAOFactory::getExtraHourDAO();
+        return $dao->getByUserId($userId);
 
     }
 
@@ -512,8 +524,8 @@ class HybridUserDAO extends UserDAO{
      */
     public function getCustomEvents($userId) {
 
-    $dao = DAOFactory::getCustomEventDAO();
-    return $dao->getByUserId($userId);
+        $dao = DAOFactory::getCustomEventDAO();
+        return $dao->getByUserId($userId);
 
     }
 
@@ -530,8 +542,8 @@ class HybridUserDAO extends UserDAO{
      */
     public function getAreaHistory($userId) {
 
-    $dao = DAOFactory::getAreaHistoryDAO();
-    return $dao->getByUserId($userId);
+        $dao = DAOFactory::getAreaHistoryDAO();
+        return $dao->getByUserId($userId);
 
     }
 
@@ -548,8 +560,8 @@ class HybridUserDAO extends UserDAO{
      */
     public function getHourCostHistory($userId) {
 
-    $dao = DAOFactory::getHourCostHistoryDAO();
-    return $dao->getByUserId($userId);
+        $dao = DAOFactory::getHourCostHistoryDAO();
+        return $dao->getByUserId($userId);
 
     }
 
@@ -566,8 +578,8 @@ class HybridUserDAO extends UserDAO{
      */
     public function getCityHistory($userId) {
 
-    $dao = DAOFactory::getCityHistoryDAO();
-    return $dao->getByUserId($userId);
+        $dao = DAOFactory::getCityHistoryDAO();
+        return $dao->getByUserId($userId);
 
     }
 
@@ -584,8 +596,8 @@ class HybridUserDAO extends UserDAO{
      */
     public function getJourneyHistory($userId) {
 
-    $dao = DAOFactory::getJourneyHistoryDAO();
-    return $dao->getByUserId($userId);
+        $dao = DAOFactory::getJourneyHistoryDAO();
+        return $dao->getByUserId($userId);
 
     }
 
