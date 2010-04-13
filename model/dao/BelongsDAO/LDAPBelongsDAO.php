@@ -177,6 +177,7 @@ class LDAPBelongsDAO extends BelongsDAO{
      *
      * This function retrieves the rows from User table that are assigned through relationship Belongs to the User Group with
      * the name <var>$userGroupName</var> and creates a {@link UserVO} with data from each row.
+     * If a user exists in LDAP but isn't present in DB, it won't be listed.
      *
      * @param string $userGroupName the name of the User Group whose Users we want to retrieve.
      * @return array an array with value objects {@link UserVO} with their properties set to the values from the rows.
@@ -203,13 +204,17 @@ class LDAPBelongsDAO extends BelongsDAO{
 
         $usersDB = $this->executeFromB($sql);
 
-        foreach($usersLDAP as $userLDAP)
+        foreach($usersLDAP as $index => $userLDAP) {
             foreach($usersDB as $userDB)
                 if ($userLDAP->getLogin() == $userDB->getLogin())
                 {
                     $userLDAP->setId($userDB->getId());
                     $userLDAP->setPassword($userDB->getPassword());
                 }
+            if($userLDAP->getId() == null)
+                //the user doesn't exist in DB, delete it
+                unset($usersLDAP[$index]);
+        }
 
         return $usersLDAP;
 

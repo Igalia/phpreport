@@ -255,10 +255,10 @@ class HybridUserDAO extends UserDAO{
     /** Users retriever for LDAP/PostgreSQL Hybrid.
      *
      * This function retrieves all rows from User table and creates a {@link UserVO} with data from each row.
+     * If a user exists in LDAP but isn't present in DB, it won't be listed.
      *
      * @return array an array with value objects {@link UserVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
-     * @todo decide whether is better obtaining users from LDAP or DB.
      * @throws {@link SQLQueryErrorException}, {@link LDAPOperationErrorException}
      */
     public function getAll() {
@@ -271,10 +271,14 @@ class HybridUserDAO extends UserDAO{
 
         $usersDB = $this->execute($sql);
 
-        foreach((array) $usersLDAP as $userLDAP)
+        foreach((array) $usersLDAP as $index => $userLDAP) {
             foreach((array) $usersDB as $userDB)
                 if ($userLDAP->getLogin() == $userDB->getLogin())
                     $userLDAP->setId($userDB->getId());
+            if($userLDAP->getId() == null)
+                //the user doesn't exist in DB, delete it
+                unset($usersLDAP[$index]);
+        }
 
         foreach((array) $usersDB as $userDB)
         {
