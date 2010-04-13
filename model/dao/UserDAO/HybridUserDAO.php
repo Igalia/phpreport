@@ -92,6 +92,7 @@ class HybridUserDAO extends UserDAO{
     /** Login for LDAP/PostgreSQL Hybrid.
      *
      * This function makes login for a user, checking if provided login and password match.
+     * The user must exist both in LDAP and DB to be valid.
      *
      * @param string $login the login of the user.
      * @param string $password the password of the user.
@@ -105,6 +106,9 @@ class HybridUserDAO extends UserDAO{
 
         $sql = "SELECT * FROM usr WHERE login='". $login . "'";
         $result = $this->execute($sql);
+        if(!isset($result[0])) {
+            throw new IncorrectLoginException("login - " . $login . " | password - " . $password);
+        }
 
         return $this->getByUserLogin($login);
 
