@@ -645,9 +645,9 @@ class HybridUserDAO extends UserDAO{
 
     /** User creator for LDAP/PostgreSQL Hybrid.
      *
-     * This function creates a new row for a User by its {@link UserVO}.
+     * This function creates a new row for a User by its {@link UserVO}, only if the user already exists in LDAP.
      * The internal id of <var>$userVO</var> will be set after its creation.
-     *projectId
+     *
      * @param UserVO $userVO the {@link UserVO} with the data we want to insert on database.
      * @return int the number of rows that have been affected (it should be 1).
      * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
@@ -655,7 +655,15 @@ class HybridUserDAO extends UserDAO{
     public function create(UserVO $userVO) {
         $affectedRows = 0;
 
-        $sql = "INSERT INTO usr (login, password) VALUES(" . DBPostgres::checkStringNull($userVO->getLogin()) . ", " . DBPostgres::checkStringNull($userVO->getPassword()) . ")";
+        if (!$sr=ldap_read($this->ldapConnect,"ou=People," .
+                ConfigurationParametersManager::getParameter('LDAP_BASE'),
+                "(uid=" . $userVO->getLogin() . ")",
+                array("uid")
+            )) {
+            return $affectedRows;
+        }
+
+        $sql = "INSERT INTO usr (login) VALUES(" . DBPostgres::checkStringNull($userVO->getLogin()) . ")";
 
         $res = pg_query($this->connect, $sql);
 
