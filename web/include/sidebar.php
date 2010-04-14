@@ -58,7 +58,7 @@ var menuPanel = new Ext.Panel({
                     }
                 ?>
               {
-                text: 'User evaluation', handler: onItemClick, iconCls: 'silk-user',
+                text: 'Users evaluation', handler: onItemClick, destination: 'usersEvaluation.php', iconCls: 'silk-user',
             },{
                 text: 'Acc hours report', handler: onItemClick, destination: 'viewWorkingHoursResultsReport.php', iconCls: 'silk-report-user',
             },{
