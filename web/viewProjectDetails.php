@@ -79,16 +79,30 @@
                 items: [{
                         id:'name',
                         name: 'name',
-                           fieldLabel:'Name',
+                        fieldLabel:'Name',
                         <?php
                               echo "value:'" . $project->getDescription() . "'";
                         ?>
                     },{
                         id:'id',
                         name: 'id',
-                           fieldLabel:'Id',
+                        fieldLabel:'Id',
                         <?php
                               echo "value:'" . $project->getId() . "'";
+                        ?>
+                    },{
+                        id:'init',
+                        name: 'init',
+                        fieldLabel:'Init Date',
+                        <?php
+                              echo "value:'" . $project->getInit()->format('d/m/Y') . "'";
+                        ?>
+                    },{
+                        id:'end',
+                        name: 'end',
+                        fieldLabel:'End Date',
+                        <?php
+                              echo "value:'" . $project->getEnd()->format('d/m/Y') . "'";
                         ?>
                     },{
                         id:'active',
