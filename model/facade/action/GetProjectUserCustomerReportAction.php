@@ -81,7 +81,7 @@ class GetProjectUserCustomerReportAction extends Action{
         $this->projectVO=$projectVO;
 
     if (is_null($init))
-        $this->init = $projectVO->getInit();
+        $this->init = date_create('1900-01-01');
     else    $this->init = $init;
 
         if (is_null($end))

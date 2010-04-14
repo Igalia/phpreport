@@ -80,13 +80,13 @@ class GetProjectUserStoryReportAction extends Action{
     public function __construct(ProjectVO $projectVO, DateTime $init = NULL, DateTime $end = NULL) {
         $this->projectVO=$projectVO;
 
-    if (is_null($init))
-        $this->init = $projectVO->getInit();
-    else    $this->init = $init;
+        if (is_null($init))
+            $this->init = date_create('1900-01-01');
+        else    $this->init = $init;
 
         if (is_null($end))
-        $this->end = new DateTime();
-    else    $this->end = $end;
+            $this->end = new DateTime();
+        else    $this->end = $end;
 
         $this->preActionParameter="GET_PROJECT_USER_STORY_REPORT_PREACTION";
         $this->postActionParameter="GET_PROJECT_USER_STORY_REPORT_POSTACTION";
