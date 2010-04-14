@@ -233,6 +233,8 @@ Ext.onReady(function(){
                 if (grid.rendered)
                                     grid.customMask.show();
 
+                pendingHoliday.removeAll();
+
                 // change web services URLs with those values and load data
                 pendingHoliday.proxy.conn.url= 'services/getPendingHolidayHoursService.php?<?php
 
@@ -243,6 +245,8 @@ Ext.onReady(function(){
 
                 pendingHoliday.load();
 
+
+                extraHours.removeAll();
 
                 extraHours.proxy.conn.url= 'services/getExtraHoursReportService.php?<?php
 

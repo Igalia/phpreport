@@ -470,6 +470,8 @@
                     end = Ext.getCmp('endDate').getValue();
 
 
+                grid.store.removeAll();
+
                 grid.store.proxy.conn.url= 'services/getProjectUserCustomerReportJsonService.php?<?php
 
                     echo "login=" . $login;
@@ -481,7 +483,11 @@
 
                 ?>&init=' + init.getFullYear() + "-" + (init.getMonth()+1) + "-" + init.getDate()  + "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
 
+
                 grid.store.load();
+
+
+                grid2.store.removeAll();
 
                 grid2.store.proxy.conn.url= 'services/getProjectUserStoryReportJsonService.php?<?php
 
