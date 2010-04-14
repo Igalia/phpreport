@@ -135,7 +135,7 @@ class HybridUserDAO extends UserDAO{
      * This function retrieves the row from User (in LDAP) with the login <var>$userLogin</var> and creates a {@link UserVO} with its data.
      *
      * @param string $userLogin the login of the row we want to retrieve.
-     * @return UserVO a value object {@link UserVO} with its properties set to the values from the row.
+     * @return UserVO a value object {@link UserVO} with its properties set to the values from the row, or NULL in case the user doesn't exist.
      * @throws {@link LDAPOperationErrorException}
      */
     public function getByUserLogin($userLogin) {
@@ -149,6 +149,10 @@ class HybridUserDAO extends UserDAO{
 
         $sql = "SELECT * FROM usr WHERE login='". $userLogin . "'";
         $result = $this->execute($sql);
+
+        if(count($result) == 0)
+            //a user with that login could not be found, return null
+            return NULL;
 
         $user->setLogin($userLogin);
         $user->setGroups($groups);

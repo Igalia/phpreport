@@ -138,13 +138,16 @@ class PostgreSQLUserDAO extends UserDAO{
      * This function retrieves the row from User table with the login <var>$userLogin</var> and creates a {@link UserVO} with its data.
      *
      * @param string $userLogin the login of the row we want to retrieve.
-     * @return UserVO a value object {@link UserVO} with its properties set to the values from the row.
+     * @return UserVO a value object {@link UserVO} with its properties set to the values from the row, or NULL in case the user doesn't exist.
      * @throws {@link SQLQueryErrorException}
      */
     public function getByUserLogin($userLogin) {
         $sql = "SELECT * FROM usr WHERE login=" . DBPostgres::checkStringNull($userLogin);
-    $result = $this->execute($sql);
-    return $result[0];
+        $result = $this->execute($sql);
+        if(count($result) == 0)
+            return NULL;
+
+        return $result[0];
     }
 
     /** Users retriever for PostgreSQL.
