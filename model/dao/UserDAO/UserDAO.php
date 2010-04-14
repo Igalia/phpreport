@@ -212,7 +212,7 @@ abstract class UserDAO extends BaseDAO{
      * @see WorksDAO, ProjectDAO
      * @throws {@link OperationErrorException}
      */
-    public abstract function addProjectWorks($userId, $userId);
+    public abstract function addProjectWorks($userId, $projectId);
 
     /** Works relationship entry deleter by User id and Project id.
      *
@@ -225,7 +225,7 @@ abstract class UserDAO extends BaseDAO{
      * @see WorksDAO, ProjectDAO
      * @throws {@link OperationErrorException}
      */
-    public abstract function removeProjectWorks($userId, $userId);
+    public abstract function removeProjectWorks($userId, $projectId);
 
     /** User Groups retriever by id.
      *
