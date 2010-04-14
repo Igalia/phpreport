@@ -98,14 +98,14 @@
                         name: 'init',
                         fieldLabel:'Init Date',
                         <?php
-                              echo "value:'" . $project->getInit()->format('d/m/Y') . "'";
+                              echo "value:'" . ((is_null($project->getInit()))?(' --- '):($project->getInit()->format('d/m/Y'))) . "'";
                         ?>
                     },{
                         id:'end',
                         name: 'end',
                         fieldLabel:'End Date',
                         <?php
-                              echo "value:'" . $project->getEnd()->format('d/m/Y') . "'";
+                              echo "value:'" . ((is_null($project->getEnd()))?(' --- '):($project->getEnd()->format('d/m/Y'))) . "'";
                         ?>
                     },{
                         id:'active',
