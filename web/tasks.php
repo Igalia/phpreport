@@ -675,13 +675,12 @@ Ext.onReady(function(){
     /* Build a calendar on the auxiliar sidebar */
     new Ext.Panel({
         renderTo: Ext.get("auxiliarpanel"),
-        items: [{
-            xtype: 'datepicker',
-            value: Date.parseDate(date, 'Y-m-d'),
-            listeners: {'select': function (item, date) {
-                window.location = "tasks.php?date=" + date.format('Y-m-d');
-            }}
-        }],
+        items: [
+            new Ext.DatePickerLinks({
+                value: Date.parseDate(date, 'Y-m-d'),
+                baseUrl: 'tasks.php?date=',
+            }),
+        ],
     });
 
 
