@@ -36,6 +36,7 @@ include_once('phpreport/model/facade/action/PartialUpdateReportAction.php');
 include_once('phpreport/model/facade/action/GetUserTasksAction.php');
 include_once('phpreport/model/facade/action/GetPersonalSummaryByLoginDateAction.php');
 include_once('phpreport/model/facade/action/GetGlobalUsersProjectsReportAction.php');
+include_once('phpreport/model/facade/action/GetGlobalUsersStoriesReportAction.php');
 include_once('phpreport/model/facade/action/GetGlobalProjectsUsersReportAction.php');
 include_once('phpreport/model/facade/action/GetGlobalProjectsCustomersReportAction.php');
 include_once('phpreport/model/facade/action/GetGlobalUsersProjectsCustomersReportAction.php');
@@ -266,6 +267,24 @@ abstract class TasksFacade {
     static function GetUserTasksByDate(UserVO $userVO, DateTime $date) {
 
     $action = new GetUserTasksByDateAction($userVO, $date);
+
+    return $action->execute();
+
+    }
+
+    /**  Get Global Users Stories Report Action
+     *
+     *  This function is used for retrieving information about Tasks done by Users for each Story. We can pass dates
+     *  with optional parameters <var>$init</var> and <var>$end</var> if we want to retrieve information about only an interval.
+     *
+     * @param DateTime $init the initial date of the interval whose Tasks report we want to retrieve.
+     * @param DateTime $end the ending date of the interval whose Tasks report we want to retrieve.
+     * @return array an array with the resulting rows of computing the extra hours as associative arrays (they contain a field
+     * <i>add_hours</i> with that result and fields for the grouping fields <i>userid</i> and <i>story</i>).
+     */
+    static function GetGlobalUsersStoriesReport(DateTime $init = NULL, DateTime $end = NULL) {
+
+    $action = new GetGlobalUsersStoriesReportAction($init, $end);
 
     return $action->execute();
 
