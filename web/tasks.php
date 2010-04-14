@@ -391,7 +391,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 tabIndex: tab++,
                 listeners: {
                     'change': function() {
-                        this.parent.taskRecord.set('telework',this.getValue());
+                        this.parent.taskRecord.set('telework',String(this.getValue()));
                     }
                 }
             }),
