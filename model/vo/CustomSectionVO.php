@@ -31,6 +31,7 @@
 
 
 include_once('phpreport/model/vo/UserVO.php');
+include_once('phpreport/model/vo/BaseSectionVO.php');
 
 /** Custom VO for Sections
  *
@@ -49,15 +50,11 @@ include_once('phpreport/model/vo/UserVO.php');
  *  @property double $toDo pending working hours in this Section.
  *  @property int $moduleId database internal identifier of the associated Module.
  */
-class CustomSectionVO {
+class CustomSectionVO extends BaseSectionVO{
 
     /**#@+
      *  @ignore
      */
-    protected $id = NULL;
-    protected $accepted = NULL;
-    protected $name = NULL;
-    protected $text = NULL;
     protected $developers = NULL;
     protected $reviewer = NULL;
     protected $estHours = NULL;
@@ -65,42 +62,6 @@ class CustomSectionVO {
     protected $done = NULL;
     protected $overrun = NULL;
     protected $toDo = NULL;
-    protected $moduleId = NULL;
-
-    public function setId($id) {
-    if (is_null($id))
-        $this->id = $id;
-    else
-            $this->id = (int) $id;
-    }
-
-    public function getId() {
-        return $this->id;
-    }
-
-    public function setName($name) {
-        $this->name = (string) $name;
-    }
-
-    public function getName() {
-        return $this->name;
-    }
-
-    public function setText($text) {
-        $this->text = (string) $text;
-    }
-
-    public function getText() {
-        return $this->text;
-    }
-
-    public function setAccepted($accepted) {
-        $this->accepted = (boolean) $accepted;
-    }
-
-    public function getAccepted() {
-        return $this->accepted;
-    }
 
     public function setEstHours($estHours) {
         $this->estHours = (double) $estHours;
@@ -159,17 +120,6 @@ class CustomSectionVO {
 
     public function getReviewer() {
         return $this->reviewer;
-    }
-
-    public function setModuleId($moduleId) {
-        if (is_null($moduleId))
-        $this->moduleId = $moduleId;
-    else
-            $this->moduleId = (int) $moduleId;
-    }
-
-    public function getModuleId() {
-        return $this->moduleId;
     }
 
     /**#@-*/

@@ -29,6 +29,8 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
+include_once('phpreport/model/vo/ProjectVO.php');
+
 /** VO for Custom Projects
  *
  *  This class just stores Project detailed and derived data.
@@ -47,70 +49,13 @@
  *  @property string $type type of this Project.
  *  @property string $schedType type of scheduling this Project has.
  */
-class CustomProjectVO {
+class CustomProjectVO extends ProjectVO {
 
     /**#@+
      *  @ignore
      */
-    protected $id = NULL;
-    protected $activation = NULL;
-    protected $init = NULL;
-    protected $_end = NULL;
-    protected $invoice = NULL;
-    protected $estHours = NULL;
-    protected $areaid = NULL;
-    protected $description = NULL;
-    protected $movedHours = NULL;
-    protected $schedType = NULL;
-    protected $type = NULL;
     protected $workedHours = NULL;
     protected $totalCost = NULL;
-
-    public function setId($id) {
-        if (is_null($id))
-            $this->id = $id;
-        else
-            $this->id = (int) $id;
-    }
-
-    public function getId() {
-        return $this->id;
-    }
-
-    public function setActivation($activation) {
-        $this->activation = (boolean) $activation;
-    }
-
-    public function getActivation() {
-        return $this->activation;
-    }
-
-    public function setInit(DateTime $init = NULL) {
-        $this->init = $init;
-    }
-
-    public function getInit() {
-        return $this->init;
-    }
-
-    public function setEnd(DateTime $_end = NULL) {
-        $this->_end = $_end;
-    }
-
-    public function getEnd() {
-        return $this->_end;
-    }
-
-    public function setInvoice($invoice) {
-        if (is_null($invoice))
-            $this->invoice = $invoice;
-        else
-            $this->invoice = (double) $invoice;
-    }
-
-    public function getInvoice() {
-        return $this->invoice;
-    }
 
     public function setTotalCost($totalCost) {
         if (is_null($totalCost))
@@ -123,17 +68,6 @@ class CustomProjectVO {
         return $this->totalCost;
     }
 
-    public function setEstHours($estHours) {
-        if (is_null($estHours))
-            $this->estHours = $estHours;
-        else
-            $this->estHours = (double) $estHours;
-    }
-
-    public function getEstHours() {
-        return $this->estHours;
-    }
-
     public function setWorkedHours($workedHours) {
         if (is_null($workedHours))
             $this->workedHours = $workedHours;
@@ -143,84 +77,6 @@ class CustomProjectVO {
 
     public function getWorkedHours() {
         return $this->workedHours;
-    }
-
-    public function setDescription($description) {
-        $this->description = (string) $description;
-    }
-
-    public function getDescription() {
-        return $this->description;
-    }
-
-    public function setType($type) {
-        $this->type = (string) $type;
-    }
-
-    public function getType() {
-        return $this->type;
-    }
-
-    public function setMovedHours($movedHours) {
-        if (is_null($movedHours))
-            $this->movedHours = $movedHours;
-        else
-            $this->movedHours = (double) $movedHours;
-    }
-
-    public function getMovedHours() {
-        return $this->movedHours;
-    }
-
-    public function setAreaId($areaId) {
-        if (is_null($areaId))
-            $this->areaId = $areaId;
-        else
-            $this->areaId = (int) $areaId;
-    }
-
-    public function getAreaId() {
-        return $this->areaId;
-    }
-
-    public function getPercDev() {
-        if ($this->estHours > 0)
-            return (($this->workedHours/$this->estHours)-1)*100;
-        else return null;
-    }
-
-    public function getAbsDev() {
-        return ($this->workedHours-$this->estHours);
-    }
-
-    public function getEstHourInvoice() {
-        if ($this->estHours > 0)
-            return ($this->invoice/$this->estHours);
-        else return null;
-    }
-
-    public function getTotalProfit() {
-        return ($this->invoice-$this->totalCost);
-    }
-
-    public function getHourProfit() {
-        if ($this->workedHours > 0)
-            return ($this->getTotalProfit()/$this->workedHours);
-        else return null;
-    }
-
-    public function getWorkedHourInvoice() {
-        if ($this->workedHours > 0)
-            return ($this->invoice/$this->workedHours);
-        else return null;
-    }
-
-    public function setSchedType($schedType) {
-        $this->schedType = (string) $schedType;
-    }
-
-    public function getSchedType() {
-        return $this->schedType;
     }
 
     /**#@-*/

@@ -29,6 +29,8 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
+include_once('model/vo/BaseTaskStoryVO.php');
+
 /** Custom VO for Task Stories
  *
  *  This class just stores Task Story and additional data.
@@ -47,76 +49,15 @@
  *  @property UserVO $developer developer of this Task Story.
  *  @property UserVO $reviewer reviewer of this Task Story.
  */
-class CustomTaskStoryVO {
+class CustomTaskStoryVO extends BaseTaskStoryVO {
 
     /**#@+
      *  @ignore
      */
-    protected $id = NULL;
-    protected $risk = NULL;
-    protected $name = NULL;
-    protected $estHours = NULL;
     protected $spent = NULL;
-    protected $toDo = NULL;
-    protected $estEnd = NULL;
-    protected $init = NULL;
-    protected $end = NULL;
     protected $taskSection = NULL;
-    protected $storyId = NULL;
     protected $developer = NULL;
     protected $reviewer = NULL;
-
-    public function setId($id) {
-    if (is_null($id))
-        $this->id = $id;
-    else
-            $this->id = (int) $id;
-    }
-
-    public function getId() {
-        return $this->id;
-    }
-
-    public function setName($name) {
-        $this->name = (string) $name;
-    }
-
-    public function getName() {
-        return $this->name;
-    }
-
-    public function setRisk($risk) {
-    if (is_null($risk))
-        $this->risk = $risk;
-    else
-            $this->risk = (int) $risk;
-    }
-
-    public function getRisk() {
-        return $this->risk;
-    }
-
-    public function setEstHours($estHours) {
-    if (is_null($estHours))
-        $this->estHours = $estHours;
-    else
-            $this->estHours = (double) $estHours;
-    }
-
-    public function getEstHours() {
-        return $this->estHours;
-    }
-
-    public function setToDo($toDo) {
-    if (is_null($toDo))
-        $this->toDo = $toDo;
-    else
-            $this->toDo = (double) $toDo;
-    }
-
-    public function getToDo() {
-        return $this->toDo;
-    }
 
     public function setSpent($spent) {
     if (is_null($spent))
@@ -127,41 +68,6 @@ class CustomTaskStoryVO {
 
     public function getSpent() {
         return $this->spent;
-    }
-
-    public function setEstEnd(DateTime $estEnd = NULL) {
-        $this->estEnd = $estEnd;
-    }
-
-    public function getEstEnd() {
-        return $this->estEnd;
-    }
-
-    public function setInit(DateTime $init = NULL) {
-        $this->init = $init;
-    }
-
-    public function getInit() {
-        return $this->init;
-    }
-
-    public function setEnd(DateTime $end = NULL) {
-        $this->end = $end;
-    }
-
-    public function getEnd() {
-        return $this->end;
-    }
-
-    public function setStoryId($storyId) {
-        if (is_null($storyId))
-        $this->storyId = $storyId;
-    else
-            $this->storyId = (int) $storyId;
-    }
-
-    public function getStoryId() {
-        return $this->storyId;
     }
 
     public function setTaskSection(TaskSectionVO $taskSection) {

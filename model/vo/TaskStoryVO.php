@@ -29,6 +29,8 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
+include_once('phpreport/model/vo/BaseTaskStoryVO.php');
+
 /** VO for Task Stories
  *
  *  This class just stores Task Story data.
@@ -45,109 +47,13 @@
  *  @property int $userId database internal identifier of the associated User.
  *  @property int $taskSectionId database internal identifier of the associated TaskSection.
  */
-class TaskStoryVO {
+class TaskStoryVO extends BaseTaskStoryVO{
 
     /**#@+
      *  @ignore
      */
-    protected $id = NULL;
-    protected $risk = NULL;
-    protected $name = NULL;
-    protected $estHours = NULL;
-    protected $estEnd = NULL;
-    protected $toDo = NULL;
-    protected $init = NULL;
-    protected $end = NULL;
-    protected $storyId = NULL;
     protected $userId = NULL;
     protected $taskSectionId = NULL;
-
-    public function setId($id) {
-    if (is_null($id))
-        $this->id = $id;
-    else
-            $this->id = (int) $id;
-    }
-
-    public function getId() {
-        return $this->id;
-    }
-
-    public function setName($name) {
-        $this->name = (string) $name;
-    }
-
-    public function getName() {
-        return $this->name;
-    }
-
-    public function setRisk($risk) {
-    if (is_null($risk))
-        $this->risk = $risk;
-    else
-            $this->risk = (int) $risk;
-    }
-
-    public function getRisk() {
-        return $this->risk;
-    }
-
-    public function setEstHours($estHours) {
-    if (is_null($estHours))
-        $this->estHours = $estHours;
-    else
-            $this->estHours = (double) $estHours;
-    }
-
-    public function getEstHours() {
-        return $this->estHours;
-    }
-
-    public function setToDo($toDo) {
-    if (is_null($toDo))
-        $this->toDo = $toDo;
-    else
-            $this->toDo = (double) $toDo;
-    }
-
-    public function getToDo() {
-        return $this->toDo;
-    }
-
-    public function setEstEnd(DateTime $estEnd = NULL) {
-        $this->estEnd = $estEnd;
-    }
-
-    public function getEstEnd() {
-        return $this->estEnd;
-    }
-
-    public function setInit(DateTime $init = NULL) {
-        $this->init = $init;
-    }
-
-    public function getInit() {
-        return $this->init;
-    }
-
-    public function setEnd(DateTime $end = NULL) {
-        $this->end = $end;
-    }
-
-    public function getEnd() {
-        return $this->end;
-    }
-
-    public function setStoryId($storyId) {
-        if (is_null($storyId))
-        $this->storyId = $storyId;
-    else
-            $this->storyId = (int) $storyId;
-    }
-
-    public function getStoryId() {
-        return $this->storyId;
-    }
 
     public function setUserId($userId) {
         if (is_null($userId))

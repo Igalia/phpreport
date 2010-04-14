@@ -31,6 +31,7 @@
 
 
 include_once('phpreport/model/vo/UserVO.php');
+include_once('phpreport/model/vo/BaseStoryVO.php');
 
 /** Custom VO for Stories
  *
@@ -47,16 +48,13 @@ include_once('phpreport/model/vo/UserVO.php');
  *  @property double $overrun per-1 variation of real work versus estimated work.
  *  @property double $toDo pending working hours in this Story.
  *  @property int $iterationId database internal identifier of the associated Iteration.
- *  @property int $nextStoryId database internal identifier of the associated Story (next one).
+ *  @property int $storyId database internal identifier of the associated Story (next one).
  */
-class CustomStoryVO {
+class CustomStoryVO extends BaseStoryVO {
 
     /**#@+
      *  @ignore
      */
-    protected $id = NULL;
-    protected $accepted = NULL;
-    protected $name = NULL;
     protected $developers = NULL;
     protected $reviewer = NULL;
     protected $estHours = NULL;
@@ -64,35 +62,6 @@ class CustomStoryVO {
     protected $done = NULL;
     protected $overrun = NULL;
     protected $toDo = NULL;
-    protected $iterationId = NULL;
-    protected $nextStoryId = NULL;
-
-    public function setId($id) {
-    if (is_null($id))
-        $this->id = $id;
-    else
-            $this->id = (int) $id;
-    }
-
-    public function getId() {
-        return $this->id;
-    }
-
-    public function setName($name) {
-        $this->name = (string) $name;
-    }
-
-    public function getName() {
-        return $this->name;
-    }
-
-    public function setAccepted($accepted) {
-        $this->accepted = (boolean) $accepted;
-    }
-
-    public function getAccepted() {
-        return $this->accepted;
-    }
 
     public function setEstHours($estHours) {
         $this->estHours = (double) $estHours;
@@ -151,28 +120,6 @@ class CustomStoryVO {
 
     public function getReviewer() {
         return $this->reviewer;
-    }
-
-    public function setIterationId($iterationId) {
-        if (is_null($iterationId))
-        $this->iterationId = $iterationId;
-    else
-            $this->iterationId = (int) $iterationId;
-    }
-
-    public function getIterationId() {
-        return $this->iterationId;
-    }
-
-    public function setNextStoryId($nextStoryId) {
-        if (is_null($nextStoryId))
-        $this->nextStoryId = $nextStoryId;
-    else
-            $this->nextStoryId = (int) $nextStoryId;
-    }
-
-    public function getNextStoryId() {
-        return $this->nextStoryId;
     }
 
     /**#@-*/

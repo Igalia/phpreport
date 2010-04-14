@@ -29,6 +29,8 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
+include_once('phpreport/model/vo/BaseTaskSectionVO.php');
+
 /** Custom VO for Task Sections
  *
  *  This class just stores Task Section and additional data.
@@ -43,61 +45,15 @@
  *  @property UserVO $developer developer of this Task Section.
  *  @property UserVO $reviewer reviewer of this Task Section.
  */
-class CustomTaskSectionVO {
+class CustomTaskSectionVO extends BaseTaskSectionVO {
 
     /**#@+
      *  @ignore
      */
-    protected $id = NULL;
-    protected $risk = NULL;
-    protected $name = NULL;
-    protected $estHours = NULL;
     protected $spent = NULL;
     protected $toDo = NULL;
-    protected $sectionId = NULL;
     protected $developer = NULL;
     protected $reviewer = NULL;
-
-    public function setId($id) {
-    if (is_null($id))
-        $this->id = $id;
-    else
-            $this->id = (int) $id;
-    }
-
-    public function getId() {
-        return $this->id;
-    }
-
-    public function setName($name) {
-        $this->name = (string) $name;
-    }
-
-    public function getName() {
-        return $this->name;
-    }
-
-    public function setRisk($risk) {
-    if (is_null($risk))
-        $this->risk = $risk;
-    else
-            $this->risk = (int) $risk;
-    }
-
-    public function getRisk() {
-        return $this->risk;
-    }
-
-    public function setEstHours($estHours) {
-    if (is_null($estHours))
-        $this->estHours = $estHours;
-    else
-            $this->estHours = (double) $estHours;
-    }
-
-    public function getEstHours() {
-        return $this->estHours;
-    }
 
     public function setToDo($toDo) {
     if (is_null($toDo))
@@ -119,17 +75,6 @@ class CustomTaskSectionVO {
 
     public function getSpent() {
         return $this->spent;
-    }
-
-    public function setSectionId($sectionId) {
-        if (is_null($sectionId))
-        $this->sectionId = $sectionId;
-    else
-            $this->sectionId = (int) $sectionId;
-    }
-
-    public function getSectionId() {
-        return $this->sectionId;
     }
 
     public function setDeveloper(UserVO $developer) {
