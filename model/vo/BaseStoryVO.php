@@ -40,7 +40,7 @@
  *  @property int $iterationId database internal identifier of the associated Iteration.
  *  @property int $storyId database internal identifier of the associated BaseStory (next one).
  */
-class BaseStoryVO {
+abstract class BaseStoryVO {
 
     /**#@+
      *  @ignore

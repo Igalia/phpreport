@@ -40,7 +40,7 @@
  *  @property string $text text with information about this Section.
  *  @property int $moduleId database internal identifier of the associated Module.
  */
-class BaseSectionVO {
+abstract class BaseSectionVO {
 
     /**#@+
      *  @ignore

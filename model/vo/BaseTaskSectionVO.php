@@ -40,7 +40,7 @@
  *  @property double $estHours estimated number of hours this Task Section will last.
  *  @property int $sectionId database internal identifier of the associated Section.
  */
-class BaseTaskSectionVO {
+abstract class BaseTaskSectionVO {
 
     /**#@+
      *  @ignore

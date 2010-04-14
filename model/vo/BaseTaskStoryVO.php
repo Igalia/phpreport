@@ -45,7 +45,7 @@
  *  @property int $storyId database internal identifier of the associated Story.
  *  @property int $taskSectionId database internal identifier of the associated TaskSection.
  */
-class BaseTaskStoryVO {
+abstract class BaseTaskStoryVO {
 
     /**#@+
      *  @ignore
