@@ -658,7 +658,7 @@ Ext.onReady(function(){
 
     // Summary Panel
     var summaryPanel = new Ext.FormPanel({
-        width: 137,
+        width: 150,
         labelWidth: 70,
         renderTo: Ext.get('auxiliarpanel'),
         frame:true,
