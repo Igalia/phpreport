@@ -125,6 +125,21 @@ abstract class UsersFacade {
 
     }
 
+    /** Get User By Login Function
+     *
+     *  This action is used for retrieving a User by his/her login.
+     *
+     * @param string $login the login of the User we want to retieve.
+     * @return UserVO the User as a {@link UserVO} with its properties set to the values from the row.
+     */
+    static function GetUserByLogin($userLogin) {
+
+    $action = new GetUserByLoginAction($userLogin);
+
+    return $action->execute();
+
+    }
+
     /** Get all Users Function
      *
      *  This action is used for retrieving all Users.
@@ -795,4 +810,4 @@ abstract class UsersFacade {
 
 }
 
-//var_dump(UsersFacade::GetUsersByAreaIdDate(2, new DateTime()));
+//var_dump(UsersFacade::GetUserByLogin('jaragunde'));
