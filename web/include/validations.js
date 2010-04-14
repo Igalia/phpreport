@@ -36,16 +36,16 @@ Ext.apply(Ext.form.VTypes, {
                         // First of all, if we don't have a max date
                         if (!field.dateRangeMax)
                         {
-                                start.setMaxValue(date.add(Date.DAY, 1));
+                                start.setMaxValue(date);
                                 start.validate();
                                 field.dateRangeMax = date;
                                 end.dateRangeMax = date;
                                 start.dateRangeMax = date;
                         }
-                        // If we have an earlier max date
+                        // If we have a later max date
                         else if (field.dateRangeMax > date )
                         {
-                                start.setMaxValue(date.add(Date.DAY, 1));
+                                start.setMaxValue(date);
                                 start.validate();
                                 field.dateRangeMax = date;
                                 end.dateRangeMax = date;
@@ -55,7 +55,7 @@ Ext.apply(Ext.form.VTypes, {
                         // upper limit)
                         else if (!end.getValue())
                         {
-                                start.setMaxValue(date.add(Date.DAY, 1));
+                                start.setMaxValue(date);
                                 start.validate();
                                 field.dateRangeMax = date;
                                 end.dateRangeMax = date;
@@ -64,7 +64,7 @@ Ext.apply(Ext.form.VTypes, {
                         // If this end date is earlier than the other
                         else if (date < end.getValue())
                         {
-                                start.setMaxValue(date.add(Date.DAY, 1));
+                                start.setMaxValue(date);
                                 start.validate();
                                 field.dateRangeMax = date;
                                 end.dateRangeMax = date;
@@ -73,18 +73,18 @@ Ext.apply(Ext.form.VTypes, {
                         // If this end date is later than the other
                         else if (field.dateRangeMax < end.getValue())
                         {
-                                start.setMaxValue(end.getValue().add(Date.DAY, 1));
+                                start.setMaxValue(end.getValue());
                                 start.validate();
                                 field.dateRangeMax = end.getValue();
                                 end.dateRangeMax = end.getValue();
                                 start.dateRangeMax = end.getValue();
                         }
 
-        } else if (field.endDateField1 && field.endDateField1 && (!field.dateRangeMin || (date.getTime() != field.dateRangeMin.getTime()))) {
+        } else if (field.endDateField1 && field.endDateField2 && (!field.dateRangeMin || (date.getTime() != field.dateRangeMin.getTime()))) {
             var end1 = Ext.getCmp(field.endDateField1);
             var end2 = Ext.getCmp(field.endDateField2);
-            end1.setMinValue(date.add(Date.DAY, -1));
-            end2.setMinValue(date.add(Date.DAY, -1));
+            end1.setMinValue(date);
+            end2.setMinValue(date);
             end1.validate();
             end2.validate();
             field.dateRangeMin = date;
@@ -135,13 +135,13 @@ Ext.apply(Ext.form.VTypes, {
         }
         if (field.startDateField && (!this.dateRangeMax || (date.getTime() != this.dateRangeMax.getTime()))) {
             var start = Ext.getCmp(field.startDateField);
-            start.setMaxValue(date.add(Date.DAY, -1));
+            start.setMaxValue(date);
             start.validate();
             this.dateRangeMax = date;
         }
         else if (field.endDateField && (!this.dateRangeMin || (date.getTime() != this.dateRangeMin.getTime()))) {
             var end = Ext.getCmp(field.endDateField);
-            end.setMinValue(date.add(Date.DAY, 1));
+            end.setMinValue(date);
             end.validate();
             this.dateRangeMin = date;
         }
