@@ -105,24 +105,22 @@ Ext.apply(Ext.form.VTypes, {
         if(!time){
             return;
         }
-        if (field.endTimeField && (!field.timeRangeMax || (time.getTime() != field.timeRangeMax.getTime()))) {
+        if (field.endTimeField) {
             var start = field.parent.initTimeField;
-            updateTimes(start, null, time);
-            start.maxValue = time;
-            start.validate();
-            field.timeRangeMax = time;
+            var time2 = start.parseDate(start.getValue());
+            if (time2)
+                if ((time <= time2) && (val != "00:00")) return false;
+            if (val == "00:00")
+                updateTimes(start, null, null);
+            else updateTimes(start, null, time);
         }
-        else if (field.initTimeField && (!field.timeRangeMin || (time.getTime() != field.timeRangeMin.getTime()))) {
+        else if (field.initTimeField) {
             var end = field.parent.endTimeField;
-            updateTimes(end, time, null);
-            end.minValue = time;
-            end.validate();
-            field.timeRangeMin = time;
+            var time2 = end.parseDate(end.getValue());
+            if (time2)
+                if ((time2 <= time) && (end.getValue() != "00:00")) return false;
+            updateTimes(end, time, null, open);
         }
-        /*
-         * Always return true since we're only using this vtype to set the
-         * min/max allowed values (these are tested for after the vtype test)
-         */
         return true;
     },
 

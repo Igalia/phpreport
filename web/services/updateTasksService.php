@@ -128,6 +128,7 @@
                                 {
                                     $endTime = $parser->value;
                                     $endTimeParse = date_parse_from_format($endTimeFormat, $endTime);
+                                    if (($endTimeParse['hour']==0) && ($endTimeParse['minute']==0)) $endTimeParse['hour'] = 24;
                                     $endTime = $endTimeParse['hour']*60 + $endTimeParse['minute'];
                                     $taskVO->setEnd($endTime);
                                     $parser->next();
