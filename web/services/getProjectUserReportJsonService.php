@@ -108,7 +108,7 @@
             foreach((array) $report2 as $user => $hours)
             {
                 $users[$user] = true;
-                $record[$user] = round($hours, 2, PHP_ROUND_HALF_DOWN);
+                $record[str_replace(".", ",", $user)] = round($hours, 2, PHP_ROUND_HALF_DOWN);
                 $totalHours[$project] += round($hours, 2, PHP_ROUND_HALF_DOWN);
                 $totalHours['total'] += round($hours, 2, PHP_ROUND_HALF_DOWN);
 
@@ -162,11 +162,11 @@
 
         foreach((array)$users as $name => $dumber)
         {
-            $field['name'] = $name;
+            $field['name'] = str_replace(".", ",", $name);
             $metaData['fields'][] = $field;
 
             $column['header'] = $name;
-            $column['dataIndex'] = $name;
+            $column['dataIndex'] = str_replace(".", ",", $name);
             $response['columns'][] = $column;
         }
 
