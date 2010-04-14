@@ -168,9 +168,9 @@ Ext.onReady(function(){
 
     /* Proxy to the services related with retrieving available Users */
     var availableUsersProxy = new Ext.data.HttpProxy({
-    method: 'POST',
+    method: 'GET',
         api: {
-            read    : {url: 'services/getTodayAreaUsersService.php', method: 'GET'},
+            read    : {url: 'services/getTodayAreaUsersService.php'},
         },
     });
 
@@ -938,10 +938,35 @@ Ext.onReady(function(){
                      layout: 'form',
                      autoHeight: true,
                      plain: false,
-                    items: [
-                      displayPanel
+                     items: [
+                        displayPanel,
+                        new Ext.Container({
+                            layout: 'hbox',
+                            layoutConfig: {pack: 'end', defaultMargins: "0 25px 0 0"},
+                            items:[
+                                new Ext.form.Checkbox({
+                                    boxLabel: 'Show all Users',
+                                    handler: function(checkbox, value) {
+                                                    if (value)
+                                                    {
+                                                        availableUsersProxy.setUrl('services/getAllUsersService.php', true);
+                                                        firstGridStore.reload();
+                                                        // We are reloading, so no filtering
+                                                        firstGrid.filter = new Array();
+                                                        secondGridStore.reload();
+                                                    } else {
+                                                        availableUsersProxy.setUrl('services/getTodayAreaUsersService.php', true);
+                                                        firstGridStore.reload();
+                                                        // We are reloading, so no filtering
+                                                        firstGrid.filter = new Array();
+                                                        secondGridStore.reload();
+                                                    }
+                                             }
+                                })
+                                ]
+                        })
                       ],
-                      listeners: {
+                     listeners: {
                           'show': function(){
                               // We create a new array for filtering when
                               // the window shows
