@@ -100,6 +100,7 @@
                */
               if(typeof(customersGrid.store.reader.jsonData.columns) === 'object') {
                 var columns = [];
+                var width = 0;
 
                   /**
                    * Adding RowNumberer or setting selection model as CheckboxSelectionModel
@@ -110,21 +111,28 @@
 
                 Ext.each(customersGrid.store.reader.jsonData.columns, function(column){
                   columns.push(column);
+                  width += column.width;
                 });
+
+                // We add a dumb column we'll hide for preventing rendering
+                // problems on resizing
+                columns.push( new Ext.grid.Column({dataIndex: 'dumb', header: 'dumb', id: 'dumbColumn', width: 25}));
+
+                width += 25;
 
               /**
                * Setting column model configuration
                */
                 customersGrid.getColumnModel().setConfig(columns);
+                customersGrid.setSize(width, 500);
 
-                // We add 33 pixels to the width because it doesn't count
-                // the vertical scroll bar
-                customersGrid.setSize(customersGrid.getColumnModel().getTotalWidth() + 33, 500);
-
-                summaryTabs.setSize(customersGrid.getColumnModel().getTotalWidth() + 33, 500);
+                summaryTabs.setSize(customersGrid.getColumnModel().getTotalWidth(), 500);
 
                 if (!summaryTabs.rendered)
                     summaryTabs.render(Ext.get("content"));
+
+                // We hide the dumb column
+                customersGrid.getColumnModel().setHidden(customersGrid.getColumnModel().getIndexById('dumbColumn'), true);
 
               }
 
@@ -154,6 +162,7 @@
                */
               if(typeof(usersGrid.store.reader.jsonData.columns) === 'object') {
                 var columns = [];
+                var width = 0;
 
                   /**
                    * Adding RowNumberer or setting selection model as CheckboxSelectionModel
@@ -164,16 +173,23 @@
 
                 Ext.each(usersGrid.store.reader.jsonData.columns, function(column){
                   columns.push(column);
+                  width += column.width;
                 });
+
+                // We add a dumb column we'll hide for preventing rendering
+                // problems on resizing
+                columns.push( new Ext.grid.Column({dataIndex: 'dumb', header: 'dumb', id: 'dumbColumn', width: 25}));
+
+                width += 25;
 
               /**
                * Setting column model configuration
                */
                 usersGrid.getColumnModel().setConfig(columns);
+                usersGrid.setSize(width, 500);
 
-                // We add 33 pixels to the width because it doesn't count
-                // the vertical scroll bar
-                usersGrid.setSize(usersGrid.getColumnModel().getTotalWidth() + 33, 500);
+                // We hide the dumb column
+                usersGrid.getColumnModel().setHidden(usersGrid.getColumnModel().getIndexById('dumbColumn'), true);
 
               }
 

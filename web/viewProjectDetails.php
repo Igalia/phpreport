@@ -306,6 +306,7 @@
                */
               if(typeof(grid.store.reader.jsonData.columns) === 'object') {
                 var columns = [];
+                var width = 0;
 
                   /**
                    * Adding RowNumberer or setting selection model as CheckboxSelectionModel
@@ -316,19 +317,26 @@
 
                 Ext.each(grid.store.reader.jsonData.columns, function(column){
                   columns.push(column);
+                  width += column.width;
                 });
+
+                // We add a dumb column we'll hide for preventing rendering
+                // problems on resizing
+                columns.push( new Ext.grid.Column({dataIndex: 'dumb', header: 'dumb', id: 'dumbColumn', width: 25}));
+
+                width += 25;
 
               /**
                * Setting column model configuration
                */
                 grid.getColumnModel().setConfig(columns);
-
-                // We add 33 pixels to the width because it doesn't count
-                // the vertical scroll bar
-                grid.setSize(grid.getColumnModel().getTotalWidth() + 33, 250);
+                grid.setSize(width, 250);
 
                 if (!grid.rendered)
                     grid.render(Ext.get("content"));
+
+                // We hide the dumb column
+                grid.getColumnModel().setHidden(grid.getColumnModel().getIndexById('dumbColumn'), true);
 
               }
 
@@ -364,6 +372,7 @@
                */
               if(typeof(grid2.store.reader.jsonData.columns) === 'object') {
                 var columns = [];
+                var width = 0;
 
                   /**
                    * Adding RowNumberer or setting selection model as CheckboxSelectionModel
@@ -374,19 +383,26 @@
 
                 Ext.each(grid2.store.reader.jsonData.columns, function(column){
                   columns.push(column);
+                  width += column.width;
                 });
+
+                // We add a dumb column we'll hide for preventing rendering
+                // problems on resizing
+                columns.push( new Ext.grid.Column({dataIndex: 'dumb', header: 'dumb', id: 'dumbColumn', width: 25}));
+
+                width += 25;
 
               /**
                * Setting column model configuration
                */
                 grid2.getColumnModel().setConfig(columns);
-
-                // We add 33 pixels to the width because it doesn't count
-                // the vertical scroll bar
-                grid2.setSize(grid2.getColumnModel().getTotalWidth() + 33, 250);
+                grid2.setSize(width, 250);
 
                 if (!grid2.rendered)
                     grid2.render(Ext.get("content"));
+
+                // We hide the dumb column
+                grid2.getColumnModel().setHidden(grid2.getColumnModel().getIndexById('dumbColumn'), true);
 
               }
 
