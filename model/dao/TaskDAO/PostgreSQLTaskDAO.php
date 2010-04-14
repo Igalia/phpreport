@@ -126,34 +126,6 @@ class PostgreSQLTaskDAO extends TaskDAO{
     return $result;
     }
 
-    /** Tasks User Id checker for PostgreSQL.
-     *
-     * This function retrieves the row from Task table with the id <var>$taskId</var> and checks it's User id
-     * vs. the passed one, <var>$userId</var>.
-     *
-     * @param int $taskId the id of the Task whose User Id we want to check.
-     * @param int $userId the User Id we want to check.
-     * @return bool a bool that indicates if the Id's are equal.
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function checkUserId($taskId, $userId) {
-    if (!is_numeric($userId))
-        throw new SQLIncorrectTypeException($userId);
-    if (!is_numeric($taskId))
-        throw new SQLIncorrectTypeException($taskId);
-        $sql = "SELECT (" . $userId . " = ( SELECT usrid FROM task WHERE id=" . $taskId . " )) AS result";
-
-    $result = @pg_query($this->connect, $sql);
-    if ($result == NULL) throw new SQLQueryErrorException(pg_last_error());
-
-    $row = @pg_fetch_array($result);
-
-    if (strtolower($row[result]) == "t")
-        return true;
-    else
-        return false;
-    }
-
     /** Tasks retriever by User id and date for PostgreSQL.
      *
      * This function retrieves the rows from Task table that are associated with the User with

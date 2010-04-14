@@ -83,18 +83,6 @@ abstract class TaskDAO extends BaseDAO{
      */
     public abstract function getByUserId($userId);
 
-    /** Tasks User Id checker.
-     *
-     * This function retrieves the row from Task table with the id <var>$taskId</var> and checks it's User id
-     * vs. the passed one, <var>$userId</var>.
-     *
-     * @param int $taskId the id of the Task whose User Id we want to check.
-     * @param int $userId the User Id we want to check.
-     * @return bool a bool that indicates if the Id's are equal.
-     * @throws {@link SQLQueryErrorException}
-     */
-    public abstract function checkUserId($taskId, $userId);
-
     /** Work Personal Summary retriever.
      *
      * This function retrieves the amount of hours the User with id <var>$userId<var> has worked on
