@@ -150,6 +150,6 @@ abstract class TaskStoryDAO extends BaseDAO{
      * and ordered ascendantly by their database internal identifier.
      * @throws {@link OperationErrorException}
      */
-    public abstract function getBySectionId($taskSectionId);
+    public abstract function getBySectionId($sectionId);
 
 }
