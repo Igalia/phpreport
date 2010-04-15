@@ -17,7 +17,12 @@ names and passwords if you feel like to, but remember it in the next steps):
 
 CREATE DATABASE phpreport;
 CREATE USER phpreport WITH PASSWORD 'phpreport';
-GRANT ALL PRIVILEGES ON DATABASE phpreport TO phpreport;
+ALTER DATABASE phpreport OWNER TO phpreport;
+
+From the shell, use the utility createlang to define the language for the triggers
+(set the correct DB name, user and host if you have changed them):
+
+createlang -h localhost -W -U phpreport plpgsql phpreport
 
 2. Setting up the files
 
@@ -51,6 +56,7 @@ psql -h localhost -W -U phpreport phpreport < schema.sql
 psql -h localhost -W -U phpreport phpreport < uniqueConstraints.sql
 psql -h localhost -W -U phpreport phpreport < otherConstraints.sql
 psql -h localhost -W -U phpreport phpreport < initialData.sql
+psql -h localhost -W -U phpreport phpreport < triggers.sql
 
 Set the correct DB name, user and host if they are different.
 
