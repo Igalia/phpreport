@@ -49,6 +49,9 @@
         <!-- Include other common validations -->
     <script type="text/javascript" src="include/validations.js"></script>
 
+        <!-- Include other common functions -->
+    <script type="text/javascript" src="include/functions.js"></script>
+
 </head>
 
 <body>
