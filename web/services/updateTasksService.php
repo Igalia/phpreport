@@ -52,13 +52,13 @@
 
         if (!$user)
         {
-            $string = "<return service='updateTasks'><error id='2'>You must be logged in</error></return>";
+            $string = "<return service='updateTasks'><success>false</success><error id='2'>You must be logged in</error></return>";
             break;
         }
 
         if (!LoginManager::isAllowed($sid))
         {
-            $string = "<return service='updateTasks'><error id='3'>Forbidden service for this User</error></return>";
+            $string = "<return service='updateTasks'><success>false</success><error id='3'>Forbidden service for this User</error></return>";
             break;
         }
 
@@ -241,11 +241,11 @@
 
         if (count($updateTasks) >= 1)
             if (TasksFacade::PartialUpdateReports($updateTasks, $updates) == -1)
-                $string = "<return service='updateTasks'><error id='1'>There was some error while updating the tasks</error></return>";
+                $string = "<return service='updateTasks'><success>false</success><error id='1'>There was some error while updating the tasks</error></return>";
 
 
         if (!$string)
-            $string = "<return service='updateTasks'><ok>Operation Success!</ok></return>";
+            $string = "<return service='updateTasks'><success>true</success><ok>Operation Success!</ok></return>";
 
     } while (false);
 

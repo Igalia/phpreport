@@ -51,13 +51,13 @@
 
         if (!$user)
         {
-            $string = "<return service='deleteTasks'><error id='2'>You must be logged in</error></return>";
+            $string = "<return service='deleteTasks'><success>false</success><error id='2'>You must be logged in</error></return>";
             break;
         }
 
         if (!LoginManager::isAllowed($sid))
         {
-            $string = "<return service='deleteTasks'><error id='3'>Forbidden service for this User</error></return>";
+            $string = "<return service='deleteTasks'><success>false</success><error id='3'>Forbidden service for this User</error></return>";
             break;
         }
 
@@ -105,10 +105,10 @@
 
         if (count($deleteTasks) >= 1)
             if (TasksFacade::DeleteReports($deleteTasks) == -1)
-                $string = "<return service='deleteTasks'><error id='1'>There was some error while deleting the tasks</error></return>";
+                $string = "<return service='deleteTasks'><success>false</success><error id='1'>There was some error while deleting the tasks</error></return>";
 
         if (!$string)
-            $string = "<return service='deleteTasks'><ok>Operation Success!</ok></return>";
+            $string = "<return service='deleteTasks'><success>true</success><ok>Operation Success!</ok></return>";
 
 
     } while (false);

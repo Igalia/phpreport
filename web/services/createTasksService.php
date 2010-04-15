@@ -51,13 +51,13 @@
 
         if (!$user)
         {
-            $string = "<return service='createTasks'><error id='2'>You must be logged in</error></return>";
+            $string = "<return service='createTasks'><success>false</success><error id='2'>You must be logged in</error></return>";
             break;
         }
 
         if (!LoginManager::isAllowed($sid))
         {
-            $string = "<return service='createTasks'><error id='3'>Forbidden service for this User</error></return>";
+            $string = "<return service='createTasks'><success>false</success><error id='3'>Forbidden service for this User</error></return>";
             break;
                 }
 
@@ -214,13 +214,13 @@
 
         if (count($createTasks) >= 1)
             if (TasksFacade::CreateReports($createTasks) == -1)
-                $string = "<return service='createTasks'><error id='1'>There was some error while creating the tasks</error></return>";
+                $string = "<return service='createTasks'><success>false</success><error id='1'>There was some error while creating the tasks</error></return>";
 
 
         if (!$string)
         {
 
-            $string = "<return service='createTasks'><ok>Operation Success!</ok><tasks>";
+            $string = "<return service='createTasks'><success>true</success><ok>Operation Success!</ok><tasks>";
 
                 foreach((array) $createTasks as $task)
             {
