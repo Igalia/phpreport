@@ -134,14 +134,14 @@ class PostgreSQLTaskDAO extends TaskDAO{
      * @param int $userId the id of the User whose Tasks we want to retrieve.
      * @param DateTime $date the date whose Tasks we want to retrieve.
      * @return array an array with value objects {@link TaskVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
+     * and ordered ascendantly by their init time.
      * @throws {@link SQLIncorrectTypeException}
      * @throws {@link SQLQueryErrorException}
      */
     public function getByUserIdDate($userId, DateTime $date) {
     if (!is_numeric($userId))
         throw new SQLIncorrectTypeException($userId);
-        $sql = "SELECT * FROM task WHERE usrid=" . $userId . " AND _date=" . DBPostgres::formatDate($date) . " ORDER BY id ASC";
+        $sql = "SELECT * FROM task WHERE usrid=" . $userId . " AND _date=" . DBPostgres::formatDate($date) . " ORDER BY init ASC";
     $result = $this->execute($sql);
     return $result;
     }

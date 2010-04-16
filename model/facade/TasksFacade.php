@@ -246,7 +246,7 @@ abstract class TasksFacade {
      * @param UserVO $userVO the User whose Tasks we want to retieve.
      * @param DateTime $date the date whose tasks we want to retrieve.
      * @return array an array with value objects {@link TaskVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
+     * and ordered ascendantly by their init time.
      */
     static function GetUserTasksByLoginDate(UserVO $userVO, DateTime $date) {
 

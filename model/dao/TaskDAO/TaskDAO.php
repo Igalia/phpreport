@@ -104,7 +104,7 @@ abstract class TaskDAO extends BaseDAO{
      * @param int $userId the id of the User whose Tasks we want to retrieve.
      * @param DateTime $date the date whose Tasks we want to retrieve.
      * @return array an array with value objects {@link TaskVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
+     * and ordered ascendantly by their init time.
      * @throws {@link SQLQueryErrorException}
      */
     public abstract function getByUserIdDate($userId, DateTime $date);

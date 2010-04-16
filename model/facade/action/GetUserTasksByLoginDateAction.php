@@ -78,7 +78,8 @@ class GetUserTasksByLoginDateAction extends Action{
      *
      * This is the function that contains the code that retrieves the Tasks.
      *
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
+     * @return array an array with value objects {@link TaskVO} with their properties set to the values from the rows
+     * and ordered ascendantly by their init time.
      */
     protected function doExecute() {
 
