@@ -79,6 +79,38 @@ class CustomProjectVO extends ProjectVO {
         return $this->workedHours;
     }
 
+    public function getPercDev() {
+        if ($this->estHours > 0)
+            return (($this->workedHours/$this->estHours)-1)*100;
+        else return null;
+    }
+
+    public function getAbsDev() {
+        return ($this->workedHours-$this->estHours);
+    }
+
+    public function getEstHourInvoice() {
+        if ($this->estHours > 0)
+            return ($this->invoice/$this->estHours);
+        else return null;
+    }
+
+    public function getTotalProfit() {
+        return ($this->invoice-$this->totalCost);
+    }
+
+    public function getHourProfit() {
+        if ($this->workedHours > 0)
+            return ($this->getTotalProfit()/$this->workedHours);
+        else return null;
+    }
+
+    public function getWorkedHourInvoice() {
+        if ($this->workedHours > 0)
+            return ($this->invoice/$this->workedHours);
+        else return null;
+    }
+
     /**#@-*/
 
 }
