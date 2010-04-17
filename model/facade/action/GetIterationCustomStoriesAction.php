@@ -91,7 +91,7 @@ class GetIterationCustomStoriesAction extends GetStoryCustomTaskStoriesAction{
 
         $customStory->setAccepted($story->getAccepted());
 
-        $customStory->setNextStoryId($story->getStoryId());
+        $customStory->setStoryId($story->getStoryId());
 
         $customStory->setIterationId($story->getIterationId());
 

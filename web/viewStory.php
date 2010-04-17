@@ -23,8 +23,10 @@ $sid = $_GET["sid"];
 
 $storyId = $_GET["stid"];
 
+$storyId = 3;
+
 /* We check authentication and authorization */
-require_once('phpreport/web/auth.php');
+//require_once('phpreport/web/auth.php');
 
 /* Include the generic header and sidebar*/
 define(PAGE_TITLE, "PhpReport - Story Data");
@@ -235,9 +237,9 @@ Ext.onReady(function(){
                 fieldLabel: 'Next Story',
                 <?php
 
-                    if ($story->getNextStoryId())
+                    if ($story->getStoryId())
                     {
-                        $nextStory = CoordinationFacade::GetStory($story->getNextStoryId());
+                        $nextStory = CoordinationFacade::GetStory($story->getStoryId());
 
                         echo "value:'" . $nextStory->getName() . "'";
                     }
