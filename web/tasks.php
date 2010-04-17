@@ -651,6 +651,9 @@ Ext.onReady(function(){
             new Ext.DatePickerLinks({
                 value: Date.parseDate(date, 'Y-m-d'),
                 baseUrl: 'tasks.php?date=',
+                listeners: {'select': function (item, date) {
+			    window.location = "tasks.php?date=" + date.format('Y-m-d');
+		}}
             }),
         ],
     });
