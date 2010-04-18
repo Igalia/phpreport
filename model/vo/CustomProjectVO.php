@@ -79,38 +79,74 @@ class CustomProjectVO extends ProjectVO {
         return $this->workedHours;
     }
 
+    /**#@-*/
+
+    /** Get Estimated Work Deviation Percentage
+     *
+     *  This function returns the deviation percentage of the estimated work hours.
+     *
+     * @return double the deviation percentage of the estimated work hours according to the worked ones.
+     */
     public function getPercDev() {
         if ($this->estHours > 0)
             return (($this->workedHours/$this->estHours)-1)*100;
         else return null;
     }
 
+    /** Get Estimated Work Deviation
+     *
+     *  This function returns the deviation of the estimated work hours.
+     *
+     * @return double the deviation of the estimated work hours according to the worked ones.
+     */
     public function getAbsDev() {
         return ($this->workedHours-$this->estHours);
     }
 
+    /** Get Estimated Hours Invoice
+     *
+     *  This function returns the hour invoice according to the estimated working hours.
+     *
+     * @return double the estimated hour invoice.
+     */
     public function getEstHourInvoice() {
         if ($this->estHours > 0)
             return ($this->invoice/$this->estHours);
         else return null;
     }
 
+    /** Get Total Profit
+     *
+     *  This function simply returns the total profit of the Project according to the current work hours.
+     *
+     * @return double the total profit of the Project.
+     */
     public function getTotalProfit() {
         return ($this->invoice-$this->totalCost);
     }
 
+    /** Get Hour Profit
+     *
+     *  This function returns the profit (total profit) per worked hour.
+     *
+     * @return double the profit per worked hour.
+     */
     public function getHourProfit() {
         if ($this->workedHours > 0)
             return ($this->getTotalProfit()/$this->workedHours);
         else return null;
     }
 
+    /** Get Hour Invoice
+     *
+     *  This function returns the invoice per worked hour.
+     *
+     * @return double the invoice per worked hour.
+     */
     public function getWorkedHourInvoice() {
         if ($this->workedHours > 0)
             return ($this->invoice/$this->workedHours);
         else return null;
     }
-
-    /**#@-*/
 
 }
