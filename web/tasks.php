@@ -781,6 +781,37 @@ Ext.onReady(function(){
         ]
     });
 
+    // Expand/collapse all Panel
+    var expandCollapseAllPanel = new Ext.FormPanel({
+        width: 150,
+        renderTo: Ext.get('auxiliarpanel'),
+        frame:true,
+        title: 'Task panels',
+        defaults: {
+            width: '100%',
+        },
+        items: [
+            new Ext.Button({
+                text:'Expand all',
+                handler: function() {
+                    var panels = tasksScrollArea.items;
+                    for(var i=0; i<panels.getCount(); i++) {
+                        panels.get(i).expand();
+                    }
+                }
+            }),
+            new Ext.Button({
+                text:'Collapse all',
+                handler: function() {
+                    var panels = tasksScrollArea.items;
+                    for(var i=0; i<panels.getCount(); i++) {
+                        panels.get(i).collapse();
+                    }
+                }
+            })
+        ]
+    });
+
     summaryStore.load();
 
 });
