@@ -325,9 +325,9 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 }),
                 listeners: {
                     'change': function() {
-                        this.parent.taskRecord.set('ttype',xmlencode(this.getValue()));
+                            this.parent.taskRecord.set('ttype',xmlencode(this.getValue()));
                     }
-	        }
+                }
             }),
             storyField: new Ext.form.Field({
                 parent: this,
@@ -517,6 +517,7 @@ Ext.onReady(function(){
             destroy : 'services/deleteTasksService.php'
         },
     });
+
     /* Store to load/save tasks */
     var myStore = new Ext.data.Store({
         autoLoad: true,  //initial data are loaded in the application init
@@ -536,31 +537,64 @@ Ext.onReady(function(){
             direction: 'ASC',
         },
         listeners: {
-            'load': function () {
-                this.each(function(r) {
-                    taskPanel = new TaskPanel({
-                        parent: tasksScrollArea,
-                        store: myStore,
-                        taskRecord:r,
-                        listeners: {
-                            'collapse': updateTitle,
-                            'beforeexpand': simplifyTitle,
-                        },
-                    });
-                    tasksScrollArea.add(taskPanel);
-                    taskPanel.doLayout();
-                    tasksScrollArea.doLayout();
+            'load': function (store, records, options) {
+                if (options.add == true)
+                    for (i in records) {
+                        if (i >=0) {
+                            records[i].markDirty();
+                            records[i].id = null;
+                            records[i].phantom = true;
+                            records[i].data['date'] = date;
+                            store.remove(records[i]);
+                            store.add(records[i]);
+                            var r = records[i];
+                            taskPanel = new TaskPanel({
+                                parent: tasksScrollArea,
+                                store: myStore,
+                                taskRecord:r,
+                                listeners: {
+                                    'collapse': updateTitle,
+                                    'beforeexpand': simplifyTitle,
+                                },
+                            });
+                            tasksScrollArea.add(taskPanel);
+                            taskPanel.doLayout();
+                            tasksScrollArea.doLayout();
 
-                    // We set the time values as raw ones, just for avoiding
-                    // infinite validations
-                    taskPanel.initTimeField.setRawValue(r.data['initTime']);
-                    taskPanel.initTimeField.validate();
-                    taskPanel.endTimeField.setRawValue(r.data['endTime']);
-                    taskPanel.endTimeField.validate();
+                            // We set the time values as raw ones, just for avoiding
+                            // infinite validations
+                            taskPanel.initTimeField.setRawValue(r.data['initTime']);
+                            taskPanel.initTimeField.validate();
+                            taskPanel.endTimeField.setRawValue(r.data['endTime']);
+                            taskPanel.endTimeField.validate();
 
-                    updateTasksLength(taskPanel);
+                            updateTasksLength(taskPanel);
+                        }
+                    }
+                else this.each(function(r) {
+                        taskPanel = new TaskPanel({
+                            parent: tasksScrollArea,
+                            store: myStore,
+                            taskRecord:r,
+                            listeners: {
+                                'collapse': updateTitle,
+                                'beforeexpand': simplifyTitle,
+                            },
+                        });
+                        tasksScrollArea.add(taskPanel);
+                        taskPanel.doLayout();
+                        tasksScrollArea.doLayout();
 
-                })
+                        // We set the time values as raw ones, just for avoiding
+                        // infinite validations
+                        taskPanel.initTimeField.setRawValue(r.data['initTime']);
+                        taskPanel.initTimeField.validate();
+                        taskPanel.endTimeField.setRawValue(r.data['endTime']);
+                        taskPanel.endTimeField.validate();
+
+                        updateTasksLength(taskPanel);
+
+                      });
             },
             'write': function() {
                 App.setAlert(true, "Task Records Changes Saved");
@@ -657,6 +691,56 @@ Ext.onReady(function(){
             }),
         ],
     });
+
+    // Cloning Panel
+    var cloningPanel = new Ext.FormPanel({
+        width: 178,
+        height: 65,
+        renderTo: Ext.get('auxiliarpanel'),
+        frame:true,
+        layout: {
+            type: 'vbox',
+            align: 'center',
+        },
+        header: false,
+        items: [
+            {
+                name: 'cloneDate',
+                id: 'cloneDate',
+                hideLabel: true,
+                width: 160,
+                xtype: 'datefield',
+                format: 'd/m/Y',
+                // Default value is previous day
+                value: Date.parseDate('<?php
+                    $dayBefore = new DateTime($date);
+                    echo $dayBefore->sub(new DateInterval('P1D'))->format('Y-m-d');
+                        ?>', 'Y-m-d'),
+                allowBlank: false,
+            }, new Ext.Button({
+                text:'Copy tasks from selected date',
+                width: 60,
+                margins: "7px 0 0 0px",
+                handler: function() {
+                    if (Ext.getCmp('cloneDate').isValid())
+                    {
+                        var cloneDate = Ext.getCmp('cloneDate').getValue();
+                        var dateString = cloneDate.getFullYear() + '-';
+                        if (cloneDate.getMonth() <= 8)
+                            dateString += '0';
+                        dateString += (cloneDate.getMonth()+1) + '-';
+                        if (cloneDate.getDate() <= 9)
+                            dateString += '0';
+                        dateString += cloneDate.getDate();
+                        // We load that day's tasks and append them into tasks' store
+                        myStore.load({
+                            params: {'date': dateString},
+                            add: true,
+                        });
+                    }
+                }
+            }),
+    ]});
 
 
     // Summary Panel
