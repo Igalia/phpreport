@@ -325,7 +325,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 }),
                 listeners: {
                     'change': function() {
-                            this.parent.taskRecord.set('ttype',xmlencode(this.getValue()));
+                            this.parent.taskRecord.set('ttype',this.getValue());
                     }
                 }
             }),
@@ -336,7 +336,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 listeners: {
                     'change': function() {
                         this.setValue(Trim(this.getValue()));
-                        this.parent.taskRecord.set('story',xmlencode(this.getValue()));
+                        this.parent.taskRecord.set('story',this.getValue());
                     }
                 }
             }),
@@ -391,7 +391,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 listeners: {
                     'change': function() {
                         this.setValue(Trim(this.getValue()));
-                        this.parent.taskRecord.set('text',xmlencode(this.getValue()));
+                        this.parent.taskRecord.set('text',this.getValue());
                     }
                 }
             }),
@@ -674,9 +674,14 @@ Ext.onReady(function(){
         }
 
         // If they are so, then we save the changes
-        if (valids)
+        if (valids) {
+            myStore.each(function(r) {
+                r.data['story'] = xmlencode(r.data['story']);
+                r.data['text'] = xmlencode(r.data['text']);
+                r.data['ttype'] = xmlencode(r.data['ttype']);
+            });
             myStore.save();
-        else  // Otherwise, we print the error message
+        } else  // Otherwise, we print the error message
           App.setAlert(false, "Check For Invalid Field Values");
     });
 
