@@ -586,6 +586,7 @@ Ext.onReady(function(){
                         tasksScrollArea.add(taskPanel);
                         taskPanel.doLayout();
                         tasksScrollArea.doLayout();
+                        taskPanel.collapse();
 
                         // We set the time values as raw ones, just for avoiding
                         // infinite validations
