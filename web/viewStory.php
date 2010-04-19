@@ -341,7 +341,12 @@ Ext.onReady(function(){
                             fieldLabel: 'Name <font color="red">*</font>',
                             name: 'name',
                             id: 'winName',
-                            allowBlank:false
+                            allowBlank:false,
+                            listeners: {
+                                'change': function() {
+                                    this.setValue(Trim(this.getValue()));
+                                }
+                            },
                         },{
                             fieldLabel: 'Risk',
                             name: 'risk',
@@ -551,7 +556,12 @@ Ext.onReady(function(){
                                 name: 'name',
                                 id: 'win2Name',
                                 value: selected.data.name,
-                                allowBlank:false
+                                allowBlank:false,
+                                listeners: {
+                                    'change': function() {
+                                        this.setValue(Trim(this.getValue()));
+                                    }
+                                },
                             },{
                                 fieldLabel: 'Risk',
                                 name: 'risk',

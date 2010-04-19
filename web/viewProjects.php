@@ -244,7 +244,7 @@ Ext.onReady(function(){
     ddGroup          : 'firstGridDDGroup',
         store            : secondGridStore,
         columns          : cols,
-    enableDragDrop   : true,
+        enableDragDrop   : true,
         stripeRows       : true,
         autoExpandColumn : 'login',
         title            : 'Available People',
@@ -537,7 +537,12 @@ Ext.onReady(function(){
                             fieldLabel: 'Name <font color="red">*</font>',
                             name: 'description',
                             id: 'winDescription',
-                            allowBlank:false
+                            allowBlank:false,
+                            listeners: {
+                                'change': function() {
+                                    this.setValue(Trim(this.getValue()));
+                                }
+                            },
                         },{
                             fieldLabel: 'Area <font color="red">*</font>',
                             name: 'area',
@@ -596,12 +601,22 @@ Ext.onReady(function(){
                             fieldLabel: 'Schedule',
                             name: 'schedule',
                             id: 'winSchedule',
-                            allowBlank: true
+                            allowBlank: true,
+                            listeners: {
+                                'change': function() {
+                                    this.setValue(Trim(this.getValue()));
+                                }
+                            },
                         },{
                             fieldLabel: 'Type',
                             name: 'type',
                             id: 'winType',
-                            allowBlank: true
+                            allowBlank: true,
+                            listeners: {
+                                'change': function() {
+                                    this.setValue(Trim(this.getValue()));
+                                }
+                            },
                         },{
                             xtype: 'label',
                             html: '<font color="red">*</font> Required fields',
@@ -717,6 +732,11 @@ Ext.onReady(function(){
                             id: 'win2Description',
                             allowBlank:false,
                             value: selected.data.description,
+                            listeners: {
+                                'change': function() {
+                                    this.setValue(Trim(this.getValue()));
+                                }
+                            },
                         },{
                             fieldLabel: 'Area <font color="red">*</font>',
                             name: 'area',
@@ -781,12 +801,22 @@ Ext.onReady(function(){
                             id: 'win2Schedule',
                             allowBlank: true,
                             value: selected.data.schedule,
+                            listeners: {
+                                'change': function() {
+                                    this.setValue(Trim(this.getValue()));
+                                }
+                            },
                         },{
                             fieldLabel: 'Type',
                             name: 'type',
                             id: 'win2Type',
                             allowBlank: true,
                             value: selected.data.type,
+                            listeners: {
+                                'change': function() {
+                                    this.setValue(Trim(this.getValue()));
+                                }
+                            },
                         },{
                             xtype: 'label',
                             html: '<font color="red">*</font> Required fields',

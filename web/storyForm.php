@@ -173,10 +173,11 @@ Ext.onReady(function(){
         ?>,
         bodyStyle:'padding:5px 5px 0',
         width: 350,
-              defaults: {width: 230,
-              labelStyle:"text-align: right"},
+        defaults: {
+        width: 230,
+            labelStyle:"text-align: right"
+    },
         defaultType: 'textfield',
-
         baseParams: urlVars,
 
         items: [{
@@ -187,7 +188,12 @@ Ext.onReady(function(){
             if ($uniqueError)
                 echo"vtype: 'duplicated',";
         ?>
-            allowBlank:false
+            allowBlank:false,
+            listeners: {
+                'change': function() {
+                    this.setValue(Trim(this.getValue()));
+                }
+            },
         },{
             fieldLabel: 'Accepted',
             name: 'accepted',

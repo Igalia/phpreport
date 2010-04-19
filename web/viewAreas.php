@@ -227,7 +227,12 @@ Ext.onReady(function(){
             dataIndex: 'name',
             editor: {
                 xtype: 'textfield',
-                allowBlank: false
+                allowBlank: false,
+                listeners: {
+                    'change': function() {
+                        this.setValue(Trim(this.getValue()));
+                    }
+                },
             }
         },
     ]);

@@ -153,9 +153,10 @@ Ext.onReady(function(){
         ?>,
         bodyStyle:'padding:5px 5px 0',
         width: 350,
-              defaults: {width: 230,
-                    labelStyle:"text-align:right"
-                },
+        defaults: {
+            width: 230,
+            labelStyle:"text-align:right"
+        },
         defaultType: 'textfield',
 
         baseParams: urlVars,
@@ -168,7 +169,12 @@ Ext.onReady(function(){
             if ($uniqueError)
                 echo"vtype: 'duplicated',";
         ?>
-            allowBlank:false
+            allowBlank:false,
+            listeners: {
+                'change': function() {
+                    this.setValue(Trim(this.getValue()));
+                }
+            },
         },{
             fieldLabel: 'Accepted',
             name: 'accepted',
@@ -177,8 +183,13 @@ Ext.onReady(function(){
         },{
             fieldLabel: 'Text',
             id: 'text',
-                  name: 'text',
-            xtype: 'textarea'
+            name: 'text',
+            xtype: 'textarea',
+            listeners: {
+                'change': function() {
+                    this.setValue(Trim(this.getValue()));
+                }
+            },
         },{
             fieldLabel: 'Reviewer <font color="red">*</font>',
             name: 'reviewer',
@@ -199,12 +210,11 @@ Ext.onReady(function(){
                          echo "value: {$_SESSION['user']->getId()},";
             ?>
             selectOnFocus:true
-
-                },{
-                      xtype: 'label',
-                        html: '<font color="red">*</font> Required fields',
-                        style: 'padding: 5px 0 5px 10px'
-                }],
+        },{
+            xtype: 'label',
+            html: '<font color="red">*</font> Required fields',
+            style: 'padding: 5px 0 5px 10px'
+        }],
 
         buttons: [{
             text: 'Save',

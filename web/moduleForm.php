@@ -158,20 +158,30 @@ Ext.onReady(function(){
             if ($uniqueError)
                 echo"vtype: 'duplicated',";
             ?>
-            allowBlank:false
+            allowBlank:false,
+            listeners: {
+                'change': function() {
+                    this.setValue(Trim(this.getValue()));
+                }
+            },
         },{
             fieldLabel: 'Description',
             id: 'description',
-                        name: 'description',
-            xtype: 'textarea'
+            name: 'description',
+            xtype: 'textarea',
+            listeners: {
+                'change': function() {
+                    this.setValue(Trim(this.getValue()));
+                }
+            },
         },{
             fieldLabel: 'Start Date <font color="red">*</font>',
             name: 'start',
             xtype: 'datefield',
             format: 'd/m/Y',
             id: 'startDate',
-                        vtype:'daterange',
-              allowBlank:false,
+            vtype:'daterange',
+            allowBlank:false,
             endDateField: 'endDate' // id of the end date field
         },{
             fieldLabel: 'End Date',
@@ -179,13 +189,13 @@ Ext.onReady(function(){
             xtype: 'datefield',
             format: 'd/m/Y',
             id: 'endDate',
-                  vtype:'daterange',
-                    startDateField: 'startDate' // id of the start date field
-                },{
-                    xtype: 'label',
-                    html: '<font color="red">*</font> Required fields',
-                    style: 'padding: 5px 0 5px 10px'
-                }],
+            vtype:'daterange',
+            startDateField: 'startDate' // id of the start date field
+        },{
+            xtype: 'label',
+            html: '<font color="red">*</font> Required fields',
+            style: 'padding: 5px 0 5px 10px'
+        }],
 
         buttons: [{
             text: 'Save',

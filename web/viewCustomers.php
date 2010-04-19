@@ -323,7 +323,12 @@ Ext.onReady(function(){
             dataIndex: 'name',
             editor: {
                 xtype: 'textfield',
-                allowBlank: false
+                allowBlank: false,
+                listeners: {
+                    'change': function() {
+                        this.setValue(Trim(this.getValue()));
+                    }
+                },
             }
         },
         {
@@ -373,7 +378,12 @@ Ext.onReady(function(){
             dataIndex: 'url',
             editor: {
                 xtype: 'textfield',
-                allowBlank: true
+                allowBlank: true,
+                listeners: {
+                    'change': function() {
+                        this.setValue(Trim(this.getValue()));
+                    }
+                },
             }
         },
     ]);
@@ -460,7 +470,12 @@ Ext.onReady(function(){
             dataIndex: 'name',
             editor: {
                 xtype: 'textfield',
-                allowBlank: false
+                allowBlank: false,
+                listeners: {
+                    'change': function() {
+                        this.setValue(Trim(this.getValue()));
+                    }
+                },
             }
         },
     ]);

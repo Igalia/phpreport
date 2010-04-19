@@ -308,7 +308,12 @@ Ext.onReady(function(){
                             fieldLabel: 'Name <font color="red">*</font>',
                             name: 'name',
                             id: 'winName',
-                            allowBlank:false
+                            allowBlank:false,
+                            listeners: {
+                                'change': function() {
+                                    this.setValue(Trim(this.getValue()));
+                                }
+                            },
                         },{
                             fieldLabel: 'Risk',
                             name: 'risk',
@@ -455,7 +460,12 @@ Ext.onReady(function(){
                                 name: 'name',
                                 id: 'win2Name',
                                 value: selected.data.name,
-                                allowBlank:false
+                                allowBlank:false,
+                                listeners: {
+                                    'change': function() {
+                                        this.setValue(Trim(this.getValue()));
+                                    }
+                                },
                             },{
                                 fieldLabel: 'Risk',
                                 name: 'risk',
@@ -566,8 +576,8 @@ Ext.onReady(function(){
             Ext.Msg.show({
                 title: 'Confirm',
         msg: 'Are you sure you want to delete the selected Task Sections?',
-        buttons: Ext.Msg.YESNO,
-        iconCls: 'silk-delete',
+                buttons: Ext.Msg.YESNO,
+                iconCls: 'silk-delete',
                 fn: function(btn){
 
                         if(btn == 'yes'){
