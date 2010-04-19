@@ -335,6 +335,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 tabIndex: tab++,
                 listeners: {
                     'change': function() {
+                        this.setValue(Trim(this.getValue()));
                         this.parent.taskRecord.set('story',xmlencode(this.getValue()));
                     }
                 }
@@ -389,6 +390,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 value: this.taskRecord.data['text'],
                 listeners: {
                     'change': function() {
+                        this.setValue(Trim(this.getValue()));
                         this.parent.taskRecord.set('text',xmlencode(this.getValue()));
                     }
                 }

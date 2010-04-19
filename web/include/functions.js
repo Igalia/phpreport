@@ -19,8 +19,38 @@
 
 // Various purposes functions
 
+// Function for encoding special chars in xml
 function xmlencode(string) {
     return string.replace(/\&/g,'&'+'amp;').replace(/</g,'&'+'lt;')
         .replace(/>/g,'&'+'gt;').replace(/\'/g,'&'+'apos;').replace(/\"/g,'&'+'quot;');
 }
 
+// Function for removing whitespaces from both the start and end of a string
+function Trim(str)
+{
+
+    return LTrim(RTrim(str));
+
+}
+
+// Function for removing whitespaces from the start of a string
+function LTrim(str)
+{
+
+    var i=0;
+    while(str.charAt(i) == " ")
+	i++;
+    return str.substring(i);
+
+}
+
+// Function for removing whitespaces from the end of a string
+function RTrim(str)
+{
+
+    var i=str.length-1;
+    while(str.charAt(i) == " ")
+	i--;
+    return str.substring(0,i+1);
+
+}
