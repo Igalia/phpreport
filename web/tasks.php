@@ -63,6 +63,9 @@ var user = '<?php echo $user->getLogin()?>';
 
 var App = new Ext.App({});
 
+/* Cookie provider */
+var cookieProvider = new Ext.state.CookieProvider();
+
 /* Schema of the information about tasks */
 var taskRecord = new Ext.data.Record.create([
     {name:'id'},
@@ -586,7 +589,9 @@ Ext.onReady(function(){
                         tasksScrollArea.add(taskPanel);
                         taskPanel.doLayout();
                         tasksScrollArea.doLayout();
-                        taskPanel.collapse();
+                        if(cookieProvider.get('tasksCollapsed')) {
+                            taskPanel.collapse();
+                        }
 
                         // We set the time values as raw ones, just for avoiding
                         // infinite validations
@@ -798,6 +803,7 @@ Ext.onReady(function(){
                     for(var i=0; i<panels.getCount(); i++) {
                         panels.get(i).expand();
                     }
+                    cookieProvider.set('tasksCollapsed', false);
                 }
             }),
             new Ext.Button({
@@ -807,6 +813,7 @@ Ext.onReady(function(){
                     for(var i=0; i<panels.getCount(); i++) {
                         panels.get(i).collapse();
                     }
+                    cookieProvider.set('tasksCollapsed', true);
                 }
             })
         ]
