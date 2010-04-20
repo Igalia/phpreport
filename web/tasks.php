@@ -682,9 +682,10 @@ Ext.onReady(function(){
         // If they are so, then we save the changes
         if (valids) {
             myStore.each(function(r) {
-                r.data['story'] = xmlencode(r.data['story']);
-                r.data['text'] = xmlencode(r.data['text']);
-                r.data['ttype'] = xmlencode(r.data['ttype']);
+                if (r.data['story'] != undefined)
+                    r.data['story'] = xmlencode(r.data['story']);
+                if (r.data['text'] != undefined)
+                    r.data['text'] = xmlencode(r.data['text']);
             });
             myStore.save();
         } else  // Otherwise, we print the error message
