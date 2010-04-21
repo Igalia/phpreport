@@ -187,6 +187,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 tabIndex: tab++,
                 listeners: {
                     'change': function() {
+                        this.parent.endTimeField.validate();
                         this.parent.taskRecord.set('initTime',this.getValue());
                         updateTasksLength(this.parent);
                     }
@@ -209,6 +210,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 tabIndex: tab++,
                 listeners: {
                     'change': function() {
+                        this.parent.initTimeField.validate();
                         this.parent.taskRecord.set('endTime',this.getValue());
                         updateTasksLength(this.parent);
                     }
