@@ -83,20 +83,6 @@ abstract class TaskSectionDAO extends BaseDAO{
      */
     public abstract function getByStoryId($storyId);
 
-    /** Open TaskSections retriever for PostgreSQL.
-     *
-     * This function retrieves all rows from TaskSection table that don't have an ending date assigned and creates
-     * a {@link TaskSectionVO} with data from each row. We can pass optional parameters for filtering by User, <var>$userId</var>,
-     * and by Project, <var>$projectId</var>.
-     *
-     * @param int $userId optional parameter for filtering by User.
-     * @param int $projectId optional parameter for filtering by Project.
-     * @return array an array with value objects {@link TaskSectionVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @throws {@link SQLQueryErrorException}
-     */
-    public abstract function getOpen($userId = NULL, $projectId = NULL);
-
     /** TaskSection updater.
      *
      * This function updates the data of a Task Section by its {@link TaskSectionVO}.

@@ -125,37 +125,6 @@ class PostgreSQLTaskSectionDAO extends TaskSectionDAO{
         return $this->execute($sql);
     }
 
-    /** Open TaskSections retriever for PostgreSQL.
-     *
-     * This function retrieves all rows from TaskSection table that don't have an ending date assigned and creates
-     * a {@link TaskSectionVO} with data from each row. We can pass optional parameters for filtering by User, <var>$userId</var>,
-     * and by Project, <var>$projectId</var>.
-     *
-     * @param int $userId optional parameter for filtering by User.
-     * @param int $projectId optional parameter for filtering by Project.
-     * @return array an array with value objects {@link TaskSectionVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getOpen($userId = NULL, $projectId = NULL) {
-        $sql = "SELECT * FROM task_section WHERE _end IS NULL ";
-
-        if ($userId != NULL)
-            if (!is_numeric($userId))
-                throw new SQLIncorrectTypeException($userId);
-            else
-                $sql = $sql . "AND usrid = " . $userId . " ";
-
-        if ($projectId != NULL)
-            if (!is_numeric($projectId))
-                throw new SQLIncorrectTypeException($projectId);
-            else
-                $sql = $sql . "AND sectionid IN (SELECT section.id FROM section JOIN module ON module.id = section.moduleid WHERE module.projectid = " . $projectId . ") ";
-
-        $sql = $sql . "ORDER BY id ASC";
-        return $this->execute($sql);
-    }
-
     /** TaskSections retriever by Story id.
      *
      * This function retrieves the rows from TaskSection table that are associated with the Story with
