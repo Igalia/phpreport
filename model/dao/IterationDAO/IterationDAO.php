@@ -71,6 +71,19 @@ abstract class IterationDAO extends BaseDAO{
      */
     public abstract function getAll();
 
+    /** Stories retriever by Iteration id for PostgreSQL.
+     *
+     * This function retrieves the rows from Story table that are assigned through relationship Contains to the Iteration with
+     * the id <var>$iterationId</var> and creates a {@link StoryVO} with data from each row.
+     *
+     * @param int $iterationId the id of the Iteration whose Stories we want to retrieve.
+     * @return array an array with value objects {@link StoryVO} with their properties set to the values from the rows
+     * and ordered ascendantly by their database internal identifier.
+     * @see StoryDAO
+     * @throws {@link SQLQueryErrorException}
+     */
+    public abstract function getStories($iterationId);
+
     /** Iteration updater.
      *
      * This function updates the data of a Iteration by its {@link IterationVO}.

@@ -113,6 +113,24 @@ class PostgreSQLModuleDAO extends ModuleDAO{
     return $result;
     }
 
+    /** Sections retriever by Module id for PostgreSQL.
+     *
+     * This function retrieves the rows from Section table that are assigned through relationship Contains to the Module with
+     * the id <var>$moduleId</var> and creates a {@link SectionVO} with data from each row.
+     *
+     * @param int $moduleId the id of the Module whose Sections we want to retrieve.
+     * @return array an array with value objects {@link SectionVO} with their properties set to the values from the rows
+     * and ordered ascendantly by their database internal identifier.
+     * @see SectionDAO
+     * @throws {@link SQLQueryErrorException}
+     */
+    public function getSections($moduleId) {
+
+        $dao = DAOFactory::getSectionDAO();
+        return $dao->getByModuleId($moduleId);
+
+    }
+
     /** Modules retriever for PostgreSQL.
      *
      * This function retrieves all rows from Module table and creates a {@link ModuleVO} with data from each row.

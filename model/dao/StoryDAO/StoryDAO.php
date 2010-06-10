@@ -71,6 +71,19 @@ abstract class StoryDAO extends BaseDAO{
      */
     public abstract function getAll();
 
+    /** TaskStories retriever by Story id for PostgreSQL.
+     *
+     * This function retrieves the rows from TaskStory table that are assigned through relationship Contains to the Story with
+     * the id <var>$storyId</var> and creates a {@link TaskStoryVO} with data from each row.
+     *
+     * @param int $storyId the id of the Story whose TaskStories we want to retrieve.
+     * @return array an array with value objects {@link TaskStoryVO} with their properties set to the values from the rows
+     * and ordered ascendantly by their database internal identifier.
+     * @see TaskStoryDAO
+     * @throws {@link SQLQueryErrorException}
+     */
+    public abstract function getTaskStories($storyId);
+
     /** Story updater.
      *
      * This function updates the data of a Story by its {@link StoryVO}.

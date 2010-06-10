@@ -71,6 +71,19 @@ abstract class ModuleDAO extends BaseDAO{
      */
     public abstract function getAll();
 
+    /** Sections retriever by Module id for PostgreSQL.
+     *
+     * This function retrieves the rows from Story table that are assigned through relationship Contains to the Module with
+     * the id <var>$moduleId</var> and creates a {@link StoryVO} with data from each row.
+     *
+     * @param int $moduleId the id of the Module whose Sections we want to retrieve.
+     * @return array an array with value objects {@link StoryVO} with their properties set to the values from the rows
+     * and ordered ascendantly by their database internal identifier.
+     * @see StoryDAO
+     * @throws {@link SQLQueryErrorException}
+     */
+    public abstract function getSections($moduleId);
+
     /** Module updater.
      *
      * This function updates the data of a Module by its {@link ModuleVO}.

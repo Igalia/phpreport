@@ -71,6 +71,19 @@ abstract class SectionDAO extends BaseDAO{
      */
     public abstract function getAll();
 
+    /** TaskSections retriever by Section id for PostgreSQL.
+     *
+     * This function retrieves the rows from TaskSection table that are assigned through relationship Contains to the Section with
+     * the id <var>$sectionId</var> and creates a {@link TaskSectionVO} with data from each row.
+     *
+     * @param int $sectionId the id of the Section whose TaskSections we want to retrieve.
+     * @return array an array with value objects {@link TaskSectionVO} with their properties set to the values from the rows
+     * and ordered ascendantly by their database internal identifier.
+     * @see TaskSectionDAO
+     * @throws {@link SQLQueryErrorException}
+     */
+    public abstract function getTaskSections($sectionId);
+
     /** Section updater.
      *
      * This function updates the data of a Section by its {@link SectionVO}.

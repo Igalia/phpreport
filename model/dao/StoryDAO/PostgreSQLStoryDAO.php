@@ -129,6 +129,24 @@ class PostgreSQLStoryDAO extends StoryDAO{
         return $this->execute($sql);
     }
 
+    /** TaskStories retriever by Story id for PostgreSQL.
+     *
+     * This function retrieves the rows from TaskStory table that are assigned through relationship Contains to the Story with
+     * the id <var>$storyId</var> and creates a {@link TaskStoryVO} with data from each row.
+     *
+     * @param int $storyId the id of the Story whose TaskStories we want to retrieve.
+     * @return array an array with value objects {@link TaskStoryVO} with their properties set to the values from the rows
+     * and ordered ascendantly by their database internal identifier.
+     * @see TaskStoryDAO
+     * @throws {@link SQLQueryErrorException}
+     */
+    public function getTaskStories($storyId) {
+
+        $dao = DAOFactory::getTaskStoryDAO();
+        return $dao->getByStoryId($storyId);
+
+    }
+
     /** Story updater for PostgreSQL.
      *
      * This function updates the data of a Story by its {@link StoryVO}.
