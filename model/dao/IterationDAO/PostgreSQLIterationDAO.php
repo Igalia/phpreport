@@ -72,7 +72,7 @@ class PostgreSQLIterationDAO extends IterationDAO{
     $iterationVO->setId($row[id]);
     $iterationVO->setName($row[name]);
     $iterationVO->setInit(date_create($row[init]));
-    $iterationVO->setEnd(date_create($row[end]));
+    $iterationVO->setEnd(date_create($row[_end]));
     $iterationVO->setSummary($row[summary]);
     $iterationVO->setProjectId($row[projectid]);
 
