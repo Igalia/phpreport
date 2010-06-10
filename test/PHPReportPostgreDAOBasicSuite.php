@@ -34,6 +34,12 @@ require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLAreaHistoryDAOBasicT
 require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLCityHistoryDAOBasicTests.php';
 require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLHourCostHistoryDAOBasicTests.php';
 require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLProjectDAOBasicTests.php';
+require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLIterationDAOBasicTests.php';
+require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLModuleDAOBasicTests.php';
+require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLStoryDAOBasicTests.php';
+require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLSectionDAOBasicTests.php';
+require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLTaskStoryDAOBasicTests.php';
+require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLTaskSectionDAOBasicTests.php';
 
 class PHPReportPostgreDAOBasicSuite extends PHPUnit_Framework_TestSuite
 {
@@ -57,6 +63,12 @@ class PHPReportPostgreDAOBasicSuite extends PHPUnit_Framework_TestSuite
     $suite->addTestSuite('PostgreSQLCityHistoryDAOBasicTests');
     $suite->addTestSuite('PostgreSQLHourCostHistoryDAOBasicTests');
     $suite->addTestSuite('PostgreSQLProjectDAOBasicTests');
+    $suite->addTestSuite('PostgreSQLModuleDAOBasicTests');
+    $suite->addTestSuite('PostgreSQLIterationDAOBasicTests');
+    $suite->addTestSuite('PostgreSQLSectionDAOBasicTests');
+    $suite->addTestSuite('PostgreSQLStoryDAOBasicTests');
+    $suite->addTestSuite('PostgreSQLTaskSectionDAOBasicTests');
+    $suite->addTestSuite('PostgreSQLTaskStoryDAOBasicTests');
 
         return $suite;
     }
