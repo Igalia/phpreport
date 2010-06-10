@@ -615,7 +615,7 @@ class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
         $add_hours1 = ($this->testObjects[0]->getEnd()-$this->testObjects[0]->getInit())/60.00;
         $add_hours2 = ($this->testObjects[1]->getEnd()-$this->testObjects[1]->getInit())/60.00;
 
-        $res = $this->dao->getGlobalTaskReport(date_create("1999-12-31"), date_create("2999-11-30"));
+        $res = $this->dao->getGlobalTaskReport(date_create("1999-12-31"), date_create("2999-11-30"), 'USER');
 
         $this->assertEquals($add_hours1, $res[0][add_hours]);
         $this->assertEquals($add_hours2, $res[1][add_hours]);

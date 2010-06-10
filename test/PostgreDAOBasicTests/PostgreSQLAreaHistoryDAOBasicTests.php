@@ -192,7 +192,7 @@ class PostgreSQLAreaHistoryDAOBasicTests extends PHPUnit_Framework_TestCase
 
         $read = $this->dao->getByUserId($this->auxObject->getId());
 
-        $this->assertNull($read);
+        $this->assertEquals(sizeof($read), 0);
 
     }
 
@@ -392,7 +392,7 @@ class PostgreSQLAreaHistoryDAOBasicTests extends PHPUnit_Framework_TestCase
 
         $read = $this->dao->getByAreaId($this->auxObject2->getId());
 
-        $this->assertNull($read);
+        $this->assertEquals(sizeof($read), 0);
 
     }
 
