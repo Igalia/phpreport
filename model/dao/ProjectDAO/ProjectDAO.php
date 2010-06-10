@@ -164,6 +164,32 @@ abstract class ProjectDAO extends BaseDAO{
      */
     public abstract function getCustomers($projectId);
 
+    /** Iterations retriever by Project id for PostgreSQL.
+     *
+     * This function retrieves the rows from Iteration table that are assigned through relationship Plans to the Project with
+     * the id <var>$projectId</var> and creates a {@link IterationVO} with data from each row.
+     *
+     * @param int $projectId the id of the Project whose Iterations we want to retrieve.
+     * @return array an array with value objects {@link IterationVO} with their properties set to the values from the rows
+     * and ordered ascendantly by their database internal identifier.
+     * @see IterationDAO
+     * @throws {@link SQLQueryErrorException}
+     */
+    public abstract function getIterations($projectId);
+
+    /** Modules retriever by Project id for PostgreSQL.
+     *
+     * This function retrieves the rows from Module table that are assigned through relationship Plans to the Project with
+     * the id <var>$projectId</var> and creates a {@link ModuleVO} with data from each row.
+     *
+     * @param int $projectId the id of the Project whose Modules we want to retrieve.
+     * @return array an array with value objects {@link ModuleVO} with their properties set to the values from the rows
+     * and ordered ascendantly by their database internal identifier.
+     * @see ModuleDAO
+     * @throws {@link SQLQueryErrorException}
+     */
+    public abstract function getModules($projectId);
+
     /** Requests relationship entry creator by Project id and Customer id.
      *
      * This function creates a new entry in the table Requests (that represents that relationship between Projects and Customers)
