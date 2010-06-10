@@ -35,6 +35,12 @@ require_once 'phpreport/test/VOTests/HourCostHistoryVOTests.php';
 require_once 'phpreport/test/VOTests/AreaHistoryVOTests.php';
 require_once 'phpreport/test/VOTests/CityHistoryVOTests.php';
 require_once 'phpreport/test/VOTests/ProjectVOTests.php';
+require_once 'phpreport/test/VOTests/IterationVOTests.php';
+require_once 'phpreport/test/VOTests/ModuleVOTests.php';
+require_once 'phpreport/test/VOTests/StoryVOTests.php';
+require_once 'phpreport/test/VOTests/SectionVOTests.php';
+require_once 'phpreport/test/VOTests/TaskStoryVOTests.php';
+require_once 'phpreport/test/VOTests/TaskSectionVOTests.php';
 
 class PHPReportVOSuite extends PHPUnit_Framework_TestSuite
 {
@@ -59,6 +65,12 @@ class PHPReportVOSuite extends PHPUnit_Framework_TestSuite
     $suite->addTestSuite('AreaHistoryVOTests');
     $suite->addTestSuite('CityHistoryVOTests');
     $suite->addTestSuite('ProjectVOTests');
+    $suite->addTestSuite('IterationVOTests');
+    $suite->addTestSuite('ModuleVOTests');
+    $suite->addTestSuite('StoryVOTests');
+    $suite->addTestSuite('SectionVOTests');
+    $suite->addTestSuite('TaskSectionVOTests');
+    $suite->addTestSuite('TaskStoryVOTests');
 
         return $suite;
     }
