@@ -27,21 +27,21 @@ class CommonEventVOTests extends PHPUnit_Framework_TestCase
     protected $VO;
 
     protected function setUp()
-        {
+    {
 
         $this->VO = new CommonEventVO();
 
     }
 
-        public function testNew()
-        {
+    public function testNew()
+    {
 
         $this->assertNotNull($this->VO);
 
-        }
+    }
 
     public function testIdField()
-        {
+    {
 
         $this->VO->setId(1);
 
@@ -51,10 +51,10 @@ class CommonEventVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getId(), 2);
 
-        }
+    }
 
     public function testDateField()
-        {
+    {
 
         $this->VO->setDate(date_create('1999-12-31'));
 
@@ -64,10 +64,10 @@ class CommonEventVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getDate(), date_create('2999-12-31'));
 
-        }
+    }
 
     public function testCityIdField()
-        {
+    {
 
         $this->VO->setCityId(2);
 
@@ -77,7 +77,7 @@ class CommonEventVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getCityId(), 45);
 
-        }
+    }
 
 }
 ?>

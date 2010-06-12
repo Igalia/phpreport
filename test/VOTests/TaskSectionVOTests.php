@@ -27,21 +27,21 @@ class TaskSectionVOTests extends PHPUnit_Framework_TestCase
     protected $VO;
 
     protected function setUp()
-        {
+    {
 
         $this->VO = new TaskSectionVO();
 
-        }
+    }
 
-        public function testNew()
-        {
+    public function testNew()
+    {
 
         $this->assertNotNull($this->VO);
 
-        }
+    }
 
     public function testIdField()
-        {
+    {
 
         $this->VO->setId(1);
 
@@ -51,10 +51,10 @@ class TaskSectionVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getId(), 2);
 
-        }
+    }
 
     public function testNameField()
-        {
+    {
 
         $this->VO->setName('Mars');
 
@@ -64,10 +64,10 @@ class TaskSectionVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getName(), 'Omicron Persei');
 
-        }
+    }
 
     public function testEstHoursField()
-        {
+    {
 
         $this->VO->setEstHours(15.75);
 
@@ -77,10 +77,10 @@ class TaskSectionVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getEstHours(), 7.66);
 
-        }
+    }
 
     public function testRiskField()
-        {
+    {
 
         $this->VO->setRisk(1);
 
@@ -90,10 +90,10 @@ class TaskSectionVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getRisk(), 3);
 
-        }
+    }
 
     public function testSectionIdField()
-        {
+    {
 
         $this->VO->setSectionId(2);
 
@@ -103,10 +103,10 @@ class TaskSectionVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getSectionId(), 45);
 
-        }
+    }
 
     public function testUserIdField()
-        {
+    {
 
         $this->VO->setUserId(2);
 
@@ -116,7 +116,7 @@ class TaskSectionVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getUserId(), 45);
 
-        }
+    }
 
 }
 ?>

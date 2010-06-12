@@ -36,8 +36,8 @@ class PostgreSQLCityHistoryDAOBasicTests extends PHPUnit_Framework_TestCase
     protected $auxDao2;
     protected $auxObject2;
 
-        protected function setUp()
-        {
+    protected function setUp()
+    {
 
         $this->auxDao = new PostgreSQLUserDAO();
 
@@ -77,24 +77,24 @@ class PostgreSQLCityHistoryDAOBasicTests extends PHPUnit_Framework_TestCase
 
     }
 
-        public function testCreate()
-        {
+    public function testCreate()
+    {
 
         $this->assertEquals($this->dao->create($this->testObjects[0]), 1);
 
-        }
+    }
 
     public function testDelete()
-        {
+    {
 
         $this->dao->create($this->testObjects[0]);
 
         $this->assertEquals($this->dao->delete($this->testObjects[0]), 1);
 
-        }
+    }
 
     public function testIdCreate()
-        {
+    {
 
         $this->dao->create($this->testObjects[0]);
 
@@ -106,7 +106,7 @@ class PostgreSQLCityHistoryDAOBasicTests extends PHPUnit_Framework_TestCase
 
         $this->assertGreaterThan($this->testObjects[0]->getId(), $this->testObjects[1]->getId());
 
-        }
+    }
 
     public function testGetById()
     {
@@ -129,8 +129,8 @@ class PostgreSQLCityHistoryDAOBasicTests extends PHPUnit_Framework_TestCase
     }
 
     /**
-         * @expectedException SQLIncorrectTypeException
-         */
+      * @expectedException SQLIncorrectTypeException
+      */
     public function testGetByIdInvalid()
     {
 
@@ -139,7 +139,7 @@ class PostgreSQLCityHistoryDAOBasicTests extends PHPUnit_Framework_TestCase
     }
 
     public function testGetAll()
-        {
+    {
 
         $this->dao->create($this->testObjects[0]);
 
@@ -157,7 +157,7 @@ class PostgreSQLCityHistoryDAOBasicTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->testObjects, $this->dao->getAll());
 
-        }
+    }
 
     public function testGetByUserId()
     {
@@ -350,8 +350,8 @@ class PostgreSQLCityHistoryDAOBasicTests extends PHPUnit_Framework_TestCase
     }
 
     /**
-         * @expectedException SQLIncorrectTypeException
-         */
+      * @expectedException SQLIncorrectTypeException
+      */
     public function testGetByIntervalsUserIdInvalid()
     {
 

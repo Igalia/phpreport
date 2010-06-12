@@ -27,21 +27,21 @@ class IterationVOTests extends PHPUnit_Framework_TestCase
     protected $VO;
 
     protected function setUp()
-        {
+    {
 
         $this->VO = new IterationVO();
 
-        }
+    }
 
-        public function testNew()
-        {
+    public function testNew()
+    {
 
         $this->assertNotNull($this->VO);
 
-        }
+    }
 
     public function testIdField()
-        {
+    {
 
         $this->VO->setId(1);
 
@@ -51,10 +51,10 @@ class IterationVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getId(), 2);
 
-        }
+    }
 
     public function testInitField()
-        {
+    {
 
         $this->VO->setInit(date_create('1999-12-31'));
 
@@ -64,10 +64,10 @@ class IterationVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getInit(), date_create('2999-12-31'));
 
-        }
+    }
 
     public function testEndField()
-        {
+    {
 
         $this->VO->setEnd(date_create('1999-12-31'));
 
@@ -77,10 +77,10 @@ class IterationVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getEnd(), date_create('2999-12-31'));
 
-        }
+    }
 
     public function testNameField()
-        {
+    {
 
         $this->VO->setName('Mars');
 
@@ -90,10 +90,10 @@ class IterationVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getName(), 'Omicron Persei');
 
-        }
+    }
 
     public function testSummaryField()
-        {
+    {
 
         $this->VO->setSummary('Deliveries on Mars');
 
@@ -103,10 +103,10 @@ class IterationVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getSummary(), 'Deliveries on Omicron Persei');
 
-        }
+    }
 
     public function testProjectIdField()
-        {
+    {
 
         $this->VO->setProjectId(2);
 
@@ -116,7 +116,7 @@ class IterationVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getProjectId(), 45);
 
-        }
+    }
 
 }
 ?>

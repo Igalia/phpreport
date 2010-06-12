@@ -27,21 +27,21 @@ class UserVOTests extends PHPUnit_Framework_TestCase
     protected $VO;
 
     protected function setUp()
-        {
+    {
 
         $this->VO = new UserVO();
 
     }
 
-        public function testNew()
-        {
+    public function testNew()
+    {
 
         $this->assertNotNull($this->VO);
 
-        }
+    }
 
     public function testIdField()
-        {
+    {
 
         $this->VO->setId(1);
 
@@ -51,10 +51,10 @@ class UserVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getId(), 2);
 
-        }
+    }
 
     public function testLoginField()
-        {
+    {
 
         $this->VO->setLogin("bender");
 
@@ -64,10 +64,10 @@ class UserVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getLogin(), "fry");
 
-        }
+    }
 
     public function testPasswordField()
-        {
+    {
 
         $this->VO->setPassword("kiss my shiny metal ass");
 
@@ -77,10 +77,10 @@ class UserVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getPassword(), "you meat-bag");
 
-        }
+    }
 
     public function testGroupsField()
-        {
+    {
 
         $groups = array("Fry", "Leela", "Bender", "Hubert");
 
@@ -94,7 +94,7 @@ class UserVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getGroups(), $groups);
 
-        }
+    }
 
 }
 ?>

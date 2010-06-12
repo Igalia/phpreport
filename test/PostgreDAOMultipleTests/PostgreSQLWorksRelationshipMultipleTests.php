@@ -38,8 +38,8 @@ class PostgreSQLWorksRelationshipMultipleTests extends PHPUnit_Framework_TestCas
     protected $auxDao3;
     protected $auxObject;
 
-        protected function setUp()
-        {
+    protected function setUp()
+    {
 
         $this->auxDao = new PostgreSQLUserDAO();
 
@@ -127,16 +127,16 @@ class PostgreSQLWorksRelationshipMultipleTests extends PHPUnit_Framework_TestCas
 
     }
 
-        public function testCreate()
-        {
+    public function testCreate()
+    {
 
         $this->assertEquals($this->dao->create($this->testObjects[0]->getId(), $this->testObjects2[0]->getId()), 1);
 
-        }
+    }
 
     /**
-         * @expectedException SQLIncorrectTypeException
-         */
+      * @expectedException SQLIncorrectTypeException
+      */
     public function testCreateId1Invalid()
     {
 
@@ -145,8 +145,8 @@ class PostgreSQLWorksRelationshipMultipleTests extends PHPUnit_Framework_TestCas
     }
 
     /**
-         * @expectedException SQLIncorrectTypeException
-         */
+      * @expectedException SQLIncorrectTypeException
+      */
     public function testCreateId2Invalid()
     {
 
@@ -155,17 +155,17 @@ class PostgreSQLWorksRelationshipMultipleTests extends PHPUnit_Framework_TestCas
     }
 
     public function testDelete()
-        {
+    {
 
         $this->dao->create($this->testObjects[0]->getId(), $this->testObjects2[0]->getId());
 
         $this->assertEquals($this->dao->delete($this->testObjects[0]->getId(), $this->testObjects2[0]->getId()), 1);
 
-        }
+    }
 
     /**
-         * @expectedException SQLIncorrectTypeException
-         */
+      * @expectedException SQLIncorrectTypeException
+      */
     public function testDeleteId1Invalid()
     {
 
@@ -174,8 +174,8 @@ class PostgreSQLWorksRelationshipMultipleTests extends PHPUnit_Framework_TestCas
     }
 
     /**
-         * @expectedException SQLIncorrectTypeException
-         */
+      * @expectedException SQLIncorrectTypeException
+      */
     public function testDeleteId2Invalid()
     {
 
@@ -207,8 +207,8 @@ class PostgreSQLWorksRelationshipMultipleTests extends PHPUnit_Framework_TestCas
     }
 
     /**
-         * @expectedException SQLIncorrectTypeException
-         */
+      * @expectedException SQLIncorrectTypeException
+      */
     public function testGetByInvalidUserId()
     {
 
@@ -233,8 +233,8 @@ class PostgreSQLWorksRelationshipMultipleTests extends PHPUnit_Framework_TestCas
     }
 
     /**
-         * @expectedException SQLIncorrectTypeException
-         */
+      * @expectedException SQLIncorrectTypeException
+      */
     public function testGetByInvalidProjectId()
     {
 

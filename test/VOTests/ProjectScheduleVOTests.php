@@ -27,21 +27,21 @@ class ProjectScheduleVOTests extends PHPUnit_Framework_TestCase
     protected $VO;
 
     protected function setUp()
-        {
+    {
 
         $this->VO = new ProjectScheduleVO();
 
     }
 
-        public function testNew()
-        {
+    public function testNew()
+    {
 
         $this->assertNotNull($this->VO);
 
-        }
+    }
 
     public function testIdField()
-        {
+    {
 
         $this->VO->setId(1);
 
@@ -51,10 +51,10 @@ class ProjectScheduleVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getId(), 2);
 
-        }
+    }
 
     public function testWeeklyLoadField()
-        {
+    {
 
         $this->VO->setWeeklyLoad(2.5);
 
@@ -64,10 +64,10 @@ class ProjectScheduleVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getWeeklyLoad(), 4.5);
 
-        }
+    }
 
     public function testInitWeekField()
-        {
+    {
 
         $this->VO->setInitWeek(1);
 
@@ -77,10 +77,10 @@ class ProjectScheduleVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getInitWeek(), 50);
 
-        }
+    }
 
     public function testEndWeekField()
-        {
+    {
 
         $this->VO->setEndWeek(1);
 
@@ -90,10 +90,10 @@ class ProjectScheduleVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getEndWeek(), 50);
 
-        }
+    }
 
     public function testInitYearField()
-        {
+    {
 
         $this->VO->setInitYear(2000);
 
@@ -103,10 +103,10 @@ class ProjectScheduleVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getInitYear(), 3000);
 
-        }
+    }
 
     public function testEndYearField()
-        {
+    {
 
         $this->VO->setEndYear(2000);
 
@@ -116,10 +116,10 @@ class ProjectScheduleVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getEndYear(), 3000);
 
-        }
+    }
 
     public function testUserIdField()
-        {
+    {
 
         $this->VO->setUserId(2);
 
@@ -129,10 +129,10 @@ class ProjectScheduleVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getUserId(), 45);
 
-        }
+    }
 
     public function testProjectIdField()
-        {
+    {
 
         $this->VO->setProjectId(2);
 
@@ -142,7 +142,7 @@ class ProjectScheduleVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getProjectId(), 45);
 
-        }
+    }
 
 }
 ?>

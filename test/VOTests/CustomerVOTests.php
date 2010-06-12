@@ -27,21 +27,21 @@ class CustomerVOTests extends PHPUnit_Framework_TestCase
     protected $VO;
 
     protected function setUp()
-        {
+    {
 
         $this->VO = new CustomerVO();
 
     }
 
-        public function testNew()
-        {
+    public function testNew()
+    {
 
         $this->assertNotNull($this->VO);
 
-        }
+    }
 
     public function testIdField()
-        {
+    {
 
         $this->VO->setId(1);
 
@@ -51,10 +51,10 @@ class CustomerVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getId(), 2);
 
-        }
+    }
 
     public function testNameField()
-        {
+    {
 
         $this->VO->setName("Mommy");
 
@@ -64,10 +64,10 @@ class CustomerVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getName(), "Ogden Wernstrom");
 
-        }
+    }
 
     public function testTypeField()
-        {
+    {
 
         $this->VO->setType("Biggest industry on Earth");
 
@@ -77,10 +77,10 @@ class CustomerVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getType(), "Professor");
 
-        }
+    }
 
     public function testURLField()
-        {
+    {
 
         $this->VO->setURL("www.mommyindustries.com");
 
@@ -90,10 +90,10 @@ class CustomerVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getURL(), "www.marsuniversity.com/teaching/wernstrom");
 
-        }
+    }
 
     public function testSectorIdField()
-        {
+    {
 
         $this->VO->setSectorId(2);
 
@@ -103,7 +103,7 @@ class CustomerVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getSectorId(), 45);
 
-        }
+    }
 
 }
 ?>

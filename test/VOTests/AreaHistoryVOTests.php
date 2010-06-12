@@ -27,21 +27,21 @@ class AreaHistoryVOTests extends PHPUnit_Framework_TestCase
     protected $VO;
 
     protected function setUp()
-        {
+    {
 
         $this->VO = new AreaHistoryVO();
 
     }
 
-        public function testNew()
-        {
+    public function testNew()
+    {
 
         $this->assertNotNull($this->VO);
 
-        }
+    }
 
     public function testIdField()
-        {
+    {
 
         $this->VO->setId(1);
 
@@ -51,10 +51,10 @@ class AreaHistoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getId(), 2);
 
-        }
+    }
 
     public function testAreaIdField()
-        {
+    {
 
         $this->VO->setAreaId(2);
 
@@ -64,10 +64,10 @@ class AreaHistoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getAreaId(), 4);
 
-        }
+    }
 
     public function testInitDateField()
-        {
+    {
 
         $this->VO->setInitDate(date_create('1999-12-31'));
 
@@ -77,10 +77,10 @@ class AreaHistoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getInitDate(), date_create('2999-12-31'));
 
-        }
+    }
 
     public function testEndDateField()
-        {
+    {
 
         $this->VO->setEndDate(date_create('1999-12-31'));
 
@@ -90,10 +90,10 @@ class AreaHistoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getEndDate(), NULL);
 
-        }
+    }
 
     public function testUserIdField()
-        {
+    {
 
         $this->VO->setUserId(2);
 
@@ -103,7 +103,7 @@ class AreaHistoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getUserId(), 45);
 
-        }
+    }
 
 }
 ?>

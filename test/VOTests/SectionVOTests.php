@@ -27,21 +27,21 @@ class SectionVOTests extends PHPUnit_Framework_TestCase
     protected $VO;
 
     protected function setUp()
-        {
+    {
 
         $this->VO = new SectionVO();
 
-        }
+    }
 
-        public function testNew()
-        {
+    public function testNew()
+    {
 
         $this->assertNotNull($this->VO);
 
-        }
+    }
 
     public function testIdField()
-        {
+    {
 
         $this->VO->setId(1);
 
@@ -51,10 +51,10 @@ class SectionVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getId(), 2);
 
-        }
+    }
 
     public function testNameField()
-        {
+    {
 
         $this->VO->setName('Mars');
 
@@ -64,10 +64,10 @@ class SectionVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getName(), 'Omicron Persei');
 
-        }
+    }
 
     public function testAcceptedField()
-        {
+    {
 
         $this->VO->setAccepted(TRUE);
 
@@ -77,10 +77,10 @@ class SectionVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($this->VO->getAccepted());
 
-        }
+    }
 
     public function testModuleIdField()
-        {
+    {
 
         $this->VO->setModuleId(2);
 
@@ -90,10 +90,10 @@ class SectionVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getModuleId(), 45);
 
-        }
+    }
 
     public function testUserIdField()
-        {
+    {
 
         $this->VO->setUserId(2);
 
@@ -103,10 +103,10 @@ class SectionVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getUserId(), 45);
 
-        }
+    }
 
     public function testTextField()
-        {
+    {
 
         $this->VO->setName('Mars');
 
@@ -116,7 +116,7 @@ class SectionVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getName(), 'Omicron Persei');
 
-        }
+    }
 
 }
 ?>

@@ -42,8 +42,8 @@ class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
     protected $auxDao;
     protected $auxObject;
 
-        protected function setUp()
-        {
+    protected function setUp()
+    {
 
         $this->auxDao = new PostgreSQLUserDAO();
 
@@ -78,24 +78,24 @@ class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
 
     }
 
-        public function testCreate()
-        {
+    public function testCreate()
+    {
 
         $this->assertEquals($this->dao->create($this->testObjects[0]), 1);
 
-        }
+    }
 
     public function testDelete()
-        {
+    {
 
         $this->dao->create($this->testObjects[0]);
 
         $this->assertEquals($this->dao->delete($this->testObjects[0]), 1);
 
-        }
+    }
 
     public function testIdCreate()
-        {
+    {
 
         $this->dao->create($this->testObjects[0]);
 
@@ -107,7 +107,7 @@ class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
 
         $this->assertGreaterThan($this->testObjects[0]->getId(), $this->testObjects[1]->getId());
 
-        }
+    }
 
     public function testGetById()
     {
@@ -131,8 +131,8 @@ class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
 
 
     /**
-         * @expectedException SQLIncorrectTypeException
-         */
+      * @expectedException SQLIncorrectTypeException
+      */
     public function testGetByIdInvalid()
     {
 
@@ -141,7 +141,7 @@ class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
     }
 
     public function testGetTaskReportByUser()
-        {
+    {
 
         $this->dao->create($this->testObjects[0]);
 
@@ -163,10 +163,10 @@ class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($add_hours, $res[0][add_hours]);
 
-        }
+    }
 
     public function testGetTaskReportByUserDates()
-        {
+    {
 
         $this->dao->create($this->testObjects[0]);
 
@@ -188,10 +188,10 @@ class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($add_hours, $res[0][add_hours]);
 
-        }
+    }
 
     public function testGetTaskReportByUserDatesGroupByType()
-        {
+    {
 
         $this->dao->create($this->testObjects[0]);
 
@@ -218,10 +218,10 @@ class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
         $this->assertEquals($add_hours1, $res[0][add_hours]);
         $this->assertEquals($add_hours2, $res[1][add_hours]);
 
-        }
+    }
 
     public function testGetTaskReportByCustomer()
-        {
+    {
 
         $dao2 = new PostgreSQLSectorDAO();
 
@@ -270,10 +270,10 @@ class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
 
         $dao2->delete($auxObject2);
 
-        }
+    }
 
     public function testGetTaskReportByCustomerDates()
-        {
+    {
 
         $dao2 = new PostgreSQLSectorDAO();
 
@@ -322,10 +322,10 @@ class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
 
         $dao2->delete($auxObject2);
 
-        }
+    }
 
     public function testGetTaskReportByCustomerDatesGroupByType()
-        {
+    {
 
         $dao2 = new PostgreSQLSectorDAO();
 
@@ -379,10 +379,10 @@ class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
 
         $dao2->delete($auxObject2);
 
-        }
+    }
 
     public function testGetTaskReportByProject()
-        {
+    {
 
         $dao2 = new PostgreSQLAreaDAO();
 
@@ -437,10 +437,10 @@ class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
 
         $dao2->delete($auxObject2);
 
-        }
+    }
 
     public function testGetTaskReportByProjectDates()
-        {
+    {
 
         $dao2 = new PostgreSQLAreaDAO();
 
@@ -495,10 +495,10 @@ class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
 
         $dao2->delete($auxObject2);
 
-        }
+    }
 
     public function testGetTaskReportByProjectDatesGroupByType()
-        {
+    {
 
         $dao2 = new PostgreSQLAreaDAO();
 
@@ -558,10 +558,10 @@ class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
 
         $dao2->delete($auxObject2);
 
-        }
+    }
 
     public function testGetGlobalTaskReportByProjectDates()
-        {
+    {
         $dao3 = new PostgreSQLUserDAO();
 
         $auxObject3 = new UserVO();
@@ -629,10 +629,10 @@ class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
 
         $dao3->delete($auxObject3);
 
-        }
+    }
 
     public function testGetVacations()
-        {
+    {
 
         $dao2 = new PostgreSQLAreaDAO();
 
@@ -707,32 +707,32 @@ class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
         $dao2->delete($auxObject2);
 
 
-        }
+    }
 
 
     /**
-         * @expectedException TaskReportInvalidParameterException
-         */
+      * @expectedException TaskReportInvalidParameterException
+      */
     public function testGetTaskInvalidField1()
-        {
+    {
 
         $res = $this->dao->getTaskReport($this->auxObject, date_create("1999-12-31"), date_create("2999-11-30"), "ZOIDBERG");
 
-        }
+    }
 
 
     /**
-         * @expectedException TaskReportInvalidParameterException
-         */
+      * @expectedException TaskReportInvalidParameterException
+      */
     public function testGetTaskInvalidField2()
-        {
+    {
 
         $res = $this->dao->getTaskReport($this->auxObject, date_create("1999-12-31"), date_create("2999-11-30"), "TTYPE", "ZOIDBERG");
 
-        }
+    }
 
     public function testGetAll()
-        {
+    {
 
         $this->dao->create($this->testObjects[0]);
 
@@ -750,7 +750,7 @@ class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->testObjects, $this->dao->getAll());
 
-        }
+    }
 
     public function testGetByUserId()
     {

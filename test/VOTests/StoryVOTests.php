@@ -27,21 +27,21 @@ class StoryVOTests extends PHPUnit_Framework_TestCase
     protected $VO;
 
     protected function setUp()
-        {
+    {
 
         $this->VO = new StoryVO();
 
-        }
+    }
 
-        public function testNew()
-        {
+    public function testNew()
+    {
 
         $this->assertNotNull($this->VO);
 
-        }
+    }
 
     public function testIdField()
-        {
+    {
 
         $this->VO->setId(1);
 
@@ -51,10 +51,10 @@ class StoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getId(), 2);
 
-        }
+    }
 
     public function testNameField()
-        {
+    {
 
         $this->VO->setName('Mars');
 
@@ -64,10 +64,10 @@ class StoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getName(), 'Omicron Persei');
 
-        }
+    }
 
     public function testAcceptedField()
-        {
+    {
 
         $this->VO->setAccepted(TRUE);
 
@@ -77,10 +77,10 @@ class StoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($this->VO->getAccepted());
 
-        }
+    }
 
     public function testIterationIdField()
-        {
+    {
 
         $this->VO->setIterationId(2);
 
@@ -90,10 +90,10 @@ class StoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getIterationId(), 45);
 
-        }
+    }
 
     public function testUserIdField()
-        {
+    {
 
         $this->VO->setUserId(2);
 
@@ -103,10 +103,10 @@ class StoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getUserId(), 45);
 
-        }
+    }
 
     public function testStoryIdField()
-        {
+    {
 
         $this->VO->setStoryId(2);
 
@@ -116,7 +116,7 @@ class StoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getStoryId(), 45);
 
-        }
+    }
 
 }
 ?>

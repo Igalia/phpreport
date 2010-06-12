@@ -42,8 +42,8 @@ class PostgreSQLProjectScheduleDAOMultipleTests extends PHPUnit_Framework_TestCa
     protected $auxDao3;
     protected $auxObject;
 
-        protected function setUp()
-        {
+    protected function setUp()
+    {
 
         $this->auxDao = new PostgreSQLUserDAO();
 
@@ -152,21 +152,21 @@ class PostgreSQLProjectScheduleDAOMultipleTests extends PHPUnit_Framework_TestCa
 
     }
 
-        public function testCreate()
-        {
+    public function testCreate()
+    {
 
         $this->assertEquals($this->dao->create($this->testObjects[0]), 1);
 
-        }
+    }
 
     public function testDelete()
-        {
+    {
 
         $this->dao->create($this->testObjects[0]);
 
         $this->assertEquals($this->dao->delete($this->testObjects[0]), 1);
 
-        }
+    }
 
     public function testDeleteNonExistent()
     {
@@ -176,7 +176,7 @@ class PostgreSQLProjectScheduleDAOMultipleTests extends PHPUnit_Framework_TestCa
     }
 
     public function testIdCreate()
-        {
+    {
 
         $this->dao->create($this->testObjects[0]);
 
@@ -188,7 +188,7 @@ class PostgreSQLProjectScheduleDAOMultipleTests extends PHPUnit_Framework_TestCa
 
         $this->assertGreaterThan($this->testObjects[0]->getId(), $this->testObjects[1]->getId());
 
-        }
+    }
 
     public function testGetById()
     {
@@ -211,8 +211,8 @@ class PostgreSQLProjectScheduleDAOMultipleTests extends PHPUnit_Framework_TestCa
     }
 
     /**
-         * @expectedException SQLIncorrectTypeException
-         */
+      * @expectedException SQLIncorrectTypeException
+      */
     public function testGetByIdInvalid()
     {
 
@@ -288,8 +288,8 @@ class PostgreSQLProjectScheduleDAOMultipleTests extends PHPUnit_Framework_TestCa
     }
 
     /**
-         * @expectedException SQLIncorrectTypeException
-         */
+      * @expectedException SQLIncorrectTypeException
+      */
     public function testGetByInvalidUserProjectIds()
     {
 
@@ -309,8 +309,8 @@ class PostgreSQLProjectScheduleDAOMultipleTests extends PHPUnit_Framework_TestCa
     }
 
     /**
-         * @expectedException SQLIncorrectTypeException
-         */
+      * @expectedException SQLIncorrectTypeException
+      */
     public function testGetByInvalidUserProjectIdsDate()
     {
 

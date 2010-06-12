@@ -27,21 +27,21 @@ class CityVOTests extends PHPUnit_Framework_TestCase
     protected $VO;
 
     protected function setUp()
-        {
+    {
 
         $this->VO = new CityVO();
 
     }
 
-        public function testNew()
-        {
+    public function testNew()
+    {
 
         $this->assertNotNull($this->VO);
 
-        }
+    }
 
     public function testIdField()
-        {
+    {
 
         $this->VO->setId(1);
 
@@ -51,10 +51,10 @@ class CityVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getId(), 2);
 
-        }
+    }
 
     public function testNameField()
-        {
+    {
 
         $this->VO->setName("PlanetExpress");
 
@@ -64,7 +64,7 @@ class CityVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getName(), "Mommy industries");
 
-        }
+    }
 
 }
 ?>

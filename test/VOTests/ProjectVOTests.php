@@ -27,21 +27,21 @@ class ProjectVOTests extends PHPUnit_Framework_TestCase
     protected $VO;
 
     protected function setUp()
-        {
+    {
 
         $this->VO = new ProjectVO();
 
     }
 
-        public function testNew()
-        {
+    public function testNew()
+    {
 
         $this->assertNotNull($this->VO);
 
-        }
+    }
 
     public function testIdField()
-        {
+    {
 
         $this->VO->setId(1);
 
@@ -51,10 +51,10 @@ class ProjectVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getId(), 2);
 
-        }
+    }
 
     public function testInitField()
-        {
+    {
 
         $this->VO->setInit(date_create('1999-12-31'));
 
@@ -64,10 +64,10 @@ class ProjectVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getInit(), date_create('2999-12-31'));
 
-        }
+    }
 
     public function testEndField()
-        {
+    {
 
         $this->VO->setEnd(date_create('1999-12-31'));
 
@@ -77,10 +77,10 @@ class ProjectVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getEnd(), date_create('2999-12-31'));
 
-        }
+    }
 
     public function testInvoiceField()
-        {
+    {
 
         $this->VO->setInvoice(2.54);
 
@@ -90,10 +90,10 @@ class ProjectVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getInvoice(), 4.54);
 
-        }
+    }
 
     public function testEstHoursField()
-        {
+    {
 
         $this->VO->setEstHours(2.54);
 
@@ -103,10 +103,10 @@ class ProjectVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getEstHours(), 4.54);
 
-        }
+    }
 
     public function testMovedHoursField()
-        {
+    {
 
         $this->VO->setMovedHours(2.54);
 
@@ -116,10 +116,10 @@ class ProjectVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getMovedHours(), 4.54);
 
-        }
+    }
 
     public function testDescriptionField()
-        {
+    {
 
         $this->VO->setDescription("Good news, everyone!");
 
@@ -129,10 +129,10 @@ class ProjectVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getDescription(), "I've taught the toaster to feel love!");
 
-        }
+    }
 
     public function testActivationField()
-        {
+    {
 
         $this->VO->setActivation(TRUE);
 
@@ -142,10 +142,10 @@ class ProjectVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getActivation(), FALSE);
 
-        }
+    }
 
     public function testTypeField()
-        {
+    {
 
         $this->VO->setType("Good news, everyone!");
 
@@ -155,10 +155,10 @@ class ProjectVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getType(), "I've taught the toaster to feel love!");
 
-        }
+    }
 
     public function testSchedTypeField()
-        {
+    {
 
         $this->VO->setSchedType("Good news, everyone!");
 
@@ -168,10 +168,10 @@ class ProjectVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getSchedType(), "I've taught the toaster to feel love!");
 
-        }
+    }
 
     public function testAreaIdField()
-        {
+    {
 
         $this->VO->setAreaId(2);
 
@@ -181,7 +181,7 @@ class ProjectVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getAreaId(), 45);
 
-        }
+    }
 
 }
 ?>

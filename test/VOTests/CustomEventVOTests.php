@@ -27,21 +27,21 @@ class CustomEventVOTests extends PHPUnit_Framework_TestCase
     protected $VO;
 
     protected function setUp()
-        {
+    {
 
         $this->VO = new CustomEventVO();
 
     }
 
-        public function testNew()
-        {
+    public function testNew()
+    {
 
         $this->assertNotNull($this->VO);
 
-        }
+    }
 
     public function testIdField()
-        {
+    {
 
         $this->VO->setId(1);
 
@@ -51,10 +51,10 @@ class CustomEventVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getId(), 2);
 
-        }
+    }
 
     public function testHoursField()
-        {
+    {
 
         $this->VO->setHours(2.5);
 
@@ -64,10 +64,10 @@ class CustomEventVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getHours(), 4.5);
 
-        }
+    }
 
     public function testDateField()
-        {
+    {
 
         $this->VO->setDate(date_create('1999-12-31'));
 
@@ -77,10 +77,10 @@ class CustomEventVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getDate(), date_create('2999-12-31'));
 
-        }
+    }
 
     public function testUserIdField()
-        {
+    {
 
         $this->VO->setUserId(2);
 
@@ -90,10 +90,10 @@ class CustomEventVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getUserId(), 45);
 
-        }
+    }
 
     public function testTypeField()
-        {
+    {
 
         $this->VO->setType("Feeding Nibbles");
 
@@ -103,7 +103,7 @@ class CustomEventVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getType(), "Hailing Zoidberg!");
 
-        }
+    }
 
 }
 ?>

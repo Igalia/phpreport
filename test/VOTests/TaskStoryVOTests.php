@@ -27,21 +27,21 @@ class TaskStoryVOTests extends PHPUnit_Framework_TestCase
     protected $VO;
 
     protected function setUp()
-        {
+    {
 
         $this->VO = new TaskStoryVO();
 
-        }
+    }
 
-        public function testNew()
-        {
+    public function testNew()
+    {
 
         $this->assertNotNull($this->VO);
 
-        }
+    }
 
     public function testIdField()
-        {
+    {
 
         $this->VO->setId(1);
 
@@ -51,10 +51,10 @@ class TaskStoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getId(), 2);
 
-        }
+    }
 
     public function testNameField()
-        {
+    {
 
         $this->VO->setName('Mars');
 
@@ -64,10 +64,10 @@ class TaskStoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getName(), 'Omicron Persei');
 
-        }
+    }
 
     public function testEstHoursField()
-        {
+    {
 
         $this->VO->setEstHours(15.75);
 
@@ -77,10 +77,10 @@ class TaskStoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getEstHours(), 7.66);
 
-        }
+    }
 
     public function testToDoField()
-        {
+    {
 
         $this->VO->setToDo(15.75);
 
@@ -90,10 +90,10 @@ class TaskStoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getToDo(), 7.66);
 
-        }
+    }
 
     public function testInitField()
-        {
+    {
 
         $this->VO->setInit(date_create('1999-12-31'));
 
@@ -103,10 +103,10 @@ class TaskStoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getInit(), date_create('2999-12-31'));
 
-        }
+    }
 
     public function testEndField()
-        {
+    {
 
         $this->VO->setEnd(date_create('1999-12-31'));
 
@@ -116,10 +116,10 @@ class TaskStoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getEnd(), date_create('2999-12-31'));
 
-        }
+    }
 
     public function testEstEndField()
-        {
+    {
 
         $this->VO->setEstEnd(date_create('1999-12-31'));
 
@@ -129,10 +129,10 @@ class TaskStoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getEstEnd(), date_create('2999-12-31'));
 
-        }
+    }
 
     public function testRiskField()
-        {
+    {
 
         $this->VO->setRisk(1);
 
@@ -142,10 +142,10 @@ class TaskStoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getRisk(), 3);
 
-        }
+    }
 
     public function testStoryIdField()
-        {
+    {
 
         $this->VO->setStoryId(2);
 
@@ -155,10 +155,10 @@ class TaskStoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getStoryId(), 45);
 
-        }
+    }
 
     public function testTaskSectionIdField()
-        {
+    {
 
         $this->VO->setTaskSectionId(2);
 
@@ -168,10 +168,10 @@ class TaskStoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getTaskSectionId(), 45);
 
-        }
+    }
 
     public function testUserIdField()
-        {
+    {
 
         $this->VO->setUserId(2);
 
@@ -181,7 +181,7 @@ class TaskStoryVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getUserId(), 45);
 
-        }
+    }
 
 }
 ?>

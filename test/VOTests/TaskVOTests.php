@@ -27,21 +27,21 @@ class TaskVOTests extends PHPUnit_Framework_TestCase
     protected $VO;
 
     protected function setUp()
-        {
+    {
 
         $this->VO = new TaskVO();
 
     }
 
-        public function testNew()
-        {
+    public function testNew()
+    {
 
         $this->assertNotNull($this->VO);
 
-        }
+    }
 
     public function testIdField()
-        {
+    {
 
         $this->VO->setId(1);
 
@@ -51,10 +51,10 @@ class TaskVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getId(), 2);
 
-        }
+    }
 
     public function testInitField()
-        {
+    {
 
         $this->VO->setInit(2);
 
@@ -64,10 +64,10 @@ class TaskVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getInit(), 4);
 
-        }
+    }
 
     public function testEndField()
-        {
+    {
 
         $this->VO->setEnd(2);
 
@@ -77,10 +77,10 @@ class TaskVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getEnd(), 4);
 
-        }
+    }
 
     public function testStoryField()
-        {
+    {
 
         $this->VO->setStory("Good news, everyone!");
 
@@ -90,10 +90,10 @@ class TaskVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getStory(), "I've taught the toaster to feel love!");
 
-        }
+    }
 
     public function testTeleworkField()
-        {
+    {
 
         $this->VO->setTelework(TRUE);
 
@@ -103,10 +103,10 @@ class TaskVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getTelework(), FALSE);
 
-        }
+    }
 
     public function testTextField()
-        {
+    {
 
         $this->VO->setText("Good news, everyone!");
 
@@ -116,10 +116,10 @@ class TaskVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getText(), "I've taught the toaster to feel love!");
 
-        }
+    }
 
     public function testTtypeField()
-        {
+    {
 
         $this->VO->setTtype("Good news, everyone!");
 
@@ -129,10 +129,10 @@ class TaskVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getTtype(), "I've taught the toaster to feel love!");
 
-        }
+    }
 
     public function testPhaseField()
-        {
+    {
 
         $this->VO->setPhase("Scruffy");
 
@@ -142,10 +142,10 @@ class TaskVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getPhase(), "Nibbles");
 
-        }
+    }
 
     public function testUsrIdField()
-        {
+    {
 
         $this->VO->setUserId(2);
 
@@ -155,10 +155,10 @@ class TaskVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getUserId(), 45);
 
-        }
+    }
 
     public function testProjectIdField()
-        {
+    {
 
         $this->VO->setProjectId(2);
 
@@ -168,10 +168,10 @@ class TaskVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getProjectId(), 45);
 
-        }
+    }
 
     public function testCustomerIdField()
-        {
+    {
 
         $this->VO->setCustomerId(2);
 
@@ -181,7 +181,7 @@ class TaskVOTests extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->VO->getCustomerId(), 45);
 
-        }
+    }
 
 }
 ?>
