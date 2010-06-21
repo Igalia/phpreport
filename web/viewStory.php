@@ -23,10 +23,8 @@ $sid = $_GET["sid"];
 
 $storyId = $_GET["stid"];
 
-$storyId = 3;
-
 /* We check authentication and authorization */
-//require_once('phpreport/web/auth.php');
+require_once('phpreport/web/auth.php');
 
 /* Include the generic header and sidebar*/
 define(PAGE_TITLE, "PhpReport - Story Data");
