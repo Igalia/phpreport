@@ -94,7 +94,7 @@
                 $storyJson[done] = $story->getDone();
                 $storyJson[overrun] = $story->getOverrun();
                 $storyJson[toDo] = $story->getToDo();
-                $storyJson[nextStoryId] = $story->getNextStoryId();
+                $storyJson[nextStoryId] = $story->getStoryId();
 
                 $taskStories = CoordinationFacade::GetStoryCustomTaskStories($story->getId());
 
