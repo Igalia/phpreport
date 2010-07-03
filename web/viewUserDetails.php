@@ -228,12 +228,14 @@
 
                 ?>&init=' + init.getFullYear() + "-" + (init.getMonth()+1) + "-" + init.getDate()  + "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
 
+                grid.store.removeAll();
                 grid.store.load();
 
         }
         }],
         });
 
+    grid.render(Ext.get('content'));
     grid.store.load();
 
     })
