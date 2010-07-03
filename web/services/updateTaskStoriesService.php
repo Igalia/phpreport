@@ -254,7 +254,7 @@
                 else    $string = $string . "<estEndDate/>";
 
                 if (!is_null($taskStory->getTaskSection()))
-                    $string = $string . "<taskSection><id>{$taskStory->getTaskSection()->getId()}<id/><name>{$taskStory->getTaskSection()->getName()}</name></taskSection>";
+                    $string = $string . "<taskSection><id>{$taskStory->getTaskSection()->getId()}</id><name>{$taskStory->getTaskSection()->getName()}</name></taskSection>";
                 else    $string = $string . "<taskSection/>";
 
                 $string = $string . "</taskStory>";
