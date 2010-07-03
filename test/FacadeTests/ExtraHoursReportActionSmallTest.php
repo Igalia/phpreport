@@ -25,11 +25,11 @@ class ExtraHoursReportActionSmallTest extends ExtraHoursReportActionTest
 {
 
     public function testExtraHourReport15Days()
-        {
+    {
 
         $this->loopTest("P15D");
 
-        }
+    }
 
 }
 ?>
