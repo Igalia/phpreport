@@ -190,7 +190,7 @@
 
                     $group = UsersFacade::GetUserGroupByName($group->getName());
 
-                    if (UsersFacade::DeassignUserFromUserGroup($user->getId(), $group->getId()) == -1)
+                    if (UsersFacade::DeassignUserFromUserGroup($userId, $group->getId()) == -1)
                     {
                         $string = "<return service='updateUsers'><error id='1'>There was some error while updating the user groups new deassignements</error></return>";
                         break;
