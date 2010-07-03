@@ -24,7 +24,7 @@
  *  This file just contains {@link PartialUpdateProjectAction}.
  *
  * @filesource
- * @package PhpProject
+ * @package PhpReport
  * @subpackage facade
  * @author Jorge López Fernández <jlopez@igalia.com>
  */

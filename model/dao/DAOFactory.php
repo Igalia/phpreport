@@ -24,7 +24,7 @@
  *  This file just contains {@link DAOFactory}.
  *
  * @filesource
- * @package dao
+ * @package PhpReport
  * @subpackage dao
  * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
