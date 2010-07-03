@@ -107,6 +107,12 @@
 
         //var_dump($deleteUsers);
 
+        $groups = UsersFacade::GetAllUserGroups();
+
+        foreach ((array)$groups as $group)
+            foreach((array)$deleteUsers as $user)
+                UsersFacade::DeassignUserFromUserGroup($user->getId(), $group->getId());
+
 
         if (count($deleteUsers) >= 1)
             foreach((array)$deleteUsers as $user)
