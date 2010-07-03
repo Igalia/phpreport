@@ -25,7 +25,7 @@
  *
  * @filesource
  * @package PhpReport
- * @subpackage dao
+ * @subpackage DAO
  * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
 
@@ -37,7 +37,7 @@ include_once('phpreport/util/ConfigurationParametersManager.php');
  *  implementation for the requested DAO, then creates a new instance and returns it.
  *
  * @package PhpReport
- * @subpackage dao
+ * @subpackage DAO
  * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
 
