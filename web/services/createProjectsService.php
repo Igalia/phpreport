@@ -155,7 +155,7 @@
                         }
                         break;
 
-                case "movHours":    $parser->read();
+                case "movedHours":    $parser->read();
                         if ($parser->hasValue)
                         {
                             $projectVO->setMovedHours($parser->value);
