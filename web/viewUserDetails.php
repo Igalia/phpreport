@@ -34,7 +34,7 @@
 
     $uid = $_GET['uid'];
 
-    $user = UsersFacade::GetUser($uid);
+    $userToShow = UsersFacade::GetUser($uid);
 
 ?>
 
@@ -60,7 +60,7 @@
                         name: 'login',
                            fieldLabel:'Login',
                         <?php
-                              echo "value:'" . $user->getLogin() . "'";
+                              echo "value:'" . $userToShow->getLogin() . "'";
                         ?>
                     },{
                         id:'groups',
@@ -68,7 +68,7 @@
                         fieldLabel: 'Groups',
                         value: '-<?php
 
-                            foreach((array)$user->getGroups() as $group)
+                            foreach((array)$userToShow->getGroups() as $group)
                                 {
                                     echo " " . $group->getName() . " -";
                                 }
