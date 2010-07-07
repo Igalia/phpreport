@@ -19,12 +19,8 @@
  */
 
 
-    $uid = $_GET['uid'];
-
     /* We check authentication and authorization */
     require_once('phpreport/web/auth.php');
-
-    $user = UsersFacade::GetUser($uid);
 
     /* Include the generic header and sidebar*/
     define(PAGE_TITLE, "PhpReport - User Details");
@@ -36,6 +32,9 @@
     include_once('phpreport/model/facade/ProjectsFacade.php');
     include_once('phpreport/web/services/WebServicesFunctions.php');
 
+    $uid = $_GET['uid'];
+
+    $user = UsersFacade::GetUser($uid);
 
 ?>
 
