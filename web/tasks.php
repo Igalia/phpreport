@@ -700,6 +700,7 @@ Ext.onReady(function(){
         renderTo: Ext.get("auxiliarpanel"),
         items: [
             new Ext.ux.DatePickerPlus({
+                allowMouseWheel: false,
                 showWeekNumber: true,
                 multiselection: false,
                 value: Date.parseDate(date, 'Y-m-d'),
