@@ -37,6 +37,7 @@ else
     $date = date("Y-m-d");
 
 ?>
+<script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus.js"></script>
 <script type="text/javascript">
 
 function updateTimes(field, min, max, open) {
@@ -698,9 +699,10 @@ Ext.onReady(function(){
     new Ext.Panel({
         renderTo: Ext.get("auxiliarpanel"),
         items: [
-            new Ext.DatePickerLinks({
+            new Ext.ux.DatePickerPlus({
+                showWeekNumber: true,
+                multiselection: false,
                 value: Date.parseDate(date, 'Y-m-d'),
-                baseUrl: 'tasks.php?date=',
                 startDay: 1,
                 listeners: {'select': function (item, date) {
 			    window.location = "tasks.php?date=" + date.format('Y-m-d');

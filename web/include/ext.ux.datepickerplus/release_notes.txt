@@ -1,0 +1,524 @@
+  * Ext.ux.DatePickerPlus  Addon
+  * Ext.ux.form.DateFieldPlus  Addon
+  *
+  * @author    Marco Wienkoop (wm003/lubber)
+  * @copyright (c) 2008-2010, Marco Wienkoop (marco.wienkoop@lubber.de) http://www.lubber.de
+  *
+  * @class Ext.ux.DatePickerPlus
+  * @extends Ext.DatePicker
+  *
+  * @class Ext.ux.form.DateFieldPlus
+  * @extends Ext.form.DateField
+  *
+
+  Version 1.4
+
+-----------------
+Description
+-----------------
+Ext.ux.DatePickerPlus works in all forms: Standalone, as a DateMenu and as a DateField (in this case its the new Ext.ux.form.DateFieldPlus Widget)
+Main Features:
+-MultiMonth
+-Multiselection with CTRL and SHIFT-Key as usual behaviour
+-Weekend, Holidays and custom CSS days
+-Weeknumber display
+-Localization Support (example Files included)
+-Quicktip support
+-Undo Function of date selection
+
+ * @license  licensing of Ext.ux.DatePickerPlus and Ext.ux.form.DateFieldPlus depends of the underlying ExtJS Framework Version
+ *
+ * If you use ExtJS <= 2.0.2 Ext.ux.DatePickerPlus and Ext.ux.form.DateFieldPlus are licensed under the terms of the
+ * LGPL v3
+ * License details: http://www.gnu.org/licenses/lgpl.html
+ *
+ * If you use ExtJS >= 2.1 Ext.ux.DatePickerPlus and Ext.ux.form.DateFieldPlus are licensed under the terms of the
+ * GPL v3
+ * License details: http://www.gnu.org/licenses/gpl.html
+
+ Commercial License available! See http://www.lubber.de/extjs/datepickerplus for more info
+
+* Donations are always welcome :)
+* Any amount is greatly appreciated and will help to continue on developing ExtJS Widgets
+*
+* You can donate via PayPal to donate@lubber.de
+*
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>
+
+ * This Addon requires the ExtJS Library, which is distributed under the terms of the GPL v3 (from V2.1)
+ * See http://extjs.com/license for more info
+
+
+-----------------
+API Documentation
+-----------------
+
+New config Items
+[since 1.4 beta2]
+"defaultValue" (DateFieldPlus only)
+A String in Dateformat or a DateObject that will be used as initial value when open the picker on an empty datefieldplus
+
+[since 1.4 beta]
+"prevNextDaysView" String/Boolean (default "mark")
+values:
+"mark" : selected days will be marked in prev/next months also
+"nomark" will not be marked and are not selectable
+false: will hide them, thus are not selectable too
+Note: When using anything other than "mark", week or monthclick will not select days outside the current month!
+
+[since 1.2]
+"styleDisabledDates": Boolean (default false)
+To be able to set custom style dates (eventdates/weekends..) on disabled dates also
+
+"eventDatesSelectable": Boolean (default false)
+To disable event-dates selection if desired (even if the dates are not disabled at all)
+
+"disableSingleDateSelection" Boolean (default false)
+To force user to use week- or monthselection only
+
+"stayInAllowedRange" Boolean (default true)
+When setting minDate/maxDate, this will prevent to change months outside the allowed daterange  (suggested by descheret)
+
+"summarizeHeader": Boolean (default false)
+To add an optional global header when using multimonth display containing the month range (e.g. january 2008-october 2008)
+
+[since 1.1 Final]
+"allowMouseWheel": Boolean (default true)
+Self explaining...
+
+[since 1.1 RC4]
+"multiSelectionDelimiter": String (default ',')
+For Datefieldplus and Multiselection only
+
+"renderPrevNextButtons": Boolean (default true)
+If you want the user not to be able to change the month or force him to use the monthpicker, set this to false
+
+"renderPrevNextYearButtons": Boolean (default false)
+Display 2 small double-arrow buttons for changing next/previous year
+
+"nextYearText": String (default "Next Year (Control+Up)")
+Will be displayed as tooltip on NextYear Button (updated locale!)
+
+"prevYearText": String (default "Previous Year (Control+Down)")
+Will be displayed as tooltip on PrevYear Button (updated locale!)
+
+"showActiveDate": Boolean (default false)
+Will display the active Date to use keynavigation
+
+"shiftSpaceSelect": Boolean (default true)
+if set to true (default) and showactivedate is set to true you can select dates on keynavigation by using shift+Space (because the space-key alone will select the today-date)
+if this is set to false , this behaviour reverses (shift+space selects today, space alone select the date under the shown activedate from keynavigation)
+Remembery Keynavigation works only when the datepicker has got focus which isnt always the case in some browsers
+
+"disableMonthPicker": Boolean (default false)
+Self explaining...
+
+"disabledLetter": String/Boolean (default false)
+Display e.g. a "X" instead of the daynumber if a date is disabled.
+
+[since 1.0 RC3]
+"strictRangeSelect": Boolean (default false)
+Set this to true does only allow multiselection in a range without the possibility to create gaps. Selection by CTRL is still possible, but DatepickerPLus checked, if the selected Day(s) append the existing selection of would produce a gap
+
+"displayMask": Number (default 3)
+As huge multimonth calendars can take some updating time this will display a mask when the noOfMonth property is higher than the given value in displayMask.
+Set to false to never display the mask
+
+"displayMaskText": String (default "Please wait...")
+The Message to be displayed when a mask is shown
+
+"defaultEventDatesText": String (default '')
+Used if no text-object is given in eventdates
+
+"defaultEventDatesCls": String (default 'x-datepickerplus-eventdates')
+Used if no cls-object is given in eventdates
+
+[since 0.9 beta 9]
+"allowedDates": Array{Dateobjects}/false (default false)
+If this is set with an Array of Dates, only these Dates are available for Selection in the DatepickerPlus, all other dates are automatically disabled
+
+"allowedDatesText": String (default '')
+Text to display on the disabled Days as quicktip
+
+"minDate": Date
+Alias for minValue
+
+"maxDate": Date
+Alias for maxValue
+
+[since 0.9 beta 2]
+"disablePartialUnselect" : Boolean/String (default true) (suggested by DVSDevise)
+When multiselecting whole months or weeks, already selected days within this week/month will _not_ get unselected anymore. Set this to false, if you want them to get unselected.
+Note: When the _whole set_ of the month/week are already selected, they get _all_ unselected anyway.
+
+"renderOkUndoButtons" : Boolean (default true) (suggested by jsakalos)
+If set to false, the OK- and Undo-Buttons will not be rendered on Multiselection Calendars
+This way any selected Date will be immediatly available in the "selectedDates" Array. If used together with DateMenu or DateFieldPlus you need to click outside the Calendar to make it disappear or press Return (if calendar got focus...)
+Works only if multiSelection is set to true
+
+"renderTodayButton" : Boolean (default true) (suggested by jsakalos)
+Whether the Today-Button should be rendered
+
+[since 0.9 beta]
+"noOfMonth" : Number (default 1)
+how many months should be displayed
+
+"noOfMonthPerRow" :Number (default 3)
+
+"fillupRows" : Boolean (default true)
+to automatically increase month-amount to fit display-matrix of rows/columns
+
+"showWeekNumber" : Boolean(default true)
+to support display of weekNumbers
+
+"selectWeekText" : String (default "Click to select all days of this week")
+Will be displayed when hovering over Weeknumber
+
+"selectMonthText" : String (default "Click to select all weeks of this month")
+Will be displayed when hovering over WeeknumberHeader
+
+"weekName" : String (default "Wk.")
+Text, that appears on the Weeknumber Header
+
+"multiSelection" : Boolean (default false to act like original datepicker)
+Whether Multiselection should be possible or not
+
+"multiSelectByCTRL" Boolean (default true)
+If set to false, its possible to multiselect the "easy" way (without CTRL) also
+
+"selectedDates" : Array
+Holds an array of dateobjects which have been selected (after clicking the OK-Button, or immediatly, if renderOkUndoButtons is set to false)
+
+"preSelectedDates" : Array
+Holds an array of date-times (getTime()) which have been selected at runtime (before clicking the OK-Button)
+
+"nationalHolidays" : function(year) (default US Holidays)
+Called every year-change to generate holidays with custom CSS
+
+"nationalHolidaysCls" : String (default to 'x-datepickerplus-nationalholidays')
+CSS Class to be applied to holidays
+
+"markNationalHolidays" : Boolean (default true)
+Whether national Holidays should be marked with different CSS
+
+"markWeekends" : Boolean (default true)
+Whether weekends should be marked with different CSS
+Custom CSS Days can also be used for cycling weekevents like "every friday"
+
+"weekendDays" : Array (default [6,0] for Saturday and Sunday)
+Array of weekdays which are supposed to be weekends
+
+"weekendText" : String (default '')
+Text to be display as Quicktips when hovering over weekends
+
+"useQuickTips" : Boolean (default true)
+To be able to show cellinfos in nice quicktips instead of cell-titles
+Occurs for disabled/eventdates/weekends/holidays days
+
+"pageKeyWarp" : Number(default 1)
+Extend pageup/pagedown keynav for custom amount of months forward/backward
+
+"maxSelectionDays" : Boolean (default false for unlimited selection)
+To limit the selection of single days to a specific amount
+
+"maxSelectionDaysTitle" : String (default 'Datepicker')
+Window-title of the alert-msg which is disdplayed when trying to select more than the allowed amount of days
+
+"maxSelectionDaysText" : String (default 'You can only select a maximum amount of %0 days')
+Window-Contentext of the alert-msg which is disdplayed when trying to select more than the allowed amount of days (When translating this use %0 as placeholder for the amount of days)
+
+"undoText" : String (default 'Undo')
+Buttontext for the Undo-option
+
+"eventdates" : function(year)
+Returns days which are marked by a specific css class and not as selected
+
+"eventDatesRE" : RegExp (default null)
+Regular Expression to select custom CSS Days (works just like disabledDaysRE)
+
+"eventDatesRECls" : String (default '')
+CSS Class to be used if days are found by eventDatesRE
+
+"eventDatesREText" : String (default '')
+Quicktip Text to be displayed if days are found by eventDatesRE
+
+"lastSelectedDate" : Number
+Contains the last selected Date.. (getTime() value)
+
+"tooltip" : String/Object (for DateFieldPlus only)
+Works exactly like in Buttons-Widget (works on Trigger Button, not field itself to keep invalidText tooltips intact!)
+
+"tooltipType" : String (for DateFieldPlus only)
+Works exactly like in Buttons-Widget
+
+"usePickerPlus" : Boolean (for datemenus only)
+
+
+New Events
+[since 1.4 beta]
+"beforemonthclick"
+Called with pickerobject, monthnumber (0=january,1=february...) and selectedState (if true, the whole month was selected, if false, it was unselected)
+Fires only when multiSelection=true and showWeekNumbers=true. Return false to cancel selection.
+
+"beforeweekclick"
+Called with pickerobject, date (firstdate of clicked week) and selectedState (if true, the whole week was selected, if false, it was unselected)
+Fires only when multiSelection=true and showWeekNumbers=true. Return false to cancel selection.
+
+"beforedateclick"
+Called with pickerobject and current clicked date
+Fires before a date is clicked. Return false to cancel selection.
+
+
+[since 1.1 Final]
+"beforemousewheel"
+Fires before the month will change on mousewheel trigger
+
+"beforemaxdays"
+Fires before the default ext alertbox will appear when the amount of maxSelectionDays has been reached (return false to cancel the msgbox appearance)
+
+[since 1.1 RC4]
+"beforeyearchange"
+Fires everytime before the year of the first month changes (by monthpicker or prev/next(year)-month buttons
+
+"afteryearchange"
+Fires everytime after the year of the first month changes (by monthpicker or prev/next(year)-month buttons
+
+[since 1.0 RC3]
+"beforemonthchange"
+Fires everytime before the first month changes (by monthpicker or prev/next-month buttons
+
+"aftermonthchange"
+Fires everytime after the first month changes (by monthpicker or prev/next-month buttons
+
+[since 0.9 beta]
+"aftermonthclick"
+Called with pickerobject, monthnumber (0=january,1=february...) and [since 0.9 beta 7]selectedState (if true, the whole month was selected, if false, it was unselected)
+Fires only when multiSelection=true and showWeekNumbers=true
+
+"afterweekclick"Called with pickerobject, date (firstdate of clicked week) and [since 0.9 beta 7]selectedState (if true, the whole week was selected, if false, it was unselected)
+Fires only when multiSelection=true and showWeekNumbers=true
+
+"afterdateclick"Called with pickerobject, current clicked date and [since 0.9 beta 7] selectedState (if true, the day was selected, if false, it was unselected)
+Fires everytime a date is clicked
+
+"undo"
+Fires on undo-button-click on multiSelection
+
+
+New Methods
+[since 1.0 RC3]
+"setEventDates(Array{DateObjects}/Object{eventDatesObject(date,text,cls)})
+To automatically transform given arrays/or objects to working functions, if not already specified
+
+[since 0.9 beta 9]
+"setAllowedDates(Array{DateObject},update(default true)])"
+To set an Array of Dates to be available only at runtime and update the picker visually. If update is set to false, the visual update will not happen.
+
+[since 0.9 beta 6/7]
+"clearSelectedDates([update(default true)])"
+To delete all selected dates and update the picker visually. If update is set to false, the visual update will not happen.
+
+"setSelectedDates(Array/DateObject,update(default true)])"
+To set one or more Dates and update the picker visually. If update is set to false, the visual update will not happen.
+
+[since 0.9 beta 5]
+"setDateLimit(minDate{DateObject},maxDate{DateObject})"
+To change both minDate and maxDate at one at runtime
+
+[since 0.9 beta 4]
+"setMinDate({DateObject})"
+To change the minDate at runtime and immediatly update the rendered DatepickerPlus. You need to specify a valid DateObject
+
+"setMaxDate({DateObject})"
+Same with the maxDate
+
+
+Compatibility
+This Widget has been tested on Firefox 2/3.x, IE6/7/8, Opera 9/10, Safari 3.1.x/4 (Win) and Chrome 3/4/5
+
+
+Revision History:
+v.1.4 [2010/04/30]
+- checked to work with ExtJS 3.2.1
+- BUGFIX: Datepickers with shown months > 1 had a white glitch obove them (thanks to radubrehar)
+- BUGFIX: CSS Fixes for Datemenus and more than 1 row of months  when using IE8 in Compatibility Mode
+- added romanian locale (thanks to radubrehar)
+- added japanese locale (thanks to itheart)
+- added polish locale (thanks to maboch)
+
+v.1.4 RC1 [2010/03/04]
+- checked to work with ExtJS 3.1.1
+- BUGFIX: DateField Events did not work properly (reported by yuewah)
+- BUGFIX: beforedestroy throws exception when parent control of datepickerplus gets destroyed (reported by yuewah)
+- spanish locale corrected (holiday had a leading zero)
+
+v.1.4 Beta 2 [2009/09/18]
+- checked to work with ExtJS 3.0.0
+- checked to work with ExtJS 2.3.0
+- Adopted config item prevNextDaysView to DateFieldPlus
+- Adopted events beforedateclick, beforeweekclick and beforemonthclick to DateFieldPlus
+- more code optimization for Ext 3.0 compatibility
+- support option "defaultvalue" on datefieldplus
+- BUGFIX: setDisabled did not work under Ext 3.0 (reported by radtad)
+
+v.1.4 Beta [2009/07/03]
+- checked to work with ExtJS 3.0-RC3
+- checked to work with ExtJS 2.2.1
+- support of jsondates  (e.g. "2008-08-04T12:22:00") in setEventDates, setSelectedDates, setAllowedDates,setMindate and setMaxdate
+- some Code optimizations
+- corrected holidays in german locale
+- added events beforedateclick, beforeweekclick and beforemonthclick
+- added dutch locale (thanks to walldorff)
+- added french locale (thanks to dubdub)
+- added Norwegian bokmål locale (thanks to Alex Brasetvik)
+- added spanish locale (thanks to erzsebet)
+- added version config
+- added config prevNextDaysView ("mark","nomark",false) to disable automatic selection/view of selected days of current months in previous and next month, so only the current months days are selectable (suggested by sirtimbly)
+- BUGFIX: select-event on datefieldplus was added again each time the trigger has been clicked
+- BUGFIX: Fix for updatehidden in case of multiselection (thanks to Hunyi)
+- BUGFIX: do not handle dateselection when disabled-property is set
+
+v.1.3 [2008/08/05]
+- Support of ExtJS 2.2
+- Adopted new config items from 1.2 to DateFieldPlus also
+
+v.1.2 [2008/08/04]
+- support "allowOtherMenus" Config for DateFieldPlus
+- datefieldplus can be hidden by clicking the triggerbutton again in cases hiding by clicking outside isn't possible
+- added config "styleDisabledDates" to be able to set custom style dates (eventdates/weekends..) on disabled dates also (suggested by descheret)
+- added config "eventDatesSelectable" to disble event-dates selection if desired (even if the dates are not disabled at all) (thanks to descheret)
+- added config "disableSingleDateSelection" to force user to use week- or monthselection only (suggested by chemist458)
+- added config "stayInAllowedRange" when setting minDate/maxDate, this will prevent to change months outside the allowed daterange  (suggested by descheret)
+- added config "summarizeHeader" to add an optional global header when using multimonth display containing the month range (e.g. january 2008-october 2008)
+- added italian locale (thanks to andreabat)
+- FIX: setMinDate/MaxDate/DateLimits did not update the viewport properly
+
+V1.1 Final [2008/06/12]
+- added config "allowMouseWheel" to generally turn on/off Mousewheelsupport (suggested by boraldo)
+- added event "beforemousewheel" to be able to temporary disable the mousewheel if desired
+- added event "beforemaxdays" to be able to cancel the default MessageBox but do something on your own instead
+- Implemented fix for xdatefield code to support applyTo Config (thanks to mystix)
+- updated russian local (thanks to WhiteRussian)
+- BUGFIX: updating eventclasses (and others) could result in wrong class-definition per cell (reported by aacraig)
+
+
+V1.1 RC4 [2008/05/20]
+- DateFieldPlus now also supports multiselection (thanks to Nohcs777)
+- extended xdatefield to support multiselection
+- "value" config for datefieldplus now also supports arrays in multiselection mode instead of just one date
+- range selection is now also possible for a wider period than only the visible months (suggested by jo2008)
+- updated xdatefield code integration to disable/enable the hidden submitfield from datefieldplus also, if the mainformfield gets disabled/enabled
+- improved xdatefield code to fill the hiddenField with a given value at config time
+- Improved some code-sections (mainly for respecting summertime changings when handling with Date.gettime())
+- Corrected eventhandling on Datemenu and DateFieldPlus
+- support for minDate and maxDate for Datefieldplus (as an alias for datepickers minValue and maxValue) to be more compatible to usual datepicker/datemenu config options
+- added "multiSelectionDelimiter" config (datefieldplus and multiselection only)
+- added "renderPrevNextButtons" config (if you want the user not to be able to change the month or force him to use the monthpicker)
+- added "renderPrevNextYearButtons" config to display 2 small double-arrow buttons for changing next/previous year
+- added "nextYearText" config which will be displayed as tooltip on NextYear Button (updated locale!)
+- added "prevYearText" config which will be displayed as tooltip on PrevYear Button (updated locale!)
+- added "showActiveDate" will display the active Date to use keynavigation
+- added "shiftSpaceSelect" if set to true (default) and showactivedate is set to true you can select dates on keynavigation by using shift+Space (because the space-key alone will select the today-date)
+    if this is set to false , this behaviour reverses (shift+space selects today, space alone select the date under the shown activedate from keynavigation)
+- added "disableMonthPicker" config
+- added "disabledLetter" config to display e.g. a "X" instead of the daynumber if a date is disabled. (default false)
+- added event "beforeyearchange"
+- added event "afteryearchange"
+- added russian locale (thanks to WhiteRussian)
+- UP/DOWN/LEFT/RIGHT Keynavigation is now only available if showActiveDate is set to true and works much faster
+- CTRL+UP/DOWN for year changing is now only available if either disableMonthPicker is false or renderPrevNextYearButtons is true
+- CTRL+LEFT/RIGHT for month changing is now only available if either disableMonthPicker is false or renderPrevNextButtons is true
+- BUGFIX: setEventDates did not update the viewport (reported by aacraig)
+- BUGFIX: Array-Cloning was done in a wrong way (reported by lpfLoveExt)
+- BUGFIX: weekselection was wrong when a different startDay was given (reported by WhiteRussian)
+- Minor Upgrade Version because of much added features instead of a bugfix-only release
+
+V1.0 RC3 [2008/04/21]
+- checked to work with ExtJS 2.1
+- added config strictRangeSelect (suggested by sigaref)
+- added config displayMask and displayMaskText to support update masking (localization files also updated)
+- added config defaultEventDatesText and defaultEventDatesCls. used if no text/cls-object is given in eventdates
+- added Events "aftermonthchange" and "beforemonthchange" (fires everytime the first month changes (by monthpicker or prev/next-month buttons)
+- added method setEventDates, to automatically transform given arrays/or objects to working functions, if not already specified
+- BUGFIX: range selection over specific months was incorrect
+
+V1.0 RC2 [2008/04/10]
+- BUGFIX: typo in DateFieldPlus corrected (reported by sigaref)
+
+V1.0 RC1 [2008/04/10]
+- BUGFIX: Undo-Function works again
+- BUGFIX: Config items allowedDates and allowedDatesText had no effect on DateFieldPlus
+
+V0.9 Beta 9 [2008/04/09]
+- Added config items allowedDates and allowedDatesText
+- Added method setAllowedDates()
+
+V0.9 Beta 8 [2008/04/09]
+- BUGFIX: setSelectedDates still had another Bug...(thanks to wehtam for reporting!)
+
+V0.9 Beta 7 [2008/04/08]
+- added the state of the afterdateclick to examine, if the date was selected or unselected, same with week/month
+- added option to cleanSelectedDates to not update the picker (e.g. to immediatly add dates manually by setSelectedDates(that would call update twice)
+- added option to setSelectedDates to clean the selectedDates before setting the new once and to not update the picker
+- BUGFIX: setSelectedDates did not work properly
+
+V0.9 Beta 6 [2008/04/08]
+- Added method clearSelectedDates() (suggested by wehtam)
+- Added method setSelectedDates() (suggested by wehtam)
+- Changed eventtriggering for afterdateclick. It will now always be fired when a date is clicked . Regardless, whether multiSelection is enabled or not.
+- BUGFIX: Given listeners to DateFieldPlus have been ignored (reported by Richie1985)
+
+V0.9 Beta 5 [2008/04/07]
+- Added method setDateLimits() to change minDate and maxDate at once at runtime
+- BUGFIX: Range selection by using the SHIFT-Key for a range more than one month, did not select some remaining days at the end of the range (reported by Spirit)
+
+V0.9 Beta 4 [2008/04/06]
+- Added method setMinDate() to change the minDate at runtime and immediatly update the datepicker
+- Added method setMaxDate() to change the maxDate at runtime and immediatly update the datepicker
+- BUGFIX: hidden submitformat Field had same name as original field, thus confuses IE with duplicate id/name. if name has not been specified in the config or is same as id datefieldplus will add a suffix to the hiddenfield (default "-format"). this field holds the custom submitFormat value (reported by jerrybrown5)
+
+V0.9 Beta 3 [2008/04/06]
+- Added xtype "datefieldplus" (suggested by jerrybrown5)
+- BUGFIX: DateFieldPlus accidently had renderTodayButton set to false by default...
+
+V0.9 Beta 2 [2008/04/06]
+- BUGFIX: Width on DateMenu and DateFieldPlus was broken in Firefox 3 (tested on latest Beta 5) (reported by ludoo)
+- BUGFIX: Some old testpath in generating transparent GIF images was left in the code and has been deleted now (reported by sanjshah)
+- Added new config options "disablePartialUnselect","renderOkUndoButtons" and "renderTodayButton" (suggested by jsakalos)
+
+V0.9 Beta [2008/04/05]
+Initial Release:
+Joined the extensions together nicely and added even more features:
+- fixed some bugs/improved the original extensions a bit
+- works on Original DateMenu and DateField (Ext.ux.DateFieldPlus) also
+- Definable Multimonths (rows,amount,fill..)
+- Custom CSS for definable days
+- Weeknumber Display
+- Weekend CSS Styling
+- National Holidays CSS Styling
+- Quicktip support
+- Function based custom displayed days
+- Multiselection support by CTRL-Key to add single days (when clicked on a date)
+- Multiselection support by CTRL-Key to add single weeks (when clicked on a weeknumber)
+- Multiselection support by CTRL-Key to add single months (when clicked on the weeknumber header)
+- Multiselection support by SHIFT-Key to add a range of days depending on the lastclicked day (when clicked on a single date)
+- returned the prev/next monthbuttons to the monthlabelrow
+- implemented mousewheel-event again for comfortable increasing/decreasing months
+- implemented monthpicker again to comfortably select the starting month. the monthpicker is rendered on the very first monthname so with only 1 month given, it acts just like the original datepicker
+- added quick dayselection routine without calling update() every time. MUCH faster selection, especially when using huge multimonth calendars!
+- added "OK"- and "Undo"-Buttons when multiSelection is set to true
+- unneccessary renderupdate trigger eliminated (performance-leak on huge multimonthcalendars!) (setvalue-function changed, much more faster now)
+- prevented opening a new browsertab in IE7/IE8 when CTRL multiselecting (occured in original multimonth calendar extension and datepicker also if clicked on an empty area within the cell) (default behaviour for a-tags, prevented this by CSS)
+- extend keynavigation (RETURN=ok-Button, CTRL as usual)
+- added Tooltip functionality to DateFieldPlus just like Buttons (tooltip show on triggerbutton only, this way invalidtext tooltips stay intact)

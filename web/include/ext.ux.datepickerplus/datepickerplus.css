@@ -1,0 +1,166 @@
+﻿.x-date-right a.npy {
+    background-image: url(dbl-right-btn.gif) !important;
+}
+.x-date-left a.npy{
+    background-image: url(dbl-left-btn.gif) !important;
+}
+
+th.x-date-weeknumber-header a em span,
+.x-date-weeknumber-cell a em span{
+    color: #66f;
+    font-size:10px;
+    text-align:center;
+}
+
+th.x-date-weeknumber-header a:hover,
+.x-date-weeknumber-cell a:hover {
+    color: #66f !important;
+    background:none !important;
+    cursor:default !important;
+}
+
+.x-date-multiselect {
+    height:100%;
+}
+
+.x-date-multiselect th.x-date-weeknumber-header a:hover,
+.x-date-multiselect .x-date-weeknumber-cell a:hover {
+    background-color: #ddecfe !important;
+    cursor:pointer !important;
+}
+
+.x-date-monthtable {
+    border-left:1px solid #1b376c;
+}
+
+.x-date-pickerplus .x-date-dummy img {
+    height:1px;
+}
+
+
+
+/* Fix for Firefox 3 */
+.x-date-pickerplus .x-date-middle {
+    width: 120px;
+}
+
+.x-date-pickerplus .x-date-left a {
+    float:left !important;
+}
+
+.x-date-pickerplus .x-date-right a{
+    float:right !important;
+}
+
+.x-date-pickerplus .x-date-dummy,
+.x-date-pickerplus .x-date-dummy img,
+.x-date-pickerplus .x-date-left,
+.x-date-pickerplus .x-date-right {
+    width:40px !important;
+}
+
+.x-date-pickerplus  .x-date-middle {
+    font-weight:normal !important;
+    height:26px;
+}
+
+.x-date-multiokbtn,
+.x-date-multitodaybtn,
+.x-date-multiundobtn {
+    width:33%;
+}
+
+.x-datepickerplus-nationalholidays {
+    background-color:#ececec !important;
+}
+
+.x-datepickerplus-weekends {
+    background-color:#f4f4f4;
+}
+
+.x-datepickerplus-activedate a {
+    background-color: #ddecfe;
+    border:1px dashed #000088 !important;
+    padding:1px 4px;
+}
+
+.x-datepickerplus-eventdates a {
+    background-color:#ccccff;
+    border:1px solid #000088;
+    padding:1px 4px;
+}
+
+
+.x-date-inner .x-datepickerplus-eventdates-disabled a:hover {
+    background: #EB5F01;
+    color: #fff;
+}
+
+.x-date-inner .x-datepickerplus-eventdates-disabled a {
+    background: #EB5F01;
+    color: #ffffff;
+    cursor:default;
+}
+
+
+/*Set the em-tag to totally override the a-tag to prevent IE from opening a new Tab when CTRL-Clicking*/
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner a,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner a em,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner a em span {
+    height:19px !important;
+    cursor:pointer;
+}
+
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner a,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-datepickerplus-eventdates a,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-datepickerplus-activedate a,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-date-today a,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-date-selected a,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner a:hover {
+    padding:0 !important;
+}
+
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner a em {
+    width:100% !important;
+    padding:0 !important;
+}
+
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner a em span {
+    padding:2px 5px;
+}
+
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-datepickerplus-eventdates a em span,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-datepickerplus-activedate a em span,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-date-today a em span,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-date-selected a em span {
+    padding:1px 4px;
+}
+
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-datepickerplus-eventdates a,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-datepickerplus-eventdates a em,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-datepickerplus-eventdates a em span,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-datepickerplus-activedate a,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-datepickerplus-activedate a em,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-datepickerplus-activedate a em span,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-date-today a,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-date-today a em,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-date-today a em span,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-date-selected a,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-date-selected a em,
+.x-datepickerplus-ie .x-date-pickerplus .x-date-inner .x-date-selected a em span {
+    height:17px !important;
+}
+
+.x-date-pickerplus-prevnexthide .x-date-nextday,
+.x-date-pickerplus-prevnexthide .x-date-prevday {
+    visibility:hidden !important;
+}
+
+/*
+Reverse Ext 3.2.x Hack to display more than 1 months vertically on datemenu
+*/
+.ext-ie .x-date-menu,
+.ext-strict .ext-ie .x-date-menu, .ext-border-box .ext-ie8 .x-date-menu,
+.ext-strict .ext-ie7 .x-date-menu{
+    height: auto;
+}
