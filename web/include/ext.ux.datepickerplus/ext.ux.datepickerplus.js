@@ -737,6 +737,14 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
 
     allowMouseWheel: true,
 
+    /**
+     * @cfg {Boolean/String} customLinkUrl
+     * Replaces the # link in days with a custom URL.
+     * Set to false to leave the default link behaviour.
+     * default is false
+     */
+    customLinkUrl: false,
+
 //this is accidently called too often in the original (when hovering over monthlabel or bottombar..there is no need to update the cells again and just leaks performance)
     focus: Ext.emptyFn,
 
@@ -1591,6 +1599,39 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
                 d.setDate(d.getDate()+1);
                 cells[i].className = "x-date-prevday";
                 setCellClass(this, cells[i],textEls[i],d);
+
+                if(this.customLinkUrl) {
+                    // We check the date for creating the right URL for href
+                    if (intDay < 10)
+                        dayString = "0" + intDay;
+                    else
+                        dayString = intDay;
+
+                    if (date.getMonth() < 9)
+                        monthString = "0" + (date.getMonth() + 1);
+                    else
+                        monthString = date.getMonth() + 1;
+                    dateString = date.getFullYear() + "-" + monthString + "-" + dayString;
+                    cells[i].firstChild.href = this.baseUrl + dateString;
+
+                    if (prevStart< 10)
+                        var dayString = "0" + prevStart;
+                    else
+                        var dayString = prevStart;
+
+                    if (date.getMonth() == 0) {
+                        var monthString = "12";
+                        var dateString = (date.getFullYear()-1) + "-" + monthString + "-" + dayString;
+                    }
+                    else {
+                        if (date.getMonth() < 10)
+                            var monthString = "0" + date.getMonth();
+                        else
+                            var monthString = date.getMonth();
+                        var dateString = date.getFullYear() + "-" + monthString + "-" + dayString;
+                    }
+                    cells[i].firstChild.href = this.customLinkUrl + dateString;
+                }
             }
 
             for(; i < days; ++i){
@@ -1605,6 +1646,21 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
                     this.todayMonthCell    = x;
                     this.todayDayCell = i;
                 }
+
+                if(this.customLinkUrl) {
+                    // We check the date for creating the right URL for href
+                    if (intDay < 10)
+                        dayString = "0" + intDay;
+                    else
+                        dayString = intDay;
+
+                    if (date.getMonth() < 9)
+                        monthString = "0" + (date.getMonth() + 1);
+                    else
+                        monthString = date.getMonth() + 1;
+                    dateString = date.getFullYear() + "-" + monthString + "-" + dayString;
+                    cells[i].firstChild.href = this.customLinkUrl + dateString;
+                }
             }
 
             var extraDays = 0;
@@ -1615,6 +1671,28 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
                 d.setDate(d.getDate()+1);
                 cells[i].className = "x-date-nextday";
                 setCellClass(this, cells[i],textEls[i],d);
+
+                if(this.customLinkUrl) {
+                    // We check the date for creating the right URL for href
+                    if (extraDays < 10)
+                        dayString = "0" + extraDays;
+                    else
+                        dayString = extraDays;
+
+                    if (date.getMonth() == 11) {
+                        monthString = "01";
+                        dateString = (date.getFullYear()+1) + "-" + monthString + "-" + dayString;
+                    }
+                    else {
+                        if (date.getMonth() < 8)
+                            monthString = "0" + (date.getMonth() + 2);
+                        else
+                            monthString = date.getMonth() + 2;
+                        dateString = date.getFullYear() + "-" + monthString + "-" + dayString;
+
+                    }
+                    cells[i].firstChild.href = this.customLinkUrl + dateString;
+                }
             }
 
             if (x===0 && !this.disableMonthPicker) {
