@@ -150,6 +150,14 @@ define('DAO_BACKEND', 'PostgreSQL');
  */
 //define('CREATE_USER_POSTACTION', 'EmailAdminPlugin');
 
+/*
+  Configuration for NavalPlan integration
+*/
+define('CREATE_REPORT_POSTACTION', 'SendTaskToNavalPlanPlugin');
+define('NAVALPLAN_SERVICE_URL', 'http://localhost:8080/navalplanner-webapp/ws/rest');
+define('NAVALPLAN_USER', 'wswriter');
+define('NAVALPLAN_PASSWORD', 'wswriter');
+
 
 /*
     Business rules definitions
