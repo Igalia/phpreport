@@ -705,6 +705,7 @@ Ext.onReady(function(){
                 multiselection: false,
                 customLinkUrl: 'tasks.php?date=',
                 selectedDates: [Date.parseDate(date, 'Y-m-d')],
+                value: Date.parseDate(date, 'Y-m-d'),
                 startDay: 1,
                 listeners: {'select': function (item, date) {
 			    window.location = "tasks.php?date=" + date.format('Y-m-d');
