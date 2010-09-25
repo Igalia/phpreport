@@ -39,10 +39,10 @@ if ($taskSectionId != NULL)
 {
     $tasksection = CoordinationFacade::GetTaskSection($taskSectionId);
     $sectionId = $tasksection->getSectionId();
-    define(PAGE_TITLE, "PhpReport - Update Task Section");
+    define('PAGE_TITLE', "PhpReport - Update Task Section");
 }
 else
-    define(PAGE_TITLE, "PhpReport - Create New Task Section");
+    define('PAGE_TITLE', "PhpReport - Create New Task Section");
 
 
 /* Include the generic header and sidebar*/

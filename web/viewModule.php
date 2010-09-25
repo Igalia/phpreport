@@ -26,7 +26,7 @@ require_once('phpreport/web/auth.php');
 
 
 /* Include the generic header and sidebar*/
-define(PAGE_TITLE, "PhpReport - Module Data");
+define('PAGE_TITLE', "PhpReport - Module Data");
 include_once("include/header.php");
 include_once("include/sidebar.php");
 include_once('phpreport/model/facade/CoordinationFacade.php');

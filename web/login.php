@@ -20,7 +20,7 @@
 
 
 /* Include the generic header */
-define(PAGE_TITLE, "PhpReport - Login");
+define('PAGE_TITLE', "PhpReport - Login");
 include("include/header.php");
 
 include_once('phpreport/model/facade/UsersFacade.php');

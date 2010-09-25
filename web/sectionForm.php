@@ -38,11 +38,11 @@ include_once('phpreport/util/SQLUniqueViolationException.php');
 if ($sectionId != NULL)
 {
     $section = CoordinationFacade::GetSection($sectionId);
-    define(PAGE_TITLE, "PhpReport - Update Section");
+    define('PAGE_TITLE', "PhpReport - Update Section");
     $moduleId = $section->getModuleId();
 }
 else
-    define(PAGE_TITLE, "PhpReport - Create New Section");
+    define('PAGE_TITLE', "PhpReport - Create New Section");
 
 
 /* Include the generic header and sidebar*/

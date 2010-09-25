@@ -26,7 +26,7 @@ include_once('phpreport/model/facade/TasksFacade.php');
 $user = $_SESSION['user'];
 
 /* Include the generic header and sidebar*/
-define(PAGE_TITLE, "PhpReport - Tasks");
+define('PAGE_TITLE', "PhpReport - Tasks");
 include("include/header.php");
 include("include/sidebar.php");
 

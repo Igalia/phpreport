@@ -39,10 +39,10 @@ if ($taskStoryId != NULL)
 {
     $taskstory = CoordinationFacade::GetTaskStory($taskStoryId);
     $storyId = $taskstory->getStoryId();
-    define(PAGE_TITLE, "PhpReport - Update Task Story");
+    define('PAGE_TITLE', "PhpReport - Update Task Story");
 }
 else
-    define(PAGE_TITLE, "PhpReport - Create New Task Story");
+    define('PAGE_TITLE', "PhpReport - Create New Task Story");
 
 
 /* Include the generic header and sidebar*/

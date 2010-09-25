@@ -25,7 +25,7 @@ $sid = $_GET["sid"];
 require_once('phpreport/web/auth.php');
 
 /* Include the generic header and sidebar*/
-define(PAGE_TITLE, "PhpReport - Users Management");
+define('PAGE_TITLE', "PhpReport - Users Management");
 include_once("include/header.php");
 include_once("include/sidebar.php");
 include_once('phpreport/util/ConfigurationParametersManager.php');

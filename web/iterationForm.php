@@ -36,10 +36,10 @@ include_once('phpreport/util/SQLUniqueViolationException.php');
 if ($iterationId != NULL)
 {
     $iteration = CoordinationFacade::GetIteration($iterationId);
-    define(PAGE_TITLE, "PhpReport - Update Iteration");
+    define('PAGE_TITLE', "PhpReport - Update Iteration");
 }
 else
-    define(PAGE_TITLE, "PhpReport - Create New Iteration");
+    define('PAGE_TITLE', "PhpReport - Create New Iteration");
 
 
 /* Include the generic header and sidebar*/

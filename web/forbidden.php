@@ -20,7 +20,7 @@
 
 
 /* Include the generic header and sidebar*/
-define(PAGE_TITLE, "PhpReport - Forbidden page");
+define('PAGE_TITLE', "PhpReport - Forbidden page");
 include("include/header.php");
 include("include/sidebar.php");
 

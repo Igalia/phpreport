@@ -39,10 +39,10 @@ if ($storyId != NULL)
 {
     $story = CoordinationFacade::GetStory($storyId);
     $iterationId = $story->getIterationId();
-    define(PAGE_TITLE, "PhpReport - Update Story");
+    define('PAGE_TITLE', "PhpReport - Update Story");
 }
 else
-    define(PAGE_TITLE, "PhpReport - Create New Story");
+    define('PAGE_TITLE', "PhpReport - Create New Story");
 
 
 /* Include the generic header and sidebar*/
