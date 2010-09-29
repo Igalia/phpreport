@@ -21,6 +21,7 @@
 
 include_once('phpreport/model/dao/DAOFactory.php');
 include_once('phpreport/model/facade/actionplugin/ActionPlugin.php');
+include_once('phpreport/model/facade/actionplugin/BeforeSendDeletedTaskToNavalPlan.php');
 include_once('phpreport/util/SimpleHttpRequest.php');
 include_once('phpreport/util/ConfigurationParametersManager.php');
 include_once('phpreport/util/UnknownParameterException.php');
@@ -42,6 +43,10 @@ class SendTaskToNavalPlanPlugin extends ActionPlugin {
                 $this->sendPartiallyUpdatedTasksToNavalPlan(
                     $this->pluggedAction->getTaskVO());
         }
+        else if($this->pluggedAction instanceof DeleteReportAction) {
+            if ($status)
+                $this->sendDeletedTaskToNavalPlan();
+        }
         // if the action doesn't belong to one of those classes,
         // we do nothing
     }
@@ -51,6 +56,15 @@ class SendTaskToNavalPlanPlugin extends ActionPlugin {
         // so we retrieve it from the DB
         $dao = DAOFactory::getTaskDAO();
         $this->sendTasksToNavalPlan($dao->getById($task->getId()));
+    }
+
+    private function sendDeletedTaskToNavalPlan() {
+        // since NavalPlan doesn't provide a service to delete
+        // work report lines, we update the line setting hours to 0
+        $task = BeforeSendDeletedTaskToNavalPlan::$taskToBeDeleted;
+        $task->setInit(0);
+        $task->setEnd(0);
+        $this->sendTasksToNavalPlan($task);
     }
 
     private function sendTasksToNavalPlan(TaskVO $task) {
