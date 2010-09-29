@@ -154,6 +154,8 @@ define('DAO_BACKEND', 'PostgreSQL');
   Configuration for NavalPlan integration
 */
 define('CREATE_REPORT_POSTACTION', 'SendTaskToNavalPlanPlugin');
+define('UPDATE_REPORT_POSTACTION', 'SendTaskToNavalPlanPlugin');
+define('PARTIAL_UPDATE_REPORT_POSTACTION', 'SendTaskToNavalPlanPlugin');
 define('NAVALPLAN_SERVICE_URL', 'http://localhost:8080/navalplanner-webapp/ws/rest');
 define('NAVALPLAN_USER', 'wswriter');
 define('NAVALPLAN_PASSWORD', 'wswriter');

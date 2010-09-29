@@ -19,6 +19,7 @@
  */
 
 
+include_once('phpreport/model/dao/DAOFactory.php');
 include_once('phpreport/model/facade/actionplugin/ActionPlugin.php');
 include_once('phpreport/util/SimpleHttpRequest.php');
 include_once('phpreport/util/ConfigurationParametersManager.php');
@@ -31,18 +32,28 @@ class SendTaskToNavalPlanPlugin extends ActionPlugin {
     }
 
     public function run($status) {
-        if ($this->pluggedAction instanceof CreateReportAction) {
+        if ($this->pluggedAction instanceof UpdateReportAction ||
+                $this->pluggedAction instanceof CreateReportAction) {
             if ($status)
-                $this->sendTasksToNavalPlan();
+                $this->sendTasksToNavalPlan($this->pluggedAction->getTaskVO());
+        }
+        else if($this->pluggedAction instanceof PartialUpdateReportAction) {
+            if ($status)
+                $this->sendPartiallyUpdatedTasksToNavalPlan(
+                    $this->pluggedAction->getTaskVO());
         }
         // if the action doesn't belong to one of those classes,
         // we do nothing
     }
 
-    private function sendTasksToNavalPlan() {
-        //retrieve task
-        $task = $this->pluggedAction->getTaskVO();
+    private function sendPartiallyUpdatedTasksToNavalPlan(TaskVO $task) {
+        // the task doesn't contain all the information we need
+        // so we retrieve it from the DB
+        $dao = DAOFactory::getTaskDAO();
+        $this->sendTasksToNavalPlan($dao->getById($task->getId()));
+    }
 
+    private function sendTasksToNavalPlan(TaskVO $task) {
         //retrieve configuration parameters
         try {
             $serviceUrl = ConfigurationParametersManager::getParameter('NAVALPLAN_SERVICE_URL');
