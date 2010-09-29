@@ -384,7 +384,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 value: (this.taskRecord.data['telework']=='true')?true:false,
                 tabIndex: tab++,
                 listeners: {
-                    'change': function() {
+                    'check': function() {
                         this.parent.taskRecord.set('telework',String(this.getValue()));
                     }
                 }
