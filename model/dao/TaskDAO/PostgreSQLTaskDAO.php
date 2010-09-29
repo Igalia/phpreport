@@ -168,7 +168,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
     if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
 
     $row = @pg_fetch_array($res);
-    if (strtolower($row[same]) == "t")
+    if (strtolower($row['same']) == "t")
         return true;
 
     return false;
@@ -535,40 +535,40 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
         $sql = "UPDATE task SET ";
 
-        if ($update[date])
+        if ($update['date'])
         $sql = $sql . "_date=" . DBPostgres::formatDate($taskVO->getDate()) . ", ";
 
-        if ($update[init])
+        if ($update['init'])
         $sql = $sql . "init=" . DBPostgres::checkNull($taskVO->getInit()) . ", ";
 
-        if ($update[end])
+        if ($update['end'])
         $sql = $sql . "_end=" . DBPostgres::checkNull($taskVO->getEnd()) . ", ";
 
-        if ($update[story])
+        if ($update['story'])
         $sql = $sql . "story=" . DBPostgres::checkStringNull($taskVO->getStory()) . ", ";
 
-        if ($update[telework])
+        if ($update['telework'])
         $sql = $sql . "telework=" . DBPostgres::boolToString($taskVO->getTelework()) . ", ";
 
-        if ($update[text])
+        if ($update['text'])
         $sql = $sql . "text=" . DBPostgres::checkStringNull($taskVO->getText()) . ", ";
 
-        if ($update[ttype])
+        if ($update['ttype'])
         $sql = $sql . "ttype=" . DBPostgres::checkStringNull($taskVO->getTtype()) . ", ";
 
-        if ($update[phase])
+        if ($update['phase'])
         $sql = $sql . "phase=" . DBPostgres::checkStringNull($taskVO->getPhase()) . ", ";
 
-        if ($update[userId])
+        if ($update['userId'])
         $sql = $sql . "usrid=" . DBPostgres::checkNull($taskVO->getUserId()) . ", ";
 
-        if ($update[projectId])
+        if ($update['projectId'])
         $sql = $sql . "projectid=" . DBPostgres::checkNull($taskVO->getProjectId()) . ", ";
 
-        if ($update[customerId])
+        if ($update['customerId'])
         $sql = $sql . "customerid=" . DBPostgres::checkNull($taskVO->getCustomerId()) . ", ";
 
-        if ($update[taskStoryId])
+        if ($update['taskStoryId'])
         $sql = $sql . "task_storyid=" . DBPostgres::checkNull($taskVO->getTaskStoryId());
 
         if (strlen($sql) == strlen("UPDATE task SET "))

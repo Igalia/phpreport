@@ -69,7 +69,11 @@
 
                 $taskVO = new TaskVO();
 
-                $update = array();
+                $update = array('date' => false, 'init' => false,
+                    'end' => false, 'story' => false, 'telework' => false,
+                    'ttype' => false, 'text' => false, 'phase' => false,
+                    'taskStoryId' => false, 'projectId' => false,
+                    'customerId' => false, 'userId' => false);
 
                 $parser->read();
 
@@ -101,7 +105,7 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update[date] = true;
+                                $update['date'] = true;
                                 break;
 
                         case "initTime": $initTimeFormat = $parser->getAttribute("format");
@@ -117,7 +121,7 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update[init] = true;
+                                $update['init'] = true;
                                 break;
 
                         case "endTime": $endTimeFormat = $parser->getAttribute("format");
@@ -134,7 +138,7 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update[end] = true;
+                                $update['end'] = true;
                                 break;
 
                         case "story":$parser->read();
@@ -144,7 +148,7 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update[story] = true;
+                                $update['story'] = true;
                                 break;
 
                         case "telework":$parser->read();
@@ -157,7 +161,7 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update[telework] = true;
+                                $update['telework'] = true;
                                 break;
 
                         case "ttype":    $parser->read();
@@ -167,7 +171,7 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update[ttype] = true;
+                                $update['ttype'] = true;
                                 break;
 
                         case "text":    $parser->read();
@@ -177,7 +181,7 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update[text] = true;
+                                $update['text'] = true;
                                 break;
 
                         case "phase":    $parser->read();
@@ -187,7 +191,7 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update[phase] = true;
+                                $update['phase'] = true;
                                 break;
 
                         case "taskStoryId":$parser->read();
@@ -197,7 +201,7 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update[taskStoryId] = true;
+                                $update['taskStoryId'] = true;
                                 break;
 
                         case "projectId":$parser->read();
@@ -207,7 +211,7 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update[projectId] = true;
+                                $update['projectId'] = true;
                                 break;
 
                         case "customerId":$parser->read();
@@ -217,7 +221,7 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update[customerId] = true;
+                                $update['customerId'] = true;
                                 break;
 
                         default:    $parser->next();
@@ -244,7 +248,7 @@
                 $string = "<return service='updateTasks'><success>false</success><error id='1'>There was some error while updating the tasks</error></return>";
 
 
-        if (!$string)
+        if (!isset($string))
             $string = "<return service='updateTasks'><success>true</success><ok>Operation Success!</ok></return>";
 
     } while (false);
