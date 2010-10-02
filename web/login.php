@@ -37,7 +37,7 @@ if (isset($_SERVER['PHP_AUTH_USER']))
 
 
 /* There are POST data: we try to log in */
-if(isset($_POST["enter"])) {
+if(isset($_POST["login"]) && isset($_POST["password"])) {
     if(LoginManager::login($_POST["login"], $_POST["password"]))
         header("Location: tasks.php");
     else
@@ -46,17 +46,52 @@ if(isset($_POST["enter"])) {
 ?>
 
 <div id="content">
-    <form method="post">
-
-        <?php echo _("Login")?>
-        <input type="text" name="login"/>
-        <?php echo _("Password")?>
-        <input type="password" name="password"/>
-
-        <input type="submit" name="enter" value="<?php echo _("Enter")?>"/>
-
-    </form>
+    <!-- We inject the form here, from the JavaScript code -->
 </div>
+
+<script>
+Ext.onReady(function(){
+
+    var sendFormFunction = function () {
+        form.getForm().getEl().dom.action = 'login.php';
+        form.getForm().getEl().dom.method = 'POST';
+        form.getForm().submit();
+    };
+
+    var form = new Ext.form.FormPanel({
+        standardSubmit: true,
+        frame: true,
+        title: 'Login data for PhpReport',
+
+        width: 350,
+        defaults: {width: 230},
+        defaultType: 'textfield',
+        items: [{
+                fieldLabel: 'Login',
+                name: 'login',
+                id: 'login',
+                allowBlank:false
+            },{
+                inputType: 'password',
+                fieldLabel: 'Password',
+                name: 'password',
+                allowBlank:false
+            }
+        ],
+        buttons: [{
+            text: 'Enter',
+            handler: sendFormFunction
+        }],
+        keys: [{
+            key: [Ext.EventObject.ENTER],
+            handler: sendFormFunction
+        }]
+    });
+
+    form.render('content');
+    form.findById('login').focus();
+});
+</script>
 
 <?php
 /* Include the footer to close the header */
