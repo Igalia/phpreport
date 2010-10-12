@@ -557,7 +557,8 @@ class PostgreSQLUserDAO extends UserDAO{
 
     /** User updater for PostgreSQL.
      *
-     * This function updates the data of a User by its {@link UserVO}.
+     * This function updates the data of a User by its {@link UserVO}. If the
+     * UserVO doesn't contain a password, it won't be updated.
      *
      * @param UserVO $userVO the {@link UserVO} with the data we want to update on database.
      * @return int the number of rows that have been affected (it should be 1).
@@ -574,12 +575,12 @@ class PostgreSQLUserDAO extends UserDAO{
         // If the query returned a row then update
         if(sizeof($currUserVO) > 0) {
 
-            $sql = "UPDATE usr SET login=" . DBPostgres::checkStringNull($userVO->getLogin()) . ", password=";
+            $sql = "UPDATE usr SET login=" . DBPostgres::checkStringNull($userVO->getLogin());
 
-            if (DBPostgres::checkStringNull($userVO->getPassword()) == "NULL")
-                $sql = $sql . "NULL WHERE id=" .$userVO->getId();
-            else
-                $sql = $sql . "md5(" . DBPostgres::checkStringNull($userVO->getPassword()) . ") WHERE id=" .$userVO->getId();
+            if (DBPostgres::checkStringNull($userVO->getPassword()) != "NULL")
+                $sql .= ", password=md5(" . DBPostgres::checkStringNull($userVO->getPassword()) . ")";
+
+            $sql .= " WHERE id=" .$userVO->getId();
 
             $res = pg_query($this->connect, $sql);
 
