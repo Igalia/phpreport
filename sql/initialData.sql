@@ -11,13 +11,15 @@
 --
 
 INSERT INTO user_group VALUES (1, 'staff');
+INSERT INTO user_group VALUES (2, 'admin');
 
 
 --
 -- Data for Name: usr; Type: TABLE DATA; Schema: public; Owner: phpreport
 --
 
-INSERT INTO usr VALUES (1, '21232f297a57a5a743894a0e4a801fc3', 'admin');
+INSERT INTO usr VALUES (1, md5('user'), 'user');
+INSERT INTO usr VALUES (2, md5('admin'), 'admin');
 
 
 --
@@ -25,3 +27,5 @@ INSERT INTO usr VALUES (1, '21232f297a57a5a743894a0e4a801fc3', 'admin');
 --
 
 INSERT INTO belongs VALUES (1, 1);
+INSERT INTO belongs VALUES (1, 2);
+INSERT INTO belongs VALUES (2, 2);
