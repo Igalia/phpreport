@@ -84,6 +84,10 @@ class UpdateReportAction extends Action{
         return 0;
     }
 
+    public function getTaskVO() {
+        return $this->task;
+    }
+
 }
 
 /*
