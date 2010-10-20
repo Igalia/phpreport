@@ -36,6 +36,12 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
             if ($status)
                 $this->sendTaskToExternalPhpReport($this->pluggedAction->getTaskVO());
         }
+        else if($this->pluggedAction instanceof PartialUpdateReportAction) {
+            if ($status)
+                $this->partialUpdateTaskInExternalPhpReport(
+                        $this->pluggedAction->getTaskVO(),
+                        $this->pluggedAction->getUpdateFlags());
+        }
         // if the action doesn't belong to one of those classes,
         // we do nothing
     }
@@ -78,6 +84,45 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
         if($externalId) {
             $this->addEntryToSynchronizationTable($task, $externalId);
         }
+    }
+
+    private function partialUpdateTaskInExternalPhpReport(TaskVO $task, $updateFlags) {
+
+        //check if the task is synchronized with the external PhpReport
+        $externalId = $this->getExternalId($task->getId());
+        if(!$externalId) {
+            return;
+        }
+
+        //update TaskVO with the external ID
+        $task->setId($externalId);
+
+        //retrieve configuration parameters
+        try {
+            $url = ConfigurationParametersManager::getParameter('EXTERNAL_PHPREPORT_URL');
+        }
+        catch(UnknownParameterException $e) {
+            error_log("External PhpReport plugin is not configured properly");
+            return;
+        }
+
+        include('ExternalPhpReportConfiguration.php');
+
+        //login to the external PhpReport
+        $user = DAOFactory::getUserDAO()->getById($task->getUserId());
+        $externalUser = $relationUsersWithExternalUsers[$user->getLogin()];
+        $sessionId = $this->login($url,
+            $externalUser["login"], $externalUser["password"]);
+        if(!$sessionId) {
+            return;
+        }
+
+        //setup XML to be sent
+        $xml = $this->buildPartialUpdateXML($task, $sessionId, $updateFlags);
+
+
+        //send task
+        $this->partialUpdateTask($url, $xml);
     }
 
     private function taskHasToBeSent(TaskVO $task, UserVO $user) {
@@ -166,6 +211,57 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
         return $xml->asXML();
     }
 
+    private function buildPartialUpdateXML($task, $sessionId, $updateFlags) {
+        include('ExternalPhpReportConfiguration.php');
+
+        $xml = new SimpleXMLElement("<tasks></tasks>");
+        $xml['sid'] = $sessionId;
+
+        $taskXML = $xml->addChild("task");
+        if($updateFlags["date"]) {
+            $taskXML->addChild("date");
+            $taskXML->date =  $task->getDate()->format('Y-m-d');
+        }
+        if($updateFlags["end"]) {
+            $taskXML->addChild("endTime");
+            $taskXML->endTime = $this->convertSecondsToTimeString($task->getEnd());
+        }
+        if($updateFlags["init"]) {
+            $taskXML->addChild("initTime");
+            $taskXML->initTime = $this->convertSecondsToTimeString($task->getInit());
+        }
+        if($updateFlags["customerId"]) {
+            $taskXML->addChild("customerId");
+            $taskXML->customerId = $relationClientsWithExternalClients[
+                    $task->getCustomerId()];
+        }
+        if($updateFlags["projectId"]) {
+            $taskXML->addChild("projectId");
+            $taskXML->projectId = $relationProjectsWithExternalProjects[
+                    $task->getProjectId()];
+        }
+        if($updateFlags["ttype"]) {
+            $taskXML->addChild("ttype");
+            $taskXML->ttype = $task->getTtype();
+        }
+        if($updateFlags["story"]) {
+            $taskXML->addChild("story");
+            $taskXML->story = $task->getStory();
+        }
+        if($updateFlags["text"]) {
+            $taskXML->addChild("text");
+            $taskXML->text = $task->getText();
+        }
+        if($updateFlags["telework"]) {
+            $taskXML->addChild("telework");
+            $taskXML->telework = $task->getTelework() ? "true" : "false";
+        }
+        $taskXML->addChild("id");
+        $taskXML->id =  $task->getId();
+
+        return $xml->asXML();
+    }
+
     function createTask($url, $xmlString) {
         //prepare request
         $request = new SimpleHttpRequest();
@@ -209,6 +305,46 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
         return (string)$xml->tasks->task->id;
     }
 
+    private function partialUpdateTask($url, $xmlString) {
+        //prepare request
+        $request = new SimpleHttpRequest();
+        $request->init();
+
+        $request->setUrl($url."/web/services/updateTasksService.php");
+        $request->setupPost($xmlString);
+        //TODO: setup HTTP authentication if neccessary
+
+        //perform the request
+        $output = $request->doRequest();
+        $request->close();
+        if(!$output) {
+            error_log("No response when creating task in external PhpReport");
+            return false;
+        }
+
+        //study the response
+        try {
+            $xml = new SimpleXMLElement($output);
+        }
+        catch (Exception $e) {
+            error_log("Error parsing response from external PhpReport: "
+                . $e->getMessage());
+            return false;
+        }
+
+        if(isset($xml->error)) {
+            error_log("Error updating task in external PhpReport: "
+                . $xml->error);
+            return false;
+        }
+        if(!isset($xml->ok)) {
+            error_log("Unspecified error updating task in external PhpReport");
+            return false;
+        }
+        error_log("Success updating task in external PhpReport");
+        error_log("External PhpReport response: " . $output);
+    }
+
     function addEntryToSynchronizationTable($task, $externalId) {
         //FIXME: accessing directly to the DB violates the layer independence
 
@@ -227,6 +363,32 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
             return;
         }
         error_log("Success adding entry to the synchronization table");
+    }
+
+    function getExternalId($internalId) {
+        //FIXME: accessing directly to the DB violates the layer independence
+
+        $sql = "SELECT externalId FROM relation_tasks_external_phpreport " .
+                " WHERE internalId = " . $internalId;
+        $connection = $this->connectPostgres();
+
+        if (!$connection) {
+            error_log("Couldn't connect to Posgres to get entry from " .
+                    "the synchronization table");
+            return false;
+        }
+
+        if(!$result=pg_query($connection, $sql)) {
+            error_log("Error getting entry from the synchronization table: "
+                . pg_last_error($connection));
+            return false;
+        }
+
+        if(pg_num_rows($result) < 1) {
+            return false;
+        }
+        $array = pg_fetch_array($result);
+        return $array[0];
     }
 
     function connectPostgres() {

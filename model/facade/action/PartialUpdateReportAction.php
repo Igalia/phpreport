@@ -97,6 +97,10 @@ class PartialUpdateReportAction extends Action{
         return $this->task;
     }
 
+    public function getUpdateFlags() {
+        return $this->update;
+    }
+
 }
 
 

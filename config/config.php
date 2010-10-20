@@ -155,6 +155,7 @@ define('DAO_BACKEND', 'PostgreSQL');
 */
 //uncomment the next lines to enable it
 //define('CREATE_REPORT_POSTACTION', 'SendTaskToExternalPhpReportInstance');
+//define('PARTIAL_UPDATE_REPORT_POSTACTION', 'SendTaskToExternalPhpReportInstance');
 //define('EXTERNAL_PHPREPORT_URL', 'http://demo.phpreport.igalia.com');
 //end lines for plugin SendTaskToExternalPhpReportInstance
 
