@@ -42,6 +42,16 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
                         $this->pluggedAction->getTaskVO(),
                         $this->pluggedAction->getUpdateFlags());
         }
+        else if($this->pluggedAction instanceof UpdateReportAction) {
+            if ($status)
+                $this->partialUpdateTaskInExternalPhpReport(
+                        $this->pluggedAction->getTaskVO(),
+                        array('date' => true, 'init' => true,
+                            'end' => true, 'story' => true, 'telework' => true,
+                            'ttype' => true, 'text' => true, 'phase' => true,
+                            'taskStoryId' => true, 'projectId' => true,
+                            'customerId' => true, 'userId' => true));
+        }
         // if the action doesn't belong to one of those classes,
         // we do nothing
     }
