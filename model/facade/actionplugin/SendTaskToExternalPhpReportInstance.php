@@ -72,7 +72,12 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
 
 
         //send task
-        $this->createTask($url, $xml);
+        $externalId = $this->createTask($url, $xml);
+
+        //synchronize
+        if($externalId) {
+            $this->addEntryToSynchronizationTable($task, $externalId);
+        }
     }
 
     private function taskHasToBeSent(TaskVO $task, UserVO $user) {
@@ -175,7 +180,7 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
         $request->close();
         if(!$output) {
             error_log("No response when creating task in external PhpReport");
-            return;
+            return false;
         }
 
         //study the response
@@ -185,19 +190,55 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
         catch (Exception $e) {
             error_log("Error parsing response from external PhpReport: "
                 . $e->getMessage());
-            return;
+            return false;
         }
 
         if(isset($xml->error)) {
             error_log("Error creating task in external PhpReport: "
                 . $xml->error);
-            return;
+            return false;
         }
         if(!isset($xml->ok)) {
             error_log("Unspecified error creating task in external PhpReport");
-            return;
+            return false;
         }
         error_log("Success sending task to external PhpReport");
         error_log("External PhpReport response: " . $output);
+
+        //return external id with synchronization purposes
+        return (string)$xml->tasks->task->id;
+    }
+
+    function addEntryToSynchronizationTable($task, $externalId) {
+        //FIXME: accessing directly to the DB violates the layer independence
+
+        $sql = "INSERT INTO relation_tasks_external_phpreport (internalId," .
+                " externalId) VALUES(" . $task->getId() . ", " . $externalId .")";
+        $connection = $this->connectPostgres();
+
+        if (!$connection) {
+            error_log("Couldn't connect to Posgres to add entry in the synchronization table");
+            return;
+        }
+
+        if(!pg_query($connection, $sql)) {
+            error_log("Error adding entry to the synchronization table: "
+                . pg_last_error($connection));
+            return;
+        }
+        error_log("Success adding entry to the synchronization table");
+    }
+
+    function connectPostgres() {
+        $parameters[] = ConfigurationParametersManager::getParameter('DB_HOST');
+        $parameters[] = ConfigurationParametersManager::getParameter('DB_PORT');
+        $parameters[] = ConfigurationParametersManager::getParameter('DB_USER');
+        $parameters[] = ConfigurationParametersManager::getParameter('DB_NAME');
+        $parameters[] = ConfigurationParametersManager::getParameter('DB_PASSWORD');
+
+        $connectionString = "host=$parameters[0] port=$parameters[1] " .
+            "user=$parameters[2] dbname=$parameters[3] password=$parameters[4]";
+
+        return pg_connect($connectionString);
     }
 }
