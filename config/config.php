@@ -150,6 +150,14 @@ define('DAO_BACKEND', 'PostgreSQL');
  */
 //define('CREATE_USER_POSTACTION', 'EmailAdminPlugin');
 
+/*
+  Configuration of the plugin SendTaskToExternalPhpReportInstance
+*/
+//uncomment the next lines to enable it
+//define('CREATE_REPORT_POSTACTION', 'SendTaskToExternalPhpReportInstance');
+//define('EXTERNAL_PHPREPORT_URL', 'http://demo.phpreport.igalia.com');
+//end lines for plugin SendTaskToExternalPhpReportInstance
+
 
 /*
     Business rules definitions
