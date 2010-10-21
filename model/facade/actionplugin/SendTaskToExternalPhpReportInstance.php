@@ -52,6 +52,11 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
                             'taskStoryId' => true, 'projectId' => true,
                             'customerId' => true, 'userId' => true));
         }
+        else if($this->pluggedAction instanceof DeleteReportAction) {
+            if ($status)
+                $this->deleteTaskInExternalPhpReport(
+                        $this->pluggedAction->getTaskVO());
+        }
         // if the action doesn't belong to one of those classes,
         // we do nothing
     }
@@ -133,6 +138,50 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
 
         //send task
         $this->partialUpdateTask($url, $xml);
+    }
+
+    private function deleteTaskInExternalPhpReport(TaskVO $task) {
+
+        //check if the task is synchronized with the external PhpReport
+        $externalId = $this->getExternalId($task->getId());
+        if(!$externalId) {
+            return;
+        }
+
+        //update TaskVO with the external ID
+        $task->setId($externalId);
+
+        //retrieve configuration parameters
+        try {
+            $url = ConfigurationParametersManager::getParameter('EXTERNAL_PHPREPORT_URL');
+        }
+        catch(UnknownParameterException $e) {
+            error_log("External PhpReport plugin is not configured properly");
+            return;
+        }
+
+        include('ExternalPhpReportConfiguration.php');
+
+        //login to the external PhpReport
+        $user = DAOFactory::getUserDAO()->getById($task->getUserId());
+        $externalUser = $relationUsersWithExternalUsers[$user->getLogin()];
+        $sessionId = $this->login($url,
+            $externalUser["login"], $externalUser["password"]);
+        if(!$sessionId) {
+            return;
+        }
+
+        //setup XML to be sent
+        $xml = $this->buildPartialUpdateXML($task, $sessionId,
+                array('date' => false, 'init' => false,
+                    'end' => false, 'story' => false, 'telework' => false,
+                    'ttype' => false, 'text' => false, 'phase' => false,
+                    'taskStoryId' => false, 'projectId' => false,
+                    'customerId' => false, 'userId' => false));
+
+
+        //send task
+        $this->deleteTask($url, $xml);
     }
 
     private function taskHasToBeSent(TaskVO $task, UserVO $user) {
@@ -352,6 +401,46 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
             return false;
         }
         error_log("Success updating task in external PhpReport");
+        error_log("External PhpReport response: " . $output);
+    }
+
+    private function deleteTask($url, $xmlString) {
+        //prepare request
+        $request = new SimpleHttpRequest();
+        $request->init();
+
+        $request->setUrl($url."/web/services/deleteTasksService.php");
+        $request->setupPost($xmlString);
+        //TODO: setup HTTP authentication if neccessary
+
+        //perform the request
+        $output = $request->doRequest();
+        $request->close();
+        if(!$output) {
+            error_log("No response when deleting task in external PhpReport");
+            return false;
+        }
+
+        //study the response
+        try {
+            $xml = new SimpleXMLElement($output);
+        }
+        catch (Exception $e) {
+            error_log("Error parsing response from external PhpReport: "
+                . $e->getMessage());
+            return false;
+        }
+
+        if(isset($xml->error)) {
+            error_log("Error deleting task in external PhpReport: "
+                . $xml->error);
+            return false;
+        }
+        if(!isset($xml->ok)) {
+            error_log("Unspecified error deleting task in external PhpReport");
+            return false;
+        }
+        error_log("Success deleting task in external PhpReport");
         error_log("External PhpReport response: " . $output);
     }
 
