@@ -205,11 +205,13 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
 
         //perform the request
         $output = $request->doRequest();
-        $request->close();
         if(!$output) {
-            error_log("No response when logging into external PhpReport");
+            error_log("No response when logging into external PhpReport: " .
+                $request->getError());
+            $request->close();
             return;
         }
+        $request->close();
 
         //study the response
         try {
@@ -332,11 +334,13 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
 
         //perform the request
         $output = $request->doRequest();
-        $request->close();
         if(!$output) {
-            error_log("No response when creating task in external PhpReport");
+            error_log("No response when creating task in external PhpReport: " .
+                $request->getError());
+            $request->close();
             return false;
         }
+        $request->close();
 
         //study the response
         try {
@@ -375,11 +379,13 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
 
         //perform the request
         $output = $request->doRequest();
-        $request->close();
         if(!$output) {
-            error_log("No response when creating task in external PhpReport");
+            error_log("No response when creating task in external PhpReport: " .
+                $request->getError());
+            $request->close();
             return false;
         }
+        $request->close();
 
         //study the response
         try {
@@ -415,11 +421,13 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
 
         //perform the request
         $output = $request->doRequest();
-        $request->close();
         if(!$output) {
-            error_log("No response when deleting task in external PhpReport");
+            error_log("No response when deleting task in external PhpReport: " .
+                $request->getError());
+            $request->close();
             return false;
         }
+        $request->close();
 
         //study the response
         try {
