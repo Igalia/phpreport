@@ -155,6 +155,9 @@ class SimpleHttpRequest {
         return $output;
     }
 
+    public function getError() {
+        return curl_error($this->curlHandle);
+    }
 
     public function doRequestXML() {
         try {
