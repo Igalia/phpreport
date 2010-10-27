@@ -90,6 +90,15 @@
                                 }
                                 break;
 
+                        case "password":$parser->read();
+                                if ($parser->hasValue)
+                                {
+                                    $userVO->setPassword(unescape_string($parser->value));
+                                    $parser->next();
+                                    $parser->next();
+                                }
+                                break;
+
                         case "userGroups":
 
                                 $parser->read();

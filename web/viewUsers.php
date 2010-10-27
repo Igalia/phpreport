@@ -245,7 +245,8 @@ Ext.onReady(function(){
     /* Schema of the information about users */
     var userRecord = new Ext.data.Record.create([
             {name: 'id', type: 'int'},
-            {name: "login", type: 'string'}<?php
+            {name: "login", type: 'string'},
+            {name: "password", type: 'string'}<?php
 
                 foreach($groups as $group)
                     print ', {name: "' . $group->getName() . '", mapping: "userGroups/' . $group->getName() . '", defaultValue: false, type: "bool"}';
@@ -278,7 +279,7 @@ Ext.onReady(function(){
         storeId: 'users',
         proxy: userProxy,
         reader:new Ext.data.XmlReader({record: 'user', idProperty:'id' }, userRecord),
-        writer:new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: true, root: 'users', tpl: '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><tpl if="name==\'id\'"><{name}>{value}</{name}></tpl><tpl if="name==\'login\'"><{name}>{value}</{name}></tpl></tpl><userGroups><tpl for="fields"><tpl if="name!=\'id\'"><tpl if="name!=\'login\'"><{[values.name.replace("userGroups/", "")]}>{value}</{[values.name.replace("userGroups/", "")]}></tpl></tpl></tpl></userGroups></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, userRecord),
+        writer:new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: true, root: 'users', tpl: '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><tpl if="name==\'id\'"><{name}>{value}</{name}></tpl><tpl if="name==\'login\'"><{name}>{value}</{name}></tpl><tpl if="name==\'password\'"><{name}>{value}</{name}></tpl></tpl><userGroups><tpl for="fields"><tpl if="name!=\'id\'"><tpl if="name!=\'login\'"><tpl if="name!=\'password\'"><{[values.name.replace("userGroups/", "")]}>{value}</{[values.name.replace("userGroups/", "")]}></tpl></tpl></tpl></tpl></userGroups></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, userRecord),
         remoteSort: false,
         sortInfo: {
             field: 'login',
@@ -307,6 +308,22 @@ Ext.onReady(function(){
             editor: {
                 xtype: 'textfield',
                 allowBlank: false,
+                listeners: {
+                    'change': function() {
+                        this.setValue(Trim(this.getValue()));
+                    }
+                },
+            }
+        },
+        {
+            header: "Password",
+            width: 100,
+            sortable: true,
+            dataIndex: 'password',
+            editor: {
+                xtype: 'textfield',
+                inputType: 'password',
+                allowBlank: true,
                 listeners: {
                     'change': function() {
                         this.setValue(Trim(this.getValue()));
