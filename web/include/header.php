@@ -34,6 +34,9 @@
     <link rel="stylesheet" type="text/css" href="include/tools.css" />
     <link rel="stylesheet" type="text/css" href="ext/examples/ux/css/ux-all.css"/>
 
+    <!-- Include DatePickerPlus stylesheet -->
+    <link rel="stylesheet" type="text/css" href="include/ext.ux.datepickerplus/datepickerplus.css"/>
+
 		<!-- Include Ext library -->
     <script type="text/javascript" src="ext/adapter/ext/ext-base-debug.js"></script>
     <script type="text/javascript" src="ext/ext-all-debug.js"></script>
