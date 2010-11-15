@@ -38,6 +38,7 @@ else
 
 ?>
 <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus.js"></script>
+<script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus-holidays.js"></script>
 <script type="text/javascript">
 
 function updateTimes(field, min, max, open) {
