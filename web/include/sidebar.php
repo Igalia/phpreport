@@ -91,6 +91,9 @@ var menuPanel = new Ext.Panel({
             },{
                 text: 'Areas management', handler: onItemClick, destination: 'viewAreas.php', iconCls: 'silk-brick-edit',
             }],
+        },{
+            text: 'Logout', handler: onItemClick,
+            destination: "logout.php",
         }],
     }]
 });

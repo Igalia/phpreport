@@ -76,6 +76,31 @@ class LoginManager {
     }
   }
 
+  /** Logout utility function
+   *
+   * Removes all the data stored in the session and the session cookie.
+   * @return void
+   */
+  public static function logout() {
+    // Initialize the session.
+    session_start();
+
+    // Unset all of the session variables.
+    $_SESSION = array();
+
+    // To kill the session, we also delete the session cookie.
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]
+        );
+    }
+
+    // Finally, destroy the session.
+    session_destroy();
+  }
+
   /** Login check utility function
    *
    * This function checks whether the User is logged or not,
