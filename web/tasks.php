@@ -478,7 +478,8 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                             cookieProvider.encodeValue(templatesArray));
 
                     //add the button for the new task to the sidebar panel
-                    Ext.getCmp('templatesPanel').addButtonForTemplate(template);
+                    Ext.getCmp('templatesPanel').addButtonForTemplate(
+                            template, templatesArray.length - 1);
                 }
             }),
         });
@@ -871,8 +872,8 @@ Ext.onReady(function(){
         defaults: {
             width: '100%',
         },
-        addButtonForTemplate: function (templateValues) {
-            this.add(new Ext.Button({
+        addButtonForTemplate: function (templateValues, indexInsideCookie) {
+            var createButton = new Ext.Button({
                 text: ((templateValues[6] != undefined) &&
                         (templateValues[6] != '')) ?
                     templateValues[6] :
@@ -906,6 +907,36 @@ Ext.onReady(function(){
                     //put the focus on the init time field
                     taskPanel.initTimeField.focus();
                 },
+            });
+            var deleteButton = new Ext.Button({
+                text: 'Delete',
+                handler: function () {
+                    var row = this.findParentByType('panel');
+
+                    //remove from the cookie
+                    var templatesArray = cookieProvider.decodeValue(
+                            cookieProvider.get('taskTemplate'));
+                    templatesArray.splice(row.indexInsideCookie, 1);
+                    cookieProvider.set('taskTemplate',
+                            cookieProvider.encodeValue(templatesArray));
+
+                    //update indexes of the other templates
+                    var sibling = row.nextSibling();
+                    while(sibling != null) {
+                        sibling.indexInsideCookie -= 1;
+                        sibling = sibling.nextSibling();
+                    }
+
+                    //remove from the panel
+                    var panel = this.findParentByType('form');
+                    panel.remove(row);
+
+                },
+            });
+            this.add(new Ext.Panel({
+                indexInsideCookie: indexInsideCookie,
+                layout: 'hbox',
+                items: [createButton, deleteButton],
             }));
             this.doLayout();
         },
@@ -917,7 +948,7 @@ Ext.onReady(function(){
     if (templatesList != undefined) {
         for (var i = 0; i < templatesList.length; i++) {
             var templateValues = templatesList[i];
-            templatesPanel.addButtonForTemplate(templateValues);
+            templatesPanel.addButtonForTemplate(templateValues, i);
         }
     }
 
