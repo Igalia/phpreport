@@ -407,9 +407,9 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             deleteButton: new Ext.Button({
                 parent: this,
                 text:'Delete',
-                width: 60,
+                width: 40,
                 tabIndex: tab++,
-                margins: "7px 0 0 13px",
+                margins: "7px 0 0 5px",
                 handler: function() {
                     // We remove the TaskRecord from the Store, the TaskPanel
                     // from the parent panel and reload it
@@ -421,9 +421,9 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             cloneButton: new Ext.Button({
                 parent: this,
                 text:'Clone',
-                width: 60,
+                width: 40,
                 tabIndex: tab++,
-                margins: "7px 0 0 13px",
+                margins: "7px 0 0 5px",
                 handler: function() {
                     newTask = this.parent.taskRecord.copy();
                     Ext.data.Record.id(newTask);
@@ -454,10 +454,10 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
             createTemplateButton: new Ext.Button({
                 parent: this,
-                text:'Create template',
-                width: 60,
+                text:'Template',
+                width: 40,
                 tabIndex: tab++,
-                margins: "7px 0 0 13px",
+                margins: "7px 0 0 5px",
                 handler: function() {
                     //get the templates from the cookie
                     var templatesArray = cookieProvider.decodeValue(
@@ -490,8 +490,8 @@ var TaskPanel = Ext.extend(Ext.Panel, {
         /* Place the subelements correctly into the form */
         leftBox = new Ext.Panel({
             layout: 'anchor',
-            width: 220,
-            defaults: {width: 215},
+            width: 230,
+            defaults: {width: 225},
             items: [
                 new Ext.Container({
                     layout: 'hbox',
@@ -522,6 +522,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         this.teleworkCheckBox,
                         this.deleteButton,
                         this.cloneButton,
+                        this.createTemplateButton,
                     ]
                 })
             ],
@@ -532,7 +533,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             columnWidth: 1,
             items:[
                 this.descriptionTextArea,
-                this.createTemplateButton,
             ],
         });
         this.items = [leftBox, rightBox];
