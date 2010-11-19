@@ -66,7 +66,9 @@ var user = '<?php echo $user->getLogin()?>';
 var App = new Ext.App({});
 
 /* Cookie provider */
-var cookieProvider = new Ext.state.CookieProvider();
+var cookieProvider = new Ext.state.CookieProvider({
+    expires: new Date(new Date().getTime()+(1000*60*60*24*365)),
+});
 
 /* Schema of the information about tasks */
 var taskRecord = new Ext.data.Record.create([
