@@ -21,7 +21,6 @@
 
 /* Include the generic header */
 define('PAGE_TITLE', "PhpReport - Login");
-include("include/header.php");
 
 include_once('phpreport/model/facade/UsersFacade.php');
 include_once('phpreport/model/vo/UserVO.php');
@@ -43,6 +42,7 @@ if(isset($_POST["login"]) && isset($_POST["password"])) {
     else
         echo _("Incorrect login information");
 }
+include("include/header.php");
 ?>
 
 <div id="content">
