@@ -450,6 +450,35 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     taskPanel.initTimeField.focus();
                 }
             }),
+            createTemplateButton: new Ext.Button({
+                parent: this,
+                text:'Create template',
+                width: 60,
+                tabIndex: tab++,
+                margins: "7px 0 0 13px",
+                handler: function() {
+                    //get the templates from the cookie
+                    var templatesArray = cookieProvider.decodeValue(
+                            cookieProvider.get('taskTemplate'));
+                    if (templatesArray == undefined) {
+                        templatesArray = [];
+                    }
+                    //add the new template to the array
+                    var task = this.parent.taskRecord;
+                    var template = [task.get('customerId'), task.get('projectId'),
+                            task.get('ttype'), task.get('story'),
+                            task.get('taskStoryId'), task.get('telework'),
+                            task.get('text')]
+                    templatesArray.push(template);
+
+                    //save the templates into the cookie
+                    cookieProvider.set('taskTemplate',
+                            cookieProvider.encodeValue(templatesArray));
+
+                    //add the button for the new task to the sidebar panel
+                    Ext.getCmp('templatesPanel').addButtonForTemplate(template);
+                }
+            }),
         });
 
         /* Set the value of the checkbox correctly */
@@ -500,6 +529,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             columnWidth: 1,
             items:[
                 this.descriptionTextArea,
+                this.createTemplateButton,
             ],
         });
         this.items = [leftBox, rightBox];
@@ -828,6 +858,66 @@ Ext.onReady(function(){
             })
         ]
     });
+
+    // Templates Panel
+    var templatesPanel = new Ext.FormPanel({
+        id: 'templatesPanel',
+        renderTo: Ext.get('auxiliarpanel'),
+        width: 150,
+        frame:true,
+        title: 'Task templates',
+        defaults: {
+            width: '100%',
+        },
+        addButtonForTemplate: function (templateValues) {
+            this.add(new Ext.Button({
+                text: ((templateValues[6] != undefined) &&
+                        (templateValues[6] != '')) ?
+                    templateValues[6] :
+                    'Template',
+                handler: function () {
+                    //create and populate a record
+                    var newTask = new taskRecord();
+                    newTask.set('customerId', templateValues[0]);
+                    newTask.set('projectId', templateValues[1]);
+                    newTask.set('ttype', templateValues[2]);
+                    newTask.set('story', templateValues[3]);
+                    newTask.set('taskStoryId', templateValues[4]);
+                    newTask.set('telework', templateValues[5]);
+                    //add the record to the store
+                    myStore.add(newTask);
+
+                    //create and show a panel for the task
+                    var taskPanel = new TaskPanel({
+                        parent: tasksScrollArea,
+                        taskRecord:newTask,
+                        store: myStore,
+                        listeners: {
+                            'collapse': updateTitle,
+                            'beforeexpand': simplifyTitle,
+                        },
+                    });
+                    tasksScrollArea.add(taskPanel);
+                    taskPanel.doLayout();
+                    tasksScrollArea.doLayout();
+
+                    //put the focus on the init time field
+                    taskPanel.initTimeField.focus();
+                },
+            }));
+            this.doLayout();
+        },
+    });
+
+    // Populate templates panel
+    var templatesList = cookieProvider.decodeValue(
+            cookieProvider.get('taskTemplate'));
+    if (templatesList != undefined) {
+        for (var i = 0; i < templatesList.length; i++) {
+            var templateValues = templatesList[i];
+            templatesPanel.addButtonForTemplate(templateValues);
+        }
+    }
 
     summaryStore.load();
 
