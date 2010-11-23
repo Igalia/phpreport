@@ -389,17 +389,16 @@ abstract class ProjectsFacade {
      * @param int $customerID If not null, the list of projects will contain those related with this customer.
      * @param string $userLogin If not null, the list of projects will contain those the user is assigned to.
      * @param bool $active If true, only active projects will be listed. Otherwise, but inactive and active will appear.
+     * @param string $order optional parameter for sorting value objects in a specific way (by default, by their internal id).
      * @return array Returns a list of ProjectVO objects satisfying the received criteria.
      */
-    static function GetProjectsByCustomerUserLogin($customerId = NULL, $userLogin = NULL, $active = False) {
+    static function GetProjectsByCustomerUserLogin($customerId = NULL, $userLogin = NULL, $active = False, $order = 'id') {
+        if (is_null($customerId) and is_null($userLogin) and !$active)
+          $action = new GetAllProjectsAction($active, $order);
+        else
+          $action = new GetProjectsByCustomerUserLoginAction($customerId, $userLogin, $active, $order);
 
-    if (is_null($customerId) and is_null($userLogin) and !$active)
-        $action = new GetAllProjectsAction($active);
-    else
-        $action = new GetProjectsByCustomerUserLoginAction($customerId, $userLogin, $active);
-
-    return $action->execute();
-
+        return $action->execute();
     }
 
 }

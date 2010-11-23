@@ -43,14 +43,23 @@ include_once('phpreport/model/dao/DAOFactory.php');
  */
 class GetAllCustomersAction extends Action{
 
+    /** Order field
+     *
+     * This variable contains the optional parameter for ordering value objects by a specific field.
+     *
+     * @var string
+     */
+    private $order;
+
     /** GetAllCustomersAction constructor.
      *
      * This is just the constructor of this action.
+     * @param string $order optional parameter for sorting value objects in a specific way (by default, by their internal id).
      */
-    public function __construct() {
+    public function __construct($order = 'id') {
         $this->preActionParameter="GET_ALL_CUSTOMERS_PREACTION";
         $this->postActionParameter="GET_ALL_CUSTOMERS_POSTACTION";
-
+        $this->order = $order;
     }
 
     /** Specific code execute.
@@ -61,11 +70,8 @@ class GetAllCustomersAction extends Action{
      * and ordered ascendantly by their database internal identifier.
      */
     protected function doExecute() {
-
         $dao = DAOFactory::getCustomerDAO();
-
-        return $dao->getAll();
-
+        return $dao->getAll($this->order);
     }
 
 }

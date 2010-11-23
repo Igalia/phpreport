@@ -59,16 +59,26 @@ class GetCustomersByProjectUserAction extends Action{
      */
     private $userVO;
 
+    /** Order field
+     *
+     * This variable contains the optional parameter for ordering value objects by a specific field.
+     *
+     * @var string
+     */
+    private $order;
+
     /** GetCustomersByProjectUserAction constructor.
      *
      * This is just the constructor of this action.
      *
      * @param UserVO $userVO the User whose Projects' Customers we want to retrieve.
      * @param bool $active optional parameter for obtaining only data related to active Projects (by default it returns all them).
+     * @param string $order optional parameter for sorting value objects in a specific way (by default, by their internal id).
      */
-    public function __construct(UserVO $userVO = NULL, $active = False) {
+    public function __construct(UserVO $userVO = NULL, $active = False, $order = 'id') {
         $this->userVO = $userVO;
-    $this->active = $active;
+        $this->active = $active;
+        $this->order = $order;
         $this->preActionParameter="GET_CUSTOMERS_BY_PROJECT_USER_PREACTION";
         $this->postActionParameter="GET_CUSTOMERS_BY_PROJECT_USER_POSTACTION";
 
@@ -86,10 +96,10 @@ class GetCustomersByProjectUserAction extends Action{
     $dao = DAOFactory::getCustomerDAO();
 
     if (is_null($this->userVO))
-        return $dao->getAll($this->active);
+      return $dao->getAll($this->active, $this->order);
     else
     {
-        return $dao->getByProjectUserLogin($this->userVO->getLogin(), $this->active);
+      return $dao->getByProjectUserLogin($this->userVO->getLogin(), $this->active, $this->order);
     }
 
     }

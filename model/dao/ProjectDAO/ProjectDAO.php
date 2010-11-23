@@ -67,11 +67,12 @@ abstract class ProjectDAO extends BaseDAO{
      * the id <var>$areaId</var> and creates a {@link ProjectVO} with data from each row.
      *
      * @param int $areaId the id of the Area whose Projects we want to retrieve.
+     * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
      * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      * @throws {@link OperationErrorException}
      */
-    public abstract function getByAreaId($areaId);
+    public abstract function getByAreaId($areaId, $orderField = 'id');
 
     /** Users retriever by Project id (relationship ProjectUser).
      *
@@ -234,11 +235,42 @@ abstract class ProjectDAO extends BaseDAO{
      * This function retrieves all rows from Project table and creates a {@link ProjectVO} with data from each row.
      *
      * @param bool $active optional parameter for obtaining only the active projects (by default it returns all them).
+     * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
      * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      * @throws {@link OperationErrorException}
      */
-    public abstract function getAll($active = False);
+    public abstract function getAll($active = False, $orderField = 'id');
+
+    /** Projects retriever.
+     *
+     * This function retrieves the rows from Project table, applying three optional conditions:
+     * projects assigned to a specific Customer through Requests,
+     * projects related with a User through ProjectUser
+     * or projects with the Activation flag as True.
+     *
+     * @param int $customerId the id of the Customer whose Projects we want to retrieve.
+     * @param string $userLogin login of the user we want to use as a filter.
+     * @param bool $active parameter for obtaining only the active Projects (by default it returns all them).
+     * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
+     * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
+     * and ordered ascendantly by their database internal identifier.
+     * @throws {@link SQLQueryErrorException}
+     */
+    public abstract function getByCustomerUserLogin($customerId = NULL, $userLogin = NULL, $active = False, $orderField = 'id');
+
+    /** Custom Projects retriever.
+     *
+     * This function retrieves all rows from Project table and creates a {@link CustomProjectVO} with data from each row,
+     * and additional ones.
+     *
+     * @param bool $active optional parameter for obtaining only the active projects (by default it returns all them).
+     * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
+     * @return array an array with value objects {@link CustomProjectVO} with their properties set to the values from the rows
+     * and the additional data, and ordered ascendantly by their database internal identifier.
+     * @throws {@link SQLQueryErrorException}
+     */
+    public abstract function getAllCustom($active = False, $orderField = 'id');
 
     /** Project partial updater.
      *

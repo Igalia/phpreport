@@ -50,17 +50,25 @@ class GetAllProjectsAction extends Action{
      */
     private $active;
 
+    /** Order field
+     *
+     * This variable contains the optional parameter for ordering value objects by a specific field.
+     *
+     * @var string
+     */
+    private $order;
+
     /** GetAllProjectsAction constructor.
      *
      * This is just the constructor of this action.
      *
      * @param bool $active optional parameter for obtaining only the active projects (by default it returns all them).
      */
-    public function __construct($active = False) {
+    public function __construct($active = False, $order = 'id') {
         $this->preActionParameter="GET_ALL_PROJECTS_PREACTION";
         $this->postActionParameter="GET_ALL_PROJECTS_POSTACTION";
-    $this->active = $active;
-
+        $this->active = $active;
+        $this->order = $order;
     }
 
     /** Specific code execute.
@@ -70,11 +78,8 @@ class GetAllProjectsAction extends Action{
      * @return array an array with all the existing Projects.
      */
     protected function doExecute() {
-
-    $dao = DAOFactory::getProjectDAO();
-
-    return $dao->getAll($this->active);
-
+        $dao = DAOFactory::getProjectDAO();
+        return $dao->getAll($this->active, $this->order);
     }
 
 }

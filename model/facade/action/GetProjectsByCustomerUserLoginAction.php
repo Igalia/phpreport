@@ -67,6 +67,14 @@ class GetProjectsByCustomerUserLoginAction extends Action{
      */
     private $userLogin;
 
+    /** Order field
+     *
+     * This variable contains the optional parameter for ordering value objects by a specific field.
+     *
+     * @var string
+     */
+    private $order;
+
     /** GetProjectsByCustomerUserLoginAction constructor.
      *
      * This is just the constructor of this action. We pass the id of the Customer, and an optional parameter
@@ -75,14 +83,15 @@ class GetProjectsByCustomerUserLoginAction extends Action{
      * @param int $customerId the id of the Customer whose Projects we want to retrieve.
      * @param string $userLogin optional parameter for obtaining only the Projects related to an User.
      * @param bool $active optional parameter for obtaining only the active projects (by default it returns all them).
+     * @param string $order optional parameter for sorting value objects in a specific way (by default, by their internal id).
      */
-    public function __construct($customerId, $userLogin = NULL, $active = False) {
+    public function __construct($customerId, $userLogin = NULL, $active = False, $order = 'id') {
         $this->customerId = $customerId;
-    $this->active = $active;
-    $this->userLogin = $userLogin;
+        $this->active = $active;
+        $this->userLogin = $userLogin;
+        $this->order = $order;
         $this->preActionParameter="GET_PROJECTS_BY_CUSTOMER_USER_LOGIN_PREACTION";
         $this->postActionParameter="GET_PROJECTS_BY_CUSTOMER_USER_LOGIN_POSTACTION";
-
     }
 
     /** Specific code execute.
@@ -92,11 +101,8 @@ class GetProjectsByCustomerUserLoginAction extends Action{
      * @return array an array with the rows of Projects related to that Customer.
      */
     protected function doExecute() {
-
-    $dao = DAOFactory::getProjectDAO();
-
-    return $dao->getByCustomerUserLogin($this->customerId, $this->userLogin, $this->active);
-
+        $dao = DAOFactory::getProjectDAO();
+        return $dao->getByCustomerUserLogin($this->customerId, $this->userLogin, $this->active, $this->order);
     }
 
 }

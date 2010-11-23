@@ -138,12 +138,13 @@ abstract class CustomersFacade {
     *  This action is used for retrieving information about Customers of Projects done by a User. If no User is specified, it returns all customers.
     *  @param UserVO $userVO the User whose Projects' Customers we want to retrieve.
     *  @param bool $active optional parameter for obtaining only data related to active Projects (by default it returns all them).
+     * @param string $order optional parameter for sorting value objects in a specific way (by default, by their internal id).
     *  @return array an array with value objects {@link CustomerVO} with their properties set to the values from the rows
     *  and ordered ascendantly by their database internal identifier.
     */
-    static function GetCustomersByProjectUser(UserVO $user=NULL, $active = False) {
+    static function GetCustomersByProjectUser(UserVO $user=NULL, $active = False, $order = 'id') {
 
-    $action = new GetCustomersByProjectUserAction($user, $active);
+      $action = new GetCustomersByProjectUserAction($user, $active, $order);
 
     return $action->execute();
 

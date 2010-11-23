@@ -36,6 +36,10 @@
 
     $sid = $_GET['sid'];
 
+    $order = $_GET['order'];
+
+    if ($order == '')
+        $order = 'id';
 
     do {
         /* We check authentication and authorization */
@@ -47,7 +51,7 @@
             if ($userLogin!="")
             $string = $string . " login='" . $userLogin . "'";
             if ($active)
-            $string = $string . " active = 'True'";
+            $string = $string . " active = 'True' order='" . $order . "'";
             $string = $string . "><error id='2'>You must be logged in</error></tasks>";
             break;
         }
@@ -58,17 +62,17 @@
             if ($userLogin!="")
             $string = $string . " login='" . $userLogin . "'";
             if ($active)
-            $string = $string . " active = 'True'";
+            $string = $string . " active = 'True' order='" . $order . "'";
             $string = $string . "><error id='3'>Forbidden service for this User</error></tasks>";
             break;
         }
 
         if ($userLogin == "")
         {
-        $customers = CustomersFacade::GetCustomersByProjectUser(NULL, $active);
+          $customers = CustomersFacade::GetCustomersByProjectUser(NULL, $active, $order);
             $string = "<customers";
         if ($active)
-            $string = $string . " active = 'True'";
+            $string = $string . " active = 'True' order='" . $order . "'";
         $string = $string . ">";
         }
         else
@@ -77,11 +81,11 @@
 
             $userVO->setLogin($userLogin);
 
-            $customers = CustomersFacade::GetCustomersByProjectUser($userVO, $active);
+            $customers = CustomersFacade::GetCustomersByProjectUser($userVO, $active, $order);
 
                 $string = "<customers login='" . $userLogin . "'";
             if ($active)
-            $string = $string . " active = 'True'";
+            $string = $string . " active = 'True' order='" . $order . "'";
             $string = $string . ">";
         }
 

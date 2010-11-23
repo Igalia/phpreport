@@ -67,12 +67,13 @@ abstract class CustomerDAO extends BaseDAO{
      * the id <var>$sectorId</var> and creates a {@link CustomerVO} with data from each row.
      *
      * @param int $sectorId the id of the Sector whose Customers we want to retrieve.
+     * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
      * @return array an array with value objects {@link CustomerVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      * @see SectorDAO
      * @throws {@link OperationErrorException}
      */
-    public abstract function getBySectorId($sectorId);
+    public abstract function getBySectorId($sectorId, $orderField = 'id');
 
     /** Customers retriever by projects done by a User identified by its login.
      *
@@ -81,11 +82,12 @@ abstract class CustomerDAO extends BaseDAO{
      *
      * @param string $login the login of the User whose Projects' Customers we want to retrieve.
      * @param bool $active optional parameter for obtaining only data related to active Projects (by default it returns all them).
+     * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
      * @return array an array with value objects {@link CustomerVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      * @throws {@link SQLQueryErrorException}
      */
-    public abstract function getByProjectUserLogin($userLogin, $active = False);
+    public abstract function getByProjectUserLogin($userLogin, $active = False, $orderField = 'id');
 
     /** Tasks retriever by Customer id.
      *
@@ -145,11 +147,12 @@ abstract class CustomerDAO extends BaseDAO{
      * This function retrieves all rows from Customer table and creates a {@link CustomerVO} with data from each row.
      *
      * @param bool $active optional parameter for obtaining only data related to active Projects (by default it returns all them).
+     * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
      * @return array an array with value objects {@link CustomerVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      * @throws {@link OperationErrorException}
      */
-    public abstract function getAll($active = False);
+    public abstract function getAll($active = False, $orderField = 'id');
 
     /** Customer updater.
      *

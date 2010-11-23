@@ -230,6 +230,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     baseParams: {
                         'login': user,
                         'active': 'true',
+                        'order': 'name',
                     },
                     proxy: new Ext.data.HttpProxy({url: 'services/getUserCustomersService.php', method: 'GET'}),
                     reader:new Ext.data.XmlReader({record: 'customer', id:'id' }, customerRecord),
@@ -267,6 +268,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     baseParams: {
                         'login': user,
                         'cid': this.taskRecord.data['customerId'],
+                        'order': 'description',
                     },
                     proxy: new Ext.data.HttpProxy({url: 'services/getCustomerProjectsService.php', method: 'GET'}),
                     reader:new Ext.data.XmlReader({record: 'project', id:'id' }, projectRecord),

@@ -99,13 +99,14 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
      * the id <var>$sectorId</var> and creates a {@link CustomerVO} with data from each row.
      *
      * @param int $sectorId the id of the Sector whose Customers we want to retrieve.
+     * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
      * @return array an array with value objects {@link CustomerVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      * @see SectorDAO
      * @throws {@link SQLQueryErrorException}
      */
-    public function getBySectorId($sectorId) {
-    $sql = "SELECT * FROM customer WHERE sectorid=" . $sectorId . " ORDER BY id ASC";
+    public function getBySectorId($sectorId, $orderField = 'id') {
+    $sql = "SELECT * FROM customer WHERE sectorid=" . $sectorId . " ORDER BY " . $orderField  . " ASC";
     $result = $this->execute($sql);
     return $result;
     }
@@ -117,17 +118,18 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
      *
      * @param string $login the login of the User whose Projects' Customers we want to retrieve.
      * @param bool $active optional parameter for obtaining only data related to active Projects (by default it returns all them).
+     * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
      * @return array an array with value objects {@link CustomerVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      * @throws {@link SQLQueryErrorException}
      */
-    public function getByProjectUserLogin($userLogin, $active = False) {
-    $sql = "SELECT * FROM customer WHERE id IN (SELECT customerid FROM requests WHERE projectid IN (SELECT id FROM project WHERE";
-    if ($active)
-        $sql = $sql . " activation = 'True' AND";
-    $sql = $sql . " id IN (SELECT projectid FROM project_usr WHERE usrid = ( SELECT id FROM usr WHERE login = " . DBPostgres::checkStringNull($userLogin) . " )))) ORDER BY id ASC";
-    $result = $this->execute($sql);
-    return $result;
+    public function getByProjectUserLogin($userLogin, $active = False, $orderField = 'id') {
+        $sql = "SELECT * FROM customer WHERE id IN (SELECT customerid FROM requests WHERE projectid IN (SELECT id FROM project WHERE";
+        if ($active)
+            $sql = $sql . " activation = 'True' AND";
+        $sql = $sql . " id IN (SELECT projectid FROM project_usr WHERE usrid = ( SELECT id FROM usr WHERE login = " . DBPostgres::checkStringNull($userLogin) . " )))) ORDER BY " . $orderField  . " ASC";
+        $result = $this->execute($sql);
+        return $result;
     }
 
     /** Tasks retriever by Customer id.
@@ -142,10 +144,8 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
      * @throws {@link SQLQueryErrorException}
      */
     public function getTasks($customerId) {
-
-    $dao = DAOFactory::getTaskDAO();
-    return $dao->getByCustomerId($customerId);
-
+        $dao = DAOFactory::getTaskDAO();
+        return $dao->getByCustomerId($customerId);
     }
 
     /** Projects retriever by Customer id.
@@ -161,10 +161,8 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
      * @throws {@link SQLQueryErrorException}
      */
     public function getProjects($customerId, $active = False) {
-
-    $dao = DAOFactory::getRequestsDAO();
-    return $dao->getByCustomerId($customerId, $active);
-
+        $dao = DAOFactory::getRequestsDAO();
+        return $dao->getByCustomerId($customerId, $active);
     }
 
     /** Requests relationship entry creator by Customer id and Project id.
@@ -179,10 +177,8 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
      * @throws {@link SQLQueryErrorException}
      */
     public function addProject($customerId, $projectId) {
-
-    $dao = DAOFactory::getRequestsDAO();
-    return $dao->create($customerId, $projectId);
-
+        $dao = DAOFactory::getRequestsDAO();
+        return $dao->create($customerId, $projectId);
     }
 
     /** Requests relationship entry deleter by Customer id and Project id.
@@ -197,10 +193,8 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
      * @throws {@link SQLQueryErrorException}
      */
     public function removeProject($customerId, $projectId) {
-
-    $dao = new PostgreSQLRequestsDAO();
-    return $dao->delete($customerId, $projectId);
-
+        $dao = new PostgreSQLRequestsDAO();
+        return $dao->delete($customerId, $projectId);
     }
 
     /** Customer retriever.
@@ -208,15 +202,16 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
      * This function retrieves all rows from Customer table and creates a {@link CustomerVO} with data from each row.
      *
      * @param bool $active optional parameter for obtaining only data related to active Projects (by default it returns all them).
+     * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
      * @return array an array with value objects {@link CustomerVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      * @throws {@link SQLQueryErrorException}
      */
-    public function getAll($active = False) {
-    if ($active)
-        $sql = "SELECT * FROM customer WHERE id IN (SELECT customerid FROM requests WHERE projectid IN (SELECT id FROM project WHERE activation = 'True')) ORDER BY id ASC";
+    public function getAll($active = False, $orderField = 'id') {
+        if ($active)
+            $sql = "SELECT * FROM customer WHERE id IN (SELECT customerid FROM requests WHERE projectid IN (SELECT id FROM project WHERE activation = 'True')) ORDER BY " . $orderField  . " ASC";
         else
-        $sql = "SELECT * FROM customer ORDER BY id ASC";
+            $sql = "SELECT * FROM customer ORDER BY " . $orderField . " ASC";
         return $this->execute($sql);
     }
 

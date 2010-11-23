@@ -37,6 +37,10 @@
 
     $onlyUser = $_GET['onlyUser'];
 
+    $order = $_GET['order'];
+    if ($order == '')
+        $order = 'id';
+
     if (strtolower($onlyUser) == "true")
         $onlyUser = True;
     else
@@ -55,7 +59,7 @@
             if ($active)
             $string = $string . " active = 'True'";
             if ($onlyUser)
-            $string = $string . " onlyUser = 'True'";
+            $string = $string . " onlyUser = 'True' order='" . $order . "'";
             $string = $string . "><error id='2'>You must be logged in</error></projects>";
             break;
         }
@@ -68,37 +72,37 @@
             if ($active)
             $string = $string . " active = 'True'";
             if ($onlyUser)
-            $string = $string . " onlyUser = 'True'";
+            $string = $string . " onlyUser = 'True' order ='" . $order . "'";
             $string = $string . "><error id='3'>Forbidden service for this User</error></projects>";
             break;
-        }
+            }
 
         if ($customerId == "")
         {
-        $projects = ProjectsFacade::GetProjectsByCustomerUserLogin(NULL, NULL, $active);
+          $projects = ProjectsFacade::GetProjectsByCustomerUserLogin(NULL, NULL, $active, $order);
             $string = "<projects";
         if ($active)
-            $string = $string . " active = 'True'>";
+            $string = $string . " active = 'True' order='" . $order . "'>";
         else
-            $string = $string . ">";
+            $string = $string . " order='" . $order . "'>";
         }
         else
         {
             if ($onlyUser)
             {
-                $projects = ProjectsFacade::GetProjectsByCustomerUserLogin($customerId, $login, $active);
+              $projects = ProjectsFacade::GetProjectsByCustomerUserLogin($customerId, $login, $active, $order);
                 $string = "<projects cid='" . $customerId . "' login='" . $login . "'";
 
             } else
             {
-            $projects = ProjectsFacade::GetProjectsByCustomerUserLogin($customerId, NULL, $active);
+              $projects = ProjectsFacade::GetProjectsByCustomerUserLogin($customerId, NULL, $active, $order);
                 $string = "<projects cid='" . $customerId . "'";
             }
 
             if ($active)
-            $string = $string . " active = 'True'>";
+            $string = $string . " active = 'True' order='" . $order . "'>";
             else
-            $string = $string . ">";
+            $string = $string . " order='" . $order . "'>";
 
 
         }
