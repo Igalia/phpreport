@@ -269,6 +269,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         'login': user,
                         'cid': this.taskRecord.data['customerId'],
                         'order': 'description',
+                        'active': 'true',
                     },
                     proxy: new Ext.data.HttpProxy({url: 'services/getCustomerProjectsService.php', method: 'GET'}),
                     reader:new Ext.data.XmlReader({record: 'project', id:'id' }, projectRecord),
