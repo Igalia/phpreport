@@ -124,6 +124,8 @@
 
             $record[project] = $projectName;
 
+            $record['id'] = $projectId;
+
             foreach((array) $report2 as $customerId => $hours)
             {
                 if ($customerId != "")
@@ -179,8 +181,19 @@
 
         $response[columns][] = $column;
 
+        $column['header'] = 'Id';
+        $column['dataIndex'] = 'id';
+        $column['sortable'] = true;
+        $column['hidden'] = true;
+        $field['name'] = 'id';
+        $field['type'] = 'int';
+
+        $response[columns][] = $column;
+        $metaData[fields][] = $field;
+
         $field[type] = "float";
 
+        $column['hidden'] = false;
         foreach((array)$customers as $name => $dumber)
         {
             $field[name] = str_replace('.', ',', $name);
