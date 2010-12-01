@@ -679,7 +679,7 @@ Ext.onReady(function(){
     });
 
     /* Add a callback to add new tasks */
-    Ext.get('newTask').on('click', function(){
+    function newTask() {
         newTask = new taskRecord();
         myStore.add(newTask);
         taskPanel = new TaskPanel({
@@ -702,10 +702,11 @@ Ext.onReady(function(){
         taskPanel.endTimeField.validate();
 
         taskPanel.initTimeField.focus();
-    });
+    }
+    Ext.get('newTask').on('click', newTask);
 
     /* Add a callback to save tasks */
-    Ext.get('save').on('click', function(){
+    function saveTasks() {
 
         // First we check if the time fields of all records are valid
         var panels = tasksScrollArea.items;
@@ -728,7 +729,8 @@ Ext.onReady(function(){
             myStore.save();
         } else  // Otherwise, we print the error message
           App.setAlert(false, "Check For Invalid Field Values");
-    });
+    }
+    Ext.get('save').on('click', saveTasks);
 
     /* Build a calendar on the auxiliar sidebar */
     new Ext.Panel({
@@ -956,6 +958,18 @@ Ext.onReady(function(){
             width: '100%',
         },
         items: [
+            new Ext.form.Label({
+                text: 'Tasks'
+            }),
+            new Ext.Button({
+                text:'New',
+                handler: newTask,
+            }),
+            new Ext.Button({
+                text:'Save',
+                handler: saveTasks,
+            }),
+            new Ext.menu.Separator(),
             new Ext.form.Label({
                 text: 'Panels'
             }),
