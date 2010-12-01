@@ -11,7 +11,7 @@ body {
     padding: 10px 30px;
 }
 
-#auxiliarpanel {
+.auxiliarpanel {
     float: left;
     clear: left;
     padding: 5px;

@@ -732,7 +732,7 @@ Ext.onReady(function(){
 
     /* Build a calendar on the auxiliar sidebar */
     new Ext.Panel({
-        renderTo: Ext.get("auxiliarpanel"),
+        renderTo: Ext.get("calendarpanel"),
         items: [
             new Ext.ux.DatePickerPlus({
                 allowMouseWheel: false,
@@ -751,9 +751,9 @@ Ext.onReady(function(){
 
     // Cloning Panel
     var cloningPanel = new Ext.FormPanel({
-        width: 178,
+        width: 204,
         height: 65,
-        renderTo: Ext.get('auxiliarpanel'),
+        renderTo: Ext.get('calendarpanel'),
         frame:true,
         layout: {
             type: 'vbox',
@@ -802,9 +802,9 @@ Ext.onReady(function(){
 
     // Summary Panel
     var summaryPanel = new Ext.FormPanel({
-        width: 150,
+        width: 204,
         labelWidth: 70,
-        renderTo: Ext.get('auxiliarpanel'),
+        renderTo: Ext.get('summarypanel'),
         frame:true,
         title: 'User Work Summary',
         bodyStyle: 'padding:5px 5px 0px 5px;',
@@ -830,11 +830,8 @@ Ext.onReady(function(){
     });
 
     // Expand/collapse all Panel
-    var expandCollapseAllPanel = new Ext.FormPanel({
-        width: 150,
-        renderTo: Ext.get('auxiliarpanel'),
-        frame:true,
-        title: 'Task panels',
+    var expandCollapseAllPanel = new Ext.Panel({
+        width: 204,
         defaults: {
             width: '100%',
         },
@@ -863,12 +860,9 @@ Ext.onReady(function(){
     });
 
     // Templates Panel
-    var templatesPanel = new Ext.FormPanel({
+    var templatesPanel = new Ext.Panel({
         id: 'templatesPanel',
-        renderTo: Ext.get('auxiliarpanel'),
-        width: 150,
-        frame:true,
-        title: 'Task templates',
+        width: 204,
         defaults: {
             width: '100%',
         },
@@ -952,12 +946,38 @@ Ext.onReady(function(){
         }
     }
 
+    // Actions panel
+    var expandCollapseAllPanel = new Ext.Panel({
+        width: 204,
+        renderTo: Ext.get('actionspanel'),
+        frame:true,
+        title: 'Actions',
+        defaults: {
+            width: '100%',
+        },
+        items: [
+            new Ext.form.Label({
+                text: 'Panels'
+            }),
+            expandCollapseAllPanel,
+            new Ext.menu.Separator(),
+            new Ext.form.Label({
+                text: 'Templates'
+            }),
+            templatesPanel
+        ],
+    });
+
     summaryStore.load();
 
 });
 </script>
 
-<div id="auxiliarpanel">
+<div id="summarypanel" class="auxiliarpanel">
+</div>
+<div id="calendarpanel" class="auxiliarpanel">
+</div>
+<div id="actionspanel" class="auxiliarpanel">
 </div>
 
 <div id="content">
