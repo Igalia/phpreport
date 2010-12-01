@@ -922,7 +922,7 @@ Ext.onReady(function(){
                     }
 
                     //remove from the panel
-                    var panel = this.findParentByType('form');
+                    var panel = row.findParentByType('panel');
                     panel.remove(row);
 
                 },
