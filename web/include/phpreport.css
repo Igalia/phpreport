@@ -52,3 +52,7 @@ body {
 .x-date-picker {
     width: 185px;
 }
+
+#moreactions .x-toolbar {
+    border-width: 1px;
+}

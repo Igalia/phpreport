@@ -703,7 +703,6 @@ Ext.onReady(function(){
 
         taskPanel.initTimeField.focus();
     }
-    Ext.get('newTask').on('click', newTask);
 
     /* Add a callback to save tasks */
     function saveTasks() {
@@ -730,7 +729,6 @@ Ext.onReady(function(){
         } else  // Otherwise, we print the error message
           App.setAlert(false, "Check For Invalid Field Values");
     }
-    Ext.get('save').on('click', saveTasks);
 
     /* Build a calendar on the auxiliar sidebar */
     new Ext.Panel({
@@ -948,7 +946,7 @@ Ext.onReady(function(){
         }
     }
 
-    // Actions panel
+    // Actions panels
     var expandCollapseAllPanel = new Ext.Panel({
         width: 204,
         renderTo: Ext.get('actionspanel'),
@@ -981,6 +979,20 @@ Ext.onReady(function(){
             templatesPanel
         ],
     });
+    var expandCollapseAllPanel = new Ext.Toolbar({
+        renderTo: Ext.get('moreactions'),
+        items: [
+            new Ext.Button({
+                text:'New task',
+                handler: newTask,
+            }),
+            '-',
+            new Ext.Button({
+                text:'Save changes',
+                handler: saveTasks,
+            }),
+        ],
+    });
 
     summaryStore.load();
 
@@ -996,8 +1008,7 @@ Ext.onReady(function(){
 
 <div id="content" style="margin-left: 215px;">
     <div id="tasks"></div>
-    <input type="submit" id="newTask" value="New Task" tabindex=1>
-    <input type="submit" id="save" value="Save" tabindex=2>
+    <div id="moreactions"></div>
 </div>
 
 <?php
