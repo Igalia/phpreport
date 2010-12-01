@@ -21,16 +21,7 @@
 
 <script type="text/javascript">
 
-var menuPanel = new Ext.Panel({
-    frame: true,
-    collapsible: true,
-    title: 'Main menu',
-    width: 125,
-    items: [{
-        border: false,
-        xtype: 'buttongroup',
-        columns: 1,
-        defaults:{width:100},
+var menuToolbar = new Ext.Toolbar({
         items: [{
             text: 'Tasks', handler: onItemClick,
             destination: "tasks.php",
@@ -91,11 +82,12 @@ var menuPanel = new Ext.Panel({
             },{
                 text: 'Areas management', handler: onItemClick, destination: 'viewAreas.php', iconCls: 'silk-brick-edit',
             }],
-        },{
+        },
+        new Ext.Toolbar.Fill(),
+        {
             text: 'Logout', handler: onItemClick,
             destination: "logout.php",
         }],
-    }]
 });
 
 function onItemClick(item){
@@ -108,10 +100,8 @@ function onItemClick(item){
 }
 
 Ext.onReady(function(){
-    menuPanel.render(Ext.get("sidebar"));
+    menuToolbar.render('menubar');
 });
 
 </script>
 
-<div id="sidebar">
-</div>

@@ -994,7 +994,7 @@ Ext.onReady(function(){
 <div id="actionspanel" class="auxiliarpanel">
 </div>
 
-<div id="content">
+<div id="content" style="margin-left: 215px;">
     <div id="tasks"></div>
     <input type="submit" id="newTask" value="New Task" tabindex=1>
     <input type="submit" id="save" value="Save" tabindex=2>

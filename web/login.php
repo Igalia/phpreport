@@ -45,7 +45,7 @@ if(isset($_POST["login"]) && isset($_POST["password"])) {
 include("include/header.php");
 ?>
 
-<div id="content">
+<div id="content" style="margin-left: 215px;">
     <!-- We inject the form here, from the JavaScript code -->
 </div>
 

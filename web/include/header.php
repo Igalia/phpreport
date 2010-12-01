@@ -61,4 +61,5 @@
 
     <div id="header">
         <img alt="PhpReport" src="include/images/phpreport-logo.png" />
+        <div id="menubar"></div>
     </div>
