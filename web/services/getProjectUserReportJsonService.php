@@ -105,10 +105,10 @@
             $totalHours[$project] = 0;
             $record['project'] = $project;
 
-            foreach((array) $report2 as $user => $hours)
+            foreach((array) $report2 as $userName => $hours)
             {
-                $users[$user] = true;
-                $record[str_replace(".", ",", $user)] = round($hours, 2, PHP_ROUND_HALF_DOWN);
+                $users[$userName] = true;
+                $record[str_replace(".", ",", $userName)] = round($hours, 2, PHP_ROUND_HALF_DOWN);
                 $totalHours[$project] += round($hours, 2, PHP_ROUND_HALF_DOWN);
                 $totalHours['total'] += round($hours, 2, PHP_ROUND_HALF_DOWN);
 
