@@ -101,6 +101,107 @@ Ext.onReady(function(){
 
     }
 
+    var filtersPanel = new Ext.FormPanel({
+        labelWidth: 100,
+        frame: true,
+        width: 350,
+        renderTo: 'content',
+        defaults: {width: 230},
+        items: [{
+            fieldLabel: 'Project name',
+            name: 'name',
+            xtype: 'textfield',
+            id: 'name',
+        },{
+            fieldLabel: 'Activation',
+            name: 'activation',
+            xtype: 'combo',
+            id: 'activation',
+            mode: 'local',
+            valueField: 'value',
+            displayField: 'displayText',
+            triggerAction:'all',
+            store: new Ext.data.ArrayStore({
+                fields: [
+                    'value',
+                    'displayText'
+                ],
+                data: [
+                    ['yes', 'yes'],
+                    ['no', 'no'],
+                ],
+            }),
+        },{
+            fieldLabel: 'Area',
+            name: 'area',
+            xtype: 'combo',
+            id: 'area',
+            mode: 'local',
+            valueField: 'id',
+            displayField: 'name',
+            triggerAction:'all',
+            store: areasStore,
+        },{
+            fieldLabel: 'Type',
+            name: 'type',
+            xtype: 'textfield',
+            id: 'type',
+        },{
+            fieldLabel: 'Dates between',
+            name: 'start',
+            xtype: 'datefield',
+            format: 'd/m/Y',
+            id: 'startDate',
+            vtype:'daterange',
+            endDateField: 'endDate' // id of the end date field
+        },{
+            fieldLabel: 'and',
+            name: 'end',
+            xtype: 'datefield',
+            format: 'd/m/Y',
+            id: 'endDate',
+            vtype:'daterange',
+            startDateField: 'startDate' // id of the start date field
+        }],
+
+        buttons: [{
+            text: 'Load projects',
+            handler: function () {
+                var baseParams = {
+                    <?php if ($sid) {?>
+                        'sid': sessionId,
+                    <?php } ?>
+                };
+                if (Ext.getCmp('name').getRawValue() != "") {
+                    baseParams.description = Ext.getCmp('name').getValue();
+                }
+                if (Ext.getCmp('startDate').getRawValue() != "") {
+                    var date = Ext.getCmp('startDate').getValue();
+                    baseParams.filterStartDate = date.getFullYear() + "-"
+                        + (date.getMonth()+1) + "-" + date.getDate();
+                }
+                if (Ext.getCmp('endDate').getRawValue() != "") {
+                    var date = Ext.getCmp('endDate').getValue();
+                    baseParams.filterEndDate = date.getFullYear() + "-"
+                        + (date.getMonth()+1) + "-" + date.getDate();
+                }
+                if (Ext.getCmp('activation').getRawValue() != "") {
+                    var value = Ext.getCmp('activation').getValue();
+                    baseParams.activation = (value == 'yes')? true : false;
+                }
+                if (Ext.getCmp('area').getRawValue() != "") {
+                    baseParams.areaId = Ext.getCmp('area').getValue();
+                }
+                if (Ext.getCmp('type').getRawValue() != "") {
+                    baseParams.type = Ext.getCmp('type').getValue();
+                }
+
+                projectsStore.baseParams = baseParams;
+                projectsStore.load();
+
+            }
+        }],
+    });
 
     editionPanel = Ext.extend(Ext.grid.GridPanel, {
         renderTo: 'content',
@@ -182,18 +283,15 @@ Ext.onReady(function(){
     var projectProxy = new Ext.data.HttpProxy({
     method: 'POST',
         api: {
-            read    : {url: 'services/getAllCustomProjectsService.php', method: 'GET'},
+            read: {url: 'services/getFilteredCustomProjectsService.php', method: 'GET'},
         },
     });
 
     /* Store to load/save Projects */
     var projectsStore = new Ext.data.Store({
         id: 'projectsStore',
-        autoLoad: true,  //initial data are loaded in the application init
+        autoLoad: false,
         autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {<?php if ($sid) {?>
-            'sid': sessionId <?php } ?>
-        },
         storeId: 'projects',
         proxy: projectProxy,
         reader:new Ext.data.XmlReader({record: 'project', idProperty:'id' }, projectRecord),
