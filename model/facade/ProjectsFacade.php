@@ -32,6 +32,7 @@
 include_once('phpreport/model/facade/action/CreateProjectAction.php');
 include_once('phpreport/model/facade/action/GetAllProjectsAction.php');
 include_once('phpreport/model/facade/action/GetAllCustomProjectsAction.php');
+include_once('phpreport/model/facade/action/GetFilteredCustomProjectsAction.php');
 include_once('phpreport/model/facade/action/GetUserProjectsAction.php');
 include_once('phpreport/model/facade/action/GetProjectUsersAction.php');
 include_once('phpreport/model/facade/action/GetProjectCustomersAction.php');
@@ -134,6 +135,38 @@ abstract class ProjectsFacade {
 
         return $action->execute();
 
+    }
+
+    /** GetAllCustomProjectsAction constructor.
+     *
+     * This is just the constructor of this action.
+     *
+     * @param string $description string to filter projects by their description
+     *        field. Projects with a description that contains this string will
+     *        be returned. NULL to deactivate filtering by this field.
+     * @param DateTime $filterStartDate start date of the time filter for
+     *        projects. Projects will a finish date later than this date will
+     *        be returned. NULL to deactivate filtering by this field.
+     * @param DateTime $filterEndDate end date of the time filter for projects.
+     *        Projects will a start date sooner than this date will be returned.
+     *        NULL to deactivate filtering by this field.
+     * @param boolean $activation filter projects by their activation field.
+     *        NULL to deactivate filtering by this field.
+     * @param long $areaId value to filter projects by their area field.
+     *        projects. NULL to deactivate filtering by this field.
+     * @param string $type string to filter projects by their type field.
+     *        Only trojects with a type field that matches completely with this
+     *        string will be returned. NULL to deactivate filtering by this
+     *        field.
+     */
+    static function GetFilteredCustomProjects($description = NULL,
+            $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL,
+            $areaId = NULL, $type = NULL) {
+
+        $action = new GetFilteredCustomProjectsAction($description,
+            $filterStartDate, $filterEndDate, $activation, $areaId, $type);
+
+        return $action->execute();
     }
 
     /** Create Project Function
