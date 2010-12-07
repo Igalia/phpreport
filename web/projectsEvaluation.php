@@ -203,32 +203,6 @@ Ext.onReady(function(){
         }],
     });
 
-    editionPanel = Ext.extend(Ext.grid.GridPanel, {
-        renderTo: 'content',
-        frame: true,
-        height: 200,
-
-        initComponent : function() {
-
-            // typical viewConfig
-            this.viewConfig = {
-                forceFit: true
-            };
-
-            // super
-            editionPanel.superclass.initComponent.call(this);
-
-            // install event handler
-            this.on('rowdblclick', function(grid, n, e) {
-                window.location = 'viewProjectDetails.php?pid=' + grid.store.getAt(n).get('id');
-            });
-
-        },
-
-    });
-
-
-
     /* Schema of the information about projects */
     var projectRecord = new Ext.data.Record.create([
             {name: 'id', type: 'int'},
@@ -373,8 +347,11 @@ Ext.onReady(function(){
         }
     ]);
 
-    var projectGrid = new editionPanel({
+    // setup the panel for the grid of projects
+    var projectGrid = new Ext.grid.GridPanel({
         id: 'projectGrid',
+        renderTo: 'content',
+        frame: true,
         height: 500,
         iconCls: 'silk-book',
         store: projectsStore,
@@ -386,6 +363,11 @@ Ext.onReady(function(){
         stripeRows: true,
         colModel: projectColModel,
         columnLines: true,
+    });
+
+    // event handler for double-click on a project
+    projectGrid.on('rowdblclick', function(grid, n, e) {
+        window.location = 'viewProjectDetails.php?pid=' + grid.store.getAt(n).get('id');
     });
 
     //function to show only a subset of columns and hide the others
