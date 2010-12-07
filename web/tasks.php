@@ -277,7 +277,15 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     listeners: {
                         'load': function () {
                             //the value of projectComboBox has to be set after loading the data on this store
-                            this.parent.projectComboBox.setValue(this.parent.taskRecord.data['projectId']);
+                            if ((this.findExact("id", this.parent.taskRecord.data['projectId']) == -1) &&
+                                    (this.parent.taskRecord.data['id'] > 0) &&
+                                    (this.parent.taskRecord.data['projectId'] > 0)) {
+                                this.parent.projectComboBox.setReadOnly(true);
+                                this.proxy.setUrl('services/getProjectService.php', true);
+                                this.setBaseParam('pid', this.parent.taskRecord.data['projectId']);
+                                this.load();
+                            } else
+                                this.parent.projectComboBox.setValue(this.parent.taskRecord.data['projectId']);
                         }
                     },
                 }),
