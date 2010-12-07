@@ -353,6 +353,7 @@ Ext.onReady(function(){
         renderTo: 'content',
         frame: true,
         height: 500,
+        width: '100%',
         iconCls: 'silk-book',
         store: projectsStore,
         frame: true,
@@ -363,6 +364,13 @@ Ext.onReady(function(){
         stripeRows: true,
         colModel: projectColModel,
         columnLines: true,
+        buttons: [{
+            text: 'Standard view',
+            handler: showStandardView,
+        },{
+            text: 'Extended view',
+            handler: showExtendedView,
+        }],
     });
 
     // event handler for double-click on a project
@@ -400,8 +408,6 @@ Ext.onReady(function(){
         projectColModel.setColumnWidth(10, 85);
         projectColModel.setColumnWidth(11, 75);
         projectColModel.setColumnWidth(15, 70);
-
-        projectGrid.setWidth(940);
     }
 
     //function to show all the columns
@@ -443,25 +449,7 @@ Ext.onReady(function(){
         projectColModel.setColumnWidth(15, 70);
         projectColModel.setColumnWidth(16, 60);
         projectColModel.setColumnWidth(17, 65);
-
-        projectGrid.setWidth(1662);
     }
-
-    //panel to change between the two column modes
-    var viewsPanel = new Ext.FormPanel({
-        labelWidth: 100,
-        frame: true,
-        width: 350,
-        renderTo: 'content',
-        defaults: {width: 230},
-        buttons: [{
-            text: 'Standard view',
-            handler: showStandardView,
-        },{
-            text: 'Extended view',
-            handler: showExtendedView,
-        }],
-    });
 
     //hide the advanced columns
     showStandardView();
