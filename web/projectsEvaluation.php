@@ -215,9 +215,6 @@ Ext.onReady(function(){
                 forceFit: true
             };
 
-            // build toolbars and buttons.
-            this.bbar = this.buildBottomToolbar();
-
             // super
             editionPanel.superclass.initComponent.call(this);
 
@@ -227,26 +224,6 @@ Ext.onReady(function(){
             });
 
         },
-
-        /**
-         * buildBottomToolbar
-         */
-        buildBottomToolbar : function() {
-            return ['->', {
-                text: 'Show Only Active Projects',
-                id: this.id + 'FilterActiveBtn',
-                toggleHandler: function(button, state){
-                    if (state)
-                        projectsStore.filter('activation', 'true');
-                    else projectsStore.clearFilter();
-                },
-                ref: '../filterActiveBtn2',
-                iconCls: 'silk-tick',
-                scope: this,
-                enableToggle: true,
-                }]
-        },
-
 
     });
 
