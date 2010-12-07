@@ -207,7 +207,6 @@ Ext.onReady(function(){
         renderTo: 'content',
         frame: true,
         height: 200,
-        width: 580,
 
         initComponent : function() {
 
@@ -305,26 +304,22 @@ Ext.onReady(function(){
     var projectColModel =  new Ext.grid.ColumnModel([
         {
             header: 'Name',
-            width: 300,
             sortable: true,
             dataIndex: 'description',
         },{
             header: 'Start Date',
-            width: 80,
             xtype: 'datecolumn',
             format: 'd/m/Y',
             sortable: true,
             dataIndex: 'init',
         },{
             header: 'End Date',
-            width: 80,
             xtype: 'datecolumn',
             format: 'd/m/Y',
             sortable: true,
             dataIndex: 'end',
         },{
             header: 'Activation',
-            width: 65,
             sortable: true,
             dataIndex: 'activation',
             xtype: 'booleancolumn',
@@ -332,84 +327,70 @@ Ext.onReady(function(){
             falseText: "<span style='color:red;'>No</span>",
         },{
             header: 'Area',
-            width: 85,
             sortable: true,
             dataIndex: 'areaId',
             renderer: areas,
         },{
             header: 'Invoice',
-            width: 70,
             sortable: true,
             dataIndex: 'invoice',
             xtype: 'numbercolumn',
         },{
             header: 'Total Cost',
-            width: 70,
             sortable: true,
             dataIndex: 'totalCost',
             xtype: 'numbercolumn',
         },{
             header: 'Total Profit',
-            width: 80,
             sortable: true,
             dataIndex: 'totalProfit',
             renderer: profit,
         },{
             header: 'Estimated Hours',
-            width: 95,
             sortable: true,
             dataIndex: 'estHours',
             xtype: 'numbercolumn',
         },{
             header: 'Worked Hours',
-            width: 85,
             sortable: true,
             dataIndex: 'workedHours',
             xtype: 'numbercolumn',
         },{
             header: 'Abs. Deviation',
-            width: 85,
             sortable: true,
             dataIndex: 'absDev',
             renderer: deviation,
         },{
             header: 'Deviation %',
-            width: 75,
             sortable: true,
             dataIndex: 'percDev',
             renderer: relativeDeviation,
         },{
             header: 'Moved Hours',
-            width: 80,
             sortable: true,
             dataIndex: 'movedHours',
             xtype: 'numbercolumn',
         },{
             header: 'Est. Hours Invoice',
-            width: 105,
             sortable: true,
             dataIndex: 'estHourInvoice',
             xtype: 'numbercolumn',
         },{
             header: 'Work Hours Invoice',
-            width: 112,
             sortable: true,
             dataIndex: 'workedHourInvoice',
             xtype: 'numbercolumn',
         },{
             header: 'Hour Profit',
-            width: 70,
             sortable: true,
             dataIndex: 'hourProfit',
             renderer: profit,
         },{
             header: 'Schedule',
-            width: 60,
             sortable: true,
             dataIndex: 'schedType',
         },{
             header: 'Type',
-            width: 65,
             sortable: true,
             dataIndex: 'type',
         }
@@ -419,7 +400,6 @@ Ext.onReady(function(){
         id: 'projectGrid',
         height: 500,
         iconCls: 'silk-book',
-        width: projectColModel.getTotalWidth(false),
         store: projectsStore,
         frame: true,
         title: 'Projects',
@@ -430,6 +410,102 @@ Ext.onReady(function(){
         colModel: projectColModel,
         columnLines: true,
     });
+
+    //function to show only a subset of columns and hide the others
+    function showStandardView() {
+        projectColModel.setHidden(0, false);  //name
+        projectColModel.setHidden(1, false);  //start
+        projectColModel.setHidden(2, false);  //end
+        projectColModel.setHidden(3, true);   //activation
+        projectColModel.setHidden(4, true);   //area
+        projectColModel.setHidden(5, false);  //invoice
+        projectColModel.setHidden(6, true);   //total cost
+        projectColModel.setHidden(7, true);   //total profit
+        projectColModel.setHidden(8, false);  //estimated hours
+        projectColModel.setHidden(9, false);  //worked hours
+        projectColModel.setHidden(10, false); //abs. deviation
+        projectColModel.setHidden(11, false); //deviation %
+        projectColModel.setHidden(12, true);  //moved hours
+        projectColModel.setHidden(13, true);  //est hours invoice
+        projectColModel.setHidden(14, true);  //work hours invoice
+        projectColModel.setHidden(15, false); //hour profit
+        projectColModel.setHidden(16, true);  //schedule
+        projectColModel.setHidden(17, true);  //type
+
+        projectColModel.setColumnWidth(0, 300);
+        projectColModel.setColumnWidth(1, 80);
+        projectColModel.setColumnWidth(2, 80);
+        projectColModel.setColumnWidth(5, 70);
+        projectColModel.setColumnWidth(8, 95);
+        projectColModel.setColumnWidth(9, 85);
+        projectColModel.setColumnWidth(10, 85);
+        projectColModel.setColumnWidth(11, 75);
+        projectColModel.setColumnWidth(15, 70);
+
+        projectGrid.setWidth(940);
+    }
+
+    //function to show all the columns
+    function showExtendedView() {
+        projectColModel.setHidden(0, false);  //name
+        projectColModel.setHidden(1, false);  //start
+        projectColModel.setHidden(2, false);  //end
+        projectColModel.setHidden(3, false);  //activation
+        projectColModel.setHidden(4, false);  //area
+        projectColModel.setHidden(5, false);  //invoice
+        projectColModel.setHidden(6, false);  //total cost
+        projectColModel.setHidden(7, false);  //total profit
+        projectColModel.setHidden(8, false);  //estimated hours
+        projectColModel.setHidden(9, false);  //worked hours
+        projectColModel.setHidden(10, false); //abs. deviation
+        projectColModel.setHidden(11, false); //deviation %
+        projectColModel.setHidden(12, false); //moved hours
+        projectColModel.setHidden(13, false); //est hours invoice
+        projectColModel.setHidden(14, false); //work hours invoice
+        projectColModel.setHidden(15, false); //hour profit
+        projectColModel.setHidden(16, false); //schedule
+        projectColModel.setHidden(17, false); //type
+
+        projectColModel.setColumnWidth(0, 300);
+        projectColModel.setColumnWidth(1, 80);
+        projectColModel.setColumnWidth(2, 80);
+        projectColModel.setColumnWidth(3, 65);
+        projectColModel.setColumnWidth(4, 85);
+        projectColModel.setColumnWidth(5, 70);
+        projectColModel.setColumnWidth(6, 70);
+        projectColModel.setColumnWidth(7, 80);
+        projectColModel.setColumnWidth(8, 95);
+        projectColModel.setColumnWidth(9, 85);
+        projectColModel.setColumnWidth(10, 85);
+        projectColModel.setColumnWidth(11, 75);
+        projectColModel.setColumnWidth(12, 80);
+        projectColModel.setColumnWidth(13, 105);
+        projectColModel.setColumnWidth(14, 112);
+        projectColModel.setColumnWidth(15, 70);
+        projectColModel.setColumnWidth(16, 60);
+        projectColModel.setColumnWidth(17, 65);
+
+        projectGrid.setWidth(1662);
+    }
+
+    //panel to change between the two column modes
+    var viewsPanel = new Ext.FormPanel({
+        labelWidth: 100,
+        frame: true,
+        width: 350,
+        renderTo: 'content',
+        defaults: {width: 230},
+        buttons: [{
+            text: 'Standard view',
+            handler: showStandardView,
+        },{
+            text: 'Extended view',
+            handler: showExtendedView,
+        }],
+    });
+
+    //hide the advanced columns
+    showStandardView();
 
 });
 
