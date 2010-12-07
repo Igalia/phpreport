@@ -27,6 +27,7 @@
  * @package PhpReport
  * @subpackage DAO
  * @author Jorge López Fernández <jlopez@igalia.com>
+ * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
 
 include_once('phpreport/util/SQLIncorrectTypeException.php');
@@ -507,6 +508,49 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         if ($active)
             $sql = $sql . " WHERE project.activation= 'True'";
         $sql = $sql . " GROUP BY project.id, project.description, project.activation, project.init, project._end, project.invoice, project.est_hours, project.areaid, project.description, project.type, project.moved_hours, project.sched_type ORDER BY project." . $orderField . " ASC";
+        return $this->customExecute($sql);
+    }
+
+    public function getFilteredCustom($description = NULL,
+            $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL,
+            $areaId = NULL, $type = NULL) {
+
+        $conditions = "TRUE";
+        if ($description != NULL) {
+            $conditions .= " AND project.description like ('%$description%')";
+        }
+        if ($filterStartDate != NULL) {
+            $conditions .= " AND (project._end >= ".
+                DBPostgres::formatDate($filterStartDate) .
+                " OR project._end is NULL)";
+        }
+        if ($filterEndDate != NULL) {
+            $conditions .= " AND (project.init <= ".
+                DBPostgres::formatDate($filterEndDate) .
+                " OR project.init is NULL)";
+        }
+        if ($activation != NULL) {
+        error_log('ACTIVATION: ' . $activation);
+            $conditions .= " AND project.activation = " . $activation;
+        }
+        if ($areaId != NULL) {
+            $conditions .= " AND project.areaid = $areaId";
+        }
+        if ($type != NULL) {
+            $conditions .= " AND project.type = '$type'";
+        }
+        $sql =
+            "SELECT project.*, SUM((task._end-task.init)/60.0) AS worked_hours, ".
+            "SUM(((task._end-task.init)/60.0) * hour_cost) AS total_cost ".
+            "FROM project LEFT JOIN task ON project.id = task.projectid ".
+            "LEFT JOIN hour_cost_history ON ".
+            "hour_cost_history.usrid = task.usrid AND ".
+            "task._date >= hour_cost_history.init_date ".
+            "AND task._date <= hour_cost_history.end_date WHERE $conditions ".
+            "GROUP BY project.id, project.description, project.activation, ".
+            "project.init, project._end, project.invoice, project.est_hours, ".
+            "project.areaid, project.description, project.type, ".
+            "project.moved_hours, project.sched_type";
         return $this->customExecute($sql);
     }
 
