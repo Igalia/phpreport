@@ -530,7 +530,6 @@ class PostgreSQLProjectDAO extends ProjectDAO {
                 " OR project.init is NULL)";
         }
         if ($activation != NULL) {
-        error_log('ACTIVATION: ' . $activation);
             $conditions .= " AND project.activation = " . $activation;
         }
         if ($areaId != NULL) {
