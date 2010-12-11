@@ -29,6 +29,11 @@ var menuToolbar = new Ext.Toolbar({
             text: 'Coordination',
             menu: [
             {
+                text: 'My tasks',
+                handler: onItemClick,
+                destination: "tasksFilter.php",
+                iconCls: 'silk-book',
+            },{
                 text: 'XP Tracker',
                 handler: onItemClick,
                 destination: "xptracker-summary.php",
