@@ -115,6 +115,16 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
             return;
         }
 
+        //check if the project id is being updated
+        if($updateFlags["projectId"]) {
+            if(!$this->projectHasToBeSent($task->getProjectId())) {
+                //the new project id doesn't exist in the external PhpReport
+                //we delete it outside
+                $this->deleteTaskInExternalPhpReport($task);
+                return;
+            }
+        }
+
         //update TaskVO with the external ID
         $task->setId($externalId);
 
@@ -188,6 +198,9 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
 
         //send task
         $this->deleteTask($url, $xml);
+
+        //synchronize
+        $this->deleteEntryFromSynchronizationTable($externalId);
     }
 
     private function taskHasToBeSent(TaskVO $task, UserVO $user) {
@@ -197,6 +210,11 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
             return true;
         }
         return false;
+    }
+
+    private function projectHasToBeSent($projectId) {
+        include('ExternalPhpReportConfiguration.php');
+        return isset($relationProjectsWithExternalProjects[$projectId]);
     }
 
     private function login($url, $login, $password) {
@@ -476,6 +494,26 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
             return;
         }
         error_log("Success adding entry to the synchronization table");
+    }
+
+    function deleteEntryFromSynchronizationTable($externalId) {
+        //FIXME: accessing directly to the DB violates the layer independence
+
+        $sql = "DELETE FROM relation_tasks_external_phpreport " .
+                "WHERE externalId=$externalId";
+        $connection = $this->connectPostgres();
+
+        if (!$connection) {
+            error_log("Couldn't connect to Posgres to delete entry in the synchronization table");
+            return;
+        }
+
+        if(!pg_query($connection, $sql)) {
+            error_log("Error deleting entry from the synchronization table: "
+                . pg_last_error($connection));
+            return;
+        }
+        error_log("Success deleting entry from the synchronization table");
     }
 
     function getExternalId($internalId) {
