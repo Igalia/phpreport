@@ -106,6 +106,12 @@ class SendTaskToExternalPhpReportInstance extends ActionPlugin {
         //check if the task is synchronized with the external PhpReport
         $externalId = $this->getExternalId($task->getId());
         if(!$externalId) {
+            //if it isn't, check if the project id is being updated
+            if($updateFlags["projectId"]) {
+                //maybe the user has set a project which has to be sent, try it
+                $this->sendTaskToExternalPhpReport(
+                        DAOFactory::getTaskDAO()->getById($task->getId()));
+            }
             return;
         }
 
