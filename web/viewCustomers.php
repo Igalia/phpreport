@@ -108,7 +108,21 @@ Ext.onReady(function(){
         storeId: 'sectors',
         proxy: sectorProxy,
         reader:new Ext.data.XmlReader({record: 'sector', idProperty:'id' }, sectorRecord),
-        writer:new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: true, root: 'sectors', tpl: '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><{name}>{value}</{name}></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, sectorRecord),
+        writer:new Ext.data.XmlWriter({
+            xmlEncoding: 'UTF-8',
+            writeAllFields: true,
+            root: 'sectors',
+            tpl: '<' + '?xml version="{version}" encoding="{encoding}"?' + '>' +
+                '<tpl if="records.length&gt;0">' +
+                    '<tpl if="root"><{root}>' +
+                        '<tpl for="records"><{parent.record}>' +
+                            '<tpl for=".">' +
+                                '<{name}>{value}</{name}>' +
+                            '</tpl>' +
+                        '</{parent.record}></tpl>' +
+                    '</{root}></tpl>' +
+                '</tpl>'
+            }, sectorRecord),
         remoteSort: false,
         sortInfo: {
             field: 'name',
@@ -290,7 +304,21 @@ Ext.onReady(function(){
         storeId: 'customers',
         proxy: customerProxy,
         reader:new Ext.data.XmlReader({record: 'customer', idProperty:'id' }, customerRecord),
-        writer:new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: true, root: 'customers', tpl: '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><{name}>{value}</{name}></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, customerRecord),
+        writer:new Ext.data.XmlWriter({
+            xmlEncoding: 'UTF-8',
+            writeAllFields: true,
+            root: 'customers',
+            tpl: '<' + '?xml version="{version}" encoding="{encoding}"?' + '>' +
+                '<tpl if="records.length&gt;0">' +
+                    '<tpl if="root"><{root}>' +
+                        '<tpl for="records"><{parent.record}>' +
+                            '<tpl for=".">' +
+                                '<{name}>{value}</{name}>' +
+                            '</tpl>' +
+                        '</{parent.record}></tpl>' +
+                    '</{root}></tpl>' +
+                '</tpl>'
+            }, customerRecord),
         remoteSort: false,
         sortInfo: {
             field: 'name',
