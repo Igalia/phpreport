@@ -819,7 +819,43 @@ Ext.onReady(function(){
         storeId: 'id',
         proxy: myProxy,
         reader:new Ext.data.XmlReader({record: 'taskStory', idProperty:'id' }, taskStoryRecord),
-        writer:new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: true, root: 'taskStories', tpl:'<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><storyId>' + storyId  + '</storyId><tpl for="fields"><tpl if="name!=\'developer/login\'"><tpl if="name!=\'taskSection/name\'"><tpl if="name==\'developer/id\'"><userId>{value}</userId></tpl><tpl if="name!=\'developer/id\'"><tpl if="name==\'taskSection/id\'"><taskSectionId>{value}</taskSectionId></tpl><tpl if="name!=\'taskSection/id\'"><tpl if="name==\'endDate\'"><tpl if="value"><endDate>{[values.value.format("Y-m-d")]}</endDate></tpl></tpl><tpl if="name!=\'endDate\'"><tpl if="name==\'initDate\'"><initDate>{[values.value.format("Y-m-d")]}</initDate></tpl><tpl if="name!=\'initDate\'"><tpl if="name==\'estEndDate\'"><estEndDate>{[values.value.format("Y-m-d")]}</estEndDate></tpl><tpl if="name!=\'estEndDate\'"><{name}>{value}</{name}></tpl></tpl></tpl></tpl></tpl></tpl></tpl></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, taskStoryRecord),
+        writer:new Ext.data.XmlWriter({
+            xmlEncoding: 'UTF-8',
+            writeAllFields: true,
+            root: 'taskStories',
+            tpl:'<' + '?xml version="{version}" encoding="{encoding}"?' + '>' +
+                '<tpl if="records.length&gt;0">' +
+                    '<tpl if="root"><{root}>' +
+                        '<tpl for="records"><{parent.record}>' +
+                            '<storyId>' + storyId  + '</storyId>' +
+                            '<tpl for=".">' +
+                                '<tpl if="name!=\'developer/login\'">' +
+                                    '<tpl if="name!=\'taskSection/name\'">' +
+                                        '<tpl if="name==\'developer/id\'">' +
+                                            '<userId>{value}</userId>' +
+                                        '</tpl>' +
+                                        '<tpl if="name!=\'developer/id\'">' +
+                                            '<tpl if="name==\'taskSection/id\'">' +
+                                                '<taskSectionId>{value}</taskSectionId>' +
+                                            '</tpl>' +
+                                            '<tpl if="name!=\'taskSection/id\'">' +
+                                                '<tpl if="name==\'endDate\' || name==\'initDate\' || name==\'estEndDate\'">' +
+                                                    '<tpl if="value">' +
+                                                        '<{name}>{[values.value.format("Y-m-d")]}</{name}>' +
+                                                    '</tpl>' +
+                                                '</tpl>' +
+                                                '<tpl if="name!=\'endDate\' && name!=\'initDate\' && name!=\'estEndDate\'">' +
+                                                    '<{name}>{value}</{name}>' +
+                                                '</tpl>' +
+                                            '</tpl>' +
+                                        '</tpl>' +
+                                    '</tpl>' +
+                                '</tpl>' +
+                            '</tpl>' +
+                        '</{parent.record}></tpl>' +
+                    '</{root}></tpl>' +
+                '</tpl>'
+            }, taskStoryRecord),
         remoteSort: false,
         listeners: {
             'write': function() {
