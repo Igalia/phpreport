@@ -227,14 +227,13 @@ Ext.onReady(function(){
          */
         buildBottomToolbar : function() {
 
-            return new Ext.Toolbar({
-                items:[{
+            return [{
                     iconCls: 'silk-help',
                     id: 'editHelp',
                     text: 'How Do I Edit?',
                     tooltip: editTooltipConf
                 }
-            ]});
+            ];
 
         },
 
@@ -454,8 +453,7 @@ Ext.onReady(function(){
          */
         buildBottomToolbar : function() {
 
-            return new Ext.Toolbar({
-                items:[{
+            return [{
                     iconCls: 'silk-help',
                     id: 'editHelp',
                     text: 'How Do I Edit?',
@@ -469,7 +467,7 @@ Ext.onReady(function(){
                     handler: this.onBrowse,
                     scope: this
                 }
-            ]});
+            ];
 
         },
 
