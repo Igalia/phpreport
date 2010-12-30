@@ -1116,7 +1116,18 @@ Ext.onReady(function(){
                 windowAssign.center();
             }
 
-                tpl = '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root} projectId="' + projectId + '"><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><{name}>{value}</{name}></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>';
+                tpl = '<' + '?xml version="{version}" encoding="{encoding}"?' + '>' +
+                '<tpl if="records.length&gt;0">' +
+                    '<tpl if="root">' +
+                        '<{root} projectId="' + projectId + '">' +
+                            '<tpl for="records"><{parent.record}>' +
+                                '<tpl for=".">' +
+                                    '<{name}>{value}</{name}>' +
+                                '</tpl>' +
+                            '</{parent.record}></tpl>' +
+                        '</{root}>' +
+                    '</tpl>' +
+                '</tpl>';
                 firstGridStore.writer.tpl = new Ext.XTemplate(tpl).compile();
                 firstGridStore.load({params: {'pid': projectId}});
                 secondGridStore.load({params: {'aid': areaId}});
@@ -1276,7 +1287,18 @@ Ext.onReady(function(){
                 windowAssign2.center();
             }
 
-                tpl = '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root} projectId="' + projectId + '"><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><{name}>{value}</{name}></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>';
+                tpl = '<' + '?xml version="{version}" encoding="{encoding}"?' + '>' +
+                '<tpl if="records.length&gt;0">' +
+                    '<tpl if="root">' +
+                        '<{root} projectId="' + projectId + '">' +
+                            '<tpl for="records"><{parent.record}>' +
+                                '<tpl for=".">' +
+                                    '<{name}>{value}</{name}>' +
+                                '</tpl>' +
+                            '</{parent.record}></tpl>' +
+                        '</{root}>' +
+                    '</tpl>' +
+                '</tpl>';
                 firstGridStore2.writer.tpl = new Ext.XTemplate(tpl).compile();
                 firstGridStore2.load({params: {'pid': projectId}});
                 secondGridStore2.load();
@@ -1330,7 +1352,28 @@ Ext.onReady(function(){
         storeId: 'projects',
         proxy: projectProxy,
         reader:new Ext.data.XmlReader({record: 'project', idProperty:'id' }, projectRecord),
-        writer:new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: true, root: 'projects', tpl: '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><tpl if="name==\'init\'"><tpl if="value"><init>{[values.value.format("Y-m-d")]}</init></tpl></tpl><tpl if="name!=\'init\'"><tpl if="name==\'end\'"><tpl if="value"><end>{[values.value.format("Y-m-d")]}</end></tpl></tpl><tpl if="name!=\'end\'"><{name}>{value}</{name}></tpl></tpl></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, projectRecord),
+        writer:new Ext.data.XmlWriter({
+            xmlEncoding: 'UTF-8',
+            writeAllFields: true,
+            root: 'projects',
+            tpl: '<' + '?xml version="{version}" encoding="{encoding}"?' + '>' +
+                '<tpl if="records.length &gt; 0">' +
+                '<tpl if="root"><{root}>' +
+                    '<tpl for="records"><{parent.record}>' +
+                        '<tpl for=".">' +
+                            '<tpl if="name==\'init\' || name==\'end\'">' +
+                                '<tpl if="value">' +
+                                    '<{name}>{[values.value.format("Y-m-d")]}</{name}>' +
+                                '</tpl>' +
+                            '</tpl>' +
+                            '<tpl if="name!=\'init\' && name!=\'end\'">' +
+                                '<{name}>{value}</{name}>' +
+                            '</tpl>' +
+                        '</tpl>' +
+                    '</{parent.record}></tpl>' +
+                '</{root}></tpl>' +
+                '</tpl>'
+                }, projectRecord),
         remoteSort: false,
         sortInfo: {
             field: 'init',
