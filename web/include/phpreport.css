@@ -48,11 +48,6 @@ body {
     background: #80FF00;
 }
 
-/* Workaround for the bug with datepicker in Chrome */
-.x-date-picker {
-    width: 185px;
-}
-
 #moreactions .x-toolbar {
     border-width: 1px;
 }
