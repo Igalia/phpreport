@@ -780,17 +780,17 @@ Ext.onReady(function(){
     var taskStoryRecord = new Ext.data.Record.create([
             {name: 'id', type: 'int'},
             {name: "name", type: 'string'},
-            {name: "risk", type: 'int'},
+            {name: "risk", type: 'int', useNull: true},
             {name: "estHours", type: 'float'},
             {name: "workHours", mapping: 'spent', type: 'float'},
             {name: "toDo", mapping: 'toDo', type: 'float'},
             {name: "taskSection", mapping: 'taskSection/name', type: 'string'},
-            {name: "taskSectionId", mapping: 'taskSection/id', type: 'int'},
+            {name: "taskSectionId", mapping: 'taskSection/id', type: 'int', useNull: true},
             {name: "endDate", type: 'date', dateFormat: 'Y-m-d'},
             {name: "estEndDate", type: 'date', dateFormat: 'Y-m-d'},
             {name: "initDate", type: 'date', dateFormat: 'Y-m-d'},
             {name: "user", mapping: 'developer/login', type: 'string'},
-            {name: "userId", mapping: 'developer/id', type: 'int'}]
+            {name: "userId", mapping: 'developer/id', type: 'int', useNull: true}]
     );
 
 
