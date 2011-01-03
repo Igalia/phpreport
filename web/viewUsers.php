@@ -410,7 +410,22 @@ Ext.onReady(function(){
     });
 
     function loadHistories(login, userId){
-        tpl = '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><userId>' + userId  + '</userId><tpl for="fields"><{name}><tpl if="name==\'init\'">{[values.value.format("Y-m-d")]}</tpl><tpl if="name!=\'init\'"><tpl if="name==\'end\'">{[values.value.format("Y-m-d")]}</tpl><tpl if="name!=\'end\'">{value}</tpl></tpl></{name}></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>';
+        tpl = '<' + '?xml version="{version}" encoding="{encoding}"?' + '>' +
+                '<tpl if="records.length &gt; 0">' +
+                    '<tpl if="root"><{root}>' +
+                        '<tpl for="records"><{parent.record}>' +
+                            '<userId>' + userId  + '</userId>' +
+                            '<tpl for="."><{name}>' +
+                                '<tpl if="name==\'init\' || name==\'end\'">' +
+                                    '{[values.value.format("Y-m-d")]}' +
+                                '</tpl>' +
+                                '<tpl if="name!=\'init\' && name!=\'end\'">' +
+                                    '{value}' +
+                                '</tpl>' +
+                            '</{name}></tpl>' +
+                        '</{parent.record}></tpl>' +
+                    '</{root}></tpl>' +
+                '</tpl>';
         hourCostStore.writer.tpl = new Ext.XTemplate(tpl).compile();
         hourCostStore.load({params: {'uid': login}});
         areaStore.writer.tpl = new Ext.XTemplate(tpl).compile();
