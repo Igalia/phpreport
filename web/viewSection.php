@@ -597,12 +597,12 @@ Ext.onReady(function(){
     var taskSectionRecord = new Ext.data.Record.create([
             {name: 'id', type: 'int'},
             {name: "name", type: 'string'},
-            {name: "risk", type: 'int'},
+            {name: "risk", type: 'int', useNull: true},
             {name: "estHours", type: 'float'},
             {name: "workHours", mapping: 'spent', type: 'float'},
             {name: "toDo", mapping: 'toDo', type: 'float'},
             {name: "user", mapping: 'developer/login', type: 'string'},
-            {name: "userId", mapping: 'developer/id', type: 'int'}]
+            {name: "userId", mapping: 'developer/id', type: 'int', useNull: true}]
     );
 
 
