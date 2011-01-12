@@ -517,7 +517,8 @@ class PostgreSQLProjectDAO extends ProjectDAO {
 
         $conditions = "TRUE";
         if ($description != NULL) {
-            $conditions .= " AND project.description like ('%$description%')";
+            $conditions .= " AND UPPER(project.description)" .
+                " LIKE ('%' || UPPER('$description') || '%')";
         }
         if ($filterStartDate != NULL) {
             $conditions .= " AND (project._end >= ".
