@@ -37,7 +37,7 @@ include_once('phpreport/model/vo/ProjectVO.php');
  *
  *  This action is used for updating only some fields of a Project.
  *
- * @package PhpProject
+ * @package PhpReport
  * @subpackage facade
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
