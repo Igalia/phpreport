@@ -53,7 +53,10 @@
             break;
         }
 
-        $project = ProjectsFacade::GetProject($projectId);
+        $project = false;
+        if ($projectId) {
+            $project = ProjectsFacade::GetProject($projectId);
+        }
         $string = "<projects pid='" . $projectId . "'>";
 
         if ($project)
