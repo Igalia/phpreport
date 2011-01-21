@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2010 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -18,6 +18,13 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/** getFilteredCustomProjects web service.
+ *
+ * @filesource
+ * @package PhpReport
+ * @subpackage services
+ * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
+ */
 
    include_once('phpreport/web/services/WebServicesFunctions.php');
    include_once('phpreport/model/facade/ProjectsFacade.php');

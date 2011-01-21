@@ -18,6 +18,13 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/** getProjectUserReport JSON web service.
+ *
+ * @filesource
+ * @package PhpReport
+ * @subpackage services
+ * @author Jorge López Fernández
+ */
 
    include_once('phpreport/web/services/WebServicesFunctions.php');
    include_once('phpreport/model/facade/TasksFacade.php');
