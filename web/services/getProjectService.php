@@ -20,6 +20,40 @@
 
 /** getProject web service.
  *
+ * This file runs the service to retrieve a project by its id. It is invoked
+ * through GET with the following parameters:
+ * <ul>
+ *   <li>
+ *     <b>pid</b> Id of the project to be retrieved.
+ *   </li>
+ * </ul>
+ * In case the operation is successful, it will return the data of the project
+ * in a XML string formatted like this:
+ * <code>
+ * <?xml version="1.0"?>
+ * <projects pid="1">
+ *   <project>
+ *     <id>1</id>
+ *     <areaId>1</areaId>
+ *     <activation>1</activation>
+ *     <description>project 1</description>
+ *     <invoice>2000</invoice>
+ *     <initDate format="Y-m-d">2011-01-01</initDate>
+ *     <endDate format="Y-m-d">2011-01-31</endDate>
+ *     <estHours>100</estHours>
+ *     <type>per_hours</type>
+ *     <movedHours>0</movedHours>
+ *     <schedType/>
+ *   </project>
+ * </projects>
+ * </code>
+ *
+ * If there is not a project with that id, it returns an empty projects tag:
+ * <code>
+ * <?xml version="1.0"?>
+ * <projects />
+ * </code>
+ *
  * @filesource
  * @package PhpReport
  * @subpackage services
