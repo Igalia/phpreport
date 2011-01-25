@@ -238,7 +238,17 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     listeners: {
                         'load': function () {
                             //the value of customerComboBox has to be set after loading the data on this store
-                            this.parent.customerComboBox.setValue(this.parent.taskRecord.data['customerId']);
+                            if ((this.findExact("id", this.parent.taskRecord.data['customerId']) == -1) &&
+                                    (this.parent.taskRecord.data['id'] > 0) &&
+                                    (this.parent.taskRecord.data['customerId'] > 0)) {
+                                //we couldn't find the customer in the list,
+                                //because the task belongs to a closed project
+                                //we load the list again disabling activation filter
+                                this.parent.customerComboBox.setReadOnly(true);
+                                this.setBaseParam('active', false);
+                                this.load();
+                            } else
+                                this.parent.customerComboBox.setValue(this.parent.taskRecord.data['customerId']);
                         }
                     },
                 }),
