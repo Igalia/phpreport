@@ -167,6 +167,22 @@ function simplifyTitle(p){
     It keeps the taskRecord in synch with the content of the form on screen,
     in real-time (as soon as it changes). */
 var TaskPanel = Ext.extend(Ext.Panel, {
+    setReadOnly: function(readOnly) {
+        this.initTimeField.setDisabled(readOnly);
+        this.endTimeField.setDisabled(readOnly);
+        this.customerComboBox.setDisabled(readOnly);
+        this.projectComboBox.setDisabled(readOnly);
+        this.taskTypeComboBox.setDisabled(readOnly);
+        this.storyField.setDisabled(readOnly);
+        this.taskStoryComboBox.setDisabled(readOnly);
+        this.teleworkCheckBox.setDisabled(readOnly);
+        this.descriptionTextArea.setDisabled(readOnly);
+
+        this.deleteButton.setDisabled(readOnly);
+        this.cloneButton.setDisabled(readOnly);
+        this.createTemplateButton.setDisabled(readOnly);
+    },
+
     initComponent: function() {
 
         Ext.apply(this, {
@@ -244,7 +260,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                                 //we couldn't find the customer in the list,
                                 //because the task belongs to a closed project
                                 //we load the list again disabling activation filter
-                                this.parent.customerComboBox.setReadOnly(true);
                                 this.setBaseParam('active', false);
                                 this.load();
                             } else
@@ -290,7 +305,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                             if ((this.findExact("id", this.parent.taskRecord.data['projectId']) == -1) &&
                                     (this.parent.taskRecord.data['id'] > 0) &&
                                     (this.parent.taskRecord.data['projectId'] > 0)) {
-                                this.parent.projectComboBox.setReadOnly(true);
+                                this.parent.setReadOnly(true);
                                 this.proxy.setUrl('services/getProjectService.php', true);
                                 this.setBaseParam('pid', this.parent.taskRecord.data['projectId']);
                                 this.load();
