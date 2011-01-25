@@ -101,6 +101,41 @@ Ext.onReady(function(){
 
     }
 
+    function loadProjects() {
+        var baseParams = {
+            <?php if ($sid) {?>
+                'sid': sessionId,
+            <?php } ?>
+        };
+        if (Ext.getCmp('name').getRawValue() != "") {
+            baseParams.description = Ext.getCmp('name').getValue();
+        }
+        if (Ext.getCmp('startDate').getRawValue() != "") {
+            var date = Ext.getCmp('startDate').getValue();
+            baseParams.filterStartDate = date.getFullYear() + "-"
+                + (date.getMonth()+1) + "-" + date.getDate();
+        }
+        if (Ext.getCmp('endDate').getRawValue() != "") {
+            var date = Ext.getCmp('endDate').getValue();
+            baseParams.filterEndDate = date.getFullYear() + "-"
+                + (date.getMonth()+1) + "-" + date.getDate();
+        }
+        if (Ext.getCmp('activation').getRawValue() != "") {
+            var value = Ext.getCmp('activation').getValue();
+            baseParams.activation = (value == 'yes')? true : false;
+        }
+        if (Ext.getCmp('area').getRawValue() != "") {
+            baseParams.areaId = Ext.getCmp('area').getValue();
+        }
+        if (Ext.getCmp('type').getRawValue() != "") {
+            baseParams.type = Ext.getCmp('type').getValue();
+        }
+
+        projectsStore.baseParams = baseParams;
+        projectsStore.load();
+
+    };
+
     var filtersPanel = new Ext.FormPanel({
         labelWidth: 100,
         frame: true,
@@ -166,40 +201,12 @@ Ext.onReady(function(){
 
         buttons: [{
             text: 'Load projects',
-            handler: function () {
-                var baseParams = {
-                    <?php if ($sid) {?>
-                        'sid': sessionId,
-                    <?php } ?>
-                };
-                if (Ext.getCmp('name').getRawValue() != "") {
-                    baseParams.description = Ext.getCmp('name').getValue();
-                }
-                if (Ext.getCmp('startDate').getRawValue() != "") {
-                    var date = Ext.getCmp('startDate').getValue();
-                    baseParams.filterStartDate = date.getFullYear() + "-"
-                        + (date.getMonth()+1) + "-" + date.getDate();
-                }
-                if (Ext.getCmp('endDate').getRawValue() != "") {
-                    var date = Ext.getCmp('endDate').getValue();
-                    baseParams.filterEndDate = date.getFullYear() + "-"
-                        + (date.getMonth()+1) + "-" + date.getDate();
-                }
-                if (Ext.getCmp('activation').getRawValue() != "") {
-                    var value = Ext.getCmp('activation').getValue();
-                    baseParams.activation = (value == 'yes')? true : false;
-                }
-                if (Ext.getCmp('area').getRawValue() != "") {
-                    baseParams.areaId = Ext.getCmp('area').getValue();
-                }
-                if (Ext.getCmp('type').getRawValue() != "") {
-                    baseParams.type = Ext.getCmp('type').getValue();
-                }
+            handler: loadProjects,
+        }],
 
-                projectsStore.baseParams = baseParams;
-                projectsStore.load();
-
-            }
+        keys: [{
+            key: [Ext.EventObject.ENTER],
+            handler: loadProjects,
         }],
     });
 
