@@ -26,6 +26,11 @@
  *   <li>
  *     <b>pid</b> Id of the project to be retrieved.
  *   </li>
+ *   <li>
+ *     <b>sid</b> Id of the active session. This parameter is optional if we are
+ *     in an environment which manages the sessions transparently, for example,
+ *     a browser.
+ *   </li>
  * </ul>
  * In case the operation is successful, it will return the data of the project
  * in a XML string formatted like this:
@@ -64,6 +69,8 @@
     include_once('phpreport/model/facade/ProjectsFacade.php');
 
     $projectId = $_GET['pid'];
+
+    $sid = $_GET['sid'];
 
     do {
         /* We check authentication and authorization */
