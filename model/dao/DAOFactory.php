@@ -26,7 +26,7 @@
  * @filesource
  * @package PhpReport
  * @subpackage DAO
- * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
+ * @author Jacobo Aragunde PÃ©rez <jaragunde@igalia.com>
  */
 
 include_once('phpreport/util/ConfigurationParametersManager.php');
@@ -38,7 +38,7 @@ include_once('phpreport/util/ConfigurationParametersManager.php');
  *
  * @package PhpReport
  * @subpackage DAO
- * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
+ * @author Jacobo Aragunde PÃ©rez <jaragunde@igalia.com>
  */
 
 class DAOFactory {

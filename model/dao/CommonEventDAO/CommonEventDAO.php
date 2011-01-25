@@ -26,7 +26,7 @@
  * @filesource
  * @package PhpReport
  * @subpackage DAO
- * @author Jorge LÛpez Fern·ndez <jlopez@igalia.com>
+ * @author Jorge L√≥pez Fern√°ndez <jlopez@igalia.com>
  */
 
 include_once('phpreport/model/vo/CommonEventVO.php');

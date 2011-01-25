@@ -50,7 +50,7 @@
  * @filesource
  * @package PhpReport
  * @subpackage config
- * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
+ * @author Jacobo Aragunde PÃ©rez <jaragunde@igalia.com>
  */
 
 

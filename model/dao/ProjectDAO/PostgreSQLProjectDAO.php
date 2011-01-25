@@ -26,8 +26,8 @@
  * @filesource
  * @package PhpReport
  * @subpackage DAO
- * @author Jorge LÛpez Fern·ndez <jlopez@igalia.com>
- * @author Jacobo Aragunde PÈrez <jaragunde@igalia.com>
+ * @author Jorge L√≥pez Fern√°ndez <jlopez@igalia.com>
+ * @author Jacobo Aragunde P√©rez <jaragunde@igalia.com>
  */
 
 include_once('phpreport/util/SQLIncorrectTypeException.php');

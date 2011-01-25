@@ -26,7 +26,7 @@
  * @filesource
  * @package PhpReport
  * @subpackage Exception
- * @author Jorge López Fernández <jlopez@igalia.com>
+ * @author Jorge LÃ³pez FernÃ¡ndez <jlopez@igalia.com>
  */
 
 /** Exception for operation errors
@@ -35,7 +35,7 @@
  *
  * @package PhpReport
  * @subpackage Exception
- * @author Jorge López Fernández <jlopez@igalia.com>
+ * @author Jorge LÃ³pez FernÃ¡ndez <jlopez@igalia.com>
  */
 
 

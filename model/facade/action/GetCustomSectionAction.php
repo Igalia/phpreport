@@ -26,7 +26,7 @@
  * @filesource
  * @package PhpReport
  * @subpackage facade
- * @author Jorge López Fernández <jlopez@igalia.com>
+ * @author Jorge LÃ³pez FernÃ¡ndez <jlopez@igalia.com>
  */
 
 include_once('phpreport/model/facade/action/GetModuleCustomSectionsAction.php');
@@ -41,7 +41,7 @@ include_once('phpreport/model/vo/CustomTaskSectionVO.php');
  *
  * @package PhpReport
  * @subpackage facade
- * @author Jorge López Fernández <jlopez@igalia.com>
+ * @author Jorge LÃ³pez FernÃ¡ndez <jlopez@igalia.com>
  */
 class GetCustomSectionAction extends GetModuleCustomSectionsAction{
 

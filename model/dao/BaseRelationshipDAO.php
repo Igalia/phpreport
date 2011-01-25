@@ -26,7 +26,7 @@
  * @filesource
  * @package PhpReport
  * @subpackage DAO
- * @author Jorge López Fernández <jlopez@igalia.com>
+ * @author Jorge LÃ³pez FernÃ¡ndez <jlopez@igalia.com>
  */
 
 include_once('phpreport/util/ConfigurationParametersManager.php');
@@ -40,7 +40,7 @@ include_once('phpreport/util/SQLQueryErrorException.php');
  *
  * @package PhpReport
  * @subpackage DAO
- * @author Jorge López Fernández <jlopez@igalia.com>
+ * @author Jorge LÃ³pez FernÃ¡ndez <jlopez@igalia.com>
  */
 abstract class BaseRelationshipDAO {
 

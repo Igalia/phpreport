@@ -26,7 +26,7 @@
  * @filesource
  * @package PhpReport
  * @subpackage util
- * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
+ * @author Jacobo Aragunde PÃ©rez <jaragunde@igalia.com>
  */
 
 include_once('phpreport/util/UnknownParameterException.php');

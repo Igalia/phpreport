@@ -26,7 +26,7 @@
  * @filesource
  * @package PhpReport
  * @subpackage facade
- * @author Jorge López Fernández <jlopez@igalia.com>
+ * @author Jorge LÃ³pez FernÃ¡ndez <jlopez@igalia.com>
  */
 
 include_once('phpreport/model/facade/action/CreateReportAction.php');
@@ -59,7 +59,7 @@ include_once('phpreport/model/vo/UserVO.php');
  * @package PhpReport
  * @subpackage facade
  * @todo create the retrieval functions.
- * @author Jorge López Fernández <jlopez@igalia.com>
+ * @author Jorge LÃ³pez FernÃ¡ndez <jlopez@igalia.com>
  */
 abstract class TasksFacade {
 

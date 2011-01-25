@@ -26,7 +26,7 @@
  * @filesource
  * @package PhpReport
  * @subpackage Exception
- * @author Jorge López Fernández <jlopez@igalia.com>
+ * @author Jorge LÃ³pez FernÃ¡ndez <jlopez@igalia.com>
  */
 
 include_once('phpreport/util/IncorrectTypeException.php');
@@ -37,7 +37,7 @@ include_once('phpreport/util/IncorrectTypeException.php');
  *
  * @package PhpReport
  * @subpackage Exception
- * @author Jorge López Fernández <jlopez@igalia.com>
+ * @author Jorge LÃ³pez FernÃ¡ndez <jlopez@igalia.com>
  */
 
 class SQLIncorrectTypeException extends IncorrectTypeException {

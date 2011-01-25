@@ -26,7 +26,7 @@
  * @filesource
  * @package PhpReport
  * @subpackage facade
- * @author Jorge López Fernández <jlopez@igalia.com>
+ * @author Jorge LÃ³pez FernÃ¡ndez <jlopez@igalia.com>
  */
 
 include_once('phpreport/model/facade/action/GetStoryCustomTaskStoriesAction.php');
@@ -43,7 +43,7 @@ include_once('phpreport/model/vo/CustomTaskStoryVO.php');
  *
  * @package PhpReport
  * @subpackage facade
- * @author Jorge López Fernández <jlopez@igalia.com>
+ * @author Jorge LÃ³pez FernÃ¡ndez <jlopez@igalia.com>
  */
 class GetIterationCustomStoriesAction extends GetStoryCustomTaskStoriesAction{
 

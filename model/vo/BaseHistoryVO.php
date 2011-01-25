@@ -26,7 +26,7 @@
  * @filesource
  * @package PhpReport
  * @subpackage VO
- * @author Jorge LÛpez Fern·ndez <jlopez@igalia.com>
+ * @author Jorge L√≥pez Fern√°ndez <jlopez@igalia.com>
  */
 
 /** Base VO for Histories
