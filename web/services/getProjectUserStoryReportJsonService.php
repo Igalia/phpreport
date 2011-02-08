@@ -124,6 +124,9 @@
 
             foreach((array) $report2 as $story => $hours)
             {
+                if ($story == "") {
+                    $story =  "-- Empty --";
+                }
                 $stories[$story] = true;
                 $record[str_replace(".", ",", $story)] = round($hours, 2, PHP_ROUND_HALF_DOWN);
                 $totalHours[$login] += round($hours, 2, PHP_ROUND_HALF_DOWN);
