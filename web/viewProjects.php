@@ -73,8 +73,8 @@ Ext.onReady(function(){
 
         foreach((array)$areas as $area)
             echo "[{$area->getId()}, '{$area->getName()}'],";
-
-    ?>]});
+        ?>
+    ]});
 
     function areas(val){
 
@@ -223,10 +223,10 @@ Ext.onReady(function(){
 
     // declare the source Grid
     var firstGrid = new Ext.grid.GridPanel({
-    ddGroup          : 'secondGridDDGroup',
+        ddGroup          : 'secondGridDDGroup',
         store            : firstGridStore,
         columns          : cols,
-    enableDragDrop   : true,
+        enableDragDrop   : true,
         stripeRows       : true,
         autoExpandColumn : 'login',
         title            : 'Assigned People',
@@ -241,7 +241,7 @@ Ext.onReady(function(){
 
     // create the destination Grid
     var secondGrid = new Ext.grid.GridPanel({
-    ddGroup          : 'firstGridDDGroup',
+        ddGroup          : 'firstGridDDGroup',
         store            : secondGridStore,
         columns          : cols,
         enableDragDrop   : true,
@@ -507,24 +507,24 @@ Ext.onReady(function(){
 
         onAdd: function() {
 
-          if (!windowCreate)
+            if (!windowCreate)
                 windowCreate = new Ext.Window({
-                     id: 'windowCreate',
-                     name: 'windowCreate',
-                     title: 'Create New Project',
-                     iconCls: 'silk-application-form-add',
-                     closeAction: 'hide',
-                     closable: false,
-                     animateTarget: 'projectGridAddBtn',
-                     modal: true,
-                     width:350,
-                     stateful: false,
-                     constrainHeader: true,
-                     resizable: false,
-                     layout: 'form',
-                     autoHeight: true,
-                     plain: false,
-                     items: [ new Ext.FormPanel({
+                    id: 'windowCreate',
+                    name: 'windowCreate',
+                    title: 'Create New Project',
+                    iconCls: 'silk-application-form-add',
+                    closeAction: 'hide',
+                    closable: false,
+                    animateTarget: 'projectGridAddBtn',
+                    modal: true,
+                    width:350,
+                    stateful: false,
+                    constrainHeader: true,
+                    resizable: false,
+                    layout: 'form',
+                    autoHeight: true,
+                    plain: false,
+                    items: [ new Ext.FormPanel({
                         frame:false,
                         id: 'createForm',
                         hideBorders: true,
@@ -627,7 +627,7 @@ Ext.onReady(function(){
                             else Ext.getCmp('btnAcceptCreate').disable();
                         }}
                     })],
-                     buttons: [{
+                    buttons: [{
                         text: 'Reset',
                         name: 'btnResetCreate',
                         id: 'btnResetCreate',
@@ -644,12 +644,12 @@ Ext.onReady(function(){
                             Ext.getCmp('winActivation').reset();
                             Ext.getCmp('winInvoice').reset();
                         }
-                     },{
-                       text: 'Accept',
-                       name: "btnAcceptCreate",
-                       id: "btnAcceptCreate",
-                       disabled: true,
-                       handler: function(){
+                    },{
+                        text: 'Accept',
+                        name: "btnAcceptCreate",
+                        id: "btnAcceptCreate",
+                        disabled: true,
+                        handler: function(){
                             var newRecord = new projectRecord({
 
                                 end:            Ext.getCmp('winEndDate').getValue(),
@@ -671,20 +671,20 @@ Ext.onReady(function(){
 
                             Ext.getCmp("windowCreate").hide();
 
-                      }
-                     },{
+                        }
+                    },{
                        text: 'Cancel',
                        name: "btnCancelCreate",
                        id: "btnCancelCreate",
                        handler: function(){
                             Ext.getCmp("windowCreate").hide();
                        }
-                     }],
-                     listeners: {
+                    }],
+                    listeners: {
                         'show': function(){
                             Ext.getCmp('winDescription').focus('', 100);
                         }
-                     }
+                    }
                 }).show();
             else {
                 windowCreate.center();
@@ -693,12 +693,12 @@ Ext.onReady(function(){
 
         },
 
-            /**
-             * onEdit
-             */
+        /**
+         * onEdit
+         */
         onEdit: function(btn, ev) {
-            if (this.getSelectionModel().getCount() > 0)
-            {
+            if (this.getSelectionModel().getCount() > 0) {
+
                 var selected = this.getSelectionModel().getSelected();
 
                 var windowUpdate = new Ext.Window({
@@ -826,8 +826,8 @@ Ext.onReady(function(){
                             if (valid) Ext.getCmp('btnAcceptUpdate').enable();
                             else Ext.getCmp('btnAcceptUpdate').disable();
                         }}
-                     })],
-                     buttons: [{
+                    })],
+                    buttons: [{
                         text: 'Reset',
                         name: 'btnResetUpdate',
                         id: 'btnResetUpdate',
@@ -855,36 +855,36 @@ Ext.onReady(function(){
                             } else Ext.getCmp('win2EndDate').reset();
 
                         }
-                     },{
+                    },{
                        text: 'Accept',
                        name: "btnAcceptUpdate",
                        id: "btnAcceptUpdate",
                        handler: function(){
 
-                        selected.set('end', Ext.getCmp('win2EndDate').getValue());
-                        selected.set('init', Ext.getCmp('win2StartDate').getValue());
-                        selected.set('movedHours', Ext.getCmp('win2MovedHours').getValue());
-                        selected.set('estHours', Ext.getCmp('win2EstHours').getValue());
-                        selected.set('areaId', Ext.getCmp('win2Area').getValue());
-                        selected.set('type', Ext.getCmp('win2Type').getValue());
-                        selected.set('schedType', Ext.getCmp('win2Schedule').getValue());
-                        selected.set('activation', Ext.getCmp('win2Activation').getValue());
-                        selected.set('invoice', Ext.getCmp('win2Invoice').getValue());
-                        selected.set('description', Ext.getCmp('win2Description').getValue());
+                           selected.set('end', Ext.getCmp('win2EndDate').getValue());
+                           selected.set('init', Ext.getCmp('win2StartDate').getValue());
+                           selected.set('movedHours', Ext.getCmp('win2MovedHours').getValue());
+                           selected.set('estHours', Ext.getCmp('win2EstHours').getValue());
+                           selected.set('areaId', Ext.getCmp('win2Area').getValue());
+                           selected.set('type', Ext.getCmp('win2Type').getValue());
+                           selected.set('schedType', Ext.getCmp('win2Schedule').getValue());
+                           selected.set('activation', Ext.getCmp('win2Activation').getValue());
+                           selected.set('invoice', Ext.getCmp('win2Invoice').getValue());
+                           selected.set('description', Ext.getCmp('win2Description').getValue());
 
-                        projectsStore.save();
+                           projectsStore.save();
 
-                        Ext.getCmp("windowUpdate").hide();
+                           Ext.getCmp("windowUpdate").hide();
 
-                       }
-                     },{
+                      }
+                    },{
                        text: 'Cancel',
                        name: "btnCancelUpdate",
                        id: "btnCancelUpdate",
                        handler: function(){
-                             Ext.getCmp("windowUpdate").hide();
+                           Ext.getCmp("windowUpdate").hide();
                        }
-                     }],
+                    }],
                     listeners: {
                         'hide': function(){
                             windowUpdate.close();
@@ -907,7 +907,7 @@ Ext.onReady(function(){
                     Ext.getCmp('win2EndDate').validate();
                 }
 
-             }
+            }
         },
 
         /**
@@ -921,14 +921,14 @@ Ext.onReady(function(){
                 iconCls: 'silk-delete',
                 fn: function(btn){
 
-                        if(btn == 'yes'){
-                            var records = this.getSelectionModel().getSelections();
+                    if(btn == 'yes'){
+                        var records = this.getSelectionModel().getSelections();
 
-                            for (var record=0; record < records.length; record++)
-                                this.store.remove(records[record]);
+                        for (var record=0; record < records.length; record++)
+                            this.store.remove(records[record]);
 
-                            this.store.save();
-                        }
+                        this.store.save();
+                    }
 
                 },
                 scope: this,
@@ -936,11 +936,11 @@ Ext.onReady(function(){
                 icon: Ext.Msg.QUESTION,
                 closable: false,
             });
-                  },
+        },
 
-            /**
-             * onAssign
-             */
+        /**
+         * onAssign
+         */
         onAssign: function(btn, ev) {
             if (this.getSelectionModel().getCount() > 0)
             {
@@ -950,171 +950,170 @@ Ext.onReady(function(){
 
                 var projectId = selected.get('id');
 
-                if (!windowAssign)
-                {
-                windowAssign = new Ext.Window({
-                     id: 'windowAssign',
-                     name: 'windowAssign',
-                     title: 'Assign People',
-                     iconCls: 'silk-table-relationship',
-                     closeAction: 'hide',
-                     closable: false,
-                     animateTarget: 'projectGridAssignBtn',
-                     modal: true,
-                     width:314,
-                     stateful: false,
-                     constrainHeader: true,
-                     resizable: false,
-                     layout: 'form',
-                     autoHeight: true,
-                     plain: false,
-                     items: [
-                        displayPanel,
-                        new Ext.Container({
-                            layout: 'hbox',
-                            layoutConfig: {pack: 'end', defaultMargins: "0 25px 0 0"},
-                            items:[
-                                new Ext.form.Checkbox({
-                                    boxLabel: 'Show all Users',
-                                    handler: function(checkbox, value) {
-                                                    if (value)
-                                                    {
-                                                        availableUsersProxy.setUrl('services/getAllUsersService.php', true);
-                                                        firstGridStore.reload();
-                                                        // We are reloading, so no filtering
-                                                        firstGrid.filter = new Array();
-                                                        secondGridStore.reload();
-                                                    } else {
-                                                        availableUsersProxy.setUrl('services/getTodayAreaUsersService.php', true);
-                                                        firstGridStore.reload();
-                                                        // We are reloading, so no filtering
-                                                        firstGrid.filter = new Array();
-                                                        secondGridStore.reload();
-                                                    }
-                                             }
-                                })
+                if (!windowAssign) {
+                    windowAssign = new Ext.Window({
+                        id: 'windowAssign',
+                        name: 'windowAssign',
+                        title: 'Assign People',
+                        iconCls: 'silk-table-relationship',
+                        closeAction: 'hide',
+                        closable: false,
+                        animateTarget: 'projectGridAssignBtn',
+                        modal: true,
+                        width:314,
+                        stateful: false,
+                        constrainHeader: true,
+                        resizable: false,
+                        layout: 'form',
+                        autoHeight: true,
+                        plain: false,
+                        items: [
+                            displayPanel,
+                            new Ext.Container({
+                                layout: 'hbox',
+                                layoutConfig: {pack: 'end', defaultMargins: "0 25px 0 0"},
+                                items:[
+                                    new Ext.form.Checkbox({
+                                        boxLabel: 'Show all Users',
+                                        handler: function(checkbox, value) {
+                                            if (value)
+                                            {
+                                                availableUsersProxy.setUrl('services/getAllUsersService.php', true);
+                                                firstGridStore.reload();
+                                                // We are reloading, so no filtering
+                                                firstGrid.filter = new Array();
+                                                secondGridStore.reload();
+                                            } else {
+                                                availableUsersProxy.setUrl('services/getTodayAreaUsersService.php', true);
+                                                firstGridStore.reload();
+                                                // We are reloading, so no filtering
+                                                firstGrid.filter = new Array();
+                                                secondGridStore.reload();
+                                            }
+                                        }
+                                    })
                                 ]
-                        })
-                      ],
-                     listeners: {
-                          'show': function(){
-                              // We create a new array for filtering when
-                              // the window shows
-                              firstGrid.filter = new Array();
-                          }
-                      },
-                     buttons: [{
-                        text: 'Reset',
-                        name: 'btnResetAssign',
-                        id: 'btnResetAssign',
-                        tooltip: 'Resets the Users\' assignation to it\'s original state .',
-                        tabIndex:1,
-                        handler: function(){
-                            firstGridStore.reload();
-                            // We are resetting, so no filtering
-                            firstGrid.filter = new Array();
-                            secondGridStore.reload();
-                        }
-                     },{
-                       text: 'Accept',
-                       name: "btnAcceptAssign",
-                       id: "btnAcceptAssign",
-                       tabIndex: 2,
-                       handler: function(){
+                            })
+                        ],
+                        listeners: {
+                            'show': function(){
+                                // We create a new array for filtering when
+                                // the window shows
+                                firstGrid.filter = new Array();
+                            }
+                        },
+                        buttons: [{
+                            text: 'Reset',
+                            name: 'btnResetAssign',
+                            id: 'btnResetAssign',
+                            tooltip: 'Resets the Users\' assignation to it\'s original state .',
+                            tabIndex:1,
+                            handler: function(){
+                                firstGridStore.reload();
+                                // We are resetting, so no filtering
+                                firstGrid.filter = new Array();
+                                secondGridStore.reload();
+                            }
+                        },{
+                            text: 'Accept',
+                            name: "btnAcceptAssign",
+                            id: "btnAcceptAssign",
+                            tabIndex: 2,
+                            handler: function(){
 
-                           // We nullify the filtering for having all
-                           // records
-                           firstGridStore.filterBy(function(){return true;});
+                                // We nullify the filtering for having all
+                                // records
+                                firstGridStore.filterBy(function(){return true;});
 
-                           // If a record is a member of the filter, then we
-                           // remove it
-                           firstGridStore.each(function(record){
-                               if (firstGrid.filter[record.get('id')])
-                                   firstGrid.store.remove(record);
-                           });
+                                // If a record is a member of the filter, then we
+                                // remove it
+                                firstGridStore.each(function(record){
+                                    if (firstGrid.filter[record.get('id')])
+                                        firstGrid.store.remove(record);
+                                });
 
-                           firstGridStore.save();
+                                firstGridStore.save();
 
-                           windowAssign.hide();
+                                windowAssign.hide();
 
-                      }
-                     },{
-                       text: 'Cancel',
-                       name: "btnCancelAssign",
-                       id: "btnCancelAssign",
-                       tabIndex: 3,
-                       handler: function(){
-                            windowAssign.hide();
-                       }
-                     }],
-                }).show();
+                            }
+                        },{
+                            text: 'Cancel',
+                            name: "btnCancelAssign",
+                            id: "btnCancelAssign",
+                            tabIndex: 3,
+                            handler: function(){
+                                 windowAssign.hide();
+                            }
+                        }],
+                    }).show();
 
-                /****
-                * Setup Drop Targets
-                ***/
+                    /****
+                    * Setup Drop Targets
+                    ***/
                     // This will make sure we only drop to the  view scroller element
-                var firstGridDropTargetEl =  firstGrid.getView().scroller.dom;
-                var firstGridDropTarget = new Ext.dd.DropTarget(firstGridDropTargetEl, {
+                    var firstGridDropTargetEl =  firstGrid.getView().scroller.dom;
+                    var firstGridDropTarget = new Ext.dd.DropTarget(firstGridDropTargetEl, {
                         ddGroup    : 'firstGridDDGroup',
                         notifyDrop : function(ddSource, e, data){
-                                var records =  ddSource.dragData.selections;
-                                Ext.each(records, ddSource.grid.store.remove, ddSource.grid.store);
-                                for (var index = 0; index<records.length; index++)
-                                {
-                                    var record = records[index];
-                                    // If a record is no phantom, then it
-                                    // was originally assigned, so it's not
-                                    // added. Instead, we stop using it's id for
-                                    // filtering in order to show it
-                                    if (!record.phantom)
-                                        firstGrid.filter[record.get('id')] = false;
-                                    else // Otherwise, we add it
-                                        firstGrid.store.add(record);
-                                }
-                                firstGrid.store.filterBy(firstGrid.filtering, firstGrid);
-                                // We nullify the modified data marking
-                                firstGrid.store.each(function(record){
-                                    if (record.modified != null)
-                                        record.modified['login'] = undefined;
-                                });
-                                firstGrid.store.sort('login', 'ASC');
-                                return true
+                            var records =  ddSource.dragData.selections;
+                            Ext.each(records, ddSource.grid.store.remove, ddSource.grid.store);
+                            for (var index = 0; index<records.length; index++)
+                            {
+                                var record = records[index];
+                                // If a record is no phantom, then it
+                                // was originally assigned, so it's not
+                                // added. Instead, we stop using it's id for
+                                // filtering in order to show it
+                                if (!record.phantom)
+                                    firstGrid.filter[record.get('id')] = false;
+                                else // Otherwise, we add it
+                                    firstGrid.store.add(record);
+                            }
+                            firstGrid.store.filterBy(firstGrid.filtering, firstGrid);
+                            // We nullify the modified data marking
+                            firstGrid.store.each(function(record){
+                                if (record.modified != null)
+                                    record.modified['login'] = undefined;
+                            });
+                            firstGrid.store.sort('login', 'ASC');
+                            return true
                         }
-                });
+                    });
 
 
-                // This will make sure we only drop to the view scroller element
-                var secondGridDropTargetEl = secondGrid.getView().scroller.dom;
+                    // This will make sure we only drop to the view scroller element
+                    var secondGridDropTargetEl = secondGrid.getView().scroller.dom;
                     var secondGridDropTarget = new Ext.dd.DropTarget(secondGridDropTargetEl, {
                         ddGroup    : 'secondGridDDGroup',
                         notifyDrop : function(ddSource, e, data){
-                                var records =  ddSource.dragData.selections;
-                                for (var index = 0; index<records.length; index++)
-                                {
-                                    var record = records[index];
-                                    // If a record is no phantom, then it
-                                    // was originally assigned, so it's not
-                                    // removed. Instead, we use it's id for
-                                    // filtering in order to hide it
-                                    if (!record.phantom)
-                                        firstGrid.filter[record.get('id')] = true;
-                                    else // Otherwise, we remove it
-                                        firstGrid.store.remove(record);
-                                }
-                                firstGrid.store.filterBy(firstGrid.filtering, firstGrid);
-                                secondGrid.store.add(records);
-                                // We nullify the modified data marking
-                                secondGrid.store.each(function(record){
-                                    if (record.modified != null)
-                                        record.modified['login'] = undefined;
-                                });
-                                secondGrid.store.sort('login', 'ASC');
-                                return true
+                            var records =  ddSource.dragData.selections;
+                            for (var index = 0; index<records.length; index++)
+                            {
+                                var record = records[index];
+                                // If a record is no phantom, then it
+                                // was originally assigned, so it's not
+                                // removed. Instead, we use it's id for
+                                // filtering in order to hide it
+                                if (!record.phantom)
+                                    firstGrid.filter[record.get('id')] = true;
+                                else // Otherwise, we remove it
+                                    firstGrid.store.remove(record);
+                            }
+                            firstGrid.store.filterBy(firstGrid.filtering, firstGrid);
+                            secondGrid.store.add(records);
+                            // We nullify the modified data marking
+                            secondGrid.store.each(function(record){
+                                if (record.modified != null)
+                                    record.modified['login'] = undefined;
+                            });
+                            secondGrid.store.sort('login', 'ASC');
+                            return true
                         }
-                        });
-            } else {
-                windowAssign.center();
-            }
+                    });
+                } else {
+                    windowAssign.center();
+                }
 
                 tpl = '<' + '?xml version="{version}" encoding="{encoding}"?' + '>' +
                 '<tpl if="records.length&gt;0">' +
@@ -1136,9 +1135,9 @@ Ext.onReady(function(){
             }
         },
 
-            /**
-             * onAssign2
-             */
+        /**
+         * onAssign2
+         */
         onAssign2: function(btn, ev) {
             if (this.getSelectionModel().getCount() > 0)
             {
@@ -1146,146 +1145,145 @@ Ext.onReady(function(){
 
                 var projectId = selected.get('id');
 
-                if (!windowAssign2)
-                {
-                windowAssign2 = new Ext.Window({
-                     id: 'windowAssign2',
-                     name: 'windowAssign2',
-                     title: 'Assign Clients',
-                     iconCls: 'silk-table-relationship',
-                     closeAction: 'hide',
-                     closable: false,
-                     animateTarget: 'projectGridAssignBtn2',
-                     modal: true,
-                     width:514,
-                     stateful: false,
-                     constrainHeader: true,
-                     resizable: false,
-                     layout: 'form',
-                     autoHeight: true,
-                     plain: false,
-                    items: [
-                      displayPanel2
-                      ],
-                      listeners: {
-                          'show': function(){
-                              // We create a new array for filtering when
-                              // the window shows
-                              firstGrid2.filter = new Array();
-                          }
-                      },
-                     buttons: [{
-                        text: 'Reset',
-                        name: 'btnResetAssign',
-                        id: 'btnResetAssign2',
-                        tooltip: 'Resets the Clients\' assignation to it\'s original state .',
-                        tabIndex:1,
-                        handler: function(){
-                            firstGridStore2.reload();
-                            // We are resetting, so no filtering
-                            firstGrid2.filter = new Array();
-                            secondGridStore2.reload();
-                        }
-                     },{
-                       text: 'Accept',
-                       name: "btnAcceptAssign",
-                       id: "btnAcceptAssign2",
-                       tabIndex: 2,
-                       handler: function(){
+                if (!windowAssign2) {
+                    windowAssign2 = new Ext.Window({
+                        id: 'windowAssign2',
+                        name: 'windowAssign2',
+                        title: 'Assign Clients',
+                        iconCls: 'silk-table-relationship',
+                        closeAction: 'hide',
+                        closable: false,
+                        animateTarget: 'projectGridAssignBtn2',
+                        modal: true,
+                        width:514,
+                        stateful: false,
+                        constrainHeader: true,
+                        resizable: false,
+                        layout: 'form',
+                        autoHeight: true,
+                        plain: false,
+                        items: [
+                            displayPanel2
+                        ],
+                        listeners: {
+                            'show': function(){
+                                // We create a new array for filtering when
+                                // the window shows
+                                firstGrid2.filter = new Array();
+                            }
+                        },
+                        buttons: [{
+                            text: 'Reset',
+                            name: 'btnResetAssign',
+                            id: 'btnResetAssign2',
+                            tooltip: 'Resets the Clients\' assignation to it\'s original state .',
+                            tabIndex:1,
+                            handler: function(){
+                                firstGridStore2.reload();
+                                // We are resetting, so no filtering
+                                firstGrid2.filter = new Array();
+                                secondGridStore2.reload();
+                            }
+                        },{
+                            text: 'Accept',
+                            name: "btnAcceptAssign",
+                            id: "btnAcceptAssign2",
+                            tabIndex: 2,
+                            handler: function(){
 
-                           // We nullify the filtering for having all
-                           // records
-                           firstGridStore2.filterBy(function(){return true;});
+                                // We nullify the filtering for having all
+                                // records
+                                firstGridStore2.filterBy(function(){return true;});
 
-                           // If a record is a member of the filter, then we
-                           // remove it
-                           firstGridStore2.each(function(record){
-                               if (firstGrid2.filter[record.get('id')])
-                                   firstGrid2.store.remove(record);
-                           });
+                                // If a record is a member of the filter, then we
+                                // remove it
+                                firstGridStore2.each(function(record){
+                                    if (firstGrid2.filter[record.get('id')])
+                                        firstGrid2.store.remove(record);
+                                });
 
-                           firstGridStore2.save();
+                                firstGridStore2.save();
 
-                           windowAssign2.hide();
+                                windowAssign2.hide();
 
-                      }
-                     },{
-                       text: 'Cancel',
-                       name: "btnCancelAssign",
-                       id: "btnCancelAssign2",
-                       tabIndex: 3,
-                       handler: function(){
-                            windowAssign2.hide();
-                       }
-                     }],
-                }).show();
+                            }
+                        },{
+                            text: 'Cancel',
+                            name: "btnCancelAssign",
+                            id: "btnCancelAssign2",
+                            tabIndex: 3,
+                            handler: function(){
+                                windowAssign2.hide();
+                            }
+                        }],
+                    }).show();
 
-                /****
-                * Setup Drop Targets
-                ***/
+                    /****
+                    * Setup Drop Targets
+                    ***/
                     // This will make sure we only drop to the  view scroller element
-                var firstGridDropTargetEl2 =  firstGrid2.getView().scroller.dom;
-                var firstGridDropTarget2 = new Ext.dd.DropTarget(firstGridDropTargetEl2, {
+                    var firstGridDropTargetEl2 =  firstGrid2.getView().scroller.dom;
+                    var firstGridDropTarget2 = new Ext.dd.DropTarget(firstGridDropTargetEl2, {
                         ddGroup    : 'firstGridDDGroup2',
                         notifyDrop : function(ddSource, e, data){
-                                var records =  ddSource.dragData.selections;
-                                Ext.each(records, ddSource.grid.store.remove, ddSource.grid.store);
-                                for (var index = 0; index<records.length; index++)
-                                {
-                                    var record = records[index];
-                                    // If a record is no phantom, then it
-                                    // was originally assigned, so it's not
-                                    // added. Instead, we stop using it's id for
-                                    // filtering in order to show it
-                                    if (!record.phantom)
-                                        firstGrid2.filter[record.get('id')] = false;
-                                    else // Otherwise, we add it
-                                        firstGrid2.store.add(record);
-                                }
-                                firstGrid2.store.filterBy(firstGrid2.filtering, firstGrid2);
-                                // We nullify the modified data marking
-                                firstGrid2.store.each(function(record){
-                                    if (record.modified != null)
-                                        record.modified['name'] = undefined;
-                                });
-                                firstGrid2.store.sort('name', 'ASC');
-                                return true
+                            var records =  ddSource.dragData.selections;
+                            Ext.each(records, ddSource.grid.store.remove, ddSource.grid.store);
+                            for (var index = 0; index<records.length; index++)
+                            {
+                                var record = records[index];
+                                // If a record is no phantom, then it
+                                // was originally assigned, so it's not
+                                // added. Instead, we stop using it's id for
+                                // filtering in order to show it
+                                if (!record.phantom)
+                                    firstGrid2.filter[record.get('id')] = false;
+                                else // Otherwise, we add it
+                                    firstGrid2.store.add(record);
+                            }
+                            firstGrid2.store.filterBy(firstGrid2.filtering, firstGrid2);
+                            // We nullify the modified data marking
+                            firstGrid2.store.each(function(record){
+                                if (record.modified != null)
+                                    record.modified['name'] = undefined;
+                            });
+                            firstGrid2.store.sort('name', 'ASC');
+                            return true
                         }
-                });
+                    });
 
 
-                // This will make sure we only drop to the view scroller element
-                var secondGridDropTargetEl2 = secondGrid2.getView().scroller.dom;
+                    // This will make sure we only drop to the view scroller element
+                    var secondGridDropTargetEl2 = secondGrid2.getView().scroller.dom;
                     var secondGridDropTarget2 = new Ext.dd.DropTarget(secondGridDropTargetEl2, {
                         ddGroup    : 'secondGridDDGroup2',
                         notifyDrop : function(ddSource, e, data){
-                                var records =  ddSource.dragData.selections;
-                                for (var index = 0; index<records.length; index++)
-                                {
-                                    var record = records[index];
-                                    // If a record is no phantom, then it
-                                    // was originally assigned, so it's not
-                                    // removed. Instead, we use it's id for
-                                    // filtering in order to hide it
-                                    if (!record.phantom)
-                                        firstGrid2.filter[record.get('id')] = true;
-                                    else // Otherwise, we remove it
-                                        firstGrid2.store.remove(record);
-                                }
-                                firstGrid2.store.filterBy(firstGrid2.filtering, firstGrid2);
-                                secondGrid2.store.add(records);
-                                // We nullify the modified data marking
-                                secondGrid2.store.each(function(record){
-                                    if (record.modified != null)
-                                        record.modified['name'] = undefined;
-                                });
-                                secondGrid2.store.sort('name', 'ASC');
-                                return true
+                            var records =  ddSource.dragData.selections;
+                            for (var index = 0; index<records.length; index++)
+                            {
+                                var record = records[index];
+                                // If a record is no phantom, then it
+                                // was originally assigned, so it's not
+                                // removed. Instead, we use it's id for
+                                // filtering in order to hide it
+                                if (!record.phantom)
+                                    firstGrid2.filter[record.get('id')] = true;
+                                else // Otherwise, we remove it
+                                    firstGrid2.store.remove(record);
+                            }
+                            firstGrid2.store.filterBy(firstGrid2.filtering, firstGrid2);
+                            secondGrid2.store.add(records);
+                            // We nullify the modified data marking
+                            secondGrid2.store.each(function(record){
+                                if (record.modified != null)
+                                    record.modified['name'] = undefined;
+                            });
+                            secondGrid2.store.sort('name', 'ASC');
+                            return true
                         }
-                        });
-            } else {
-                windowAssign2.center();
-            }
+                    });
+                } else {
+                    windowAssign2.center();
+                }
 
                 tpl = '<' + '?xml version="{version}" encoding="{encoding}"?' + '>' +
                 '<tpl if="records.length&gt;0">' +
@@ -1324,7 +1322,7 @@ Ext.onReady(function(){
             {name: 'movedHours', type: 'float'},
             {name: 'schedType', type: 'string'},
             {name: 'type', type: 'string'},
-            ]
+        ]
     );
 
 
@@ -1373,7 +1371,7 @@ Ext.onReady(function(){
                     '</{parent.record}></tpl>' +
                 '</{root}></tpl>' +
                 '</tpl>'
-                }, projectRecord),
+            }, projectRecord),
         remoteSort: false,
         sortInfo: {
             field: 'init',
