@@ -32,6 +32,11 @@
 
     $sid = $_GET['sid'];
 
+    if (isset($_GET['active']) && strtolower($_GET['active']) == "true")
+        $active = True;
+    else
+        $active = False;
+
     do {
         /* We check authentication and authorization */
         require_once('phpreport/util/LoginManager.php');
@@ -48,7 +53,7 @@
             break;
         }
 
-        $customers = CustomersFacade::GetAllCustomers();
+        $customers = CustomersFacade::GetAllCustomers($active);
 
         $string = "<customers>";
 

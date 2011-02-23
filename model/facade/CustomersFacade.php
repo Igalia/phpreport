@@ -74,12 +74,14 @@ abstract class CustomersFacade {
      *
      *  This action is used for retrieving all Customers.
      *
+     * @param bool $active optional parameter for obtaining only data related to active Projects (by default it returns all them).
+     * @param string $order optional parameter for sorting value objects in a specific way (by default, by their internal id).
      * @return array an array with value objects {@link CustomersVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      */
-    static function GetAllCustomers() {
+    static function GetAllCustomers($active = False, $order = 'id') {
 
-    $action = new GetAllCustomersAction();
+    $action = new GetAllCustomersAction($active, $order);
 
     return $action->execute();
 

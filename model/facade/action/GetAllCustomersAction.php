@@ -51,14 +51,23 @@ class GetAllCustomersAction extends Action{
      */
     private $order;
 
+    /** Active projects flag
+     *
+     * This variable contains the optional parameter for retrieving only data related to active Projects.
+     *
+     * @var bool
+     */
+    private $active;
+
     /** GetAllCustomersAction constructor.
      *
      * This is just the constructor of this action.
      * @param string $order optional parameter for sorting value objects in a specific way (by default, by their internal id).
      */
-    public function __construct($order = 'id') {
+    public function __construct($active = False, $order = 'id') {
         $this->preActionParameter="GET_ALL_CUSTOMERS_PREACTION";
         $this->postActionParameter="GET_ALL_CUSTOMERS_POSTACTION";
+        $this->active = $active;
         $this->order = $order;
     }
 
@@ -71,7 +80,7 @@ class GetAllCustomersAction extends Action{
      */
     protected function doExecute() {
         $dao = DAOFactory::getCustomerDAO();
-        return $dao->getAll($this->order);
+        return $dao->getAll($this->active, $this->order);
     }
 
 }
