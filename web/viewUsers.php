@@ -280,7 +280,30 @@ Ext.onReady(function(){
         storeId: 'users',
         proxy: userProxy,
         reader:new Ext.data.XmlReader({record: 'user', idProperty:'id' }, userRecord),
-        writer:new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: true, root: 'users', tpl: '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><tpl for="fields"><tpl if="name==\'id\'"><{name}>{value}</{name}></tpl><tpl if="name==\'login\'"><{name}>{value}</{name}></tpl><tpl if="name==\'password\'"><{name}>{value}</{name}></tpl></tpl><userGroups><tpl for="fields"><tpl if="name!=\'id\'"><tpl if="name!=\'login\'"><tpl if="name!=\'password\'"><{[values.name.replace("userGroups/", "")]}>{value}</{[values.name.replace("userGroups/", "")]}></tpl></tpl></tpl></tpl></userGroups></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>'}, userRecord),
+        writer: new Ext.data.XmlWriter({
+            xmlEncoding: 'UTF-8',
+            writeAllFields: true,
+            root: 'users',
+            tpl: '<' + '?xml version="{version}" encoding="{encoding}"?' + '>' +
+                '<tpl if="records.length &gt; 0">' +
+                    '<tpl if="root"><{root}>' +
+                        '<tpl for="records"><{parent.record}>' +
+                            '<tpl for=".">' +
+                                '<tpl if="name==\'id\' || name==\'login\' || name==\'password\'">' +
+                                    '<{name}>{value}</{name}>' +
+                                '</tpl>' +
+                            '</tpl>' +
+                            '<userGroups><tpl for=".">' +
+                                '<tpl if="name!=\'id\' && name!=\'login\' && name!=\'password\'">' +
+                                    '<{[values.name.replace("userGroups/", "")]}>' +
+                                        '{value}' +
+                                    '</{[values.name.replace("userGroups/", "")]}>' +
+                                '</tpl>' +
+                            '</tpl></userGroups>' +
+                        '</{parent.record}></tpl>' +
+                    '</{root}></tpl>' +
+                '</tpl>'
+                }, userRecord),
         remoteSort: false,
         sortInfo: {
             field: 'login',
@@ -387,7 +410,22 @@ Ext.onReady(function(){
     });
 
     function loadHistories(login, userId){
-        tpl = '<tpl for="."><' + '?xml version="{version}" encoding="{encoding}"?' + '><tpl if="records.length&gt;0"><tpl if="root"><{root}><tpl for="records"><tpl if="fields.length&gt;0"><{parent.record}><userId>' + userId  + '</userId><tpl for="fields"><{name}><tpl if="name==\'init\'">{[values.value.format("Y-m-d")]}</tpl><tpl if="name!=\'init\'"><tpl if="name==\'end\'">{[values.value.format("Y-m-d")]}</tpl><tpl if="name!=\'end\'">{value}</tpl></tpl></{name}></tpl></{parent.record}></tpl></tpl></{root}></tpl></tpl></tpl>';
+        tpl = '<' + '?xml version="{version}" encoding="{encoding}"?' + '>' +
+                '<tpl if="records.length &gt; 0">' +
+                    '<tpl if="root"><{root}>' +
+                        '<tpl for="records"><{parent.record}>' +
+                            '<userId>' + userId  + '</userId>' +
+                            '<tpl for="."><{name}>' +
+                                '<tpl if="name==\'init\' || name==\'end\'">' +
+                                    '{[values.value.format("Y-m-d")]}' +
+                                '</tpl>' +
+                                '<tpl if="name!=\'init\' && name!=\'end\'">' +
+                                    '{value}' +
+                                '</tpl>' +
+                            '</{name}></tpl>' +
+                        '</{parent.record}></tpl>' +
+                    '</{root}></tpl>' +
+                '</tpl>';
         hourCostStore.writer.tpl = new Ext.XTemplate(tpl).compile();
         hourCostStore.load({params: {'uid': login}});
         areaStore.writer.tpl = new Ext.XTemplate(tpl).compile();
