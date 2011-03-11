@@ -217,15 +217,19 @@ Ext.onReady(function(){
     });
 
     // Column Model shortcut array
-    var cols = [
-        { id : 'login', header: "Login", width: 160, sortable: true, dataIndex: 'login'},
+    var colsUsersFirst = [
+        { id : 'login', header: "Login", sortable: true, dataIndex: 'login'},
+    ];
+
+    var colsUsersSecond = [
+        { id : 'login', header: "Login", sortable: true, dataIndex: 'login'},
     ];
 
     // declare the source Grid
     var firstGrid = new Ext.grid.GridPanel({
         ddGroup          : 'secondGridDDGroup',
         store            : firstGridStore,
-        columns          : cols,
+        columns          : colsUsersFirst,
         enableDragDrop   : true,
         stripeRows       : true,
         autoExpandColumn : 'login',
@@ -243,7 +247,7 @@ Ext.onReady(function(){
     var secondGrid = new Ext.grid.GridPanel({
         ddGroup          : 'firstGridDDGroup',
         store            : secondGridStore,
-        columns          : cols,
+        columns          : colsUsersSecond,
         enableDragDrop   : true,
         stripeRows       : true,
         autoExpandColumn : 'login',
@@ -375,15 +379,19 @@ Ext.onReady(function(){
     });
 
     // Column Model shortcut array
-    var cols2 = [
-        { id : 'name', header: "Name", width: 260, sortable: true, dataIndex: 'name'},
+    var colsClientsFirst = [
+        { id : 'name', header: "Name", sortable: true, dataIndex: 'name'},
+    ];
+
+    var colsClientsSecond = [
+        { id : 'name', header: "Name", sortable: true, dataIndex: 'name'},
     ];
 
     // declare the source Grid
     var firstGrid2 = new Ext.grid.GridPanel({
         ddGroup          : 'secondGridDDGroup2',
         store            : firstGridStore2,
-        columns          : cols2,
+        columns          : colsClientsFirst,
         enableDragDrop   : true,
         stripeRows       : true,
         autoExpandColumn : 'name',
@@ -401,7 +409,7 @@ Ext.onReady(function(){
     var secondGrid2 = new Ext.grid.GridPanel({
         ddGroup          : 'firstGridDDGroup2',
         store            : secondGridStore2,
-        columns          : cols2,
+        columns          : colsClientsSecond,
         enableDragDrop   : true,
         stripeRows       : true,
         autoExpandColumn : 'name',
