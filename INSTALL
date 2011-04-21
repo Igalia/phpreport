@@ -31,11 +31,6 @@ the web server (usually it would be /var/www/phpreport). If you changed any
 data on the previous step, edit the file config/config.php and set the correct
 values for the DB name, user, password, host, etc.
 
-You will also have to download the ExtJS library, version 3.3.1 (www.sencha.com/products/js)
-and extract it to the directory web/ext/. Please note you need exactly that version,
-not an older nor a newer one. You can get the library in the following URL:
-http://www.sencha.com/products/js/download.php?dl=extjs331
-
 3. Creating the schema and initial data of the database
 
 Browse to the directory sql/ and run the following commands (you will be asked
