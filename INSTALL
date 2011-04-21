@@ -26,12 +26,29 @@ createlang -h localhost -W -U phpreport plpgsql phpreport
 
 2. Setting up the files
 
-Move the program files to a location available for
-the web server (usually it would be /var/www/phpreport). If you changed any
-data on the previous step, edit the file config/config.php and set the correct
-values for the DB name, user, password, host, etc.
+Just move the program files to a location available for the web server. In a
+Debian system, for example, it would be /var/www/phpreport.
 
 3. Creating the schema and initial data of the database
+
+You have two ways to do it: using the included web installation wizard (3.1) or
+manually (3.2).
+
+3.1 Installation wizard
+
+As a precondition, your web server has to have write permissions on the config
+directory of PhpReport to write the configuration file. Once that is done, open
+the url http://your-web-server/phpreport/install, and follow the on-screen
+instructions. If you didn't change the names and passwords specified on step 1,
+defaults will just work fine.
+
+Once the installation is complete, remove the install directory inside your
+PhpReport, to prevent other users to reset your DB again.
+
+3.2 Manual setup of schema and initial data
+
+If you changed any of data on the first step, edit the file config/config.php
+and set the correct values for the DB name, user, password, host, etc.
 
 Browse to the directory sql/ and run the following commands (you will be asked
 by the password (phpreport) interactively):
