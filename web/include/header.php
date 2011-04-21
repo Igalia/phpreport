@@ -40,7 +40,7 @@
 		<!-- Include Ext library -->
     <script type="text/javascript" src="ext/adapter/ext/ext-base-debug.js"></script>
     <script type="text/javascript" src="ext/ext-all-debug.js"></script>
-    <script type="text/javascript" src="ext/examples/shared/extjs/App.js"></script>
+    <script type="text/javascript" src="include/App.js"></script>
     <script type="text/javascript" src="include/RowEditor.js"></script>
     <script type="text/javascript" src="include/DatePickerLinks.js"></script>
 
