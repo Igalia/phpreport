@@ -19,7 +19,7 @@
  */
 
 
-include_once('phpreport/model/vo/JourneyHistoryVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/JourneyHistoryVO.php');
 
 class JourneyHistoryVOTests extends PHPUnit_Framework_TestCase
 {

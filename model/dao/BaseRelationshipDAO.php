@@ -29,9 +29,9 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/util/ConfigurationParametersManager.php');
-include_once('phpreport/util/DBConnectionErrorException.php');
-include_once('phpreport/util/SQLQueryErrorException.php');
+include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
+include_once(PHPREPORT_ROOT . '/util/DBConnectionErrorException.php');
+include_once(PHPREPORT_ROOT . '/util/SQLQueryErrorException.php');
 
 /** Base class for all relationship DAOs
  *

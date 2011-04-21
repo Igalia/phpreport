@@ -19,7 +19,7 @@
  */
 
 
-include_once('phpreport/model/vo/CommonEventVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CommonEventVO.php');
 
 class CommonEventVOTests extends PHPUnit_Framework_TestCase
 {

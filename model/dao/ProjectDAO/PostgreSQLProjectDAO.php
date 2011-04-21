@@ -30,15 +30,15 @@
  * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
 
-include_once('phpreport/util/SQLIncorrectTypeException.php');
-include_once('phpreport/util/DBPostgres.php');
-include_once('phpreport/model/vo/ProjectVO.php');
-include_once('phpreport/model/vo/CustomProjectVO.php');
-include_once('phpreport/model/dao/ProjectDAO/ProjectDAO.php');
-include_once('phpreport/model/dao/ProjectUserDAO/PostgreSQLProjectUserDAO.php');
-include_once('phpreport/model/dao/WorksDAO/PostgreSQLWorksDAO.php');
-include_once('phpreport/model/dao/TaskDAO/PostgreSQLTaskDAO.php');
-include_once('phpreport/model/dao/RequestsDAO/PostgreSQLRequestsDAO.php');
+include_once(PHPREPORT_ROOT . '/util/SQLIncorrectTypeException.php');
+include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
+include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CustomProjectVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/ProjectDAO/ProjectDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/ProjectUserDAO/PostgreSQLProjectUserDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/WorksDAO/PostgreSQLWorksDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/TaskDAO/PostgreSQLTaskDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/RequestsDAO/PostgreSQLRequestsDAO.php');
 
 /** DAO for Projects in PostgreSQL
  *

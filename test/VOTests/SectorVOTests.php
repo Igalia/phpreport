@@ -19,7 +19,7 @@
  */
 
 
-include_once('phpreport/model/vo/SectorVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/SectorVO.php');
 
 class SectorVOTests extends PHPUnit_Framework_TestCase
 {

@@ -29,7 +29,7 @@
  * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
 
-include_once('phpreport/util/ConfigurationParametersManager.php');
+include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
 
 /** Base class for all actions
  *
@@ -77,7 +77,7 @@ abstract class Action {
     private function runPlugins($pluginNameList, $status) {
 
         foreach((array) $pluginNameList as $pluginClassName) {
-            require_once('phpreport/model/facade/actionplugin/' . $pluginClassName . ".php");
+            require_once(PHPREPORT_ROOT . '/model/facade/actionplugin/' . $pluginClassName . ".php");
 
             $action = new $pluginClassName($this);
             $action->run($status);

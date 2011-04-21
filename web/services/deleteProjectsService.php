@@ -26,9 +26,10 @@
  * @author Jorge López Fernández
  */
 
-   include_once('phpreport/web/services/WebServicesFunctions.php');
-   include_once('phpreport/model/facade/ProjectsFacade.php');
-   include_once('phpreport/model/vo/ProjectVO.php');
+    define('PHPREPORT_ROOT', __DIR__ . '/../../');
+    include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
+    include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
+    include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
 
     $parser = new XMLReader();
 
@@ -45,7 +46,7 @@
     if ($parser->name == "projects")
     {
         /* We check authentication and authorization */
-        require_once('phpreport/util/LoginManager.php');
+        require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 
         $sid = $parser->getAttribute("sid");
 

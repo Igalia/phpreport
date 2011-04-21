@@ -29,21 +29,21 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/util/SQLIncorrectTypeException.php');
-include_once('phpreport/util/IncorrectLoginException.php');
-include_once('phpreport/util/DBPostgres.php');
-include_once('phpreport/model/vo/UserVO.php');
-include_once('phpreport/model/dao/UserDAO/UserDAO.php');
-include_once('phpreport/model/dao/ProjectUserDAO/PostgreSQLProjectUserDAO.php');
-include_once('phpreport/model/dao/BelongsDAO/PostgreSQLBelongsDAO.php');
-include_once('phpreport/model/dao/WorksDAO/PostgreSQLWorksDAO.php');
-include_once('phpreport/model/dao/TaskDAO/PostgreSQLTaskDAO.php');
-include_once('phpreport/model/dao/ExtraHourDAO/PostgreSQLExtraHourDAO.php');
-include_once('phpreport/model/dao/CustomEventDAO/PostgreSQLCustomEventDAO.php');
-include_once('phpreport/model/dao/AreaHistoryDAO/PostgreSQLAreaHistoryDAO.php');
-include_once('phpreport/model/dao/CityHistoryDAO/PostgreSQLCityHistoryDAO.php');
-include_once('phpreport/model/dao/JourneyHistoryDAO/PostgreSQLJourneyHistoryDAO.php');
-include_once('phpreport/model/dao/HourCostHistoryDAO/PostgreSQLHourCostHistoryDAO.php');
+include_once(PHPREPORT_ROOT . '/util/SQLIncorrectTypeException.php');
+include_once(PHPREPORT_ROOT . '/util/IncorrectLoginException.php');
+include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/UserDAO/UserDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/ProjectUserDAO/PostgreSQLProjectUserDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/BelongsDAO/PostgreSQLBelongsDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/WorksDAO/PostgreSQLWorksDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/TaskDAO/PostgreSQLTaskDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/ExtraHourDAO/PostgreSQLExtraHourDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/CustomEventDAO/PostgreSQLCustomEventDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/AreaHistoryDAO/PostgreSQLAreaHistoryDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/CityHistoryDAO/PostgreSQLCityHistoryDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/JourneyHistoryDAO/PostgreSQLJourneyHistoryDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/HourCostHistoryDAO/PostgreSQLHourCostHistoryDAO.php');
 
 
 /** DAO for Users in PostgreSQL

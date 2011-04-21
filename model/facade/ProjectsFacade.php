@@ -29,26 +29,26 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/model/facade/action/CreateProjectAction.php');
-include_once('phpreport/model/facade/action/GetAllProjectsAction.php');
-include_once('phpreport/model/facade/action/GetAllCustomProjectsAction.php');
-include_once('phpreport/model/facade/action/GetFilteredCustomProjectsAction.php');
-include_once('phpreport/model/facade/action/GetUserProjectsAction.php');
-include_once('phpreport/model/facade/action/GetProjectUsersAction.php');
-include_once('phpreport/model/facade/action/GetProjectCustomersAction.php');
-include_once('phpreport/model/facade/action/GetProjectExtraDataAction.php');
-include_once('phpreport/model/facade/action/GetProjectAction.php');
-include_once('phpreport/model/facade/action/GetCustomProjectAction.php');
-include_once('phpreport/model/facade/action/AssignUserToProjectAction.php');
-include_once('phpreport/model/facade/action/DeassignUserFromProjectAction.php');
-include_once('phpreport/model/facade/action/AssignCustomerToProjectAction.php');
-include_once('phpreport/model/facade/action/DeassignCustomerFromProjectAction.php');
-include_once('phpreport/model/facade/action/DeleteProjectAction.php');
-include_once('phpreport/model/facade/action/UpdateProjectAction.php');
-include_once('phpreport/model/facade/action/PartialUpdateProjectAction.php');
-include_once('phpreport/model/facade/action/GetProjectsByCustomerUserLoginAction.php');
-include_once('phpreport/model/dao/DAOFactory.php');
-include_once('phpreport/model/vo/ProjectVO.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/CreateProjectAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllProjectsAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllCustomProjectsAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetFilteredCustomProjectsAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserProjectsAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectUsersAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectCustomersAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectExtraDataAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetCustomProjectAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/AssignUserToProjectAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/DeassignUserFromProjectAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/AssignCustomerToProjectAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/DeassignCustomerFromProjectAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteProjectAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateProjectAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/PartialUpdateProjectAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectsByCustomerUserLoginAction.php');
+include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
+include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
 
 /** Projects Facade
  *

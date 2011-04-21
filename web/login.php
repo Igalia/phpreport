@@ -22,9 +22,10 @@
 /* Include the generic header */
 define('PAGE_TITLE', "PhpReport - Login");
 
-include_once('phpreport/model/facade/UsersFacade.php');
-include_once('phpreport/model/vo/UserVO.php');
-require_once('phpreport/util/LoginManager.php');
+define('PHPREPORT_ROOT', __DIR__ . '/../');
+include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
+require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 
 /* There are Http authentication data: we try to log in*/
 if (isset($_SERVER['PHP_AUTH_USER']))

@@ -29,11 +29,11 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/util/SQLIncorrectTypeException.php');
-include_once('phpreport/util/DBPostgres.php');
-include_once('phpreport/model/vo/UserGroupVO.php');
-include_once('phpreport/model/dao/UserGroupDAO/UserGroupDAO.php');
-include_once('phpreport/model/dao/BelongsDAO/PostgreSQLBelongsDAO.php');
+include_once(PHPREPORT_ROOT . '/util/SQLIncorrectTypeException.php');
+include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserGroupVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/UserGroupDAO/UserGroupDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/BelongsDAO/PostgreSQLBelongsDAO.php');
 
 /** DAO for User Groups in PostgreSQL
  *

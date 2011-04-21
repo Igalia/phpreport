@@ -26,9 +26,10 @@
  * @author Jorge López Fernández
  */
 
-   include_once('phpreport/web/services/WebServicesFunctions.php');
-   include_once('phpreport/model/facade/TasksFacade.php');
-   include_once('phpreport/model/vo/TaskVO.php');
+    define('PHPREPORT_ROOT', __DIR__ . '/../../');
+    include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
+    include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
+    include_once(PHPREPORT_ROOT . '/model/vo/TaskVO.php');
 
     $parser = new XMLReader();
 
@@ -52,7 +53,7 @@
         }
 
         /* We check authentication and authorization */
-        require_once('phpreport/util/LoginManager.php');
+        require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 
         $user = LoginManager::isLogged($sid);
 

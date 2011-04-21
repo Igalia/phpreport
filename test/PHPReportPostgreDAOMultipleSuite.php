@@ -19,11 +19,12 @@
  */
 
 
-require_once 'phpreport/test/PostgreDAOMultipleTests/PostgreSQLBelongsRelationshipMultipleTests.php';
-require_once 'phpreport/test/PostgreDAOMultipleTests/PostgreSQLRequestsRelationshipMultipleTests.php';
-require_once 'phpreport/test/PostgreDAOMultipleTests/PostgreSQLWorksRelationshipMultipleTests.php';
-require_once 'phpreport/test/PostgreDAOMultipleTests/PostgreSQLProjectUserRelationshipMultipleTests.php';
-require_once 'phpreport/test/PostgreDAOMultipleTests/PostgreSQLProjectScheduleDAOMultipleTests.php';
+define('PHPREPORT_ROOT', __DIR__ . '/../');
+require_once PHPREPORT_ROOT . '/test/PostgreDAOMultipleTests/PostgreSQLBelongsRelationshipMultipleTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOMultipleTests/PostgreSQLRequestsRelationshipMultipleTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOMultipleTests/PostgreSQLWorksRelationshipMultipleTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOMultipleTests/PostgreSQLProjectUserRelationshipMultipleTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOMultipleTests/PostgreSQLProjectScheduleDAOMultipleTests.php';
 
 class PHPReportPostgreDAOMultipleSuite extends PHPUnit_Framework_TestSuite
 {

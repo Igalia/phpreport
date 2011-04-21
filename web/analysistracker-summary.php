@@ -18,17 +18,18 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+define('PHPREPORT_ROOT', __DIR__ . '/../');
 
 /* We check authentication and authorization */
-require_once('phpreport/util/LoginManager.php');
+require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 if (!LoginManager::login())
     header('Location: login.php');
 if (!LoginManager::isAllowed())
     require('forbidden.php');
 
-require_once('phpreport/model/facade/ProjectsFacade.php');
-require_once('phpreport/model/vo/UserVO.php');
-require_once('phpreport/model/vo/ProjectVO.php');
+require_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
+require_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
+require_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
 
 /* Include the generic header and sidebar*/
 define("PAGE_TITLE", "PhpReport - Analysis tracker summary");

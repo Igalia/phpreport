@@ -26,9 +26,10 @@
  * @author Jorge López Fernández
  */
 
-   include_once('phpreport/web/services/WebServicesFunctions.php');
-   include_once('phpreport/model/facade/UsersFacade.php');
-   include_once('phpreport/model/vo/UserVO.php');
+    define('PHPREPORT_ROOT', __DIR__ . '/../../');
+    include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
+    include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
+    include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
 /**
  * HTTP PARAMETERS RECEIVED BY THIS PAGE:

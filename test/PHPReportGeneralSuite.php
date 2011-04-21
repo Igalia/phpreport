@@ -19,8 +19,9 @@
  */
 
 
-require_once 'phpreport/test/PHPReportVOSuite.php';
-require_once 'phpreport/test/PHPReportPostgreSuite.php';
+define('PHPREPORT_ROOT', __DIR__ . '/../');
+require_once PHPREPORT_ROOT . '/test/PHPReportVOSuite.php';
+require_once PHPREPORT_ROOT . '/test/PHPReportPostgreSuite.php';
 
 class PHPReportGeneralSuite extends PHPUnit_Framework_TestSuite
 {

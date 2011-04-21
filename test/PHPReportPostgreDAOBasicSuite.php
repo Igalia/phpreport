@@ -19,27 +19,28 @@
  */
 
 
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLUserDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLAreaDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLCityDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLSectorDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLUserGroupDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLExtraHourDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLCustomEventDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLCommonEventDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLCustomerDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLTaskDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLJourneyHistoryDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLAreaHistoryDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLCityHistoryDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLHourCostHistoryDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLProjectDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLIterationDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLModuleDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLStoryDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLSectionDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLTaskStoryDAOBasicTests.php';
-require_once 'phpreport/test/PostgreDAOBasicTests/PostgreSQLTaskSectionDAOBasicTests.php';
+define('PHPREPORT_ROOT', __DIR__ . '/../');
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLUserDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLAreaDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLCityDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLSectorDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLUserGroupDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLExtraHourDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLCustomEventDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLCommonEventDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLCustomerDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLTaskDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLJourneyHistoryDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLAreaHistoryDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLCityHistoryDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLHourCostHistoryDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLProjectDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLIterationDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLModuleDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLStoryDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLSectionDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLTaskStoryDAOBasicTests.php';
+require_once PHPREPORT_ROOT . '/test/PostgreDAOBasicTests/PostgreSQLTaskSectionDAOBasicTests.php';
 
 class PHPReportPostgreDAOBasicSuite extends PHPUnit_Framework_TestSuite
 {

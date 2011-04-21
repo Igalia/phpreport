@@ -29,7 +29,7 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/model/vo/BaseSectionVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/BaseSectionVO.php');
 
 /** VO for Sections
  *

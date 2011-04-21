@@ -19,7 +19,7 @@
  */
 
 
-include_once('phpreport/model/vo/ProjectScheduleVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/ProjectScheduleVO.php');
 
 class ProjectScheduleVOTests extends PHPUnit_Framework_TestCase
 {

@@ -29,13 +29,13 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/util/SQLIncorrectTypeException.php');
-include_once('phpreport/util/SQLUniqueViolationException.php');
-include_once('phpreport/util/DBPostgres.php');
-include_once('phpreport/model/vo/TaskStoryVO.php');
-include_once('phpreport/model/vo/ProjectVO.php');
-include_once('phpreport/model/dao/TaskStoryDAO/TaskStoryDAO.php');
-include_once('phpreport/util/ConfigurationParametersManager.php');
+include_once(PHPREPORT_ROOT . '/util/SQLIncorrectTypeException.php');
+include_once(PHPREPORT_ROOT . '/util/SQLUniqueViolationException.php');
+include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
+include_once(PHPREPORT_ROOT . '/model/vo/TaskStoryVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/TaskStoryDAO/TaskStoryDAO.php');
+include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
 
 /** DAO for Task Stories in PostgreSQL
  *

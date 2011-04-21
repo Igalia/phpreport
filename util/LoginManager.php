@@ -29,9 +29,9 @@
  * @author Jacobo Aragunde Perez <jaragunde@igalia.com>
  */
 
-require_once('phpreport/model/facade/UsersFacade.php');
-require_once('phpreport/model/vo/UserVO.php');
-require_once('phpreport/model/vo/UserGroupVO.php');
+require_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
+require_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
+require_once(PHPREPORT_ROOT . '/model/vo/UserGroupVO.php');
 
 /** Login Manager
  *
@@ -142,7 +142,7 @@ class LoginManager {
   public static function isAllowed($sid=NULL) {
 
     /* We include the file with the array of permissions */
-    require('phpreport/config/permissions.php');
+    require(PHPREPORT_ROOT . '/config/permissions.php');
 
     if ($sid!=NULL)
       session_id($sid);
@@ -179,7 +179,7 @@ class LoginManager {
   public static function isAdmin($sid=NULL) {
 
     /* We include the file with the array of permissions */
-    require('phpreport/config/permissions.php');
+    require(PHPREPORT_ROOT . '/config/permissions.php');
 
     if ($sid!=NULL)
       session_id($sid);

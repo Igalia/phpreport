@@ -29,10 +29,10 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/util/SQLIncorrectTypeException.php');
-include_once('phpreport/util/DBPostgres.php');
-include_once('phpreport/model/vo/CommonEventVO.php');
-include_once('phpreport/model/dao/CommonEventDAO/CommonEventDAO.php');
+include_once(PHPREPORT_ROOT . '/util/SQLIncorrectTypeException.php');
+include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CommonEventVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/CommonEventDAO/CommonEventDAO.php');
 
 /** DAO for Common Events in PostgreSQL
  *

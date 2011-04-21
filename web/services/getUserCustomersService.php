@@ -26,9 +26,10 @@
  * @author Jorge López Fernández
  */
 
-   include_once('phpreport/web/services/WebServicesFunctions.php');
-   include_once('phpreport/model/facade/CustomersFacade.php');
-   include_once('phpreport/model/vo/UserVO.php');
+    define('PHPREPORT_ROOT', __DIR__ . '/../../');
+    include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
+    include_once(PHPREPORT_ROOT . '/model/facade/CustomersFacade.php');
+    include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
     $userLogin = $_GET['uid'];
 
@@ -50,7 +51,7 @@
 
     do {
         /* We check authentication and authorization */
-        require_once('phpreport/util/LoginManager.php');
+        require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 
         if (!LoginManager::isLogged($sid))
         {

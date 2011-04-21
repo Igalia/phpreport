@@ -29,10 +29,10 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/util/SQLIncorrectTypeException.php');
-include_once('phpreport/util/DBPostgres.php');
-include_once('phpreport/model/vo/CustomEventVO.php');
-include_once('phpreport/model/dao/CustomEventDAO/CustomEventDAO.php');
+include_once(PHPREPORT_ROOT . '/util/SQLIncorrectTypeException.php');
+include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CustomEventVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/CustomEventDAO/CustomEventDAO.php');
 
 /** DAO for Custom Events in PostgreSQL
  *

@@ -19,13 +19,13 @@
  */
 
 
-include_once('phpreport/model/vo/ProjectVO.php');
-include_once('phpreport/model/dao/ProjectDAO/PostgreSQLProjectDAO.php');
-include_once('phpreport/model/vo/UserVO.php');
-include_once('phpreport/model/dao/UserDAO/PostgreSQLUserDAO.php');
-include_once('phpreport/model/vo/AreaVO.php');
-include_once('phpreport/model/dao/AreaDAO/PostgreSQLAreaDAO.php');
-include_once('phpreport/model/dao/ProjectUserDAO/PostgreSQLProjectUserDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/ProjectDAO/PostgreSQLProjectDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/UserDAO/PostgreSQLUserDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/AreaVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/AreaDAO/PostgreSQLAreaDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/ProjectUserDAO/PostgreSQLProjectUserDAO.php');
 
 class PostgreSQLProjectUserRelationshipMultipleTests extends PHPUnit_Framework_TestCase
 {

@@ -19,8 +19,8 @@
  */
 
 
-include_once('phpreport/model/vo/CityVO.php');
-include_once('phpreport/model/dao/CityDAO/PostgreSQLCityDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CityVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/CityDAO/PostgreSQLCityDAO.php');
 
 class PostgreSQLCityDAOBasicTests extends PHPUnit_Framework_TestCase
 {

@@ -18,14 +18,16 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+    define('PHPREPORT_ROOT', __DIR__ . '/../');
+
     /* We check authentication and authorization */
-    require_once('phpreport/web/auth.php');
+    require_once(PHPREPORT_ROOT . '/web/auth.php');
 
     /* Include the generic header and sidebar*/
     define('PAGE_TITLE', "PhpReport - Users Evaluation");
     include_once("include/header.php");
     include_once("include/sidebar.php");
-    include_once('phpreport/web/services/WebServicesFunctions.php');
+    include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 
 ?>
 

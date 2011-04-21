@@ -19,7 +19,7 @@
  */
 
 
-include_once('phpreport/model/vo/ExtraHourVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/ExtraHourVO.php');
 
 class ExtraHourVOTests extends PHPUnit_Framework_TestCase
 {

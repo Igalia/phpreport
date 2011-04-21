@@ -28,7 +28,7 @@
  * @subpackage Exception
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
-include_once('phpreport/util/InvalidOperationException.php');
+include_once(PHPREPORT_ROOT . '/util/InvalidOperationException.php');
 
 /** Exception for LDAP invalid operations
  *

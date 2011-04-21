@@ -29,10 +29,10 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/util/DBPostgres.php');
-include_once('phpreport/model/vo/UserVO.php');
-include_once('phpreport/model/vo/UserGroupVO.php');
-include_once('phpreport/model/dao/BelongsDAO/BelongsDAO.php');
+include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserGroupVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/BelongsDAO/BelongsDAO.php');
 
 /** DAO for relationship Belongs in PostgreSQL
  *

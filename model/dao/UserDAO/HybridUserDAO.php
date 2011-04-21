@@ -29,14 +29,14 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/util/SQLIncorrectTypeException.php');
-include_once('phpreport/util/DBPostgres.php');
-include_once('phpreport/model/vo/UserVO.php');
-include_once('phpreport/model/dao/UserDAO/UserDAO.php');
-include_once('phpreport/util/LDAPConnectionErrorException.php');
-include_once('phpreport/util/LDAPInvalidOperationException.php');
-include_once('phpreport/util/LDAPOperationErrorException.php');
-include_once('phpreport/util/IncorrectLoginException.php');
+include_once(PHPREPORT_ROOT . '/util/SQLIncorrectTypeException.php');
+include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/UserDAO/UserDAO.php');
+include_once(PHPREPORT_ROOT . '/util/LDAPConnectionErrorException.php');
+include_once(PHPREPORT_ROOT . '/util/LDAPInvalidOperationException.php');
+include_once(PHPREPORT_ROOT . '/util/LDAPOperationErrorException.php');
+include_once(PHPREPORT_ROOT . '/util/IncorrectLoginException.php');
 
 
 /** DAO for Users in LDAP/PostgreSQL Hybrid

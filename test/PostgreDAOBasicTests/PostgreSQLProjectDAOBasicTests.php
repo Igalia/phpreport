@@ -19,10 +19,10 @@
  */
 
 
-include_once('phpreport/model/vo/ProjectVO.php');
-include_once('phpreport/model/dao/ProjectDAO/PostgreSQLProjectDAO.php');
-include_once('phpreport/model/vo/AreaVO.php');
-include_once('phpreport/model/dao/AreaDAO/PostgreSQLAreaDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/ProjectDAO/PostgreSQLProjectDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/AreaVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/AreaDAO/PostgreSQLAreaDAO.php');
 
 class PostgreSQLProjectDAOBasicTests extends PHPUnit_Framework_TestCase
 {

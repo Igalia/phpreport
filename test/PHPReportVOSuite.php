@@ -19,33 +19,34 @@
  */
 
 
-require_once 'phpreport/test/VOTests/UserVOTests.php';
-require_once 'phpreport/test/VOTests/AreaVOTests.php';
-require_once 'phpreport/test/VOTests/UserGroupVOTests.php';
-require_once 'phpreport/test/VOTests/ExtraHourVOTests.php';
-require_once 'phpreport/test/VOTests/TaskVOTests.php';
-require_once 'phpreport/test/VOTests/CustomerVOTests.php';
-require_once 'phpreport/test/VOTests/SectorVOTests.php';
-require_once 'phpreport/test/VOTests/CustomEventVOTests.php';
-require_once 'phpreport/test/VOTests/ProjectScheduleVOTests.php';
-require_once 'phpreport/test/VOTests/CityVOTests.php';
-require_once 'phpreport/test/VOTests/CommonEventVOTests.php';
-require_once 'phpreport/test/VOTests/JourneyHistoryVOTests.php';
-require_once 'phpreport/test/VOTests/HourCostHistoryVOTests.php';
-require_once 'phpreport/test/VOTests/AreaHistoryVOTests.php';
-require_once 'phpreport/test/VOTests/CityHistoryVOTests.php';
-require_once 'phpreport/test/VOTests/ProjectVOTests.php';
-require_once 'phpreport/test/VOTests/IterationVOTests.php';
-require_once 'phpreport/test/VOTests/ModuleVOTests.php';
-require_once 'phpreport/test/VOTests/StoryVOTests.php';
-require_once 'phpreport/test/VOTests/SectionVOTests.php';
-require_once 'phpreport/test/VOTests/TaskStoryVOTests.php';
-require_once 'phpreport/test/VOTests/TaskSectionVOTests.php';
-require_once 'phpreport/test/VOTests/CustomTaskSectionVOTests.php';
-require_once 'phpreport/test/VOTests/CustomSectionVOTests.php';
-require_once 'phpreport/test/VOTests/CustomTaskStoryVOTests.php';
-require_once 'phpreport/test/VOTests/CustomStoryVOTests.php';
-require_once 'phpreport/test/VOTests/CustomProjectVOTests.php';
+define('PHPREPORT_ROOT', __DIR__ . '/../');
+require_once PHPREPORT_ROOT . '/test/VOTests/UserVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/AreaVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/UserGroupVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/ExtraHourVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/TaskVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/CustomerVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/SectorVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/CustomEventVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/ProjectScheduleVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/CityVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/CommonEventVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/JourneyHistoryVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/HourCostHistoryVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/AreaHistoryVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/CityHistoryVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/ProjectVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/IterationVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/ModuleVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/StoryVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/SectionVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/TaskStoryVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/TaskSectionVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/CustomTaskSectionVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/CustomSectionVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/CustomTaskStoryVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/CustomStoryVOTests.php';
+require_once PHPREPORT_ROOT . '/test/VOTests/CustomProjectVOTests.php';
 
 class PHPReportVOSuite extends PHPUnit_Framework_TestSuite
 {

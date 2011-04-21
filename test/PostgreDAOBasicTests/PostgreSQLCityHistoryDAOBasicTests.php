@@ -19,12 +19,12 @@
  */
 
 
-include_once('phpreport/model/vo/CityHistoryVO.php');
-include_once('phpreport/model/dao/CityHistoryDAO/PostgreSQLCityHistoryDAO.php');
-include_once('phpreport/model/vo/UserVO.php');
-include_once('phpreport/model/dao/UserDAO/PostgreSQLUserDAO.php');
-include_once('phpreport/model/vo/CityVO.php');
-include_once('phpreport/model/dao/CityDAO/PostgreSQLCityDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CityHistoryVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/CityHistoryDAO/PostgreSQLCityHistoryDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/UserDAO/PostgreSQLUserDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CityVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/CityDAO/PostgreSQLCityDAO.php');
 
 class PostgreSQLCityHistoryDAOBasicTests extends PHPUnit_Framework_TestCase
 {

@@ -29,7 +29,7 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/model/dao/BaseRelationshipDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/BaseRelationshipDAO.php');
 
 /** DAO for relationship Requests
  *

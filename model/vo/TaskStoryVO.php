@@ -29,7 +29,7 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/model/vo/BaseTaskStoryVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/BaseTaskStoryVO.php');
 
 /** VO for Task Stories
  *

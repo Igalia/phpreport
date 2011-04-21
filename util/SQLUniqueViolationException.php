@@ -29,7 +29,7 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/util/OperationErrorException.php');
+include_once(PHPREPORT_ROOT . '/util/OperationErrorException.php');
 
 /** Exception for SQL query incorrect types
  *

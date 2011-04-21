@@ -19,8 +19,8 @@
  */
 
 
-include_once('phpreport/model/vo/CustomSectionVO.php');
-include_once('phpreport/model/vo/UserVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CustomSectionVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
 class CustomSectionVOTests extends PHPUnit_Framework_TestCase
 {

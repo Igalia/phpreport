@@ -19,8 +19,8 @@
  */
 
 
-include_once('phpreport/model/vo/UserVO.php');
-include_once('phpreport/model/dao/UserDAO/PostgreSQLUserDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/UserDAO/PostgreSQLUserDAO.php');
 
 class PostgreSQLUserDAOBasicTests extends PHPUnit_Framework_TestCase
 {

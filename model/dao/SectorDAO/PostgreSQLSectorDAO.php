@@ -29,11 +29,11 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/util/SQLIncorrectTypeException.php');
-include_once('phpreport/util/DBPostgres.php');
-include_once('phpreport/model/vo/SectorVO.php');
-include_once('phpreport/model/dao/SectorDAO/SectorDAO.php');
-include_once('phpreport/model/dao/CustomerDAO/PostgreSQLCustomerDAO.php');
+include_once(PHPREPORT_ROOT . '/util/SQLIncorrectTypeException.php');
+include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
+include_once(PHPREPORT_ROOT . '/model/vo/SectorVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/SectorDAO/SectorDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/CustomerDAO/PostgreSQLCustomerDAO.php');
 
 /** DAO for Sectors in PostgreSQL
  *

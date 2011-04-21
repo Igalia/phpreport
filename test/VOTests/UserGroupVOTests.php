@@ -19,7 +19,7 @@
  */
 
 
-include_once('phpreport/model/vo/UserGroupVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserGroupVO.php');
 
 class UserGroupVOTests extends PHPUnit_Framework_TestCase
 {

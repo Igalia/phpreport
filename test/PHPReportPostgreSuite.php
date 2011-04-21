@@ -19,8 +19,9 @@
  */
 
 
-require_once 'phpreport/test/PHPReportPostgreDAOBasicSuite.php';
-require_once 'phpreport/test/PHPReportPostgreDAOMultipleSuite.php';
+define('PHPREPORT_ROOT', __DIR__ . '/../');
+require_once PHPREPORT_ROOT . '/test/PHPReportPostgreDAOBasicSuite.php';
+require_once PHPREPORT_ROOT . '/test/PHPReportPostgreDAOMultipleSuite.php';
 
 class PHPReportPostgreSuite extends PHPUnit_Framework_TestSuite
 {

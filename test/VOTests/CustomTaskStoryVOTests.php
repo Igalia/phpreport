@@ -19,9 +19,9 @@
  */
 
 
-include_once('phpreport/model/vo/CustomTaskStoryVO.php');
-include_once('phpreport/model/vo/TaskSectionVO.php');
-include_once('phpreport/model/vo/UserVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CustomTaskStoryVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/TaskSectionVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
 class CustomTaskStoryVOTests extends PHPUnit_Framework_TestCase
 {

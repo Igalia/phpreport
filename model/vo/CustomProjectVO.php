@@ -29,7 +29,7 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/model/vo/ProjectVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
 
 /** VO for Custom Projects
  *

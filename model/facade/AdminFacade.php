@@ -29,22 +29,22 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/model/facade/action/CreateCommonEventAction.php');
-include_once('phpreport/model/facade/action/DeleteCommonEventAction.php');
-include_once('phpreport/model/facade/action/UpdateCommonEventAction.php');
-include_once('phpreport/model/facade/action/GetAllCitiesAction.php');
-include_once('phpreport/model/facade/action/CreateCityAction.php');
-include_once('phpreport/model/facade/action/DeleteCityAction.php');
-include_once('phpreport/model/facade/action/UpdateCityAction.php');
-include_once('phpreport/model/facade/action/CopyCityPreviousHolidaysAction.php');
-include_once('phpreport/model/facade/action/GetAllAreasAction.php');
-include_once('phpreport/model/facade/action/CreateAreaAction.php');
-include_once('phpreport/model/facade/action/DeleteAreaAction.php');
-include_once('phpreport/model/facade/action/UpdateAreaAction.php');
-include_once('phpreport/model/dao/DAOFactory.php');
-include_once('phpreport/model/vo/CommonEventVO.php');
-include_once('phpreport/model/vo/CityVO.php');
-include_once('phpreport/model/vo/AreaVO.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/CreateCommonEventAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteCommonEventAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateCommonEventAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllCitiesAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/CreateCityAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteCityAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateCityAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/CopyCityPreviousHolidaysAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllAreasAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/CreateAreaAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteAreaAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateAreaAction.php');
+include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CommonEventVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CityVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/AreaVO.php');
 
 /** Administration Facade
  *

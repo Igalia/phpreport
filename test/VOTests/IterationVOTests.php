@@ -19,7 +19,7 @@
  */
 
 
-include_once('phpreport/model/vo/IterationVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/IterationVO.php');
 
 class IterationVOTests extends PHPUnit_Framework_TestCase
 {

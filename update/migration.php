@@ -19,9 +19,10 @@
  */
 
 
-include_once('phpreport/model/facade/action/ExtraHoursReportAction.php');
-include_once('phpreport/model/dao/UserDAO/PostgreSQLUserDAO.php');
-include_once('phpreport/util/DBPostgres.php');
+define('PHPREPORT_ROOT', __DIR__ . '/../');
+include_once(PHPREPORT_ROOT . '/model/facade/action/ExtraHoursReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/dao/UserDAO/PostgreSQLUserDAO.php');
+include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
 
 function readline($prompt) {
     echo $prompt;

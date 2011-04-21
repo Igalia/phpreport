@@ -19,9 +19,8 @@
  */
 
 
-require_once("include/util.php");
-require_once("phpreport/model/facade/action/ExtraHoursReportAction.php");
-require_once("phpreport/util/oldExtraHours.php");
+require_once(PHPREPORT_ROOT . "/model/facade/action/ExtraHoursReportAction.php");
+require_once(PHPREPORT_ROOT . "/util/oldExtraHours.php");
 
 abstract class ExtraHoursReportActionTest extends PHPUnit_Framework_TestCase
 {

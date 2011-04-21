@@ -29,9 +29,9 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/model/facade/action/Action.php');
-include_once('phpreport/model/dao/DAOFactory.php');
-include_once('phpreport/model/vo/HourCostHistoryVO.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/Action.php');
+include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
+include_once(PHPREPORT_ROOT . '/model/vo/HourCostHistoryVO.php');
 
 /** Create Hour Cost History entry Action
  *

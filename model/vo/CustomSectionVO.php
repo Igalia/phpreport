@@ -30,8 +30,8 @@
  */
 
 
-include_once('phpreport/model/vo/UserVO.php');
-include_once('phpreport/model/vo/BaseSectionVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/BaseSectionVO.php');
 
 /** Custom VO for Sections
  *

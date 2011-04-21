@@ -29,12 +29,12 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/util/SQLIncorrectTypeException.php');
-include_once('phpreport/util/DBPostgres.php');
-include_once('phpreport/model/vo/CityVO.php');
-include_once('phpreport/model/dao/CityDAO/CityDAO.php');
-include_once('phpreport/model/dao/CommonEventDAO/PostgreSQLCommonEventDAO.php');
-include_once('phpreport/model/dao/CityHistoryDAO/PostgreSQLCityHistoryDAO.php');
+include_once(PHPREPORT_ROOT . '/util/SQLIncorrectTypeException.php');
+include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CityVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/CityDAO/CityDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/CommonEventDAO/PostgreSQLCommonEventDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/CityHistoryDAO/PostgreSQLCityHistoryDAO.php');
 
 /** DAO for Citys in PostgreSQL
  *

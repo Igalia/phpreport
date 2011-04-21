@@ -29,8 +29,8 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/model/vo/SectorVO.php');
-include_once('phpreport/model/dao/BaseDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/SectorVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/BaseDAO.php');
 
 /** DAO for Sectors
  *

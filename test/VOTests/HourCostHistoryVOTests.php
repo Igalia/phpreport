@@ -19,7 +19,7 @@
  */
 
 
-include_once('phpreport/model/vo/HourCostHistoryVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/HourCostHistoryVO.php');
 
 class HourCostHistoryVOTests extends PHPUnit_Framework_TestCase
 {

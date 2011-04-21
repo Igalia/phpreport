@@ -28,7 +28,7 @@
  * @subpackage Exception
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
-include_once('phpreport/util/ConnectionErrorException.php');
+include_once(PHPREPORT_ROOT . '/util/ConnectionErrorException.php');
 
 /** Exception for LDAP connection errors
  *

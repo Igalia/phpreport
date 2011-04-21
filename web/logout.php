@@ -18,7 +18,8 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('phpreport/util/LoginManager.php');
+define('PHPREPORT_ROOT', __DIR__ . '/../');
+require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 
 LoginManager::logout();
 

@@ -18,22 +18,23 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+define('PHPREPORT_ROOT', __DIR__ . '/../');
 
 $sid = $_GET["sid"];
 
 $storyId = $_GET["stid"];
 
 /* We check authentication and authorization */
-require_once('phpreport/web/auth.php');
+require_once(PHPREPORT_ROOT . '/web/auth.php');
 
 /* Include the generic header and sidebar*/
 define('PAGE_TITLE', "PhpReport - Story Data");
 include_once("include/header.php");
 include_once("include/sidebar.php");
-include_once('phpreport/model/facade/CoordinationFacade.php');
-include_once('phpreport/model/vo/StoryVO.php');
-include_once('phpreport/model/facade/UsersFacade.php');
-include_once('phpreport/web/services/WebServicesFunctions.php');
+include_once(PHPREPORT_ROOT . '/model/facade/CoordinationFacade.php');
+include_once(PHPREPORT_ROOT . '/model/vo/StoryVO.php');
+include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
+include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 
 // We retrieve the Custom Story
 $story = CoordinationFacade::GetCustomStory($storyId);

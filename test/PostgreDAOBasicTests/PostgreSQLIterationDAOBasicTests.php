@@ -19,12 +19,12 @@
  */
 
 
-include_once('phpreport/model/vo/IterationVO.php');
-include_once('phpreport/model/dao/IterationDAO/PostgreSQLIterationDAO.php');
-include_once('phpreport/model/vo/ProjectVO.php');
-include_once('phpreport/model/dao/ProjectDAO/PostgreSQLProjectDAO.php');
-include_once('phpreport/model/vo/AreaVO.php');
-include_once('phpreport/model/dao/AreaDAO/PostgreSQLAreaDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/IterationVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/IterationDAO/PostgreSQLIterationDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/ProjectDAO/PostgreSQLProjectDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/AreaVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/AreaDAO/PostgreSQLAreaDAO.php');
 
 class PostgreSQLIterationDAOBasicTests extends PHPUnit_Framework_TestCase
 {

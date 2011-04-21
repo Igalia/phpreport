@@ -29,7 +29,7 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/model/vo/BaseHistoryVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/BaseHistoryVO.php');
 
 /** VO for City Histories
  *

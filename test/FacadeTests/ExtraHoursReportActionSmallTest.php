@@ -19,7 +19,7 @@
  */
 
 
-require_once("phpreport/test/FacadeTests/ExtraHoursReportActionTest.php");
+require_once(PHPREPORT_ROOT . "/test/FacadeTests/ExtraHoursReportActionTest.php");
 
 class ExtraHoursReportActionSmallTest extends ExtraHoursReportActionTest
 {

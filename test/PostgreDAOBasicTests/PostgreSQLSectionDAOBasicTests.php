@@ -19,16 +19,16 @@
  */
 
 
-include_once('phpreport/model/vo/SectionVO.php');
-include_once('phpreport/model/dao/SectionDAO/PostgreSQLSectionDAO.php');
-include_once('phpreport/model/vo/ProjectVO.php');
-include_once('phpreport/model/dao/ProjectDAO/PostgreSQLProjectDAO.php');
-include_once('phpreport/model/vo/AreaVO.php');
-include_once('phpreport/model/dao/AreaDAO/PostgreSQLAreaDAO.php');
-include_once('phpreport/model/vo/ModuleVO.php');
-include_once('phpreport/model/dao/ModuleDAO/PostgreSQLModuleDAO.php');
-include_once('phpreport/model/vo/UserVO.php');
-include_once('phpreport/model/dao/UserDAO/PostgreSQLUserDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/SectionVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/SectionDAO/PostgreSQLSectionDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/ProjectDAO/PostgreSQLProjectDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/AreaVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/AreaDAO/PostgreSQLAreaDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/ModuleVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/ModuleDAO/PostgreSQLModuleDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/UserDAO/PostgreSQLUserDAO.php');
 
 class PostgreSQLSectionDAOBasicTests extends PHPUnit_Framework_TestCase
 {

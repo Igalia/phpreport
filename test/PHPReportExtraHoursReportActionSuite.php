@@ -19,10 +19,11 @@
  */
 
 
-require_once 'phpreport/test/FacadeTests/ExtraHoursReportActionLargeTest.php';
-require_once 'phpreport/test/FacadeTests/ExtraHoursReportActionMediumTest.php';
-require_once 'phpreport/test/FacadeTests/ExtraHoursReportActionSmallTest.php';
-require_once 'phpreport/test/FacadeTests/ExtraHoursReportActionVerySmallTest.php';
+define('PHPREPORT_ROOT', __DIR__ . '/../');
+require_once PHPREPORT_ROOT . '/test/FacadeTests/ExtraHoursReportActionLargeTest.php';
+require_once PHPREPORT_ROOT . '/test/FacadeTests/ExtraHoursReportActionMediumTest.php';
+require_once PHPREPORT_ROOT . '/test/FacadeTests/ExtraHoursReportActionSmallTest.php';
+require_once PHPREPORT_ROOT . '/test/FacadeTests/ExtraHoursReportActionVerySmallTest.php';
 
 class PHPReportExtraHoursReportActionSuite extends PHPUnit_Framework_TestSuite
 {

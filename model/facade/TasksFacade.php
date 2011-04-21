@@ -29,28 +29,28 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/model/facade/action/CreateReportAction.php');
-include_once('phpreport/model/facade/action/DeleteReportAction.php');
-include_once('phpreport/model/facade/action/UpdateReportAction.php');
-include_once('phpreport/model/facade/action/PartialUpdateReportAction.php');
-include_once('phpreport/model/facade/action/GetUserTasksAction.php');
-include_once('phpreport/model/facade/action/GetPersonalSummaryByLoginDateAction.php');
-include_once('phpreport/model/facade/action/GetGlobalUsersProjectsReportAction.php');
-include_once('phpreport/model/facade/action/GetGlobalUsersStoriesReportAction.php');
-include_once('phpreport/model/facade/action/GetGlobalProjectsUsersReportAction.php');
-include_once('phpreport/model/facade/action/GetGlobalProjectsCustomersReportAction.php');
-include_once('phpreport/model/facade/action/GetGlobalUsersProjectsCustomersReportAction.php');
-include_once('phpreport/model/facade/action/GetUserProjectCustomerReportAction.php');
-include_once('phpreport/model/facade/action/GetProjectTtypeReportAction.php');
-include_once('phpreport/model/facade/action/GetUserProjectReportAction.php');
-include_once('phpreport/model/facade/action/GetProjectUserCustomerReportAction.php');
-include_once('phpreport/model/facade/action/GetProjectUserStoryReportAction.php');
-include_once('phpreport/model/facade/action/GetUserTasksByDateAction.php');
-include_once('phpreport/model/facade/action/GetUserTasksByLoginDateAction.php');
-include_once('phpreport/model/dao/DAOFactory.php');
-include_once('phpreport/model/vo/TaskVO.php');
-include_once('phpreport/model/vo/ProjectVO.php');
-include_once('phpreport/model/vo/UserVO.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/CreateReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/PartialUpdateReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserTasksAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetPersonalSummaryByLoginDateAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetGlobalUsersProjectsReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetGlobalUsersStoriesReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetGlobalProjectsUsersReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetGlobalProjectsCustomersReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetGlobalUsersProjectsCustomersReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserProjectCustomerReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectTtypeReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserProjectReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectUserCustomerReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectUserStoryReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserTasksByDateAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserTasksByLoginDateAction.php');
+include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
+include_once(PHPREPORT_ROOT . '/model/vo/TaskVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
 /** Tasks Facade
  *

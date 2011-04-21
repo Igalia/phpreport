@@ -19,20 +19,20 @@
  */
 
 
-include_once('phpreport/util/TaskReportInvalidParameterException.php');
-include_once('phpreport/util/SQLIncorrectTypeException.php');
-include_once('phpreport/model/vo/TaskVO.php');
-include_once('phpreport/model/dao/TaskDAO/PostgreSQLTaskDAO.php');
-include_once('phpreport/model/vo/UserVO.php');
-include_once('phpreport/model/dao/UserDAO/PostgreSQLUserDAO.php');
-include_once('phpreport/model/vo/SectorVO.php');
-include_once('phpreport/model/dao/SectorDAO/PostgreSQLSectorDAO.php');
-include_once('phpreport/model/vo/CustomerVO.php');
-include_once('phpreport/model/dao/CustomerDAO/PostgreSQLCustomerDAO.php');
-include_once('phpreport/model/vo/AreaVO.php');
-include_once('phpreport/model/dao/AreaDAO/PostgreSQLAreaDAO.php');
-include_once('phpreport/model/vo/ProjectVO.php');
-include_once('phpreport/model/dao/ProjectDAO/PostgreSQLProjectDAO.php');
+include_once(PHPREPORT_ROOT . '/util/TaskReportInvalidParameterException.php');
+include_once(PHPREPORT_ROOT . '/util/SQLIncorrectTypeException.php');
+include_once(PHPREPORT_ROOT . '/model/vo/TaskVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/TaskDAO/PostgreSQLTaskDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/UserDAO/PostgreSQLUserDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/SectorVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/SectorDAO/PostgreSQLSectorDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CustomerVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/CustomerDAO/PostgreSQLCustomerDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/AreaVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/AreaDAO/PostgreSQLAreaDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/ProjectDAO/PostgreSQLProjectDAO.php');
 
 class PostgreSQLTaskDAOBasicTests extends PHPUnit_Framework_TestCase
 {

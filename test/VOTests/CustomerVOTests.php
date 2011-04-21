@@ -19,7 +19,7 @@
  */
 
 
-include_once('phpreport/model/vo/CustomerVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CustomerVO.php');
 
 class CustomerVOTests extends PHPUnit_Framework_TestCase
 {

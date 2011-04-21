@@ -19,7 +19,7 @@
  */
 
 
-include_once('phpreport/model/vo/CityVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CityVO.php');
 
 class CityVOTests extends PHPUnit_Framework_TestCase
 {

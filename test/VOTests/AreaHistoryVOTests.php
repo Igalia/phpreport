@@ -19,7 +19,7 @@
  */
 
 
-include_once('phpreport/model/vo/AreaHistoryVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/AreaHistoryVO.php');
 
 class AreaHistoryVOTests extends PHPUnit_Framework_TestCase
 {

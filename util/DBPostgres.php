@@ -19,7 +19,7 @@
  */
 
 
-include_once('phpreport/util/DBAdapter.php');
+include_once(PHPREPORT_ROOT . '/util/DBAdapter.php');
 
 /*
  *  $Id: DBPostgres.php 1011 2008-03-20 11:36:27Z hans $

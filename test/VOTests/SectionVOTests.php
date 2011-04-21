@@ -19,7 +19,7 @@
  */
 
 
-include_once('phpreport/model/vo/SectionVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/SectionVO.php');
 
 class SectionVOTests extends PHPUnit_Framework_TestCase
 {

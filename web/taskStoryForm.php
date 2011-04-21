@@ -18,6 +18,7 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+define('PHPREPORT_ROOT', __DIR__ . '/../');
 
 /* Get the needed variables to create the new Task Story*/
 
@@ -26,13 +27,13 @@ $taskStoryId = $_GET["tsid"];
 $storyId = $_GET["stid"];
 
 /* We check authentication and authorization */
-require_once('phpreport/web/auth.php');
+require_once(PHPREPORT_ROOT . '/web/auth.php');
 
-include_once("phpreport/model/facade/UsersFacade.php");
-include_once('phpreport/model/facade/CoordinationFacade.php');
-include_once('phpreport/model/vo/TaskStoryVO.php');
-include_once('phpreport/web/services/WebServicesFunctions.php');
-include_once('phpreport/util/SQLUniqueViolationException.php');
+include_once(PHPREPORT_ROOT . "/model/facade/UsersFacade.php");
+include_once(PHPREPORT_ROOT . '/model/facade/CoordinationFacade.php');
+include_once(PHPREPORT_ROOT . '/model/vo/TaskStoryVO.php');
+include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
+include_once(PHPREPORT_ROOT . '/util/SQLUniqueViolationException.php');
 
 
 if ($taskStoryId != NULL)

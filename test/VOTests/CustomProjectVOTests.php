@@ -19,7 +19,7 @@
  */
 
 
-include_once('phpreport/model/vo/CustomProjectVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CustomProjectVO.php');
 
 class CustomProjectVOTests extends PHPUnit_Framework_TestCase
 {

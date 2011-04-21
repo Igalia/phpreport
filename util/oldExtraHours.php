@@ -19,7 +19,6 @@
  */
 
 
-require_once("include/util.php");
 
 function getCnx() {
 

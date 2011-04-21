@@ -18,20 +18,21 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+define('PHPREPORT_ROOT', __DIR__ . '/../');
 
 $sid = $_GET["sid"];
 
 /* We check authentication and authorization */
-require_once('phpreport/web/auth.php');
+require_once(PHPREPORT_ROOT . '/web/auth.php');
 
 /* Include the generic header and sidebar*/
 define('PAGE_TITLE', "PhpReport - Areas Management");
 include_once("include/header.php");
 include_once("include/sidebar.php");
-include_once('phpreport/util/ConfigurationParametersManager.php');
-include_once('phpreport/util/UnknownParameterException.php');
-include_once('phpreport/util/LoginManager.php');
-include_once('phpreport/web/services/WebServicesFunctions.php');
+include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
+include_once(PHPREPORT_ROOT . '/util/UnknownParameterException.php');
+include_once(PHPREPORT_ROOT . '/util/LoginManager.php');
+include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 
 ?>
 

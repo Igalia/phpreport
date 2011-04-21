@@ -19,7 +19,7 @@
  */
 
 
-include_once('phpreport/model/facade/actionplugin/ActionPlugin.php');
+include_once(PHPREPORT_ROOT . '/model/facade/actionplugin/ActionPlugin.php');
 
 class EmailAdminPlugin extends ActionPlugin {
 

@@ -19,8 +19,8 @@
  */
 
 
-include_once('phpreport/model/vo/UserGroupVO.php');
-include_once('phpreport/model/dao/UserGroupDAO/PostgreSQLUserGroupDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserGroupVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/UserGroupDAO/PostgreSQLUserGroupDAO.php');
 
 class PostgreSQLUserGroupDAOBasicTests extends PHPUnit_Framework_TestCase
 {

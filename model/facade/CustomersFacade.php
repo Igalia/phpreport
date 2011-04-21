@@ -29,20 +29,20 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/model/facade/action/CreateCustomerAction.php');
-include_once('phpreport/model/facade/action/GetCustomerAction.php');
-include_once('phpreport/model/facade/action/DeleteCustomerAction.php');
-include_once('phpreport/model/facade/action/UpdateCustomerAction.php');
-include_once('phpreport/model/facade/action/GetSectorAction.php');
-include_once('phpreport/model/facade/action/CreateSectorAction.php');
-include_once('phpreport/model/facade/action/DeleteSectorAction.php');
-include_once('phpreport/model/facade/action/UpdateSectorAction.php');
-include_once('phpreport/model/facade/action/GetAllSectorsAction.php');
-include_once('phpreport/model/facade/action/GetAllCustomersAction.php');
-include_once('phpreport/model/facade/action/GetCustomersByProjectUserAction.php');
-include_once('phpreport/model/dao/DAOFactory.php');
-include_once('phpreport/model/vo/CustomerVO.php');
-include_once('phpreport/model/vo/SectorVO.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/CreateCustomerAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetCustomerAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteCustomerAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateCustomerAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetSectorAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/CreateSectorAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteSectorAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateSectorAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllSectorsAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllCustomersAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetCustomersByProjectUserAction.php');
+include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CustomerVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/SectorVO.php');
 
 /** Customers Facade
  *
@@ -234,7 +234,7 @@ abstract class CustomersFacade {
 
 
 
-/*include_once('phpreport/model/vo/UserVO.php');
+/*include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
 $user = new UserVO();
 

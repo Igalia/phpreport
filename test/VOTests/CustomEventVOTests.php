@@ -19,7 +19,7 @@
  */
 
 
-include_once('phpreport/model/vo/CustomEventVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CustomEventVO.php');
 
 class CustomEventVOTests extends PHPUnit_Framework_TestCase
 {

@@ -29,10 +29,10 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/util/SQLIncorrectTypeException.php');
-include_once('phpreport/util/DBPostgres.php');
-include_once('phpreport/model/vo/HourCostHistoryVO.php');
-include_once('phpreport/model/dao/HourCostHistoryDAO/HourCostHistoryDAO.php');
+include_once(PHPREPORT_ROOT . '/util/SQLIncorrectTypeException.php');
+include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
+include_once(PHPREPORT_ROOT . '/model/vo/HourCostHistoryVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/HourCostHistoryDAO/HourCostHistoryDAO.php');
 
 /** DAO for Hour Cost Histories in PostgreSQL
  *

@@ -29,7 +29,7 @@
  * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
 
-include_once('phpreport/util/ConfigurationParametersManager.php');
+include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
 
 /** Factory for obtaning DAOs
  *
@@ -60,7 +60,7 @@ class DAOFactory {
       $className = $backend . 'SectorDAO';
     }
 
-    include_once('phpreport/model/dao/SectorDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/SectorDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -80,7 +80,7 @@ class DAOFactory {
       $className = $backend . 'UserDAO';
     }
 
-    include_once('phpreport/model/dao/UserDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/UserDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -100,7 +100,7 @@ class DAOFactory {
       $className = $backend . 'UserGroupDAO';
     }
 
-    include_once('phpreport/model/dao/UserGroupDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/UserGroupDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -120,7 +120,7 @@ class DAOFactory {
       $className = $backend . 'BelongsDAO';
     }
 
-    include_once('phpreport/model/dao/BelongsDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/BelongsDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -140,7 +140,7 @@ class DAOFactory {
       $className = $backend . 'AreaDAO';
     }
 
-    include_once('phpreport/model/dao/AreaDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/AreaDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -160,7 +160,7 @@ class DAOFactory {
       $className = $backend . 'AreaHistoryDAO';
     }
 
-    include_once('phpreport/model/dao/AreaHistoryDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/AreaHistoryDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -180,7 +180,7 @@ class DAOFactory {
       $className = $backend . 'CityDAO';
     }
 
-    include_once('phpreport/model/dao/CityDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/CityDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -200,7 +200,7 @@ class DAOFactory {
       $className = $backend . 'CityHistoryDAO';
     }
 
-    include_once('phpreport/model/dao/CityHistoryDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/CityHistoryDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -220,7 +220,7 @@ class DAOFactory {
       $className = $backend . 'CommonEventDAO';
     }
 
-    include_once('phpreport/model/dao/CommonEventDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/CommonEventDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -240,7 +240,7 @@ class DAOFactory {
       $className = $backend . 'CustomerDAO';
     }
 
-    include_once('phpreport/model/dao/CustomerDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/CustomerDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -260,7 +260,7 @@ class DAOFactory {
       $className = $backend . 'CustomEventDAO';
     }
 
-    include_once('phpreport/model/dao/CustomEventDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/CustomEventDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -280,7 +280,7 @@ class DAOFactory {
       $className = $backend . 'ExtraHourDAO';
     }
 
-    include_once('phpreport/model/dao/ExtraHourDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/ExtraHourDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -300,7 +300,7 @@ class DAOFactory {
       $className = $backend . 'HourCostHistoryDAO';
     }
 
-    include_once('phpreport/model/dao/HourCostHistoryDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/HourCostHistoryDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -320,7 +320,7 @@ class DAOFactory {
       $className = $backend . 'JourneyHistoryDAO';
     }
 
-    include_once('phpreport/model/dao/JourneyHistoryDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/JourneyHistoryDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -340,7 +340,7 @@ class DAOFactory {
       $className = $backend . 'ProjectDAO';
     }
 
-    include_once('phpreport/model/dao/ProjectDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/ProjectDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -360,7 +360,7 @@ class DAOFactory {
       $className = $backend . 'ProjectScheduleDAO';
     }
 
-    include_once('phpreport/model/dao/ProjectScheduleDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/ProjectScheduleDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -380,7 +380,7 @@ class DAOFactory {
       $className = $backend . 'ProjectUserDAO';
     }
 
-    include_once('phpreport/model/dao/ProjectUserDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/ProjectUserDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -400,7 +400,7 @@ class DAOFactory {
       $className = $backend . 'RequestsDAO';
     }
 
-    include_once('phpreport/model/dao/RequestsDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/RequestsDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -420,7 +420,7 @@ class DAOFactory {
       $className = $backend . 'TaskDAO';
     }
 
-    include_once('phpreport/model/dao/TaskDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/TaskDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -440,7 +440,7 @@ class DAOFactory {
       $className = $backend . 'WorksDAO';
     }
 
-    include_once('phpreport/model/dao/WorksDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/WorksDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -460,7 +460,7 @@ class DAOFactory {
       $className = $backend . 'IterationDAO';
     }
 
-    include_once('phpreport/model/dao/IterationDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/IterationDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -480,7 +480,7 @@ class DAOFactory {
       $className = $backend . 'StoryDAO';
     }
 
-    include_once('phpreport/model/dao/StoryDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/StoryDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -500,7 +500,7 @@ class DAOFactory {
       $className = $backend . 'TaskStoryDAO';
     }
 
-    include_once('phpreport/model/dao/TaskStoryDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/TaskStoryDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -520,7 +520,7 @@ class DAOFactory {
       $className = $backend . 'ModuleDAO';
     }
 
-    include_once('phpreport/model/dao/ModuleDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/ModuleDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -540,7 +540,7 @@ class DAOFactory {
       $className = $backend . 'SectionDAO';
     }
 
-    include_once('phpreport/model/dao/SectionDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/SectionDAO/' . $className . ".php");
     return new $className;
   }
 
@@ -560,7 +560,7 @@ class DAOFactory {
       $className = $backend . 'TaskSectionDAO';
     }
 
-    include_once('phpreport/model/dao/TaskSectionDAO/' . $className . ".php");
+    include_once(PHPREPORT_ROOT . '/model/dao/TaskSectionDAO/' . $className . ".php");
     return new $className;
   }
 

@@ -19,10 +19,10 @@
  */
 
 
-include_once('phpreport/model/vo/CommonEventVO.php');
-include_once('phpreport/model/dao/CommonEventDAO/PostgreSQLCommonEventDAO.php');
-include_once('phpreport/model/vo/CityVO.php');
-include_once('phpreport/model/dao/CityDAO/PostgreSQLCityDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CommonEventVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/CommonEventDAO/PostgreSQLCommonEventDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CityVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/CityDAO/PostgreSQLCityDAO.php');
 
 class PostgreSQLCommonEventDAOBasicTests extends PHPUnit_Framework_TestCase
 {

@@ -29,10 +29,10 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/util/DBPostgres.php');
-include_once('phpreport/model/vo/ProjectVO.php');
-include_once('phpreport/model/vo/CustomerVO.php');
-include_once('phpreport/model/dao/RequestsDAO/RequestsDAO.php');
+include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
+include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CustomerVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/RequestsDAO/RequestsDAO.php');
 
 /** DAO for relationship Requests in PostgreSQL
  *

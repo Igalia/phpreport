@@ -29,8 +29,8 @@
  * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
 
-include_once('phpreport/util/UnknownParameterException.php');
-require_once('phpreport/config/config.php');
+include_once(PHPREPORT_ROOT . '/util/UnknownParameterException.php');
+require_once(PHPREPORT_ROOT . '/config/config.php');
 
 /** Configuration parameters manager
  *

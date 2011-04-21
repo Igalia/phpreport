@@ -19,15 +19,15 @@
  */
 
 
-include_once('phpreport/model/vo/ProjectVO.php');
-include_once('phpreport/model/dao/ProjectDAO/PostgreSQLProjectDAO.php');
-include_once('phpreport/model/vo/CustomerVO.php');
-include_once('phpreport/model/dao/CustomerDAO/PostgreSQLCustomerDAO.php');
-include_once('phpreport/model/vo/AreaVO.php');
-include_once('phpreport/model/dao/AreaDAO/PostgreSQLAreaDAO.php');
-include_once('phpreport/model/vo/SectorVO.php');
-include_once('phpreport/model/dao/SectorDAO/PostgreSQLSectorDAO.php');
-include_once('phpreport/model/dao/RequestsDAO/PostgreSQLRequestsDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/ProjectDAO/PostgreSQLProjectDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CustomerVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/CustomerDAO/PostgreSQLCustomerDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/AreaVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/AreaDAO/PostgreSQLAreaDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/SectorVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/SectorDAO/PostgreSQLSectorDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/RequestsDAO/PostgreSQLRequestsDAO.php');
 
 class PostgreSQLRequestsRelationshipMultipleTests extends PHPUnit_Framework_TestCase
 {

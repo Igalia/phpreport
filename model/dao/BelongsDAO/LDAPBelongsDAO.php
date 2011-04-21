@@ -29,12 +29,12 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/model/vo/UserVO.php');
-include_once('phpreport/model/vo/UserGroupVO.php');
-include_once('phpreport/model/dao/BelongsDAO/BelongsDAO.php');
-include_once('phpreport/util/LDAPConnectionErrorException.php');
-include_once('phpreport/util/LDAPInvalidOperationException.php');
-include_once('phpreport/util/LDAPOperationErrorException.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserGroupVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/BelongsDAO/BelongsDAO.php');
+include_once(PHPREPORT_ROOT . '/util/LDAPConnectionErrorException.php');
+include_once(PHPREPORT_ROOT . '/util/LDAPInvalidOperationException.php');
+include_once(PHPREPORT_ROOT . '/util/LDAPOperationErrorException.php');
 
 /** DAO for relationship Belongs working with LDAP
  *

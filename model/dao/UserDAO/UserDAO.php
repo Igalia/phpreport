@@ -29,9 +29,9 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/model/vo/UserVO.php');
-include_once('phpreport/model/dao/BaseDAO.php');
-include_once('phpreport/util/IncorrectLoginException.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/BaseDAO.php');
+include_once(PHPREPORT_ROOT . '/util/IncorrectLoginException.php');
 
 /** DAO for Users
  *

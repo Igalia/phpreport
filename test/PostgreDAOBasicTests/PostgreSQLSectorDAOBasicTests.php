@@ -19,8 +19,8 @@
  */
 
 
-include_once('phpreport/model/vo/SectorVO.php');
-include_once('phpreport/model/dao/SectorDAO/PostgreSQLSectorDAO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/SectorVO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/SectorDAO/PostgreSQLSectorDAO.php');
 
 class PostgreSQLSectorDAOBasicTests extends PHPUnit_Framework_TestCase
 {

@@ -29,10 +29,10 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once('phpreport/model/facade/action/GetIterationCustomStoriesAction.php');
-include_once('phpreport/model/dao/DAOFactory.php');
-include_once('phpreport/model/vo/CustomStoryVO.php');
-include_once('phpreport/model/vo/CustomTaskStoryVO.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetIterationCustomStoriesAction.php');
+include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CustomStoryVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CustomTaskStoryVO.php');
 
 
 /** Get Custom Story Action
