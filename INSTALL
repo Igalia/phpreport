@@ -36,18 +36,7 @@ and extract it to the directory web/ext/. Please note you need exactly that vers
 not an older nor a newer one. You can get the library in the following URL:
 http://www.sencha.com/products/js/download.php?dl=extjs331
 
-3. Setting up PHP
-
-PhpReport needs you to add a new value to the PHP variable include_path. Assuming
-you have installed PhpReport in /var/www/phpreport, the value of include_path should
-be ".:/var/www". There are different ways to do that:
-   * If you have enough permissions, you can modify the main PHP configuration
-file (usually in /etc/php5/apache2/php.ini).
-   * Maybe you can configure it in your web server configuration: in apache2,
-you could do it in a .htaccess file or in a VirtualHost, using:
-     php_value include_path ".:/var/www"
-
-4. Creating the schema and initial data of the database
+3. Creating the schema and initial data of the database
 
 Browse to the directory sql/ and run the following commands (you will be asked
 by the password (phpreport) interactively):
@@ -60,7 +49,7 @@ psql -h localhost -W -U phpreport phpreport < triggers.sql
 
 Set the correct DB name, user and host if they are different.
 
-5. Try the application
+4. Try the application
 
 Use a browser to open the correct URL of your web server, and use the user name 'admin'
 and the password 'admin' for the first time. You will be able to create more users and
