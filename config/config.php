@@ -99,7 +99,7 @@ define('LDAP_SERVER', 'localhost');
  * @name LDAP_PORT
  * @global int LDAP server port
  */
-define('LDAP_PORT', 5389);
+define('LDAP_PORT', 389);
 
 /**
  * @name LDAP_BASE
