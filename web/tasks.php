@@ -280,6 +280,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
 
                         //invoke changes in the "Projects" combo box
                         this.parent.projectComboBox.store.setBaseParam('cid',this.parent.taskRecord.data['customerId']);
+                        this.parent.projectComboBox.store.setBaseParam('customerChanged', true);
                         this.parent.projectComboBox.store.load();
                     }
                 },
@@ -304,12 +305,22 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         'load': function () {
                             //the value of projectComboBox has to be set after loading the data on this store
                             if ((this.findExact("id", this.parent.taskRecord.data['projectId']) == -1) &&
-                                    (this.parent.taskRecord.data['id'] > 0) &&
                                     (this.parent.taskRecord.data['projectId'] > 0)) {
-                                this.parent.setReadOnly(true);
-                                this.proxy.setUrl('services/getProjectService.php', true);
-                                this.setBaseParam('pid', this.parent.taskRecord.data['projectId']);
-                                this.load();
+                                if(this.baseParams.customerChanged) {
+                                    //the project could not be found because the user
+                                    //has just changed the client
+                                    this.parent.projectComboBox.setValue(null);
+                                    this.parent.taskRecord.set('projectId', null);
+                                }
+                                else if(this.parent.taskRecord.data['id'] > 0) {
+                                    //the project could not be found because it's not
+                                    //open, we disable edition for this task and reload
+                                    //the list with that only project
+                                    this.parent.setReadOnly(true);
+                                    this.proxy.setUrl('services/getProjectService.php', true);
+                                    this.setBaseParam('pid', this.parent.taskRecord.data['projectId']);
+                                    this.load();
+                                }
                             } else
                                 this.parent.projectComboBox.setValue(this.parent.taskRecord.data['projectId']);
                         }
