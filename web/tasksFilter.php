@@ -18,11 +18,12 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+define('PHPREPORT_ROOT', __DIR__ . '/../');
 
 $sid = $_GET["sid"];
 
 /* We check authentication and authorization */
-require_once('phpreport/web/auth.php');
+require_once(PHPREPORT_ROOT . '/web/auth.php');
 
 /* Include the generic header and sidebar*/
 define('PAGE_TITLE', "PhpReport - My tasks");
