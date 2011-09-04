@@ -53,11 +53,6 @@ CREATE DATABASE phpreport;
 CREATE USER phpreport WITH PASSWORD 'phpreport';
 ALTER DATABASE phpreport OWNER TO phpreport;
 
-From the shell, use the utility createlang to define the language for the triggers
-(set the correct DB name, user and host if you have changed them):
-
-createlang -h localhost -W -U phpreport plpgsql phpreport
-
 2. Setting up the files
 
 Just move the program files to a location available for the web server, inside

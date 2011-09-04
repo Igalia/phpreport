@@ -1,3 +1,5 @@
+CREATE LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION control_task_overlapping() RETURNS trigger AS '
 DECLARE
   overlap boolean;
