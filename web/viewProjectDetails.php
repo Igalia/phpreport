@@ -133,21 +133,21 @@
 
                         ?>
                     },{
+                        id: 'movedHours',
+                        name:'movedHours',
+                        fieldLabel: 'Moved Hours',
+                        <?php
+
+                            echo "value:'" . $project->getMovedHours() . "'";
+
+                        ?>
+                    },{
                         id: 'invoice',
                         name:'invoice',
                         fieldLabel: 'Invoice',
                         <?php
 
                             echo "value:'" . $project->getInvoice() . "'";
-
-                        ?>
-                    },{
-                        id: 'estHourCost',
-                        name:'estHourCost',
-                        fieldLabel: 'Estimated Hour Cost',
-                        <?php
-
-                            echo "value:'" . round($project->getEstHourInvoice(), 2, PHP_ROUND_HALF_DOWN) . "'";
 
                         ?>
                     },{
@@ -164,7 +164,7 @@
             },{
                 xtype: 'fieldset',
                 columnWidth: 0.5,
-                title: 'Current Work Data',
+                title: 'Work Hours Data',
                 width: 200,
                 collapsible: true,
                 colspan: 1,
@@ -175,6 +175,15 @@
                 },
                 defaultType:'displayfield',
                 items: [{
+                      id: 'estimatedHoursWithMoved',
+                        name:'estimatedHoursWithMoved',
+                        fieldLabel: 'Estimated Hours',
+                        <?php
+
+                            echo "value:'" . ($project->getEstHours()-$project->getMovedHours()) . "'";
+
+                        ?>
+                    },{
                       id: 'workedHours',
                         name:'workedHours',
                         fieldLabel: 'Worked Hours',
@@ -186,7 +195,7 @@
                     },{
                         id: 'workDeviation',
                         name:'workDeviation',
-                        fieldLabel: 'Work Deviation',
+                        fieldLabel: 'Deviation',
                         <?php
 
                             echo "value:'" . round($project->getAbsDev(), 2, PHP_ROUND_HALF_DOWN) . "'";
@@ -195,7 +204,7 @@
                     },{
                         id: 'workDeviationPercent',
                         name:'workDeviationPercent',
-                        fieldLabel: 'Work Deviation %',
+                        fieldLabel: 'Deviation %',
                         <?php
 
                             echo "value:'" . round($project->getPercDev(), 2, PHP_ROUND_HALF_DOWN) . "'";
@@ -207,7 +216,7 @@
                 xtype: 'fieldset',
                 columnWidth: 0.5,
                 width: 200,
-                title: 'Current Invoice Data',
+                title: 'Price Per Hour Data',
                 collapsible: true,
                 colspan:1,
                 autoHeight: true,
@@ -217,9 +226,18 @@
                 },
                 defaultType:'displayfield',
                 items: [{
+                        id: 'estInvoice',
+                        name:'estInvoice',
+                        fieldLabel: 'Estimated Price',
+                        <?php
+
+                            echo "value:'" . round($project->getEstHourInvoice(), 2, PHP_ROUND_HALF_DOWN) . "'";
+
+                        ?>
+                    },{
                         id: 'currentInvoice',
                         name:'currentInvoice',
-                        fieldLabel: 'Current Invoice',
+                        fieldLabel: 'Current Price',
                         <?php
 
                             echo "value:'" . round($project->getWorkedHourInvoice(), 2, PHP_ROUND_HALF_DOWN) . "'";
@@ -228,7 +246,7 @@
                     },{
                         id: 'invoiceDeviation',
                         name:'invoiceDeviation',
-                        fieldLabel: 'Invoice Deviation',
+                        fieldLabel: 'Deviation',
                         <?php
 
                             echo "value:'" . round($project->getWorkedHourInvoiceAbsoluteDeviation(), 2, PHP_ROUND_HALF_DOWN) . "'";
@@ -237,7 +255,7 @@
                     },{
                         id: 'invoiceDeviationPercent',
                         name:'invoiceDeviationPercent',
-                        fieldLabel: 'Invoice Deviation %',
+                        fieldLabel: 'Deviation %',
                         <?php
 
                             echo "value:'" . round($project->getWorkedHourInvoiceRelativeDeviation(), 2, PHP_ROUND_HALF_DOWN) . "'";
