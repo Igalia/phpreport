@@ -35,9 +35,7 @@
     include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
     include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 
-    $project = ProjectsFacade::GetProject($pid);
-
-    $extraData = ProjectsFacade::GetProjectExtraData($pid);
+    $project = ProjectsFacade::GetCustomProject($pid);
 
 
 ?>
@@ -149,7 +147,7 @@
                         fieldLabel: 'Estimated Hour Cost',
                         <?php
 
-                            echo "value:'" . round($project->getInvoice()/$project->getEstHours(), 2, PHP_ROUND_HALF_DOWN) . "'";
+                            echo "value:'" . round($project->getEstHourInvoice(), 2, PHP_ROUND_HALF_DOWN) . "'";
 
                         ?>
                     },{
@@ -182,7 +180,7 @@
                         fieldLabel: 'Worked Hours',
                         <?php
 
-                            echo "value:'" . $extraData[total] . "'";
+                            echo "value:'" . $project->getWorkedHours() . "'";
 
                         ?>
                     },{
@@ -191,7 +189,7 @@
                         fieldLabel: 'Work Deviation',
                         <?php
 
-                            echo "value:'" . round($extraData[total]-$project->getEstHours(), 2, PHP_ROUND_HALF_DOWN) . "'";
+                            echo "value:'" . round($project->getAbsDev(), 2, PHP_ROUND_HALF_DOWN) . "'";
 
                         ?>
                     },{
@@ -200,7 +198,7 @@
                         fieldLabel: 'Work Deviation %',
                         <?php
 
-                            echo "value:'" . round(100*($extraData[total]-$project->getEstHours())/$project->getEstHours(), 2, PHP_ROUND_HALF_DOWN) . "'";
+                            echo "value:'" . round($project->getPercDev(), 2, PHP_ROUND_HALF_DOWN) . "'";
 
                         ?>
                     }
@@ -224,7 +222,7 @@
                         fieldLabel: 'Current Invoice',
                         <?php
 
-                            echo "value:'" . round($extraData[currentInvoice], 2, PHP_ROUND_HALF_DOWN) . "'";
+                            echo "value:'" . round($project->getWorkedHourInvoice(), 2, PHP_ROUND_HALF_DOWN) . "'";
 
                         ?>
                     },{
@@ -233,7 +231,7 @@
                         fieldLabel: 'Invoice Deviation',
                         <?php
 
-                            echo "value:'" . round($extraData[currentInvoice]-($project->getInvoice()/$project->getEstHours()), 2, PHP_ROUND_HALF_DOWN) . "'";
+                            echo "value:'" . round($project->getWorkedHourInvoiceAbsoluteDeviation(), 2, PHP_ROUND_HALF_DOWN) . "'";
 
                         ?>
                     },{
@@ -242,7 +240,7 @@
                         fieldLabel: 'Invoice Deviation %',
                         <?php
 
-                            echo "value:'" . round((100*($extraData[currentInvoice]-($project->getInvoice()/$project->getEstHours()))/($project->getInvoice()/$project->getEstHours())), 2, PHP_ROUND_HALF_DOWN) . "'";
+                            echo "value:'" . round($project->getWorkedHourInvoiceRelativeDeviation(), 2, PHP_ROUND_HALF_DOWN) . "'";
 
                         ?>
                     }
