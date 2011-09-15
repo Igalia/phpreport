@@ -89,7 +89,7 @@ class CustomProjectVO extends ProjectVO {
      */
     public function getPercDev() {
         if ($this->estHours > 0)
-            return (($this->workedHours/$this->estHours)-1)*100;
+            return (($this->workedHours/($this->estHours+$this->movedHours))-1)*100;
         else return null;
     }
 
@@ -100,7 +100,7 @@ class CustomProjectVO extends ProjectVO {
      * @return double the deviation of the estimated work hours according to the worked ones.
      */
     public function getAbsDev() {
-        return ($this->workedHours-$this->estHours);
+        return ($this->workedHours-$this->estHours-$this->movedHours);
     }
 
     /** Get Estimated Hours Invoice
@@ -111,7 +111,7 @@ class CustomProjectVO extends ProjectVO {
      */
     public function getEstHourInvoice() {
         if ($this->estHours > 0)
-            return ($this->invoice/$this->estHours);
+            return ($this->invoice/($this->estHours+$this->movedHours));
         else return null;
     }
 
