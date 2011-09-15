@@ -36,7 +36,6 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/GetFilteredCustomProjectsAct
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserProjectsAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectUsersAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectCustomersAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectExtraDataAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetCustomProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/AssignUserToProjectAction.php');
@@ -60,21 +59,6 @@ include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 abstract class ProjectsFacade {
-
-    /** Get Project Extra Data Function
-     *
-     *  This function is used for retrieving extra data about a Project.
-     *
-     * @param int $id the database identifier of the Project whose extra data we want to retieve.
-     * @return array an array with extra data as associative fields 'total' and 'currentInvoice'.
-     */
-    static function GetProjectExtraData($projectId) {
-
-    $action = new GetProjectExtraDataAction($projectId);
-
-    return $action->execute();
-
-    }
 
     /** Get Project Function
      *
