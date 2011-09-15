@@ -118,8 +118,12 @@
                             {
                                 if ($active == False)
                                     echo "value:'No'";
-                                else
+                                else {
                                     echo "value:'Yes'";
+                                    if(time() > $project->getEnd()->getTimestamp())
+                                        //project is open but finish date has passed
+                                        echo ',style: {color:"red"}';
+                                }
                             }
 
                         ?>
