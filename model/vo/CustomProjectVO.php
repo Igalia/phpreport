@@ -149,4 +149,33 @@ class CustomProjectVO extends ProjectVO {
         else return null;
     }
 
+    /** Get Absolute Hour Invoice Deviation
+     *
+     *  This function returns the absolute deviation between the estimated
+     *  invoice per hour and the actual invoice per hour taking into account the
+     *  actual time devoted, measuring it in money.
+     *
+     * @return {double} the deviation on invoice per hour measured in money.
+     */
+    public function getWorkedHourInvoiceAbsoluteDeviation() {
+        if ($this->workedHours > 0)
+            return ($this->getEstHourInvoice() - $this->getWorkedHourInvoice());
+        else return null;
+    }
+
+    /** Get Relative Hour Invoice Deviation
+     *
+     *  This function returns the relative deviation between the estimated
+     *  invoice per hour and the actual invoice per hour taking into account the
+     *  actual time devoted, measuring it in percentage.
+     *
+     * @return {double} the deviation on invoice per hour measured in percentage.
+     */
+    public function getWorkedHourInvoiceRelativeDeviation() {
+        if ($this->workedHours > 0)
+            return (100*$this->getWorkedHourInvoiceAbsoluteDeviation()/
+                    $this->getEstHourInvoice());
+        else return null;
+    }
+
 }
