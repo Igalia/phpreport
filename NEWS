@@ -1,0 +1,45 @@
+NEWS
+====
+
+Version 2.0-beta2 (16 Sep 2011)
+-------------------------------
+
+Bugfixing release which fixes some open bugs and improves installation
+instructions to be more concrete and specific; specially, a guide to install the
+application in Windows systems has been written.
+
+Changes
+~~~~~~~
+
+* Improved installation instruccions:
+  * Added specific steps for Debian/Ubuntu, RedHat/Fedora and Windows users.
+  * Added a section with common problems.
+* [Bug #141] Fixed bug in user creation in fresh installs.
+* [Bug #150] Take into account moved hours to calculate deviation and cost per
+  hour of a project.
+* [Bug #151] Detect when a project is opened but should be closed
+
+
+Version 2.0-beta1 (05 May 2011)
+-------------------------------
+
+This is the first binary release of *PhpReport* after its full rewrite.
+*PhpReport* is a web application for time tracking, which provides useful
+statistics about users, projects, and more.
+
+Main features
+~~~~~~~~~~~~~
+
+* Logs individual worker dedication to projects.
+* Manages working days, holidays, bank holidays.
+* Analyzes project state: cost, deviation, etc.
+* Provides tools to organize the work using extreme programming (XP) techniques.
+
+Changes since 1.x
+~~~~~~~~~~~~~~~~~
+
+* Modular, layer based software design.
+* Plug-in services to extend software functionality without modifying the core.
+* Web service API to interact with third-party applications.
+* New web interface using AJAX techniques.
+* XP tracking tools.
