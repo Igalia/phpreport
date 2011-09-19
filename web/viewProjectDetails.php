@@ -184,7 +184,7 @@
                         fieldLabel: 'Estimated Hours',
                         <?php
 
-                            echo "value:'" . ($project->getEstHours()-$project->getMovedHours()) . "'";
+                            echo "value:'" . $project->getFinalEstHours() . "'";
 
                         ?>
                     },{

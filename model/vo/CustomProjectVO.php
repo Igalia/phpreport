@@ -81,6 +81,14 @@ class CustomProjectVO extends ProjectVO {
 
     /**#@-*/
 
+    /** Get final estimated hours (estimated hours - moved hours).
+     *
+     * @return {double} final estimated hours.
+     */
+    public function getFinalEstHours() {
+        return ($this->estHours-$this->movedHours);
+    }
+
     /** Get Estimated Work Deviation Percentage
      *
      *  This function returns the deviation percentage of the estimated work hours.
@@ -89,7 +97,7 @@ class CustomProjectVO extends ProjectVO {
      */
     public function getPercDev() {
         if ($this->estHours > 0)
-            return (($this->workedHours/($this->estHours+$this->movedHours))-1)*100;
+            return (($this->workedHours/$this->getFinalEstHours())-1)*100;
         else return null;
     }
 
@@ -100,7 +108,7 @@ class CustomProjectVO extends ProjectVO {
      * @return double the deviation of the estimated work hours according to the worked ones.
      */
     public function getAbsDev() {
-        return ($this->workedHours-$this->estHours-$this->movedHours);
+        return ($this->workedHours-$this->getFinalEstHours());
     }
 
     /** Get Estimated Hours Invoice
@@ -111,7 +119,7 @@ class CustomProjectVO extends ProjectVO {
      */
     public function getEstHourInvoice() {
         if ($this->estHours > 0)
-            return ($this->invoice/($this->estHours+$this->movedHours));
+            return ($this->invoice/$this->getFinalEstHours());
         else return null;
     }
 
