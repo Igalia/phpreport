@@ -56,7 +56,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      * @see ProjectDAO::__construct()
      */
     function __construct() {
-    parent::__construct();
+        parent::__construct();
     }
 
     /** Project value object constructor for PostgreSQL.
@@ -67,8 +67,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      * @return ProjectVO an {@link ProjectVO} with its properties set to the values from <var>$row</var>.
      * @see ProjectVO
      */
-    protected function setValues($row)
-    {
+    protected function setValues($row) {
 
         $projectVO = new ProjectVO();
 
@@ -136,8 +135,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      * @return CustomProjectVO an {@link CustomProjectVO} with its properties set to the values from <var>$row</var>.
      * @see CustomProjectVO
      */
-    protected function setCustomValues($row)
-    {
+    protected function setCustomValues($row) {
 
         $projectVO = new CustomProjectVO();
 
@@ -178,11 +176,11 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      * @throws {@link SQLQueryErrorException}
      */
     public function getById($projectId) {
-    if (!is_numeric($projectId))
-        throw new SQLIncorrectTypeException($projectId);
+        if (!is_numeric($projectId))
+            throw new SQLIncorrectTypeException($projectId);
         $sql = "SELECT * FROM project WHERE id=".$projectId;
-    $result = $this->execute($sql);
-    return $result[0];
+        $result = $this->execute($sql);
+        return $result[0];
     }
 
     /** Custom Project retriever by id for PostgreSQL.
@@ -196,11 +194,24 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      * @throws {@link SQLQueryErrorException}
      */
     public function getCustomById($projectId) {
-    if (!is_numeric($projectId))
-        throw new SQLIncorrectTypeException($projectId);
-    $sql = "SELECT project.*, SUM((task._end-task.init)/60.0) AS worked_hours, SUM(((task._end-task.init)/60.0) * hour_cost) AS total_cost FROM project LEFT JOIN task ON project.id = task.projectid LEFT JOIN hour_cost_history ON hour_cost_history.usrid = task.usrid AND task._date >= hour_cost_history.init_date AND task._date <= hour_cost_history.end_date WHERE project.id= {$projectId} GROUP BY project.id, project.description, project.activation, project.init, project._end, project.invoice, project.est_hours, project.areaid, project.description, project.type, project.moved_hours, project.sched_type";
-    $result = $this->customExecute($sql);
-    return $result[0];
+        if (!is_numeric($projectId))
+            throw new SQLIncorrectTypeException($projectId);
+        $sql =
+            "SELECT project.*, ".
+                "SUM((task._end-task.init)/60.0) AS worked_hours, ".
+                "SUM(((task._end-task.init)/60.0) * hour_cost) AS total_cost ".
+            "FROM project ".
+                "LEFT JOIN task ON project.id = task.projectid ".
+                "LEFT JOIN hour_cost_history ON hour_cost_history.usrid = task.usrid ".
+                    "AND task._date >= hour_cost_history.init_date ".
+                    "AND task._date <= hour_cost_history.end_date ".
+            "WHERE project.id= {$projectId} ".
+            "GROUP BY project.id, project.description, project.activation, ".
+                "project.init, project._end, project.invoice, ".
+                "project.est_hours, project.areaid, project.description, ".
+                "project.type, project.moved_hours, project.sched_type";
+        $result = $this->customExecute($sql);
+        return $result[0];
     }
 
     /** Projects retriever by Area id for PostgreSQL.
@@ -216,8 +227,8 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      */
     public function getByAreaId($areaId, $orderField = 'id') {
         $sql = "SELECT * FROM project WHERE areaid=" . $areaId . " ORDER BY " . $orderField  . " ASC";
-    $result = $this->execute($sql);
-    return $result;
+        $result = $this->execute($sql);
+        return $result;
     }
 
     /** Users retriever by Project id (relationship ProjectUser) for PostgreSQL.
@@ -233,8 +244,8 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      */
     public function getUsersProject($projectId) {
 
-    $dao = DAOFactory::getProjectUserDAO();
-    return $dao->getByProjectId($projectId);
+        $dao = DAOFactory::getProjectUserDAO();
+        return $dao->getByProjectId($projectId);
 
     }
 
@@ -251,8 +262,8 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      */
     public function addUserProject($projectId, $userId) {
 
-    $dao = DAOFactory::getProjectUserDAO();
-    return $dao->create($userId, $projectId);
+        $dao = DAOFactory::getProjectUserDAO();
+        return $dao->create($userId, $projectId);
 
     }
 
@@ -269,8 +280,8 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      */
     public function removeUserProject($projectId, $userId) {
 
-    $dao = DAOFactory::getProjectUserDAO();
-    return $dao->delete($userId, $projectId);
+        $dao = DAOFactory::getProjectUserDAO();
+        return $dao->delete($userId, $projectId);
 
     }
 
@@ -287,8 +298,8 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      */
     public function getUsersWorks($projectId) {
 
-    $dao = DAOFactory::getWorksDAO();
-    return $dao->getByProjectId($projectId);
+        $dao = DAOFactory::getWorksDAO();
+        return $dao->getByProjectId($projectId);
 
     }
 
@@ -305,8 +316,8 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      */
     public function addUserWorks($projectId, $userId) {
 
-    $dao = DAOFactory::getWorksDAO();
-    return $dao->create($userId, $projectId);
+        $dao = DAOFactory::getWorksDAO();
+        return $dao->create($userId, $projectId);
 
     }
 
@@ -323,8 +334,8 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      */
     public function removeUserWorks($projectId, $userId) {
 
-    $dao = DAOFactory::getWorksDAO();
-    return $dao->delete($userId, $projectId);
+        $dao = DAOFactory::getWorksDAO();
+        return $dao->delete($userId, $projectId);
 
     }
 
@@ -341,8 +352,8 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      */
     public function getCustomers($projectId) {
 
-    $dao = DAOFactory::getRequestsDAO();
-    return $dao->getByProjectId($projectId);
+        $dao = DAOFactory::getRequestsDAO();
+        return $dao->getByProjectId($projectId);
 
     }
 
@@ -395,8 +406,8 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      */
     public function addCustomer($projectId, $customerId) {
 
-    $dao = DAOFactory::getRequestsDAO();
-    return $dao->create($customerId, $projectId);
+        $dao = DAOFactory::getRequestsDAO();
+        return $dao->create($customerId, $projectId);
 
     }
 
@@ -413,8 +424,8 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      */
     public function removeCustomer($projectId, $customerId) {
 
-    $dao = DAOFactory::getRequestsDAO();
-    return $dao->delete($customerId, $projectId);
+        $dao = DAOFactory::getRequestsDAO();
+        return $dao->delete($customerId, $projectId);
 
     }
 
@@ -431,8 +442,8 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      */
     public function getTasks($projectId) {
 
-    $dao = DAOFactory::getTaskDAO();
-    return $dao->getByProjectId($projectId);
+        $dao = DAOFactory::getTaskDAO();
+        return $dao->getByProjectId($projectId);
 
     }
 
@@ -451,21 +462,22 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      * and ordered ascendantly by their database internal identifier.
      * @throws {@link SQLQueryErrorException}
      */
-    public function getByCustomerUserLogin($customerId = NULL, $userLogin = NULL, $active = False, $orderField = 'id') {
-    $customerCondition = "true";
-    $userCondition = "true";
-    $activeCondition = "true";
+    public function getByCustomerUserLogin($customerId = NULL, $userLogin = NULL,
+            $active = False, $orderField = 'id') {
+        $customerCondition = "true";
+        $userCondition = "true";
+        $activeCondition = "true";
 
-    if ($customerId)
-        $customerCondition = "id IN (SELECT projectid FROM requests where customerid = ".
-                         DBPostgres::checkNull($customerId) . ")";
+        if ($customerId)
+            $customerCondition = "id IN (SELECT projectid FROM requests where customerid = ".
+                    DBPostgres::checkNull($customerId) . ")";
 
-    if ($userLogin)
-        $userCondition = "id IN (SELECT projectid FROM project_usr LEFT JOIN usr ON usrid=id ".
+        if ($userLogin)
+            $userCondition = "id IN (SELECT projectid FROM project_usr LEFT JOIN usr ON usrid=id ".
                     "WHERE login=" . DBPostgres::checkStringNull($userLogin) . ") ";
 
-    if ($active)
-        $activeCondition = "activation='True'";
+        if ($active)
+            $activeCondition = "activation='True'";
 
         $sql = "SELECT * FROM project".
             " WHERE ".$customerCondition." AND ".$userCondition." AND ".$activeCondition.
