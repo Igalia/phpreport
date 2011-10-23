@@ -590,34 +590,34 @@ class PostgreSQLProjectDAO extends ProjectDAO {
 
         $sql = "UPDATE project SET ";
 
-        if ($update[activation])
+        if ($update['activation'])
         $sql = $sql . "activation=" . DBPostgres::boolToString($projectVO->getActivation()) . ", ";
 
-        if ($update[init])
+        if ($update['init'])
         $sql = $sql . "init=" . DBPostgres::formatDate($projectVO->getInit()) . ", ";
 
-        if ($update[end])
+        if ($update['end'])
         $sql = $sql . "_end=" . DBPostgres::formatDate($projectVO->getEnd()) . ", ";
 
-        if ($update[invoice])
+        if ($update['invoice'])
         $sql = $sql . "invoice=" . DBPostgres::checkNull($projectVO->getInvoice()) . ", ";
 
-        if ($update[estHours])
+        if ($update['estHours'])
         $sql = $sql . "est_hours=" . DBPostgres::checkNull($projectVO->getEstHours()) . ", ";
 
-        if ($update[areaId])
+        if ($update['areaId'])
         $sql = $sql . "areaid=" . DBPostgres::checkNull($projectVO->getAreaId()) . ", ";
 
-        if ($update[description])
+        if ($update['description'])
         $sql = $sql . "description=" . DBPostgres::checkStringNull($projectVO->getDescription()) . ", ";
 
-        if ($update[type])
+        if ($update['type'])
         $sql = $sql . "type=" . DBPostgres::checkStringNull($projectVO->getType()) . ", ";
 
-        if ($update[movHours])
+        if ($update['movHours'])
         $sql = $sql . "moved_hours=" . DBPostgres::checkNull($projectVO->getMovedHours()) . ", ";
 
-        if ($update[schedType])
+        if ($update['schedType'])
         $sql = $sql . "sched_type=" . DBPostgres::checkStringNull($projectVO->getSchedType());
 
         if (strlen($sql) == strlen("UPDATE project SET "))
