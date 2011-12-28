@@ -136,15 +136,24 @@ citiesSelector.on('select', function () {
 });
 
 /**
- * Fired when a new city is loaded: update the dates selected on the calendar
+ * Update the dates selected on the calendar
  */
-datesStore.on('load', function () {
+function updateCalendarFromStore () {
     var dates = [];
-    for(var i=0; i<datesStore.getCount(); i++) {
-        dates[i] = new Date(datesStore.getAt(i).data.date);
+    for(var i=0,j=0; i<datesStore.getCount(); i++) {
+        var date = new Date(datesStore.getAt(i).data.date);
+        if(date >= calendar.minDate && date <= calendar.maxDate) {
+            dates[j] = date;
+            j++;
+        }
     }
     calendar.setValue(dates);
-});
+}
+
+/**
+ * Fired when a new city is loaded
+ */
+datesStore.on('load', updateCalendarFromStore);
 
 /**
  * Fired when the selected year changes
@@ -153,6 +162,7 @@ yearSelector.on('change', function () {
     calendar.setDateLimits(new Date(this.value, 0, 1),
             new Date(this.value, 11, 31));
     calendar.update(new Date(this.value, 0, 1));
+    updateCalendarFromStore();
 });
 
 /***********************
