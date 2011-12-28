@@ -18,6 +18,12 @@
  */
 
 /***********************
+ *   Misc variables
+ ***********************/
+
+var defaultYear = new Date().getFullYear();
+
+/***********************
  *     Data stores
  ***********************/
 
@@ -71,9 +77,9 @@ var calendar = new Ext.ux.DatePickerPlus({
     showToday: false,
     renderTodayButton: false,
     renderOkUndoButtons: false,
-    value: new Date(2011, 0, 1),
-    minDate: new Date(2011, 0, 1),
-    maxDate: new Date(2011, 11, 31),
+    value: new Date(defaultYear, 0, 1),
+    minDate: new Date(defaultYear, 0, 1),
+    maxDate: new Date(defaultYear, 11, 31),
     listeners: {
         'select': function (item, date) {
         }
@@ -88,6 +94,13 @@ var citiesSelector = new Ext.form.ComboBox({
     mode: 'local'
 });
 
+//input to select a year
+var yearSelector = new Ext.form.NumberField({
+    allowDecimals: false,
+    minValue: 1970,
+    value: defaultYear
+});
+
 //side bar
 var sidebarPanel = new Ext.Panel({
     width: 204,
@@ -98,6 +111,8 @@ var sidebarPanel = new Ext.Panel({
     },
     items: [
         citiesSelector,
+        new Ext.menu.Separator(),
+        yearSelector,
         new Ext.menu.Separator(),
         new Ext.Button({
             text:'Save',
@@ -129,6 +144,15 @@ datesStore.on('load', function () {
         dates[i] = new Date(datesStore.getAt(i).data.date);
     }
     calendar.setValue(dates);
+});
+
+/**
+ * Fired when the selected year changes
+ */
+yearSelector.on('change', function () {
+    calendar.setDateLimits(new Date(this.value, 0, 1),
+            new Date(this.value, 11, 31));
+    calendar.update(new Date(this.value, 0, 1));
 });
 
 /***********************
