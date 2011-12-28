@@ -34,6 +34,27 @@ var citiesStore = new Ext.data.ArrayStore({
     ]
 });
 
+var datesStore = new Ext.data.Store({
+    parent: this,
+    autoLoad: false, //data will be loaded on event
+    autoSave: false, //data will be saved on event
+    baseParams: {
+        dateFormat: 'Y/m/d'
+    },
+    proxy: new Ext.data.HttpProxy({
+        url: 'services/getCommonEventsByCityIdJsonService.php',
+        method: 'GET'
+    }),
+    reader:new Ext.data.JsonReader({
+        root: 'result',
+        idProperty: 'id',
+        fields: [
+            'date'
+        ]
+    }),
+    remoteSort: false,
+});
+
 /***********************
  *       Widgets
  ***********************/
@@ -59,6 +80,14 @@ var calendar = new Ext.ux.DatePickerPlus({
     }
 });
 
+//combo box to select a city
+var citiesSelector = new Ext.form.ComboBox({
+    store: citiesStore,
+    valueField: 'id',
+    displayField: 'name',
+    mode: 'local'
+});
+
 //side bar
 var sidebarPanel = new Ext.Panel({
     width: 204,
@@ -68,12 +97,7 @@ var sidebarPanel = new Ext.Panel({
         width: '100%',
     },
     items: [
-        new Ext.form.ComboBox({
-            store: citiesStore,
-            valueField: 'id',
-            displayField: 'name',
-            mode: 'local',
-        }),
+        citiesSelector,
         new Ext.menu.Separator(),
         new Ext.Button({
             text:'Save',
@@ -84,6 +108,28 @@ var sidebarPanel = new Ext.Panel({
 /***********************
  *   Event listeners
  ***********************/
+
+/**
+ * Fired when a city is selected in the combo box
+ */
+citiesSelector.on('select', function () {
+    datesStore.reload({
+        params: {
+            cityId: this.getValue()
+        }
+    });
+});
+
+/**
+ * Fired when a new city is loaded: update the dates selected on the calendar
+ */
+datesStore.on('load', function () {
+    var dates = [];
+    for(var i=0; i<datesStore.getCount(); i++) {
+        dates[i] = new Date(datesStore.getAt(i).data.date);
+    }
+    calendar.setValue(dates);
+});
 
 /***********************
  *        Render
