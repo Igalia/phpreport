@@ -61,6 +61,51 @@ var datesStore = new Ext.data.Store({
     remoteSort: false,
 });
 
+var CustomEventRecord = new Ext.data.Record.create([
+    {name: 'id', type: 'int'},
+    {name: 'cityId', type: 'int'},
+    {name: 'date', type: 'date', dateFormat: 'Y-m-d'},
+]);
+
+var datesToSaveStore = new Ext.data.Store({
+    autoLoad: false,
+    autoSave: false,
+    proxy: new Ext.data.HttpProxy({
+        method: 'POST',
+        api: {
+            create    : 'services/createCommonEventsService.php',
+            destroy    : 'services/deleteCommonEventsService.php',
+        },
+    }),
+    reader: new Ext.data.XmlReader({
+        root: 'commonEvents',
+        record: 'commonEvent',
+        idProperty:'id'
+    }, CustomEventRecord),
+    writer: new Ext.data.XmlWriter({
+        xmlEncoding: 'UTF-8',
+        writeAllFields: true,
+        root: 'commonEvents',
+        record: 'commonEvent',
+        tpl: '<' + '?xml version="{version}" encoding="{encoding}"?' + '>' +
+                '<tpl if="records.length &gt; 0">' +
+                    '<tpl if="root"><{root}>' +
+                        '<tpl for="records"><{parent.record}>' +
+                            '<tpl for="."><{name}>' +
+                                '<tpl if="name==\'date\'">' +
+                                    '{[values.value.format("Y-m-d")]}' +
+                                '</tpl>' +
+                                '<tpl if="name!=\'date\'">' +
+                                    '{value}' +
+                                '</tpl>' +
+                            '</{name}></tpl>' +
+                        '</{parent.record}></tpl>' +
+                    '</{root}></tpl>' +
+                '</tpl>',
+    }, CustomEventRecord),
+    remoteSort: false,
+});
+
 /***********************
  *       Widgets
  ***********************/
@@ -101,6 +146,11 @@ var yearSelector = new Ext.form.NumberField({
     value: defaultYear
 });
 
+//save button
+var saveButton = new Ext.Button({
+    text:'Save',
+});
+
 //side bar
 var sidebarPanel = new Ext.Panel({
     width: 204,
@@ -114,9 +164,7 @@ var sidebarPanel = new Ext.Panel({
         new Ext.menu.Separator(),
         yearSelector,
         new Ext.menu.Separator(),
-        new Ext.Button({
-            text:'Save',
-        })
+        saveButton
     ],
 });
 
@@ -163,6 +211,18 @@ yearSelector.on('change', function () {
             new Date(this.value, 11, 31));
     calendar.update(new Date(this.value, 0, 1));
     updateCalendarFromStore();
+});
+
+saveButton.on('click', function () {
+    var selectedDates = calendar.selectedDates;
+    for(var i=0; i<selectedDates.length; i++) {
+        var record = new CustomEventRecord({
+            date: selectedDates[i],
+            cityId: citiesSelector.getValue()
+        });
+        datesToSaveStore.add(record);
+    }
+    datesToSaveStore.save();
 });
 
 /***********************
