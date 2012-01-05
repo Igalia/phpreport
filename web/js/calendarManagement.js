@@ -48,8 +48,12 @@ var datesStore = new Ext.data.Store({
         dateFormat: 'Y/m/d'
     },
     proxy: new Ext.data.HttpProxy({
-        url: 'services/getCommonEventsByCityIdJsonService.php',
-        method: 'GET'
+        method: 'POST',
+        api: {
+            read: {url: 'services/getCommonEventsByCityIdJsonService.php', method: 'GET'},
+            create: 'services/createCommonEventsService.php',
+            destroy: 'services/deleteCommonEventsService.php',
+        },
     }),
     reader:new Ext.data.JsonReader({
         root: 'result',
@@ -58,30 +62,6 @@ var datesStore = new Ext.data.Store({
             'date'
         ]
     }),
-    remoteSort: false,
-});
-
-var CustomEventRecord = new Ext.data.Record.create([
-    {name: 'id', type: 'int'},
-    {name: 'cityId', type: 'int'},
-    {name: 'date', type: 'date', dateFormat: 'Y-m-d'},
-]);
-
-var datesToSaveStore = new Ext.data.Store({
-    autoLoad: false,
-    autoSave: false,
-    proxy: new Ext.data.HttpProxy({
-        method: 'POST',
-        api: {
-            create    : 'services/createCommonEventsService.php',
-            destroy    : 'services/deleteCommonEventsService.php',
-        },
-    }),
-    reader: new Ext.data.XmlReader({
-        root: 'commonEvents',
-        record: 'commonEvent',
-        idProperty:'id'
-    }, CustomEventRecord),
     writer: new Ext.data.XmlWriter({
         xmlEncoding: 'UTF-8',
         writeAllFields: true,
@@ -90,7 +70,7 @@ var datesToSaveStore = new Ext.data.Store({
         tpl: '<' + '?xml version="{version}" encoding="{encoding}"?' + '>' +
                 '<tpl if="records.length &gt; 0">' +
                     '<tpl if="root"><{root}>' +
-                        '<tpl for="records"><{parent.record}>' +
+                        '<tpl for="records"><commonEvent>' +
                             '<tpl for="."><{name}>' +
                                 '<tpl if="name==\'date\'">' +
                                     '{[values.value.format("Y-m-d")]}' +
@@ -99,12 +79,18 @@ var datesToSaveStore = new Ext.data.Store({
                                     '{value}' +
                                 '</tpl>' +
                             '</{name}></tpl>' +
-                        '</{parent.record}></tpl>' +
+                        '</commonEvent></tpl>' +
                     '</{root}></tpl>' +
                 '</tpl>',
     }, CustomEventRecord),
     remoteSort: false,
 });
+
+var CustomEventRecord = new Ext.data.Record.create([
+    {name: 'id', type: 'int'},
+    {name: 'cityId', type: 'int'},
+    {name: 'date', type: 'date', dateFormat: 'Y-m-d'},
+]);
 
 /***********************
  *       Widgets
@@ -220,9 +206,9 @@ saveButton.on('click', function () {
             date: selectedDates[i],
             cityId: citiesSelector.getValue()
         });
-        datesToSaveStore.add(record);
+        datesStore.add(record);
     }
-    datesToSaveStore.save();
+    datesStore.save();
 });
 
 /***********************
