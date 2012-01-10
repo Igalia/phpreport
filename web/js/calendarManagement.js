@@ -172,12 +172,15 @@ citiesSelector.on('select', function () {
 /**
  * Update the dates selected on the calendar
  */
+var usedPositionsFromCalendar;
 function updateCalendarFromStore () {
     var dates = [];
+    usedPositionsFromCalendar = [];
     for(var i=0,j=0; i<datesStore.getCount(); i++) {
         var date = new Date(datesStore.getAt(i).data.date);
         if(date >= calendar.minDate && date <= calendar.maxDate) {
             dates[j] = date;
+            usedPositionsFromCalendar.push(j);
             j++;
         }
     }
@@ -187,7 +190,10 @@ function updateCalendarFromStore () {
 /**
  * Fired when a new city is loaded
  */
-datesStore.on('load', updateCalendarFromStore);
+datesStore.on('load', function () {
+    datesStore.singleSort('date');
+    updateCalendarFromStore();
+});
 
 /**
  * Fired when the selected year changes
@@ -199,14 +205,69 @@ yearSelector.on('change', function () {
     updateCalendarFromStore();
 });
 
+/**
+ * Fired when save button is pressed.
+ * Synchronizes the store with the calendar and triggers store save.
+ */
 saveButton.on('click', function () {
-    var selectedDates = calendar.selectedDates;
-    for(var i=0; i<selectedDates.length; i++) {
-        var record = new CustomEventRecord({
-            date: selectedDates[i],
-            cityId: citiesSelector.getValue()
-        });
-        datesStore.add(record);
+    var selectedDates = calendar.selectedDates.sortDates();
+    var recordsToBeAdded = [];
+    var positionsToBeDeleted = [];
+    for(var i=0, j=0, iFinished = false, jFinished = false;
+            !(iFinished && jFinished);) {
+        var storedDate = new Date(datesStore.getAt(
+                usedPositionsFromCalendar[j]).data.date);
+        if((selectedDates[i] > storedDate && !jFinished) ||
+            (iFinished && selectedDates[i] < storedDate) ) {
+            //the stored date was removed
+            positionsToBeDeleted.push(usedPositionsFromCalendar[j]);
+            //advance pointer j
+            if(j < usedPositionsFromCalendar.length - 1) {
+                j++;
+            }
+            else {
+                jFinished = true;
+            }
+        }
+        else if((!iFinished && selectedDates[i] < storedDate) ||
+            (jFinished && selectedDates[i] > storedDate) ) {
+            //the date didn't exist before, create
+            var record = new CustomEventRecord({
+                date: selectedDates[i],
+                cityId: citiesSelector.getValue()
+            });
+            recordsToBeAdded.push(record);
+            //advance pointer i
+            if(i < selectedDates.length - 1) {
+                i++;
+            }
+            else {
+                iFinished = true;
+            }
+        }
+        else {
+            //in other case, dates are equal so there are no changes
+            //advance both pointers
+            if(i < selectedDates.length - 1) {
+                i++;
+            }
+            else {
+                iFinished = true;
+            }
+            if(j < usedPositionsFromCalendar.length - 1) {
+                j++;
+            }
+            else {
+                jFinished = true;
+            }
+        }
+    }
+    //update the store
+    for(var i=0; i<positionsToBeDeleted.length; i++) {
+        datesStore.removeAt(positionsToBeDeleted[i]);
+    }
+    for(var i=0; i<recordsToBeAdded.length; i++) {
+        datesStore.add(recordsToBeAdded[i]);
     }
     datesStore.save();
 });
