@@ -40,6 +40,13 @@ var citiesStore = new Ext.data.ArrayStore({
     ]
 });
 
+
+var CustomEventRecord = new Ext.data.Record.create([
+    {name: 'id', type: 'int'},
+    {name: 'cityId', type: 'int'},
+    {name: 'date', type: 'date', dateFormat: 'Y-m-d'},
+]);
+
 var datesStore = new Ext.data.Store({
     parent: this,
     autoLoad: false, //data will be loaded on event
@@ -50,18 +57,15 @@ var datesStore = new Ext.data.Store({
     proxy: new Ext.data.HttpProxy({
         method: 'POST',
         api: {
-            read: {url: 'services/getCommonEventsByCityIdJsonService.php', method: 'GET'},
+            read: {url: 'services/getCommonEventsByCityIdService.php', method: 'GET'},
             create: 'services/createCommonEventsService.php',
             destroy: 'services/deleteCommonEventsService.php',
         },
     }),
-    reader:new Ext.data.JsonReader({
-        root: 'result',
-        idProperty: 'id',
-        fields: [
-            'date'
-        ]
-    }),
+    reader: new Ext.data.XmlReader({
+        record: 'commonEvent',
+        idProperty: 'id'
+    }, CustomEventRecord),
     writer: new Ext.data.XmlWriter({
         xmlEncoding: 'UTF-8',
         writeAllFields: true,
@@ -85,12 +89,6 @@ var datesStore = new Ext.data.Store({
     }, CustomEventRecord),
     remoteSort: false,
 });
-
-var CustomEventRecord = new Ext.data.Record.create([
-    {name: 'id', type: 'int'},
-    {name: 'cityId', type: 'int'},
-    {name: 'date', type: 'date', dateFormat: 'Y-m-d'},
-]);
 
 /***********************
  *       Widgets
