@@ -22,6 +22,7 @@
  ***********************/
 
 var defaultYear = new Date().getFullYear();
+var App = new Ext.App({});
 
 /***********************
  *     Data stores
@@ -253,6 +254,20 @@ calendar.on('afterdateclick', function (datePicker, date) {
  */
 saveButton.on('click', function () {
     datesStore.save();
+});
+
+/**
+ * Fired when the AJAX response is received and it was a success.
+ */
+datesStore.on('write', function() {
+    App.setAlert(true, "Changes saved");
+});
+
+/**
+ * Fired when the AJAX response is received and it contains an error.
+ */
+datesStore.on('exception', function(){
+    App.setAlert(false, "Unexpected error while saving changes");
 });
 
 /***********************
