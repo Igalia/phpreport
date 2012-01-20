@@ -120,7 +120,8 @@
                                     echo "value:'No'";
                                 else {
                                     echo "value:'Yes'";
-                                    if(time() > $project->getEnd()->getTimestamp())
+                                    if(!is_null($project->getEnd()) &&
+                                            time() > $project->getEnd()->getTimestamp())
                                         //project is open but finish date has passed
                                         echo ',style: {color:"red"}';
                                 }
