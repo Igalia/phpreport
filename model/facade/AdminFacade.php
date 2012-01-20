@@ -32,6 +32,7 @@
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateCommonEventAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteCommonEventAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateCommonEventAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetCommonEventsByCityIdAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllCitiesAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateCityAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteCityAction.php');
@@ -102,6 +103,21 @@ abstract class AdminFacade {
     $action = new UpdateCommonEventAction($commonEvent);
 
     return $action->execute();
+
+    }
+
+    /** Get Common Events by City Id Function
+     *
+     *  This function is used for retrieving the CommonEvent objects for a specific city.
+     *
+     * @param int Id of the city to filter the CommonEvents
+     * @throws {@link SQLQueryErrorException}
+     */
+    static function GetCommonEventsByCityId($cityId) {
+
+        $action = new GetCommonEventsByCityIdAction($cityId);
+
+        return $action->execute();
 
     }
 
