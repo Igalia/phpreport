@@ -23,6 +23,7 @@
 
 var defaultYear = new Date().getFullYear();
 var App = new Ext.App({});
+var unsavedChanges = false;
 
 /***********************
  *     Data stores
@@ -161,14 +162,41 @@ var sidebarPanel = new Ext.Panel({
 /**
  * Fired when a city is selected in the combo box
  */
-citiesSelector.on('select', function () {
-    datesStore.reload({
-        params: {
-            cityId: this.getValue()
-        }
-    });
+var oldValue;
+citiesSelector.on('beforeselect', function () {
+    //before the calendar runs the selection, we store the old value
+    oldValue = this.getValue();
 });
+citiesSelector.on('select', function () {
+    //helper function to reload the store
+    function reloadStore() {
+        datesStore.reload({
+            params: {
+                cityId: citiesSelector.getValue()
+            }
+        });
+    }
 
+    if(unsavedChanges) {
+        //if there were unsaved changes, ask for confirmation
+        Ext.MessageBox.confirm('Confirm',
+                'You will lose unsaved changes in current city. Are you sure?',
+                function (btn) {
+            if(btn == 'yes') {
+                //confirmed
+                reloadStore();
+            }
+            else {
+                //operation cancelled, get old value back
+                citiesSelector.setValue(oldValue);
+            }
+        });
+    }
+    else {
+        //no need to ask for confirmation
+        reloadStore();
+    }
+});
 /**
  * Update the dates selected on the calendar
  */
@@ -189,6 +217,7 @@ function updateCalendarFromStore () {
  */
 datesStore.on('load', function () {
     updateCalendarFromStore();
+    unsavedChanges = false;
 });
 
 /**
@@ -227,6 +256,8 @@ calendar.on('afterdateclick', function (datePicker, date) {
         }
     }
 
+    unsavedChanges = true;
+
     var selectedDates = datePicker.selectedDates.sortDates();
     if(selectedDates.length == 0) {
         removeDateFromStore(date);
@@ -261,6 +292,7 @@ saveButton.on('click', function () {
  */
 datesStore.on('write', function() {
     App.setAlert(true, "Changes saved");
+    unsavedChanges = false;
 });
 
 /**
