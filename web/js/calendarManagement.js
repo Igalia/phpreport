@@ -131,7 +131,15 @@ var citiesSelector = new Ext.form.ComboBox({
 var yearSelector = new Ext.form.NumberField({
     allowDecimals: false,
     minValue: 1970,
-    value: defaultYear
+    value: defaultYear,
+    listeners: {
+        specialkey: function (f,e){
+            //fire change of the selector when pressing enter
+            if (e.getKey() == e.ENTER) {
+                yearSelector.blur();
+            }
+        }
+    }
 });
 
 //save button
@@ -198,6 +206,7 @@ citiesSelector.on('select', function () {
         reloadStore();
     }
 });
+
 /**
  * Update the dates selected on the calendar
  */
