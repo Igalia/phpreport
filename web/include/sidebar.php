@@ -35,7 +35,7 @@ var menuToolbar = new Ext.Toolbar({
             },{
                 text: 'My agenda', handler: onItemClick,
             },{
-                text: 'Work calendar', handler: onItemClick,
+                text: 'Work calendar', handler: onItemClick, destination: 'calendarManagement.php', iconCls: 'silk-calendar'
             },{
                 text: 'Project Schedule', handler: onItemClick,
             }],
