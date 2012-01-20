@@ -123,6 +123,7 @@ var citiesSelector = new Ext.form.ComboBox({
     store: citiesStore,
     valueField: 'id',
     displayField: 'name',
+    triggerAction:'all',
     mode: 'local'
 });
 
@@ -144,7 +145,7 @@ var sidebarPanel = new Ext.Panel({
     frame: true,
     title: 'Actions',
     defaults: {
-        width: '100%',
+        width: 192,
     },
     items: [
         citiesSelector,
