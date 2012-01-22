@@ -29,58 +29,77 @@ var menuToolbar = new Ext.Toolbar({
             text: 'Coordination',
             menu: [
             {
-                text: 'XP Tracker', handler: onItemClick, destination: "xptracker-summary.php", iconCls: 'silk-sitemap',
+                text: 'XP Tracker',
+                handler: onItemClick,
+                destination: "xptracker-summary.php",
+                iconCls: 'silk-sitemap',
             },{
-                text: 'Analysis Tracker', handler: onItemClick, destination: "analysistracker-summary.php", iconCls: 'silk-sitemap-color',
-            },{
-                text: 'My agenda', handler: onItemClick,
-            },{
-                text: 'Work calendar', handler: onItemClick, destination: 'calendarManagement.php', iconCls: 'silk-calendar'
-            },{
-                text: 'Project Schedule', handler: onItemClick,
+                text: 'Analysis Tracker',
+                handler: onItemClick,
+                destination: "analysistracker-summary.php",
+                iconCls: 'silk-sitemap-color',
             }],
         },{
-            text: 'Users',
+            text: 'Reports',
                 menu: [
                 <?php
                     if (isset($_SESSION['user'])){
                         $user = $_SESSION['user'];
-                        echo "{ text: 'Personal page', handler: onItemClick, iconCls: 'silk-user-green', destination:'viewUserDetails.php?uid=" . $user->getId() . "',},";
+                        echo "{ text: 'User details', ".
+                            "handler: onItemClick, ".
+                            "iconCls: 'silk-user-green', ".
+                            "destination:'viewUserDetails.php?uid=" . $user->getId().
+                            "',},";
                     }
                 ?>
               {
-                text: 'Users evaluation', handler: onItemClick, destination: 'usersEvaluation.php', iconCls: 'silk-user',
+                text: 'Users evaluation',
+                handler: onItemClick,
+                destination: 'usersEvaluation.php',
+                iconCls: 'silk-user',
             },{
-                text: 'Acc hours report', handler: onItemClick, destination: 'viewWorkingHoursResultsReport.php', iconCls: 'silk-report-user',
+                text: 'Accumulated hours',
+                handler: onItemClick,
+                destination: 'viewWorkingHoursResultsReport.php',
+                iconCls: 'silk-report-user',
+            },'-',{
+                text: 'Project evaluation',
+                handler: onItemClick,
+                destination: 'projectsEvaluation.php',
+                iconCls: 'silk-book-open',
             },{
-                text: 'Users management', handler: onItemClick, destination: 'viewUsers.php', iconCls: 'silk-user-edit',
+                text: 'Projects summary',
+                handler: onItemClick,
+                destination: 'projectsSummary.php',
+                iconCls: 'silk-book',
             }],
         },{
-            text: 'Projects',
+            text: 'Data management',
             menu: [{
-                text: 'Project evaluation', handler: onItemClick, destination: 'projectsEvaluation.php', iconCls: 'silk-book-open',
+                text: 'Users',
+                handler: onItemClick,
+                destination: 'viewUsers.php',
+                iconCls: 'silk-user-edit',
             },{
-                text: 'Projects summary', handler: onItemClick, destination: 'projectsSummary.php', iconCls: 'silk-book',
+                text: 'Projects',
+                handler: onItemClick,
+                destination: 'viewProjects.php',
+                iconCls: 'silk-book-edit',
             },{
-                text: 'Management indexes', handler: onItemClick,
+                text: 'Clients',
+                handler: onItemClick,
+                destination: 'viewCustomers.php',
+                iconCls: 'silk-vcard-edit',
             },{
-                text: 'Projects management', handler: onItemClick, destination: 'viewProjects.php', iconCls: 'silk-book-edit',
-            }],
-        },{
-            text: 'Clients',
-            menu: [{
-                text: 'Clients summary', handler: onItemClick,
+                text: 'Areas',
+                handler: onItemClick,
+                destination: 'viewAreas.php',
+                iconCls: 'silk-brick-edit',
             },{
-                text: 'Clients management', handler: onItemClick, destination: 'viewCustomers.php', iconCls: 'silk-vcard-edit',
-            }],
-        },{
-            text: 'Areas',
-            menu: [{
-                text: 'Areas evaluation', handler: onItemClick,
-            },{
-                text: 'Turnover goals', handler: onItemClick,
-            },{
-                text: 'Areas management', handler: onItemClick, destination: 'viewAreas.php', iconCls: 'silk-brick-edit',
+                text: 'Calendars',
+                handler: onItemClick,
+                destination: 'calendarManagement.php',
+                iconCls: 'silk-calendar'
             }],
         },
         new Ext.Toolbar.Fill(),
