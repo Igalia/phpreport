@@ -57,8 +57,8 @@ class UpdateCityAction extends Action{
      *
      * @param CityVO $sector the City value object we want to update.
      */
-    public function __construct(SectorVO $sector) {
-        $this->sector=$sector;
+    public function __construct(CityVO $city) {
+        $this->city=$city;
         $this->preActionParameter="UPDATE_CITY_PREACTION";
         $this->postActionParameter="UPDATE_CITY_POSTACTION";
 
