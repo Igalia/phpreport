@@ -67,6 +67,7 @@
 .silk-building { background-image: url(icons/building.png) !important; background-repeat: no-repeat; }
 .silk-building-add { background-image: url(icons/building_add.png) !important; background-repeat: no-repeat; }
 .silk-building-delete { background-image: url(icons/building_delete.png) !important; background-repeat: no-repeat; }
+.silk-building-edit { background-image: url(icons/building_edit.png) !important; background-repeat: no-repeat; }
 .silk-cog { background-image: url(icons/cog.png) !important; background-repeat: no-repeat; }
 .silk-calendar { background-image: url(icons/calendar.png) !important; background-repeat: no-repeat; }
 .silk-calculator { background-image: url(icons/calculator.png) !important; background-repeat: no-repeat; }
