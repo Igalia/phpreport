@@ -104,7 +104,7 @@ var menuToolbar = new Ext.Toolbar({
                 text: 'Calendars',
                 handler: onItemClick,
                 destination: 'calendarManagement.php',
-                iconCls: 'silk-calendar'
+                iconCls: 'silk-calendar-edit'
             }],
         },
         new Ext.Toolbar.Fill(),
