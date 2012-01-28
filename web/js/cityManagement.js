@@ -53,6 +53,9 @@ var citiesStore = new Ext.data.Store({
     method: 'POST',
         api: {
             read    : {url: 'services/getAllCitiesService.php', method: 'GET'},
+            create  : 'services/createCitiesService.php',
+            update  : 'services/updateCitiesService.php',
+            destroy : 'services/deleteCitiesService.php'
 
         },
     }),
@@ -77,6 +80,17 @@ var citiesStore = new Ext.data.Store({
         field: 'name',
         direction: 'ASC',
     },
+    listeners: {
+        'write': function() {
+            App.setAlert(true, "City changes saved");
+        },
+        'exception': function(){
+            App.setAlert(false, "Unexpected error while saving changes");
+        },
+        'update': function() {
+            this.save();
+        },
+    }
 });
 
 /***********************
