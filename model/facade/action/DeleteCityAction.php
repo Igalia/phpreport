@@ -41,7 +41,7 @@ include_once(PHPREPORT_ROOT . '/model/vo/CityVO.php');
  * @subpackage facade
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
-class DeleteSectorAction extends Action{
+class DeleteCityAction extends Action{
 
     /** The City
      *

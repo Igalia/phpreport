@@ -96,6 +96,11 @@ var menuToolbar = new Ext.Toolbar({
                 destination: 'viewAreas.php',
                 iconCls: 'silk-brick-edit',
             },{
+                text: 'Cities',
+                handler: onItemClick,
+                destination: 'cityManagement.php',
+                iconCls: 'silk-building-edit',
+            },{
                 text: 'Calendars',
                 handler: onItemClick,
                 destination: 'calendarManagement.php',
