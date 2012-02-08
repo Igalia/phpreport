@@ -65,6 +65,26 @@ var extraHoursStore = new Ext.data.Store({
         record: 'extraHour',
         idProperty:'id'
         }, ExtraHourRecord),
+    writer: new Ext.data.XmlWriter({
+        xmlEncoding: 'UTF-8',
+        writeAllFields: true,
+        root: 'extraHours',
+        tpl: '<' + '?xml version="{version}" encoding="{encoding}"?' + '>' +
+            '<tpl if="records.length&gt;0">' +
+                '<tpl if="root"><{root}>' +
+                    '<tpl for="records"><{parent.record}>' +
+                        '<tpl for="."><{name}>' +
+                            '<tpl if="name==\'date\'">' +
+                                '{[values.value.format("Y-m-d")]}' +
+                            '</tpl>' +
+                            '<tpl if="name!=\'date\'">' +
+                                '{value}' +
+                            '</tpl>' +
+                        '</{name}></tpl>' +
+                    '</{parent.record}></tpl>' +
+                '</{root}></tpl>' +
+            '</tpl>'
+        }, ExtraHourRecord),
     remoteSort: false,
     sortInfo: {
         field: 'date',
