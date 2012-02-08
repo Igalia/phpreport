@@ -43,6 +43,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteCustomEventAction.php'
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateCustomEventAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateExtraHourAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteExtraHourAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllExtraHoursAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateExtraHourAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateUserGroupAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllUserGroupsAction.php');
@@ -386,6 +387,22 @@ abstract class UsersFacade {
     $action = new UpdateCustomEventAction($customEvent);
 
     return $action->execute();
+
+    }
+
+    /** Get All Extra Hours Function
+     *
+     *  This action is used for retrieving all Extra Hour objects.
+     *
+     * @return array an array with value objects {@link ExtraHourVO} with their
+     *   properties set to the values from the rows and ordered ascendantly by
+     *   their database internal identifier.
+     */
+    static function GetAllExtraHours() {
+
+        $action = new GetAllExtraHoursAction();
+
+        return $action->execute();
 
     }
 
