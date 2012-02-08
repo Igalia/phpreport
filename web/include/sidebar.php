@@ -105,6 +105,11 @@ var menuToolbar = new Ext.Toolbar({
                 handler: onItemClick,
                 destination: 'calendarManagement.php',
                 iconCls: 'silk-calendar-edit'
+            },{
+                text: 'Hour compensations',
+                handler: onItemClick,
+                destination: 'hourCompensationManagement.php',
+                iconCls: 'silk-script-edit'
             }],
         },
         new Ext.Toolbar.Fill(),
