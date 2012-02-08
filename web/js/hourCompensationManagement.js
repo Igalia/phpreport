@@ -45,6 +45,37 @@ var ExtraHourRecord = new Ext.data.Record.create([
     {name: "date", type: 'date', dateFormat: 'Y-m-d'},
 ]);
 
+//schema of the information about users
+var UserRecord = new Ext.data.Record.create([
+    {name: 'id', type: 'int'},
+    {name: "login", type: 'string'}
+]);
+
+// store to load users
+var usersStore = new Ext.data.Store({
+    id: 'usersStore',
+    autoLoad: true,  //initial data are loaded in the application init
+    autoSave: false, //if set true, changes will be sent instantly
+    baseParams: {
+    },
+    proxy: new Ext.data.HttpProxy({
+        method: 'GET',
+        api: {
+            read: {url: 'services/getAllUsersService.php'}
+        },
+    }),
+    storeId: 'users',
+    reader:new Ext.data.XmlReader({
+        record: 'user',
+        idProperty:'id'
+        }, UserRecord),
+    remoteSort: false,
+    sortInfo: {
+        field: 'login',
+        direction: 'ASC',
+    }
+});
+
 //store to load/save extra hours
 var extraHoursStore = new Ext.data.Store({
     autoLoad: true,  //initial data are loaded in the application init
@@ -231,6 +262,18 @@ var inlineEditionPanel = Ext.extend(Ext.grid.GridPanel, {
 
 });
 
+//column renderer for users
+var renderUser = function (val) {
+
+    var record =  usersStore.getById(val);
+
+    if (record)
+        return record.get('login');
+    else
+        return val;
+
+};
+
 //column model for the grid
 var extraHoursColumnModel =  new Ext.grid.ColumnModel([
     {
@@ -250,7 +293,22 @@ var extraHoursColumnModel =  new Ext.grid.ColumnModel([
     {
         header: "User",
         width: 100,
+        sortable: true,
         dataIndex: 'userId',
+        renderer: renderUser,
+        editor: {
+            xtype: 'combo',
+            displayField: 'login',
+            valueField: 'id',
+            lazyRender: true,
+            mode: 'local',
+            triggerAction: 'all',
+            store: usersStore,
+            emptyText: 'user',
+            selectOnFocus: true,
+            typeAhead: true,
+            allowBlank: false
+        }
     },
     {
         header: "Hours",
