@@ -43,26 +43,28 @@
 
     while ($parser->read()) {
 
-    if ($parser->name == "tasks")
+    if ($parser->name == "projects")
     {
-        /* We check authentication and authorization */
-        require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
-
         $sid = $parser->getAttribute("sid");
 
-        if (!LoginManager::isLogged($sid))
-        {
-            $string = "<return service='createProjects'><error id='2'>You must be logged in</error></return>";
-            break;
-        }
-
-        if (!LoginManager::isAllowed($sid))
-        {
-            $string = "<return service='createProjects'><error id='3'>Forbidden service for this User</error></return>";
-            break;
-        }
-
+        $parser->read();
     }
+
+    /* We check authentication and authorization */
+    require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
+
+    if (!LoginManager::isLogged($sid))
+    {
+        $string = "<return service='createProjects'><error id='2'>You must be logged in</error></return>";
+        break;
+    }
+
+    if (!LoginManager::isAllowed($sid))
+    {
+        $string = "<return service='createProjects'><error id='3'>Forbidden service for this User</error></return>";
+        break;
+    }
+
     elseif ($parser->name == "project")
     {
 
