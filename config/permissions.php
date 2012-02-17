@@ -69,8 +69,10 @@ $permissions = array(
         '/services/getAllUsersService.php', '/services/getAllCustomersService.php',
         '/services/getAllProjectsService.php', '/services/getAllCustomProjectsService.php',
         '/services/getAllCitiesService.php', '/services/getProjectService.php',
-        //management screens
-        '/viewUsers.php',  '/viewAreas.php', '/viewProjects.php',
+        '/services/getAllSectorsService.php', '/services/getAllAreasService.php',
+        '/services/getAllExtraHourVOsService.php', '/services/getAllCitiesService.php',
+        //user management screen (read only)
+        '/viewUsers.php',
         '/services/getUserHourCostHistoriesService.php', '/services/getUserAreaHistoriesService.php',
         '/services/getUserCityHistoriesService.php', '/services/getUserJourneyHistoriesService.php',
         '/services/getTodayAreaUsersService.php', '/services/getProjectUsersService.php',
@@ -78,7 +80,7 @@ $permissions = array(
     'admin' => array(
         //projects management
         '/services/createProjectsService.php', '/services/deleteProjectsService.php',
-        '/services/updateProjectsService.php',
+        '/services/updateProjectsService.php', '/viewProjects.php',
         //project attributes management
         '/services/assignUsersToProjectService.php', '/services/deassignUsersFromProjectService.php',
         '/services/assignCustomersToProjectService.php', '/services/deassignCustomersFromProjectService.php',
@@ -96,21 +98,21 @@ $permissions = array(
         '/viewCustomers.php', '/services/createCustomersService.php',
         '/services/updateCustomersService.php', '/services/deleteCustomersService.php',
         //customer attributes management
-        '/services/getAllSectorsService.php', '/services/updateSectorsService.php',
+        '/services/updateSectorsService.php',
         '/services/createSectorsService.php', '/services/deleteSectorsService.php',
         //areas management
         '/services/createAreasService.php', '/services/deleteAreasService.php',
-        '/services/getAllAreasService.php', '/services/updateAreasService.php',
+        '/services/updateAreasService.php', '/viewAreas.php',
         //calendar management
         '/calendarManagement.php', '/services/getCommonEventsByCityIdJsonService.php',
         '/services/getCommonEventsByCityIdService.php', '/services/createCommonEventsService.php',
         '/services/deleteCommonEventsService.php',
         //city management
-        '/cityManagement.php', '/services/getAllCitiesService.php',
+        '/cityManagement.php',
         '/services/createCitiesService.php', '/services/updateCitiesService.php',
         '/services/deleteCitiesService.php',
         //hour compensations management
-        '/services/getAllExtraHourVOsService.php', '/services/createExtraHourVOsService.php',
+        '/services/createExtraHourVOsService.php',
         '/services/updateExtraHourVOsService.php', '/services/deleteExtraHourVOsService.php',
         '/hourCompensationManagement.php')
 );
