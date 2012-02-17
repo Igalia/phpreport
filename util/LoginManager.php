@@ -151,9 +151,9 @@ class LoginManager {
 
     if (isset($_SESSION['user'])) {
       $user=$_SESSION['user'];
+      $url = explode($urlHeader, $_SERVER["SCRIPT_NAME"]);
 
       foreach ($user->getGroups() as $group) {
-        $url = explode($urlHeader, $_SERVER["SCRIPT_NAME"]);
         if (isset($permissions[$group->getName()]) &&
             in_array($url[1], $permissions[$group->getName()]))
           return true;
