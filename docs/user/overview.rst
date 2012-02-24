@@ -48,3 +48,44 @@ The relations stablished between them are the following:
 * In a scenario where multiple clients have requested the same project, every
   task is related with one specific client who in theory finances the cost of
   that task.
+
+Data model for working day management
+=====================================
+
+PhpReport can calculate the number of hours users are supposed to work and track
+the balance of extra or undone hours. It can also take into account public
+holidays to do that calculation. These are the new entities introduced with this
+purpose:
+
+* City entity represents a city, because public holidays are usually set at city
+  level.
+
+* Public holiday entity represents one public holiday which belongs to one city.
+
+* City history entity represents the history of cities to which a user has
+  belonged, between two dates.
+
+* Journey history entity represents the number of hours a user is supposed to
+  work per working day between two dates. PhpReport considers there are five
+  working days per week, from Monday to Friday, excepting public holidays.
+
+.. figure:: i/working-day-classes.png
+   :scale: 50
+
+   Main entities related with working day tracking
+
+Relations between these entities:
+
+* A user can have any number of associated city history entities, as long as
+  the time periods of these history entities don't overlap.
+
+* In the same way, a user can have any number of associated journey history
+  entities, fulfilling the same condition about overlapping.
+
+* One city history entity can only be related to one city, as a consequence a
+  user can't be member of multiple cities at the same time.
+
+* Finally, a city can have any number of public holiday entities. One public
+  holiday entity can only be related with one city, so if the same date is a
+  holiday in different cities there must be two entities with the same date but
+  different relations.
