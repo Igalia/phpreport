@@ -35,3 +35,18 @@ SELECT nextval(pg_get_serial_sequence('usr', 'id'));
 INSERT INTO belongs VALUES (1, 1);
 INSERT INTO belongs VALUES (1, 2);
 INSERT INTO belongs VALUES (2, 2);
+
+--
+-- Data for Name: area; Type: TABLE DATA; Schema: public; Owner: phpreport
+--
+
+INSERT INTO area VALUES (1, 'internal');
+
+-- advance one step the sequence which generates area ids
+SELECT nextval(pg_get_serial_sequence('area', 'id'));
+
+--
+-- Data for Name: project; Type: TABLE DATA; Schema: public; Owner: phpreport
+--
+
+INSERT INTO project (description, areaid) VALUES ('Holidays', 1);

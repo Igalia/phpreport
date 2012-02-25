@@ -177,4 +177,4 @@ define('USER_GROUPS', serialize(array('staff', 'admin')));
  * @name VACATIONS_PROJECT
  * @global string project used for identifying vacations tasks
  */
-define('VACATIONS_PROJECT', 'vac');
+define('VACATIONS_PROJECT', 'Holidays');
