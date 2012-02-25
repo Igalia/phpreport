@@ -89,3 +89,29 @@ Relations between these entities:
   holiday entity can only be related with one city, so if the same date is a
   holiday in different cities there must be two entities with the same date but
   different relations.
+
+Data model for project cost management
+======================================
+
+PhpReport can estimate the cost, deviation, benefit and other economical data
+of your projects. The related entities are:
+
+* User, Project and Task entities, already introduced.
+
+* Hour cost history entity, it represents the history of the cost per hour for
+  a user in different time periods.
+
+.. figure:: i/cost-classes.png
+   :scale: 50
+
+   Main entities related with cost management
+
+This is the explanation of the relations stablished between these entities:
+
+* A user can have any number of associated hour cost history entities, as long
+  as the time periods don't overlap.
+
+* The application can know the number of hours devoted to a project by every
+  user, through the relation with task entity and its relation with project
+  entity. Using the date of the tasks and the relation with hour cost history,
+  the cost of every work hour can be calculated.
