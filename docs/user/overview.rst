@@ -116,6 +116,35 @@ This is the explanation of the relations stablished between these entities:
   entity. Using the date of the tasks and the relation with hour cost history,
   the cost of every work hour can be calculated.
 
+Data model for organization structure
+=====================================
+
+PhpReport structures the organization in areas, to which users and projects
+belong. This is a breakdown of the related entities:
+
+* User and Project entities, already introduced.
+
+* Area entity, it represent an area of interest inside the organization.
+
+* Area history entity, it represents the history of the membership of a user to
+  different areas.
+
+.. figure:: i/structure-classes.png
+   :scale: 50
+
+   Main entities related with the organization structure
+
+Relations between these entities:
+
+* A user can have any number of associated area history entities, as long as the
+  time periods don't overlap.
+
+* One area history entity can only be related to one area, as a consequence a
+  user can't be member of multiple areas at the same time.
+
+* Finally, a project belongs to only one area, while an area can have many
+  projects.
+
 Data model for holiday management
 =================================
 
