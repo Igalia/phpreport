@@ -115,3 +115,29 @@ This is the explanation of the relations stablished between these entities:
   user, through the relation with task entity and its relation with project
   entity. Using the date of the tasks and the relation with hour cost history,
   the cost of every work hour can be calculated.
+
+Data model for holiday management
+=================================
+
+PhpReport can also calculate the number of holiday hours corresponding to every
+worker according to his contract and journey conditions. Holidays are treated as
+tasks belonging to a specific project called "Holidays". A user taking one day
+of holidays should fill a task specifying that project, and with a number of
+hours equal to the lenght of his working day (which is 8 hours by default).
+
+The entities involved in this process are:
+
+* A specific project called 'Holidays'.
+
+* The Task entity, in this case represents used holidays.
+
+* A configuration parameter called ``YEARLY_HOLIDAY_HOURS``, it indicates the
+  number of holiday hours corresponding to one person in a year having a journey
+  of 8 hours per day. The default value is 184 hours, which corresponds to 23
+  holidays per year. The application will adjust this value according to the
+  specific case of every user, as specified below.
+
+* Journey history entity is also involved in this calculation, adjusting the
+  value of ``YEARLY_HOLIDAY_HOURS`` to the situation of every user. E.g. a user
+  working 4 hours per day would have 92 hours, and a person working from January
+  to June would have 92 hours too, assuming the default configuration.
