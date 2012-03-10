@@ -7,3 +7,4 @@ statistics about users, projects, and more. These documents provide the basic
 concepts to use PhpReport both for worker and manager profiles.
 
 #. `Overview <overview.html>`__
+#. `Tasks management <tasks.html>`__
