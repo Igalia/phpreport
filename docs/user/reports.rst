@@ -28,3 +28,24 @@ represent projects and columns represent workers. There are two extra columns,
 a project, independently from the client (thus, it's the sum of all the client
 columns) and the latter shows the proportion of hours of one project regarding
 all the work done by the user in the same time period.
+
+User evaluation
+===============
+
+.. figure:: i/user-evaluation-screen.png
+
+This report details the amount of work done by all the users in the system
+between two dates. It shows the time spent by every user on each story.
+
+In the top of the screen there are two date inputs to insert the report
+dates: if the start date is left empty, the default value is the date of the
+first task inserted by the user; if the end date is empty, the default value is
+the current date.
+
+The results are shown in the grid in the central area of the screen; rows
+represent users and columns represent stories (the field *Story* of every task,
+which we said it could be used to differentiate tasks). There are also two extra
+columns, *Total* and *%*; the former shows the total number of hours invested in
+a user, independently from the story (thus, it's the sum of all the story
+columns) and the latter shows the proportion of hours of one user regarding
+all the work done in the organization in that time period.
