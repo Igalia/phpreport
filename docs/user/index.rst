@@ -8,3 +8,6 @@ concepts to use PhpReport both for worker and manager profiles.
 
 #. `Overview <overview.html>`__
 #. `Tasks management <tasks.html>`__
+#. `Reports <reports.html>`__
+
+   * `User details <reports.html#user-details>`__
