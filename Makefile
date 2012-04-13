@@ -1,8 +1,9 @@
 VERSION=2.0~beta2
 
-tgz:
+tgz: help
 	tar zcf phpreport_$(VERSION).tar.gz --exclude=Makefile --exclude=*~ \
-		--exclude=config/config.php --exclude=phpreport_$(VERSION).tar.gz *
+		--exclude=docs \
+		--exclude=config/config.php --exclude=*.tar.gz --exclude=*.zip *
 
 zip: tgz
 	tar tf phpreport_$(VERSION).tar.gz | zip -@ phpreport_$(VERSION).zip
