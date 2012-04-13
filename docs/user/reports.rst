@@ -49,3 +49,54 @@ columns, *Total* and *%*; the former shows the total number of hours invested in
 a user, independently from the story (thus, it's the sum of all the story
 columns) and the latter shows the proportion of hours of one user regarding
 all the work done in the organization in that time period.
+
+Accumulated hours
+=================
+
+.. figure:: i/acc-hours-screen.png
+
+This report shows the difference of hours between every user's theoretical work
+journey and the actual number of hours worked, and the number of unused holiday
+hours. It shows the partial results between two dates and the total since the
+beginning of the history.
+
+PhpReport assumes a work journey of X hours per day from Monday to Friday, and
+excluding public holidays. X is a variable that can be configured by managers
+for every user, in the user management screen.
+
+In the top of the screen there are two date inputs to insert the report
+dates: if the start date is left empty, the default value is the date of the
+first contract period of every user; if the end date is empty, the default value
+is the current date.
+
+The results are shown in the grid in the central area of the screen; rows
+represent users and columns represent the following data:
+
+Pending holiday hours:
+  it's the difference between the theoretical number of
+  holiday hours for every user (calculated according to the explanation in
+  `Data model for holiday management <overview.html#data-model-for-holiday-management>`__)
+  and the number of holiday hours used. The unused holidays are accumulated from
+  one year to the next one; to see only the number of pending holidays in the
+  current year, a start date in the current year must be chosen.
+
+Extra hours:
+  the difference of hours between the theoretical work journey and
+  the actual number of hours worked, inside the specified time interval. It's
+  the difference between the columns 'Workable hours' and 'Worked hours'.
+
+Workable hours:
+  theoretical number of hours every user should have worked in
+  the specified time interval.
+
+Worked hours:
+  actual number of hours every user has worked in
+  the specified time interval.
+
+Total extra hours:
+  the difference of hours between the theoretical work journey
+  and the actual number of hours worked, taking into account all the history of
+  the worker until the specified end date. It can be used to check side by side
+  the partial value in 'Extra hours' column and the absolute value in this
+  column. If the start date of the report is left empty, the values of these two
+  columns are the same.
