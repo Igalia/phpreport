@@ -100,3 +100,100 @@ Total extra hours:
   the partial value in 'Extra hours' column and the absolute value in this
   column. If the start date of the report is left empty, the values of these two
   columns are the same.
+
+Project evaluation
+==================
+
+.. figure:: i/project-evaluation-screen.png
+
+This reports shows a list with projects and some data and statistics about them.
+There are different filtering options to select the projects to be listed.
+
+In the top of the screen there are different filtering options to be applied to
+the list of projects. Leaving an option empty means not taking into account that
+field. The options are:
+
+Project name:
+  The name of the project must contain the words entered here.
+
+Activation:
+  Check whether the project is active or not.
+
+Area:
+  Only projects belonging to a specific area.
+
+Type:
+  The type of the project must match the string entered here.
+
+Dates between ... and ...:
+  Filter the projects which start and end dates intersect with the time interval
+  specified in these two fields.
+
+The results are shown in the grid in the central area of the screen; rows
+represent projects and columns represent the following data:
+
+Name:
+  Name of the project.
+
+Start date:
+  Start date of the project.
+
+End date:
+  End date of the project.
+
+Invoice:
+  Expected invoiced of the project, entered by the manager when the project is
+  created.
+
+Estimated hours:
+  Number of hours expected to be devoted to the project, entered by the manager
+  when the project is created.
+
+Worked hours:
+  Actual number of hours devoted to the project.
+
+Abs. deviation:
+  Difference between the hours estimated and worked (*estimated - worked*).
+
+Deviation %:
+  Percentage of the deviation regarding the estimation of hours:
+  *(estimated - worked) / estimated*.
+
+Hour profit:
+  Calculation of the profit obtained per hour spent in the project. It is
+  calculated as: *(invoice - cost) / worked hours*.
+
+In the bottom of the grid there are two buttons named **Standard** and
+**Extended** view. The second one adds some additional columns:
+
+Activation:
+  Activation status of the project.
+
+Area:
+  Value of the field *area*.
+
+Total cost:
+  Cost of the project, it's calculated using the cost per hour of each developer,
+  multipled by the number of hours devoted to the project.
+
+Total profit:
+  It's the difference between the invoice and the cost (*invoice - cost*).
+
+Moved hours:
+  Number of hours moved out of the project. The moved hours are not taken into
+  account to calculate the deviation or the estimated invoice per hour.
+
+Est. hours invoice:
+  Estimated invoice per hour. It's calculated as *invoice / est. hours*.
+
+Work hours invoice:
+  Actual invoice per hour.  It's calculated as *invoice / worked hours*.
+
+Schedule:
+  Value of the field *schedule*.
+
+Type:
+  Value of the field *type*.
+
+Finally, double-clicking on a row will open the project details page for the
+corresponding project.

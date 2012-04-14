@@ -13,3 +13,4 @@ concepts to use PhpReport both for worker and manager profiles.
    * `User details <reports.html#user-details>`__
    * `User evaluation <reports.html#user-evaluation>`__
    * `Accumulated hours <reports.html#accumulated-hours>`__
+   * `Project evaluation <reports.html#project-evaluation>`__
