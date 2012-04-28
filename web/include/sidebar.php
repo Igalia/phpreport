@@ -114,6 +114,10 @@ var menuToolbar = new Ext.Toolbar({
         },
         new Ext.Toolbar.Fill(),
         {
+            text: 'Help', handler: onItemClick,
+            destination: "../help/user",
+            newWindow: true
+        },{
             text: 'Logout', handler: onItemClick,
             destination: "logout.php",
         }],
@@ -121,7 +125,11 @@ var menuToolbar = new Ext.Toolbar({
 
 function onItemClick(item){
     if (item.destination) {
-        window.location = item.destination;
+        if(item.newWindow) {
+            window.open(item.destination);
+        } else {
+            window.location = item.destination;
+        }
     } else {
         Ext.Msg.alert('Menu Click', 'The page "' + item.text +
                                     '" is not implemented yet.');
