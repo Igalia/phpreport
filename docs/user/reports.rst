@@ -280,3 +280,22 @@ in the other one. There are two extra columns,
 the user in the report time period (thus, it's the sum of all the different
 client/story columns) and the latter shows the proportion of hours of one user
 regarding all the work done in the project inside the same time period.
+
+Projects summary
+================
+
+.. figure:: i/project-summary-screen.png
+
+This report summarizes all the work registered by the tool, split by projects
+and workers or clients.
+
+It consists on two grids shown in two tabs. The first tab is the project/customer
+report, where all the hours are split by projects and customers; rows represent
+projects and columns represent customers.
+The second tab is the project/user report, where all the hours are split by
+projects and users; rows represent projects and columns represent users.
+
+In both grids there are two extra columns, *Total* and *Percentage*; the former
+shows the total number of hours devoted to the project (thus, it's the sum of
+all the different client/user columns) and the latter shows the proportion of
+hours of one project regarding the work done in all projects.
