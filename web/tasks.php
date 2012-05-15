@@ -938,6 +938,7 @@ Ext.onReady(function(){
                         (templateValues[6] != '')) ?
                     templateValues[6] :
                     'Template',
+                flex: 3,
                 handler: function () {
                     //create and populate a record
                     var newTask = new taskRecord();
@@ -970,6 +971,7 @@ Ext.onReady(function(){
             });
             var deleteButton = new Ext.Button({
                 text: 'Delete',
+                flex: 1,
                 handler: function () {
                     var row = this.findParentByType('panel');
 
