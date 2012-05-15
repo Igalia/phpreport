@@ -106,7 +106,7 @@ Project evaluation
 
 .. figure:: i/project-evaluation-screen.png
 
-This reports shows a list with projects and some data and statistics about them.
+This report shows a list with projects and some data and statistics about them.
 There are different filtering options to select the projects to be listed.
 
 In the top of the screen there are different filtering options to be applied to
@@ -197,3 +197,86 @@ Type:
 
 Finally, double-clicking on a row will open the project details page for the
 corresponding project.
+
+Project details
+===============
+
+.. figure:: i/project-details-screen.png
+
+In this report we can see the details of a specific project, and the time devoted
+to this project split by worker and customer or story.
+
+In the top of the screen there are different values and metrics for the project:
+
+Name:
+  Name of the project.
+
+Id:
+  Internal ID of the project.
+
+Init date:
+  Start date of the project.
+
+End date:
+  End date of the project.
+
+Active:
+  Activation status of the project. It will be red if the project has surpassed
+  the end date and it's still active; it will be green otherwise.
+
+Estimated hours:
+  Number of hours expected to be devoted to the project, entered by the manager
+  when the project is created.
+
+Moved hours:
+  Number of hours moved out of the project. The moved hours are not taken into
+  account to calculate the deviation or the estimated invoice per hour.
+
+Invoice:
+  Expected invoiced of the project, entered by the manager when the project is
+  created.
+
+Type:
+  Value of the field *type*.
+
+Work hours data: estimated hours:
+  Number of hours expected to be devoted to the project minus the moved hours.
+
+Work hours data: worked hours:
+  Actual number of hours devoted to the project.
+
+Work hours data: deviation:
+  Difference between the hours estimated and worked (*estimated - worked*).
+
+Work hours data: deviation %:
+  Percentage of the deviation regarding the estimation of hours:
+  *(estimated - worked) / estimated*.
+
+Price per hour data: estimated price:
+  Estimated invoice per hour. It's calculated as *invoice / est. hours*.
+
+Price per hour data: current price:
+  Actual invoice per hour.  It's calculated as *invoice / worked hours*.
+
+Price per hour data: deviation:
+  Absolute difference between the price estimated and actual (*estimated price
+  - current price*).
+
+Price per hour data: deviation %:
+  Percentage of the deviation regarding the estimation of hours:
+  *(estimated - worked) / estimated*.
+  Percentage of the price deviation regarding the original estimation:
+  *(estimated price - current price) / estimated price*.
+
+Below the project data, there are two date inputs to insert the report
+dates: if the start date is left empty, the default value is the date of the
+first task assigned to the project; if the end date is empty, the default valu
+is the current date.
+
+The results are shown two grids in the bottom  area of the screen; rows
+represent users and columns represent clients in one of the grids, and stories
+in the other one. There are two extra columns,
+*Total* and *Percentage*; the former shows the total number of hours invested by
+the user in the report time period (thus, it's the sum of all the different
+client/story columns) and the latter shows the proportion of hours of one user
+regarding all the work done in the project inside the same time period.
