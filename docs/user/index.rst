@@ -16,3 +16,5 @@ concepts to use PhpReport both for worker and manager profiles.
    * `Project evaluation <reports.html#project-evaluation>`__
    * `Project details <reports.html#project-details>`__
    * `Projects summary <reports.html#projects-summary>`__
+
+#. `Projects management <projects-management.html>`__
