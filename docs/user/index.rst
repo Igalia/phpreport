@@ -18,3 +18,4 @@ concepts to use PhpReport both for worker and manager profiles.
    * `Projects summary <reports.html#projects-summary>`__
 
 #. `Projects management <projects-management.html>`__
+#. `Users management <users-management.html>`__
