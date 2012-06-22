@@ -103,3 +103,51 @@ to save the changes. To delete a row you must select it with a single click and
 use the *Delete* button.
 
 .. WARNING:: Overlapping time periods among different rows are not allowed.
+
+Setting the area for a user
+================================
+
+Areas are the way to translate a department structure to PhpReport; you can
+assign a user to an area for a defined period of time.
+Like in the previous values, you will have to enter an *Init date* and
+*End date* for every value of user area in PhpReport. You can do it in the
+*Users management* screen, selecting one user (doing a single click on a row)
+and expanding the panel named *User Histories* located below the users grid.
+The second tab in this panel is *Area*:
+
+.. figure:: i/users-mgmt-area.png
+
+As you can see, every row has three values: *Init date*, *End date* and *Area*.
+To create a new row, you must use the *Add* button, and to edit a row you must
+double click on it. In both cases an inline edition row will appear and you will
+be able to enter the three values. Once you have entered them you can *Accept*
+to save the changes. To delete a row you must select it with a single click and
+use the *Delete* button.
+
+.. WARNING:: Overlapping time periods among different rows are not allowed.
+
+Setting the city for a user
+================================
+
+Finally, users may be assigned to a city. The city has influence in the working
+days of users, because they translate the public holidays of every city to user
+hours accountability. Public holidays work like weekends: users are not supposed
+to work in those days, and when they do, the hours are accounted as extra hours.
+
+This value may vary with time (e.g. a user moving to a work center located in
+a different city), so you will have to enter an *Init date* and
+*End date* for every value of user city in PhpReport. You can do it in the
+*Users management* screen, selecting one user (doing a single click on a row)
+and expanding the panel named *User Histories* located below the users grid.
+The second tab in this panel is *City*:
+
+.. figure:: i/users-mgmt-city.png
+
+As you can see, every row has three values: *Init date*, *End date* and *City*.
+To create a new row, you must use the *Add* button, and to edit a row you must
+double click on it. In both cases an inline edition row will appear and you will
+be able to enter the three values. Once you have entered them you can *Accept*
+to save the changes. To delete a row you must select it with a single click and
+use the *Delete* button.
+
+.. WARNING:: Overlapping time periods among different rows are not allowed.
