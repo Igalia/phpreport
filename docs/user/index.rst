@@ -21,3 +21,4 @@ concepts to use PhpReport both for worker and manager profiles.
 #. `Users management <users-management.html>`__
 #. `Clients management <clients-management.html>`__
 #. `Cities and work calendars management <cities-calendars-management.html>`__
+#. `Management of other entities <other-management.html>`__
