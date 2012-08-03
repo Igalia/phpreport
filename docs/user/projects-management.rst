@@ -9,8 +9,8 @@ section *Projects*.
 
 .. figure:: i/menu-data-mgmt-projects.png
 
-Create and edit projects
-============================
+Create, edit and delete projects
+===================================
 
 In the *Project management* screen you will see a grid containing all the
 projects, sorted by *start date* by default; this can be changed pressing on
@@ -65,10 +65,7 @@ The *Reset* button allows you to to return the data in the window to the
 original state, while the *Accept* and *Cancel* buttons will save or discard
 your changes, respectively.
 
-Project deletion
-=================
-
-With the *Delete* button located above the projects grid, you can remove the
+Finally, with the *Delete* button located above the projects grid you can remove the
 selected project. You will be asked for confirmation before actually trying to
 delete. If there are any assignations of tasks, clients or users to the project,
 you won't be allowed to delete it. You have to remove those assignations and try
