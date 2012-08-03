@@ -69,6 +69,10 @@ purpose:
   work per working day between two dates. PhpReport considers there are five
   working days per week, from Monday to Friday, excepting public holidays.
 
+* Extra hour compensations entity represents a moment in time where the
+  calculation of extra hours for a particular user is reset to a new figure,
+  ignoring all the previous history.
+
 .. figure:: i/working-day-classes.png
    :scale: 50
 
@@ -89,6 +93,8 @@ Relations between these entities:
   holiday entity can only be related with one city, so if the same date is a
   holiday in different cities there must be two entities with the same date but
   different relations.
+
+* A user can be associated with any number of extra hours compensation entities.
 
 Data model for project cost management
 ======================================
