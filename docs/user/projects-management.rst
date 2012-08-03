@@ -9,7 +9,7 @@ section *Projects*.
 
 .. figure:: i/menu-data-mgmt-projects.png
 
-Project creation and edition
+Create and edit projects
 ============================
 
 In the *Project management* screen you will see a grid containing all the

@@ -8,7 +8,7 @@ It can be accessed from the *Data management* menu, section *Clients*.
 
 .. figure:: i/menu-data-mgmt-clients.png
 
-Client creation, edition and deletion
+Create, edit and delete clients
 =====================================
 
 In the *Clients management* screen you will see a grid containing all the
@@ -46,7 +46,7 @@ for confirmation before actually trying to delete. If the client is assigned to
 some project you won't be allowed to delete it. You have to remove the existing
 assignations from projects or tasks to this client and try the deletion later.
 
-Sector creation, edition and deletion
+Create, edit and delete sectors
 =====================================
 
 In the *Clients management* screen you will also be able to maintain a list of

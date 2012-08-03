@@ -6,11 +6,11 @@ Management of other entities
 There are some other entities in PhpReport, not mentioned before, with their own
 management interfaces.
 
-Area creation, edition and deletion
+Create, edit and delete areas
 =====================================
 
 In the *Areas management* screen you will be able to create, edit and delete
-cities. It can be accessed from the *Data management* menu, section *Areas*.
+areas. It can be accessed from the *Data management* menu, section *Areas*.
 
 .. figure:: i/menu-data-mgmt-areas.png
 
@@ -30,7 +30,7 @@ for confirmation before actually trying to delete. If there are any users or
 projects assigned to that area, you won't be allowed
 to delete it. You have to remove these associations and try the deletion later.
 
-Extra hours compensation creation, edition and deletion
+Create, edit and delete extra hours compensations
 =======================================================
 
 In the *Hour compensations management* screen you will be able to create, edit

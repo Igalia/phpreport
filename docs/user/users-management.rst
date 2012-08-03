@@ -9,7 +9,7 @@ It can be accessed from the *Data management* menu, section *Users*.
 
 .. figure:: i/menu-data-mgmt-users.png
 
-User creation, edition and deletion
+Create, edit and delete users
 ===================================
 
 In the *Users management* screen you will see a grid containing all the

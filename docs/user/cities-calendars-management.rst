@@ -6,7 +6,7 @@ Cities and work calendars management
 PhpReport provides interfaces to create, edit and remove cities and the
 calendars attached to them.
 
-City creation, edition and deletion
+Create, edit and delete cities
 =====================================
 
 In the *Cities management* screen you will be able to create, edit and delete
