@@ -4,3 +4,6 @@
 #ignore backup files
 *~
 \#*\#
+
+#compiled help files
+help/*
