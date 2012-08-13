@@ -1,6 +1,28 @@
 NEWS
 ====
 
+Version 2.0 (13 Aug 2012)
+-------------------------------
+
+Release containing all the features considered for 2.0 milestone.
+
+Changes
+~~~~~~~
+
+* Written user documentation, integrated in the application.
+* Implemented a screen to create, edit and delete hour compensations.
+* Implemented a screen to create, edit and delete cities.
+* Implemented a screen to manage work calendars.
+* Upgraded Ext JS framework to the latest version in 3.x series, 3.4.0.
+* Reviewed permissions of the admin/user groups on some screens and services.
+* Reordered the menu bar, deleting the unused entries.
+* [Bug #131] Correct authorization problem related with project creation.
+* [Bug #136] Fix size of template creation and delete buttons.
+* [Bug #155] Prevent wrong calculation of project deviation.
+* [Bug #161] Prevent blank project details screen due to a null end date.
+* [Bug #168] Added holidays project to default installation.
+
+
 Version 2.0-beta2 (16 Sep 2011)
 -------------------------------
 
