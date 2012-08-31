@@ -76,9 +76,9 @@ class ExtraHoursReportAction extends Action {
      * @param UserVO $user the User whose Extra Hours report we want to retrieve.
      */
     public function __construct(DateTime $init, DateTime $end, UserVO $user = NULL) {
-    $this->init = $init;
-    $this->end = $end;
-    $this->user = $user;
+        $this->init = $init;
+        $this->end = $end;
+        $this->user = $user;
         $this->preActionParameter="EXTRA_HOURS_REPORT_PREACTION";
         $this->postActionParameter="EXTRA_HOURS_REPORT_POSTACTION";
     }
@@ -93,14 +93,14 @@ class ExtraHoursReportAction extends Action {
      * @return int the number of days since 1970-01-05.
      */
     private function daysFromEpoch(DateTime $date) {
-    $aux = date_create($date->format("Y-m-d"));    // <---- This code acts as a workaround with a PHP bug
+        $aux = date_create($date->format("Y-m-d"));    // <---- This code acts as a workaround with a PHP bug
 
-    // 1970-01-05 is a better epoch day, because it's Monday and can be
-      // used to compute the week day doing modulus
+        // 1970-01-05 is a better epoch day, because it's Monday and can be
+        // used to compute the week day doing modulus
 
-    $aux2 = $aux->diff(date_create("1970-01-05"));
-    $result =  $aux2->days;
-    return $result;
+        $aux2 = $aux->diff(date_create("1970-01-05"));
+        $result =  $aux2->days;
+        return $result;
     }
 
 
@@ -113,27 +113,27 @@ class ExtraHoursReportAction extends Action {
      * @return int the number of working days between the two dates.
      */
     private function numWorkDays(DateTime $init, DateTime $end) {
-      // Taking on account the things said in function num_weekend_days,
-      // this is a function that works in a similar way to get the number
-      // of *work* days (that means excluding weekends) between two dates.
+        // Taking on account the things said in function num_weekend_days,
+        // this is a function that works in a similar way to get the number
+        // of *work* days (that means excluding weekends) between two dates.
 
-      // NOTE: -1 because we also include the start date
-      // (init<=x<=end, INSTEAD OF init<x<=end)
-      $days_epoch_to_init=$this->daysFromEpoch($init)-1;
-      $days_epoch_to_end=$this->daysFromEpoch($end);
-          $weekend_days_epoch_to_init=floor($days_epoch_to_init/7)*2;
-      if ($days_epoch_to_init%7==5) $weekend_days_epoch_to_init+=1;
-      else if ($days_epoch_to_init%7==6) $weekend_days_epoch_to_init+=2;
+        // NOTE: -1 because we also include the start date
+        // (init<=x<=end, INSTEAD OF init<x<=end)
+        $days_epoch_to_init=$this->daysFromEpoch($init)-1;
+        $days_epoch_to_end=$this->daysFromEpoch($end);
+        $weekend_days_epoch_to_init=floor($days_epoch_to_init/7)*2;
+        if ($days_epoch_to_init%7==5) $weekend_days_epoch_to_init+=1;
+        else if ($days_epoch_to_init%7==6) $weekend_days_epoch_to_init+=2;
 
-      $weekend_days_epoch_to_end=floor($days_epoch_to_end/7)*2;
-      if ($days_epoch_to_end%7==5) $weekend_days_epoch_to_end+=1;
-      else if ($days_epoch_to_end%7==6) $weekend_days_epoch_to_end+=2;
+        $weekend_days_epoch_to_end=floor($days_epoch_to_end/7)*2;
+        if ($days_epoch_to_end%7==5) $weekend_days_epoch_to_end+=1;
+        else if ($days_epoch_to_end%7==6) $weekend_days_epoch_to_end+=2;
 
-      $result = $days_epoch_to_end - $days_epoch_to_init -
+        $result = $days_epoch_to_end - $days_epoch_to_init -
             ($weekend_days_epoch_to_end - $weekend_days_epoch_to_init);
 
 
-      return $result;
+        return $result;
     }
 
 
@@ -153,120 +153,138 @@ class ExtraHoursReportAction extends Action {
      */
     private function netExtraHours(DateTime $init, DateTime $end, UserVO $user = NULL) {
 
+        $taskDao = DAOFactory::getTaskDAO();
+        $commonDao = DAOFactory::getCommonEventDAO();
+        $journeyHistoryDao = DAOFactory::getJourneyHistoryDAO();
+        $cityHistoryDao = DAOFactory::getCityHistoryDAO();
 
-    $taskDao = DAOFactory::getTaskDAO();
-    $commonDao = DAOFactory::getCommonEventDAO();
-    $journeyHistoryDao = DAOFactory::getJourneyHistoryDAO();
-    $cityHistoryDao = DAOFactory::getCityHistoryDAO();
-
-    if (is_null($user))
-    {
-        $groupDAO = DAOFactory::getUserGroupDAO();
-        $users = $groupDAO->getUsersByUserGroupName(ConfigurationParametersManager::getParameter("ALL_USERS_GROUP"));
-    }
-    else
-    {
-        $users = array($user);
-    }
-
-    $userWork = array();
-
-    foreach($users as $userVO)
-    {
-        if (!is_null($userVO->getId()))
+        if (is_null($user))
         {
-            $hoursWorked = $taskDao->getTaskReport($userVO, $init, $end, "USER");
-
-            $journeyHistory = $journeyHistoryDao->getByIntervals($init, $end, $userVO->getId());
-
-            $cityHistory = $cityHistoryDao->getByIntervals($init, $end, $userVO->getId());
-
-            if (is_null($hoursWorked[0]['add_hours']))
-                $userWork[$userVO->getLogin()]["total_hours"] = 0;
-            else
-                $userWork[$userVO->getLogin()]["total_hours"] = $hoursWorked[0]['add_hours'];
-            $userWork[$userVO->getLogin()]["workable_hours"] = 0;
-
-            $histories = array();
-
-            $i = 0;
-
-            foreach((array) $journeyHistory as $journeyRow)
-                foreach((array) $cityHistory as $cityRow)
-                {
-
-                    $newPeriod = FALSE;
-
-                    // We check if the history entries have a commmon period (we first check if their end dates are null, so we know what to check next)
-
-                    if (!is_null($journeyRow->getEndDate()))
-                        if (!is_null($cityRow->getEndDate()))
-                        {
-                            if (!(($journeyRow->getInitDate() < $cityRow->getInitDate()) && ($journeyRow->getEndDate() < $cityRow->getInitDate())) && !(($journeyRow->getInitDate() > $cityRow->getEndDate()) && ($journeyRow->getEndDate() > $cityRow->getEndDate())))
-                                $newPeriod = TRUE;
-                        } else
-                        {
-                            if (!(($journeyRow->getInitDate() < $cityRow->getInitDate()) && ($journeyRow->getEndDate() < $cityRow->getInitDate())))
-                                $newPeriod = TRUE;
-                        }
-
-                    else
-                    {
-                        if (!is_null($cityRow->getEndDate()))
-                        {
-                            if (!(($cityRow->getInitDate() < $journeyRow->getInitDate()) && ($cityRow->getEndDate() < $journeyRow->getInitDate())))
-                                $newPeriod = TRUE;
-                        }
-                        else $newPeriod = TRUE;
-                    }
-
-                    if ($newPeriod)
-                    {
-                        $histories[$i]["init"] = $journeyRow->getInitDate();
-                        $histories[$i]["end"] = $journeyRow->getEndDate();
-                        $histories[$i]["journey"] = $journeyRow->getJourney();
-
-                        if (($histories[$i]["init"] < $cityRow->getInitDate()) && ( is_null($histories[$i]["end"]) || ($histories[$i]["end"] > $cityRow->getInitDate())))
-                            $histories[$i]["init"] = $cityRow->getInitDate();
-
-                        if (is_null($histories[$i]["end"]) || (($histories[$i]["end"] > $cityRow->getEndDate())) && ($histories[$i]["init"] < $cityRow->getEndDate()))
-                            $histories[$i]["end"] = $cityRow->getEndDate();
-
-                        // If both dates are NULL, then end date is nowadays
-
-                        if (is_null($histories[$i]["end"]))
-                            $histories[$i]["end"] = new DateTime();
-
-                        $histories[$i]["city"] = $cityRow->getCityId();
-
-                        $i++;
-                    }
-                }
-
-            $hours = 0;
-
-            foreach((array) $histories as $row)
-            {
-
-                if ($row["init"] < $init)
-                    $row["init"] = $init;
-
-                if ($row["end"] > $end)
-                    $row["end"] = $end;
-
-                $work = $this->numWorkDays($row["init"], $row["end"]);
-                $holidays = count($commonDao->getByCityIdDates($row["city"], $row["init"], $row["end"]));
-                $workHours = ($work - $holidays) * $row["journey"];
-                $userWork[$userVO->getLogin()]["workable_hours"] += $workHours;
-
-            }
-
-            $userWork[$userVO->getLogin()]["extra_hours"] = $userWork[$userVO->getLogin()]["total_hours"] - $userWork[$userVO->getLogin()]["workable_hours"];
+            $groupDAO = DAOFactory::getUserGroupDAO();
+            $users = $groupDAO->getUsersByUserGroupName(
+                    ConfigurationParametersManager::getParameter("ALL_USERS_GROUP"));
+        }
+        else
+        {
+            $users = array($user);
         }
 
-    }
+        $userWork = array();
 
-    return $userWork;
+        foreach($users as $userVO)
+        {
+            if (!is_null($userVO->getId()))
+            {
+                $hoursWorked = $taskDao->
+                        getTaskReport($userVO, $init, $end, "USER");
+
+                $journeyHistory = $journeyHistoryDao->
+                        getByIntervals($init, $end, $userVO->getId());
+
+                $cityHistory = $cityHistoryDao->
+                        getByIntervals($init, $end, $userVO->getId());
+
+                if (is_null($hoursWorked[0]['add_hours']))
+                    $userWork[$userVO->getLogin()]["total_hours"] = 0;
+                else
+                    $userWork[$userVO->getLogin()]["total_hours"] =
+                            $hoursWorked[0]['add_hours'];
+
+                $userWork[$userVO->getLogin()]["workable_hours"] = 0;
+
+                $histories = array();
+
+                $i = 0;
+
+                foreach((array) $journeyHistory as $journeyRow)
+                    foreach((array) $cityHistory as $cityRow)
+                    {
+
+                        $newPeriod = FALSE;
+
+                        // We check if the history entries have a commmon period
+                        //(we first check if their end dates are null, so we know what to check next)
+
+                        if (!is_null($journeyRow->getEndDate()))
+                            if (!is_null($cityRow->getEndDate()))
+                            {
+                                if (!(($journeyRow->getInitDate() < $cityRow->getInitDate())
+                                        && ($journeyRow->getEndDate() < $cityRow->getInitDate()))
+                                        && !(($journeyRow->getInitDate() > $cityRow->getEndDate())
+                                        && ($journeyRow->getEndDate() > $cityRow->getEndDate())))
+                                    $newPeriod = TRUE;
+                            } else
+                            {
+                                if (!(($journeyRow->getInitDate() < $cityRow->getInitDate())
+                                        && ($journeyRow->getEndDate() < $cityRow->getInitDate())))
+                                    $newPeriod = TRUE;
+                            }
+
+                        else
+                        {
+                            if (!is_null($cityRow->getEndDate()))
+                            {
+                                if (!(($cityRow->getInitDate() < $journeyRow->getInitDate())
+                                        && ($cityRow->getEndDate() < $journeyRow->getInitDate())))
+                                    $newPeriod = TRUE;
+                            }
+                            else $newPeriod = TRUE;
+                        }
+
+                        if ($newPeriod)
+                        {
+                            $histories[$i]["init"] = $journeyRow->getInitDate();
+                            $histories[$i]["end"] = $journeyRow->getEndDate();
+                            $histories[$i]["journey"] = $journeyRow->getJourney();
+
+                            if (($histories[$i]["init"] < $cityRow->getInitDate())
+                                    && ( is_null($histories[$i]["end"])
+                                    || ($histories[$i]["end"] > $cityRow->getInitDate())))
+                                $histories[$i]["init"] = $cityRow->getInitDate();
+
+                            if (is_null($histories[$i]["end"])
+                                    || (($histories[$i]["end"] > $cityRow->getEndDate()))
+                                    && ($histories[$i]["init"] < $cityRow->getEndDate()))
+                                $histories[$i]["end"] = $cityRow->getEndDate();
+
+                            // If both dates are NULL, then end date is nowadays
+
+                            if (is_null($histories[$i]["end"]))
+                                $histories[$i]["end"] = new DateTime();
+
+                            $histories[$i]["city"] = $cityRow->getCityId();
+
+                            $i++;
+                        }
+                    }
+
+                $hours = 0;
+
+                foreach((array) $histories as $row)
+                {
+
+                    if ($row["init"] < $init)
+                        $row["init"] = $init;
+
+                    if ($row["end"] > $end)
+                        $row["end"] = $end;
+
+                    $work = $this->numWorkDays($row["init"], $row["end"]);
+                    $holidays = count($commonDao->
+                            getByCityIdDates($row["city"], $row["init"], $row["end"]));
+                    $workHours = ($work - $holidays) * $row["journey"];
+                    $userWork[$userVO->getLogin()]["workable_hours"] += $workHours;
+
+                }
+
+                $userWork[$userVO->getLogin()]["extra_hours"] =
+                        $userWork[$userVO->getLogin()]["total_hours"]
+                        - $userWork[$userVO->getLogin()]["workable_hours"];
+            }
+
+        }
+
+        return $userWork;
     }
 
 
@@ -294,91 +312,103 @@ class ExtraHoursReportAction extends Action {
      */
     protected function doExecute() {
 
+        $extraHourDao = DAOFactory::getExtraHourDAO();
+        $userDAO = DAOFactory::getUserDAO();
 
-    $extraHourDao = DAOFactory::getExtraHourDAO();
-    $userDAO = DAOFactory::getUserDAO();
-
-    if (is_null($this->user))
-    {
-        $groupDAO = DAOFactory::getUserGroupDAO();
-        $users = $groupDAO->getUsersByUserGroupName(ConfigurationParametersManager::getParameter("ALL_USERS_GROUP"));
-    }
-    else
-    {
-        if (is_null($this->user->getLogin()))
+        if (is_null($this->user))
         {
-            if (!is_null($this->user->getId()))
-                $this->user = $userDAO->getById($this->user->getId());
+            $groupDAO = DAOFactory::getUserGroupDAO();
+            $users = $groupDAO->getUsersByUserGroupName(
+                    ConfigurationParametersManager::getParameter("ALL_USERS_GROUP"));
         }
         else
-            if (is_null($this->user->getId()))
-                $this->user = $userDAO->getByUserLogin($this->user->getLogin());
-
-        $users[] = $this->user;
-    }
-
-    $addResults["total_hours"] = 0;
-    $addResults["workable_hours"] = 0;
-    $addResults["extra_hours"] = 0;
-    $addResults["total_extra_hours"] = 0;
-
-
-    foreach ((array) $users as $user)
-    {
-
-        $work = $this->netExtraHours($this->init, $this->end, $user);
-
-        $previous = $extraHourDao->getLastByUserId($user->getId(), $this->end);
-
-        if (!is_null($previous)) {
-          if ($previous->getDate() < $this->init)
-              $previousInit= $previous->getDate()->add(new DateInterval("P1D"));
-          else
-            $previousInit= $previous->getDate();
-          $previousExtraHours[$user->getLogin()]=$previous->getHours();
-        } else {
-          $previousInit=date_create("1900-01-01");
-          $previousExtraHours[$user->getLogin()]=0;
-        }
-
-        $auxDate = clone ($this->init);
-        if ($previousInit < $this->init)
-            $auxDate = $auxDate->sub(new DateInterval("P1D"));
-        if ($previousInit > $auxDate)
         {
-            $auxOtherExtraHours = $this->netExtraHours($auxDate, $previousInit, $user);
-            $auxOtherExtraHours[$user->getLogin()]["extra_hours"] = (-1) * $auxOtherExtraHours[$user->getLogin()]["extra_hours"];
-        } else
-            if ($previousInit != $auxDate)
-                $auxOtherExtraHours = $this->netExtraHours($previousInit, $auxDate, $user);
-            else
-                $auxOtherExtraHours = 0;
-
-        $otherExtraHours[$user->getLogin()] = $auxOtherExtraHours[$user->getLogin()];
-
-        if (!is_null($previous))
-        {
-            if ($previous->getDate() >= $this->init)
+            if (is_null($this->user->getLogin()))
             {
-                $work[$user->getLogin()]["extra_hours"] += $otherExtraHours[$user->getLogin()]["extra_hours"] + $previousExtraHours[$user->getLogin()];
-                $totalExtraHours[$user->getLogin()] = $work[$user->getLogin()]["extra_hours"];
+                if (!is_null($this->user->getId()))
+                    $this->user = $userDAO->getById($this->user->getId());
             }
-            else $totalExtraHours[$user->getLogin()] = $work[$user->getLogin()]["extra_hours"] + $otherExtraHours[$user->getLogin()]["extra_hours"] + $previousExtraHours[$user->getLogin()];
-        } else $totalExtraHours[$user->getLogin()] = $work[$user->getLogin()]["extra_hours"] + $otherExtraHours[$user->getLogin()]["extra_hours"] + $previousExtraHours[$user->getLogin()];
+            else
+                if (is_null($this->user->getId()))
+                    $this->user = $userDAO->getByUserLogin($this->user->getLogin());
 
-        $addResults["total_hours"] += $work[$user->getLogin()]["total_hours"];
-        $addResults["workable_hours"] += $work[$user->getLogin()]["workable_hours"];
-        $addResults["extra_hours"] += $work[$user->getLogin()]["extra_hours"];
-        $addResults["total_extra_hours"] += $totalExtraHours[$user->getLogin()];
-        $work[$user->getLogin()]["total_extra_hours"] = $totalExtraHours[$user->getLogin()];
+            $users[] = $this->user;
+        }
 
-        $allWork[$user->getLogin()] = $work[$user->getLogin()];
+        $addResults["total_hours"] = 0;
+        $addResults["workable_hours"] = 0;
+        $addResults["extra_hours"] = 0;
+        $addResults["total_extra_hours"] = 0;
+
+
+        foreach ((array) $users as $user)
+        {
+
+            $work = $this->netExtraHours($this->init, $this->end, $user);
+
+            $previous = $extraHourDao->getLastByUserId($user->getId(), $this->end);
+
+            if (!is_null($previous)) {
+                if ($previous->getDate() < $this->init)
+                    $previousInit= $previous->getDate()->add(new DateInterval("P1D"));
+                else
+                    $previousInit= $previous->getDate();
+                $previousExtraHours[$user->getLogin()]=$previous->getHours();
+            } else {
+                $previousInit=date_create("1900-01-01");
+                $previousExtraHours[$user->getLogin()]=0;
+            }
+
+            $auxDate = clone ($this->init);
+            if ($previousInit < $this->init)
+                $auxDate = $auxDate->sub(new DateInterval("P1D"));
+            if ($previousInit > $auxDate)
+            {
+                $auxOtherExtraHours = $this->netExtraHours($auxDate, $previousInit, $user);
+                $auxOtherExtraHours[$user->getLogin()]["extra_hours"] =
+                        (-1) * $auxOtherExtraHours[$user->getLogin()]["extra_hours"];
+            } else
+                if ($previousInit != $auxDate)
+                    $auxOtherExtraHours = $this->netExtraHours($previousInit, $auxDate, $user);
+                else
+                    $auxOtherExtraHours = 0;
+
+            $otherExtraHours[$user->getLogin()] = $auxOtherExtraHours[$user->getLogin()];
+
+            if (!is_null($previous))
+            {
+                if ($previous->getDate() >= $this->init)
+                {
+                    $work[$user->getLogin()]["extra_hours"] +=
+                            $otherExtraHours[$user->getLogin()]["extra_hours"]
+                            + $previousExtraHours[$user->getLogin()];
+                    $totalExtraHours[$user->getLogin()] =
+                            $work[$user->getLogin()]["extra_hours"];
+                }
+                else
+                    $totalExtraHours[$user->getLogin()] =
+                            $work[$user->getLogin()]["extra_hours"]
+                            + $otherExtraHours[$user->getLogin()]["extra_hours"]
+                            + $previousExtraHours[$user->getLogin()];
+            } else
+                $totalExtraHours[$user->getLogin()] =
+                        $work[$user->getLogin()]["extra_hours"]
+                        + $otherExtraHours[$user->getLogin()]["extra_hours"]
+                        + $previousExtraHours[$user->getLogin()];
+
+            $addResults["total_hours"] += $work[$user->getLogin()]["total_hours"];
+            $addResults["workable_hours"] += $work[$user->getLogin()]["workable_hours"];
+            $addResults["extra_hours"] += $work[$user->getLogin()]["extra_hours"];
+            $addResults["total_extra_hours"] += $totalExtraHours[$user->getLogin()];
+            $work[$user->getLogin()]["total_extra_hours"] = $totalExtraHours[$user->getLogin()];
+
+            $allWork[$user->getLogin()] = $work[$user->getLogin()];
 
         }
 
-    $results = array($addResults, $allWork);
+        $results = array($addResults, $allWork);
 
-    return $results;
+        return $results;
     }
 
 }
@@ -392,10 +422,11 @@ $dao = DAOFactory::getUserDAO();
 //$user = $dao->getByUserLogin("jaragunde");
 
 if (is_null($user))
-    {
-        $groupDAO = DAOFactory::getUserGroupDAO();
-        $users = $groupDAO->getUsersByUserGroupName(ConfigurationParametersManager::getParameter("ALL_USERS_GROUP"));
-    }
+{
+    $groupDAO = DAOFactory::getUserGroupDAO();
+    $users = $groupDAO->getUsersByUserGroupName(
+            ConfigurationParametersManager::getParameter("ALL_USERS_GROUP"));
+}
 else
     $users[] = $user;
 
