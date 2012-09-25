@@ -564,6 +564,26 @@ class DAOFactory {
     return new $className;
   }
 
+    /** Config DAO creator
+     *
+     * This function returns a new instance of {@link ConfigDAO}.
+     *
+     * @return ConfigDAO a new instance of {@link ConfigDAO}.
+     * @throws {@link UnknownParameterException}
+     */
+  public static function getConfigDAO() {
+    try {
+      $className = ConfigurationParametersManager::getParameter('CONFIG_DAO');
+    }
+    catch(UnknownParameterException $e) {
+      $backend = ConfigurationParametersManager::getParameter('DAO_BACKEND');
+      $className = $backend . 'ConfigDAO';
+    }
+
+    include_once(PHPREPORT_ROOT . '/model/dao/ConfigDAO/' . $className . ".php");
+    return new $className;
+  }
+
 }
 
 

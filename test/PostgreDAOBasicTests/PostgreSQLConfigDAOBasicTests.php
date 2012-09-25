@@ -29,7 +29,7 @@
 
 define('PHPREPORT_ROOT', __DIR__ . '/../../');
 
-include_once(PHPREPORT_ROOT . '/model/dao/ConfigDAO/PostgreSQLConfigDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 
-$dao = new PostgreSQLConfigDAO();
+$dao = DAOFactory::getConfigDAO();
 var_dump($dao->getVersionNumber());
