@@ -64,4 +64,32 @@ class PostgreSQLConfigDAO extends ConfigDAO {
         }
     }
 
+    /** Query PhpReport task block configuration.
+     *
+     * Check if PhpReport configuration allows writing tasks on the specified
+     * date.
+     *
+     * @return boolean returns wether tasks for the speficied date can be
+     *         written or not.
+     */
+    public function isWriteAllowedForDate(DateTime $date){
+        $sql = "SELECT block_tasks_by_time_enabled FROM config";
+        $enabled = $this->execute($sql);
+
+        $sql = "SELECT block_tasks_by_time_number_of_days FROM config";
+        $days = $this->execute($sql);
+
+        if(!$enabled[0] || is_null($days[0]) || $days[0] == 0) {
+            return true;
+        }
+
+        //times are reset to 0:00 because we don't need it
+        $dateNotWritable = new DateTime();
+        $dateNotWritable->setTime(0,0);
+        $dateNotWritable->sub(new DateInterval('P'.$days[0].'D'));
+        $date->setTime(0,0);
+
+        return $date > $dateNotWritable;
+    }
+
 }
