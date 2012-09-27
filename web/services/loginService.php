@@ -43,10 +43,11 @@
 
     $userPassword = $_GET['password'];
 
-    //$userLogin = 'jjjameson';
-
-    //$userPassword = 'jaragunde';
-
+    /* If there are Http authentication data, we try to log in using it */
+    if (isset($_SERVER['PHP_AUTH_USER'])) {
+        $userLogin = $_SERVER['PHP_AUTH_USER'];
+        $userPassword = $_SERVER['PHP_AUTH_PW'];
+    }
 
     $string = "";
 
