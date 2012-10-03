@@ -114,7 +114,9 @@ $permissions = array(
         //hour compensations management
         '/services/createExtraHourVOsService.php',
         '/services/updateExtraHourVOsService.php', '/services/deleteExtraHourVOsService.php',
-        '/hourCompensationManagement.php')
+        '/hourCompensationManagement.php',
+        //system settings
+        '/settings.php')
 );
 
 /** Admin permissions array
