@@ -28,6 +28,7 @@
  */
 
 include_once(PHPREPORT_ROOT . '/model/dao/ConfigDAO/ConfigDAO.php');
+include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
 
 /** DAO for Config in PostgreSQL
  *
@@ -90,6 +91,28 @@ class PostgreSQLConfigDAO extends ConfigDAO {
         $date->setTime(0,0);
 
         return $date > $dateNotWritable;
+    }
+
+    /** Store PhpReport task block configuration.
+     *
+     * Change PhpReport configuration to allow or prevent writing tasks based on
+     * the date of those tasks.
+     *
+     * @param boolean $enabled Enable of disable the task block feature.
+     * @param int $numberOfDays Set the number of days in the past when tasks
+     *        tasks cannot be altered.
+     * @return boolean returns wether changes were saved or not.
+     */
+    public function setTaskBlockConfiguration($enabled, $numberOfDays) {
+        $sql = "UPDATE config SET " .
+                "block_tasks_by_time_number_of_days =" .
+                DBPostgres::checkNull($numberOfDays) . "," .
+                "block_tasks_by_time_enabled = " .
+                DBPostgres::boolToString($enabled);
+
+        $res = pg_query($this->connect, $sql);
+
+        return ($res != NULL);
     }
 
 }

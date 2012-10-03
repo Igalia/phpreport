@@ -33,5 +33,8 @@ include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 
 $dao = DAOFactory::getConfigDAO();
 var_dump($dao->getVersionNumber());
-var_dump($dao->isWriteAllowedForDate(new DateTime()));
-var_dump($dao->isWriteAllowedForDate(new DateTime('2000-01-01')));
+var_dump($dao->setTaskBlockConfiguration(true, 1));
+var_dump($dao->isWriteAllowedForDate(new DateTime())); //true
+var_dump($dao->isWriteAllowedForDate(new DateTime('2000-01-01'))); //false
+var_dump($dao->setTaskBlockConfiguration(false, null));
+var_dump($dao->isWriteAllowedForDate(new DateTime('2000-01-01'))); //true
