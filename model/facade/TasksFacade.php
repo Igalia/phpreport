@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009-2012 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -27,6 +27,7 @@
  * @package PhpReport
  * @subpackage facade
  * @author Jorge López Fernández <jlopez@igalia.com>
+ * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
 
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateReportAction.php');
@@ -48,6 +49,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectUserStoryReportAct
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserTasksByDateAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserTasksByLoginDateAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/IsWriteAllowedForDateAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/SetTaskBlockConfigurationAction.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/TaskVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
@@ -464,6 +466,22 @@ abstract class TasksFacade {
     static function IsWriteAllowedForDate(DateTime $date) {
 
         $action = new IsWriteAllowedForDateAction($date);
+        return $action->execute();
+    }
+
+    /** SetTaskBlockConfiguration Action
+     *
+     * Change PhpReport configuration to allow or prevent writing tasks based on
+     * the date of those tasks.
+     *
+     * @param boolean $enabled Enable of disable the task block feature.
+     * @param int $numberOfDays Set the number of days in the past when tasks
+     *        tasks cannot be altered.
+     * @return boolean returns wether changes were saved or not.
+     */
+    static function SetTaskBlockConfiguration($enabled, $numberOfDays) {
+
+        $action = new SetTaskBlockConfigurationAction($enabled, $numberOfDays);
         return $action->execute();
     }
 
