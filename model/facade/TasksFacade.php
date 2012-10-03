@@ -47,6 +47,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectUserCustomerReport
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectUserStoryReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserTasksByDateAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserTasksByLoginDateAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/IsWriteAllowedForDateAction.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/TaskVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
@@ -449,6 +450,21 @@ abstract class TasksFacade {
 
     return $action->execute();
 
+    }
+
+    /** IsWriteAllowedForDateAction Action
+     *
+     * This function is used to know the status of the configuration regarding
+     * the ability to save tasks on a specific date.
+     *
+     * @param DateTime $date the date to check on the configuration.
+     * @return boolean true if task save is enabled for that date, false
+     *         otherwise.
+     */
+    static function IsWriteAllowedForDate(DateTime $date) {
+
+        $action = new IsWriteAllowedForDateAction($date);
+        return $action->execute();
     }
 
 }

@@ -37,6 +37,17 @@ if(isset($_GET["date"]))
 else
     $date = date("Y-m-d");
 
+/* Check if the date is enabled to write */
+if(!TasksFacade::IsWriteAllowedForDate(new DateTime($date))) {
+    echo _("You are not allowed to edit tasks for this date");
+
+    /* Include the footer to close the header */
+    include("include/footer.php");
+
+    /* Exit the script */
+    exit();
+}
+
 ?>
 <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus.js"></script>
 <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus-holidays.js"></script>
