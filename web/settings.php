@@ -47,6 +47,16 @@ if(isset($_POST["numberOfDays"])) {
 define('PAGE_TITLE', "PhpReport - Settings");
 include("include/header.php");
 include("include/sidebar.php");
+
+/* Read saved configuration */
+$config = TasksFacade::GetTaskBlockConfiguration();
+
+echo '<script type="text/javascript">';
+echo 'var enabled = ';
+echo $config['enabled']?'true; ':'false; ';
+echo 'var numberOfDays = ' . $config['numberOfDays'] . ';';
+echo '</script>';
+
 ?>
 
 <div id="content">
@@ -73,10 +83,12 @@ Ext.onReady(function () {
                 fieldLabel: 'Block enabled',
                 xtype: 'checkbox',
                 name: 'enabled',
+                checked: enabled,
             },{
                 fieldLabel: 'Number of days',
                 xtype: 'numberfield',
-                name: 'numberOfDays'
+                name: 'numberOfDays',
+                value: numberOfDays,
             }
         ],
         buttons: [{

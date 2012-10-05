@@ -46,6 +46,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectTtypeReportAction.
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserProjectReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectUserCustomerReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectUserStoryReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetTaskBlockConfigurationAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserTasksByDateAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserTasksByLoginDateAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/IsWriteAllowedForDateAction.php');
@@ -482,6 +483,21 @@ abstract class TasksFacade {
     static function SetTaskBlockConfiguration($enabled, $numberOfDays) {
 
         $action = new SetTaskBlockConfigurationAction($enabled, $numberOfDays);
+        return $action->execute();
+    }
+
+    /** GetTaskBlockConfiguration Action
+     *
+     * Return all the values implicated in the configuration of task block by
+     * date.
+     *
+     * @return array "enabled" returns wether task block is enabled or not.
+     *         "numberOfDays" returns the number of days configured as time
+     *         limit.
+     */
+    static function GetTaskBlockConfiguration() {
+
+        $action = new GetTaskBlockConfigurationAction();
         return $action->execute();
     }
 
