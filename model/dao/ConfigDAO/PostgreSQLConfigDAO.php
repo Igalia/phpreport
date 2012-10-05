@@ -76,11 +76,12 @@ class PostgreSQLConfigDAO extends ConfigDAO {
     public function isWriteAllowedForDate(DateTime $date){
         $sql = "SELECT block_tasks_by_time_enabled FROM config";
         $enabled = $this->execute($sql);
+        $enabled = (strtolower($enabled[0]) == "t");
 
         $sql = "SELECT block_tasks_by_time_number_of_days FROM config";
         $days = $this->execute($sql);
 
-        if(!$enabled[0] || is_null($days[0]) || $days[0] == 0) {
+        if(!$enabled || is_null($days[0]) || $days[0] == 0) {
             return true;
         }
 
