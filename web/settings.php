@@ -40,7 +40,7 @@ if(isset($_POST["numberOfDays"])) {
     if(isset($_POST["enabled"])) {
         $enabled = true;
     }
-    var_dump(TasksFacade::SetTaskBlockConfiguration($enabled, $_POST["numberOfDays"]));
+    $saved = TasksFacade::SetTaskBlockConfiguration($enabled, $_POST["numberOfDays"]);
 }
 
 /* Include the generic header and sidebar*/
@@ -55,6 +55,14 @@ echo '<script type="text/javascript">';
 echo 'var enabled = ';
 echo $config['enabled']?'true; ':'false; ';
 echo 'var numberOfDays = ' . $config['numberOfDays'] . ';';
+if (isset($saved)) {
+    echo 'var saved = true; ';
+    echo 'var errorOnSave = ';
+    echo $saved? 'true; ': 'false; ';
+}
+else {
+    echo 'var saved = false; ';
+}
 echo '</script>';
 
 ?>
@@ -65,6 +73,17 @@ echo '</script>';
 
 <script>
 Ext.onReady(function () {
+    //show save results if any
+    if(saved) {
+        var App = new Ext.App({});
+        if (errorOnSave) {
+            App.setAlert(true, "Configuration correctly saved");
+        }
+        else {
+            App.setAlert(false,
+                    "Some error happened, configuration was not saved");
+        }
+    }
 
     var sendFormFunction = function () {
         form.getForm().getEl().dom.action = 'settings.php';
