@@ -94,6 +94,22 @@
                                 }
                                 break;
 
+                        case "date":
+                            $dateFormat = $parser->getAttribute("format");
+                            if (is_null($dateFormat)) {
+                                $dateFormat = "Y-m-d";
+                            }
+                            $parser->read();
+                            if ($parser->hasValue) {
+                                $dateString = $parser->value;
+                                $date = date_create_from_format(
+                                        $dateFormat, $dateString);
+                                $taskVO->setDate($date);
+                                $parser->next();
+                                $parser->next();
+                            }
+                            break;
+
                         default:    $parser->next();
                                 break;
 
