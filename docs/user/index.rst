@@ -51,3 +51,5 @@ concepts to use PhpReport both for worker and manager profiles.
 
    * `Create, edit and delete areas <other-management.html#create-edit-and-delete-areas>`__
    * `Create, edit and delete extra hours compensations <other-management.html#create-edit-and-delete-extra-hours-compensations>`__
+
+#. `Application settings <settings-management.html>`__
