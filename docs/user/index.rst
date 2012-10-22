@@ -13,6 +13,7 @@ concepts to use PhpReport both for worker and manager profiles.
    * `Managing tasks <tasks.html#managing-tasks>`__
    * `Using templates <tasks.html#using-templates>`__
    * `Copying tasks from another date <tasks.html#copying-tasks-from-another-date>`__
+   * `Blocked tasks <tasks.html#blocked-tasks>`__
 
 #. `Reports <reports.html>`__
 
