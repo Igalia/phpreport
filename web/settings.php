@@ -37,10 +37,14 @@ include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
 /* There are POST data: we try to save the settings */
 if(isset($_POST["numberOfDays"])) {
     $enabled = false;
+    $numberOfDays = null;
     if(isset($_POST["enabled"])) {
         $enabled = true;
     }
-    $saved = TasksFacade::SetTaskBlockConfiguration($enabled, $_POST["numberOfDays"]);
+    if(!empty($_POST["numberOfDays"])) {
+        $numberOfDays = $_POST["numberOfDays"];
+    }
+    $saved = TasksFacade::SetTaskBlockConfiguration($enabled, $numberOfDays);
 }
 
 /* Include the generic header and sidebar*/
@@ -54,7 +58,12 @@ $config = TasksFacade::GetTaskBlockConfiguration();
 echo '<script type="text/javascript">';
 echo 'var enabled = ';
 echo $config['enabled']?'true; ':'false; ';
-echo 'var numberOfDays = ' . $config['numberOfDays'] . ';';
+if($config['numberOfDays'] != null) {
+    echo 'var numberOfDays = ' . $config['numberOfDays'] . ';';
+}
+else {
+    echo 'var numberOfDays;';
+}
 if (isset($saved)) {
     echo 'var saved = true; ';
     echo 'var errorOnSave = ';
