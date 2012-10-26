@@ -44,6 +44,12 @@ Ext.onReady(function () {
 
     var userId = <?php echo $_SESSION['user']->getId()?>;
 
+    /* Schema of the information about customers */
+    var customerRecord = new Ext.data.Record.create([
+        {name:'id'},
+        {name:'name'},
+    ]);
+
     /* Schema of the information about projects */
     var projectRecord = new Ext.data.Record.create([
         {name:'id'},
@@ -71,11 +77,36 @@ Ext.onReady(function () {
         },
     });
 
+    /* Store object for customers */
+    var customersStore = new Ext.data.Store({
+        autoLoad: true,
+        autoSave: false,
+        baseParams: {
+            'order': 'name',
+        },
+        proxy: new Ext.data.HttpProxy({
+            url: 'services/getUserCustomersService.php',
+            method: 'GET'
+        }),
+        reader: new Ext.data.XmlReader(
+            {record: 'customer', id:'id' }, customerRecord),
+        remoteSort: false,
+    });
+
     /* Renderer to show the project name in the grid */
     function projectRenderer(id) {
         var record =  projectsStore.getById(id);
         if (record) {
             return record.get('description');
+        }
+        return id;
+    };
+
+    /* Renderer to show the customer name in the grid */
+    function customerRenderer(id) {
+        var record =  customersStore.getById(id);
+        if (record) {
+            return record.get('name');
         }
         return id;
     };
@@ -107,6 +138,18 @@ Ext.onReady(function () {
             name: 'filterText',
             xtype: 'textfield',
             id: 'filterText',
+        },{
+            fieldLabel: 'Customer',
+            name: 'customer',
+            xtype: 'combo',
+            id: 'customer',
+            store: customersStore,
+            mode: 'local',
+            valueField: 'id',
+            typeAhead: true,
+            triggerAction: 'all',
+            displayField: 'name',
+            forceSelection: true,
         },{
             fieldLabel: 'Project',
             name: 'project',
@@ -170,6 +213,10 @@ Ext.onReady(function () {
                 if (Ext.getCmp('project').getRawValue() != "") {
                     var value = Ext.getCmp('project').getValue();
                     baseParams.projectId = value;
+                }
+                if (Ext.getCmp('customer').getRawValue() != "") {
+                    var value = Ext.getCmp('customer').getValue();
+                    baseParams.customerId = value;
                 }
                 if (Ext.getCmp('filterStory').getRawValue() != "") {
                     baseParams.filterStory =
@@ -241,6 +288,11 @@ Ext.onReady(function () {
             header: 'End time',
             sortable: true,
             dataIndex: 'endTime',
+        },{
+            header: "Customer",
+            sortable: true,
+            dataIndex: 'customerId',
+            renderer: customerRenderer,
         },{
             header: "Project",
             sortable: true,
