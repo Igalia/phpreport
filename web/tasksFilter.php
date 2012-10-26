@@ -44,6 +44,33 @@ Ext.onReady(function () {
 
     var userId = <?php echo $_SESSION['user']->getId()?>;
 
+    /* Schema of the information about projects */
+    var projectRecord = new Ext.data.Record.create([
+        {name:'id'},
+        {name:'description'},
+    ]);
+
+    /* Store object for the projects */
+    var projectsStore = new Ext.data.Store({
+        parent: this,
+        autoLoad: true,
+        autoSave: false,
+        baseParams: {
+            'order': 'description',
+        },
+        proxy: new Ext.data.HttpProxy({
+            url: 'services/getCustomerProjectsService.php',
+            method: 'GET'
+        }),
+        reader: new Ext.data.XmlReader(
+            {record: 'project', id:'id'}, projectRecord),
+        remoteSort: false,
+        sortInfo: {
+            field: 'description',
+            direction: 'ASC',
+        },
+    });
+
     var filtersPanel = new Ext.FormPanel({
         labelWidth: 100,
         frame: true,
@@ -71,6 +98,18 @@ Ext.onReady(function () {
             name: 'filterText',
             xtype: 'textfield',
             id: 'filterText',
+        },{
+            fieldLabel: 'Project',
+            name: 'project',
+            xtype: 'combo',
+            id: 'project',
+            store: projectsStore,
+            mode: 'local',
+            valueField: 'id',
+            typeAhead: true,
+            triggerAction: 'all',
+            displayField: 'description',
+            forceSelection: true,
         },{
             fieldLabel: 'Story',
             name: 'filterStory',
@@ -118,6 +157,10 @@ Ext.onReady(function () {
                 }
                 if (Ext.getCmp('filterText').getRawValue() != "") {
                     baseParams.filterText = Ext.getCmp('filterText').getValue();
+                }
+                if (Ext.getCmp('project').getRawValue() != "") {
+                    var value = Ext.getCmp('project').getValue();
+                    baseParams.projectId = value;
                 }
                 if (Ext.getCmp('filterStory').getRawValue() != "") {
                     baseParams.filterStory =
