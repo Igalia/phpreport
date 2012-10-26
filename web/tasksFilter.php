@@ -71,6 +71,15 @@ Ext.onReady(function () {
         },
     });
 
+    /* Renderer to show the project name in the grid */
+    function projectRenderer(id) {
+        var record =  projectsStore.getById(id);
+        if (record) {
+            return record.get('description');
+        }
+        return id;
+    };
+
     var filtersPanel = new Ext.FormPanel({
         labelWidth: 100,
         frame: true,
@@ -232,6 +241,11 @@ Ext.onReady(function () {
             header: 'End time',
             sortable: true,
             dataIndex: 'endTime',
+        },{
+            header: "Project",
+            sortable: true,
+            dataIndex: 'projectId',
+            renderer: projectRenderer,
         },{
             header: 'Telework',
             sortable: true,
