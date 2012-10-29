@@ -56,6 +56,12 @@ Ext.onReady(function () {
         {name:'description'},
     ]);
 
+    /* Schema of the information about task-stories */
+    var taskStoryRecord = new Ext.data.Record.create([
+        {name:'id'},
+        {name:'friendlyName'},
+    ]);
+
     /* Store object for the projects */
     var projectsStore = new Ext.data.Store({
         parent: this,
@@ -90,6 +96,19 @@ Ext.onReady(function () {
         }),
         reader: new Ext.data.XmlReader(
             {record: 'customer', id:'id' }, customerRecord),
+        remoteSort: false,
+    });
+
+    /* Store object for taskStory field */
+    var taskStoryStore = new Ext.data.Store({
+        autoLoad: true,
+        autoSave: false,
+        proxy: new Ext.data.HttpProxy({
+            url: 'services/getOpenTaskStoriesService.php',
+            method: 'GET'
+        }),
+        reader:new Ext.data.XmlReader(
+            {record: 'taskStory', id:'id' }, taskStoryRecord),
         remoteSort: false,
     });
 
@@ -138,6 +157,15 @@ Ext.onReady(function () {
         var record =  customersStore.getById(id);
         if (record) {
             return record.get('name');
+        }
+        return id;
+    };
+
+    /* Renderer to show the task story name in the grid */
+    function taskStoryRenderer(id) {
+        var record =  taskStoryStore.getById(id);
+        if (record) {
+            return record.get('friendlyName');
         }
         return id;
     };
@@ -220,6 +248,18 @@ Ext.onReady(function () {
             xtype: 'textfield',
             id: 'filterStory',
         },{
+            fieldLabel: 'TaskStory',
+            name: 'taskStory',
+            xtype: 'combo',
+            id: 'taskStory',
+            store: taskStoryStore,
+            mode: 'local',
+            valueField: 'id',
+            displayField: 'friendlyName',
+            typeAhead: true,
+            triggerAction: 'all',
+            forceSelection: true,
+        },{
             fieldLabel: 'Telework',
             name: 'telework',
             xtype: 'combo',
@@ -277,6 +317,10 @@ Ext.onReady(function () {
                 if (Ext.getCmp('filterStory').getRawValue() != "") {
                     baseParams.filterStory =
                             Ext.getCmp('filterStory').getValue();
+                }
+                if (Ext.getCmp('taskStory').getRawValue() != "") {
+                    var value = Ext.getCmp('taskStory').getValue();
+                    baseParams.taskStoryId = value;
                 }
                 if (Ext.getCmp('telework').getRawValue() != "") {
                     var value = Ext.getCmp('telework').getValue();
@@ -370,6 +414,11 @@ Ext.onReady(function () {
             header: 'Story',
             sortable: true,
             dataIndex: 'story',
+        },{
+            header: "Task story",
+            sortable: true,
+            dataIndex: 'taskStoryId',
+            renderer: taskStoryRenderer,
         },{
             header: 'Description',
             sortable: true,
