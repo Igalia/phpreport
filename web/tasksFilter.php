@@ -93,6 +93,37 @@ Ext.onReady(function () {
         remoteSort: false,
     });
 
+    /* Store object and data for task types */
+    var taskTypeStore = new Ext.data.ArrayStore({
+        idIndex: 0,
+        fields: [
+            'value',
+            'displayText'
+        ],
+        data: [
+            ['administration', 'Administration'],
+            ['analysis', 'Analysis'],
+            ['community', 'Community'],
+            ['coordination', 'Coordination'],
+            ['demonstration', 'Demonstration'],
+            ['deployment', 'Deployment'],
+            ['design', 'Design'],
+            ['documentation', 'Documentation'],
+            ['environment', 'Environment'],
+            ['implementation', 'Implementation'],
+            ['maintenance', 'Maintenance'],
+            ['publication', 'Publication'],
+            ['requirements', 'Requirements'],
+            ['sales', 'Sales'],
+            ['sys_maintenance', 'Systems maintenance'],
+            ['teaching', 'Teaching'],
+            ['technology', 'Technology'],
+            ['test', 'Test'],
+            ['training', 'Training'],
+            ['traveling', 'Traveling'],
+        ],
+    });
+
     /* Renderer to show the project name in the grid */
     function projectRenderer(id) {
         var record =  projectsStore.getById(id);
@@ -109,6 +140,15 @@ Ext.onReady(function () {
             return record.get('name');
         }
         return id;
+    };
+
+    /* Renderer to show the customer name in the grid */
+    function taskTypeRenderer(value) {
+        var record =  taskTypeStore.getById(value);
+        if (record) {
+            return record.get('displayText');
+        }
+        return value;
     };
 
     var filtersPanel = new Ext.FormPanel({
@@ -161,6 +201,18 @@ Ext.onReady(function () {
             typeAhead: true,
             triggerAction: 'all',
             displayField: 'description',
+            forceSelection: true,
+        },{
+            fieldLabel: 'Task type',
+            name: 'type',
+            xtype: 'combo',
+            id: 'type',
+            store: taskTypeStore,
+            mode: 'local',
+            valueField: 'value',
+            displayField: 'displayText',
+            typeAhead: true,
+            triggerAction: 'all',
             forceSelection: true,
         },{
             fieldLabel: 'Story',
@@ -217,6 +269,10 @@ Ext.onReady(function () {
                 if (Ext.getCmp('customer').getRawValue() != "") {
                     var value = Ext.getCmp('customer').getValue();
                     baseParams.customerId = value;
+                }
+                if (Ext.getCmp('type').getRawValue() != "") {
+                    var value = Ext.getCmp('type').getValue();
+                    baseParams.type = value;
                 }
                 if (Ext.getCmp('filterStory').getRawValue() != "") {
                     baseParams.filterStory =
@@ -298,6 +354,11 @@ Ext.onReady(function () {
             sortable: true,
             dataIndex: 'projectId',
             renderer: projectRenderer,
+        },{
+            header: "Task type",
+            sortable: true,
+            dataIndex: 'ttype',
+            renderer: taskTypeRenderer,
         },{
             header: 'Telework',
             sortable: true,
