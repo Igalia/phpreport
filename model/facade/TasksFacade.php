@@ -302,6 +302,8 @@ abstract class TasksFacade {
      *        NULL to deactivate filtering by this field.
      * @param int $customerId id of the customer whose tasks will be filtered.
      *        NULL to deactivate filtering by this field.
+     * @param int $taskStoryId id of the story inside the XP tracker which tasks
+     *        will be filtered. NULL to deactivate filtering by this field.
      * @param string $filterStory string to filter tasks by their story field.
      *        Tasks with a story that contains this string will be returned.
      *        NULL to deactivate filtering by this field.
@@ -311,11 +313,12 @@ abstract class TasksFacade {
      */
     static function GetTasksFiltered($filterStartDate = NULL, $filterEndDate = NULL,
             $telework = NULL, $filterText = NULL, $type = NULL, $userId = NULL,
-            $projectId = NULL, $customerId = NULL, $filterStory = NULL) {
+            $projectId = NULL, $customerId = NULL, $taskStoryId = NULL,
+            $filterStory = NULL) {
 
         $action = new GetTasksFilteredAction($filterStartDate, $filterEndDate,
                 $telework, $filterText, $type, $userId, $projectId, $customerId,
-                $filterStory);
+                $taskStoryId, $filterStory);
         return $action->execute();
     }
 

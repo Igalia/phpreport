@@ -61,6 +61,10 @@
  *     <b>customerId</b> id of the customer whose tasks will be filtered.
  *   </li>
  *   <li>
+ *     <b>taskStoryId</b> id of the story inside the XP tracker which tasks will
+ *     be filtered.
+ *   </li>
+ *   <li>
  *     <b>filterStory</b> string to filter tasks by their story field. Tasks
  *     with a story that contains this string will be returned.
  *   </li>
@@ -128,6 +132,7 @@
         $userId = NULL;
         $projectId = NULL;
         $customerId = NULL;
+        $taskStoryId = NULL;
         $filterStory = NULL;
         if (isset($_GET['dateFormat'])) {
             $dateFormat = $_GET['dateFormat'];
@@ -158,13 +163,16 @@
         if (isset($_GET['customerId'])) {
             $customerId = $_GET['customerId'];
         }
+        if (isset($_GET['taskStoryId'])) {
+            $taskStoryId = $_GET['taskStoryId'];
+        }
         if (isset($_GET['filterStory'])) {
             $filterStory = $_GET['filterStory'];
         }
 
         $tasks = TasksFacade::GetTasksFiltered($filterStartDate, $filterEndDate,
                 $telework, $filterText, $type, $userId, $projectId, $customerId,
-                $filterStory);
+                $taskStoryId, $filterStory);
 
         $string = "<tasks>";
 
