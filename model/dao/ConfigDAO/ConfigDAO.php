@@ -57,6 +57,39 @@ abstract class ConfigDAO extends BaseDAO {
      */
     public abstract function getVersionNumber();
 
+    /** Query PhpReport task block configuration.
+     *
+     * Check if PhpReport configuration allows writing tasks on the specified
+     * date.
+     *
+     * @return boolean returns wether tasks for the speficied date can be
+     *         written or not.
+     */
+    public abstract function isWriteAllowedForDate(DateTime $date);
+
+    /** Get PhpReport task block configuration.
+     *
+     * Return all the values implicated in the configuration of task block by
+     * date.
+     *
+     * @return array "enabled" returns wether task block is enabled or not.
+     *         "numberOfDays" returns the number of days configured as time
+     *         limit.
+     */
+    public abstract function getTaskBlockConfiguration();
+
+    /** Store PhpReport task block configuration.
+     *
+     * Change PhpReport configuration to allow or prevent writing tasks based on
+     * the date of those tasks.
+     *
+     * @param boolean $enabled Enable of disable the task block feature.
+     * @param int $numberOfDays Set the number of days in the past when tasks
+     *        tasks cannot be altered.
+     * @return boolean returns wether changes were saved or not.
+     */
+    public abstract function setTaskBlockConfiguration($enabled, $numberOfDays);
+
     /** User value object constructor for PostgreSQL.
      *
      * The method is supposed to create value objects from the rows retrieved

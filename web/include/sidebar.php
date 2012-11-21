@@ -110,6 +110,11 @@ var menuToolbar = new Ext.Toolbar({
                 handler: onItemClick,
                 destination: 'hourCompensationManagement.php',
                 iconCls: 'silk-script-edit'
+            },{
+                text: 'Application settings',
+                handler: onItemClick,
+                destination: 'settings.php',
+                iconCls: 'silk-brick-edit'
             }],
         },
         new Ext.Toolbar.Fill(),

@@ -37,6 +37,14 @@ if(isset($_GET["date"]))
 else
     $date = date("Y-m-d");
 
+/* Check if the date is enabled to write */
+if(!TasksFacade::IsWriteAllowedForDate(new DateTime($date))) {
+    echo '<script type="text/javascript">var forbidden = true;</script>';
+}
+else {
+    echo '<script type="text/javascript">var forbidden = false;</script>';
+}
+
 ?>
 <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus.js"></script>
 <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus-holidays.js"></script>
@@ -677,6 +685,10 @@ Ext.onReady(function(){
                             taskPanel.endTimeField.setRawValue(r.data['endTime']);
                             taskPanel.endTimeField.validate();
 
+                            if(forbidden) {
+                                taskPanel.setReadOnly(true);
+                            }
+
                             updateTasksLength(taskPanel);
                         }
                     }
@@ -703,6 +715,10 @@ Ext.onReady(function(){
                         taskPanel.initTimeField.validate();
                         taskPanel.endTimeField.setRawValue(r.data['endTime']);
                         taskPanel.endTimeField.validate();
+
+                        if(forbidden) {
+                            taskPanel.setReadOnly(true);
+                        }
 
                         updateTasksLength(taskPanel);
 
@@ -939,6 +955,7 @@ Ext.onReady(function(){
                     templateValues[6] :
                     'Template',
                 flex: 3,
+                disabled: forbidden,
                 handler: function () {
                     //create and populate a record
                     var newTask = new taskRecord();
@@ -1030,10 +1047,12 @@ Ext.onReady(function(){
             new Ext.Button({
                 text:'New',
                 handler: newTask,
+                disabled: forbidden,
             }),
             new Ext.Button({
                 text:'Save',
                 handler: saveTasks,
+                disabled: forbidden,
             }),
             new Ext.menu.Separator(),
             new Ext.form.Label({
@@ -1053,11 +1072,13 @@ Ext.onReady(function(){
             new Ext.Button({
                 text:'New task',
                 handler: newTask,
+                disabled: forbidden,
             }),
             '-',
             new Ext.Button({
                 text:'Save changes',
                 handler: saveTasks,
+                disabled: forbidden,
             }),
         ],
     });

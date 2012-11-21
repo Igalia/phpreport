@@ -80,6 +80,12 @@ class PartialUpdateReportAction extends Action{
      * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
      */
     protected function doExecute() {
+        //first check if current configuration allows saving tasks in that date
+        $configDao = DAOFactory::getConfigDAO();
+        if(!$configDao->isWriteAllowedForDate($this->task->getDate())) {
+            return -1;
+        }
+
 
         $dao = DAOFactory::getTaskDAO();
 

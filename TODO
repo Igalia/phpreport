@@ -7,8 +7,6 @@ Version 2.1
 Features
 ~~~~~~~~
 
-* Possibility to set a deadline in the past, so tasks before that date cannot be
-  modified.
 * Ability to reset holidays account in a determinate date, similar to the
   compensation of extra hours.
 * New report for users to see a filtered list of their tasks.

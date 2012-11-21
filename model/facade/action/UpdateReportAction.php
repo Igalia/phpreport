@@ -72,6 +72,11 @@ class UpdateReportAction extends Action{
      * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
      */
     protected function doExecute() {
+        //first check if current configuration allows saving tasks in that date
+        $configDao = DAOFactory::getConfigDAO();
+        if(!$configDao->isWriteAllowedForDate($this->task->getDate())) {
+            return -1;
+        }
 
         $dao = DAOFactory::getTaskDAO();
 

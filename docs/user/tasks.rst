@@ -112,3 +112,16 @@ account that copied tasks aren't saved until you press the save button.
 Notice that the default date to copy from is the day before the current date;
 that's the most common use case. Finally, mention that copied tasks can be
 modified without affecting to the original ones.
+
+Blocked tasks
+=============
+
+Sometimes users won't be able to modify or delete some saved tasks, nor even
+create new ones on certain dates. It can happen because of two reasons:
+
+* Managers have closed a project. In that case, tasks assigned to that project
+  cannot be altered.
+
+* Managers have blocked tasks reports older than a certain date: a number of
+  days can be set so any tasks older than that cannot be changed. In this case,
+  even the *New task* and *Save changes* buttons would be blocked.
