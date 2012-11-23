@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2010 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2010-2012 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -443,8 +443,62 @@ Ext.onReady(function () {
         stripeRows: true,
         colModel: columnModel,
         columnLines: true,
+        buttons: [{
+            text: 'Standard view',
+            handler: showStandardView,
+        },{
+            text: 'Extended view',
+            handler: showExtendedView,
+        }],
     });
 
+    //function to show only a subset of columns and hide the others
+    function showStandardView() {
+        columnModel.setHidden(0, false);  //date
+        columnModel.setHidden(1, false);  //init
+        columnModel.setHidden(2, false);  //end
+        columnModel.setHidden(3, true);   //customer
+        columnModel.setHidden(4, false);  //project
+        columnModel.setHidden(5, true);   //task type
+        columnModel.setHidden(6, true);   //telework
+        columnModel.setHidden(7, false);  //story
+        columnModel.setHidden(8, false);  //taskStory
+        columnModel.setHidden(9, false);  //description
+        columnModel.setColumnWidth(0, 80);
+        columnModel.setColumnWidth(1, 55);
+        columnModel.setColumnWidth(2, 55);
+        columnModel.setColumnWidth(4, 120);
+        columnModel.setColumnWidth(7, 120);
+        columnModel.setColumnWidth(8, 100);
+        columnModel.setColumnWidth(9, 435);
+    }
+
+    //function to show all the columns
+    function showExtendedView() {
+        columnModel.setHidden(0, false);  //date
+        columnModel.setHidden(1, false);  //init
+        columnModel.setHidden(2, false);  //end
+        columnModel.setHidden(3, false);  //customer
+        columnModel.setHidden(4, false);  //project
+        columnModel.setHidden(5, false);  //task type
+        columnModel.setHidden(6, false);  //telework
+        columnModel.setHidden(7, false);  //story
+        columnModel.setHidden(8, false);  //taskStory
+        columnModel.setHidden(9, false);  //description
+        columnModel.setColumnWidth(0, 80);
+        columnModel.setColumnWidth(1, 55);
+        columnModel.setColumnWidth(2, 55);
+        columnModel.setColumnWidth(3, 90);
+        columnModel.setColumnWidth(4, 100);
+        columnModel.setColumnWidth(5, 80);
+        columnModel.setColumnWidth(6, 50);
+        columnModel.setColumnWidth(7, 100);
+        columnModel.setColumnWidth(8, 100);
+        columnModel.setColumnWidth(9, 255);
+    }
+
+    //hide the advanced columns
+    showStandardView();
 });
 </script>
 
