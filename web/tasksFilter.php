@@ -204,8 +204,11 @@ Ext.onReady(function () {
         },{
             fieldLabel: 'Task description',
             name: 'filterText',
-            xtype: 'textfield',
+            xtype: 'combo',
             id: 'filterText',
+            store: ['[empty]', '[not empty]'],
+            triggerAction:'all',
+            forceSelection: false,
         },{
             fieldLabel: 'Customer',
             name: 'customer',
@@ -289,7 +292,18 @@ Ext.onReady(function () {
                         + (date.getMonth()+1) + "-" + date.getDate();
                 }
                 if (Ext.getCmp('filterText').getRawValue() != "") {
-                    baseParams.filterText = Ext.getCmp('filterText').getValue();
+                    //this field is the selector for two different, incompatible
+                    //parameters in the service
+                    var value = Ext.getCmp('filterText').getValue();
+                    if (value == '[empty]') {
+                        baseParams.emptyText = true;
+                    }
+                    else if (value == '[not empty]') {
+                        baseParams.emptyText = false;
+                    }
+                    else {
+                        baseParams.filterText = value;
+                    }
                 }
                 if (Ext.getCmp('project').getRawValue() != "") {
                     var value = Ext.getCmp('project').getValue();
