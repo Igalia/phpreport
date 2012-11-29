@@ -219,6 +219,9 @@ abstract class TaskDAO extends BaseDAO{
      * @param boolean $emptyText filter tasks by the presence, or absence, of
      *        text in the description field. NULL to deactivate this field; if
      *        not NULL, the parameter $filterText will be ignored.
+     * @param boolean $emptyStory filter tasks by the presence, or absence, of
+     *        text in the story field. NULL to deactivate this field; if
+     *        not NULL, the parameter $filterStory will be ignored.
      * @return array an array with value objects {@link TaskVO} with their
      *         properties set to the values from the rows and ordered
      *         ascendantly by their database internal identifier.
@@ -227,7 +230,8 @@ abstract class TaskDAO extends BaseDAO{
     public abstract function getFiltered($filterStartDate = NULL,
             $filterEndDate = NULL, $telework = NULL, $filterText = NULL,
             $type = NULL, $userId = NULL, $projectId = NULL, $customerId = NULL,
-            $taskStoryId = NULL, $filterStory = NULL, $emptyText = NULL);
+            $taskStoryId = NULL, $filterStory = NULL, $emptyText = NULL,
+            $emptyStory = NULL);
 
     /** Tasks report generator.
      *

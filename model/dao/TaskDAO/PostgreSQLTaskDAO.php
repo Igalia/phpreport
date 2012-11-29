@@ -297,7 +297,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
     public function getFiltered($filterStartDate = NULL, $filterEndDate = NULL,
             $telework = NULL, $filterText = NULL, $type = NULL, $userId = NULL,
             $projectId = NULL, $customerId = NULL, $taskStoryId = NULL,
-            $filterStory = NULL, $emptyText = NULL) {
+            $filterStory = NULL, $emptyText = NULL, $emptyStory = NULL) {
 
         $conditions = "TRUE";
         if ($filterStartDate != NULL) {
@@ -330,7 +330,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
         if ($taskStoryId != NULL) {
             $conditions .= " AND task_storyId = $taskStoryId";
         }
-        if ($filterStory != NULL) {
+        if ($filterStory != NULL && $emptyStory === NULL) {
             $conditions .= " AND story like ('%$filterStory%')";
         }
         if ($emptyText !== NULL) {
@@ -339,6 +339,14 @@ class PostgreSQLTaskDAO extends TaskDAO{
             }
             else {
                 $conditions .= " AND (text != '' OR text IS NOT NULL)";
+            }
+        }
+        if ($emptyStory !== NULL) {
+            if ($emptyStory) {
+                $conditions .= " AND (story = '' OR story IS NULL)";
+            }
+            else {
+                $conditions .= " AND (story != '' OR story IS NOT NULL)";
             }
         }
         $sql = "SELECT * FROM task WHERE $conditions ORDER BY id ASC";

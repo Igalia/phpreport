@@ -54,6 +54,7 @@ class GetTasksFilteredAction extends Action{
     private $taskStoryId;
     private $filterStory;
     private $emptyText;
+    private $emptyStory;
 
     /** GetTasksFilteredAction constructor.
      *
@@ -91,6 +92,9 @@ class GetTasksFilteredAction extends Action{
      * @param boolean $emptyText filter tasks by the presence, or absence, of
      *        text in the description field. NULL to deactivate this field; if
      *        not NULL, the parameter $filterText will be ignored.
+     * @param boolean $emptyStory filter tasks by the presence, or absence, of
+     *        text in the story field. NULL to deactivate this field; if
+     *        not NULL, the parameter $filterStory will be ignored.
      * @return array an array with value objects {@link TaskVO} with their
      *         properties set to the values from the rows and ordered
      *         ascendantly by their database internal identifier.
@@ -98,7 +102,7 @@ class GetTasksFilteredAction extends Action{
     public function __construct($filterStartDate = NULL, $filterEndDate = NULL,
             $telework = NULL, $filterText = NULL, $type = NULL, $userId = NULL,
             $projectId = NULL, $customerId = NULL, $taskStoryId = NULL,
-            $filterStory = NULL, $emptyText = NULL) {
+            $filterStory = NULL, $emptyText = NULL, $emptyStory = NULL) {
         $this->filterStartDate = $filterStartDate;
         $this->filterEndDate = $filterEndDate;
         $this->telework = $telework;
@@ -110,6 +114,7 @@ class GetTasksFilteredAction extends Action{
         $this->taskStoryId = $taskStoryId;
         $this->filterStory = $filterStory;
         $this->emptyText = $emptyText;
+        $this->emptyStory = $emptyStory;
 
         $this->preActionParameter = "GET_TASKS_FILTERED_PREACTION";
         $this->postActionParameter = "GET_TASKS_FILTERED_POSTACTION";
@@ -129,6 +134,6 @@ class GetTasksFilteredAction extends Action{
         return $dao->getFiltered($this->filterStartDate, $this->filterEndDate,
                 $this->telework, $this->filterText, $this->type, $this->userId,
                 $this->projectId, $this->customerId, $this->taskStoryId,
-                $this->filterStory, $this->emptyText);
+                $this->filterStory, $this->emptyText, $this->emptyStory);
     }
 }

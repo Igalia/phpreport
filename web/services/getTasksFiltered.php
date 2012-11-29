@@ -73,6 +73,11 @@
  *     the description field. Values can be 'true' or 'false'. If this field is
  *     present, the parameter filterText will be ignored.
  *   </li>
+ *   <li>
+ *     <b>emptyStory</b> filter tasks by the presence, or absence, of text in
+ *     the story field. Values can be 'true' or 'false'. If this field is
+ *     present, the parameter filterStory will be ignored.
+ *   </li>
  * </ul>
  * In case the operation is successfull, it will return the tasks in a XML
  * string formatted like this:
@@ -140,6 +145,7 @@
         $taskStoryId = NULL;
         $filterStory = NULL;
         $emptyText = NULL;
+        $emptyStory = NULL;
         if (isset($_GET['dateFormat'])) {
             $dateFormat = $_GET['dateFormat'];
         }
@@ -188,10 +194,18 @@
                 $emptyText = false;
             }
         }
+        if (isset($_GET['emptyStory'])) {
+            if ($_GET['emptyStory'] == 'true') {
+                $emptyStory = true;
+            }
+            else if ($_GET['emptyStory'] == 'false') {
+                $emptyStory = false;
+            }
+        }
 
         $tasks = TasksFacade::GetTasksFiltered($filterStartDate, $filterEndDate,
                 $telework, $filterText, $type, $userId, $projectId, $customerId,
-                $taskStoryId, $filterStory, $emptyText);
+                $taskStoryId, $filterStory, $emptyText, $emptyStory);
 
         $string = "<tasks>";
 
