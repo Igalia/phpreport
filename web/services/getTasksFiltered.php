@@ -146,7 +146,12 @@
                     $dateFormat, $_GET['filterEndDate']);
         }
         if (isset($_GET['telework'])) {
-            $telework = $_GET['telework'];
+            if ($_GET['telework'] == 'true') {
+                $telework = true;
+            }
+            else if ($_GET['telework'] == 'false') {
+                $telework = false;
+            }
         }
         if (isset($_GET['filterText'])) {
             $filterText = $_GET['filterText'];

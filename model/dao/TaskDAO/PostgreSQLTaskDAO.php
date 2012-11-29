@@ -308,8 +308,9 @@ class PostgreSQLTaskDAO extends TaskDAO{
             $conditions .= " AND (_date <= ".
                 DBPostgres::formatDate($filterEndDate) . " OR _date is NULL)";
         }
-        if ($telework != NULL) {
-            $conditions .= " AND telework = " . $telework;
+        if ($telework !== NULL) {
+            $conditions .= " AND telework = " .
+                    DBPostgres::boolToString($telework);
         }
         if ($filterText != NULL) {
             $conditions .= " AND text like ('%$filterText%')";
