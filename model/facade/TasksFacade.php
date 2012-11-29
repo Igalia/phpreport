@@ -307,6 +307,9 @@ abstract class TasksFacade {
      * @param string $filterStory string to filter tasks by their story field.
      *        Tasks with a story that contains this string will be returned.
      *        NULL to deactivate filtering by this field.
+     * @param boolean $emptyText filter tasks by the presence, or absence, of
+     *        text in the description field. NULL to deactivate this field; if
+     *        not NULL, the parameter $filterText will be ignored.
      * @return array an array with value objects {@link TaskVO} with their
      *         properties set to the values from the rows and ordered
      *         ascendantly by their database internal identifier.
@@ -314,11 +317,11 @@ abstract class TasksFacade {
     static function GetTasksFiltered($filterStartDate = NULL, $filterEndDate = NULL,
             $telework = NULL, $filterText = NULL, $type = NULL, $userId = NULL,
             $projectId = NULL, $customerId = NULL, $taskStoryId = NULL,
-            $filterStory = NULL) {
+            $filterStory = NULL, $emptyText = NULL) {
 
         $action = new GetTasksFilteredAction($filterStartDate, $filterEndDate,
                 $telework, $filterText, $type, $userId, $projectId, $customerId,
-                $taskStoryId, $filterStory);
+                $taskStoryId, $filterStory, $emptyText);
         return $action->execute();
     }
 
