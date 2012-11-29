@@ -265,19 +265,8 @@ Ext.onReady(function () {
             xtype: 'combo',
             id: 'telework',
             mode: 'local',
-            valueField: 'value',
-            displayField: 'displayText',
             triggerAction:'all',
-            store: new Ext.data.ArrayStore({
-                fields: [
-                    'value',
-                    'displayText'
-                ],
-                data: [
-                    ['yes', 'yes'],
-                    ['no', 'no'],
-                ],
-            }),
+            store: ['yes', 'no'],
         }],
 
         buttons: [{
