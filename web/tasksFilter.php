@@ -248,8 +248,11 @@ Ext.onReady(function () {
         },{
             fieldLabel: 'Story',
             name: 'filterStory',
-            xtype: 'textfield',
+            xtype: 'combo',
             id: 'filterStory',
+            store: ['[empty]', '[not empty]'],
+            triggerAction:'all',
+            forceSelection: false,
         },{
             fieldLabel: 'TaskStory',
             name: 'taskStory',
@@ -318,8 +321,18 @@ Ext.onReady(function () {
                     baseParams.type = value;
                 }
                 if (Ext.getCmp('filterStory').getRawValue() != "") {
-                    baseParams.filterStory =
-                            Ext.getCmp('filterStory').getValue();
+                    //this field is the selector for two different, incompatible
+                    //parameters in the service
+                    var value = Ext.getCmp('filterStory').getValue();
+                    if (value == '[empty]') {
+                        baseParams.emptyStory = true;
+                    }
+                    else if (value == '[not empty]') {
+                        baseParams.emptyStory = false;
+                    }
+                    else {
+                        baseParams.filterStory = value;
+                    }
                 }
                 if (Ext.getCmp('taskStory').getRawValue() != "") {
                     var value = Ext.getCmp('taskStory').getValue();
