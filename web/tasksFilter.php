@@ -277,7 +277,17 @@ Ext.onReady(function () {
 
         buttons: [{
             text: 'Find tasks',
-            handler: function () {
+            handler: findTasks,
+        }],
+
+        keys: [{
+            key: [Ext.EventObject.ENTER],
+            handler: findTasks,
+        }],
+    });
+
+    /* Handler to invoke the search service */
+    function findTasks () {
                 var baseParams = {
                     'userId': userId,
                     <?php if ($sid) {?>
@@ -345,9 +355,7 @@ Ext.onReady(function () {
 
                 tasksStore.baseParams = baseParams;
                 tasksStore.load();
-            }
-        }],
-    });
+    }
 
     /* Schema of the information about tasks */
     var taskRecord = new Ext.data.Record.create([
