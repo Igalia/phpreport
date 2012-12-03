@@ -26,7 +26,7 @@ $sid = $_GET["sid"];
 require_once(PHPREPORT_ROOT . '/web/auth.php');
 
 /* Include the generic header and sidebar*/
-define('PAGE_TITLE', "PhpReport - My tasks");
+define('PAGE_TITLE', "PhpReport - User tasks report");
 include_once("include/header.php");
 include_once("include/sidebar.php");
 
@@ -179,6 +179,7 @@ Ext.onReady(function () {
         return value;
     };
 
+    /* Panel containing all the search parameters */
     var filtersPanel = new Ext.FormPanel({
         labelWidth: 100,
         frame: true,
@@ -209,6 +210,7 @@ Ext.onReady(function () {
             store: ['[empty]', '[not empty]'],
             triggerAction:'all',
             forceSelection: false,
+            autoSelect: false,
         },{
             fieldLabel: 'Customer',
             name: 'customer',
@@ -253,6 +255,7 @@ Ext.onReady(function () {
             store: ['[empty]', '[not empty]'],
             triggerAction:'all',
             forceSelection: false,
+            autoSelect: false,
         },{
             fieldLabel: 'TaskStory',
             name: 'taskStory',
