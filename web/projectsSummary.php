@@ -31,9 +31,30 @@
 
 ?>
 
+<script type="text/javascript" src="js/include/DateIntervalForm.js"></script>
 <script type="text/javascript">
 
     Ext.onReady(function(){
+
+        var dates = new Ext.ux.DateIntervalForm({
+            renderTo: 'content',
+            listeners: {
+                'view': function (element, startDate, endDate) {
+                    var params = {
+                        init: startDate.getFullYear() + "-" +
+                            (startDate.getMonth()+1) + "-" +
+                            startDate.getDate(),
+                        end: endDate.getFullYear() + "-" +
+                            (endDate.getMonth()+1) + "-" +
+                            endDate.getDate(),
+                    };
+                    customersGrid.store.baseParams = params;
+                    usersGrid.store.baseParams = params;
+                    customersGrid.store.load();
+                    usersGrid.store.load();
+                }
+            }
+        });
 
         Ext.ux.DynamicGridPanel = Ext.extend(Ext.grid.GridPanel, {
 
@@ -58,7 +79,10 @@
               loadMask: true,
               stripeRows: true,
               ds: new Ext.data.Store({
-                    url: this.storeUrl,
+                    proxy: new Ext.data.HttpProxy({
+                        url: this.storeUrl,
+                        method: 'GET',
+                    }),
                     reader: new Ext.data.JsonReader()
               }),
               columns: []
@@ -80,10 +104,7 @@
 
         var customersGrid = new Ext.ux.DynamicGridPanel({
             id: 'CustomersGrid',
-            storeUrl: 'services/getProjectCustomerReportJsonService.php?<?php
-
-                if ($sid!="")
-                    echo "&sid=" . $sid;?>',
+            storeUrl: 'services/getProjectCustomerReportJsonService.php',
             rowNumberer: false,
             checkboxSelModel: false,
             loadMask: true,
@@ -142,10 +163,7 @@
 
         var usersGrid = new Ext.ux.DynamicGridPanel({
             id: 'UsersGrid',
-            storeUrl: 'services/getProjectUserReportJsonService.php?<?php
-
-                if ($sid!="")
-                    echo "&sid=" . $sid;?>',
+            storeUrl: 'services/getProjectUserReportJsonService.php',
             rowNumberer: false,
             checkboxSelModel: false,
             loadMask: true,
@@ -211,9 +229,6 @@
                 }
             }
         });
-
-        customersGrid.store.load();
-        usersGrid.store.load();
 
     })
 
