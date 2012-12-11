@@ -286,10 +286,16 @@ Projects summary
 
 .. figure:: i/project-summary-screen.png
 
-This report summarizes all the work registered by the tool, split by projects
-and workers or clients.
+This report summarizes the work registered by the tool between two dates, split
+by projects and workers or clients.
 
-It consists on two grids shown in two tabs. The first tab is the project/customer
+In the top of the screen there are two date inputs to insert the report
+dates: if the start date is left empty, the default value is the date of the
+first task inserted in the system; if the end date is empty, the default value
+is the current date.
+
+The report itself consists on two grids shown in two tabs.
+The first tab is the project/customer
 report, where all the hours are split by projects and customers; rows represent
 projects and columns represent customers.
 The second tab is the project/user report, where all the hours are split by
@@ -299,3 +305,7 @@ In both grids there are two extra columns, *Total* and *Percentage*; the former
 shows the total number of hours devoted to the project (thus, it's the sum of
 all the different client/user columns) and the latter shows the proportion of
 hours of one project regarding the work done in all projects.
+
+Finally, in the bottom of the grid there are two buttons named **All data**
+and **Only totals**. The latter hides all columns excepting *Project*, *Total*
+and *Percentage*, while the former shows all columns again.
