@@ -112,6 +112,17 @@
             frame: true,
             title: 'Project - Customer Worked Hours Report',
             iconCls: 'silk-table',
+            buttons: [{
+                text: 'All data',
+                handler: function () {
+                    showAllColumns(customersGrid.getColumnModel());
+                }
+            },{
+                text: 'Only totals',
+                handler: function () {
+                    hideAllColumnsExceptingTotals(customersGrid.getColumnModel());
+                }
+            }],
         });
 
 
@@ -171,6 +182,17 @@
             frame: true,
             title: 'Project - User Worked Hours Report',
             iconCls: 'silk-table',
+            buttons: [{
+                text: 'All data',
+                handler: function () {
+                    showAllColumns(usersGrid.getColumnModel());
+                }
+            },{
+                text: 'Only totals',
+                handler: function () {
+                    hideAllColumnsExceptingTotals(usersGrid.getColumnModel());
+                }
+            }],
         });
 
 
@@ -230,6 +252,23 @@
             }
         });
 
+        function showAllColumns(columnModel) {
+            //getColumnCount returns the number of visible columns + 1
+            for(var i = 0; i<columnModel.getColumnCount() - 1; i++) {
+                columnModel.setHidden(i, false);
+            }
+        }
+
+        function hideAllColumnsExceptingTotals(columnModel) {
+            //getColumnCount returns the number of visible columns + 1
+            //hide all except:
+            //    column 0 = project
+            //    getColumnCount() - 3 = total
+            //    getColumnCount() - 2 = total %
+            for(var i = 1; i<columnModel.getColumnCount() - 3; i++) {
+                columnModel.setHidden(i, true);
+            }
+        }
     })
 
 </script>
