@@ -27,6 +27,7 @@
  * @package PhpReport
  * @subpackage DAO
  * @author Jorge López Fernández <jlopez@igalia.com>
+ * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
 
 include_once(PHPREPORT_ROOT . '/model/vo/TaskVO.php');
@@ -180,6 +181,57 @@ abstract class TaskDAO extends BaseDAO{
      * @throws {@link OperationErrorException}
      */
     public abstract function getAll();
+
+    /** Tasks retriever by multiple fields.
+     *
+     * This function retrieves a subset of rows from Task table and creates a
+     * {@link TaskVO} with data from each row.
+     *
+     * Multiple fields can be used as filters; to disable a filter, a NULL value
+     * has to be passed on that parameter.
+     *
+     * @param DateTime $filterStartDate start date to filter tasks. Those tasks
+     *        having a date equal or later than this one will be returned. NULL
+     *        to deactivate filtering by this field.
+     * @param DateTime $filterEndDate end date to filter tasks. Those tasks
+     *        having a date equal or sooner than this one will be returned. NULL
+     *        to deactivate filtering by this field.
+     * @param boolean $telework filter tasks by their telework field.
+     *        NULL to deactivate filtering by this field.
+     * @param string $filterText string to filter tasks by their description
+     *        field. Tasks with a description that contains this string will
+     *        be returned. NULL to deactivate filtering by this field.
+     * @param string $type string to filter projects by their type field.
+     *        Only projects with a type field that matches completely with this
+     *        string will be returned. NULL to deactivate filtering by this
+     *        field.
+     * @param int $userId id of the user whose tasks will be filtered. NULL to
+     *        deactivate filtering by this field.
+     * @param int $projectId id of the project which tasks will be filtered by.
+     *        NULL to deactivate filtering by this field.
+     * @param int $customerId id of the customer whose tasks will be filtered.
+     *        NULL to deactivate filtering by this field.
+     * @param int $taskStoryId id of the story inside the XP tracker which tasks
+     *        will be filtered. NULL to deactivate filtering by this field.
+     * @param string $filterStory string to filter tasks by their story field.
+     *        Tasks with a story that contains this string will be returned.
+     *        NULL to deactivate filtering by this field.
+     * @param boolean $emptyText filter tasks by the presence, or absence, of
+     *        text in the description field. NULL to deactivate this field; if
+     *        not NULL, the parameter $filterText will be ignored.
+     * @param boolean $emptyStory filter tasks by the presence, or absence, of
+     *        text in the story field. NULL to deactivate this field; if
+     *        not NULL, the parameter $filterStory will be ignored.
+     * @return array an array with value objects {@link TaskVO} with their
+     *         properties set to the values from the rows and ordered
+     *         ascendantly by their database internal identifier.
+     * @throws {@link OperationErrorException}
+     */
+    public abstract function getFiltered($filterStartDate = NULL,
+            $filterEndDate = NULL, $telework = NULL, $filterText = NULL,
+            $type = NULL, $userId = NULL, $projectId = NULL, $customerId = NULL,
+            $taskStoryId = NULL, $filterStory = NULL, $emptyText = NULL,
+            $emptyStory = NULL);
 
     /** Tasks report generator.
      *

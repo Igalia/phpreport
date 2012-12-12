@@ -27,6 +27,7 @@
  * @package PhpReport
  * @subpackage DAO
  * @author Jorge López Fernández <jlopez@igalia.com>
+ * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
 
 include_once(PHPREPORT_ROOT . '/util/TaskReportInvalidParameterException.php');
@@ -290,6 +291,65 @@ class PostgreSQLTaskDAO extends TaskDAO{
      */
     public function getAll() {
         $sql = "SELECT * FROM task ORDER BY id ASC";
+        return $this->execute($sql);
+    }
+
+    public function getFiltered($filterStartDate = NULL, $filterEndDate = NULL,
+            $telework = NULL, $filterText = NULL, $type = NULL, $userId = NULL,
+            $projectId = NULL, $customerId = NULL, $taskStoryId = NULL,
+            $filterStory = NULL, $emptyText = NULL, $emptyStory = NULL) {
+
+        $conditions = "TRUE";
+        if ($filterStartDate != NULL) {
+            $conditions .= " AND (_date >= ".
+                DBPostgres::formatDate($filterStartDate) . " OR _date is NULL)";
+        }
+        if ($filterEndDate != NULL) {
+            $conditions .= " AND (_date <= ".
+                DBPostgres::formatDate($filterEndDate) . " OR _date is NULL)";
+        }
+        if ($telework !== NULL) {
+            $conditions .= " AND telework = " .
+                    DBPostgres::boolToString($telework);
+        }
+        if ($filterText != NULL && $emptyText === NULL) {
+            $conditions .= " AND text like ('%$filterText%')";
+        }
+        if ($type != NULL) {
+            $conditions .= " AND ttype = '$type'";
+        }
+        if ($userId != NULL) {
+            $conditions .= " AND usrid = $userId";
+        }
+        if ($projectId != NULL) {
+            $conditions .= " AND projectid = $projectId";
+        }
+        if ($customerId != NULL) {
+            $conditions .= " AND customerid = $customerId";
+        }
+        if ($taskStoryId != NULL) {
+            $conditions .= " AND task_storyId = $taskStoryId";
+        }
+        if ($filterStory != NULL && $emptyStory === NULL) {
+            $conditions .= " AND story like ('%$filterStory%')";
+        }
+        if ($emptyText !== NULL) {
+            if ($emptyText) {
+                $conditions .= " AND (text = '' OR text IS NULL)";
+            }
+            else {
+                $conditions .= " AND (text != '' OR text IS NOT NULL)";
+            }
+        }
+        if ($emptyStory !== NULL) {
+            if ($emptyStory) {
+                $conditions .= " AND (story = '' OR story IS NULL)";
+            }
+            else {
+                $conditions .= " AND (story != '' OR story IS NOT NULL)";
+            }
+        }
+        $sql = "SELECT * FROM task WHERE $conditions ORDER BY id ASC";
         return $this->execute($sql);
     }
 

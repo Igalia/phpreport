@@ -41,7 +41,13 @@ var menuToolbar = new Ext.Toolbar({
             }],
         },{
             text: 'Reports',
-                menu: [
+            menu: [
+            {
+                text: 'User tasks',
+                handler: onItemClick,
+                destination: "tasksFilter.php",
+                iconCls: 'silk-pencil',
+            },'-',
                 <?php
                     if (isset($_SESSION['user'])){
                         $user = $_SESSION['user'];
@@ -52,7 +58,7 @@ var menuToolbar = new Ext.Toolbar({
                             "',},";
                     }
                 ?>
-              {
+            {
                 text: 'Users evaluation',
                 handler: onItemClick,
                 destination: 'usersEvaluation.php',
