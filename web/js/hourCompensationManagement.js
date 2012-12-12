@@ -287,6 +287,7 @@ var extraHoursColumnModel =  new Ext.grid.ColumnModel([
             id: 'date',
             xtype: 'datefield',
             format: 'd/m/Y',
+            startDay: 1,
             allowBlank: false,
         }
     },

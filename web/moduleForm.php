@@ -180,6 +180,7 @@ Ext.onReady(function(){
             name: 'start',
             xtype: 'datefield',
             format: 'd/m/Y',
+            startDay: 1,
             id: 'startDate',
             vtype:'daterange',
             allowBlank:false,
@@ -189,6 +190,7 @@ Ext.onReady(function(){
             name: 'end',
             xtype: 'datefield',
             format: 'd/m/Y',
+            startDay: 1,
             id: 'endDate',
             vtype:'daterange',
             startDateField: 'startDate' // id of the start date field

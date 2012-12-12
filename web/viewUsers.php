@@ -499,6 +499,7 @@ Ext.onReady(function(){
                 id: 'hourCostInit',
                 xtype: 'datefield',
                 format: 'd/m/Y',
+                startDay: 1,
                 allowBlank: false,
                 vtype:'daterange',
                 endDateField: 'hourCostEnd'
@@ -515,6 +516,7 @@ Ext.onReady(function(){
                 id: 'hourCostEnd',
                 xtype: 'datefield',
                 format: 'd/m/Y',
+                startDay: 1,
                 allowBlank: false,
                 vtype:'daterange',
                 startDateField: 'hourCostInit'
@@ -648,6 +650,7 @@ Ext.onReady(function(){
                 id: 'journeyInit',
                 xtype: 'datefield',
                 format: 'd/m/Y',
+                startDay: 1,
                 allowBlank: false,
                 vtype:'daterange',
                 endDateField: 'journeyEnd'
@@ -664,6 +667,7 @@ Ext.onReady(function(){
                 id: 'journeyEnd',
                 xtype: 'datefield',
                 format: 'd/m/Y',
+                startDay: 1,
                 allowBlank: false,
                 vtype:'daterange',
                 startDateField: 'journeyInit'
@@ -794,6 +798,7 @@ Ext.onReady(function(){
                 id: 'areaInit',
                 xtype: 'datefield',
                 format: 'd/m/Y',
+                startDay: 1,
                 allowBlank: false,
                 vtype:'daterange',
                 endDateField: 'areaEnd'
@@ -810,6 +815,7 @@ Ext.onReady(function(){
                 id: 'areaEnd',
                 xtype: 'datefield',
                 format: 'd/m/Y',
+                startDay: 1,
                 allowBlank: false,
                 vtype:'daterange',
                 startDateField: 'areaInit'
@@ -947,6 +953,7 @@ Ext.onReady(function(){
                 id: 'cityInit',
                 xtype: 'datefield',
                 format: 'd/m/Y',
+                startDay: 1,
                 allowBlank: false,
                 vtype:'daterange',
                 endDateField: 'cityEnd'
@@ -963,6 +970,7 @@ Ext.onReady(function(){
                 id: 'cityEnd',
                 xtype: 'datefield',
                 format: 'd/m/Y',
+                startDay: 1,
                 allowBlank: false,
                 vtype:'daterange',
                 startDateField: 'cityInit'
