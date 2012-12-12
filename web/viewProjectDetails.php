@@ -40,6 +40,7 @@
 
 ?>
 
+<script type="text/javascript" src="js/include/DateIntervalForm.js"></script>
 <script type="text/javascript">
 
     Ext.onReady(function(){
@@ -448,50 +449,11 @@
 
             }, this);
 
-    // define the form
-    var workingResultsForm = new Ext.FormPanel({
-        labelWidth: 75, // label settings here cascade unless overridden
-        frame:true,
-        title: 'Working Results',
-        header: false,
-        bodyStyle:'padding:5px 5px 0',
-        width: 350,
+    // dates filter form
+    var workingResultsForm = new Ext.ux.DateIntervalForm({
         renderTo: 'content',
-        defaults: {width: 230},
-        defaultType: 'datefield',
-        items: [{
-            fieldLabel: 'Start Date',
-            name: 'start',
-            xtype: 'datefield',
-            format: 'd/m/Y',
-            id: 'startDate',
-            vtype:'daterange',
-            endDateField: 'endDate' // id of the end date field
-        },{
-            fieldLabel: 'End Date',
-            name: 'end',
-            xtype: 'datefield',
-            format: 'd/m/Y',
-            id: 'endDate',
-            vtype:'daterange',
-            startDateField: 'startDate' // id of the start date field
-        }],
-
-        buttons: [{
-            text: 'View',
-            handler: function(){
-
-                // check if the fields have values, and if they don't, create default ones
-                if (Ext.getCmp('startDate').getRawValue() == "")
-                    init = new Date(1900,00,01);
-                else
-                    init = Ext.getCmp('startDate').getValue();
-
-                if (Ext.getCmp('endDate').getRawValue() == "")
-                    end = new Date();
-                else
-                    end = Ext.getCmp('endDate').getValue();
-
+        listeners: {
+            'view': function (element, init, end) {
 
                 grid.store.removeAll();
 
@@ -525,9 +487,9 @@
 
                 grid2.store.load();
 
+            }
         }
-        }],
-        });
+    });
 
     grid.store.load();
     grid2.store.load();
