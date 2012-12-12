@@ -8,6 +8,60 @@ They can be accessed in the *Reports* menu.
 
 .. figure:: i/reports-menu.png
 
+User tasks
+==========
+
+.. figure:: i/user-tasks-screen.png
+
+This report retrieves the list of tasks introduced by a user which match certain
+conditions.
+
+The top of the screen contains a box with all the available filters. In all
+cases, leaving a field empty means that the field won't be taken into account.
+This is the full list of available options:
+
+Dates between ... and ...
+  Filter tasks according to their date. You can use only the first field to get
+  the tasks since a particular date or only the second field to get the tasks
+  saved before or at that date.
+
+Task description:
+  A text string can be set here to search it inside the description field of
+  tasks. You can also select in a drop-down list the options **[empty]** or
+  **[not empty]** to search the tasks that contain some text or no text in that
+  field.
+
+Customer:
+  You can filter the tasks assigned to a specific customer selecting one from
+  this list.
+
+Project:
+  You can filter the tasks assigned to a specific project selecting one from
+  this list.
+
+Task type:
+  You can filter the tasks tagged with a specific task type selecting one from
+  this list.
+
+Story:
+  A text string can be set here to search it inside the story field of
+  tasks. You can also select in a drop-down list the options **[empty]** or
+  **[not empty]** to search the tasks that contain some text or no text in that
+  field.
+
+TaskStory:
+  You can filter the tasks related with a specific category inside a XP tracker
+  iteration selecting one from this list.
+
+Task type:
+  You can filter the tasks tagged as telework or the opposite with this option.
+
+The results are shown in the grid in the central area of the screen; rows
+represent tasks and columns represent the different data stored in them.
+Finally, in the bottom of the grid there are two buttons named **Standard view**
+and **Extended view**. The first one hides some columns to show a more compact
+grid (it's the default option), while the second one shows all the columns.
+
 User details
 ============
 
