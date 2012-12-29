@@ -29,6 +29,7 @@ Ext.ux.TasksStore = Ext.extend(Ext.data.Store, {
      * the server.
      */
     pendingOperations: {},
+    pendingOperationsTotalLength: 0,
 
     /**
      * Overwritten save method. The code is exactly the same but it makese sure
@@ -83,6 +84,7 @@ Ext.ux.TasksStore = Ext.extend(Ext.data.Store, {
                 this.pendingOperations[trans[0]] = trans[1];
             }
             if(this.fireEvent('beforesave', this, this.pendingOperations) !== false){
+                pendingOperationsTotalLength = batch;
                 this.processPendingOperations();
                 return batch;
             }
@@ -94,15 +96,32 @@ Ext.ux.TasksStore = Ext.extend(Ext.data.Store, {
 
         if(this.pendingOperations['destroy'] != undefined) {
             this.doTransaction('destroy', this.pendingOperations['destroy'],
-                    this.pendingOperations.length);
+                    this.pendingOperationsTotalLength);
+            delete this.pendingOperations['destroy'];
         }
-        if(this.pendingOperations['update'] != undefined) {
+        else if(this.pendingOperations['update'] != undefined) {
             this.doTransaction('update', this.pendingOperations['update'],
-                    this.pendingOperations.length);
+                    this.pendingOperationsTotalLength);
+            delete this.pendingOperations['update'];
         }
-        if(this.pendingOperations['create'] != undefined) {
+        else if(this.pendingOperations['create'] != undefined) {
             this.doTransaction('create', this.pendingOperations['create'],
-                    this.pendingOperations.length);
+                    this.pendingOperationsTotalLength);
+            delete this.pendingOperations['create'];
         }
+    },
+
+    /**
+     * Callback processed when the destroy operation finishes.
+     */
+    onDestroyRecords: function (sucess, rs, data) {
+        this.processPendingOperations();
+    },
+
+    /**
+     * Callback processed when the update operation finishes.
+     */
+    onUpdateRecords: function (sucess, rs, data) {
+        this.processPendingOperations();
     },
 });
