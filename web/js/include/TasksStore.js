@@ -25,6 +25,12 @@
 Ext.ux.TasksStore = Ext.extend(Ext.data.Store, {
 
     /**
+     * List with the destroy, create and update operations pending to be sent to
+     * the server.
+     */
+    pendingOperations: {},
+
+    /**
      * Overwritten save method. The code is exactly the same but it makese sure
      * that the calls to services are sent in this order: delete, update, save.
      */
@@ -74,16 +80,29 @@ Ext.ux.TasksStore = Ext.extend(Ext.data.Store, {
             batch = ++this.batchCounter;
             for(i = 0; i < len; ++i){
                 trans = queue[i];
-                data[trans[0]] = trans[1];
+                this.pendingOperations[trans[0]] = trans[1];
             }
-            if(this.fireEvent('beforesave', this, data) !== false){
-                for(i = 0; i < len; ++i){
-                    trans = queue[i];
-                    this.doTransaction(trans[0], trans[1], batch);
-                }
+            if(this.fireEvent('beforesave', this, this.pendingOperations) !== false){
+                this.processPendingOperations();
                 return batch;
             }
         }
         return -1;
+    },
+
+    processPendingOperations: function () {
+
+        if(this.pendingOperations['destroy'] != undefined) {
+            this.doTransaction('destroy', this.pendingOperations['destroy'],
+                    this.pendingOperations.length);
+        }
+        if(this.pendingOperations['update'] != undefined) {
+            this.doTransaction('update', this.pendingOperations['update'],
+                    this.pendingOperations.length);
+        }
+        if(this.pendingOperations['create'] != undefined) {
+            this.doTransaction('create', this.pendingOperations['create'],
+                    this.pendingOperations.length);
+        }
     },
 });
