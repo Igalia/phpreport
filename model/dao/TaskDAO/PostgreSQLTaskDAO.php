@@ -246,7 +246,35 @@ class PostgreSQLTaskDAO extends TaskDAO{
     public function getPersonalSummary($userId, DateTime $date) {
         if (!is_numeric($userId))
             throw new SQLIncorrectTypeException($userId);
-        $sql ="SELECT * FROM (SELECT COALESCE(SUM(_end-init), 0) AS WEEK FROM task WHERE usrid=" . $userId  . " AND EXTRACT(WEEK FROM _date) = EXTRACT(WEEK FROM date " . DBPostgres::formatDate($date)  . ") AND EXTRACT(YEAR FROM _date) = EXTRACT(YEAR FROM date " . DBPostgres::formatDate($date)  . ")) a , (SELECT COALESCE(SUM(_end-init), 0) AS MONTH FROM task WHERE usrid=" . $userId . " AND EXTRACT(MONTH FROM _date) = EXTRACT(MONTH FROM date " . DBPostgres::formatDate($date)  . ") AND EXTRACT(YEAR FROM _date) = EXTRACT(YEAR FROM date " . DBPostgres::formatDate($date)  . ")) b , (SELECT COALESCE(SUM(_end-init), 0) AS day FROM task WHERE usrid=" . $userId  . " AND _date = " . DBPostgres::formatDate($date)  . ") c;";
+        //this is a query grouping three unrelated queries
+        $sql = "SELECT * FROM
+
+            -- this query selects the hours worked in the current week
+            (SELECT COALESCE(SUM(_end-init), 0) AS WEEK
+                FROM task
+                WHERE usrid=" . $userId  . "
+                    AND EXTRACT(WEEK FROM _date) =
+                        EXTRACT(WEEK FROM date " . DBPostgres::formatDate($date)  . ")
+                    AND EXTRACT(YEAR FROM _date) =
+                        EXTRACT(YEAR FROM date " . DBPostgres::formatDate($date) . ")
+            ) a ,
+
+            -- this query selects the hours worked in the current month
+            (SELECT COALESCE(SUM(_end-init), 0) AS MONTH
+                FROM task
+                WHERE usrid=" . $userId . "
+                    AND EXTRACT(MONTH FROM _date) =
+                        EXTRACT(MONTH FROM date " . DBPostgres::formatDate($date)  . ")
+                    AND EXTRACT(YEAR FROM _date) =
+                        EXTRACT(YEAR FROM date " . DBPostgres::formatDate($date) . ")
+            ) b ,
+
+            -- this query selects the hours worked in the current day
+            (SELECT COALESCE(SUM(_end-init), 0) AS day
+                FROM task
+                WHERE usrid=" . $userId  . "
+                    AND _date = " . DBPostgres::formatDate($date) . "
+            ) c;";
 
         $res = @pg_query($this->connect, $sql);
 
