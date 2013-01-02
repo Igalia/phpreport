@@ -253,10 +253,18 @@ class PostgreSQLTaskDAO extends TaskDAO{
             (SELECT COALESCE(SUM(_end-init), 0) AS WEEK
                 FROM task
                 WHERE usrid=" . $userId  . "
-                    AND EXTRACT(WEEK FROM _date) =
-                        EXTRACT(WEEK FROM date " . DBPostgres::formatDate($date)  . ")
-                    AND EXTRACT(YEAR FROM _date) =
-                        EXTRACT(YEAR FROM date " . DBPostgres::formatDate($date) . ")
+                    AND _date >=
+                        --calculate the first day of the week
+                        (timestamp " . DBPostgres::formatDate($date)  . " -
+                            ((int2(date_part('dow',timestamp " .
+                                DBPostgres::formatDate($date)  . ")+7-1) % 7) ||' days')
+                            ::interval)::date
+                    AND _date <=
+                        --calculate the last day of the week
+                        (timestamp " . DBPostgres::formatDate($date)  . " -
+                            ((int2(date_part('dow',timestamp " .
+                                DBPostgres::formatDate($date)  . ")+7-1) % 7)-6 ||' days')
+                            ::interval)::date
             ) a ,
 
             -- this query selects the hours worked in the current month
