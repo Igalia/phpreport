@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2010 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2010-2012 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -29,9 +29,9 @@
  * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
 
-include_once('phpreport/model/facade/action/Action.php');
-include_once('phpreport/model/dao/DAOFactory.php');
-include_once('phpreport/model/vo/UserVO.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/Action.php');
+include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
 /** Get Tasks Filtered Action
  *
