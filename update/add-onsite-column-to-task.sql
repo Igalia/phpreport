@@ -8,5 +8,5 @@
 -- * onsite: whether a task was onsite or not
 --
 
-ALTER TABLE tasks ADD COLUMN onsite BOOLEAN
+ALTER TABLE task ADD COLUMN onsite BOOLEAN
     NOT NULL DEFAULT false;
