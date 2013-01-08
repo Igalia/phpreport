@@ -292,6 +292,8 @@ abstract class TasksFacade {
      *        to deactivate filtering by this field.
      * @param boolean $telework filter tasks by their telework field.
      *        NULL to deactivate filtering by this field.
+     * @param boolean $onsite filter tasks by their onsite field.
+     *        NULL to deactivate filtering by this field.
      * @param string $filterText string to filter tasks by their description
      *        field. Tasks with a description that contains this string will
      *        be returned. NULL to deactivate filtering by this field.
@@ -321,12 +323,12 @@ abstract class TasksFacade {
      *         ascendantly by their database internal identifier.
      */
     static function GetTasksFiltered($filterStartDate = NULL, $filterEndDate = NULL,
-            $telework = NULL, $filterText = NULL, $type = NULL, $userId = NULL,
+            $telework = NULL, $onsite = NULL, $filterText = NULL, $type = NULL, $userId = NULL,
             $projectId = NULL, $customerId = NULL, $taskStoryId = NULL,
             $filterStory = NULL, $emptyText = NULL, $emptyStory = NULL) {
 
         $action = new GetTasksFilteredAction($filterStartDate, $filterEndDate,
-                $telework, $filterText, $type, $userId, $projectId, $customerId,
+                $telework, $onsite, $filterText, $type, $userId, $projectId, $customerId,
                 $taskStoryId, $filterStory, $emptyText, $emptyStory);
         return $action->execute();
     }

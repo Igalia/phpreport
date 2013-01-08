@@ -46,6 +46,7 @@ class GetTasksFilteredAction extends Action{
     private $filterStartDate;
     private $filterEndDate;
     private $telework;
+    private $onsite;
     private $filterText;
     private $type;
     private $userId;
@@ -70,6 +71,8 @@ class GetTasksFilteredAction extends Action{
      *        having a date equal or sooner than this one will be returned. NULL
      *        to deactivate filtering by this field.
      * @param boolean $telework filter tasks by their telework field.
+     *        NULL to deactivate filtering by this field.
+     * @param boolean $onsite filter tasks by their onsite field.
      *        NULL to deactivate filtering by this field.
      * @param string $filterText string to filter tasks by their description
      *        field. Tasks with a description that contains this string will
@@ -100,12 +103,13 @@ class GetTasksFilteredAction extends Action{
      *         ascendantly by their database internal identifier.
      */
     public function __construct($filterStartDate = NULL, $filterEndDate = NULL,
-            $telework = NULL, $filterText = NULL, $type = NULL, $userId = NULL,
+            $telework = NULL, $onsite = NULL, $filterText = NULL, $type = NULL, $userId = NULL,
             $projectId = NULL, $customerId = NULL, $taskStoryId = NULL,
             $filterStory = NULL, $emptyText = NULL, $emptyStory = NULL) {
         $this->filterStartDate = $filterStartDate;
         $this->filterEndDate = $filterEndDate;
         $this->telework = $telework;
+        $this->onsite = $onsite;
         $this->filterText = $filterText;
         $this->type = $type;
         $this->userId = $userId;
@@ -132,8 +136,8 @@ class GetTasksFilteredAction extends Action{
         $dao = DAOFactory::getTaskDAO();
 
         return $dao->getFiltered($this->filterStartDate, $this->filterEndDate,
-                $this->telework, $this->filterText, $this->type, $this->userId,
-                $this->projectId, $this->customerId, $this->taskStoryId,
+                $this->telework, $this->onsite, $this->filterText, $this->type,
+                $this->userId, $this->projectId, $this->customerId, $this->taskStoryId,
                 $this->filterStory, $this->emptyText, $this->emptyStory);
     }
 }

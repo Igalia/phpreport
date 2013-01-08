@@ -198,6 +198,8 @@ abstract class TaskDAO extends BaseDAO{
      *        to deactivate filtering by this field.
      * @param boolean $telework filter tasks by their telework field.
      *        NULL to deactivate filtering by this field.
+     * @param boolean $onsite filter tasks by their onsite field.
+     *        NULL to deactivate filtering by this field.
      * @param string $filterText string to filter tasks by their description
      *        field. Tasks with a description that contains this string will
      *        be returned. NULL to deactivate filtering by this field.
@@ -228,10 +230,9 @@ abstract class TaskDAO extends BaseDAO{
      * @throws {@link OperationErrorException}
      */
     public abstract function getFiltered($filterStartDate = NULL,
-            $filterEndDate = NULL, $telework = NULL, $filterText = NULL,
+            $filterEndDate = NULL, $telework = NULL, $onsite = NULL, $filterText = NULL,
             $type = NULL, $userId = NULL, $projectId = NULL, $customerId = NULL,
-            $taskStoryId = NULL, $filterStory = NULL, $emptyText = NULL,
-            $emptyStory = NULL);
+            $taskStoryId = NULL, $filterStory = NULL, $emptyText = NULL, $emptyStory = NULL);
 
     /** Tasks report generator.
      *

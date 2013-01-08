@@ -77,8 +77,8 @@
 
                 $taskVO = new TaskVO();
 
-                $update = array('date' => false, 'init' => false,
-                    'end' => false, 'story' => false, 'telework' => false,
+                $update = array('date' => false, 'init' => false, 'end' => false,
+                    'story' => false, 'telework' => false, 'onsite' => false,
                     'ttype' => false, 'text' => false, 'phase' => false,
                     'taskStoryId' => false, 'projectId' => false,
                     'customerId' => false, 'userId' => false);
@@ -170,6 +170,19 @@
                                     $parser->next();
                                 }
                                 $update['telework'] = true;
+                                break;
+
+                        case "onsite":$parser->read();
+                                if ($parser->hasValue)
+                                {
+                                    if (strtolower($parser->value) == "true")
+                                        $taskVO->setOnsite(true);
+                                    else
+                                        $taskVO->setOnsite(false);
+                                    $parser->next();
+                                    $parser->next();
+                                }
+                                $update['onsite'] = true;
                                 break;
 
                         case "ttype":    $parser->read();

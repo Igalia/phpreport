@@ -80,6 +80,10 @@ class PostgreSQLTaskDAO extends TaskDAO{
         $taskVO->setTelework(True);
     elseif (strtolower($row['telework']) == "f")
         $taskVO->setTelework(False);
+    if (strtolower($row['onsite']) == "t")
+        $taskVO->setOnsite(True);
+    elseif (strtolower($row['onsite']) == "f")
+        $taskVO->setOnsite(False);
     $taskVO->setText($row['text']);
     $taskVO->setTtype($row['ttype']);
     $taskVO->setPhase($row['phase']);
@@ -331,8 +335,8 @@ class PostgreSQLTaskDAO extends TaskDAO{
     }
 
     public function getFiltered($filterStartDate = NULL, $filterEndDate = NULL,
-            $telework = NULL, $filterText = NULL, $type = NULL, $userId = NULL,
-            $projectId = NULL, $customerId = NULL, $taskStoryId = NULL,
+            $telework = NULL, $onsite = NULL, $filterText = NULL, $type = NULL,
+            $userId = NULL, $projectId = NULL, $customerId = NULL, $taskStoryId = NULL,
             $filterStory = NULL, $emptyText = NULL, $emptyStory = NULL) {
 
         $conditions = "TRUE";
@@ -347,6 +351,10 @@ class PostgreSQLTaskDAO extends TaskDAO{
         if ($telework !== NULL) {
             $conditions .= " AND telework = " .
                     DBPostgres::boolToString($telework);
+        }
+        if ($onsite !== NULL) {
+            $conditions .= " AND onsite = " .
+                    DBPostgres::boolToString($onsite);
         }
         if ($filterText != NULL && $emptyText === NULL) {
             $conditions .= " AND text like ('%$filterText%')";
@@ -646,6 +654,9 @@ class PostgreSQLTaskDAO extends TaskDAO{
         if ($update['telework'])
         $sql = $sql . "telework=" . DBPostgres::boolToString($taskVO->getTelework()) . ", ";
 
+        if ($update['onsite'])
+        $sql = $sql . "onsite=" . DBPostgres::boolToString($taskVO->getOnsite()) . ", ";
+
         if ($update['text'])
         $sql = $sql . "text=" . DBPostgres::checkStringNull($taskVO->getText()) . ", ";
 
@@ -703,7 +714,20 @@ class PostgreSQLTaskDAO extends TaskDAO{
         // If the query returned a row then update
         if(sizeof($currTaskVO) > 0) {
 
-            $sql = "UPDATE task SET _date=" . DBPostgres::formatDate($taskVO->getDate()) . ", init=" . DBPostgres::checkNull($taskVO->getInit()) . ", _end=" . DBPostgres::checkNull($taskVO->getEnd()) . ", story=" . DBPostgres::checkStringNull($taskVO->getStory()) . ", telework=" . DBPostgres::boolToString($taskVO->getTelework()) . ", text=" . DBPostgres::checkStringNull($taskVO->getText()) . ", ttype=" . DBPostgres::checkStringNull($taskVO->getTtype()) . ", phase=" . DBPostgres::checkStringNull($taskVO->getPhase()) . ", usrid=" . DBPostgres::checkNull($taskVO->getUserId()) . ", projectid=" . DBPostgres::checkNull($taskVO->getProjectId()) . ", customerid=" . DBPostgres::checkNull($taskVO->getCustomerId()) . ", task_storyid=" . DBPostgres::checkNull($taskVO->getTaskStoryId()) . " WHERE id=".$taskVO->getId();
+            $sql = "UPDATE task SET _date=" . DBPostgres::formatDate($taskVO->getDate()) .
+                   ", init=" . DBPostgres::checkNull($taskVO->getInit()) .
+                   ", _end=" . DBPostgres::checkNull($taskVO->getEnd()) .
+                   ", story=" . DBPostgres::checkStringNull($taskVO->getStory()) .
+                   ", telework=" . DBPostgres::boolToString($taskVO->getTelework()) .
+                   ", onsite=" . DBPostgres::boolToString($taskVO->getOnsite()) .
+                   ", text=" . DBPostgres::checkStringNull($taskVO->getText()) .
+                   ", ttype=" . DBPostgres::checkStringNull($taskVO->getTtype()) .
+                   ", phase=" . DBPostgres::checkStringNull($taskVO->getPhase()) .
+                   ", usrid=" . DBPostgres::checkNull($taskVO->getUserId()) .
+                   ", projectid=" . DBPostgres::checkNull($taskVO->getProjectId()) .
+                   ", customerid=" . DBPostgres::checkNull($taskVO->getCustomerId()) .
+                   ", task_storyid=" . DBPostgres::checkNull($taskVO->getTaskStoryId()) .
+                   " WHERE id=".$taskVO->getId();
 
             $res = pg_query($this->connect, $sql);
 
@@ -731,7 +755,20 @@ class PostgreSQLTaskDAO extends TaskDAO{
     public function create(TaskVO $taskVO) {
         $affectedRows = 0;
 
-        $sql = "INSERT INTO task (_date, init, _end, story, telework, text, ttype, phase, usrid, projectid, customerid, task_storyid) VALUES(" . DBPostgres::formatDate($taskVO->getDate()) . ", " . DBPostgres::checkNull($taskVO->getInit()) . ", " . DBPostgres::checkNull($taskVO->getEnd()) . ", " . DBPostgres::checkStringNull($taskVO->getStory()) . ", " . DBPostgres::boolToString($taskVO->getTelework()) . ", " . DBPostgres::checkStringNull($taskVO->getText()) . ", " . DBPostgres::checkStringNull($taskVO->getTtype()) . ", " . DBPostgres::checkStringNull($taskVO->getPhase()) . ", " . DBPostgres::checkNull($taskVO->getUserId()) . ", " . DBPostgres::checkNull($taskVO->getProjectId()) . ", " . DBPostgres::checkNull($taskVO->getCustomerId()). ", " . DBPostgres::checkNull($taskVO->getTaskStoryId()) .")";
+        $sql = "INSERT INTO task (_date, init, _end, story, telework, onsite, text, ttype, phase, usrid, projectid, customerid, task_storyid) VALUES(" .
+            DBPostgres::formatDate($taskVO->getDate()) . ", " .
+            DBPostgres::checkNull($taskVO->getInit()) . ", " .
+            DBPostgres::checkNull($taskVO->getEnd()) . ", " .
+            DBPostgres::checkStringNull($taskVO->getStory()) . ", " .
+            DBPostgres::boolToString($taskVO->getTelework()) . ", " .
+            DBPostgres::boolToString($taskVO->getOnsite()) . ", " .
+            DBPostgres::checkStringNull($taskVO->getText()) . ", " .
+            DBPostgres::checkStringNull($taskVO->getTtype()) . ", " .
+            DBPostgres::checkStringNull($taskVO->getPhase()) . ", " .
+            DBPostgres::checkNull($taskVO->getUserId()) . ", " .
+            DBPostgres::checkNull($taskVO->getProjectId()) . ", " .
+            DBPostgres::checkNull($taskVO->getCustomerId()). ", " .
+            DBPostgres::checkNull($taskVO->getTaskStoryId()) .")";
 
         $res = pg_query($this->connect, $sql);
 

@@ -278,6 +278,14 @@ Ext.onReady(function () {
             mode: 'local',
             triggerAction:'all',
             store: ['yes', 'no'],
+        },{
+            fieldLabel: 'Onsite',
+            name: 'onsite',
+            xtype: 'combo',
+            id: 'onsite',
+            mode: 'local',
+            triggerAction:'all',
+            store: ['yes', 'no'],
         }],
 
         buttons: [{
@@ -357,6 +365,10 @@ Ext.onReady(function () {
                     var value = Ext.getCmp('telework').getValue();
                     baseParams.telework = (value == 'yes')? true : false;
                 }
+                if (Ext.getCmp('onsite').getRawValue() != "") {
+                    var value = Ext.getCmp('onsite').getValue();
+                    baseParams.onsite = (value == 'yes')? true : false;
+                }
 
                 tasksStore.baseParams = baseParams;
                 tasksStore.load();
@@ -370,6 +382,7 @@ Ext.onReady(function () {
         {name:'endTime'},
         {name:'story'},
         {name:'telework'},
+        {name:'onsite'},
         {name:'ttype'},
         {name:'text'},
         {name:'phase'},
@@ -440,6 +453,13 @@ Ext.onReady(function () {
             trueText: "<span style='color:green;'>Yes</span>",
             falseText: "<span style='color:red;'>No</span>",
         },{
+            header: 'Onsite',
+            sortable: true,
+            dataIndex: 'onsite',
+            xtype: 'booleancolumn',
+            trueText: "<span style='color:green;'>Yes</span>",
+            falseText: "<span style='color:red;'>No</span>",
+        },{
             header: 'Story',
             sortable: true,
             dataIndex: 'story',
@@ -490,9 +510,10 @@ Ext.onReady(function () {
         columnModel.setHidden(4, false);  //project
         columnModel.setHidden(5, true);   //task type
         columnModel.setHidden(6, true);   //telework
-        columnModel.setHidden(7, false);  //story
-        columnModel.setHidden(8, false);  //taskStory
-        columnModel.setHidden(9, false);  //description
+        columnModel.setHidden(7, true);   //onsite
+        columnModel.setHidden(8, false);  //story
+        columnModel.setHidden(9, false);  //taskStory
+        columnModel.setHidden(10, false);  //description
         columnModel.setColumnWidth(0, 80);
         columnModel.setColumnWidth(1, 55);
         columnModel.setColumnWidth(2, 55);
@@ -511,9 +532,10 @@ Ext.onReady(function () {
         columnModel.setHidden(4, false);  //project
         columnModel.setHidden(5, false);  //task type
         columnModel.setHidden(6, false);  //telework
-        columnModel.setHidden(7, false);  //story
-        columnModel.setHidden(8, false);  //taskStory
-        columnModel.setHidden(9, false);  //description
+        columnModel.setHidden(7, false);  //onsite
+        columnModel.setHidden(8, false);  //story
+        columnModel.setHidden(9, false);  //taskStory
+        columnModel.setHidden(10, false);  //description
         columnModel.setColumnWidth(0, 80);
         columnModel.setColumnWidth(1, 55);
         columnModel.setColumnWidth(2, 55);

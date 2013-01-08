@@ -43,6 +43,10 @@
  *     or 'false'.
  *   </li>
  *   <li>
+ *     <b>onsite</b> filter tasks by their onsite field. Values can be 'true'
+ *     or 'false'.
+ *   </li>
+ *   <li>
  *     <b>filterText</b> string to filter tasks by their description field.
  *     Tasks with a description that contains this string will be returned.
  *   </li>
@@ -137,6 +141,7 @@
         $filterStartDate = NULL;
         $filterEndDate = NULL;
         $telework = NULL;
+        $onsite = NULL;
         $filterText = NULL;
         $type = NULL;
         $userId = NULL;
@@ -163,6 +168,14 @@
             }
             else if ($_GET['telework'] == 'false') {
                 $telework = false;
+            }
+        }
+        if (isset($_GET['onsite'])) {
+            if ($_GET['onsite'] == 'true') {
+                $onsite = true;
+            }
+            else if ($_GET['onsite'] == 'false') {
+                $onsite = false;
             }
         }
         if (isset($_GET['filterText'])) {
@@ -204,7 +217,7 @@
         }
 
         $tasks = TasksFacade::GetTasksFiltered($filterStartDate, $filterEndDate,
-                $telework, $filterText, $type, $userId, $projectId, $customerId,
+                $telework, $onsite, $filterText, $type, $userId, $projectId, $customerId,
                 $taskStoryId, $filterStory, $emptyText, $emptyStory);
 
         $string = "<tasks>";
@@ -218,10 +231,16 @@
                     ":" . str_pad($task->getEnd()%60, 2, "0", STR_PAD_LEFT)  . "</endTime>" .
                     "<story>" . escape_string($task->getStory()) . "</story>" .
                     "<telework>";
-            if($task->getTelework())
+
+            if ($task->getTelework())
                 $string .=  "true";
             else $string .= "false";
-            $string = $string . "</telework><ttype>" . escape_string($task->getTtype()) . "</ttype><text>" . escape_string($task->getText()) . "</text><phase>" . escape_string($task->getPhase()) . "</phase><userId>{$task->getUserId()}</userId><projectId>{$task->getProjectId()}</projectId><customerId>{$task->getCustomerId()}</customerId><taskStoryId>{$task->getTaskStoryId()}</taskStoryId></task>";
+            $string .= "</telework><onsite>";
+            if ($task->getOnsite())
+                $string .=  "true";
+            else $string .= "false";
+
+            $string .= "</onsite><ttype>" . escape_string($task->getTtype()) . "</ttype><text>" . escape_string($task->getText()) . "</text><phase>" . escape_string($task->getPhase()) . "</phase><userId>{$task->getUserId()}</userId><projectId>{$task->getProjectId()}</projectId><customerId>{$task->getCustomerId()}</customerId><taskStoryId>{$task->getTaskStoryId()}</taskStoryId></task>";
 
         }
 

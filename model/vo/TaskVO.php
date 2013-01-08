@@ -39,6 +39,7 @@
  *  @property int $_end time this Task ended at.
  *  @property string $story story of this Task.
  *  @property boolean $telework says if this Task was made by telework.
+ *  @property boolean $onsite says if this Task was made onsite.
  *  @property string $text text describing this Task.
  *  @property string $ttype type of this Task.
  *  @property string $phase phase of this Task.
@@ -58,6 +59,7 @@ class TaskVO {
     protected $_end = NULL;
     protected $story = NULL;
     protected $telework = NULL;
+    protected $onsite = NULL;
     protected $text = NULL;
     protected $ttype = NULL;
     protected $phase = NULL;
@@ -119,8 +121,16 @@ class TaskVO {
         $this->telework = (boolean) $telework;
     }
 
+    public function setOnsite($onsite) {
+        $this->onsite = (boolean) $onsite;
+    }
+
     public function getTelework() {
         return $this->telework;
+    }
+
+    public function getOnsite() {
+        return $this->onsite;
     }
 
     public function setText($text) {

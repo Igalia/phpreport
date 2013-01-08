@@ -87,6 +87,7 @@ var taskRecord = new Ext.data.Record.create([
     {name:'endTime'},
     {name:'story'},
     {name:'telework'},
+    {name:'onsite'},
     {name:'ttype'},
     {name:'text'},
     {name:'phase'},
@@ -185,6 +186,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
         this.storyField.setDisabled(readOnly);
         this.taskStoryComboBox.setDisabled(readOnly);
         this.teleworkCheckBox.setDisabled(readOnly);
+        this.onsiteCheckBox.setDisabled(readOnly);
         this.descriptionTextArea.setDisabled(readOnly);
 
         this.deleteButton.setDisabled(readOnly);
@@ -440,7 +442,8 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
             teleworkCheckBox: new Ext.form.Checkbox({
                 parent: this,
-                value: (this.taskRecord.data['telework']=='true')?true:false,
+                value: this.taskRecord.data['telework']=='true',
+                boxLabel: "Telework",
                 tabIndex: tab++,
                 listeners: {
                     'check': function() {
@@ -448,9 +451,20 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     }
                 }
             }),
+            onsiteCheckBox: new Ext.form.Checkbox({
+                parent: this,
+                value: this.taskRecord.data['onsite']=='true',
+                boxLabel: "Onsite",
+                tabIndex: tab++,
+                listeners: {
+                    'check': function() {
+                        this.parent.taskRecord.set('onsite',String(this.getValue()));
+                    }
+                }
+            }),
             descriptionTextArea: new Ext.form.TextArea({
                 parent: this,
-                height:205,
+                height: 250,
                 tabIndex: tab++,
                 value: this.taskRecord.data['text'],
                 listeners: {
@@ -523,10 +537,14 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     }
                     //add the new template to the array
                     var task = this.parent.taskRecord;
-                    var template = [task.get('customerId'), task.get('projectId'),
-                            task.get('ttype'), task.get('story'),
-                            task.get('taskStoryId'), task.get('telework'),
-                            task.get('text')]
+                    var template = [task.get('customerId'),
+                                    task.get('projectId'),
+                                    task.get('ttype'),
+                                    task.get('story'),
+                                    task.get('taskStoryId'),
+                                    task.get('telework'),
+                                    task.get('onsite'),
+                                    task.get('text')]
                     templatesArray.push(template);
 
                     //save the templates into the cookie
@@ -540,8 +558,9 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
         });
 
-        /* Set the value of the checkbox correctly */
-        this.teleworkCheckBox.setValue((this.taskRecord.data['telework']=='true')?true:false);
+        /* Set the value of the checkboxes correctly */
+        this.teleworkCheckBox.setValue((this.taskRecord.data['telework']=='true'));
+        this.onsiteCheckBox.setValue((this.taskRecord.data['onsite']=='true'));
 
         /* Place the subelements correctly into the form */
         leftBox = new Ext.Panel({
@@ -573,9 +592,11 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 new Ext.Container({
                     layout: 'hbox',
                     layoutConfig: {defaultMargins: "7px 5px 0 0"},
+                    items: [this.teleworkCheckBox, this.onsiteCheckBox]}),
+                new Ext.Container({
+                    layout: 'hbox',
+                    layoutConfig: {defaultMargins: "7px 5px 0 0"},
                     items:[
-                        new Ext.form.Label({text: 'Telework'}),
-                        this.teleworkCheckBox,
                         this.deleteButton,
                         this.cloneButton,
                         this.createTemplateButton,
@@ -950,9 +971,9 @@ Ext.onReady(function(){
         },
         addButtonForTemplate: function (templateValues, indexInsideCookie) {
             var createButton = new Ext.Button({
-                text: ((templateValues[6] != undefined) &&
-                        (templateValues[6] != '')) ?
-                    templateValues[6] :
+                text: ((templateValues[7] != undefined) &&
+                        (templateValues[7] != '')) ?
+                    templateValues[7] :
                     'Template',
                 flex: 3,
                 disabled: forbidden,
@@ -965,6 +986,7 @@ Ext.onReady(function(){
                     newTask.set('story', templateValues[3]);
                     newTask.set('taskStoryId', templateValues[4]);
                     newTask.set('telework', templateValues[5]);
+                    newTask.set('onsite', templateValues[6]);
                     //add the record to the store
                     myStore.add(newTask);
 
