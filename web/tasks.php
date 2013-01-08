@@ -450,7 +450,8 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
             descriptionTextArea: new Ext.form.TextArea({
                 parent: this,
-                height:205,
+                height: 195,
+                anchor: '100%',
                 tabIndex: tab++,
                 value: this.taskRecord.data['text'],
                 listeners: {
@@ -576,19 +577,25 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     items:[
                         new Ext.form.Label({text: 'Telework'}),
                         this.teleworkCheckBox,
-                        this.deleteButton,
-                        this.cloneButton,
-                        this.createTemplateButton,
                     ]
                 })
             ],
         });
         rightBox = new Ext.Panel({
-            layout:'fit',
+            layout:'anchor',
             monitorResize: true,
             columnWidth: 1,
             items:[
                 this.descriptionTextArea,
+                new Ext.Container({
+                    layout: 'hbox',
+                    layoutConfig: {defaultMargins: "7px 5px 0 0"},
+                    items:[
+                        this.deleteButton,
+                        this.cloneButton,
+                        this.createTemplateButton,
+                    ]
+                })
             ],
         });
         this.items = [leftBox, rightBox];
