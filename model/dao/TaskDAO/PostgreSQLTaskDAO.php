@@ -32,6 +32,7 @@
 
 include_once(PHPREPORT_ROOT . '/util/TaskReportInvalidParameterException.php');
 include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
+include_once(PHPREPORT_ROOT . '/model/vo/DirtyTaskVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/TaskVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/CustomerVO.php');
@@ -575,15 +576,17 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
     /** Task partial updater for PostgreSQL.
      *
-     * This function updates only some fields of the data of a Task by its {@link TaskVO}, reading
-     * the flags on the associative array <var>$update</var>.
+     * This function updates only some fields of the data of a Task using a
+     * {@link DirtyTaskVO} to know the data and the information of which fields
+     * should be updated.
      *
-     * @param TaskVO $taskVO the {@link TaskVO} with the data we want to update on database.
-     * @param array $update an array with flags for updating or not the different fields.
+     * @param DirtyTaskVO $taskVO the {@link TaskVO} with the data we want to
+     *        update on database and the information about which fields must be
+     *        updated.
      * @return int the number of rows that have been affected (it should be 1).
      * @throws {@link SQLQueryErrorException}
      */
-    public function partialUpdate(TaskVO $taskVO, $update) {
+    public function partialUpdate(DirtyTaskVO $taskVO) {
         $affectedRows = 0;
 
         if($taskVO->getId() != "") {
@@ -595,41 +598,52 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
         $sql = "UPDATE task SET ";
 
-        if ($update['date'])
-        $sql = $sql . "_date=" . DBPostgres::formatDate($taskVO->getDate()) . ", ";
+        if ($taskVO->isDateDirty())
+            $sql .= "_date=" .
+                    DBPostgres::formatDate($taskVO->getDate()) . ", ";
 
-        if ($update['init'])
-        $sql = $sql . "init=" . DBPostgres::checkNull($taskVO->getInit()) . ", ";
+        if ($taskVO->isInitDirty())
+            $sql .= "init=" . DBPostgres::checkNull($taskVO->getInit()) . ", ";
 
-        if ($update['end'])
-        $sql = $sql . "_end=" . DBPostgres::checkNull($taskVO->getEnd()) . ", ";
+        if ($taskVO->isEndDirty())
+            $sql .= "_end=" .
+                    DBPostgres::checkNull($taskVO->getEnd()) . ", ";
 
-        if ($update['story'])
-        $sql = $sql . "story=" . DBPostgres::checkStringNull($taskVO->getStory()) . ", ";
+        if ($taskVO->isStoryDirty())
+            $sql .= "story=" .
+                    DBPostgres::checkStringNull($taskVO->getStory()) . ", ";
 
-        if ($update['telework'])
-        $sql = $sql . "telework=" . DBPostgres::boolToString($taskVO->getTelework()) . ", ";
+        if ($taskVO->isTeleworkDirty())
+            $sql .= "telework=" .
+                    DBPostgres::boolToString($taskVO->getTelework()) . ", ";
 
-        if ($update['text'])
-        $sql = $sql . "text=" . DBPostgres::checkStringNull($taskVO->getText()) . ", ";
+        if ($taskVO->isTextDirty())
+            $sql .= "text=" .
+                    DBPostgres::checkStringNull($taskVO->getText()) . ", ";
 
-        if ($update['ttype'])
-        $sql = $sql . "ttype=" . DBPostgres::checkStringNull($taskVO->getTtype()) . ", ";
+        if ($taskVO->isTtypeDirty())
+            $sql .= "ttype=" .
+                    DBPostgres::checkStringNull($taskVO->getTtype()) . ", ";
 
-        if ($update['phase'])
-        $sql = $sql . "phase=" . DBPostgres::checkStringNull($taskVO->getPhase()) . ", ";
+        if ($taskVO->isPhaseDirty())
+            $sql .= "phase=" .
+                    DBPostgres::checkStringNull($taskVO->getPhase()) . ", ";
 
-        if ($update['userId'])
-        $sql = $sql . "usrid=" . DBPostgres::checkNull($taskVO->getUserId()) . ", ";
+        if ($taskVO->isUserIdDirty())
+            $sql .= "usrid=" .
+                    DBPostgres::checkNull($taskVO->getUserId()) . ", ";
 
-        if ($update['projectId'])
-        $sql = $sql . "projectid=" . DBPostgres::checkNull($taskVO->getProjectId()) . ", ";
+        if ($taskVO->isProjectIdDirty())
+            $sql .= "projectid=" .
+                    DBPostgres::checkNull($taskVO->getProjectId()) . ", ";
 
-        if ($update['customerId'])
-        $sql = $sql . "customerid=" . DBPostgres::checkNull($taskVO->getCustomerId()) . ", ";
+        if ($taskVO->isCustomerIdDirty())
+            $sql .= "customerid=" .
+                    DBPostgres::checkNull($taskVO->getCustomerId()) . ", ";
 
-        if ($update['taskStoryId'])
-        $sql = $sql . "task_storyid=" . DBPostgres::checkNull($taskVO->getTaskStoryId());
+        if ($taskVO->isTaskStoryIdDirty())
+            $sql .= "task_storyid=" .
+                    DBPostgres::checkNull($taskVO->getTaskStoryId());
 
         if (strlen($sql) == strlen("UPDATE task SET "))
         return NULL;

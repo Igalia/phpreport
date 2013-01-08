@@ -29,7 +29,7 @@
     define('PHPREPORT_ROOT', __DIR__ . '/../../');
     include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
     include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
-    include_once(PHPREPORT_ROOT . '/model/vo/TaskVO.php');
+    include_once(PHPREPORT_ROOT . '/model/vo/DirtyTaskVO.php');
 
     $parser = new XMLReader();
 
@@ -75,13 +75,7 @@
             if ($parser->name == "task")
             {
 
-                $taskVO = new TaskVO();
-
-                $update = array('date' => false, 'init' => false,
-                    'end' => false, 'story' => false, 'telework' => false,
-                    'ttype' => false, 'text' => false, 'phase' => false,
-                    'taskStoryId' => false, 'projectId' => false,
-                    'customerId' => false, 'userId' => false);
+                $taskVO = new DirtyTaskVO();
 
                 $parser->read();
 
@@ -113,7 +107,9 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update['date'] = true;
+                                else {
+                                    $taskVO->setDate(NULL);
+                                }
                                 break;
 
                         case "initTime": $initTimeFormat = $parser->getAttribute("format");
@@ -129,7 +125,9 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update['init'] = true;
+                                else {
+                                    $taskVO->setInit(NULL);
+                                }
                                 break;
 
                         case "endTime": $endTimeFormat = $parser->getAttribute("format");
@@ -146,7 +144,9 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update['end'] = true;
+                                else {
+                                    $taskVO->setEnd(NULL);
+                                }
                                 break;
 
                         case "story":$parser->read();
@@ -156,7 +156,9 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update['story'] = true;
+                                else {
+                                    $taskVO->setStory(NULL);
+                                }
                                 break;
 
                         case "telework":$parser->read();
@@ -169,7 +171,9 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update['telework'] = true;
+                                else {
+                                    $taskVO->setTelework(NULL);
+                                }
                                 break;
 
                         case "ttype":    $parser->read();
@@ -179,7 +183,9 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update['ttype'] = true;
+                                else {
+                                    $taskVO->setTtype(NULL);
+                                }
                                 break;
 
                         case "text":    $parser->read();
@@ -189,7 +195,9 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update['text'] = true;
+                                else {
+                                    $taskVO->setText(NULL);
+                                }
                                 break;
 
                         case "phase":    $parser->read();
@@ -199,7 +207,9 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update['phase'] = true;
+                                else {
+                                    $taskVO->setPhase(NULL);
+                                }
                                 break;
 
                         case "taskStoryId":$parser->read();
@@ -209,7 +219,9 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update['taskStoryId'] = true;
+                                else {
+                                    $taskVO->setTaskStoryId(NULL);
+                                }
                                 break;
 
                         case "projectId":$parser->read();
@@ -219,7 +231,9 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update['projectId'] = true;
+                                else {
+                                    $taskVO->setProjectId(NULL);
+                                }
                                 break;
 
                         case "customerId":$parser->read();
@@ -229,7 +243,9 @@
                                     $parser->next();
                                     $parser->next();
                                 }
-                                $update['customerId'] = true;
+                                else {
+                                    $taskVO->setCustomerId(NULL);
+                                }
                                 break;
 
                         default:    $parser->next();
@@ -244,15 +260,13 @@
 
                 $updateTasks[] = $taskVO;
 
-                $updates[] = $update;
-
             }
 
         } while ($parser->read());
 
 
         if (count($updateTasks) >= 1)
-            if (TasksFacade::PartialUpdateReports($updateTasks, $updates) == -1)
+            if (TasksFacade::PartialUpdateReports($updateTasks) == -1)
                 $string = "<return service='updateTasks'><success>false</success><error id='1'>There was some error while updating the tasks</error></return>";
 
 
