@@ -663,6 +663,16 @@ class PostgreSQLTaskDAO extends TaskDAO{
         return $affectedRows;
     }
 
+    public function batchPartialUpdate($tasks) {
+        $affectedRows = 0;
+
+        foreach ($tasks as $task) {
+            $affectedRows += $this->partialUpdate($task);
+        }
+
+        return $affectedRows;
+    }
+
     /** Task updater for PostgreSQL.
      *
      * This function updates the data of a Task by its {@link TaskVO}.

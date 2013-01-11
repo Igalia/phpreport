@@ -34,6 +34,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/CreateReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/PartialUpdateReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/PartialUpdateTasksAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserTasksAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetPersonalSummaryByLoginDateAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetGlobalUsersProjectsReportAction.php');
@@ -204,11 +205,9 @@ abstract class TasksFacade {
      */
     static function PartialUpdateReports($tasks) {
 
-        foreach((array)$tasks as $i=>$task)
-            if ((TasksFacade::PartialUpdateReport($task)) == -1)
-                return -1;
+        $action = new PartialUpdateTasksAction($tasks);
 
-    return 0;
+        return $action->execute();
 
     }
 
