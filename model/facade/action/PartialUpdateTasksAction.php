@@ -81,16 +81,16 @@ class PartialUpdateTasksAction extends Action{
         $discardedTasks = [];
 
         //first check permission on task write
-        foreach ($tasks as $i => $task) {
-            if(!$configDao->isWriteAllowedForDate($this->task->getDate()) ||
+        foreach ($this->tasks as $i => $task) {
+            if(!$configDao->isWriteAllowedForDate($task->getDate()) ||
                     (!$taskDao->checkTaskUserId(
                         $task->getId(), $task->getUserId()))) {
                 $discardedTasks[] = $task;
-                unset($tasks[$i]);
+                unset($this->tasks[$i]);
             }
         }
 
-        if ($taskDao->batchPartialUpdate($this->tasks) <= 0) {
+        if ($taskDao->batchPartialUpdate($this->tasks) < count($this->tasks)) {
             return -1;
         }
 
