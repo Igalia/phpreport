@@ -736,6 +736,16 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
     }
 
+    public function batchCreate($tasks) {
+        $affectedRows = 0;
+
+        foreach ($tasks as $task) {
+            $affectedRows += $this->create($task);
+        }
+
+        return $affectedRows;
+    }
+
     /** Task deleter for PostgreSQL.
      *
      * This function deletes the data of a Task by its {@link TaskVO}.

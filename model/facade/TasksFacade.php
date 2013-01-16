@@ -31,6 +31,7 @@
  */
 
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/CreateTasksAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/PartialUpdateReportAction.php');
@@ -96,11 +97,9 @@ abstract class TasksFacade {
      */
     static function CreateReports($tasks) {
 
-    foreach((array)$tasks as $task)
-        if ((TasksFacade::CreateReport($task)) == -1)
-            return -1;
+        $action = new CreateTasksAction($tasks);
 
-    return 0;
+        return $action->execute();
 
     }
 

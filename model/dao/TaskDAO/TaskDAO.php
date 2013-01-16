@@ -331,6 +331,17 @@ abstract class TaskDAO extends BaseDAO{
      */
     public abstract function create(TaskVO $taskVO);
 
+    /** Task batch creator.
+     *
+     * Equivalent to {@see create} for arrays of tasks.
+     *
+     * @param array $tasks array of {@link TaskVO} objects to be created.
+     * @return int the number of rows that have been affected (it should be
+     *         equal to the size of $tasks).
+     * @throws {@link SQLQueryErrorException}
+     */
+    public abstract function batchCreate($tasks);
+
     /** Task deleter.
      *
      * This function deletes the data of a Task by its {@link TaskVO}.
