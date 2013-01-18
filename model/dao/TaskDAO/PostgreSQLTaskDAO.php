@@ -676,8 +676,8 @@ class PostgreSQLTaskDAO extends TaskDAO{
     /**
      * Checks if the set of task modifications overlaps with the set of tasks
      * that are already saved.
+     * PRECONDITION: we assume all the tasks belong to the same user.
      * TODO: make it work for task updates too.
-     * TODO: check the dates of the tasks
      * @param {array} $tasks set of modifications. It can contain {@link TaskVO}
               objects for new tasks, or {@link DirtyTaskVO} objects for updates.
      * @return {boolean} true if there is no overlapping.
@@ -686,16 +686,31 @@ class PostgreSQLTaskDAO extends TaskDAO{
         if (count($tasks) == 0) {
             return true;
         }
-        $task = $tasks[0];
-        $tasksInDB = $this->getByUserIdDate($task->getUserId(),
-                $task->getDate());
-        return $this->checkOverlappingTasks(array_merge($tasks, $tasksInDB));
+
+        //group tasks by date
+        $tasksByDate = [];
+        foreach ($tasks as $task) {
+            $dates[$task->getDate()][] = $task;
+        }
+
+        //evaluate every date independently
+        $userId = $tasks[0]->getUserId();
+        foreach (array_keys($tasksByDate) as $date) {
+            $tasksInDB = $this->getByUserIdDate($userId, $date);
+            if (!$this->checkOverlappingTasks(
+                    array_merge($tasksByDate[$date], $tasksInDB))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
      * Checks if some Task in a set of Task objects overlaps with the other
      * objects.
-     * TODO: check the dates of the tasks
+     * PRECONDITION: it assumes all tasks belong to the same user and have the
+     * same date.
      * @param {array} $tasks set of {@link TaskVO} objects.
      * @return {boolean} true if there is no overlapping.
      */
