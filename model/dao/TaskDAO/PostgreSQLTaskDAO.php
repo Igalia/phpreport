@@ -673,6 +673,65 @@ class PostgreSQLTaskDAO extends TaskDAO{
         return $affectedRows;
     }
 
+    /**
+     * Checks if the set of task modifications overlaps with the set of tasks
+     * that are already saved.
+     * TODO: make it work for task updates too.
+     * TODO: check the dates of the tasks
+     * @param {array} $tasks set of modifications. It can contain {@link TaskVO}
+              objects for new tasks, or {@link DirtyTaskVO} objects for updates.
+     * @return {boolean} true if there is no overlapping.
+     */
+    private function checkOverlappingWithDBTasks($tasks) {
+        if (count($tasks) == 0) {
+            return true;
+        }
+        $task = $tasks[0];
+        $tasksInDB = $this->getByUserIdDate($task->getUserId(),
+                $task->getDate());
+        return $this->checkOverlappingTasks(array_merge($tasks, $tasksInDB));
+    }
+
+    /**
+     * Checks if some Task in a set of Task objects overlaps with the other
+     * objects.
+     * TODO: check the dates of the tasks
+     * @param {array} $tasks set of {@link TaskVO} objects.
+     * @return {boolean} true if there is no overlapping.
+     */
+    private function checkOverlappingTasks($tasks) {
+        //if array is empty or has only one element: there is no overlapping
+        if (count($tasks) <= 1) {
+            return true;
+        }
+
+        //set init as the index of the array
+        $indexes = [];
+        foreach ($tasks as $task) {
+            if (in_array($task->getInit(), $indexes)) {
+                //when two tasks share the same init time
+                return false;
+            }
+            $indexes[] = $task->getInit();
+        }
+        $sortedTasks = array_combine($indexes, $tasks);
+
+        //sort array per its index (init time), then reset indexes
+        ksort($sortedTasks);
+        $sortedTasks = array_values($sortedTasks);
+
+        //compare the end of one task with the beginning of the next one
+        for ($i = 1; $i < count($sortedTasks); $i++) {
+            if ($sortedTasks[$i]->getInit() < $sortedTasks[$i-1]->getEnd()) {
+            error_log($sortedTasks[$i]->getInit());
+            error_log($sortedTasks[$i-1]->getEnd());
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /** Task updater for PostgreSQL.
      *
      * This function updates the data of a Task by its {@link TaskVO}.
@@ -737,6 +796,10 @@ class PostgreSQLTaskDAO extends TaskDAO{
     }
 
     public function batchCreate($tasks) {
+        if (!$this->checkOverlappingWithDBTasks($tasks)) {
+            return 0;
+        }
+
         $affectedRows = 0;
 
         foreach ($tasks as $task) {
