@@ -208,4 +208,11 @@ class DirtyTaskVO extends TaskVO {
         return $this->dirtyTaskStoryId;
     }
 
+    public function isDirty() {
+        return $this->dirtyDate || $this->dirtyInit || $this->dirtyEnd ||
+                $this->dirtyStory || $this->dirtyTelework ||
+                $this->dirtyText || $this->dirtyTtype || $this->dirtyPhase ||
+                $this->dirtyUserId || $this->dirtyProjectId ||
+                $this->dirtyCustomerId || $this->dirtyTaskStoryId;
+    }
 }

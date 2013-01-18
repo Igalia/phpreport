@@ -664,6 +664,10 @@ class PostgreSQLTaskDAO extends TaskDAO{
     }
 
     public function batchPartialUpdate($tasks) {
+        if (!$this->checkOverlappingWithDBTasks($tasks)) {
+            return 0;
+        }
+
         $affectedRows = 0;
 
         foreach ($tasks as $task) {
@@ -677,7 +681,6 @@ class PostgreSQLTaskDAO extends TaskDAO{
      * Checks if the set of task modifications overlaps with the set of tasks
      * that are already saved.
      * PRECONDITION: we assume all the tasks belong to the same user.
-     * TODO: make it work for task updates too.
      * @param {array} $tasks set of modifications. It can contain {@link TaskVO}
               objects for new tasks, or {@link DirtyTaskVO} objects for updates.
      * @return {boolean} true if there is no overlapping.
@@ -688,17 +691,42 @@ class PostgreSQLTaskDAO extends TaskDAO{
         }
 
         //group tasks by date
+        //at the same time, update TaskVO objects
         $tasksByDate = [];
+        $updatedTaskIds = [];
         foreach ($tasks as $task) {
-            $dates[$task->getDate()][] = $task;
+            $date = $task->getDate()->format('Y-m-d');
+            //add normal task
+            if ($task->isNew()) {
+                $tasksByDate[$date][] = $task;
+            }
+            //update dirty task
+            else if ($task->isDirty()) {
+                $originalTask = $this->getById($task->getId());
+                $originalTask->updateFrom($task);
+                $tasksByDate[$date][] = $originalTask;
+                $updatedTaskIds[] = $task->getId();
+            }
         }
 
         //evaluate every date independently
         $userId = $tasks[0]->getUserId();
-        foreach (array_keys($tasksByDate) as $date) {
+        foreach (array_keys($tasksByDate) as $index) {
+            $date = $tasksByDate[$index][0]->getDate();
+
+            //get the tasks already saved for that date
             $tasksInDB = $this->getByUserIdDate($userId, $date);
+
+            //remove dirty tasks which have already been updated
+            foreach ($tasksInDB as $key => $task) {
+                if (in_array($task->getId(), $updatedTaskIds)) {
+                    unset($tasksInDB[$key]);
+                }
+            }
+
+            //check overlapping
             if (!$this->checkOverlappingTasks(
-                    array_merge($tasksByDate[$date], $tasksInDB))) {
+                    array_merge($tasksByDate[$index], $tasksInDB))) {
                 return false;
             }
         }
