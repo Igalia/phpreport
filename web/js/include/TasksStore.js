@@ -115,6 +115,7 @@ Ext.ux.TasksStore = Ext.extend(Ext.data.Store, {
      * Callback processed when the destroy operation finishes.
      */
     onDestroyRecords: function (sucess, rs, data) {
+        Ext.ux.TasksStore.superclass.onDestroyRecords.apply(this, arguments);
         this.processPendingOperations();
     },
 
@@ -122,6 +123,7 @@ Ext.ux.TasksStore = Ext.extend(Ext.data.Store, {
      * Callback processed when the update operation finishes.
      */
     onUpdateRecords: function (sucess, rs, data) {
+        Ext.ux.TasksStore.superclass.onUpdateRecords.apply(this, arguments);
         this.processPendingOperations();
     },
 });
