@@ -30,6 +30,7 @@
  * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
 
+include_once(PHPREPORT_ROOT . '/model/vo/DirtyTaskVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/TaskVO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/BaseDAO.php');
 
@@ -285,17 +286,29 @@ abstract class TaskDAO extends BaseDAO{
      */
     public abstract function getVacations(UserVO $userVO, DateTime $initDate = NULL, DateTime $endDate = NULL);
 
-    /** Task partial updater.
+    /** Task partial updater for PostgreSQL.
      *
-     * This function updates only some fields of the data of a Task by its {@link TaskVO}, reading
-     * the flags on the associative array <var>$update</var>.
+     * This function updates only some fields of the data of a Task using a
+     * {@link DirtyTaskVO} to know the data and the information of which fields
+     * should be updated.
      *
-     * @param TaskVO $taskVO the {@link TaskVO} with the data we want to update on database.
-     * @param array $update an array with flags for updating or not the different fields.
+     * @param DirtyTaskVO $taskVO the {@link TaskVO} with the data we want to
+     *        update on database and the information about which fields must be
+     *        updated.
      * @return int the number of rows that have been affected (it should be 1).
      * @throws {@link SQLQueryErrorException}
      */
-    public abstract function partialUpdate(TaskVO $taskVO, $update);
+    public abstract function partialUpdate(DirtyTaskVO $taskVO);
+
+    /** Task batch partial updater.
+     *
+     * Equivalent to {@see partialUpdate} for arrays of tasks.
+     *
+     * @param array $tasks array of {@link DirtyTaskVO} objects to be updated.
+     * @return int the number of rows that have been affected (it should be
+     *         equal to the size of $tasks).
+     */
+    public abstract function batchPartialUpdate($tasks);
 
     /** Task updater.
      *
@@ -317,6 +330,17 @@ abstract class TaskDAO extends BaseDAO{
      * @throws {@link OperationErrorException}, {@link SQLUniqueViolationException}
      */
     public abstract function create(TaskVO $taskVO);
+
+    /** Task batch creator.
+     *
+     * Equivalent to {@see create} for arrays of tasks.
+     *
+     * @param array $tasks array of {@link TaskVO} objects to be created.
+     * @return int the number of rows that have been affected (it should be
+     *         equal to the size of $tasks).
+     * @throws {@link SQLQueryErrorException}
+     */
+    public abstract function batchCreate($tasks);
 
     /** Task deleter.
      *

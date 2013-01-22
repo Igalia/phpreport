@@ -32,6 +32,7 @@
 
 include_once(PHPREPORT_ROOT . '/util/TaskReportInvalidParameterException.php');
 include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
+include_once(PHPREPORT_ROOT . '/model/vo/DirtyTaskVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/TaskVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/CustomerVO.php');
@@ -611,15 +612,17 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
     /** Task partial updater for PostgreSQL.
      *
-     * This function updates only some fields of the data of a Task by its {@link TaskVO}, reading
-     * the flags on the associative array <var>$update</var>.
+     * This function updates only some fields of the data of a Task using a
+     * {@link DirtyTaskVO} to know the data and the information of which fields
+     * should be updated.
      *
-     * @param TaskVO $taskVO the {@link TaskVO} with the data we want to update on database.
-     * @param array $update an array with flags for updating or not the different fields.
+     * @param DirtyTaskVO $taskVO the {@link TaskVO} with the data we want to
+     *        update on database and the information about which fields must be
+     *        updated.
      * @return int the number of rows that have been affected (it should be 1).
      * @throws {@link SQLQueryErrorException}
      */
-    public function partialUpdate(TaskVO $taskVO, $update) {
+    public function partialUpdate(DirtyTaskVO $taskVO) {
         $affectedRows = 0;
 
         if($taskVO->getId() != "") {
@@ -631,41 +634,52 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
         $sql = "UPDATE task SET ";
 
-        if ($update['date'])
-        $sql = $sql . "_date=" . DBPostgres::formatDate($taskVO->getDate()) . ", ";
+        if ($taskVO->isDateDirty())
+            $sql .= "_date=" .
+                    DBPostgres::formatDate($taskVO->getDate()) . ", ";
 
-        if ($update['init'])
-        $sql = $sql . "init=" . DBPostgres::checkNull($taskVO->getInit()) . ", ";
+        if ($taskVO->isInitDirty())
+            $sql .= "init=" . DBPostgres::checkNull($taskVO->getInit()) . ", ";
 
-        if ($update['end'])
-        $sql = $sql . "_end=" . DBPostgres::checkNull($taskVO->getEnd()) . ", ";
+        if ($taskVO->isEndDirty())
+            $sql .= "_end=" .
+                    DBPostgres::checkNull($taskVO->getEnd()) . ", ";
 
-        if ($update['story'])
-        $sql = $sql . "story=" . DBPostgres::checkStringNull($taskVO->getStory()) . ", ";
+        if ($taskVO->isStoryDirty())
+            $sql .= "story=" .
+                    DBPostgres::checkStringNull($taskVO->getStory()) . ", ";
 
-        if ($update['telework'])
-        $sql = $sql . "telework=" . DBPostgres::boolToString($taskVO->getTelework()) . ", ";
+        if ($taskVO->isTeleworkDirty())
+            $sql .= "telework=" .
+                    DBPostgres::boolToString($taskVO->getTelework()) . ", ";
 
-        if ($update['text'])
-        $sql = $sql . "text=" . DBPostgres::checkStringNull($taskVO->getText()) . ", ";
+        if ($taskVO->isTextDirty())
+            $sql .= "text=" .
+                    DBPostgres::checkStringNull($taskVO->getText()) . ", ";
 
-        if ($update['ttype'])
-        $sql = $sql . "ttype=" . DBPostgres::checkStringNull($taskVO->getTtype()) . ", ";
+        if ($taskVO->isTtypeDirty())
+            $sql .= "ttype=" .
+                    DBPostgres::checkStringNull($taskVO->getTtype()) . ", ";
 
-        if ($update['phase'])
-        $sql = $sql . "phase=" . DBPostgres::checkStringNull($taskVO->getPhase()) . ", ";
+        if ($taskVO->isPhaseDirty())
+            $sql .= "phase=" .
+                    DBPostgres::checkStringNull($taskVO->getPhase()) . ", ";
 
-        if ($update['userId'])
-        $sql = $sql . "usrid=" . DBPostgres::checkNull($taskVO->getUserId()) . ", ";
+        if ($taskVO->isUserIdDirty())
+            $sql .= "usrid=" .
+                    DBPostgres::checkNull($taskVO->getUserId()) . ", ";
 
-        if ($update['projectId'])
-        $sql = $sql . "projectid=" . DBPostgres::checkNull($taskVO->getProjectId()) . ", ";
+        if ($taskVO->isProjectIdDirty())
+            $sql .= "projectid=" .
+                    DBPostgres::checkNull($taskVO->getProjectId()) . ", ";
 
-        if ($update['customerId'])
-        $sql = $sql . "customerid=" . DBPostgres::checkNull($taskVO->getCustomerId()) . ", ";
+        if ($taskVO->isCustomerIdDirty())
+            $sql .= "customerid=" .
+                    DBPostgres::checkNull($taskVO->getCustomerId()) . ", ";
 
-        if ($update['taskStoryId'])
-        $sql = $sql . "task_storyid=" . DBPostgres::checkNull($taskVO->getTaskStoryId());
+        if ($taskVO->isTaskStoryIdDirty())
+            $sql .= "task_storyid=" .
+                    DBPostgres::checkNull($taskVO->getTaskStoryId());
 
         if (strlen($sql) == strlen("UPDATE task SET "))
         return NULL;
@@ -683,6 +697,118 @@ class PostgreSQLTaskDAO extends TaskDAO{
         }
 
         return $affectedRows;
+    }
+
+    public function batchPartialUpdate($tasks) {
+        if (!$this->checkOverlappingWithDBTasks($tasks)) {
+            return 0;
+        }
+
+        $affectedRows = 0;
+
+        foreach ($tasks as $task) {
+            $affectedRows += $this->partialUpdate($task);
+        }
+
+        return $affectedRows;
+    }
+
+    /**
+     * Checks if the set of task modifications overlaps with the set of tasks
+     * that are already saved.
+     * PRECONDITION: we assume all the tasks belong to the same user.
+     * @param {array} $tasks set of modifications. It can contain {@link TaskVO}
+              objects for new tasks, or {@link DirtyTaskVO} objects for updates.
+     * @return {boolean} true if there is no overlapping.
+     */
+    private function checkOverlappingWithDBTasks($tasks) {
+        if (count($tasks) == 0) {
+            return true;
+        }
+
+        //group tasks by date
+        //at the same time, update TaskVO objects
+        $tasksByDate = [];
+        $updatedTaskIds = [];
+        foreach ($tasks as $task) {
+            $date = $task->getDate()->format('Y-m-d');
+            //add normal task
+            if ($task->isNew()) {
+                $tasksByDate[$date][] = $task;
+            }
+            //update dirty task
+            else if ($task->isDirty()) {
+                $originalTask = $this->getById($task->getId());
+                $originalTask->updateFrom($task);
+                $tasksByDate[$date][] = $originalTask;
+                $updatedTaskIds[] = $task->getId();
+            }
+        }
+
+        //evaluate every date independently
+        $userId = $tasks[0]->getUserId();
+        foreach (array_keys($tasksByDate) as $index) {
+            $date = $tasksByDate[$index][0]->getDate();
+
+            //get the tasks already saved for that date
+            $tasksInDB = $this->getByUserIdDate($userId, $date);
+
+            //remove dirty tasks which have already been updated
+            foreach ($tasksInDB as $key => $task) {
+                if (in_array($task->getId(), $updatedTaskIds)) {
+                    unset($tasksInDB[$key]);
+                }
+            }
+
+            //check overlapping
+            if (!$this->checkOverlappingTasks(
+                    array_merge($tasksByDate[$index], $tasksInDB))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if some Task in a set of Task objects overlaps with the other
+     * objects.
+     * PRECONDITION: it assumes all tasks belong to the same user and have the
+     * same date.
+     * @param {array} $tasks set of {@link TaskVO} objects.
+     * @return {boolean} true if there is no overlapping.
+     */
+    private function checkOverlappingTasks($tasks) {
+        //if array is empty or has only one element: there is no overlapping
+        if (count($tasks) <= 1) {
+            return true;
+        }
+
+        //set init as the index of the array
+        $indexes = [];
+        foreach ($tasks as $task) {
+            if (in_array($task->getInit(), $indexes)) {
+                //when two tasks share the same init time
+                return false;
+            }
+            $indexes[] = $task->getInit();
+        }
+        $sortedTasks = array_combine($indexes, $tasks);
+
+        //sort array per its index (init time), then reset indexes
+        ksort($sortedTasks);
+        $sortedTasks = array_values($sortedTasks);
+
+        //compare the end of one task with the beginning of the next one
+        for ($i = 1; $i < count($sortedTasks); $i++) {
+            if ($sortedTasks[$i]->getInit() < $sortedTasks[$i-1]->getEnd()) {
+            error_log($sortedTasks[$i]->getInit());
+            error_log($sortedTasks[$i-1]->getEnd());
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /** Task updater for PostgreSQL.
@@ -746,6 +872,20 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
         return $affectedRows;
 
+    }
+
+    public function batchCreate($tasks) {
+        if (!$this->checkOverlappingWithDBTasks($tasks)) {
+            return 0;
+        }
+
+        $affectedRows = 0;
+
+        foreach ($tasks as $task) {
+            $affectedRows += $this->create($task);
+        }
+
+        return $affectedRows;
     }
 
     /** Task deleter for PostgreSQL.

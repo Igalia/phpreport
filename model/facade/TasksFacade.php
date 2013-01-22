@@ -31,9 +31,11 @@
  */
 
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/CreateTasksAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/PartialUpdateReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/PartialUpdateTasksAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserTasksAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetPersonalSummaryByLoginDateAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetGlobalUsersProjectsReportAction.php');
@@ -95,11 +97,9 @@ abstract class TasksFacade {
      */
     static function CreateReports($tasks) {
 
-    foreach((array)$tasks as $task)
-        if ((TasksFacade::CreateReport($task)) == -1)
-            return -1;
+        $action = new CreateTasksAction($tasks);
 
-    return 0;
+        return $action->execute();
 
     }
 
@@ -158,16 +158,17 @@ abstract class TasksFacade {
      *
      *  This function is used for partially updating a Task.
      *
-     * @param TaskVO $task the Task value object we want to update.
-     * @param array $update the updating flags of the Task VO.
+     * @param DirtyTaskVO $task the Task value object we want to update. Must be
+     *        a DirtyTaskVO object which contains also the information about
+     *        which fields must be updated.
      * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
      * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
      */
-    static function PartialUpdateReport(TaskVO $task, $update) {
+    static function PartialUpdateReport(DirtyTaskVO $task) {
 
-    $action = new PartialUpdateReportAction($task, $update);
+        $action = new PartialUpdateReportAction($task);
 
-    return $action->execute();
+        return $action->execute();
 
     }
 
@@ -195,18 +196,17 @@ abstract class TasksFacade {
      *  This function is used for partially updating an array of Tasks.
      *  If an error occurs, it stops updating.
      *
-     * @param array $tasks the Task value objects we want to update.
-     * @param array $updates the updating flag arrays of the Task VOs.
+     * @param array $tasks the Task value objects we want to update. Must be
+     *        a DirtyTaskVO object which contains also the information about
+     *        which fields must be updated.
      * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
      * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
      */
-    static function PartialUpdateReports($tasks, $updates) {
+    static function PartialUpdateReports($tasks) {
 
-    foreach((array)$tasks as $i=>$task)
-        if ((TasksFacade::PartialUpdateReport($task, $updates[$i])) == -1)
-            return -1;
+        $action = new PartialUpdateTasksAction($tasks);
 
-    return 0;
+        return $action->execute();
 
     }
 

@@ -40,34 +40,29 @@ include_once(PHPREPORT_ROOT . '/model/vo/TaskVO.php');
  * @package PhpReport
  * @subpackage facade
  * @author Jorge López Fernández <jlopez@igalia.com>
+ * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
 class PartialUpdateReportAction extends Action{
 
     /** The Task
      *
-     * This variable contains the Task we want to update.
+     * This variable contains the Task we want to update and the information
+     * about which fields must be updated.
      *
-     * @var TaskVO
+     * @var DirtyTaskVO
      */
     private $task;
-
-    /** The flags array
-     *
-     * This variable contains flags indicating which fields we want to update.
-     *
-     * @var array
-     */
-    private $update;
 
     /** PartialUpdateReportAction constructor.
      *
      * This is just the constructor of this action.
      *
-     * @param TaskVO $task the Task value object we want to update.
+     * @param DirtyTaskVO $task the Task value object we want to update. Must be
+     *        a DirtyTaskVO object which contains also the information about
+     *        which fields must be updated.
      */
-    public function __construct(TaskVO $task, $update) {
+    public function __construct(DirtyTaskVO $task) {
         $this->task=$task;
-        $this->update=$update;
         $this->preActionParameter="PARTIAL_UPDATE_REPORT_PREACTION";
         $this->postActionParameter="PARTIAL_UPDATE_REPORT_POSTACTION";
 
@@ -92,7 +87,7 @@ class PartialUpdateReportAction extends Action{
         if (!$dao->checkTaskUserId($this->task->getId(), $this->task->getUserId()))
             return -1;
 
-        if ($dao->partialUpdate($this->task, $this->update)!=1) {
+        if ($dao->partialUpdate($this->task)!=1) {
             return -1;
         }
 

@@ -9,9 +9,3 @@ Features
 
 * Ability to reset holidays account in a determinate date, similar to the
   compensation of extra hours.
-
-Bugs
-~~~~
-
-* Fix false positives in the detection of overlapping tasks.
-
