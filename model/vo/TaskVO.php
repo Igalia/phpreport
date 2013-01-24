@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009-2013 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -27,7 +27,10 @@
  * @package PhpReport
  * @subpackage VO
  * @author Jorge López Fernández <jlopez@igalia.com>
+ * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
+
+include_once(PHPREPORT_ROOT . '/model/vo/DirtyTaskVO.php');
 
 /** VO for Tasks
  *
@@ -202,5 +205,56 @@ class TaskVO {
     }
 
     /**#@-*/
+
+    /**
+     * Checks if the entity is new or if it has been already stored in DB.
+     * @return {boolean} true if it has been stored in DB and, in consequence,
+     *         it has been assigned an id.
+     */
+    public function isNew() {
+        return is_null($this->id);
+    }
+
+    /**
+     * Updates the fields of this object with the changes in a
+     * {@link DirtyTaskVO} object.
+     */
+    public function updateFrom(DirtyTaskVO $dirtyTask) {
+        if ($dirtyTask->isDateDirty())
+            $this->setDate($dirtyTask->getDate());
+
+        if ($dirtyTask->isInitDirty())
+            $this->setInit($dirtyTask->getInit());
+
+        if ($dirtyTask->isEndDirty())
+            $this->setEnd($dirtyTask->getEnd());
+
+        if ($dirtyTask->isStoryDirty())
+            $this->setStory($dirtyTask->getStory());
+
+        if ($dirtyTask->isTeleworkDirty())
+            $this->setTelework($dirtyTask->getTelework());
+
+        if ($dirtyTask->isTextDirty())
+            $this->setText($dirtyTask->getText());
+
+        if ($dirtyTask->isTtypeDirty())
+            $this->setTtype($dirtyTask->getTtype());
+
+        if ($dirtyTask->isPhaseDirty())
+            $this->setPhase($dirtyTask->getPhase());
+
+        if ($dirtyTask->isUserIdDirty())
+            $this->setUserId($dirtyTask->getUserId());
+
+        if ($dirtyTask->isProjectIdDirty())
+            $this->setProjectId($dirtyTask->getProjectId());
+
+        if ($dirtyTask->isCustomerIdDirty())
+            $this->setCustomerId($dirtyTask->getCustomerId());
+
+        if ($dirtyTask->isTaskStoryIdDirty())
+            $this->setTaskStoryId($dirtyTask->getTaskStoryId());
+    }
 
 }

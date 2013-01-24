@@ -48,6 +48,7 @@ else {
 ?>
 <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus.js"></script>
 <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus-holidays.js"></script>
+<script src="js/include/TasksStore.js"></script>
 <script type="text/javascript">
 
 function updateTimes(field, min, max, open) {
@@ -640,7 +641,7 @@ Ext.onReady(function(){
     });
 
     /* Store to load/save tasks */
-    var myStore = new Ext.data.Store({
+    var myStore = new Ext.ux.TasksStore({
         autoLoad: true,  //initial data are loaded in the application init
         autoSave: false, //if set true, changes will be sent instantly
         baseParams: {
@@ -746,12 +747,16 @@ Ext.onReady(function(){
 
                       });
             },
-            'write': function() {
-                App.setAlert(true, "Task Records Changes Saved");
-                summaryStore.load();
+            'save': function () {
+                if (!myStore.error) {
+                    App.setAlert(true, "Task Records Changes Saved");
+                    summaryStore.load();
+                }
+                myStore.error = false;
             },
-            'exception': function(){
+            'exception': function () {
                 App.setAlert(false, "Some Error Occurred While Saving The Changes (please check you haven't clipped working hours)");
+                myStore.error = true;
             }
         }
     });
