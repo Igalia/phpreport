@@ -455,10 +455,13 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 anchor: '100%',
                 tabIndex: tab++,
                 value: this.taskRecord.data['text'],
+                enableKeyEvents: true,
                 listeners: {
-                    'change': function() {
+                    'keyup': function () {
+                        this.parent.taskRecord.set('text',Trim(this.getValue()));
+                    },
+                    'blur': function () {
                         this.setValue(Trim(this.getValue()));
-                        this.parent.taskRecord.set('text',this.getValue());
                     }
                 }
             }),
@@ -1093,6 +1096,14 @@ Ext.onReady(function(){
                 disabled: forbidden,
             }),
         ],
+    });
+
+    //hotkeys
+    new Ext.KeyMap(document, {
+        key: 's',
+        ctrl: true,
+        stopEvent: true,
+        handler: saveTasks
     });
 
     summaryStore.load();
