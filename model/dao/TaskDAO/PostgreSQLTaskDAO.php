@@ -728,8 +728,8 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
         //group tasks by date
         //at the same time, update TaskVO objects
-        $tasksByDate = [];
-        $updatedTaskIds = [];
+        $tasksByDate = array();
+        $updatedTaskIds = array();
         foreach ($tasks as $task) {
             $date = $task->getDate()->format('Y-m-d');
             //add normal task
@@ -785,7 +785,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
         }
 
         //set init as the index of the array
-        $indexes = [];
+        $indexes = array();
         foreach ($tasks as $task) {
             if (in_array($task->getInit(), $indexes)) {
                 //when two tasks share the same init time
