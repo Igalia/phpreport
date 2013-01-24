@@ -518,9 +518,9 @@ Ext.onReady(function () {
         columnModel.setColumnWidth(1, 55);
         columnModel.setColumnWidth(2, 55);
         columnModel.setColumnWidth(4, 120);
-        columnModel.setColumnWidth(7, 120);
-        columnModel.setColumnWidth(8, 100);
-        columnModel.setColumnWidth(9, 435);
+        columnModel.setColumnWidth(8, 120);
+        columnModel.setColumnWidth(9, 100);
+        columnModel.setColumnWidth(10, 435);
     }
 
     //function to show all the columns
@@ -543,9 +543,10 @@ Ext.onReady(function () {
         columnModel.setColumnWidth(4, 100);
         columnModel.setColumnWidth(5, 80);
         columnModel.setColumnWidth(6, 50);
-        columnModel.setColumnWidth(7, 100);
+        columnModel.setColumnWidth(7, 50);
         columnModel.setColumnWidth(8, 100);
-        columnModel.setColumnWidth(9, 255);
+        columnModel.setColumnWidth(9, 100);
+        columnModel.setColumnWidth(10, 205);
     }
 
     //hide the advanced columns
