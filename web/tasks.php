@@ -1095,6 +1095,14 @@ Ext.onReady(function(){
         ],
     });
 
+    //hotkeys
+    new Ext.KeyMap(document, {
+        key: 'u',
+        ctrl: true,
+        stopEvent: true,
+        handler: newTask
+    });
+
     summaryStore.load();
 
 });
