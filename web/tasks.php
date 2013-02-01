@@ -208,7 +208,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 parent: this,
                 ref: '../initField',
                 allowBlank: false,
-                autoSelect: false,
                 width: 60,
                 format: 'H:i',
                 increment: 15,
@@ -219,11 +218,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 listeners: {
                     'change': function() {
                         this.parent.endTimeField.validate();
-                    },
-                    'keyup': function() {
-                        this.parent.endTimeField.validate();
-                    },
-                    'valid': function () {
                         this.parent.taskRecord.set('initTime',this.getValue());
                         updateTasksLength(this.parent);
                     }
@@ -237,7 +231,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 parent: this,
                 ref: '../endField',
                 allowBlank: false,
-                autoSelect: false,
                 width: 60,
                 format: 'H:i',
                 increment: 15,
@@ -248,11 +241,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 listeners: {
                     'change': function() {
                         this.parent.initTimeField.validate();
-                    },
-                    'keyup': function() {
-                        this.parent.initTimeField.validate();
-                    },
-                    'valid': function () {
                         this.parent.taskRecord.set('endTime',this.getValue());
                         updateTasksLength(this.parent);
                     }
@@ -407,17 +395,14 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     }
                 }
             }),
-            storyField: new Ext.form.TextField({
+            storyField: new Ext.form.Field({
                 parent: this,
                 value: this.taskRecord.data['story'],
                 tabIndex: tab++,
-                enableKeyEvents: true,
                 listeners: {
-                    'keyup': function () {
-                        this.parent.taskRecord.set('story',this.getValue());
-                    },
-                    'blur': function () {
+                    'change': function() {
                         this.setValue(Trim(this.getValue()));
+                        this.parent.taskRecord.set('story',this.getValue());
                     }
                 }
             }),
@@ -473,8 +458,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 enableKeyEvents: true,
                 listeners: {
                     'keyup': function () {
-                        this.parent.taskRecord.set('text',
-                                Trim(this.getValue()));
+                        this.parent.taskRecord.set('text',Trim(this.getValue()));
                     },
                     'blur': function () {
                         this.setValue(Trim(this.getValue()));
@@ -1107,7 +1091,6 @@ Ext.onReady(function(){
             }),
             '-',
             new Ext.Button({
-                id:'saveChangesButton',
                 text:'Save changes',
                 handler: saveTasks,
                 disabled: forbidden,
@@ -1120,21 +1103,7 @@ Ext.onReady(function(){
         key: 's',
         ctrl: true,
         stopEvent: true,
-        handler: function () {
-            saveTasks();
-        }
-    });
-    new Ext.KeyMap(document, {
-        key: 'u',
-        ctrl: true,
-        stopEvent: true,
-        handler: newTask
-    });
-    new Ext.KeyMap(document, {
-        key: '123456789',
-        ctrl: true,
-        stopEvent: true,
-        handler: function () {alert("one")}
+        handler: saveTasks
     });
 
     summaryStore.load();
