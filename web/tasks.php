@@ -1146,6 +1146,17 @@ Ext.onReady(function(){
         stopEvent: true,
         handler: newTask
     });
+    new Ext.KeyMap(document, {
+        key: '123456789',
+        ctrl: true,
+        stopEvent: true,
+        handler: function (key, event) {
+            var i = key - 49; //49 is the key code for '1'
+
+            tasksScrollArea.items.get(i).initTimeField.focus();
+            //TODO: fix problem with blur event, see: http://stackoverflow.com/questions/8656165/combo-doesnt-blur-when-manually-shifting-focus
+        }
+    });
 
     summaryStore.load();
 
