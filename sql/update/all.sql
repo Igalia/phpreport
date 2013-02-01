@@ -1,3 +1,4 @@
+--------------------------------------------------------------------------------
 --
 -- These are the changes you need in database to upgrade PhpReport 2.0 to 2.1
 --
@@ -39,3 +40,13 @@ INSERT INTO config(version) VALUES ('2.1');
 ALTER TABLE config ADD COLUMN block_tasks_by_time_enabled BOOLEAN
     NOT NULL DEFAULT false;
 ALTER TABLE config ADD COLUMN block_tasks_by_time_number_of_days INTEGER;
+
+--
+-- Remove function and trigger that activated every time a row in task table
+-- was being modified. It was used to check there weren't overlapping tasks,
+-- but it produced false positives. Now that check is done in the PHP code
+-- before running the create or update operations on DB, so we don't need them.
+--
+
+DROP TRIGGER control_task_overlapping ON task;
+DROP FUNCTION control_task_overlapping();
