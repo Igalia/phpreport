@@ -216,10 +216,13 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 vtypeText: 'Time must be earlier than the end time.',
                 tabIndex: tab++,
                 listeners: {
-                    'change': function() {
+                    'change': function () {
                         this.parent.endTimeField.validate();
                         this.parent.taskRecord.set('initTime',this.getValue());
                         updateTasksLength(this.parent);
+                    },
+                    'valid': function () {
+                        this.parent.taskRecord.set('initTime',this.getRawValue());
                     }
                 },
             }),
@@ -239,10 +242,13 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 vtypeText: 'Time must be later than the init time.',
                 tabIndex: tab++,
                 listeners: {
-                    'change': function() {
+                    'change': function () {
                         this.parent.initTimeField.validate();
                         this.parent.taskRecord.set('endTime',this.getValue());
                         updateTasksLength(this.parent);
+                    },
+                    'valid': function () {
+                        this.parent.taskRecord.set('endTime',this.getRawValue());
                     }
                 },
             }),
@@ -284,7 +290,13 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 triggerAction: 'all',
                 forceSelection: true,
                 listeners: {
-                    'change': function() {
+                    'select': function () {
+                        this.parent.taskRecord.set('customerId',this.getValue());
+                    },
+                    'blur': function () {
+                        // workaround in case you set a value, save with ctrl+s,
+                        // delete the value and change the focus. In that case,
+                        // 'select' or 'change' events wouldn't be triggered.
                         this.parent.taskRecord.set('customerId',this.getValue());
 
                         //invoke changes in the "Projects" combo box
@@ -342,10 +354,16 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 displayField: 'description',
                 forceSelection: true,
                 listeners: {
-                    'change': function() {
+                    'select': function () {
+                        this.parent.taskRecord.set('projectId',this.getValue());
+                    },
+                    'blur': function () {
+                        // workaround in case you set a value, save with ctrl+s,
+                        // delete the value and change the focus. In that case,
+                        // 'select' or 'change' events wouldn't be triggered.
                         this.parent.taskRecord.set('projectId',this.getValue());
 
-                        //invoke changes in the "Projects" combo box
+                        //invoke changes in the "TaskStory" combo box
                         this.parent.taskStoryComboBox.store.setBaseParam('pid',this.parent.taskRecord.data['projectId']);
                         this.parent.taskStoryComboBox.store.load();
                     },
@@ -390,19 +408,28 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     ],
                 }),
                 listeners: {
-                    'change': function() {
-                            this.parent.taskRecord.set('ttype',this.getValue());
+                    'select': function () {
+                        this.parent.taskRecord.set('ttype',this.getValue());
+                    },
+                    // workaround in case you set a value, save with the hotkey,
+                    // delete the value and change the focus. In that case,
+                    // 'select' or 'change' events wouldn't be triggered.
+                    'blur': function () {
+                        this.parent.taskRecord.set('ttype',this.getValue());
                     }
                 }
             }),
-            storyField: new Ext.form.Field({
+            storyField: new Ext.form.TextField({
                 parent: this,
                 value: this.taskRecord.data['story'],
                 tabIndex: tab++,
+                enableKeyEvents: true,
                 listeners: {
-                    'change': function() {
-                        this.setValue(Trim(this.getValue()));
+                    'keyup': function () {
                         this.parent.taskRecord.set('story',this.getValue());
+                    },
+                    'blur': function () {
+                        this.setValue(Trim(this.getValue()));
                     }
                 }
             }),
@@ -434,7 +461,13 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 displayField: 'friendlyName',
                 forceSelection: true,
                 listeners: {
-                    'change': function() {
+                    'select': function () {
+                        this.parent.taskRecord.set('taskStoryId',this.getValue());
+                    },
+                    'blur': function () {
+                        // workaround in case you set a value, save with ctrl+s,
+                        // delete the value and change the focus. In that case,
+                        // 'select' or 'change' events wouldn't be triggered.
                         this.parent.taskRecord.set('taskStoryId',this.getValue());
                     },
                 }
@@ -455,10 +488,13 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 anchor: '100%',
                 tabIndex: tab++,
                 value: this.taskRecord.data['text'],
+                enableKeyEvents: true,
                 listeners: {
-                    'change': function() {
+                    'keyup': function () {
+                        this.parent.taskRecord.set('text',Trim(this.getValue()));
+                    },
+                    'blur': function () {
                         this.setValue(Trim(this.getValue()));
-                        this.parent.taskRecord.set('text',this.getValue());
                     }
                 }
             }),
@@ -1096,6 +1132,14 @@ Ext.onReady(function(){
     });
 
     //hotkeys
+    new Ext.KeyMap(document, {
+        key: 's',
+        ctrl: true,
+        stopEvent: true,
+        handler: function () {
+            saveTasks();
+        }
+    });
     new Ext.KeyMap(document, {
         key: 'u',
         ctrl: true,
