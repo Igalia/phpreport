@@ -224,6 +224,11 @@ Ext.onReady(function(){
             }
         }
     });
+    //explicitly set start date so it becomes visible
+    var defaultStartDate = new Date();
+    defaultStartDate.setMonth(0);
+    defaultStartDate.setDate(1); //defaultStartDate is 1st Jan of current year
+    workingResultsForm.get('startDate').setValue(defaultStartDate);
 
     Ext.QuickTips.register({
        text: "<div align='justify'><b>Format:</b> \'dd/mm/yyyy\'<br><b>Inclusion:</b> included in the interval<br><b>Default value (with \'\'):</b> 01/01/1900</div>",
