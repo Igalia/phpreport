@@ -25,6 +25,20 @@
 Ext.ux.DateIntervalForm = Ext.extend(Ext.FormPanel, {
 
     /**
+     * @cfg {Date} defaultStartDate
+     * Specifies the default value of the start date field.
+     * It will be 1/1/1900 if not set explicitly.
+     */
+    defaultStartDate: new Date(1900,00,01),
+
+    /**
+     * @cfg {Date} defaultEndDate
+     * Specifies the default value of the end date field.
+     * It will be current date if not set explicitly.
+     */
+    defaultEndDate: new Date(),
+
+    /**
      * Get the selected start date, or the default one if empty.
      * @return {Date} start date selected in the form or the default if empty.
      */
@@ -32,7 +46,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.FormPanel, {
         var dateField = this.get('startDate');
         // check if the field has values, and if it doesn't, create default ones
         if (dateField.getRawValue() == "")
-            return new Date(1900,00,01);
+            return this.defaultStartDate;
         else
             return dateField.getValue();
     },
@@ -45,7 +59,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.FormPanel, {
         var dateField = this.get('endDate');
         // check if the field has values, and if it doesn't, create default ones
         if (dateField.getRawValue() == "")
-            return new Date();
+            return this.defaultEndDate;
         else
             return dateField.getValue();
     },
