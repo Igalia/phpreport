@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2012, 2013 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -122,5 +122,24 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.FormPanel, {
 
         /* call the superclass to preserve base class functionality */
         Ext.ux.DateIntervalForm.superclass.initComponent.apply(this, arguments);
+
+        /* set informative tooltips for date fields */
+        Ext.QuickTips.init();
+        Ext.QuickTips.register({
+           text: "<div align='justify'>" +
+                    "<b>Format:</b> \'dd/mm/yyyy\'<br>" +
+                    "<b>Inclusion:</b> included in the interval<br>" +
+                    "<b>Default value if empty:</b> " +
+                    this.defaultStartDate.toLocaleDateString() +"</div>",
+           target: this.get('startDate')
+        });
+        Ext.QuickTips.register({
+           text: "<div align='justify'>" +
+                    "<b>Format:</b> \'dd/mm/yyyy\'<br>" +
+                    "<b>Inclusion:</b> included in the interval<br>" +
+                    "<b>Default value if empty:</b> " +
+                    this.defaultEndDate.toLocaleDateString() +"</div>",
+           target: this.get('endDate')
+        });
     },
 });

@@ -45,8 +45,6 @@
 
     Ext.onReady(function(){
 
-    Ext.QuickTips.init();
-
 
     // Main Panel
     var mainPanel = new Ext.FormPanel({
@@ -493,26 +491,6 @@
 
     grid.store.load();
     grid2.store.load();
-
-    Ext.QuickTips.register({
-       text: "<div align='justify'><b>Format:</b> \'dd/mm/yyyy\'<br><b>Inclusion:</b> included in the interval<br><b>Default value (with \'\'):</b> 01/01/1900</div>",
-       target: 'startDate'
-    });
-
-    var dateString = '', currentDate = new Date();
-
-    if (currentDate.getDate() < 10)
-        dateString += "0"
-    dateString += currentDate.getDate() + "/";
-    if (currentDate.getMonth() < 9)
-        dateString += "0";
-    dateString += (currentDate.getMonth() + 1) + "/";
-    dateString += currentDate.getFullYear();
-
-    Ext.QuickTips.register({
-       text: "<div align='justify'><b>Format:</b> \'dd/mm/yyyy\'<br><b>Inclusion:</b> included in the interval<br><b>Default value (with \'\'):</b> " + dateString + " (current date)</div>",
-       target: 'endDate'
-    });
 
     })
 
