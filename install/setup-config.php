@@ -49,7 +49,6 @@ $sqlfiles[] = SQLPATH . "schema.sql";
 $sqlfiles[] = SQLPATH . "uniqueConstraints.sql";
 $sqlfiles[] = SQLPATH . "otherConstraints.sql";
 $sqlfiles[] = SQLPATH . "initialData.sql";
-$sqlfiles[] = SQLPATH . "triggers.sql";
 $sqlfiles[] = SQLPATH . "update/all.sql";
 
 function parse_psql_dump($url,$nowhost,$nowport,$nowdatabase,$nowuser,$nowpass){
