@@ -11,6 +11,7 @@ zip: tgz
 help:
 	#create dirs
 	mkdir -p help/user
+	mkdir -p help/admin
 	#copy images
 	cp -r docs/user/i help/user; \
 	#parse rst
