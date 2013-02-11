@@ -29,7 +29,6 @@ entities:
   finances the tasks needed to carry over that project.
 
 .. figure:: i/main-classes.png
-   :scale: 50
 
    Main entities related with time tracking
 
@@ -74,7 +73,6 @@ purpose:
   ignoring all the previous history.
 
 .. figure:: i/working-day-classes.png
-   :scale: 50
 
    Main entities related with working day tracking
 
@@ -108,7 +106,6 @@ of your projects. The related entities are:
   a user in different time periods.
 
 .. figure:: i/cost-classes.png
-   :scale: 50
 
    Main entities related with cost management
 
@@ -136,7 +133,6 @@ belong. This is a breakdown of the related entities:
   different areas.
 
 .. figure:: i/structure-classes.png
-   :scale: 50
 
    Main entities related with the organization structure
 
