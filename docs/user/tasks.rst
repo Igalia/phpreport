@@ -125,3 +125,25 @@ create new ones on certain dates. It can happen because of two reasons:
 * Managers have blocked tasks reports older than a certain date: a number of
   days can be set so any tasks older than that cannot be changed. In this case,
   even the *New task* and *Save changes* buttons would be blocked.
+
+Hotkeys
+=======
+
+Some hotkeys are available to increase the productivity for keyboard users:
+
+CTRL + S
+  Save changes.
+
+CTRL + U
+  Create a new task. The cursor will be placed in the first field of the new
+  task.
+
+CTRL + number
+  The cursor will be placed in the first field of the first, second, third, etc.
+  task depending on the number you pressed.
+
+TAB
+  Advance to the next field.
+
+SHIFT + TAB
+  Go back to the previous field.
