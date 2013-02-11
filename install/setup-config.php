@@ -69,7 +69,7 @@ function parse_psql_dump($url,$nowhost,$nowport,$nowdatabase,$nowuser,$nowpass){
                 $string = "";
             } elseif (strstr($string, ";") != false)
             {
-                @pg_query($link, $string);
+                pg_query($link, $string);
                 $string = "";
             }
         } else $string = "";
@@ -260,7 +260,7 @@ switch($step) {
 
 ?>
 
-<p>Well done! You have made it through this part of the installation, and now PhpReport has it&#8217;s own working database properly configured.</p>
+<p>Well done! You have made it through this part of the installation, and now PhpReport has its own working database properly configured.</p>
 
 <?php
 
