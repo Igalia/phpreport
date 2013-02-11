@@ -176,6 +176,21 @@
                                 }
                                 break;
 
+                        case "onsite":$parser->read();
+                                if ($parser->hasValue)
+                                {
+                                    if (strtolower($parser->value) == "true")
+                                        $taskVO->setOnsite(true);
+                                    else
+                                        $taskVO->setOnsite(false);
+                                    $parser->next();
+                                    $parser->next();
+                                }
+                                else {
+                                    $taskVO->setOnsite(NULL);
+                                }
+                                break;
+
                         case "ttype":    $parser->read();
                                 if ($parser->hasValue)
                                 {

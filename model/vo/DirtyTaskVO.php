@@ -44,6 +44,7 @@ class DirtyTaskVO extends TaskVO {
     private $dirtyEnd = false;
     private $dirtyStory = false;
     private $dirtyTelework = false;
+    private $dirtyOnsite = false;
     private $dirtyText = false;
     private $dirtyTtype = false;
     private $dirtyPhase = false;
@@ -115,6 +116,19 @@ class DirtyTaskVO extends TaskVO {
 
     public function isTeleworkDirty() {
         return $this->dirtyTelework;
+    }
+
+    public function setOnsite($onsite) {
+        $this->dirtyOnsite = true;
+        parent::setOnsite($onsite);
+    }
+
+    public function clearDirtyOnsite() {
+        $this->dirtyOnsite = false;
+    }
+
+    public function isOnsiteDirty() {
+        return $this->dirtyOnsite;
     }
 
     public function setText($text) {
@@ -211,6 +225,7 @@ class DirtyTaskVO extends TaskVO {
     public function isDirty() {
         return $this->dirtyDate || $this->dirtyInit || $this->dirtyEnd ||
                 $this->dirtyStory || $this->dirtyTelework ||
+                $this->dirtyOnsite ||
                 $this->dirtyText || $this->dirtyTtype || $this->dirtyPhase ||
                 $this->dirtyUserId || $this->dirtyProjectId ||
                 $this->dirtyCustomerId || $this->dirtyTaskStoryId;

@@ -86,10 +86,17 @@
         {
 
             $string = $string . "<task><id>{$task->getId()}</id><date format='$dateFormat'>{$task->getDate()->format($dateFormat)}</date><initTime>" . str_pad(floor($task->getInit()/60), 2, "0", STR_PAD_LEFT) . ":" . str_pad($task->getInit()%60, 2, "0", STR_PAD_LEFT)  . "</initTime><endTime>" . str_pad(floor($task->getEnd()/60)%24, 2, "0", STR_PAD_LEFT) . ":" . str_pad($task->getEnd()%60, 2, "0", STR_PAD_LEFT)  . "</endTime><story>" . escape_string($task->getStory()) . "</story><telework>";
-            if($task->getTelework())
+
+            if ($task->getTelework())
                 $string = $string . "true";
             else $string = $string . "false";
-            $string = $string . "</telework><ttype>" . escape_string($task->getTtype()) . "</ttype><text>" . escape_string($task->getText()) . "</text><phase>" . escape_string($task->getPhase()) . "</phase><userId>{$task->getUserId()}</userId><projectId>{$task->getProjectId()}</projectId><customerId>{$task->getCustomerId()}</customerId><taskStoryId>{$task->getTaskStoryId()}</taskStoryId></task>";
+            $string = $string . "</telework><onsite>";
+
+            if ($task->getOnsite())
+                $string = $string . "true";
+            else $string = $string . "false";
+
+            $string .= "</onsite><ttype>" . escape_string($task->getTtype()) . "</ttype><text>" . escape_string($task->getText()) . "</text><phase>" . escape_string($task->getPhase()) . "</phase><userId>{$task->getUserId()}</userId><projectId>{$task->getProjectId()}</projectId><customerId>{$task->getCustomerId()}</customerId><taskStoryId>{$task->getTaskStoryId()}</taskStoryId></task>";
 
         }
 
