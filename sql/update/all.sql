@@ -40,3 +40,11 @@ INSERT INTO config(version) VALUES ('2.1');
 ALTER TABLE config ADD COLUMN block_tasks_by_time_enabled BOOLEAN
     NOT NULL DEFAULT false;
 ALTER TABLE config ADD COLUMN block_tasks_by_time_number_of_days INTEGER;
+
+--
+-- Add new column in task table:
+-- * onsite: whether a task was onsite or not
+--
+
+ALTER TABLE task ADD COLUMN onsite BOOLEAN
+    NOT NULL DEFAULT false;

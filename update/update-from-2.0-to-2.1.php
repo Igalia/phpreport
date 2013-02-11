@@ -29,6 +29,7 @@ define('SQLPATH', PHPREPORT_ROOT . 'sql/update/');
 $sqlFiles = array();
 $sqlFiles[] = SQLPATH . "create-config-table.sql";
 $sqlFiles[] = SQLPATH . "add-block-task-columns-in-config-table.sql";
+$sqlFiles[] = SQLPATH . "add-onsite-column-to-task.sql";
 $sqlFiles[] = SQLPATH . "remove-triggers-for-overlapping-control.sql";
 
 // function inspired by code from install/setup-config.php
