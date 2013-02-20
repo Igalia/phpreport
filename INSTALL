@@ -95,9 +95,6 @@ on-screen
 instructions. If you didn't change the names and passwords specified on step 1,
 defaults will just work fine.
 
-Once the installation is complete, remove the ``install/`` directory inside your
-PhpReport, to prevent other users to reset your DB again.
-
 Manual setup of schema and initial data
 ---------------------------------------
 
@@ -127,6 +124,13 @@ Use a browser to open the correct URL of your web server, and use the user name
 ``admin`` and the password ``admin`` for the first time. You will be able to
 create more users and
 change their passwords once you enter the application.
+
+Step 5: remove dangerous files
+==============================
+
+Once the installation is complete and you have checked it is working, remove the
+``install/`` and ``update/`` directories inside your PhpReport, to prevent other
+users to reset your DB.
 
 Common problems
 ===============
