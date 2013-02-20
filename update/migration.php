@@ -24,9 +24,13 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/ExtraHoursReportAction.php')
 include_once(PHPREPORT_ROOT . '/model/dao/UserDAO/PostgreSQLUserDAO.php');
 include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
 
-function readline($prompt) {
-    echo $prompt;
-    return substr(fgets(STDIN),0, -1);
+//declare readline() function if the system function is not available
+if (!function_exists("readline")) {
+
+    function readline($prompt) {
+        echo $prompt;
+        return substr(fgets(STDIN),0, -1);
+    }
 }
 
 // Special sector name (used in case we find a non-matching sector id)
