@@ -8,4 +8,5 @@ concepts to install and configure PhpReport for system administrators.
 
 #. `Installation instructions <installation.html>`__
 #. `Upgrade instructions <upgrade.html>`__
+#. `How to set up LDAP authentication <ldap.html>`__
 #. `Common problems <common-problems.html>`__
