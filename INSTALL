@@ -132,6 +132,24 @@ Once the installation is complete and you have checked it is working, remove the
 ``install/`` and ``update/`` directories inside your PhpReport, to prevent other
 users to reset your DB.
 
+Step 6: last configuration bits
+===============================
+
+You might have to modify some parameters in the file `config/config.php` to
+match your work domain. In particular, you might have to modify the default
+total number of holiday hours for a full-time worker. It is specified by the
+`YEARLY_HOLIDAY_HOURS` attribute, and you have to modify the following line to
+change it::
+
+   * @name YEARLY_HOLIDAY_HOURS
+   * @global int holiday hours per year for an 8-hour working journey
+   */
+  define ('YEARLY_HOLIDAY_HOURS', 184);
+
+Remember to check the `data model for holiday management
+<../user/overview.html#data-model-for-holiday-management>`__ to know how it
+works and which value you should put there.
+
 Common problems
 ===============
 
