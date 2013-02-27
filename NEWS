@@ -1,6 +1,41 @@
 NEWS
 ====
 
+Version 2.1 (27 Feb 2013)
+-------------------------------
+
+Release containing new features and bug fixes.
+
+Main changes
+~~~~~~~~~~~~
+
+* Implemented a feature to prevent the modifications of tasks older than a
+  certain number of days.
+* New report for users to see a filtered list of their tasks.
+* Written documentation for sysadmins.
+* [#118] Added boolean field to mark on-site tasks.
+* [#164] Added some keyboard shortcuts to the task management screen.
+* [#183] Fix false positives in the detection of overlapping tasks.
+
+Other changes
+~~~~~~~~~~~~~
+
+* Added start and end date selectors to projects summary report.
+* Added show/hide all data buttons to projects summary report.
+* Allow the use of HTTP authentication in loginService.php.
+* Explicitly set start date for acc. hours report to the 1st of January of
+  current year.
+* Implemented script to upgrade the DB from 2.0 to 2.1.
+* Added DB table containing the version number to ease upgrading in the future.
+* [#39] Only show one banner when saving.
+* [#160] Move delete/clone/template buttons below the description text area.
+* [#162] Fix wrong identification of the first week of the year at the weekly
+  hour summary.
+* [#188] Explicitly set week start to Monday in all the calendar widgets.
+* [#189] Added footer with version and generation time to the docs.
+* [#191] Workaround a problem with trigger creation.
+
+
 Version 2.0 (13 Aug 2012)
 -------------------------------
 

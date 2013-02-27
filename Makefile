@@ -1,4 +1,4 @@
-VERSION=2.0
+VERSION=2.1
 
 tgz: help
 	tar zcf phpreport_$(VERSION).tar.gz --exclude=Makefile --exclude=*~ \
