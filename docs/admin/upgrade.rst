@@ -18,8 +18,8 @@ script::
 
   http://your-web-server/phpreport/update/update-from-2.0-to-2.1.php
 
-Once the upgrade is complete, remove the ``update/`` directory inside your
-PhpReport, to prevent other users to alter your DB.
+Once the upgrade is complete, remove the directories ``update/`` and ``install/``
+inside your PhpReport, to prevent other users from altering your DB.
 
 .. WARNING ::
 
@@ -60,4 +60,4 @@ database (destination)::
 During the process you might be asked some questions to resolve migration
 conflicts. Finally, when the process is complete, test the application, and
 remember to remove the directories ``update/`` and ``install/`` to prevent other
-users to alter your DB.
+users from altering your DB.

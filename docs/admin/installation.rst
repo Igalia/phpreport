@@ -130,7 +130,7 @@ Step 5: remove dangerous files
 
 Once the installation is complete and you have checked it is working, remove the
 ``install/`` and ``update/`` directories inside your PhpReport, to prevent other
-users to reset your DB.
+users from resetting your DB.
 
 Step 6: last configuration bits
 ===============================
