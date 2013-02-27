@@ -1152,13 +1152,25 @@ Ext.onReady(function(){
         key: 's',
         ctrl: true,
         stopEvent: true,
-        handler: function () {
-            saveTasks();
-        }
+        handler: saveTasks,
     });
     new Ext.KeyMap(document, {
-        key: 'u',
+        //alternate shortcut for Epiphany
+        key: 's',
+        alt: true,
+        stopEvent: true,
+        handler: saveTasks,
+    });
+    new Ext.KeyMap(document, {
+        key: 'un',
         ctrl: true,
+        stopEvent: true,
+        handler: newTask
+    });
+    new Ext.KeyMap(document, {
+        //alternate shortcut for Epiphany
+        key: 'un',
+        alt: true,
         stopEvent: true,
         handler: newTask
     });

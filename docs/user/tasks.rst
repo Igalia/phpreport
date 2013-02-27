@@ -132,11 +132,14 @@ Hotkeys
 Some hotkeys are available to increase the productivity for keyboard users:
 
 CTRL + S
-  Save changes.
+  Save changes. Some browsers don't allow to overwrite the behaviour of this
+  key combination (e.g. Epiphany), so you can use ALT + S instead.
 
-CTRL + U
+CTRL + N
   Create a new task. The cursor will be placed in the first field of the new
-  task.
+  task. Some browsers don't allow to overwrite the behaviour of this
+  key combination (e.g. Chrome), so you can use ALT + N, CTRL + U or ALT + U
+  instead.
 
 CTRL + number
   The cursor will be placed in the first field of the first, second, third, etc.
