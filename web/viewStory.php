@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009, 2013 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -32,6 +32,7 @@ define('PAGE_TITLE', "PhpReport - Story Data");
 include_once("include/header.php");
 include_once("include/sidebar.php");
 include_once(PHPREPORT_ROOT . '/model/facade/CoordinationFacade.php');
+include_once(PHPREPORT_ROOT . "/model/facade/ProjectsFacade.php");
 include_once(PHPREPORT_ROOT . '/model/vo/StoryVO.php');
 include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
 include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
@@ -39,7 +40,9 @@ include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 // We retrieve the Custom Story
 $story = CoordinationFacade::GetCustomStory($storyId);
 
-$users = UsersFacade::GetStoryIterationProjectAreaTodayUsers($storyId);
+$iteration = CoordinationFacade::GetIteration($story->getIterationId());
+
+$users = ProjectsFacade::GetProjectUsers($iteration->getProjectId());
 
 $taskSections = CoordinationFacade::GetStoryTaskSections($storyId);
 
