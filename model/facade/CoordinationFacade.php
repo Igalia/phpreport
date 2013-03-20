@@ -148,7 +148,7 @@ abstract class CoordinationFacade {
      *
      *  This action is used for retrieving an Iteration.
      *
-     * @param int $id the database identifier of the Iteration we want to retieve.
+     * @param int $iterationId the database identifier of the Iteration we want to retieve.
      * @return IterationVO the Iteration as a {@link IterationVO} with its properties set to the values from the row.
      */
     static function GetIteration($iterationId) {
