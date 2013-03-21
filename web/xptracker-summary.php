@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009, 2013 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -32,6 +32,11 @@ define("PAGE_TITLE", "PhpReport - XP tracker summary");
 include("include/header.php");
 include("include/sidebar.php");
 
+/* Check GET parameters */
+if(isset($_GET["projectId"])) {
+    $projectId = $_GET["projectId"];
+}
+
 ?>
 
 <link rel="stylesheet" type="text/css" href="include/ColumnNodeUI.css" />
@@ -44,8 +49,13 @@ Ext.onReady(function(){
 <?php
     $user = $_SESSION['user'];
 
-    // we gather all the active projects where the user is involved
-    $projects = ProjectsFacade::GetProjectsByCustomerUserLogin(NULL, $user->getLogin(), true);
+    if(isset($projectId)) {
+        $projects = array(ProjectsFacade::GetProject($projectId));
+    }
+    else {
+        // we gather all the active projects where the user is involved
+        $projects = ProjectsFacade::GetProjectsByCustomerUserLogin(NULL, $user->getLogin(), true);
+    }
 
     // we print a TrackerSummaryTree for each project
     foreach((array) $projects as $project) {
