@@ -65,11 +65,50 @@ Ext.onReady(function(){
              ".render(Ext.get('content'));\n";
     }
 ?>
+
+//build the combo with all projects with ExtJS
+new Ext.FormPanel({
+    labelWidth: 150,
+    frame: false,
+    border: false,
+    bodyStyle: "background:transparent; padding-top: 20px",
+    renderTo: 'content',
+    items: [{
+        fieldLabel: 'Check another project:',
+        xtype: 'combo',
+        value: '',
+        transform: 'projects',
+        triggerAction:'all',
+        forceSelection: false,
+        autoSelect: false,
+        lazyRender: true,
+        renderTo: 'content',
+        listeners: {
+            'select': function () {
+                var projectId = this.getValue();
+                if(projectId)
+                    window.location = 'xptracker-summary.php?projectId='
+                            + projectId;
+            }
+        }
+    }]
 });
 
+});
 </script>
 
 <div id="content">
+    <select id="projects" name="projects" display="none">
+        <?php
+        //write projects list as options in the combo
+        $projects = ProjectsFacade::GetAllProjects();
+        foreach((array) $projects as $project) {
+            echo "<option value=".$project->getId().">" .
+                    $project->getDescription() .
+                    "</option>";
+        }
+        ?>
+    </select>
 </div>
 
 <?php
