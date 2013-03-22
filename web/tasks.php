@@ -358,12 +358,15 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 listeners: {
                     'select': function () {
                         this.parent.taskRecord.set('projectId',this.getValue());
+                        this.parent.taskRecord.set('taskStoryId', "");
+                        this.parent.taskStoryComboBox.setValue("");
                     },
                     'blur': function () {
                         // workaround in case you set a value, save with ctrl+s,
                         // delete the value and change the focus. In that case,
                         // 'select' or 'change' events wouldn't be triggered.
                         this.parent.taskRecord.set('projectId',this.getValue());
+                        this.parent.taskRecord.set('taskStoryId', "");
 
                         //invoke changes in the "TaskStory" combo box
                         this.parent.taskStoryComboBox.store.setBaseParam('pid',this.parent.taskRecord.data['projectId']);
