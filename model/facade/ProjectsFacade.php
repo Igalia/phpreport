@@ -268,11 +268,11 @@ abstract class ProjectsFacade {
      * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      */
-    public function GetUserProjects($userId) {
+    static function GetUserProjects($userId) {
 
-    $action = new GetUserProjectsAction($userId);
+        $action = new GetUserProjectsAction($userId);
 
-    return $action->execute();
+        return $action->execute();
 
     }
 
@@ -285,11 +285,11 @@ abstract class ProjectsFacade {
      * @return array an array with value objects {@link UserVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      */
-    public function GetProjectUsers($projectId) {
+    static function GetProjectUsers($projectId) {
 
-    $action = new GetProjectUsersAction($projectId);
+        $action = new GetProjectUsersAction($projectId);
 
-    return $action->execute();
+        return $action->execute();
 
     }
 
@@ -338,11 +338,11 @@ abstract class ProjectsFacade {
      * @return array an array with value objects {@link CustomerVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      */
-    public function GetProjectCustomers($projectId) {
+    static function GetProjectCustomers($projectId) {
 
-    $action = new GetProjectCustomersAction($projectId);
+        $action = new GetProjectCustomersAction($projectId);
 
-    return $action->execute();
+        return $action->execute();
 
     }
 
