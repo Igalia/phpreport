@@ -138,7 +138,12 @@ class GetIterationCustomStoriesAction extends GetStoryCustomTaskStoriesAction{
 
         $customStory->setDevelopers($developers);
 
-        $customStory->setDone($spent/($spent+$toDo));
+        if(($spent+$toDo) == 0) {
+            $customStory->setDone(0);
+        }
+        else {
+            $customStory->setDone($spent/($spent+$toDo));
+        }
 
         if ($estHours)
             $customStory->setOverrun((($spent+$toDo)/$estHours) - 1.0);
