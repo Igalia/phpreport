@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009-2013 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -119,6 +119,16 @@ var summaryRecord = new Ext.data.Record.create([
     {name:'month'},
     {name:'week'},
 ]);
+
+/* Variable to store if there are unsaved changes */
+var unsavedChanges = false;
+
+/**
+ * Checks if there are unsaved changes in this page.
+ */
+function isUnsaved() {
+    return unsavedChanges;
+}
 
 function updateTasksLength(taskPanel) {
     if (taskPanel.initTimeField.getRawValue()!='' && taskPanel.endTimeField.getRawValue()!='' && taskPanel.endTimeField.isValid() && taskPanel.initTimeField.isValid()) {
@@ -790,12 +800,16 @@ Ext.onReady(function(){
                 if (!myStore.error) {
                     App.setAlert(true, "Task Records Changes Saved");
                     summaryStore.load();
+                    unsavedChanges = false;
                 }
                 myStore.error = false;
             },
             'exception': function () {
                 App.setAlert(false, "Some Error Occurred While Saving The Changes (please check you haven't clipped working hours)");
                 myStore.error = true;
+            },
+            'update': function () {
+                unsavedChanges = true;
             }
         }
     });
@@ -1193,6 +1207,7 @@ Ext.onReady(function(){
 
 });
 </script>
+<script src="js/include/closeConfirmation.js"></script>
 
 <div id="summarypanel" class="auxiliarpanel">
 </div>
