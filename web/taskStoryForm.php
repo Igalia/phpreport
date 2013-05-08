@@ -248,7 +248,8 @@ Ext.onReady(function(){
             xtype: 'datefield',
             format: 'd/m/Y',
             vtype: 'doubledaterange',
-              allowBlank: false,
+            allowBlank: false,
+            startDay: 1,
             endDateField1: 'endDate',
             endDateField2: 'estEndDate' // id of the end date field
         },{
@@ -258,7 +259,8 @@ Ext.onReady(function(){
             xtype: 'datefield',
             format: 'd/m/Y',
             vtype: 'doubledaterange',
-              allowBlank: false,
+            allowBlank: false,
+            startDay: 1,
             startDateField: 'startDate',
             endDateField: 'endDate' // id of the start date field
         },{
@@ -268,7 +270,8 @@ Ext.onReady(function(){
             xtype: 'datefield',
             format: 'd/m/Y',
             vtype: 'doubledaterange',
-              allowBlank: true,
+            allowBlank: true,
+            startDay: 1,
             startDateField: 'startDate',
             endDateField: 'estEndDate' // id of the start date field
         },{

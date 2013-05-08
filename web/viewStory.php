@@ -390,6 +390,7 @@ Ext.onReady(function(){
                             format: 'd/m/Y',
                             vtype: 'doubledaterange',
                             allowBlank: false,
+                            startDay: 1,
                             endDateField1: 'winEndDate',
                             endDateField2: 'winEstEndDate'
                         },{
@@ -400,6 +401,7 @@ Ext.onReady(function(){
                             format: 'd/m/Y',
                             vtype: 'doubledaterange',
                             allowBlank: false,
+                            startDay: 1,
                             startDateField: 'winStartDate',
                             endDateField: 'winEndDate'
                         },{
@@ -410,6 +412,7 @@ Ext.onReady(function(){
                             format: 'd/m/Y',
                             vtype: 'doubledaterange',
                             allowBlank: true,
+                            startDay: 1,
                             startDateField: 'winStartDate',
                             endDateField: 'winEstEndDate'
                         },{
