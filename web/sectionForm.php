@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009, 2013 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -29,6 +29,7 @@ $sectionId = $_GET["scid"];
 /* We check authentication and authorization */
 require_once(PHPREPORT_ROOT . '/web/auth.php');
 
+include_once(PHPREPORT_ROOT . "/model/facade/ProjectsFacade.php");
 include_once(PHPREPORT_ROOT . "/model/facade/UsersFacade.php");
 include_once(PHPREPORT_ROOT . '/model/facade/CoordinationFacade.php');
 include_once(PHPREPORT_ROOT . '/model/vo/SectionVO.php');
@@ -45,6 +46,8 @@ if ($sectionId != NULL)
 else
     define('PAGE_TITLE', "PhpReport - Create New Section");
 
+$module = CoordinationFacade::GetModule($moduleId);
+$projectId = $module->getProjectId();
 
 /* Include the generic header and sidebar*/
 include_once("include/header.php");
@@ -89,7 +92,7 @@ if ( (isset($_POST["name"])) && ($_POST["name"] != "") && ($_POST["hiddenReviewe
 
 }
 
-$users = UsersFacade::GetModuleProjectAreaTodayUsers($moduleId);
+$users = ProjectsFacade::GetProjectUsers($projectId);
 
 ?>
 

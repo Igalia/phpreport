@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009, 2013 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -34,6 +34,7 @@ define('PAGE_TITLE', "PhpReport - Section Data");
 include_once("include/header.php");
 include_once("include/sidebar.php");
 include_once(PHPREPORT_ROOT . '/model/facade/CoordinationFacade.php');
+include_once(PHPREPORT_ROOT . "/model/facade/ProjectsFacade.php");
 include_once(PHPREPORT_ROOT . '/model/vo/SectionVO.php');
 include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
 include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
@@ -44,7 +45,9 @@ $section = CoordinationFacade::GetCustomSection($sectionId);
 // We get the Section's Custom Task Sections
 $taskSections = CoordinationFacade::GetSectionCustomTaskSections($sectionId);
 
-$users = UsersFacade::GetSectionModuleProjectAreaTodayUsers($sectionId);
+// Retrieve users in the project
+$module = CoordinationFacade::GetModule($section->getModuleId());
+$users = ProjectsFacade::GetProjectUsers($module->getProjectId());
 
 ?>
 
