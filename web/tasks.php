@@ -37,13 +37,24 @@ if(isset($_GET["date"]))
 else
     $date = date("Y-m-d");
 
+$lastTaskDate = TasksFacade::getLastTaskDate($user);
+if($lastTaskDate == NULL) {
+    //defaults to the day before $date
+    $lastTaskDate = (new DateTime($date))->sub(new DateInterval('P1D'));
+}
+$lastTaskDate = $lastTaskDate->format('Y-m-d');
+
+echo '<script type="text/javascript">';
+echo 'var lastTaskDate = Date.parseDate("' . $lastTaskDate . '", "Y-m-d");';
+
 /* Check if the date is enabled to write */
 if(!TasksFacade::IsWriteAllowedForDate(new DateTime($date))) {
-    echo '<script type="text/javascript">var forbidden = true;</script>';
+    echo 'var forbidden = true;';
 }
 else {
-    echo '<script type="text/javascript">var forbidden = false;</script>';
+    echo 'var forbidden = false;';
 }
+echo "</script>\n";
 
 ?>
 <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus.js"></script>
@@ -930,11 +941,7 @@ Ext.onReady(function(){
                 width: 160,
                 xtype: 'datefield',
                 format: 'd/m/Y',
-                // Default value is previous day
-                value: Date.parseDate('<?php
-                    $dayBefore = new DateTime($date);
-                    echo $dayBefore->sub(new DateInterval('P1D'))->format('Y-m-d');
-                        ?>', 'Y-m-d'),
+                value: lastTaskDate,
                 allowBlank: false,
             }, new Ext.Button({
                 text:'Copy tasks from selected date',
