@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009-2013 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -952,6 +952,19 @@ class PostgreSQLTaskDAO extends TaskDAO{
     }
 
         return $affectedRows;
+    }
+
+    public function getLastTaskDate($userId) {
+        $sql = "SELECT MAX(_date) FROM task WHERE usrId=" .
+               DBPostgres::checkNull($userId);
+
+        $res = pg_query($this->connect, $sql);
+        $row = pg_fetch_result($res, 0);
+
+        if($row == NULL)
+            return NULL;
+
+        return date_create($row);
     }
 }
 

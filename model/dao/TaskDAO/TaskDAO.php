@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009-2013 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -352,5 +352,13 @@ abstract class TaskDAO extends BaseDAO{
      * @throws {@link OperationErrorException}
      */
     public abstract function delete(TaskVO $taskVO);
+
+    /** Retrieve the date of the last task for a user
+     *
+     * @param int $userId Id of the user to check
+     * @return DateTime The date of the last task of that user, or NULL if the user
+     *         doesn't have any tasks yet.
+     */
+    public abstract function getLastTaskDate($userId);
 
 }
