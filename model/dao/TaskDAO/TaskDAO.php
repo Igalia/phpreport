@@ -356,9 +356,10 @@ abstract class TaskDAO extends BaseDAO{
     /** Retrieve the date of the last task for a user
      *
      * @param int $userId Id of the user to check
-     * @return DateTime The date of the last task of that user, or NULL if the user
-     *         doesn't have any tasks yet.
+     * @param  $referenceDate The date to start searching backwars.
+     * @return DateTime The date of the last task of that user before $referenceDate,
+     *         or NULL if the user doesn't have any tasks yet.
      */
-    public abstract function getLastTaskDate($userId);
+    public abstract function getLastTaskDate($userId, DateTime $referenceDate);
 
 }

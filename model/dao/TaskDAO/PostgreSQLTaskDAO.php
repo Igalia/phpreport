@@ -954,9 +954,10 @@ class PostgreSQLTaskDAO extends TaskDAO{
         return $affectedRows;
     }
 
-    public function getLastTaskDate($userId) {
-        $sql = "SELECT MAX(_date) FROM task WHERE usrId=" .
-               DBPostgres::checkNull($userId);
+    public function getLastTaskDate($userId, DateTime $referenceDate) {
+        $sql = "SELECT MAX(_date) FROM task " .
+                    "WHERE usrId=" . DBPostgres::checkNull($userId) .
+                    " AND _date <" . DBPostgres::formatDate($referenceDate);
 
         $res = pg_query($this->connect, $sql);
         $row = pg_fetch_result($res, 0);

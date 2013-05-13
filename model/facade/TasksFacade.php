@@ -560,16 +560,17 @@ abstract class TasksFacade {
 
     /** Retrieve the date of the last task for a user
      *
-     * @param  $userId Id of the user to check
-     * @return DateTime The date of the last task of that user, or NULL if the user
-     *         doesn't have any tasks yet.
+     * @param  $userVO User to check
+     * @param  $referenceDate The date to start searching backwars.
+     * @return DateTime The date of the last task of that user before $referenceDate,
+     *         or NULL if the user doesn't have any tasks yet.
      */
-    static function getLastTaskDate(UserVO $userVO) {
+    static function getLastTaskDate(UserVO $userVO, DateTime $referenceDate) {
         //There is no action object for this task:
         //creating one action per facade method is an overkill if there
         //are no plugins for that action; will be created only if needed.
         $dao = DAOFactory::getTaskDAO();
-        return $dao->getLastTaskDate($userVO->getId());
+        return $dao->getLastTaskDate($userVO->getId(), $referenceDate);
     }
 
 }

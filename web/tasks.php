@@ -41,7 +41,7 @@ else
 $date = new DateTime($dateString);
 
 //last task date
-$lastTaskDate = TasksFacade::getLastTaskDate($user);
+$lastTaskDate = TasksFacade::getLastTaskDate($user, $date);
 if($lastTaskDate == NULL) {
     //defaults to the day before $date
     $lastTaskDate = $date->sub(new DateInterval('P1D'));
