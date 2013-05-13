@@ -32,28 +32,35 @@ include("include/header.php");
 include("include/sidebar.php");
 
 /* Get the needed variables to be passed to the Javascript code */
-if(isset($_GET["date"]))
-    $date = $_GET["date"];
-else
-    $date = date("Y-m-d");
 
+//selected date
+if(isset($_GET["date"]))
+    $dateString = $_GET["date"];
+else
+    $dateString = date("Y-m-d");
+$date = new DateTime($dateString);
+
+//last task date
 $lastTaskDate = TasksFacade::getLastTaskDate($user);
 if($lastTaskDate == NULL) {
     //defaults to the day before $date
-    $lastTaskDate = (new DateTime($date))->sub(new DateInterval('P1D'));
+    $lastTaskDate = $date->sub(new DateInterval('P1D'));
 }
 $lastTaskDate = $lastTaskDate->format('Y-m-d');
 
-echo '<script type="text/javascript">';
-echo 'var lastTaskDate = Date.parseDate("' . $lastTaskDate . '", "Y-m-d");';
+//is current date enabled to write?
+$forbidden = false;
+if(!TasksFacade::IsWriteAllowedForDate($date)) {
+    $forbidden = true;
+}
 
-/* Check if the date is enabled to write */
-if(!TasksFacade::IsWriteAllowedForDate(new DateTime($date))) {
-    echo 'var forbidden = true;';
-}
-else {
-    echo 'var forbidden = false;';
-}
+//output vars as JS code
+echo "<!-- Global variables extracted from the PHP side -->\n";
+echo "<script type='text/javascript'>\n";
+echo "var lastTaskDate = Date.parseDate('" . $lastTaskDate . "', 'Y-m-d');\n";
+echo "var forbidden = " . ($forbidden? "true": "false") . ";\n";
+echo "var date = '" . $dateString . "';\n";
+echo "var user = '" . $user->getLogin() . "';\n";
 echo "</script>\n";
 
 ?>
@@ -79,10 +86,6 @@ function updateTimes(field, min, max, open) {
         times.push(['00:00']);
     field.store.loadData(times);
 };
-
-/* Global variables extracted from the PHP side */
-var date = '<?php echo $date?>';
-var user = '<?php echo $user->getLogin()?>';
 
 var App = new Ext.App({});
 
