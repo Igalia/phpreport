@@ -741,7 +741,7 @@ Ext.onReady(function(){
         },
         listeners: {
             'load': function (store, records, options) {
-                if (options.add == true)
+                if (options.add == true) {
                     for (i in records) {
                         if (i >=0) {
                             records[i].markDirty();
@@ -778,6 +778,8 @@ Ext.onReady(function(){
                             updateTasksLength(taskPanel);
                         }
                     }
+                    unsavedChanges = true;
+                }
                 else this.each(function(r) {
                         taskPanel = new TaskPanel({
                             parent: tasksScrollArea,
