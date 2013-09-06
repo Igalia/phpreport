@@ -360,13 +360,22 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                                     this.parent.taskRecord.set('projectId', null);
                                 }
                                 else if(this.parent.taskRecord.data['id'] > 0) {
-                                    //the project could not be found because it's not
-                                    //open, we disable edition for this task and reload
-                                    //the list with that only project
-                                    this.parent.setReadOnly(true);
-                                    this.proxy.setUrl('services/getProjectService.php', true);
-                                    this.setBaseParam('pid', this.parent.taskRecord.data['projectId']);
-                                    this.load();
+                                    //the project could not be found because it's not open
+                                    if(this.parent.taskRecord.isDirty()) {
+                                        //this is a cloned task
+                                        //we remove the project value
+                                        this.parent.projectComboBox.setValue(null);
+                                        this.parent.taskRecord.set('projectId', null);
+                                    }
+                                    else {
+                                        //this is a saved task
+                                        //we disable edition for this task and reload
+                                        //the list with that only project
+                                        this.parent.setReadOnly(true);
+                                        this.proxy.setUrl('services/getProjectService.php', true);
+                                        this.setBaseParam('pid', this.parent.taskRecord.data['projectId']);
+                                        this.load();
+                                    }
                                 }
                             } else
                                 this.parent.projectComboBox.setValue(this.parent.taskRecord.data['projectId']);
