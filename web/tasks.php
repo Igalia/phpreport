@@ -467,7 +467,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         this.parent.taskRecord.set('story',Trim(this.getValue()));
                     },
                     'keyup': function () {
-                        this.parent.taskRecord.set('story',this.getValue());
+                        this.parent.taskRecord.set('story',Trim(this.getValue()));
                     },
                     'blur': function () {
                         this.setValue(Trim(this.getValue()));
