@@ -113,7 +113,6 @@ asked by the password (``phpreport``) interactively)::
   psql -h localhost -W -U phpreport phpreport < uniqueConstraints.sql
   psql -h localhost -W -U phpreport phpreport < otherConstraints.sql
   psql -h localhost -W -U phpreport phpreport < initialData.sql
-  psql -h localhost -W -U phpreport phpreport < triggers.sql
 
 Set the correct DB name, user and host if they are different.
 
