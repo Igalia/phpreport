@@ -40,7 +40,7 @@ var App = new Ext.App({});
 //schema of the information about extra hour objects
 var ExtraHourRecord = new Ext.data.Record.create([
     {name: 'id', type: 'int'},
-    {name: 'hours', type: 'int'},
+    {name: 'hours', type: 'float'},
     {name: 'userId', type: 'int'},
     {name: "date", type: 'date', dateFormat: 'Y-m-d'},
 ]);
