@@ -135,9 +135,12 @@ Pending holiday hours:
   current year, a start date in the current year must be chosen.
 
 Extra hours:
-  the difference of hours between the theoretical work journey and
-  the actual number of hours worked, inside the specified time interval. It's
-  the difference between the columns 'Workable hours' and 'Worked hours'.
+  the difference of hours between the actual number of hours worked and
+  the theoretical work journey, inside the specified time interval. It's
+  the difference between the columns 'Worked hours' and 'Workable hours'.
+
+  Extra hour compensations are not taken into account when calculating the value
+  of this column.
 
 Workable hours:
   theoretical number of hours every user should have worked in
@@ -148,12 +151,17 @@ Worked hours:
   the specified time interval.
 
 Total extra hours:
-  the difference of hours between the theoretical work journey
-  and the actual number of hours worked, taking into account all the history of
+  the difference of hours between the actual number of hours worked
+  and the theoretical work journey, taking into account all the history of
   the worker until the specified end date. It can be used to check side by side
   the partial value in 'Extra hours' column and the absolute value in this
   column. If the start date of the report is left empty, the values of these two
   columns are the same.
+
+  Extra hour compensations are taken into account when calculating the value of
+  this column. If the user has any compensation entry the value of this column
+  reflects the compensated value adding or subtracting the extra hours since the
+  date the compensation became effective.
 
 Project evaluation
 ==================
