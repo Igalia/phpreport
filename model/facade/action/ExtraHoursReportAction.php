@@ -401,6 +401,10 @@ class ExtraHoursReportAction extends Action {
             $addResults["extra_hours"] += $work[$user->getLogin()]["extra_hours"];
             $addResults["total_extra_hours"] += $totalExtraHours[$user->getLogin()];
             $work[$user->getLogin()]["total_extra_hours"] = $totalExtraHours[$user->getLogin()];
+            // we don't want to take into account $previous in this column,
+            // it will only affect to "total_extra_hours" column
+            $work[$user->getLogin()]["extra_hours"] =
+                    $work[$user->getLogin()]["workable_hours"] - $work[$user->getLogin()]["total_hours"];
 
             $allWork[$user->getLogin()] = $work[$user->getLogin()];
 
