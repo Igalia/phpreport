@@ -454,7 +454,7 @@ Ext.onReady(function(){
             this.bbar = this.buildBottomToolbar();
 
             this.on('rowdblclick', function(g, n) {
-                window.location = 'viewProjectDetails.php?pid=' + g.getStore().getAt(n).get('id');
+                this.onEdit();
             });
 
             // super
@@ -487,6 +487,14 @@ Ext.onReady(function(){
                 disabled: true,
                 iconCls: this.iconCls + '-delete',
                 handler: this.onDelete,
+                scope: this
+                }, '-', {
+                text: 'Details',
+                id: this.id + 'DetailsBtn',
+                ref: '../detailsBtn',
+                disabled: true,
+                iconCls: this.iconCls + '-go',
+                handler: this.onDetails,
                 scope: this
                 }, '-']
         },
@@ -949,6 +957,17 @@ Ext.onReady(function(){
                 icon: Ext.Msg.QUESTION,
                 closable: false,
             });
+        },
+
+        /**
+         * onDetails
+         */
+        onDetails: function() {
+
+            if (this.getSelectionModel().getCount() > 0) {
+                var selected = this.getSelectionModel().getSelected();
+                window.location = 'viewProjectDetails.php?pid=' + selected.id;
+            }
         },
 
         /**
@@ -1485,6 +1504,7 @@ Ext.onReady(function(){
     projectGrid.getSelectionModel().on('selectionchange', function(sm){
         projectGrid.deleteBtn.setDisabled(sm.getCount() < 1);
         projectGrid.editBtn.setDisabled(sm.getCount() < 1);
+        projectGrid.detailsBtn.setDisabled(sm.getCount() < 1);
         projectGrid.assignBtn.setDisabled(sm.getCount() < 1);
         projectGrid.assignBtn2.setDisabled(sm.getCount() < 1);
     });
