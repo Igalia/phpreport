@@ -36,6 +36,7 @@
 ?>
 
 <script type="text/javascript" src="js/include/DateIntervalForm.js"></script>
+<script type="text/javascript" src="js/include/ExportableGridPanel.js"></script>
 <script type="text/javascript">
 
 Ext.onReady(function(){
@@ -156,9 +157,9 @@ Ext.onReady(function(){
     pendingHoliday.on('load', populate);
 
     // create the Grid
-        var grid = new Ext.grid.GridPanel({
-              id: 'grid',
-              store: store,
+    var grid = new Ext.ux.ExportableGridPanel({
+        id: 'grid',
+        store: store,
         columns: [
             {id:'login',width: 70, header: 'Login',sortable: true, dataIndex: 'login'},
             {id: 'pendingHoliday', width: 130, header: 'Pending Holiday Hours', sortable: true, renderer: hours, dataIndex: 'pendingHoliday'},
@@ -183,7 +184,7 @@ Ext.onReady(function(){
 
             }
         }
-        });
+    });
 
 
     // dates filter form
