@@ -40,6 +40,7 @@
 ?>
 
 <script type="text/javascript" src="js/include/DateIntervalForm.js"></script>
+<script type="text/javascript" src="js/include/ExportableGridPanel.js"></script>
 <script type="text/javascript">
 
     Ext.onReady(function(){
@@ -81,7 +82,7 @@
     });
 
     mainPanel.render(Ext.get("content"));
-        Ext.ux.DynamicGridPanel = Ext.extend(Ext.grid.GridPanel, {
+        Ext.ux.DynamicGridPanel = Ext.extend(Ext.ux.ExportableGridPanel, {
 
           initComponent: function(){
             /**

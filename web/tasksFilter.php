@@ -32,6 +32,7 @@ include_once("include/sidebar.php");
 
 ?>
 
+<script type="text/javascript" src="js/include/ExportableGridPanel.js"></script>
 <script type="text/javascript">
 
 Ext.onReady(function () {
@@ -476,7 +477,7 @@ Ext.onReady(function () {
     ]);
 
     // setup the panel for the grid of tasks
-    var tasksGrid = new Ext.grid.GridPanel({
+    var tasksGrid = new Ext.ux.ExportableGridPanel({
         id: 'tasksGrid',
         renderTo: 'content',
         frame: true,
