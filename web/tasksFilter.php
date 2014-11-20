@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2010-2012 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2010-2014 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
