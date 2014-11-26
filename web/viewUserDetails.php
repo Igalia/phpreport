@@ -117,8 +117,8 @@
 
             // listener for double click to open the project details page
             this.on('rowdblclick', function(g, n) {
-                window.location = 'viewProjectDetails.php?pid=' +
-                        g.getStore().getAt(n).get('id');
+                window.open('viewProjectDetails.php?pid=' +
+                        g.getStore().getAt(n).get('id'));
             });
 
             Ext.ux.DynamicGridPanel.superclass.initComponent.apply(this, arguments);

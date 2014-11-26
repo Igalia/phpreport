@@ -386,7 +386,7 @@ Ext.onReady(function(){
 
     // event handler for double-click on a project
     projectGrid.on('rowdblclick', function(grid, n, e) {
-        window.location = 'viewProjectDetails.php?pid=' + grid.store.getAt(n).get('id');
+        window.open('viewProjectDetails.php?pid=' + grid.store.getAt(n).get('id'));
     });
 
     //function to show only a subset of columns and hide the others
