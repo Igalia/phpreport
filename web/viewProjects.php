@@ -44,6 +44,8 @@ $areas = AdminFacade::GetAllAreas();
 
 ?>
 
+<script src="include/ext.ux.form.superboxselect/SuperBoxSelect.js"></script>
+<link rel="stylesheet" type="text/css" href="include/ext.ux.form.superboxselect/superboxselect.css"/>
 <script type="text/javascript">
 
 Ext.onReady(function(){
@@ -56,7 +58,7 @@ Ext.onReady(function(){
 
     var App = new Ext.App({});
 
-    // Flag for stores loading coordination
+    // Flag to coordinate the multi-combo widget setup with the stores
     var storesLoaded = false;
 
     // Flag for stores loading coordination
@@ -120,7 +122,7 @@ Ext.onReady(function(){
     });
 
     /* Store to load/save assigned Users */
-    var firstGridStore = new Ext.data.Store({
+    var assignedUsersStore = new Ext.data.Store({
         id: 'assignedUsersStore',
         autoLoad: false,  //initial data are loaded in the application init
         autoSave: false, //if set true, changes will be sent instantly
@@ -145,129 +147,37 @@ Ext.onReady(function(){
                 App.setAlert(false, "Some Error Occurred While Saving The Changes");
             },
             'load': function(){
-                // We only execute the following code when both stores have
-                // loaded their data.
-                if (storesLoaded)
-                {
-                    // We remove the assigned Users from the available ones.
-                    firstGridStore.each( function(record){
-                        secondGridStore.remove(secondGridStore.getById(record.get('id')));
-                    });
-
-                    // We mark all available Users as dirty records, because
-                    // we only care about their status against the assigned
-                    // ones' store, and this way it's easier.
-                    secondGridStore.each( function(record){
-                        record.markDirty();
-                    });
-
-                    storesLoaded = false;
-                } else storesLoaded = true;
+                var userSelector = Ext.getCmp('userSelector');
+                userSelector.clearValue(true); //clear, don't trigger remove event
+                assignedUsersStore.each(function (record) {
+                    userSelector.addNewItem(record.data);
+                });
+                storesLoaded = true;
             }
         }
     });
 
-    /* Proxy to the services related with retrieving available Users */
-    var availableUsersProxy = new Ext.data.HttpProxy({
-    method: 'GET',
-        api: {
-            read    : {url: 'services/getTodayAreaUsersService.php'},
-        },
-    });
-
     /* Store with available Users */
-    var secondGridStore = new Ext.data.Store({
+    var availableUsersStore = new Ext.data.Store({
         id: 'availableUsersStore',
-        autoLoad: false,  //initial data are loaded in the application init
+        autoLoad: true,  //initial data are loaded in the application init
         autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {
-            <?php if ($sid) {?>
-            'sid': sessionId <?php } ?>
-        },
         storeId: 'availableUsers',
-        proxy: availableUsersProxy,
-        reader:new Ext.data.XmlReader({record: 'user', idProperty:'id' }, userRecord),
+        proxy: new Ext.data.HttpProxy({
+            method: 'GET',
+            api: {
+                read: {url: 'services/getAllUsersService.php'}
+            },
+        }),
+        reader: new Ext.data.XmlReader({
+                record: 'user',
+                idProperty:'id'
+            }, userRecord),
         remoteSort: false,
         sortInfo: {
             field: 'login',
             direction: 'ASC',
-        },
-        listeners: {
-            'load': function(){
-                // We only execute the following code when both stores have
-                // loaded their data.
-                if (storesLoaded)
-                {
-
-                    // We remove the assigned Users from the available ones.
-                    firstGridStore.each( function(record){
-                        secondGridStore.remove(secondGridStore.getById(record.get('id')));
-                    });
-
-                    // We mark all available Users as dirty records, because
-                    // we only care about their status against the assigned
-                    // ones' store, and this way it's easier.
-                    secondGridStore.each( function(record){
-                        record.phantom = true;
-                    });
-
-                    storesLoaded = false;
-                } else storesLoaded = true;
-            }
         }
-    });
-
-    // Column Model shortcut array
-    var colsUsersFirst = [
-        { id : 'login', header: "Login", sortable: true, dataIndex: 'login'},
-    ];
-
-    var colsUsersSecond = [
-        { id : 'login', header: "Login", sortable: true, dataIndex: 'login'},
-    ];
-
-    // declare the source Grid
-    var firstGrid = new Ext.grid.GridPanel({
-        ddGroup          : 'secondGridDDGroup',
-        store            : firstGridStore,
-        columns          : colsUsersFirst,
-        enableDragDrop   : true,
-        stripeRows       : true,
-        autoExpandColumn : 'login',
-        title            : 'Assigned People',
-        loadMask         : true,
-        filter           : new Array(),
-        filtering        : function(record){
-                                if (this.filter[record.get('id')])
-                                    return false;
-                                else return true;
-                           }
-    });
-
-    // create the destination Grid
-    var secondGrid = new Ext.grid.GridPanel({
-        ddGroup          : 'firstGridDDGroup',
-        store            : secondGridStore,
-        columns          : colsUsersSecond,
-        enableDragDrop   : true,
-        stripeRows       : true,
-        autoExpandColumn : 'login',
-        title            : 'Available People',
-        loadMask         : true,
-    });
-
-
-    //Simple 'border layout' panel to house both grids
-    var displayPanel = new Ext.Panel({
-        width        : 300,
-        height       : 300,
-        layout       : 'hbox',
-        defaults     : { flex : 1 }, //auto stretch
-        layoutConfig : { align : 'stretch' },
-        items        : [
-            firstGrid,
-            secondGrid
-        ],
     });
 
     /* Proxy to the services related with load/save assigned Customers */
@@ -992,48 +902,47 @@ Ext.onReady(function(){
                         closable: false,
                         animateTarget: 'projectGridAssignBtn',
                         modal: true,
-                        width:314,
+                        width: 320,
+                        height: 240,
                         stateful: false,
                         constrainHeader: true,
-                        resizable: false,
-                        layout: 'form',
-                        autoHeight: true,
+                        resizable: true,
+                        layout: 'fit',
+                        autoScroll: true,
                         plain: false,
-                        items: [
-                            displayPanel,
-                            new Ext.Container({
-                                layout: 'hbox',
-                                layoutConfig: {pack: 'end', defaultMargins: "0 25px 0 0"},
-                                items:[
-                                    new Ext.form.Checkbox({
-                                        boxLabel: 'Show all Users',
-                                        handler: function(checkbox, value) {
-                                            if (value)
-                                            {
-                                                availableUsersProxy.setUrl('services/getAllUsersService.php', true);
-                                                firstGridStore.reload();
-                                                // We are reloading, so no filtering
-                                                firstGrid.filter = new Array();
-                                                secondGridStore.reload();
-                                            } else {
-                                                availableUsersProxy.setUrl('services/getTodayAreaUsersService.php', true);
-                                                firstGridStore.reload();
-                                                // We are reloading, so no filtering
-                                                firstGrid.filter = new Array();
-                                                secondGridStore.reload();
-                                            }
-                                        }
-                                    })
-                                ]
-                            })
-                        ],
-                        listeners: {
-                            'show': function(){
-                                // We create a new array for filtering when
-                                // the window shows
-                                firstGrid.filter = new Array();
-                            }
-                        },
+                        items: [{
+                            id: 'userSelector',
+                            xtype: 'superboxselect',
+                            fieldLabel: 'Project members',
+                            emptyText: 'Select users...',
+                            name: 'users',
+                            store: availableUsersStore,
+                            mode: 'local',
+                            valueField: 'id',
+                            displayField: 'login',
+                            forceSelection : true,
+                            allowBlank: true,
+                            listeners: {
+                                'addItem': function (selector, value, record) {
+                                    //wait until the assigned users store is ready
+                                    if(!storesLoaded) return;
+
+                                    record.phantom = true;
+                                    assignedUsersStore.add(record);
+                                },
+                                'removeItem': function (selector, value, record) {
+                                    //wait until the assigned users store is ready
+                                    if(!storesLoaded) return;
+
+                                    //assignedUsersStore.remove(record) will not work,
+                                    //because the record is not a member of assignedUsersStore
+                                    //workaround: get the record with the same id
+                                    //contained in assignedUsersStore and remove it
+                                    assignedUsersStore.remove(
+                                        assignedUsersStore.getById(record.data['id']));
+                                },
+                            },
+                        }],
                         buttons: [{
                             text: 'Reset',
                             name: 'btnResetAssign',
@@ -1041,10 +950,11 @@ Ext.onReady(function(){
                             tooltip: 'Resets the Users\' assignation to it\'s original state .',
                             tabIndex:1,
                             handler: function(){
-                                firstGridStore.reload();
-                                // We are resetting, so no filtering
-                                firstGrid.filter = new Array();
-                                secondGridStore.reload();
+                                var userSelector = Ext.getCmp('userSelector');
+                                storesLoaded = false;
+                                userSelector.clearValue(true); //clear, don't trigger remove event
+                                assignedUsersStore.rejectChanges();
+                                assignedUsersStore.reload();
                             }
                         },{
                             text: 'Accept',
@@ -1052,20 +962,7 @@ Ext.onReady(function(){
                             id: "btnAcceptAssign",
                             tabIndex: 2,
                             handler: function(){
-
-                                // We nullify the filtering for having all
-                                // records
-                                firstGridStore.filterBy(function(){return true;});
-
-                                // If a record is a member of the filter, then we
-                                // remove it
-                                firstGridStore.each(function(record){
-                                    if (firstGrid.filter[record.get('id')])
-                                        firstGrid.store.remove(record);
-                                });
-
-                                firstGridStore.save();
-
+                                assignedUsersStore.save();
                                 windowAssign.hide();
 
                             }
@@ -1075,74 +972,11 @@ Ext.onReady(function(){
                             id: "btnCancelAssign",
                             tabIndex: 3,
                             handler: function(){
-                                 windowAssign.hide();
+                                assignedUsersStore.rejectChanges();
+                                windowAssign.hide();
                             }
                         }],
                     }).show();
-
-                    /****
-                    * Setup Drop Targets
-                    ***/
-                    // This will make sure we only drop to the  view scroller element
-                    var firstGridDropTargetEl =  firstGrid.getView().scroller.dom;
-                    var firstGridDropTarget = new Ext.dd.DropTarget(firstGridDropTargetEl, {
-                        ddGroup    : 'firstGridDDGroup',
-                        notifyDrop : function(ddSource, e, data){
-                            var records =  ddSource.dragData.selections;
-                            Ext.each(records, ddSource.grid.store.remove, ddSource.grid.store);
-                            for (var index = 0; index<records.length; index++)
-                            {
-                                var record = records[index];
-                                // If a record is no phantom, then it
-                                // was originally assigned, so it's not
-                                // added. Instead, we stop using it's id for
-                                // filtering in order to show it
-                                if (!record.phantom)
-                                    firstGrid.filter[record.get('id')] = false;
-                                else // Otherwise, we add it
-                                    firstGrid.store.add(record);
-                            }
-                            firstGrid.store.filterBy(firstGrid.filtering, firstGrid);
-                            // We nullify the modified data marking
-                            firstGrid.store.each(function(record){
-                                if (record.modified != null)
-                                    record.modified['login'] = undefined;
-                            });
-                            firstGrid.store.sort('login', 'ASC');
-                            return true
-                        }
-                    });
-
-
-                    // This will make sure we only drop to the view scroller element
-                    var secondGridDropTargetEl = secondGrid.getView().scroller.dom;
-                    var secondGridDropTarget = new Ext.dd.DropTarget(secondGridDropTargetEl, {
-                        ddGroup    : 'secondGridDDGroup',
-                        notifyDrop : function(ddSource, e, data){
-                            var records =  ddSource.dragData.selections;
-                            for (var index = 0; index<records.length; index++)
-                            {
-                                var record = records[index];
-                                // If a record is no phantom, then it
-                                // was originally assigned, so it's not
-                                // removed. Instead, we use it's id for
-                                // filtering in order to hide it
-                                if (!record.phantom)
-                                    firstGrid.filter[record.get('id')] = true;
-                                else // Otherwise, we remove it
-                                    firstGrid.store.remove(record);
-                            }
-                            firstGrid.store.filterBy(firstGrid.filtering, firstGrid);
-                            secondGrid.store.add(records);
-                            // We nullify the modified data marking
-                            secondGrid.store.each(function(record){
-                                if (record.modified != null)
-                                    record.modified['login'] = undefined;
-                            });
-                            secondGrid.store.sort('login', 'ASC');
-                            return true
-                        }
-                    });
                 } else {
                     windowAssign.center();
                 }
@@ -1159,9 +993,10 @@ Ext.onReady(function(){
                         '</{root}>' +
                     '</tpl>' +
                 '</tpl>';
-                firstGridStore.writer.tpl = new Ext.XTemplate(tpl).compile();
-                firstGridStore.load({params: {'pid': projectId}});
-                secondGridStore.load({params: {'aid': areaId}});
+                assignedUsersStore.writer.tpl = new Ext.XTemplate(tpl).compile();
+                storesLoaded = false;
+                assignedUsersStore.load({params: {'pid': projectId}});
+                availableUsersStore.load();
                 windowAssign.show();
 
             }
