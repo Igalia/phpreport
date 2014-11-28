@@ -853,12 +853,16 @@ Ext.onReady(function(){
                                 },
                             },
                         }],
+                        listeners: {
+                            'show': function () {
+                                Ext.getCmp('userSelector').focus('', 100);
+                            }
+                        },
                         buttons: [{
                             text: 'Reset',
                             name: 'btnResetAssign',
                             id: 'btnResetAssign',
                             tooltip: 'Resets the Users\' assignation to it\'s original state .',
-                            tabIndex:1,
                             handler: function(){
                                 var userSelector = Ext.getCmp('userSelector');
                                 storesLoaded = false;
@@ -870,7 +874,6 @@ Ext.onReady(function(){
                             text: 'Accept',
                             name: "btnAcceptAssign",
                             id: "btnAcceptAssign",
-                            tabIndex: 2,
                             handler: function(){
                                 assignedUsersStore.save();
                                 windowAssign.hide();
@@ -880,13 +883,12 @@ Ext.onReady(function(){
                             text: 'Cancel',
                             name: "btnCancelAssign",
                             id: "btnCancelAssign",
-                            tabIndex: 3,
                             handler: function(){
                                 assignedUsersStore.rejectChanges();
                                 windowAssign.hide();
                             }
                         }],
-                    }).show();
+                    });
                 } else {
                     windowAssign.center();
                 }
@@ -973,12 +975,16 @@ Ext.onReady(function(){
                                 },
                             },
                         }],
+                        listeners: {
+                            'show': function () {
+                                Ext.getCmp('clientSelector').focus('', 100);
+                            }
+                        },
                         buttons: [{
                             text: 'Reset',
                             name: 'btnResetAssign',
                             id: 'btnResetAssign2',
                             tooltip: 'Resets the Clients\' assignation to it\'s original state .',
-                            tabIndex:1,
                             handler: function(){
                                 var selector = Ext.getCmp('clientSelector');
                                 clientStoresLoaded = false;
@@ -990,7 +996,6 @@ Ext.onReady(function(){
                             text: 'Accept',
                             name: "btnAcceptAssign",
                             id: "btnAcceptAssign2",
-                            tabIndex: 2,
                             handler: function(){
                                 assignedClientsStore.save();
                                 windowAssign2.hide();
@@ -999,13 +1004,12 @@ Ext.onReady(function(){
                             text: 'Cancel',
                             name: "btnCancelAssign",
                             id: "btnCancelAssign2",
-                            tabIndex: 3,
                             handler: function(){
                                 assignedClientsStore.rejectChanges();
                                 windowAssign2.hide();
                             }
                         }],
-                    }).show();
+                    });
                 } else {
                     windowAssign2.center();
                 }
