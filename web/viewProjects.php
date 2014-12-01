@@ -361,6 +361,7 @@ Ext.onReady(function(){
                     layout: 'form',
                     autoHeight: true,
                     plain: false,
+                    buttonAlign: 'left',
                     items: [ new Ext.FormPanel({
                         frame:false,
                         id: 'createForm',
@@ -483,7 +484,7 @@ Ext.onReady(function(){
                             Ext.getCmp('winActivation').reset();
                             Ext.getCmp('winInvoice').reset();
                         }
-                    },{
+                    },'->',{
                         text: 'Accept',
                         name: "btnAcceptCreate",
                         id: "btnAcceptCreate",
@@ -556,6 +557,7 @@ Ext.onReady(function(){
                     autoHeight: true,
                     stateful: false,
                     plain: false,
+                    buttonAlign: 'left',
                     items: [ new Ext.FormPanel({
                         frame:false,
                         hideBorders: true,
@@ -696,7 +698,7 @@ Ext.onReady(function(){
                             } else Ext.getCmp('win2EndDate').reset();
 
                         }
-                    },{
+                    },'->',{
                        text: 'Accept',
                        name: "btnAcceptUpdate",
                        id: "btnAcceptUpdate",
@@ -820,6 +822,7 @@ Ext.onReady(function(){
                         layout: 'fit',
                         autoScroll: true,
                         plain: false,
+                        buttonAlign: 'left',
                         items: [{
                             id: 'userSelector',
                             xtype: 'superboxselect',
@@ -870,7 +873,7 @@ Ext.onReady(function(){
                                 assignedUsersStore.rejectChanges();
                                 assignedUsersStore.reload();
                             }
-                        },{
+                        },'->',{
                             text: 'Accept',
                             name: "btnAcceptAssign",
                             id: "btnAcceptAssign",
@@ -942,6 +945,7 @@ Ext.onReady(function(){
                         layout: 'fit',
                         autoScroll: true,
                         plain: false,
+                        buttonAlign: 'left',
                         items: [{
                             id: 'clientSelector',
                             xtype: 'superboxselect',
@@ -992,7 +996,7 @@ Ext.onReady(function(){
                                 assignedClientsStore.rejectChanges();
                                 assignedClientsStore.reload();
                             }
-                        },{
+                        },'->',{
                             text: 'Accept',
                             name: "btnAcceptAssign",
                             id: "btnAcceptAssign2",
