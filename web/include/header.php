@@ -63,3 +63,6 @@
         <img alt="PhpReport" src="include/images/phpreport-logo.png" />
         <div id="menubar"></div>
     </div>
+    <script type="text/javascript">
+        var HEADER_HEIGHT = document.getElementById('header').scrollHeight;
+    </script>

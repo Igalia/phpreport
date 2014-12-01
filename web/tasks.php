@@ -599,6 +599,11 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     taskPanel.initTimeField.setRawValue('');
 
                     taskPanel.initTimeField.focus();
+
+                    // If contents don't fit the screen, scroll to the new task
+                    var content = document.getElementById('content');
+                    if( HEADER_HEIGHT + content.scrollHeight > window.innerHeight)
+                        window.scrollTo(0, taskPanel.getEl().getY());
                 }
             }),
             createTemplateButton: new Ext.Button({
@@ -893,7 +898,13 @@ Ext.onReady(function(){
         newTask.set('endTime',now.format('H:i'));
         taskPanel.endTimeField.validate();
 
+        // Put the focus on the init time field
         taskPanel.initTimeField.focus();
+
+        // If contents don't fit the screen, scroll to the new task
+        var content = document.getElementById('content');
+        if( HEADER_HEIGHT + content.scrollHeight > window.innerHeight)
+            window.scrollTo(0, taskPanel.getEl().getY());
     }
 
     /* Add a callback to save tasks */
@@ -1091,6 +1102,11 @@ Ext.onReady(function(){
 
                     //put the focus on the init time field
                     taskPanel.initTimeField.focus();
+
+                    // If contents don't fit the screen, scroll to the new task
+                    var content = document.getElementById('content');
+                    if( HEADER_HEIGHT + content.scrollHeight > window.innerHeight)
+                        window.scrollTo(0, taskPanel.getEl().getY());
                 },
             });
             var deleteButton = new Ext.Button({
