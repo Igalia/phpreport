@@ -51,3 +51,7 @@ body {
 #moreactions .x-toolbar {
     border-width: 1px;
 }
+
+.x-btn BUTTON:focus {
+    font-weight: bold;
+}
