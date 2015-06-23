@@ -53,5 +53,5 @@ body {
 }
 
 .x-btn BUTTON:focus {
-    font-weight: bold;
+    text-decoration: underline;
 }
