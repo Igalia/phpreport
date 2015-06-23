@@ -227,7 +227,7 @@ Ext.onReady(function(){
     var defaultStartDate = new Date();
     defaultStartDate.setMonth(0);
     defaultStartDate.setDate(1); //defaultStartDate is 1st Jan of current year
-    workingResultsForm.get('startDate').setValue(defaultStartDate);
+    workingResultsForm.setStartDate(defaultStartDate);
 
 });
 

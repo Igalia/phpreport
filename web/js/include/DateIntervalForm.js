@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012, 2013 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2012-2015 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -43,7 +43,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.FormPanel, {
      * @return {Date} start date selected in the form or the default if empty.
      */
     getStartDate: function () {
-        var dateField = this.get('startDate');
+        var dateField = this._getStartDateField();
         // check if the field has values, and if it doesn't, create default ones
         if (dateField.getRawValue() == "")
             return this.defaultStartDate;
@@ -56,12 +56,46 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.FormPanel, {
      * @return {Date} end date selected in the form or the default if empty.
      */
     getEndDate: function () {
-        var dateField = this.get('endDate');
+        var dateField = this._getEndDateField();
         // check if the field has values, and if it doesn't, create default ones
         if (dateField.getRawValue() == "")
             return this.defaultEndDate;
         else
             return dateField.getValue();
+    },
+
+    /**
+     * Set a date for the start date field.
+     * @param date {Date} start date.
+     */
+    setStartDate: function (date) {
+        this._getStartDateField().setValue(date);
+    },
+
+    /**
+     * Set a date for the end date field.
+     * @param date {Date} end date.
+     */
+    setEndDate: function (date) {
+        this._getEndDateField().setValue(date);
+    },
+
+    /**
+     * Gets the field that contains the start date in this form.
+     * This method is intended to be private, only used inside DateIntervalForm.
+     * @return {DateField} start date field.
+     */
+    _getStartDateField: function () {
+        return this.get('startDate');
+    },
+
+    /**
+     * Gets the field that contains the end date in this form.
+     * This method is intended to be private, only used inside DateIntervalForm.
+     * @return {DateField} end date field.
+     */
+    _getEndDateField: function () {
+        return this.get('endDate');
     },
 
     initComponent: function () {
@@ -141,7 +175,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.FormPanel, {
                     "<b>Inclusion:</b> included in the interval<br>" +
                     "<b>Default value if empty:</b> " +
                     this.defaultStartDate.toLocaleDateString() +"</div>",
-           target: this.get('startDate')
+           target: this._getStartDateField()
         });
         Ext.QuickTips.register({
            text: "<div align='justify'>" +
@@ -149,7 +183,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.FormPanel, {
                     "<b>Inclusion:</b> included in the interval<br>" +
                     "<b>Default value if empty:</b> " +
                     this.defaultEndDate.toLocaleDateString() +"</div>",
-           target: this.get('endDate')
+           target: this._getEndDateField()
         });
     },
 });
