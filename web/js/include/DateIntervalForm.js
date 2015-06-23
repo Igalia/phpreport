@@ -19,10 +19,37 @@
 
 
 /**
- * @class Ext.ux.DateIntervalForm
- * @extends Ext.FormPanel
+ * Returns the date of the Monday previous to the received date.
+ * @param date {Date}
+ * @return {Date} date of the previous Monday.
  */
-Ext.ux.DateIntervalForm = Ext.extend(Ext.FormPanel, {
+function getPreviousMonday(date) {
+    var date = new Date(date); //clone date to avoid changes in the parameter
+    var dayOfWeek = date.getDay();
+    var monday = date.getDate() - dayOfWeek;
+    monday += (dayOfWeek == 0 ? -6:1); // adjust when day is Sunday
+
+    return new Date(date.setDate(monday));
+}
+
+/**
+ * Returns the date of the first Sunday after the received date.
+ * @param date {Date}
+ * @return {Date} date of the next Sunday.
+ */
+function getNextSunday(date) {
+    var date = new Date(date); //clone date to avoid changes in the parameter
+    var dayOfWeek = date.getDay();
+    var diff = (dayOfWeek == 0 ? 0 : 7 - dayOfWeek);
+
+    return new Date(date.setDate(date.getDate() + diff));
+}
+
+/**
+ * @class Ext.ux.DateIntervalForm
+ * @extends Ext.Panel
+ */
+Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
 
     /**
      * @cfg {Date} defaultStartDate
@@ -86,7 +113,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.FormPanel, {
      * @return {DateField} start date field.
      */
     _getStartDateField: function () {
-        return this.get('startDate');
+        return this.get('form').get('startDate');
     },
 
     /**
@@ -95,7 +122,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.FormPanel, {
      * @return {DateField} end date field.
      */
     _getEndDateField: function () {
-        return this.get('endDate');
+        return this.get('form').get('endDate');
     },
 
     initComponent: function () {
@@ -104,53 +131,99 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.FormPanel, {
             //default visual configuration
             frame: true,
             header: false,
-            bodyStyle: 'padding:5px 5px 0',
-            labelWidth: 75,
             width: 350,
-            defaults: {
-                width: 230
-            },
+            items:[{
+                id: 'form',
+                layout: 'form',
+                bodyStyle: 'padding:5px 5px 0',
+                labelWidth: 75,
+                defaults: {
+                    width: 230
+                },
 
-            //items: start and end date fields
-            items: [{
-                fieldLabel: 'Start Date',
-                name: 'start',
-                xtype: 'datefield',
-                format: 'd/m/Y',
-                startDay: 1,
-                id: 'startDate',
-                listeners: {
-                    'change': function (field, newValue, oldValue) {
-                        if(!field.isValid()) return;
-                        var date = field.parseDate(newValue);
-                        Ext.getCmp('endDate').setMinValue(date);
+                //items: start and end date fields
+                items: [{
+                    fieldLabel: 'Start Date',
+                    name: 'start',
+                    xtype: 'datefield',
+                    format: 'd/m/Y',
+                    startDay: 1,
+                    id: 'startDate',
+                    listeners: {
+                        'change': function (field, newValue, oldValue) {
+                            if(!field.isValid()) return;
+                            var date = field.parseDate(newValue);
+                            Ext.getCmp('endDate').setMinValue(date);
+                        }
                     }
-                }
-            },{
-                fieldLabel: 'End Date',
-                name: 'end',
-                xtype: 'datefield',
-                format: 'd/m/Y',
-                startDay: 1,
-                id: 'endDate',
-                listeners: {
-                    'change': function (field, newValue, oldValue) {
-                        if(!field.isValid()) return;
-                        var date = field.parseDate(newValue);
-                        Ext.getCmp('startDate').setMaxValue(date);
+                },{
+                    fieldLabel: 'End Date',
+                    name: 'end',
+                    xtype: 'datefield',
+                    format: 'd/m/Y',
+                    startDay: 1,
+                    id: 'endDate',
+                    listeners: {
+                        'change': function (field, newValue, oldValue) {
+                            if(!field.isValid()) return;
+                            var date = field.parseDate(newValue);
+                            Ext.getCmp('startDate').setMaxValue(date);
+                        }
                     }
-                }
+                }],
+
+                //button: send form
+                buttons: [{
+                    text: 'View',
+                    scope: this, //scope inside the handler will be the Form object
+                    handler: function () {
+                        this.fireEvent("view", this,
+                            this.getStartDate(), this.getEndDate());
+                    }
+                }],
             }],
+            bbar: {
+                xtype: 'toolbar',
+                items:[{
+                    text: 'Last week',
+                    xtype: 'button',
+                    scope: this, //scope inside the handler will be the Form object
+                    handler: function () {
+                        var lastWeek = new Date();
+                        lastWeek.setDate(lastWeek.getDate() - 7);
+                        this._getStartDateField().setValue(getPreviousMonday(lastWeek));
+                        this._getEndDateField().setValue(getNextSunday(lastWeek));
 
-            //button: send form
-            buttons: [{
-                text: 'View',
-                scope: this, //scope inside the handler will be the Form object
-                handler: function () {
-                    this.fireEvent("view", this,
-                        this.getStartDate(), this.getEndDate());
-                }
-            }]
+                        this.fireEvent("view", this,
+                            this.getStartDate(), this.getEndDate());
+                    }
+                }, {
+                    text: 'This week',
+                    xtype: 'button',
+                    scope: this, //scope inside the handler will be the Form object
+                    handler: function () {
+                        var now = new Date();
+                        this._getStartDateField().setValue(getPreviousMonday(now));
+                        this._getEndDateField().setValue(now);
+
+                        this.fireEvent("view", this,
+                            this.getStartDate(), this.getEndDate());
+                    }
+                }, '-', {
+                    text: 'This month',
+                    xtype: 'button',
+                    scope: this, //scope inside the handler will be the Form object
+                    handler: function () {
+                        var date = new Date();
+                        this._getEndDateField().setValue(date);
+                        date.setDate(1);
+                        this._getStartDateField().setValue(date);
+
+                        this.fireEvent("view", this,
+                            this.getStartDate(), this.getEndDate());
+                    }
+                }],
+            }
         });
 
         this.addEvents(
