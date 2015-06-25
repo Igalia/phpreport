@@ -505,7 +505,7 @@ Ext.onReady(function(){
 
                             });
 
-                            projectsStore.add([newRecord]);
+                            projectsStore.addSorted(newRecord);
 
                             projectsStore.save();
 
