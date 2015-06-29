@@ -1112,8 +1112,13 @@ Ext.onReady(function(){
             direction: 'DESC',
         },
         listeners: {
-            'write': function() {
+            'write': function (store, action, result, res, rs) {
                 App.setAlert(true, "Projects Changes Saved");
+
+                // select newly added row and scroll to it
+                var rowIndex = store.indexOf(rs);
+                projectGrid.getSelectionModel().selectRow(rowIndex);
+                projectGrid.getView().focusRow(rowIndex);
             },
             'exception': function(){
                 App.setAlert(false, "Some Error Occurred While Saving The Changes");
