@@ -31,13 +31,20 @@ define('PAGE_TITLE', "PhpReport - Tasks");
 include("include/header.php");
 include("include/sidebar.php");
 
+/* If no date is specified, get client date via JS and reload */
+if(!isset($_GET["date"])) {
+    echo "<script type='text/javascript'>\n";
+    echo "var date = new Date();\n";
+    echo "window.location = \"tasks.php?date=\" + date.format('Y-m-d');\n";
+    echo "</script>\n";
+    include("include/footer.php");
+    exit();
+}
+
 /* Get the needed variables to be passed to the Javascript code */
 
 //selected date
-if(isset($_GET["date"]))
-    $dateString = $_GET["date"];
-else
-    $dateString = date("Y-m-d");
+$dateString = $_GET["date"];
 $date = new DateTime($dateString);
 
 //last task date
