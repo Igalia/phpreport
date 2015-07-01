@@ -472,17 +472,8 @@ Ext.onReady(function(){
                         name: 'btnResetCreate',
                         id: 'btnResetCreate',
                         tooltip: 'Resets all the fields to empty values.',
-                        handler: function(){
-                            Ext.getCmp('winEndDate').reset();
-                            Ext.getCmp('winStartDate').reset();
-                            Ext.getCmp('winMovedHours').reset();
-                            Ext.getCmp('winEstHours').reset();
-                            Ext.getCmp('winArea').reset();
-                            Ext.getCmp('winDescription').reset();
-                            Ext.getCmp('winSchedule').reset();
-                            Ext.getCmp('winType').reset();
-                            Ext.getCmp('winActivation').reset();
-                            Ext.getCmp('winInvoice').reset();
+                        handler: function () {
+                            windowCreate.reset();
                         }
                     },'->',{
                         text: 'Accept',
@@ -524,10 +515,23 @@ Ext.onReady(function(){
                         'show': function(){
                             Ext.getCmp('winDescription').focus('', 100);
                         }
+                    },
+                    reset: function () {
+                        Ext.getCmp('winEndDate').reset();
+                        Ext.getCmp('winStartDate').reset();
+                        Ext.getCmp('winMovedHours').reset();
+                        Ext.getCmp('winEstHours').reset();
+                        Ext.getCmp('winArea').reset();
+                        Ext.getCmp('winDescription').reset();
+                        Ext.getCmp('winSchedule').reset();
+                        Ext.getCmp('winType').reset();
+                        Ext.getCmp('winActivation').reset();
+                        Ext.getCmp('winInvoice').reset();
                     }
                 }).show();
             else {
                 windowCreate.center();
+                windowCreate.reset();
                 windowCreate.show();
             }
 
