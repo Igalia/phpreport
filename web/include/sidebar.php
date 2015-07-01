@@ -24,7 +24,7 @@
 var menuToolbar = new Ext.Toolbar({
         items: [{
             text: 'Tasks', handler: onItemClick,
-            destination: "tasks.php",
+            destination: "tasks.php?date=" + (new Date()).format('Y-m-d'),
         },{
             text: 'Coordination',
             menu: [
