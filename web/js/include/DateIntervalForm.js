@@ -222,6 +222,20 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
                         this.fireEvent("view", this,
                             this.getStartDate(), this.getEndDate());
                     }
+                }, '-', {
+                    text: 'This year',
+                    xtype: 'button',
+                    scope: this, //scope inside the handler will be the Form object
+                    handler: function () {
+                        var date = new Date();
+                        this._getEndDateField().setValue(date);
+                        date.setDate(1);
+                        date.setMonth(0);
+                        this._getStartDateField().setValue(date);
+
+                        this.fireEvent("view", this,
+                            this.getStartDate(), this.getEndDate());
+                    }
                 }],
             }
         });
