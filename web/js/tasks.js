@@ -921,6 +921,7 @@ Ext.onReady(function(){
                 format: 'd/m/Y',
                 value: lastTaskDate,
                 allowBlank: false,
+                startDay: 1,
             }, new Ext.Button({
                 text:'Copy tasks from selected date',
                 width: 60,
