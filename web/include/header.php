@@ -38,8 +38,8 @@
     <link rel="stylesheet" type="text/css" href="include/ext.ux.datepickerplus/datepickerplus.css"/>
 
 		<!-- Include Ext library -->
-    <script type="text/javascript" src="ext/adapter/ext/ext-base.js"></script>
-    <script type="text/javascript" src="ext/ext-all.js"></script>
+    <script type="text/javascript" src="ext/adapter/ext/ext-base-debug.js"></script>
+    <script type="text/javascript" src="ext/ext-all-debug.js"></script>
     <script type="text/javascript" src="include/App.js"></script>
     <script type="text/javascript" src="include/RowEditor.js"></script>
     <script type="text/javascript" src="include/DatePickerLinks.js"></script>
@@ -54,6 +54,10 @@
 
         <!-- Include other common functions -->
     <script type="text/javascript" src="include/functions.js"></script>
+
+    <!-- Include improved calendar widget -->
+    <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus.js"></script>
+    <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus-holidays.js"></script>
 
 </head>
 

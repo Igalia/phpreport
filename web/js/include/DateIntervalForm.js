@@ -145,7 +145,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
                 items: [{
                     fieldLabel: 'Start Date',
                     name: 'start',
-                    xtype: 'datefield',
+                    xtype: 'datefieldplus',
                     format: 'd/m/Y',
                     startDay: 1,
                     id: 'startDate',
@@ -159,7 +159,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
                 },{
                     fieldLabel: 'End Date',
                     name: 'end',
-                    xtype: 'datefield',
+                    xtype: 'datefieldplus',
                     format: 'd/m/Y',
                     startDay: 1,
                     id: 'endDate',

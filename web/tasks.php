@@ -71,8 +71,6 @@ echo "var user = '" . $user->getLogin() . "';\n";
 echo "</script>\n";
 
 ?>
-<script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus.js"></script>
-<script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus-holidays.js"></script>
 <script src="js/include/TasksStore.js"></script>
 <script src="js/tasks.js"></script>
 <script src="js/include/closeConfirmation.js"></script>
