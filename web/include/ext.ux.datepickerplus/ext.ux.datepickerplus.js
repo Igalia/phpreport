@@ -1546,7 +1546,7 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
             cells = this.cellsArray[x].elements;
             textEls = this.textNodesArray[x];
 
-            if ((this.markNationalHolidays || this.eventDates.length>0) && this.useQuickTips) {
+            if ((this.markNationalHolidays || this.eventDates().length>0) && this.useQuickTips) {
                 for (var e=0,el=textEls.length;e<el;++e) {
                     Ext.QuickTips.unregister(textEls[e]);
                 }

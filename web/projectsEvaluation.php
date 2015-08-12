@@ -186,9 +186,10 @@ Ext.onReady(function(){
         },{
             fieldLabel: 'Dates between',
             name: 'start',
-            xtype: 'datefield',
+            xtype: 'datefieldplus',
             format: 'd/m/Y',
             startDay: 1,
+            useQuickTips: false,
             id: 'startDate',
             listeners: {
                 'change': function (field, newValue, oldValue) {
@@ -200,9 +201,10 @@ Ext.onReady(function(){
         },{
             fieldLabel: 'and',
             name: 'end',
-            xtype: 'datefield',
+            xtype: 'datefieldplus',
             format: 'd/m/Y',
             startDay: 1,
+            useQuickTips: false,
             id: 'endDate',
             listeners: {
                 'change': function (field, newValue, oldValue) {
