@@ -497,7 +497,7 @@ Ext.onReady(function(){
             dataIndex: 'init',
             editor: {
                 id: 'hourCostInit',
-                xtype: 'datefield',
+                xtype: 'datefieldplus',
                 format: 'd/m/Y',
                 startDay: 1,
                 allowBlank: false,
@@ -514,7 +514,7 @@ Ext.onReady(function(){
             dataIndex: 'end',
             editor: {
                 id: 'hourCostEnd',
-                xtype: 'datefield',
+                xtype: 'datefieldplus',
                 format: 'd/m/Y',
                 startDay: 1,
                 allowBlank: false,
@@ -648,7 +648,7 @@ Ext.onReady(function(){
             dataIndex: 'init',
             editor: {
                 id: 'journeyInit',
-                xtype: 'datefield',
+                xtype: 'datefieldplus',
                 format: 'd/m/Y',
                 startDay: 1,
                 allowBlank: false,
@@ -665,7 +665,7 @@ Ext.onReady(function(){
             dataIndex: 'end',
             editor: {
                 id: 'journeyEnd',
-                xtype: 'datefield',
+                xtype: 'datefieldplus',
                 format: 'd/m/Y',
                 startDay: 1,
                 allowBlank: false,
@@ -796,7 +796,7 @@ Ext.onReady(function(){
             dataIndex: 'init',
             editor: {
                 id: 'areaInit',
-                xtype: 'datefield',
+                xtype: 'datefieldplus',
                 format: 'd/m/Y',
                 startDay: 1,
                 allowBlank: false,
@@ -813,7 +813,7 @@ Ext.onReady(function(){
             dataIndex: 'end',
             editor: {
                 id: 'areaEnd',
-                xtype: 'datefield',
+                xtype: 'datefieldplus',
                 format: 'd/m/Y',
                 startDay: 1,
                 allowBlank: false,
@@ -951,7 +951,7 @@ Ext.onReady(function(){
             dataIndex: 'init',
             editor: {
                 id: 'cityInit',
-                xtype: 'datefield',
+                xtype: 'datefieldplus',
                 format: 'd/m/Y',
                 startDay: 1,
                 allowBlank: false,
@@ -968,7 +968,7 @@ Ext.onReady(function(){
             dataIndex: 'end',
             editor: {
                 id: 'cityEnd',
-                xtype: 'datefield',
+                xtype: 'datefieldplus',
                 format: 'd/m/Y',
                 startDay: 1,
                 allowBlank: false,

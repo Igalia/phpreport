@@ -917,7 +917,7 @@ Ext.onReady(function(){
                 id: 'cloneDate',
                 hideLabel: true,
                 width: 160,
-                xtype: 'datefield',
+                xtype: 'datefieldplus',
                 format: 'd/m/Y',
                 value: lastTaskDate,
                 allowBlank: false,
