@@ -45,7 +45,7 @@ var menuToolbar = new Ext.Toolbar({
             {
                 text: 'User tasks',
                 handler: onItemClick,
-                destination: "tasksFilter.php",
+                destination: "userTasksReport.php",
                 iconCls: 'silk-pencil',
             },'-',
                 <?php
