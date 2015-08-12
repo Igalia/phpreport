@@ -52,6 +52,10 @@ body {
     border-width: 1px;
 }
 
+.x-form-check-wrap input:focus + label {
+    text-decoration: underline;
+}
+
 .x-btn BUTTON:focus {
     text-decoration: underline;
 }
