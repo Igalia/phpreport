@@ -190,8 +190,13 @@ Ext.onReady(function(){
             format: 'd/m/Y',
             startDay: 1,
             id: 'startDate',
-            vtype:'daterange',
-            endDateField: 'endDate' // id of the end date field
+            listeners: {
+                'change': function (field, newValue, oldValue) {
+                    if(!field.isValid()) return;
+                    var date = field.parseDate(newValue);
+                    Ext.getCmp('endDate').setMinValue(date);
+                }
+            }
         },{
             fieldLabel: 'and',
             name: 'end',
@@ -199,8 +204,13 @@ Ext.onReady(function(){
             format: 'd/m/Y',
             startDay: 1,
             id: 'endDate',
-            vtype:'daterange',
-            startDateField: 'startDate' // id of the start date field
+            listeners: {
+                'change': function (field, newValue, oldValue) {
+                    if(!field.isValid()) return;
+                    var date = field.parseDate(newValue);
+                    Ext.getCmp('startDate').setMaxValue(date);
+                }
+            }
         }],
 
         buttons: [{
