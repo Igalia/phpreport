@@ -30,20 +30,17 @@ define('PAGE_TITLE', "PhpReport - User tasks report");
 include_once("include/header.php");
 include_once("include/sidebar.php");
 
+//output vars as JS code
+echo "<!-- Global variables extracted from the PHP side -->\n";
+echo "<script type='text/javascript'>\n";
+echo "var userId = '" . $_SESSION['user']->getId() . "';\n";
+echo "</script>\n";
 ?>
 
 <script type="text/javascript" src="js/include/ExportableGridPanel.js"></script>
 <script type="text/javascript">
 
 Ext.onReady(function () {
-
-    <?php if ($sid) {?>
-
-    var sessionId = <?php echo $sid;?>;
-
-    <?php } ?>
-
-    var userId = <?php echo $_SESSION['user']->getId()?>;
 
     /* Schema of the information about customers */
     var customerRecord = new Ext.data.Record.create([
@@ -316,9 +313,6 @@ Ext.onReady(function () {
     function findTasks () {
                 var baseParams = {
                     'userId': userId,
-                    <?php if ($sid) {?>
-                        'sid': sessionId,
-                    <?php } ?>
                 };
                 if (Ext.getCmp('startDate').getRawValue() != "") {
                     var date = Ext.getCmp('startDate').getValue();
