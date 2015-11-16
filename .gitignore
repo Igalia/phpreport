@@ -7,3 +7,7 @@
 
 #compiled help files
 help/*
+
+#release tarballs
+phpreport*.tar.gz
+phpreport*.zip
