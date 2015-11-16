@@ -58,7 +58,10 @@ Task type:
 
 The results are shown in the grid in the central area of the screen; rows
 represent tasks and columns represent the different data stored in them.
-Finally, in the bottom of the grid there are two buttons named **Standard view**
+You can export the data contained in the grid to a CSV file for processing with
+spreadsheet software, for example, using the **Download as CSV** button at the
+bottom of the grid.
+Finally, at the bottom of the box containing the grid there are two buttons named **Standard view**
 and **Extended view**. The first one hides some columns to show a more compact
 grid (it's the default option), while the second one shows all the columns.
 
@@ -75,6 +78,8 @@ the groups it belongs to. Then there are two date inputs to insert the report
 dates: if the start date is left empty, the default value is the date of the
 first task inserted by the user; if the end date is empty, the default value is
 the current date.
+There are quick-access buttons for common combinations of dates at the bottom
+of the dates box.
 
 The results are shown in the grid in the central area of the screen; rows
 represent projects and columns represent workers. There are two extra columns,
@@ -82,6 +87,10 @@ represent projects and columns represent workers. There are two extra columns,
 a project, independently from the client (thus, it's the sum of all the client
 columns) and the latter shows the proportion of hours of one project regarding
 all the work done by the user in the same time period.
+
+You can export the data contained in the grid to a CSV file for processing with
+spreadsheet software, for example, using the **Download as CSV** button at the
+bottom of the grid.
 
 User evaluation
 ===============
@@ -95,6 +104,8 @@ In the top of the screen there are two date inputs to insert the report
 dates: if the start date is left empty, the default value is the date of the
 first task inserted by the user; if the end date is empty, the default value is
 the current date.
+There are quick-access buttons for common combinations of dates at the bottom
+of the dates box.
 
 The results are shown in the grid in the central area of the screen; rows
 represent users and columns represent stories (the field *Story* of every task,
@@ -103,6 +114,10 @@ columns, *Total* and *%*; the former shows the total number of hours invested in
 a user, independently from the story (thus, it's the sum of all the story
 columns) and the latter shows the proportion of hours of one user regarding
 all the work done in the organization in that time period.
+
+You can export the data contained in the grid to a CSV file for processing with
+spreadsheet software, for example, using the **Download as CSV** button at the
+bottom of the grid.
 
 Accumulated hours
 =================
@@ -122,6 +137,8 @@ In the top of the screen there are two date inputs to insert the report
 dates: if the start date is left empty, the default value is the date of the
 first contract period of every user; if the end date is empty, the default value
 is the current date.
+There are quick-access buttons for common combinations of dates at the bottom
+of the dates box.
 
 The results are shown in the grid in the central area of the screen; rows
 represent users and columns represent the following data:
@@ -162,6 +179,10 @@ Total extra hours:
   this column. If the user has any compensation entry the value of this column
   reflects the compensated value adding or subtracting the extra hours since the
   date the compensation became effective.
+
+You can export the data contained in the grid to a CSV file for processing with
+spreadsheet software, for example, using the **Download as CSV** button at the
+bottom of the grid.
 
 Project evaluation
 ==================
@@ -257,6 +278,10 @@ Schedule:
 Type:
   Value of the field *type*.
 
+You can export the data contained in the grid to a CSV file for processing with
+spreadsheet software, for example, using the **Download as CSV** button at the
+bottom of the grid.
+
 Finally, double-clicking on a row will open the project details page for the
 corresponding project.
 
@@ -332,8 +357,10 @@ Price per hour data: deviation %:
 
 Below the project data, there are two date inputs to insert the report
 dates: if the start date is left empty, the default value is the date of the
-first task assigned to the project; if the end date is empty, the default valu
+first task assigned to the project; if the end date is empty, the default value
 is the current date.
+There are quick-access buttons for common combinations of dates at the bottom
+of the dates box.
 
 The results are shown two grids in the bottom  area of the screen; rows
 represent users and columns represent clients in one of the grids, and stories
@@ -342,6 +369,10 @@ in the other one. There are two extra columns,
 the user in the report time period (thus, it's the sum of all the different
 client/story columns) and the latter shows the proportion of hours of one user
 regarding all the work done in the project inside the same time period.
+
+You can export the data contained in the grids to a CSV file for processing with
+spreadsheet software, for example, using the **Download as CSV** button at the
+bottom of the grid.
 
 Projects summary
 ================
@@ -355,6 +386,8 @@ In the top of the screen there are two date inputs to insert the report
 dates: if the start date is left empty, the default value is the date of the
 first task inserted in the system; if the end date is empty, the default value
 is the current date.
+There are quick-access buttons for common combinations of dates at the bottom
+of the dates box.
 
 The report itself consists on two grids shown in two tabs.
 The first tab is the project/customer
@@ -368,6 +401,10 @@ shows the total number of hours devoted to the project (thus, it's the sum of
 all the different client/user columns) and the latter shows the proportion of
 hours of one project regarding the work done in all projects.
 
-Finally, in the bottom of the grid there are two buttons named **All data**
+You can export the data contained in the grid to a CSV file for processing with
+spreadsheet software, for example, using the **Download as CSV** button at the
+bottom of the grid.
+
+Finally, at the bottom of the box containing the grid there are two buttons named **All data**
 and **Only totals**. The latter hides all columns excepting *Project*, *Total*
 and *Percentage*, while the former shows all columns again.
