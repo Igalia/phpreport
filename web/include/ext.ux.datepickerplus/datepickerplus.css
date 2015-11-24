@@ -164,3 +164,43 @@ Reverse Ext 3.2.x Hack to display more than 1 months vertically on datemenu
 .ext-strict .ext-ie7 .x-date-menu{
     height: auto;
 }
+
+.x-datepickerplus-fieldprev {
+    background-image:url(prev-tgr.gif) !important;
+    cursor:pointer;
+}
+
+.x-datepickerplus-fieldnext {
+    background-image:url(next-tgr.gif) !important;
+    cursor:pointer;
+}
+
+.x-datepickerplus-prevnext-ext3,
+.x-datepickerplus-prevnext-ext3-next {
+    margin-left:17px;
+}
+
+/* ie6-8 fixes */
+
+.ext-ie6 .x-datepickerplus-prevnext-ext3 {
+    margin-left:0px !important;
+    left:17px;
+}
+
+.ext-ie6 .x-datepickerplus-prevnext-ext3-date {
+    margin-left:17px;
+}
+
+.ext-ie6 .x-datepickerplus-prevnext-ext3-next {
+    margin-left:34px !important;
+}
+
+.ext-ie7 .x-datepickerplus-prevnext-ext3-date,
+.ext-ie8 .x-datepickerplus-prevnext-ext3-date {
+    margin-right:17px;
+}
+
+.ext-ie7 .x-datepickerplus-prevnext-ext3-prev,
+.ext-ie8 .x-datepickerplus-prevnext-ext3-prev {
+    margin-right:100px;
+}

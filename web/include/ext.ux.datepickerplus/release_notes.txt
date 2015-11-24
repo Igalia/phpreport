@@ -11,7 +11,7 @@
   * @extends Ext.form.DateField
   *
 
-  Version 1.4
+  Version 1.4.3
 
 -----------------
 Description
@@ -65,6 +65,15 @@ API Documentation
 -----------------
 
 New config Items
+[since 1.4.2]
+"showPrevNextTrigger" (DateFieldPlus only and not with multiselection)
+To display 2 buttons next to the DateFieldPlus to select next/previous day(s)
+
+"prevNextTriggerType" (DateFieldPlus only not with multiselection)
+values:
+"m": means +/- month (valid End of month will be considered)
+any numeric value: means amount of +/- days
+
 [since 1.4 beta2]
 "defaultValue" (DateFieldPlus only)
 A String in Dateformat or a DateObject that will be used as initial value when open the picker on an empty datefieldplus
@@ -266,6 +275,13 @@ Works exactly like in Buttons-Widget
 
 
 New Events
+[since 1.4.2]
+"onPrevTriggerRelease" (DateFieldPlus only not with multiselection)
+Fires when the PrevTrigger MouseUp Event occurs (if omitted the usual select-handler will be triggered)
+
+"onNextTriggerRelease" (DateFieldPlus only not with multiselection)
+Fires when the PrevTrigger MouseUp Event occurs (if omitted the usual select-handler will be triggered)
+
 [since 1.4 beta]
 "beforemonthclick"
 Called with pickerobject, monthnumber (0=january,1=february...) and selectedState (if true, the whole month was selected, if false, it was unselected)
@@ -349,6 +365,24 @@ This Widget has been tested on Firefox 2/3.x, IE6/7/8, Opera 9/10, Safari 3.1.x/
 
 
 Revision History:
+v.1.4.3 [2011/03/18]
+- BUGFIX: Config wasn't set when used in Editorgridpanel
+
+v.1.4.2 [2011/02/23]
+- checked to work with ExtJS 3.3.1
+- added config: showPrevNextTrigger (DateFieldPlus only and not with multiselection) to display 2 buttons next to the DateFieldPlus
+- added config: prevNextTriggerType (DateFieldPlus only not with multiselection): m means +/- month (valid End of month will be considered), any numeric value means amount of +/- days
+- added Event "onPrevTriggerRelease", (DateFieldPlus only not with multiselection) which triggers when the PrevTrigger MouseUp Event occurs (if omitted the usual select-handler will be triggered)
+- added Event "onNextTriggerRelease", (DateFieldPlus only not with multiselection) which triggers when the PrevTrigger MouseUp Event occurs (if omitted the usual select-handler will be triggered)
+- BUGFIX: When specifying that weeknumbers should not be rendered and showing more than 1 row of months,the widths of daily columns in the 2nd and subsequent rows of months are too small. (reported by josefhaydn)
+- BUGFIX: select event was triggered twice on Datefieldplus
+- BUGFIX: When using strictRangeSelection all clicked dates outside gaps were still selected even when not displayed (reported by gkarmadi)
+
+v.1.4.1 [2010/11/09]
+- checked to work with ExtJS 3.3.0
+- Forced to update viewport on setValue
+- BUGFIX: correctly position picker in datefield with hiddenfield on IE in some cases
+
 v.1.4 [2010/04/30]
 - checked to work with ExtJS 3.2.1
 - BUGFIX: Datepickers with shown months > 1 had a white glitch obove them (thanks to radubrehar)
@@ -381,7 +415,7 @@ v.1.4 Beta [2009/07/03]
 - added events beforedateclick, beforeweekclick and beforemonthclick
 - added dutch locale (thanks to walldorff)
 - added french locale (thanks to dubdub)
-- added Norwegian bokmål locale (thanks to Alex Brasetvik)
+- added Norwegian bokmÃ¥l locale (thanks to Alex Brasetvik)
 - added spanish locale (thanks to erzsebet)
 - added version config
 - added config prevNextDaysView ("mark","nomark",false) to disable automatic selection/view of selected days of current months in previous and next month, so only the current months days are selectable (suggested by sirtimbly)

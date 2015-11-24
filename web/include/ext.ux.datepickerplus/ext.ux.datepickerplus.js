@@ -8,7 +8,7 @@
   * @class Ext.ux.DatePickerPlus
   * @extends Ext.DatePicker
   *
-  * v.1.4
+  * v.1.4.3
   *
   * @class Ext.ux.form.DateFieldPlus
   * @extends Ext.form.DateField
@@ -86,6 +86,24 @@ Also adds Ext.util.EasterDate
 
 
 Revision History:
+v.1.4.3 [2011/03/18]
+- BUGFIX: Config wasn't set when used in Editorgridpanel
+
+v.1.4.2 [2011/02/23]
+- checked to work with ExtJS 3.3.1
+- added config: showPrevNextTrigger (DateFieldPlus only and not with multiselection) to display 2 buttons next to the DateFieldPlus
+- added config: prevNextTriggerType (DateFieldPlus only not with multiselection): m means +/- month (valid End of month will be considered), any numeric value means amount of +/- days
+- added Event "onPrevTriggerRelease", (DateFieldPlus only not with multiselection) which triggers when the PrevTrigger MouseUp Event occurs (if omitted the usual select-handler will be triggered)
+- added Event "onNextTriggerRelease", (DateFieldPlus only not with multiselection) which triggers when the PrevTrigger MouseUp Event occurs (if omitted the usual select-handler will be triggered)
+- BUGFIX: When specifying that weeknumbers should not be rendered and showing more than 1 row of months,the widths of daily columns in the 2nd and subsequent rows of months are too small. (reported by josefhaydn)
+- BUGFIX: select event was triggered twice on Datefieldplus
+- BUGFIX: When using strictRangeSelection all clicked dates outside gaps were still selected even when not displayed (reported by gkarmadi)
+
+v.1.4.1 [2010/11/09]
+- checked to work with ExtJS 3.3.0
+- Forced to update viewport on setValue
+- BUGFIX: correctly position picker in datefield with hiddenfield on IE in some cases
+
 v.1.4 [2010/04/30]
 - checked to work with ExtJS 3.2.1
 - BUGFIX: Datepickers with shown months > 1 had a white glitch obove them (thanks to radubrehar)
@@ -297,7 +315,7 @@ Be sure to include it AFTER the datepickerwidget!
 
 ROAD MAP:
 
-v1.5 (~ Summer 2010)
+v1.5 (~ Summer 2011)
 - support stores for selectedDates, allowedDates, disabledDates and eventDates
 - Check if given value for first renderered month stays within a given min/maxdate (suggested by bholyoak)
 - add a config item to be able to hide specific dates just like disableddays but they are not even visible
@@ -315,7 +333,7 @@ v1.5 (~ Summer 2010)
 - support hovering a full week/month/days when moving the mouse over weekday/weeknumber/weeknumberheader
 - support dateranges for eventdates
 
-v1.6/2.0 (~ Fall 2010/Spring 2011)
+v1.6/2.0 (~ Fall 2011/Spring 2012)
 - change monthselection to combobox selection of month and year as an option
 - implement time selection also like http://extjs.com/forum/showthread.php?p=170472#post170472
 - use the spinner plugin for above selections if available (or integrate it) or combobox instead (?)
@@ -450,7 +468,8 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
             update=true;
         }
         this.edArray = [];
-        for (var i=0,il=edArray.length;i<il;++i) {
+        var i=0,il=edArray.length;
+        for (;i<il;++i) {
             if (Ext.isDate(edArray[i])) {
                 this.edArray.push({
                     date:edArray[i],
@@ -938,12 +957,12 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
             mpre.push('<th class="x-date-weeknumber-header"><a href="#" hidefocus="on" class="x-date-weeknumber" tabIndex="1"><em><span ',(this.multiSelection ? (this.useQuickTips? ' ext:qtip="'+this.selectMonthText+'" ' :' title="'+this.selectMonthText+'" ') : ''),'>' + this.weekName + '</span></em></a></th>');
         }
 
-        var dn = this.dayNames;
-        for(var i = 0; i < 7; ++i){
-           var d = this.startDay+i;
-           if(d > 6){
-               d = d-7;
-           }
+        var dn = this.dayNames, i=0, d, k = 0, x=0, xk=this.noOfMonth;
+        for(; i < 7; ++i){
+           d = this.startDay+i;
+            if(d > 6){
+                d = d-7;
+            }
             mpre.push('<th><span>', dn[d].substr(0,1), '</span></th>');
         }
         mpre.push('</tr></thead><tbody><tr>');
@@ -952,7 +971,7 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
             mpre.push('<td class="x-date-weeknumber-cell"><a href="#" hidefocus="on" class="x-date-weeknumber" tabIndex="1"><em><span ',weekNumberQuickTip,'></span></em></a></td>');
         }
 
-        for(var k = 0; k < 42; ++k) {
+        for(; k < 42; ++k) {
             if(k % 7 === 0 && k > 0){
                 if (this.showWeekNumber) {
                     mpre.push('</tr><tr><td class="x-date-weeknumber-cell"><a href="#" hidefocus="on" class="x-date-weeknumber" tabIndex="1"><em><span ',weekNumberQuickTip,'></span></em></a></td>');
@@ -970,7 +989,7 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
             m.push("<tr>");
         }
 
-        for(var x=0,xk=this.noOfMonth; x<xk; ++x) {
+        for(; x<xk; ++x) {
             m.push('<td><table class="x-date-pickerplus',(x%this.noOfMonthPerRow===0?'':' x-date-monthtable'),(!this.prevNextDaysView?" x-date-pickerplus-prevnexthide":""),'" cellspacing="0"><tr>');
             if (x===0) {
                 m.push('<td class="x-date-left">');
@@ -982,10 +1001,8 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
                 }
                 m.push('</td>');
             }
-            else if (x==this.noOfMonthPerRow-1) {
-                if (this.renderPrevNextButtons) {
-                    m.push('<td class="x-date-dummy x-date-middle">',widfaker,'</td>');
-                }
+            else {
+                m.push('<td class="x-date-dummy x-date-middle">',widfaker,'</td>');
             }
             m.push("<td class='x-date-middle x-date-pickerplus-middle",(x===0 && !this.disableMonthPicker ?" x-date-firstMonth":""),"' align='center'>");
             if (x>0 || this.disableMonthPicker) {
@@ -1002,13 +1019,11 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
                 }
                 m.push('</td>');
             }
-            else if (x===0) {
-                if (this.renderPrevNextButtons) {
-                    m.push('<td class="x-date-dummy x-date-middle">',widfaker,'</td>');
-                }
+            else  {
+                m.push('<td class="x-date-dummy x-date-middle">',widfaker,'</td>');
             }
 
-            m.push('</tr><tr><td',(x===0 || x==this.noOfMonthPerRow-1?' colspan="3" ':''),'><table class="x-date-inner" id="',this.id,'-inner-date', x ,'" cellspacing="0">');
+            m.push('</tr><tr><td colspan="3"><table class="x-date-inner" id="',this.id,'-inner-date', x ,'" cellspacing="0">');
 
             m.push(prerenderedMonth);
 
@@ -1131,8 +1146,8 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
         this.weekNumberTextElsArray = [];
         this.weekNumberHeaderCellsArray = [];
 
-        var cells,textNodes,weekNumberCells,weekNumberTextEls,weekNumberHeaderCells;
-        for(var xx=0,xxk=this.noOfMonth; xx< xxk; ++xx) {
+        var cells,textNodes,weekNumberCells,weekNumberTextEls,weekNumberHeaderCells, xx=0, xxk=this.noOfMonth;
+        for(; xx< xxk; ++xx) {
             cells = Ext.get(this.id+'-inner-date'+xx).select("tbody td.x-date-date-cell");
             textNodes = Ext.get(this.id+'-inner-date'+xx).query("tbody td.x-date-date-cell span");
             this.cellsArray[xx] = cells;
@@ -1191,7 +1206,8 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
                     if (!this.disabled) {
                         this.fireEvent("undo", this, this.preSelectedDates);
                         this.preSelectedDates = [];
-                        for (var i=0,il=this.selectedDates.length;i<il;++i) {
+                        var i=0,il=this.selectedDates.length;
+                        for (;i<il;++i) {
                             this.preSelectedDates.push(this.selectedDates[i].clearTime().getTime());
                         }
                         this.update(this.activeDate);
@@ -1227,7 +1243,8 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
         }
 //preselect dates if given
         this.preSelectedDates = [];
-        for(var sdc=0, sdcl=this.selectedDates.length; sdc < sdcl; ++sdc) {
+        var sdc=0, sdcl=this.selectedDates.length;
+        for(; sdc < sdcl; ++sdc) {
            this.preSelectedDates.push(this.selectedDates[sdc].clearTime().getTime());
         }
 
@@ -1243,8 +1260,8 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
 //converts all custom dates to timestamps numbers for faster calculations and splits their attributes into separate arrays
     convertCSSDatesToNumbers : function(objarr) {
 //date,text,class
-        var converted =  [[],[],[]];
-        for (var i=0,il=objarr.length;i<il;++i) {
+        var converted =  [[],[],[]], i=0, il=objarr.length;
+        for (;i<il;++i) {
             converted[0][i] = objarr[i].date.clearTime().getTime();
             converted[1][i] = (objarr[i].text ? objarr[i].text : this.defaultEventDatesText);
             converted[2][i] = (objarr[i].cls ? objarr[i].cls : this.defaultEventDatesCls);
@@ -1271,7 +1288,8 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
             }
         }
         else {
-            for (var i=0,il=dates.length;i<il;i++) {
+            var i=0,il=dates.length;
+            for (;i<il;i++) {
                 if (typeof dates[i] === "string") {
                     dates[i] = Date.parseDate(dates[i].replace(/T/," "),'Y-m-d H:i:s');
                 }
@@ -1288,8 +1306,8 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
         if (!Ext.isArray(dates)) {
             dates = [dates];
         }
-        var d, dt;
-        for (var i=0,il=dates.length;i<il;++i) {
+        var d, dt, i=0,il=dates.length;
+        for (;i<il;++i) {
             d = dates[i];
             dt = d.clearTime().getTime();
             if (this.preSelectedDates.indexOf(dt)==-1) {
@@ -1401,7 +1419,8 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
         this.todayDayCell = false;
         if (this.allowedDates) {
             this.allowedDatesT = [];
-            for (var k=0, kl=this.allowedDates.length;k<kl;++k) {
+            var k=0, kl=this.allowedDates.length;
+            for (;k<kl;++k) {
                 this.allowedDatesT.push(this.allowedDates[k].clearTime().getTime());
             }
         }
@@ -1535,8 +1554,8 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
         };
 
         var cells,textEls,days,firstOfMonth,startingPos,pm,prevStart,d,sel,i,intDay,weekNumbers,weekNumbersTextEls,curWeekStart,weekNumbersHeader,monthLabel,main,w;
-        var summarizeHTML = [];
-        for(var x=0,xk=this.noOfMonth;x<xk;++x) {
+        var summarizeHTML = [], x=0, xk=this.noOfMonth,e,el;
+        for(;x<xk;++x) {
             if (this.summarizeHeader && this.noOfMonth > 1 && (x===0||x==this.noOfMonth-1)) {
                 summarizeHTML.push(this.monthNames[date.getMonth()]," ",date.getFullYear());
                 if (x===0) {
@@ -1547,7 +1566,7 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
             textEls = this.textNodesArray[x];
 
             if ((this.markNationalHolidays || this.eventDates().length>0) && this.useQuickTips) {
-                for (var e=0,el=textEls.length;e<el;++e) {
+                for (e=0,el=textEls.length;e<el;++e) {
                     Ext.QuickTips.unregister(textEls[e]);
                 }
             }
@@ -1801,8 +1820,8 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
 
                 enableUnselect=true;
                 if (this.disablePartialUnselect) {
-                    var teststartweekdate = startweekdate;
-                    for (var k=0;k<amount;++k) {
+                    var teststartweekdate = startweekdate,k=0;
+                    for (;k<amount;++k) {
         //check, if the whole set is still selected, then make unselection possible again
                         curmonth = teststartweekdate.getMonth();
                         if ((amount == 7 || curmonth === startmonth) && this.preSelectedDates.indexOf(teststartweekdate.clearTime().getTime())==-1) {
@@ -1826,7 +1845,8 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
                 }
 
                 this.maxNotified = false;
-                for (var i=0,ni;i<amount;++i) {
+                var i=0,ni;
+                for (;i<amount;++i) {
                     curmonth = startweekdate.getMonth();
                     ni = (reverseAdd ? amount-1-i : i);
                     if (amount == 7 || curmonth === startmonth) {
@@ -1909,7 +1929,7 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
         if (this.multiSelection && !this.renderOkUndoButtons) {
             this.copyPreToSelectedDays();
         }
-        return true;
+        return this.lastStateWasSelected;
     },
 
     markSingleDays : function(monthcell,daycell,remove) {
@@ -1965,8 +1985,9 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
 
 
     removeAllPreselectedClasses : function() {
-        for (var e=0,el=this.preSelectedCells.length;e<el;++e) {
-            var position = this.preSelectedCells[e].split("#");
+        var e=0,el=this.preSelectedCells.length,position;
+        for (;e<el;++e) {
+            position = this.preSelectedCells[e].split("#");
             Ext.get(this.cellsArray[position[0]].elements[position[1]]).removeClass("x-date-selected");
         }
         this.preSelectedDates = [];
@@ -2091,17 +2112,17 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
 
                 }
 
-
-                this.markDateAsSelected(t.dateValue,ctrlfaker,t.monthCell,t.dayCell,true);
-
-                this.finishDateSelection(new Date(t.dateValue));
+                if(this.markDateAsSelected(t.dateValue,ctrlfaker,t.monthCell,t.dayCell,true)) {
+                    this.finishDateSelection(new Date(t.dateValue));
+                }
             }
         }
     },
 
     copyPreToSelectedDays : function() {
         this.selectedDates = [];
-        for (var i=0,il=this.preSelectedDates.length;i<il;++i) {
+        var i=0,il=this.preSelectedDates.length;
+        for (;i<il;++i) {
             this.selectedDates.push(new Date(this.preSelectedDates[i]));
         }
     },
@@ -2153,12 +2174,18 @@ Ext.ux.DatePickerPlus = Ext.extend(Ext.DatePicker, {
 
     setValue : function(value){
         if (Ext.isArray(value)) {
+
             this.selectedDates = [];
             this.preSelectedDates = [];
             this.setSelectedDates(value,true);
             value = value[0];
+
+        }
+        else {
+            this.setSelectedDates(value,false);
         }
         this.value = value.clearTime(true);
+
 
         if(this.el && !this.multiSelection && this.noOfMonth==1){
             this.update(this.value);
@@ -2179,6 +2206,7 @@ To use DatepickerPlus in menus and datefields, DateItem and datefield needs to b
 
 
 if (parseInt(Ext.version.substr(0,1),10)>2) {
+
 //ext 3.0
     Ext.menu.DateItem = Ext.ux.DatePickerPlus;
     Ext.override(Ext.menu.DateMenu,{
@@ -2193,15 +2221,20 @@ if (parseInt(Ext.version.substr(0,1),10)>2) {
                 showSeparator: false,
                 items: this.picker = new PickerWidget(Ext.apply({
                     internalRender: this.strict || !Ext.isIE,
-                    ctCls: 'x-menu-date-item'
+                    ctCls: 'x-menu-date-item',
+                    id: this.pickerId
                 }, this.initialConfig))
             });
+            this.picker.purgeListeners();
             Ext.menu.DateMenu.superclass.initComponent.call(this);
             this.relayEvents(this.picker, ["select"]);
+            this.on('show', this.picker.focus, this.picker);
             this.on('select', this.menuHide, this);
+
             if(this.handler){
                 this.on('select', this.handler, this.scope || this);
             }
+
         }
     });
 
@@ -2209,11 +2242,14 @@ if (parseInt(Ext.version.substr(0,1),10)>2) {
 else {
 //ext 2.x
     Ext.menu.DateItem = function(config){
-        if (config && config.usePickerPlus) {
-            Ext.menu.DateItem.superclass.constructor.call(this, new Ext.ux.DatePickerPlus(config), config);    //NEW LINE
+        if (typeof config === "undefined") {
+            config = {};
+        }
+        if (config.usePickerPlus) {
+            Ext.menu.DateItem.superclass.constructor.call(this, new Ext.ux.DatePickerPlus(Ext.applyIf({listeners: config.datePickerListeners||{}}, config)), config);    //NEW LINE
         }
         else {
-            Ext.menu.DateItem.superclass.constructor.call(this, new Ext.DatePicker(config), config);
+            Ext.menu.DateItem.superclass.constructor.call(this, new Ext.DatePicker(Ext.applyIf({listeners: config.datePickerListeners||{}}, config)), config);
         }
         this.picker = this.component;
         this.addEvents('select');
@@ -2230,7 +2266,9 @@ else {
         // private
         onSelect : function(picker, date){
             this.fireEvent("select", this, date, picker);
-            Ext.menu.DateItem.superclass.handleClick.call(this);
+            if(picker.rendered) {
+                Ext.menu.DateItem.superclass.handleClick.call(this);
+            }
         }
     });
 }
@@ -2238,6 +2276,11 @@ else {
 
 if (Ext.form && Ext.form.DateField) {
     Ext.ux.form.DateFieldPlus = Ext.extend(Ext.form.DateField, {
+        showPrevNextTrigger:false,
+        prevNextTriggerType: 1,
+        onPrevTriggerRelease: null,
+        onNextTriggerRelease: null,
+
         usePickerPlus: true,
         showWeekNumber: true,
         noOfMonth : 1,
@@ -2335,10 +2378,7 @@ if (Ext.form && Ext.form.DateField) {
             return this.fireEvent("undo", this, preSelectedDates, picker);
         },
 
-        onTriggerClick : function(){
-            if(this.disabled){
-                return;
-            }
+        createMenu: function() {
             if(!this.menu){
                 this.menu = new Ext.menu.DateMenu({
                     allowOtherMenus: this.allowOtherMenus,
@@ -2365,7 +2405,6 @@ if (Ext.form && Ext.form.DateField) {
 //do this only once!
                 this.relayEvents(this.menu, ["select"]);
             }
-
             if (this.menu.isVisible()) {
                 this.menu.hide();
                 return;
@@ -2427,6 +2466,11 @@ if (Ext.form && Ext.form.DateField) {
                 styleDisabledDates: this.styleDisabledDates,
                 prevNextDaysView : this.prevNextDaysView
             });
+
+            this.menu.picker.on("select",function(dp,date) {
+                this.setValue(date);
+            },this);
+/*
 //Ext 3.0
             if (this.menuEvents) {
                 this.menuEvents('on');
@@ -2437,6 +2481,14 @@ if (Ext.form && Ext.form.DateField) {
                     scope:this
                 }));
             }
+*/
+        },
+
+        onTriggerClick : function(){
+            if(this.disabled){
+                return;
+            }
+            this.createMenu();
             if( typeof this.defaultValue == 'string' ) {
                 this.defaultValue = Date.parseDate( this.defaultValue, this.format );
             }
@@ -2449,8 +2501,8 @@ if (Ext.form && Ext.form.DateField) {
         setValue : function(date){
             var field = this;
             if (Ext.isArray(date)) {
-                var formatted = [];
-                for (var e=0,el=date.length;e<el;++e) {
+                var formatted = [],e=0,el=date.length;
+                for (;e<el;++e) {
                     formatted.push(field.formatDate(date[e]));
                 }
 
@@ -2468,8 +2520,8 @@ if (Ext.form && Ext.form.DateField) {
             if (this.multiSelection){
                 var field = this;
                 var values = value.split(this.multiSelectionDelimiter);
-                var isValid = true;
-                for (var e=0,el=values.length;e<el;++e) {
+                var isValid = true,e=0,el=values.length;
+                for (;e<el;++e) {
                     if (!Ext.ux.form.DateFieldPlus.superclass.validateValue.call(field, values[e])) {
                         isValid = false;
                     }
@@ -2486,8 +2538,8 @@ if (Ext.form && Ext.form.DateField) {
                 var value = Ext.form.DateField.superclass.getValue.call(this);
                 var field = this;
                 var values = value.split(this.multiSelectionDelimiter);
-                var dates = [];
-                for (var e=0,el=values.length;e<el;++e) {
+                var dates = [],e=0,el=values.length;
+                for (;e<el;++e) {
                     var checkDate = field.parseDate(values[e]);
                     if (checkDate) {
                         dates.push(checkDate);
@@ -2517,9 +2569,129 @@ if (Ext.form && Ext.form.DateField) {
 
         submitFormat:'Y-m-d',
         submitFormatAddon: '-format',
-        onRender:function() {
 
+        onResize : function(w, h){
+            Ext.form.TriggerField.superclass.onResize.call(this, w, h);
+            var tw = this.trigger.getWidth();
+            var allTriggerWidths = tw;
+            if (this.showPrevNextTrigger && !this.multiSelection) {
+                allTriggerWidths+= this.prevTrigger.getWidth()+this.nextTrigger.getWidth();
+            }
+            if(!isNaN(w)){
+                this.el.setWidth(w - tw);
+            }
+            this.wrap.setWidth(this.el.getWidth() + allTriggerWidths);
+        },
+
+        onRender:function() {
             Ext.ux.form.DateFieldPlus.superclass.onRender.apply(this, arguments);
+
+            if (this.showPrevNextTrigger && !this.multiSelection) {
+                this.createMenu();
+                this.prevTrigger = this.el.insertSibling({
+                    tag: "img",
+                    src: Ext.BLANK_IMAGE_URL,
+                    cls: "x-form-trigger x-datepickerplus-fieldprev"
+                });
+                this.prevTrigger.addClassOnOver('x-form-trigger-over');
+                this.prevTrigger.addClassOnClick('x-form-trigger-click');
+
+                this.nextTrigger = this.trigger.insertSibling({
+                    tag: "img",
+                    src: Ext.BLANK_IMAGE_URL,
+                    cls: "x-form-trigger x-datepickerplus-fieldnext"
+                },'after');
+                this.nextTrigger.addClassOnOver('x-form-trigger-over');
+                this.nextTrigger.addClassOnClick('x-form-trigger-click');
+
+//ext 3?
+                if (this.menuEvents) {
+                    this.el.addClass("x-datepickerplus-prevnext-ext3");
+                    this.nextTrigger.addClass("x-datepickerplus-prevnext-ext3-next");
+                    this.prevTrigger.addClass("x-datepickerplus-prevnext-ext3-prev");
+                    this.trigger.addClass("x-datepickerplus-prevnext-ext3-date");
+                }
+
+                this.prevTrigRpt = new Ext.util.ClickRepeater(this.prevTrigger, {
+                    handler: function(el) {
+                        var old = this.getValue(),nxt=new Date();
+                        if (Ext.isDate(old)) {
+                            if (this.prevNextTriggerType==='m') {
+                                var md = old.getDate(),mm = old.getMonth()-1, my = old.getFullYear(),maxd=0;
+                                if (mm==-1) {
+                                    mm=11;
+                                    my--;
+                                }
+                                else {
+                                    maxd = new Date(my,mm,1).getDaysInMonth();
+                                    if (md>maxd) {
+                                        md=maxd;
+                                    }
+                                }
+                                nxt = new Date(my,mm,md);
+                            }
+                            else {
+                                nxt = new Date(old.getTime()-(86400000*this.prevNextTriggerType));
+                            }
+                        }
+                        this.setValue(nxt);
+                        this.menu.picker.setValue([nxt]);
+                    },
+                    listeners: {
+                        mouseup: function(cr,e){
+                            if (typeof this.scope.onPrevTriggerRelease=="function") {
+                                this.scope.onPrevTriggerRelease(this.scope.menu.picker, this.scope.menu.picker.value);
+                            }
+                            else {
+                                this.scope.menu.picker.fireEvent("select", this.scope.menu.picker, this.scope.menu.picker.value);
+                            }
+                        }
+                    },
+                    scope: this,
+                    preventDefault:true,
+                    stopDefault:true
+                });
+                this.nextTrigRpt = new Ext.util.ClickRepeater(this.nextTrigger, {
+                    handler: function(el) {
+                        var old = this.getValue(),nxt=new Date();
+                        if (Ext.isDate(old)) {
+                            if (this.prevNextTriggerType==='m') {
+                                var md = old.getDate(),mm = old.getMonth()+1, my = old.getFullYear(),maxd=0;
+                                if (mm==12) {
+                                    mm=0;
+                                    my++;
+                                }
+                                else {
+                                    maxd = new Date(my,mm,1).getDaysInMonth();
+                                    if (md>maxd) {
+                                        md=maxd;
+                                    }
+                                }
+                                nxt = new Date(my,mm,md);
+                            }
+                            else {
+                                nxt = new Date(old.getTime()+(86400000*this.prevNextTriggerType));
+                            }
+                        }
+                        this.setValue(nxt);
+                        this.menu.picker.setValue([nxt]);
+                    },
+                    listeners: {
+                        mouseup: function(cr,e){
+                            if (typeof this.scope.onNextTriggerRelease=="function") {
+                                this.scope.onNextTriggerRelease(this.scope.menu.picker, this.scope.menu.picker.value);
+                            }
+                            else {
+                                this.scope.menu.picker.fireEvent("select", this.scope.menu.picker, this.scope.menu.picker.value);
+                            }
+                        }
+                    },
+                    scope: this,
+                    preventDefault:true,
+                    stopDefault:true
+                });
+            }
+
 //be sure not to have duplicate formfield names (at least IE moans about it and gets confused)
 //                this.name =  (typeof this.name==="undefined"?this.id+this.submitFormatAddon:(this.name==this.id?this.name+this.submitFormatAddon:this.name));
             var name =  this.name || this.el.dom.name || (this.id+this.submitFormatAddon);
@@ -2531,7 +2703,7 @@ if (Ext.form && Ext.form.DateField) {
                 type:'hidden',
                 name: name,
                 value:this.formatHiddenDate(this.parseDate(this.value))
-            });
+            }, Ext.isIE ? 'after' : 'before');
             this.hiddenName = name;
             this.el.dom.removeAttribute('name');
             this.el.on({
@@ -2553,6 +2725,19 @@ if (Ext.form && Ext.form.DateField) {
 
 
         },
+        onDestroy: function(){
+            Ext.ux.form.DateFieldPlus.superclass.onDestroy.apply(this, arguments);
+            if(this.prevTrigger){
+                this.prevTrigRpt.destroy();
+                this.prevTrigger.removeAllListeners();
+                this.prevTrigger.remove();
+            }
+            if(this.nextTrigger){
+                this.nextTrigRpt.destroy();
+                this.nextTrigger.removeAllListeners();
+                this.nextTrigger.remove();
+            }
+        },
         onDisable: function(){
             Ext.ux.form.DateFieldPlus.superclass.onDisable.apply(this, arguments);
             if(this.hiddenField) {
@@ -2572,8 +2757,8 @@ if (Ext.form && Ext.form.DateField) {
         },
 
         formatMultiHiddenDate : function(date) {
-            var field = this, formatted = [],value;
-            for (var e=0,el=date.length;e<el;++e) {
+            var field = this, formatted = [],value,e=0,el=date.length;
+            for (;e<el;++e) {
                 formatted.push(field.formatHiddenDate(date[e]));
             }
             value = formatted.join(this.multiSelectionDelimiter);
