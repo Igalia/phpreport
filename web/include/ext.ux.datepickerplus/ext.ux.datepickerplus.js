@@ -2470,7 +2470,6 @@ if (Ext.form && Ext.form.DateField) {
             this.menu.picker.on("select",function(dp,date) {
                 this.setValue(date);
             },this);
-/*
 //Ext 3.0
             if (this.menuEvents) {
                 this.menuEvents('on');
@@ -2481,7 +2480,6 @@ if (Ext.form && Ext.form.DateField) {
                     scope:this
                 }));
             }
-*/
         },
 
         onTriggerClick : function(){
