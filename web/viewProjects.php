@@ -1196,11 +1196,12 @@ Ext.onReady(function(){
         }
     ]);
 
+    var contentElement = document.getElementById('content');
     var projectGrid = new editionPanel({
         id: 'projectGrid',
-        height: 300,
+        height: window.innerHeight - contentElement.offsetTop - 10,
+        width: '100%',
         iconCls: 'silk-book',
-        width: projectColModel.getTotalWidth(false),
         store: projectsStore,
         frame: true,
         title: 'Projects',
