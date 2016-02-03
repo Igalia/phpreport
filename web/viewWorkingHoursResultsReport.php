@@ -131,6 +131,8 @@ Ext.onReady(function(){
 
     }
 
+    // Variable to store the login of the selected row between reloads of the grid
+    var selectedLogin;
 
     // create the event handling function for populating the main store when both XML stores have loaded their data
     function populate() {
@@ -146,7 +148,17 @@ Ext.onReady(function(){
 
             if (!grid.rendered)
                 grid.render(Ext.get("content"));
-            else grid.customMask.hide();
+            else {
+                // select and scroll to previously selected row
+                if(selectedLogin !== undefined) {
+                    var index = store.findExact('login', selectedLogin);
+                    grid.getSelectionModel().selectRow(index);
+                    grid.getView().focusRow(index);
+                }
+
+                //hide "loading"
+                grid.customMask.hide();
+            }
 
         } else loaded = true;
 
@@ -193,6 +205,12 @@ Ext.onReady(function(){
         renderTo: 'content',
         listeners: {
             'view': function (element, init, end) {
+
+                // store selected row to restore it after load
+                if (grid.getSelectionModel().getSelected() !== undefined)
+                    selectedLogin = grid.getSelectionModel().getSelected().get('login');
+                else
+                    selectedLogin = undefined;
 
                 if (grid.rendered)
                     grid.customMask.show();
