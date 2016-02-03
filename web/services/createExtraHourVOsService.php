@@ -118,6 +118,16 @@
                             }
                             break;
 
+                        case "comment":
+                            $parser->read();
+                            if ($parser->hasValue)
+                            {
+                                $extraHourVO->setComment($parser->value);
+                                $parser->next();
+                                $parser->next();
+                            }
+                            break;
+
                         default:
                             $parser->next();
                             break;
@@ -152,7 +162,11 @@
             $string = "<return service='createExtraHourVOs'><ok>Operation Success!</ok><extraHours>";
 
             foreach((array) $createExtraHours as $hour)
-                $string = $string . "<extraHour><id>{$hour->getId()}</id><userId>{$hour->getUserId()}</userId><hours>{$hour->getHours()}</hours><date format='Y-m-d'>{$hour->getDate()->format('Y-m-d')}</date></extraHour>";
+                $string = $string . "<extraHour><id>{$hour->getId()}</id>" .
+                        "<userId>{$hour->getUserId()}</userId>" .
+                        "<hours>{$hour->getHours()}</hours>" .
+                        "<date format='Y-m-d'>{$hour->getDate()->format('Y-m-d')}</date>" .
+                        "<comment>{$hour->getComment()}</comment></extraHour>";
 
             $string = $string . "</extraHours></return>";
 
