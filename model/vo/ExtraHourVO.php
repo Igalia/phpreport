@@ -43,6 +43,7 @@ class ExtraHourVO {
     protected $userId = NULL;
     protected $date = NULL;
     protected $hours = NULL;
+    protected $comment = NULL;
 
     public function setId($id) {
         if (is_null($id))
@@ -83,5 +84,13 @@ class ExtraHourVO {
 
     public function getHours() {
         return $this->hours;
+    }
+
+    public function setComment($comment) {
+        $this->comment = (string) $comment;
+    }
+
+    public function getComment() {
+        return $this->comment;
     }
 }

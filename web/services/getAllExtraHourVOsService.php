@@ -54,7 +54,11 @@
         $string = "<extraHours>";
 
         foreach((array) $extraHours as $extraHour)
-            $string = $string . "<extraHour><id>{$extraHour->getId()}</id><hours>{$extraHour->getHours()}</hours><userId>{$extraHour->getUserId()}</userId><date format='Y-m-d'>{$extraHour->getDate()->format('Y-m-d')}</date></extraHour>";
+            $string = $string . "<extraHour><id>{$extraHour->getId()}</id>" .
+                    "<hours>{$extraHour->getHours()}</hours>" .
+                    "<userId>{$extraHour->getUserId()}</userId>" .
+                    "<date format='Y-m-d'>{$extraHour->getDate()->format('Y-m-d')}</date>" .
+                    "<comment>{$extraHour->getComment()}</comment></extraHour>";
 
         $string = $string . "</extraHours>";
 

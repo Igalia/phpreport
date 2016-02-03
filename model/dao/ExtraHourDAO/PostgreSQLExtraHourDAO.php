@@ -50,7 +50,7 @@ class PostgreSQLExtraHourDAO extends ExtraHourDAO{
      * @see ExtraHourDAO::__construct()
      */
     function __construct() {
-    parent::__construct();
+        parent::__construct();
     }
 
     /** Extra Hour value object constructor for PostgreSQL.
@@ -63,15 +63,15 @@ class PostgreSQLExtraHourDAO extends ExtraHourDAO{
      */
     protected function setValues($row)
     {
-
         $extraHourVO = new ExtraHourVO();
 
         $extraHourVO->setId($row['id']);
         $extraHourVO->setDate(date_create($row['_date']));
         $extraHourVO->setHours($row['hours']);
         $extraHourVO->setUserId($row['usrid']);
+        $extraHourVO->setComment($row['comment']);
 
-    return $extraHourVO;
+        return $extraHourVO;
     }
 
     /** Extra Hour retriever by id for PostgreSQL.
@@ -157,7 +157,12 @@ class PostgreSQLExtraHourDAO extends ExtraHourDAO{
         // If the query returned a row then update
         if(sizeof($currExtraHourVO) > 0) {
 
-            $sql = "UPDATE extra_hour SET _date=" .DBPostgres::formatDate($extraHourVO->getDate()) . ", hours="  . DBPostgres::checkNull($extraHourVO->getHours()) . ", usrid="  . DBPostgres::checkNull($extraHourVO->getUserId()) . " WHERE id=".$extraHourVO->getId();
+            $sql = "UPDATE extra_hour SET " .
+                    "_date=" .DBPostgres::formatDate($extraHourVO->getDate()) .
+                    ", hours="  . DBPostgres::checkNull($extraHourVO->getHours()) .
+                    ", usrid="  . DBPostgres::checkNull($extraHourVO->getUserId()) .
+                    ", comment="  . DBPostgres::checkStringNull($extraHourVO->getComment()) .
+                    " WHERE id=".$extraHourVO->getId();
 
             $res = pg_query($this->connect, $sql);
 
@@ -184,7 +189,11 @@ class PostgreSQLExtraHourDAO extends ExtraHourDAO{
     public function create(ExtraHourVO $extraHourVO) {
         $affectedRows = 0;
 
-        $sql = "INSERT INTO extra_hour (_date, hours, usrid) VALUES(" . DBPostgres::formatDate($extraHourVO->getDate()) . ", "  . DBPostgres::checkNull($extraHourVO->getHours()) . ","  . DBPostgres::checkNull($extraHourVO->getUserId()) . ")";
+        $sql = "INSERT INTO extra_hour (_date, hours, usrid, comment) VALUES(" .
+                DBPostgres::formatDate($extraHourVO->getDate()) . ", "  .
+                DBPostgres::checkNull($extraHourVO->getHours()) . ","  .
+                DBPostgres::checkNull($extraHourVO->getUserId()) . ","  .
+                DBPostgres::checkStringNull($extraHourVO->getComment()) . ")";
 
         $res = pg_query($this->connect, $sql);
 

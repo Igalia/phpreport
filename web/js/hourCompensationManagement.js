@@ -43,6 +43,7 @@ var ExtraHourRecord = new Ext.data.Record.create([
     {name: 'hours', type: 'float'},
     {name: 'userId', type: 'int'},
     {name: "date", type: 'date', dateFormat: 'Y-m-d'},
+    {name: 'comment', type: 'string'}
 ]);
 
 //schema of the information about users
@@ -322,6 +323,16 @@ var extraHoursColumnModel =  new Ext.grid.ColumnModel([
             xtype: 'numberfield',
             decimalPrecision: 5,
             allowBlank: false
+        }
+    },
+    {
+        header: "Comment",
+        width: 500,
+        sortable: true,
+        dataIndex: 'comment',
+        editor: {
+            xtype: 'textfield',
+            allowBlank: true
         }
     }
 ]);
