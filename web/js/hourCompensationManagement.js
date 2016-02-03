@@ -341,7 +341,6 @@ var editor = new Editor();
 
 //options to build the grid, it has to be instantiated later
 var extraHoursGridOptions = {
-    height: 300,
     inlineEditor: editor,
     plugins: [editor],
     iconCls: 'silk-table',
@@ -374,6 +373,10 @@ var extraHoursGridOptions = {
 Ext.onReady(function(){
 
     Ext.QuickTips.init();
+
+    //calculate height of the grid
+    var contentElement = document.getElementById('content');
+    extraHoursGridOptions.height = window.innerHeight - contentElement.offsetTop - 10;
 
     //instantiate and create grid
     var extraHoursGrid = new inlineEditionPanel(extraHoursGridOptions);
