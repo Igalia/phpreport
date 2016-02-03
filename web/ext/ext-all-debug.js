@@ -37494,43 +37494,7 @@ var swfobject = function() {
     
     
     function main() { 
-        if (plugin) {
-            testPlayerVersion();
-        }
-        else {
-            matchVersions();
-        }
-    }
-    
-    
-    function testPlayerVersion() {
-        var b = doc.getElementsByTagName("body")[0];
-        var o = createElement(OBJECT);
-        o.setAttribute("type", FLASH_MIME_TYPE);
-        var t = b.appendChild(o);
-        if (t) {
-            var counter = 0;
-            (function(){
-                if (typeof t.GetVariable != UNDEF) {
-                    var d = t.GetVariable("$version");
-                    if (d) {
-                        d = d.split(" ")[1].split(",");
-                        ua.pv = [parseInt(d[0], 10), parseInt(d[1], 10), parseInt(d[2], 10)];
-                    }
-                }
-                else if (counter < 10) {
-                    counter++;
-                    setTimeout(arguments.callee, 10);
-                    return;
-                }
-                b.removeChild(o);
-                t = null;
-                matchVersions();
-            })();
-        }
-        else {
-            matchVersions();
-        }
+        matchVersions();
     }
     
     
