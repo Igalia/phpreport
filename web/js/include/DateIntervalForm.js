@@ -46,6 +46,13 @@ function getNextSunday(date) {
 }
 
 /**
+ * Height that a DateIntervalForm will have.
+ * It should be the same value that form.getOuterSize().height would return when
+ * the form has been rendered.
+ */
+var DATE_INTERVAL_FORM_HEIGHT = 135;
+
+/**
  * @class Ext.ux.DateIntervalForm
  * @extends Ext.Panel
  */

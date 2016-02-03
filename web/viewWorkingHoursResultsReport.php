@@ -157,6 +157,7 @@ Ext.onReady(function(){
     pendingHoliday.on('load', populate);
 
     // create the Grid
+    var contentElement = document.getElementById('content');
     var grid = new Ext.ux.ExportableGridPanel({
         id: 'grid',
         store: store,
@@ -171,8 +172,8 @@ Ext.onReady(function(){
         stripeRows: true,
         //autoExpandColumn: 'workableHours',
         //loadMask: true,
-        height: 350,
-        width: 600,
+        height: window.innerHeight - contentElement.offsetTop - DATE_INTERVAL_FORM_HEIGHT - 5,
+        width: '100%',
         title: 'Working Hours Results Report',
         // config options for stateful behavior
         stateful: true,
