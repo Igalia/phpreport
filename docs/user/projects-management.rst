@@ -85,21 +85,15 @@ subwindow will appear:
 
 .. figure:: i/client-assignment-subwindow.png
 
-To assign a client, you can open a dropdown box containing the full list of
-clients pressing the down arrow icon on the right or type some letters of the
-client name which will open a list of clients matching that name. Use your
-mouse or your keyboard to select a client from the dropdown box and get it
-added.
-
-You can repeat this process any number of times you want, until all the
-required clients have been added.
-
-To remove one client, you can press the X button located inside every user box.
-The X icon on the right side of the subwindow will clear the list.
+To assign a client, you have to drag it from the right list and drop it on the
+left list.
 
 Once you're done, press the *Accept* button to save the assignment or
 *Cancel* to discard it. You can also use the *Reset* button to return the data
 in the window to the original state.
+
+.. TIP:: You can select more than one client to drag'n'drop them at once, using
+         the *Ctrl* or *Shift* keys.
 
 Assigning users
 =================
@@ -110,19 +104,14 @@ subwindow will appear:
 
 .. figure:: i/user-assignment-subwindow.png
 
-To assign a user, you can open a dropdown box containing the full list of
-users pressing the down arrow icon on the right or type some letters of the
-user name which will open a list of users matching that name. Use your
-mouse or your keyboard to select a user from the dropdown box and get it
-added.
-
-You can repeat this process any number of times you want, until all the
-required users have been added.
-
-To remove one user, you can press the X button located inside every user box.
-The X icon on the right side of the subwindow will clear the list.
+To assign a user, you have to drag it from the right list and drop it on the
+left list. Only the users assigned to the area to which the project belongs are
+shown in the list by default; if you want to assign a user who's not in the list,
+check the *Show all Users* box.
 
 Once you're done, press the *Accept* button to save the assignment or
 *Cancel* to discard it. You can also use the *Reset* button to return the data
 in the window to the original state.
 
+.. TIP:: You can select more than one user to drag'n'drop them at once, using
+         the *Ctrl* or *Shift* keys.
