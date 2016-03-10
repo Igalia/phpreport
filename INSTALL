@@ -98,8 +98,9 @@ defaults will just work fine.
 Manual setup of schema and initial data
 ---------------------------------------
 
-Follow these steps only if you haven't used the installation wizard. Firstly,
-create the configuration file with the default options with the command::
+Follow these steps only if you haven't used the installation wizard. In first
+place, browse to the ``phpreport`` directory and
+create a configuration file with the default options with the command::
 
   cp config/config.defaults config/config.php
 
@@ -107,12 +108,13 @@ If you changed any of data on the first step, edit the file ``config/config.php`
 and set the correct values for the DB name, user, password, host, etc.
 
 Browse to the directory ``sql/`` and run the following commands (you will be
-asked by the password (``phpreport``) interactively)::
+asked by the password interactively, default is ``phpreport``)::
 
   psql -h localhost -W -U phpreport phpreport < schema.sql
   psql -h localhost -W -U phpreport phpreport < uniqueConstraints.sql
   psql -h localhost -W -U phpreport phpreport < otherConstraints.sql
   psql -h localhost -W -U phpreport phpreport < initialData.sql
+  psql -h localhost -W -U phpreport phpreport < update/all.sql
 
 Set the correct DB name, user and host if they are different.
 

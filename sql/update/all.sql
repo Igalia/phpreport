@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
 --
--- These are the changes you need in database to upgrade PhpReport 2.0 to 2.1
+-- These are all the changes required to upgrade the DB from 2.0 to the latest
+-- release, to be included by the installation scripts.
 --
 --------------------------------------------------------------------------------
 
@@ -48,3 +49,16 @@ ALTER TABLE config ADD COLUMN block_tasks_by_time_number_of_days INTEGER;
 
 ALTER TABLE task ADD COLUMN onsite BOOLEAN
     NOT NULL DEFAULT false;
+
+--
+-- Add new column in extra_hour table:
+-- * comment: free text to optinally add a comment on each entry in the table.
+--
+
+ALTER TABLE extra_hour ADD COLUMN comment VARCHAR(256);
+
+--
+-- Set database version to 2.16
+--
+
+UPDATE config SET version='2.16';

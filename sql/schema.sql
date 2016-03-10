@@ -139,7 +139,6 @@ create table task (
   _end                      integer not null,
   story                     varchar(80),
   telework                  boolean,
-  onsite                    boolean,
   text                      varchar(8192),
   ttype                     varchar(40),
   phase                     varchar(15),
