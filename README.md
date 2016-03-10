@@ -16,6 +16,15 @@ Finally, PhpReport can communicate with external applications, like ERPs or
 desktop tools for personal time-tracking, by means of plugin development or
 through the exposed web services.
 
+## Documentation
+
+There is documentation for users and system administrators, it comes packaged
+with every release. The latest version can always be checked straight from the
+repository:
+
+* [User manual](docs/user/index.rst)
+* [Administrator manual](docs/admin/index.rst)
+
 ## More information 
 
 * News: Take a look at the
@@ -33,4 +42,12 @@ contact directly with its [maintainer](https://github.com/jaragunde).
 
 ## License
 
-The project is released under the GNU General Public License, version 3.
+The project is released under the
+[GNU General Public License, version 3](COPYING).
+
+## Screenshots
+
+![Tasks](docs/user/i/tasks-screen.png)
+![Acc hours](docs/user/i/acc-hours-screen.png)
+![User tasks](docs/user/i/user-tasks-screen.png)
+
