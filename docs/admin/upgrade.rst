@@ -3,6 +3,24 @@ Upgrade instructions
 
 .. contents::
 
+From version 2.1 to 2.16
+========================
+
+Unpack the files of PhpReport 2.16 at the same location of the original files,
+overwriting the existing contents. After that run the upgrade script located at
+the directory ``update/``::
+
+  cd update
+  php -f update-from-2.1-to-2.16.php
+
+Alternatively, you can open the following URL in your browser to run the
+script::
+
+  http://your-web-server/phpreport/update/update-from-2.1-to-2.16.php
+
+Once the upgrade is complete, remove the directories ``update/`` and ``install/``
+inside your PhpReport, to prevent other users from altering your DB.
+
 From version 2.0 to 2.1
 =======================
 
