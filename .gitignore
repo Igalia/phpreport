@@ -11,3 +11,6 @@ help/*
 #release tarballs
 phpreport*.tar.gz
 phpreport*.zip
+
+#default config file
+config/config.defaults
