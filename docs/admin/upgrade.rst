@@ -60,7 +60,7 @@ not guaranteed. For these reasons, you will have to install PhpReport 2.0 in a
 new location and create a new DB for it which needs to be available side by side
 with PhpReport 1.x database during the migration.
 
-Begin following the `installation instructions <installation.html>`__ from steps
+Begin following the `installation instructions <installation.rst>`__ from steps
 0 to 2. Take into account you will probably have to use a different name for the
 DB and extract the files to a different directory to avoid conflicts with the
 existing installation. At step 3 you must follow the manual setup instructions,

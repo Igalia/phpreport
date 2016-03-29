@@ -21,8 +21,9 @@ help:
 	date >> footer; \
 	#parse rst
 	for i in `find -name *.rst` ; do \
+	  #rename .rst for .html in links to other doc pages \
+	  sed 's/.rst/.html/g' $$i > tmp; \
 	  #append footer \
-	  cat $$i > tmp; \
 	  cat footer >> tmp; \
 	  #extract file name to be used as the output file name \
 	  FILE=`echo $$i | awk '{firstpart=substr($$i, 8);x=index(firstpart,".rst");print substr(firstpart, 1,x)}'`; \

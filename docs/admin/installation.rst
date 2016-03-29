@@ -148,5 +148,5 @@ change it::
   define ('YEARLY_HOLIDAY_HOURS', 184);
 
 Remember to check the `data model for holiday management
-<../user/overview.html#data-model-for-holiday-management>`__ to know how it
+<../user/overview.rst#data-model-for-holiday-management>`__ to know how it
 works and which value you should put there.

@@ -73,7 +73,7 @@ you won't be allowed to delete it. You have to remove those assignations and try
 the deletion later.
 
 Finally, the last button, *Details*, will open the
-`project details report <reports.html#project-details>`__ for the selected
+`project details report <reports.rst#project-details>`__ for the selected
 project.
 
 Assigning clients

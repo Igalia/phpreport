@@ -146,7 +146,7 @@ represent users and columns represent the following data:
 Pending holiday hours:
   it's the difference between the theoretical number of
   holiday hours for every user (calculated according to the explanation in
-  `Data model for holiday management <overview.html#data-model-for-holiday-management>`__)
+  `Data model for holiday management <overview.rst#data-model-for-holiday-management>`__)
   and the number of holiday hours used. The unused holidays are accumulated from
   one year to the next one; to see only the number of pending holidays in the
   current year, a start date in the current year must be chosen.

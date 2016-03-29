@@ -84,7 +84,7 @@ The journey is the number of hours the person is supposed to work for every
 working day. Working days in PhpReport are Monday to Friday. This value will be
 used to calculate the balance of *Extra hours* for a user, as well as the
 corresponding amount of *Holiday hours*. These values can be checked in the
-`Accumulated hours <reports.html#accumulated-hours>`__ report.
+`Accumulated hours <reports.rst#accumulated-hours>`__ report.
 
 This value may vary with time (e.g. a user may change from full time to part-time
 dedication for a specific period of time), so you will have to enter an *Init date* and
