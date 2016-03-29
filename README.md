@@ -16,6 +16,14 @@ Finally, PhpReport can communicate with external applications, like ERPs or
 desktop tools for personal time-tracking, by means of plugin development or
 through the exposed web services.
 
+## Get PhpReport
+
+Download PhpReport from our
+[releases page](https://github.com/Igalia/phpreport/releases).
+
+Then follow the instructions in the [administrator manual](docs/admin/index.rst)
+to install it or to upgrade from an earlier release.
+
 ## Documentation
 
 There is documentation for users and system administrators, it comes packaged
@@ -29,9 +37,6 @@ repository:
 
 * News: Take a look at the
 [project blog](http://blogs.igalia.com/jaragunde/category/web/phpreport/).
-
-* Download: Get PhpReport from our
-[releases page](https://github.com/Igalia/phpreport/releases).
 
 * Development: Project sources, documentation and issue tracker are
 available at [GitHub](https://github.com/Igalia/phpreport).
