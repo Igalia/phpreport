@@ -1,6 +1,80 @@
 NEWS
 ====
 
+Version 2.16 (31 March 2016)
+-------------------------------
+
+Release containing new features and bug fixes. Highlights for this release are
+the possibility to export report tables in CSV format, the addition of
+quick-access buttons for the most common date filters on reports and the new
+behavior of the "copy from date" feature in tasks screen.
+
+List of changes
+~~~~~~~~~~~~~~~
+
+* Tasks screen:
+  * Fix trim on story fields.
+  * #148: Explicitly scroll to the newly added task.
+  * #184: Copy tasks feature selects by default the previous date containing
+    any tasks.
+  * #203: Reset taskStory field in a task when the project field is changed.
+  * #212: Show alert of unsaved tasks before leaving.
+  * #218: Middle-click pasted text is properly saved.
+  * #222: Cloned tasks belonging to closed projects cannot be assigned to the
+    closed project.
+  * #230: Fix conditions to prevent edition of tasks from closed projects.
+  * #232: Use client timezone to get current date instead of the server's.
+
+* Project management screen:
+  * Double-click to edit projects, consistently with other edition screens.
+  * Fix tab navigation in client/user assigment subwindows.
+  * Close subwindows with ESC.
+  * Rearrange button layout in subwindows.
+  * Clear "new project" subwindow every time it is used.
+  * Select and scroll to newly added projects.
+  * The grid now uses the entire screen space.
+  * #192: Sort newly added projects into the list.
+  * #231: Prevent removing start and end dates in newly added projects.
+
+* Reports:
+  * Added quick-access buttons for current and previous week and current month.
+  * Ability to export report tables in CSV format.
+  * Accumulated hours report grid now uses the entire screen space.
+  * Accumulated hours report keeps the selected row and scrolls to it when the
+    report is refreshed.
+  * #128: Fix conflict in date constraints when one date is deleted.
+  * #133: Always open project details in a new window to prevent closing the
+    open report.
+  * #229: Fix unexpected results in partial extra hours report after extended
+    timetable compensation.
+
+* Coordination tools:
+  * #195: List project members as candidate reviewers for a story.
+  * #198: List project members as candidate developers for a task-story.
+  * #202: Add combo box in XP tracker screen to select any project, even if
+    not listed.
+  * #210: Prevent a division by zero when listing stories inside an iteration.
+  * #213: List project members as candidate reviewers for a section.
+
+* Other:
+  * Migrate project home to GitHub.
+  * Upgrade Ext JS framework from 3.4.0 to 3.4.1.1.
+  * Upgrade datepickerplus component from 1.4 to 1.4.3.
+  * Refresh user and administrator documentation.
+  * Correct errors in the installation instructions.
+  * Fix some small problems in the installation process.
+  * Underline focused button label to fix invisible focus problem in Chrome.
+  * Underline the label next to a focused check box for better visibility.
+  * Start splitting JS code contained inside PHP scripts for improved caching
+    and easier debugging.
+  * Add a column for comments in extra hour compensations management.
+  * Extra hour compensations grid now uses the entire screen space.
+  * Remove any usage of Flash in the application.
+  * #188: Explicitly set week start to Monday in all the calendar widgets.
+  * #226: Allow float values in extra hours compensation UI.
+  * #233: Add week number to most date selectors.
+
+
 Version 2.1 (27 Feb 2013)
 -------------------------------
 

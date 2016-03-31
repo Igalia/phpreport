@@ -1,4 +1,4 @@
-VERSION=2.1
+VERSION=2.16
 
 tgz: help
 	cp config/config.php config/config.defaults
