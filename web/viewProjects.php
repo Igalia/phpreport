@@ -67,6 +67,7 @@ Ext.onReady(function(){
     var areasStore = new Ext.data.ArrayStore({
         id: 0,
         fields: ['id', 'name'],
+        sortInfo: { field: 'name', direction: 'ASC' },
         data : [
         <?php
 
