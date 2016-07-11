@@ -31,20 +31,12 @@
     include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
     include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
-/**
- * HTTP PARAMETERS RECEIVED BY THIS PAGE:
- *
- * login = Login of the user
- * password = Password of the user
- */
-
-
-    $userLogin = $_GET['login'];
-
-    $userPassword = $_GET['password'];
-
-    /* If there are Http authentication data, we try to log in using it */
-    if (isset($_SERVER['PHP_AUTH_USER'])) {
+    /* Allow login only via HTTP Authentication data only if both username and password are not empty*/
+    if (!$_SERVER['PHP_AUTH_USER'] || !$_SERVER['PHP_AUTH_PW']) {
+        header('WWW-Authenticate: Basic realm="phpeport Authentication"');
+        header('HTTP/1.0 401 Unauthorized');
+        http_response_code(401);
+    } else {
         $userLogin = $_SERVER['PHP_AUTH_USER'];
         $userPassword = $_SERVER['PHP_AUTH_PW'];
     }
