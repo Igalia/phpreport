@@ -394,12 +394,34 @@ Ext.onReady(function(){
             text: 'Extended view',
             handler: showExtendedView,
         }],
+        tbar: [{
+            text: 'Details',
+            id: 'projectGridDetailsBtn',
+            ref: '../detailsBtn',
+            disabled: true,
+            iconCls: 'silk-book-go',
+            handler: onDetails
+        }]
     });
 
     // event handler for double-click on a project
     projectGrid.on('rowdblclick', function(grid, n, e) {
         window.open('viewProjectDetails.php?pid=' + grid.store.getAt(n).get('id'));
     });
+
+    projectGrid.getSelectionModel().on('selectionchange', function(sm){
+        projectGrid.detailsBtn.setDisabled(sm.getCount() < 1);
+    });
+
+    /**
+     * function to show details of project when clicked on Details button in top bar
+     */
+    function onDetails() {
+        if (projectGrid.getSelectionModel().getCount() > 0) {
+            var selected = projectGrid.getSelectionModel().getSelected();
+            window.open('viewProjectDetails.php?pid=' + selected.id);
+        }
+    }
 
     //function to show only a subset of columns and hide the others
     function showStandardView() {
