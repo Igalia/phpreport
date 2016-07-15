@@ -66,6 +66,7 @@ $permissions = array(
         '/services/getFilteredCustomProjectsService.php', '/services/getProjectCustomerReportJsonService.php',
         '/services/getProjectUserReportJsonService.php',
         '/services/getProjectUserStoryReportJsonService.php', '/services/getUserStoryReportJsonService.php',
+        '/services/getProjectUserWeeklyHoursReportJsonService.php',
         //common services
         '/services/getAllUsersService.php', '/services/getAllCustomersService.php',
         '/services/getAllProjectsService.php', '/services/getAllCustomProjectsService.php',

@@ -46,6 +46,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/GetGlobalUsersProjectsCustom
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserProjectCustomerReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectTtypeReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserProjectReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectUserWeeklyHoursReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectUserCustomerReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectUserStoryReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetTaskBlockConfigurationAction.php');
@@ -367,6 +368,23 @@ abstract class TasksFacade {
 
     return $action->execute();
 
+    }
+
+    /** Get weekly hours worked per week on a given project
+     *
+     * This function is used to retrieve details of hours worked by all users on a given project
+     * <var>$projectVO</var>
+     *
+     * @param ProjectVO $projectVO
+     * @param DateTime|null $init
+     * @param DateTime|null $end
+     * @return mixed
+     * @throws null
+     */
+    static function GetProjectUserWeeklyHoursReport(ProjectVO $projectVO, DateTime $init = NULL, DateTime $end = NULL) {
+        $action = new GetProjectUserWeeklyHoursReportAction($projectVO, $init, $end);
+
+        return $action->execute();
     }
 
     /**  Get User Project Report Action
