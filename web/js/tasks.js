@@ -85,6 +85,17 @@ var summaryRecord = new Ext.data.Record.create([
 /* Variable to store if there are unsaved changes */
 var unsavedChanges = false;
 
+/* Variable to store if all tasks has loaded completely for a day */
+var loaded = false;
+
+/**
+ * Checks if the tasks for the day has loaded completely.
+ *
+ * @returns {boolean}
+ */
+function isLoaded() {
+    return loaded;
+}
 /**
  * Checks if there are unsaved changes in this page.
  */
@@ -746,8 +757,8 @@ Ext.onReady(function(){
                         }
                     }
                     unsavedChanges = true;
-                }
-                else this.each(function(r) {
+                } else {
+                    this.each(function(r) {
                         taskPanel = new TaskPanel({
                             parent: tasksScrollArea,
                             store: myStore,
@@ -776,8 +787,10 @@ Ext.onReady(function(){
                         }
 
                         updateTasksLength(taskPanel);
-
-                      });
+                    });
+                    // Mark every item has loaded
+                    loaded = true;
+                }
             },
             'save': function () {
                 if (!myStore.error) {
@@ -825,8 +838,14 @@ Ext.onReady(function(){
 
     /* Add a callback to add new tasks */
     function newTask() {
-        newTask = new taskRecord();
-        myStore.add(newTask);
+        /*We have to wait till the entire list gets loaded, otherwise the new
+        item do not get saved.*/
+        if (isLoaded()) {
+            newTask = new taskRecord();
+            myStore.add(newTask);
+        } else {
+            window.setTimeout(newTask, 100);
+        }
         taskPanel = new TaskPanel({
             parent: tasksScrollArea,
             taskRecord:newTask,
@@ -1023,8 +1042,14 @@ Ext.onReady(function(){
                 flex: 3,
                 disabled: forbidden,
                 handler: function () {
-                    //create and populate a record
-                    var newTask = new taskRecord();
+                    /*We have to wait till the entire list gets loaded, otherwise the new
+                     item do not get saved.*/
+                    if (isLoaded()) {
+                        //create and populate a record
+                        var newTask = new taskRecord();
+                    } else {
+                        window.setTimeout(createButton.handler, 100);
+                    }
                     newTask.set('customerId', templateValues[0]);
                     newTask.set('projectId', templateValues[1]);
                     newTask.set('ttype', templateValues[2]);
