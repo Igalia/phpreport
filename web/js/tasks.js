@@ -81,6 +81,19 @@ var summaryRecord = new Ext.data.Record.create([
     {name:'month'},
     {name:'week'},
 ]);
+/* Schema of the information about task templates */
+var templateRecord = new Ext.data.Record.create([
+    {name:'id'},
+    {name:'customerId'},
+    {name:'projectId'},
+    {name:'ttype'},
+    {name:'story'},
+    {name:'taskStoryId'},
+    {name:'telework'},
+    {name:'onsite'},
+    {name:'text'},
+    {name:'name'}
+]);
 
 /* Variable to store if there are unsaved changes */
 var unsavedChanges = false;
@@ -572,6 +585,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 tabIndex: tab++,
                 margins: "7px 0 0 5px",
                 handler: function() {
+
                     //get the templates from the cookie
                     var templatesArray = cookieProvider.decodeValue(
                             cookieProvider.get('taskTemplate'));
@@ -1035,9 +1049,9 @@ Ext.onReady(function(){
         },
         addButtonForTemplate: function (templateValues, indexInsideCookie) {
             var createButton = new Ext.Button({
-                text: ((templateValues[7] != undefined) &&
-                        (templateValues[7] != '')) ?
-                    templateValues[7] :
+                text: ((templateValues['name'] != undefined) &&
+                        (templateValues['name'] != '')) ?
+                    templateValues['name'] :
                     'Template',
                 flex: 3,
                 disabled: forbidden,
@@ -1050,13 +1064,13 @@ Ext.onReady(function(){
                     } else {
                         window.setTimeout(createButton.handler, 100);
                     }
-                    newTask.set('customerId', templateValues[0]);
-                    newTask.set('projectId', templateValues[1]);
-                    newTask.set('ttype', templateValues[2]);
-                    newTask.set('story', templateValues[3]);
-                    newTask.set('taskStoryId', templateValues[4]);
-                    newTask.set('telework', templateValues[5]);
-                    newTask.set('onsite', templateValues[6]);
+                    newTask.set('customerId', templateValues['customerId']);
+                    newTask.set('projectId', templateValues['projectId']);
+                    newTask.set('ttype', templateValues['ttype']);
+                    newTask.set('story', templateValues['story']);
+                    newTask.set('taskStoryId', templateValues['taskStoryId']);
+                    newTask.set('telework', templateValues['telework']);
+                    newTask.set('onsite', templateValues['onsite']);
                     //add the record to the store
                     myStore.add(newTask);
 
@@ -1119,14 +1133,36 @@ Ext.onReady(function(){
     });
 
     // Populate templates panel
-    var templatesList = cookieProvider.decodeValue(
-            cookieProvider.get('taskTemplate'));
-    if (templatesList != undefined) {
-        for (var i = 0; i < templatesList.length; i++) {
-            var templateValues = templatesList[i];
-            templatesPanel.addButtonForTemplate(templateValues, i);
+    var templatesStore = new Ext.data.Store({
+        autoLoad: true,
+        autoSave: false,
+        storeId: 'templatesStore',
+        fields: templateRecord,
+        reader: new Ext.data.XmlReader({
+            record: 'template',
+            successProperty: 'success',
+            idProperty:'id'
+        }, templateRecord),
+        writer: new Ext.data.XmlWriter({
+            xmlEncoding: 'UTF-8',
+            root: 'templates',
+            writeAllFields: true
+        }, templateRecord),
+        proxy: new Ext.data.HttpProxy({
+            method: 'POST',
+            api: {
+                read    : {url: 'services/getUserTemplatesService.php', method: 'GET'},
+                create  : 'services/createTemplatesService.php'
+            },
+        }),
+        listeners: {
+            'load': function (store, records, options) {
+                store.each(function(r) {
+                    templatesPanel.addButtonForTemplate(r.data, r.data['id']);
+                });
+            }
         }
-    }
+    });
 
     // Actions panels
     var expandCollapseAllPanel = new Ext.Panel({
