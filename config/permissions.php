@@ -44,6 +44,8 @@ $permissions = array(
         '/services/createTasksService.php', '/services/deleteTasksService.php',
         '/services/updateTasksService.php', '/services/setTasksJsonService.php',
         '/services/getTasksFiltered.php', '/userTasksReport.php',
+        //templates
+        '/services/createTemplatesService.php',
         //XP tracker and analysis
         '/analysistracker-summary.php', '/xptracker-summary.php',
         '/moduleForm.php', '/sectionForm.php', '/taskSectionForm.php',
