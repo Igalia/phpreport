@@ -42,6 +42,7 @@ include(PHPREPORT_ROOT . 'web/include/header.php');
     });
 
     var templateRecord = new Ext.data.Record.create([
+        {name:'id'},
         {name:'customerId'},
         {name:'projectId'},
         {name:'ttype'},
@@ -49,13 +50,18 @@ include(PHPREPORT_ROOT . 'web/include/header.php');
         {name:'taskStoryId'},
         {name:'telework'},
         {name:'onsite'},
+        {name:'text'},
         {name:'name'}
     ]);
-    var store = new Ext.data.ArrayStore({
+    var store = new Ext.data.Store({
         autoSave: false,
         storeId: 'myStore',
         fields: templateRecord,
-        record: 'template',
+        reader: new Ext.data.XmlReader({
+            record: 'template',
+            successProperty: 'success',
+            idProperty:'id'
+        }, templateRecord),
         writer: new Ext.data.XmlWriter({
             xmlEncoding: 'UTF-8',
             root: 'templates',
@@ -66,17 +72,36 @@ include(PHPREPORT_ROOT . 'web/include/header.php');
             url: 'services/createTemplatesService.php'
         }),
         listeners: {
-            // this will always return an exception, because the configured reader
-            // in this store does not understand the XML response from the service
             'exception': function(){
-                App.setAlert(true, "Templates sent to server");
+                App.setAlert(false, "Some error occurred");
+                store.error = true;
+            },
+            'save': function (store, batch, data) {
+                if(!store.error) {
+                    App.setAlert(true, "Templates successfully migrated");
+                    // workaround to remove the cookies, per https://www.sencha.com/forum/showthread.php?87334
+                    Ext.util.Cookies.set('ys-taskTemplate', null, new Date("January 1, 1970"));
+                    Ext.util.Cookies.clear('ys-taskTemplate');
+                }
             }
         }
     });
 
     var templatesList = cookieProvider.decodeValue(
             cookieProvider.get('taskTemplate'));
-    store.loadData(templatesList, true);
+    templatesList.forEach(function(t) {
+        var newTemplate = new templateRecord();
+        newTemplate.set('customerId', t[0]);
+        newTemplate.set('projectId', t[1]);
+        newTemplate.set('ttype', t[2]);
+        newTemplate.set('story', t[3]);
+        newTemplate.set('taskStoryId', t[4]);
+        newTemplate.set('telework', t[5]);
+        newTemplate.set('onsite', t[6]);
+        newTemplate.set('name', t[7]);
+
+        store.add(newTemplate);
+    });
     store.save();
 
 </script>
