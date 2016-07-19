@@ -57,7 +57,7 @@ $permissions = array(
         '/services/updateTaskSectionsService.php', '/services/createTaskSectionsService.php',
         '/services/deleteTaskSectionsService.php',
         //reports
-        '/viewProjectDetails.php', '/viewUserDetails.php', '/projectsSummary.php',
+        '/viewProjectDetails.php', '/viewUserDetails.php', '/projectsSummary.php', '/projectDetails.php',
         '/viewWorkingHoursResultsReport.php', '/projectsEvaluation.php', '/usersEvaluation.php',
         '/services/getExtraHoursReportService.php', '/services/getPendingHolidayHoursService.php',
         '/services/getProjectTtypeReportService.php', '/services/getProjectUserCustomerReportJsonService.php',

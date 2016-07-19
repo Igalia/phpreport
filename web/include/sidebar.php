@@ -69,6 +69,11 @@ var menuToolbar = new Ext.Toolbar({
                 destination: 'viewWorkingHoursResultsReport.php',
                 iconCls: 'silk-report-user',
             },'-',{
+                    text: 'Project details',
+                    handler: onItemClick,
+                    destination: 'projectDetails.php',
+                    iconCls: 'silk-book-go',
+            },{
                 text: 'Project evaluation',
                 handler: onItemClick,
                 destination: 'projectsEvaluation.php',
