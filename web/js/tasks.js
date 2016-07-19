@@ -585,32 +585,21 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 tabIndex: tab++,
                 margins: "7px 0 0 5px",
                 handler: function() {
-
-                    //get the templates from the cookie
-                    var templatesArray = cookieProvider.decodeValue(
-                            cookieProvider.get('taskTemplate'));
-                    if (templatesArray == undefined) {
-                        templatesArray = [];
-                    }
-                    //add the new template to the array
                     var task = this.parent.taskRecord;
-                    var template = [task.get('customerId'),
-                                    task.get('projectId'),
-                                    task.get('ttype'),
-                                    task.get('story'),
-                                    task.get('taskStoryId'),
-                                    task.get('telework'),
-                                    task.get('onsite'),
-                                    task.get('text')]
-                    templatesArray.push(template);
 
-                    //save the templates into the cookie
-                    cookieProvider.set('taskTemplate',
-                            cookieProvider.encodeValue(templatesArray));
+                    //create a new template record
+                    var newTemplate = new templateRecord();
+                    newTemplate.set('name', task.get('text'));
+                    newTemplate.set('customerId', task.get('customerId'));
+                    newTemplate.set('projectId', task.get('projectId'));
+                    newTemplate.set('ttype', task.get('ttype'));
+                    newTemplate.set('story', task.get('story'));
+                    newTemplate.set('taskStoryId', task.get('taskStoryId'));
+                    newTemplate.set('telework', task.get('telework'));
+                    newTemplate.set('onsite', task.get('onsite'));
 
-                    //add the button for the new task to the sidebar panel
-                    Ext.getCmp('templatesPanel').addButtonForTemplate(
-                            template, templatesArray.length - 1);
+                    //add the record to the store, it will trigger a save operation
+                    Ext.StoreMgr.get('templatesStore').add(newTemplate);
                 }
             }),
         });
@@ -1135,7 +1124,7 @@ Ext.onReady(function(){
     // Populate templates panel
     var templatesStore = new Ext.data.Store({
         autoLoad: true,
-        autoSave: false,
+        autoSave: true,
         storeId: 'templatesStore',
         fields: templateRecord,
         reader: new Ext.data.XmlReader({
@@ -1159,6 +1148,11 @@ Ext.onReady(function(){
             'load': function (store, records, options) {
                 store.each(function(r) {
                     templatesPanel.addButtonForTemplate(r.data, r.data['id']);
+                });
+            },
+            'save': function (store, batch, data) {
+                data.create.forEach(function(r) {
+                    templatesPanel.addButtonForTemplate(r, r['id']);
                 });
             }
         }

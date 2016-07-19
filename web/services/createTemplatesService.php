@@ -186,7 +186,7 @@ do {
         $connect = pg_connect($connectionString);
         pg_set_error_verbosity($connect, PGSQL_ERRORS_VERBOSE);
 
-        foreach ($createTemplates as $template) {
+        foreach ($createTemplates as $key => $template) {
             $sql = "INSERT INTO template (name, story, telework, onsite, text, ttype, usrid, projectid, customerid, task_storyid) VALUES(" .
                 DBPostgres::checkStringNull($template["name"]) . ", " .
                 DBPostgres::checkStringNull($template["story"]) . ", " .
@@ -202,10 +202,27 @@ do {
             $res = pg_query($connect, $sql);
             if ($res == NULL)
                 $string = "<return service='createTemplates'><success>false</success><error id='1'>There was some error while creating the tasks</error></return>";
+
+            $createTemplates[$key]["id"] = DBPostgres::getId($connect, "template_id_seq");
         }
         if (!$string)
         {
-            $string = "<return service='createTemplates'><success>true</success><ok>Operation Success!</ok><templates></templates></return>";
+            $string = "<return service='createTemplates'><success>true</success><ok>Operation Success!</ok><templates>";
+            foreach ($createTemplates as $template) {
+                $string .= "<template><id>{$template['id']}</id>";
+                $string .= "<name>{$template["name"]}</name>";
+                $string .= "<story>{$template["story"]}</story>";
+                $string .= "<telework>{$template["telework"]}</telework>";
+                $string .= "<onsite>{$template["onsite"]}</onsite>";
+                $string .= "<text>{$template["text"]}</text>";
+                $string .= "<ttype>{$template["ttype"]}</ttype>";
+                $string .= "<userId>{$template["userId"]}</userId>";
+                $string .= "<projectId>{$template["projectId"]}</projectId>";
+                $string .= "<customerId>{$template["customerId"]}</customerId>";
+                $string .= "<taskStoryId>{$template["taskStoryId"]}</taskStoryId></template>";
+            }
+            $string .= "</templates></return>";
+            error_log($string);
         }
     }
 
