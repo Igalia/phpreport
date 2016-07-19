@@ -568,6 +568,49 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
     }
 
+    /** Weekly hours worked on project by users for PostgreSQL
+     *
+     * @param ProjectVO $projectVO
+     * @param DateTime|null $initDate
+     * @param DateTime|null $endDate
+     * @return mixed
+     * @throws SQLQueryErrorException
+     */
+    public function getProjectUserWeeklyWorkingHours(ProjectVO $projectVO, DateTime $initDate = NULL, DateTime $endDate = NULL){
+        $projectId = $projectVO->getId();
+
+        if( $initDate && $endDate ) {
+            // Given a start date and end date, only pick weeks in between
+            $sql = "select usrid,
+                  EXTRACT(WEEK FROM _date) AS week,
+                  COALESCE(SUM(_end-init), 0) AS total_hours
+                  from task WHERE projectid = $projectId
+                  AND
+                    _date >= (timestamp " . DBPostgres::formatDate($initDate)  . ")
+                  AND
+                    _date <= (timestamp " . DBPostgres::formatDate($endDate)  . ")
+                  GROUP BY week, usrid";
+        } else {
+            $sql = "select usrid,
+            EXTRACT(WEEK FROM _date) AS week, COALESCE(SUM(_end-init), 0) AS total_hours
+            from task WHERE projectid = $projectId
+            GROUP BY week, usrid";
+        }
+
+        $res = pg_query($this->connect, $sql);
+
+        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
+
+        if(pg_num_rows($res) > 0) {
+            for($i = 0; $i < pg_num_rows($res); $i++)
+            {
+                $rows[$i] = @pg_fetch_array($res);
+            }
+        }
+
+        return $rows;
+    }
+
     /** Vacations report generator for PostgreSQL.
      *
      * This function generates a report of the vacations hours a user {@link UserVO} has spent as for today. Two optional DateTime parameters can be passed,

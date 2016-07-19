@@ -274,6 +274,14 @@ abstract class TaskDAO extends BaseDAO{
      */
     public abstract function getGlobalTaskReport(DateTime $initDate = NULL, DateTime $endDate = NULL, $groupField1, $groupField2 = NULL, $groupField3 = NULL);
 
+    /** Weekly hours worked on project by users generator.
+     *
+     * @param ProjectVO $project
+     * @param DateTime|null $initDate
+     * @param DateTime|null $endDate
+     * @return mixed
+     */
+    public abstract function getProjectUserWeeklyWorkingHours(ProjectVO $project, DateTime $initDate = NULL, DateTime $endDate = NULL);
     /** Vacations report generator.
      *
      * This function generates a report of the vacations hours a user {@link UserVO} has spent as for today. Two optional DateTime parameters can be passed,

@@ -448,6 +448,71 @@
 
             }, this);
 
+        var grid3 = new Ext.ux.DynamicGridPanel({
+            id: 'projectUserWeeklyHoursGrid',
+            stateId: 'projectUserWeeklyHoursGrid',
+            storeUrl: "services/mytest.json",
+            storeUrl: 'services/getProjectUserWeeklyHoursReportJsonService.php?<?php
+
+                echo "login=" . $login;
+                echo "&pid=" . $pid;?>',
+            rowNumberer: false,
+            columnLines: true,
+            checkboxSelModel: false,
+            width: 400,
+            height: 250,
+            frame: false,
+            title: 'Project User-Weekly Worked Hours Report',
+            iconCls: 'silk-table',
+        });
+
+
+        grid3.store.on('load', function(){
+
+            /**
+             * Thats the magic!
+             *
+             * JSON data returned from server has the column definitions
+             */
+            if(typeof(grid3.store.reader.jsonData.columns) === 'object') {
+
+                var columns = [];
+                var width = 0;
+
+                /**
+                 * Adding RowNumberer or setting selection model as CheckboxSelectionModel
+                 * We need to add them before other columns to display first
+                 */
+                if(grid3.rowNumberer) { columns.push(new Ext.grid3.RowNumberer()); }
+                if(grid3.checkboxSelModel) { columns.push(new Ext.grid3.CheckboxSelectionModel()); }
+
+                Ext.each(grid3.store.reader.jsonData.columns, function(column){
+                    columns.push(column);
+                    width += column.width;
+                });
+
+                // We add a dumb column we'll hide for preventing rendering
+                // problems on resizing
+                columns.push( new Ext.grid.Column({dataIndex: 'dumb', header: 'dumb', id: 'dumbColumn', width: 25}));
+
+                width += 25;
+
+                /**
+                 * Setting column model configuration
+                 */
+                grid3.getColumnModel().setConfig(columns);
+                grid3.setSize(width, 250);
+
+                if (!grid3.rendered)
+                    grid3.render(Ext.get("content"));
+
+                // We hide the dumb column
+                grid3.getColumnModel().setHidden(grid3.getColumnModel().getIndexById('dumbColumn'), true);
+
+            }
+
+        }, this);
+
     // dates filter form
     var workingResultsForm = new Ext.ux.DateIntervalForm({
         renderTo: 'content',
@@ -486,12 +551,25 @@
 
                 grid2.store.load();
 
+                grid3.store.removeAll();
+                grid3.store.proxy.conn.url = 'services/mytest.json';
+
+                grid3.store.proxy.conn.url= 'services/getProjectUserWeeklyHoursReportJsonService.php?<?php
+
+                        echo "login=" . $login;
+                        echo "&pid=" . $pid;
+
+                        ?>&init=' + init.getFullYear() + "-" + (init.getMonth()+1) + "-" + init.getDate()  + "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
+
+                grid3.store.load();
+
             }
         }
     });
 
     grid.store.load();
     grid2.store.load();
+    grid3.store.load();
 
     })
 
