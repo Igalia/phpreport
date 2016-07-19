@@ -1036,7 +1036,7 @@ Ext.onReady(function(){
         defaults: {
             width: '100%',
         },
-        addButtonForTemplate: function (templateValues, indexInsideCookie) {
+        addButtonForTemplate: function (templateValues) {
             var createButton = new Ext.Button({
                 text: ((templateValues['name'] != undefined) &&
                         (templateValues['name'] != '')) ?
@@ -1090,30 +1090,17 @@ Ext.onReady(function(){
                 text: 'Delete',
                 flex: 1,
                 handler: function () {
-                    var row = this.findParentByType('panel');
-
-                    //remove from the cookie
-                    var templatesArray = cookieProvider.decodeValue(
-                            cookieProvider.get('taskTemplate'));
-                    templatesArray.splice(row.indexInsideCookie, 1);
-                    cookieProvider.set('taskTemplate',
-                            cookieProvider.encodeValue(templatesArray));
-
-                    //update indexes of the other templates
-                    var sibling = row.nextSibling();
-                    while(sibling != null) {
-                        sibling.indexInsideCookie -= 1;
-                        sibling = sibling.nextSibling();
-                    }
+                    //remove from the store
+                    store = Ext.StoreMgr.get('templatesStore')
+                    store.remove(store.getById(templateValues['id']));
 
                     //remove from the panel
+                    var row = this.findParentByType('panel');
                     var panel = row.findParentByType('panel');
                     panel.remove(row);
-
                 },
             });
             this.add(new Ext.Panel({
-                indexInsideCookie: indexInsideCookie,
                 layout: 'hbox',
                 items: [createButton, deleteButton],
             }));
@@ -1141,19 +1128,22 @@ Ext.onReady(function(){
             method: 'POST',
             api: {
                 read    : {url: 'services/getUserTemplatesService.php', method: 'GET'},
+                destroy : 'services/deleteTemplatesService.php',
                 create  : 'services/createTemplatesService.php'
             },
         }),
         listeners: {
             'load': function (store, records, options) {
                 store.each(function(r) {
-                    templatesPanel.addButtonForTemplate(r.data, r.data['id']);
+                    templatesPanel.addButtonForTemplate(r.data);
                 });
             },
             'save': function (store, batch, data) {
-                data.create.forEach(function(r) {
-                    templatesPanel.addButtonForTemplate(r, r['id']);
-                });
+                if(data.create !== undefined) {
+                    data.create.forEach(function(r) {
+                        templatesPanel.addButtonForTemplate(r);
+                    });
+                }
             }
         }
     });
