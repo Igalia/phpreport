@@ -19,3 +19,22 @@ create table template (
   customerId                integer,
   task_storyId              integer
 ) ;
+
+--
+-- Foreign key constraints for task templates table.
+--
+-- It has the same relations as the tasks table.
+--
+
+alter table template add constraint does
+  foreign key (usrId)
+  references usr (id)  ;
+alter table template add constraint makeUp
+  foreign key (projectId)
+  references project (id)  ;
+alter table template add constraint finances
+  foreign key (customerId)
+  references customer (id)  ;
+alter table template add constraint includes
+  foreign key (task_storyId)
+  references task_story (id)  ;
