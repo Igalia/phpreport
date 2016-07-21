@@ -1057,6 +1057,7 @@ Ext.onReady(function(){
                     newTask.set('taskStoryId', templateValues[4]);
                     newTask.set('telework', templateValues[5]);
                     newTask.set('onsite', templateValues[6]);
+                    newTask.set('text', templateValues[7]);
                     //add the record to the store
                     myStore.add(newTask);
 
