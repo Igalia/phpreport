@@ -32,9 +32,6 @@ $user = $_SESSION['user'];
 ?>
 
 <script type="text/javascript" src="js/include/ExportableGridPanel.js"></script>
-<script type="text/javascript">
-    var user = "<?php echo $user->getLogin(); ?>";
-</script>
 <script src="js/projectDetails.js"></script>
 
 <div id="content">
