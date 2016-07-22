@@ -29,11 +29,18 @@ require_once(PHPREPORT_ROOT . '/web/auth.php');
 define('PAGE_TITLE', "PhpReport - User tasks report");
 include_once("include/header.php");
 include_once("include/sidebar.php");
+$user = $_SESSION['user'];
 
 //output vars as JS code
 echo "<!-- Global variables extracted from the PHP side -->\n";
 echo "<script type='text/javascript'>\n";
 echo "var userId = '" . $_SESSION['user']->getId() . "';\n";
+echo "var user = '" . $user->getLogin() . "';\n";
+if(LoginManager::isAdmin()) {
+    echo "var admin = true; \n";
+} else {
+    echo "var admin = false; \n";
+}
 echo "</script>\n";
 ?>
 

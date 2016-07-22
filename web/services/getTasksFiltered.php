@@ -185,6 +185,13 @@
             $type = $_GET['type'];
         }
         if (isset($_GET['userId'])) {
+            //Request to check user tasks of other user
+            if($_GET['userId'] != $_SESSION['user']->getId()){
+                if(!LoginManager::isAdmin()){
+                    $string = "<tasks><error id='4'>Forbidden service for this User</error></tasks>";
+                    break;
+                }
+            }
             $userId = $_GET['userId'];
         }
         if (isset($_GET['projectId'])) {
