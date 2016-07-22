@@ -18,6 +18,7 @@
  */
 
 Ext.onReady(function () {
+    var App = new Ext.App({});
 
     /* Schema of the information about customers */
     var customerRecord = new Ext.data.Record.create([
@@ -36,6 +37,43 @@ Ext.onReady(function () {
         {name:'id'},
         {name:'friendlyName'},
     ]);
+
+    //schema of the information about users
+    var userRecord = new Ext.data.Record.create([
+        {name: 'id', type: 'int'},
+        {name: "login", type: 'string'}
+    ]);
+
+    // store to load users
+    var usersStore = new Ext.data.Store({
+        id: 'usersStore',
+        autoLoad: true,  //initial data are loaded in the application init
+        autoSave: false, //if set true, changes will be sent instantly
+        baseParams: {
+        },
+        proxy: new Ext.data.HttpProxy({
+            method: 'GET',
+            api: {
+                read: {url: 'services/getAllUsersService.php'}
+            },
+        }),
+        storeId: 'users',
+        reader:new Ext.data.XmlReader({
+            record: 'user',
+            idProperty:'id'
+        }, userRecord),
+        remoteSort: false,
+        sortInfo: {
+            field: 'login',
+            direction: 'ASC',
+        },
+        listeners: {
+            'load': function () {
+                /* Set the default value of the combobox to the logged in user on load */
+                Ext.getCmp('userLogin').setValue(userId);
+            }
+        },
+    });
 
     /* Store object for the projects */
     var projectsStore = new Ext.data.Store({
@@ -162,6 +200,20 @@ Ext.onReady(function () {
         renderTo: 'content',
         defaults: {width: 230},
         items: [{
+            fieldLabel: 'User',
+            name: 'user',
+            xtype: 'combo',
+            allowBlank: false,
+            autoLoad: true,
+            typeAhead: true,
+            mode: 'local',
+            store: usersStore,
+            valueField: 'id',
+            displayField: 'login',
+            triggerAction: 'all',
+            forceSelection: true,
+            id: 'userLogin'
+        },{
             fieldLabel: 'Dates between',
             name: 'start',
             xtype: 'datefieldplus',
@@ -285,12 +337,21 @@ Ext.onReady(function () {
             handler: findTasks,
         }],
     });
+    /* Allow listing of user tasks of other users only for an admin user */
+    if ( admin == "" ) {
+        Ext.getCmp('userLogin').setDisabled(true);
+    }
 
     /* Handler to invoke the search service */
     function findTasks () {
+                if (Ext.getCmp('userLogin').getRawValue() == ""){
+                    App.setAlert(false, "Check For Invalid Field Values");
+                    return;
+                }
                 var baseParams = {
-                    'userId': userId,
+                    userId: Ext.getCmp('userLogin').getValue()
                 };
+
                 if (Ext.getCmp('startDate').getRawValue() != "") {
                     var date = Ext.getCmp('startDate').getValue();
                     baseParams.filterStartDate = date.getFullYear() + "-"
