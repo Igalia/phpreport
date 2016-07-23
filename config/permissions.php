@@ -130,5 +130,9 @@ $permissions = array(
  * For example: "clients" => array("/xptracker-summary.php")
  */
 $adminPermissions = array(
-  "admin" => array("/userTasksReport.php", "/services/getTasksFiltered.php", "/viewUsers.php"),
+    "admin" => array(
+        //user tasks report
+        "/userTasksReport.php", "/services/getTasksFiltered.php",
+        //users management
+        "/viewUsers.php"),
 );

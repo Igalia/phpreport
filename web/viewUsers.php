@@ -38,7 +38,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
 include_once(PHPREPORT_ROOT . '/model/facade/AdminFacade.php');
 include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 
-$admin = LoginManager::IsAdmin($sid);
+$admin = LoginManager::isAdmin($sid);
 $ldapEnabled = defined('USER_DAO') && (USER_DAO == 'HybridUserDAO');
 
 // We retrieve the User Groups, Areas and Cities

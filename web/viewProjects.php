@@ -37,8 +37,6 @@ include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
 include_once(PHPREPORT_ROOT . '/model/facade/AdminFacade.php');
 include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 
-//$admin = LoginManager::IsAdmin($sid);
-
 // We retrieve the Areas
 $areas = AdminFacade::GetAllAreas();
 
