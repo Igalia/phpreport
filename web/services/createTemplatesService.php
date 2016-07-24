@@ -20,8 +20,8 @@
 
 define('PHPREPORT_ROOT', __DIR__ . '/../../');
 include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
-include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
-include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
+include_once(PHPREPORT_ROOT . '/model/facade/TemplatesFacade.php');
+include_once(PHPREPORT_ROOT . '/model/vo/TemplateVO.php');
 
 $parser = new XMLReader();
 
@@ -61,13 +61,15 @@ do {
         break;
     }
 
+    $createTemplates = array();
+
     do {
         if ($parser->name == "template") {
+            $templatesVO = new TemplateVO();
 
-            $template = array();
-            $template["telework"] = false;
-            $template["onsite"] = false;
-            $template["userId"] = $user->getId();
+            $templatesVO->setTelework(false);
+            $templatesVO->setOnsite(false);
+            $templatesVO->setUserId($user->getId());
 
             $parser->read();
 
@@ -78,7 +80,7 @@ do {
                         $parser->read();
                         if ($parser->hasValue)
                         {
-                            $template["story"] = unescape_string($parser->value);
+                            $templatesVO->setStory(unescape_string($parser->value));
                             $parser->next();
                             $parser->next();
                         }
@@ -89,7 +91,7 @@ do {
                         if ($parser->hasValue)
                         {
                             if (strtolower($parser->value) == "true")
-                                $template["telework"] = true;
+                                $templatesVO->setTelework(true);
                             $parser->next();
                             $parser->next();
                         }
@@ -100,7 +102,7 @@ do {
                         if ($parser->hasValue)
                         {
                             if (strtolower($parser->value) == "true")
-                                $template["onsite"] = true;
+                                $templatesVO->setOnsite(true);
                             $parser->next();
                             $parser->next();
                         }
@@ -110,7 +112,7 @@ do {
                         $parser->read();
                         if ($parser->hasValue)
                         {
-                            $template["ttype"] = unescape_string($parser->value);
+                            $templatesVO->setTtype(unescape_string($parser->value));
                             $parser->next();
                             $parser->next();
                         }
@@ -120,7 +122,7 @@ do {
                         $parser->read();
                         if ($parser->hasValue)
                         {
-                            $template["text"] = unescape_string($parser->value);
+                            $templatesVO->setText(unescape_string($parser->value));
                             $parser->next();
                             $parser->next();
                         }
@@ -130,7 +132,7 @@ do {
                         $parser->read();
                         if ($parser->hasValue)
                         {
-                            $template["name"] = unescape_string($parser->value);
+                            $templatesVO->setName(substr(unescape_string($parser->value), 0, 75));
                             $parser->next();
                             $parser->next();
                         }
@@ -140,7 +142,7 @@ do {
                         $parser->read();
                         if ($parser->hasValue)
                         {
-                            $template["taskStoryId"] = $parser->value;
+                            $templatesVO->setTaskStoryId($parser->value);
                             $parser->next();
                             $parser->next();
                         }
@@ -150,7 +152,7 @@ do {
                         $parser->read();
                         if ($parser->hasValue)
                         {
-                            $template["projectId"] = $parser->value;
+                            $templatesVO->setProjectId($parser->value);
                             $parser->next();
                             $parser->next();
                         }
@@ -160,7 +162,7 @@ do {
                         $parser->read();
                         if ($parser->hasValue)
                         {
-                            $template["customerId"] = $parser->value;
+                            $templatesVO->setCustomerId($parser->value);
                             $parser->next();
                             $parser->next();
                         }
@@ -171,55 +173,20 @@ do {
                         break;
                 }
             }
-            $createTemplates[] = $template;
+            $createTemplates[] = $templatesVO;
         }
     } while ($parser->read());
 
     if (count($createTemplates) >= 1) {
-        $parameters[] = ConfigurationParametersManager::getParameter('DB_HOST');
-        $parameters[] = ConfigurationParametersManager::getParameter('DB_PORT');
-        $parameters[] = ConfigurationParametersManager::getParameter('DB_USER');
-        $parameters[] = ConfigurationParametersManager::getParameter('DB_NAME');
-        $parameters[] = ConfigurationParametersManager::getParameter('DB_PASSWORD');
+        $string = "";
+        if (TemplatesFacade::CreateTemplates($createTemplates) == -1)
+            $string = "<return service='createTemplates'><success>false</success><error id='1'>There was some error while creating the tasks</error></return>";
 
-        $connectionString = "host=$parameters[0] port=$parameters[1] user=$parameters[2] dbname=$parameters[3] password=$parameters[4]";
-        $connect = pg_connect($connectionString);
-        pg_set_error_verbosity($connect, PGSQL_ERRORS_VERBOSE);
-
-        foreach ($createTemplates as $key => $template) {
-            $sql = "INSERT INTO template (name, story, telework, onsite, text, ttype, usrid, projectid, customerid, task_storyid) VALUES(" .
-                DBPostgres::checkStringNull($template["name"]) . ", " .
-                DBPostgres::checkStringNull($template["story"]) . ", " .
-                DBPostgres::boolToString($template["telework"]) . ", " .
-                DBPostgres::boolToString($template["onsite"]) . ", " .
-                DBPostgres::checkStringNull($template["text"]) . ", " .
-                DBPostgres::checkStringNull($template["ttype"]) . ", " .
-                DBPostgres::checkNull($template["userId"]) . ", " .
-                DBPostgres::checkNull($template["projectId"]) . ", " .
-                DBPostgres::checkNull($template["customerId"]). ", " .
-                DBPostgres::checkNull($template["taskStoryId"]) .")";
-
-            $res = pg_query($connect, $sql);
-            if ($res == NULL)
-                $string = "<return service='createTemplates'><success>false</success><error id='1'>There was some error while creating the tasks</error></return>";
-
-            $createTemplates[$key]["id"] = DBPostgres::getId($connect, "template_id_seq");
-        }
         if (!$string)
         {
             $string = "<return service='createTemplates'><success>true</success><ok>Operation Success!</ok><templates>";
             foreach ($createTemplates as $template) {
-                $string .= "<template><id>{$template['id']}</id>";
-                $string .= "<name>{$template["name"]}</name>";
-                $string .= "<story>{$template["story"]}</story>";
-                $string .= "<telework>{$template["telework"]}</telework>";
-                $string .= "<onsite>{$template["onsite"]}</onsite>";
-                $string .= "<text>{$template["text"]}</text>";
-                $string .= "<ttype>{$template["ttype"]}</ttype>";
-                $string .= "<userId>{$template["userId"]}</userId>";
-                $string .= "<projectId>{$template["projectId"]}</projectId>";
-                $string .= "<customerId>{$template["customerId"]}</customerId>";
-                $string .= "<taskStoryId>{$template["taskStoryId"]}</taskStoryId></template>";
+                $string .= $template->toXml();
             }
             $string .= "</templates></return>";
             error_log($string);

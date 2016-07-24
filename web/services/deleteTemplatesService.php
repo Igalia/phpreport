@@ -20,8 +20,8 @@
 
 define('PHPREPORT_ROOT', __DIR__ . '/../../');
 include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
-include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
-include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
+include_once(PHPREPORT_ROOT . '/model/facade/TemplatesFacade.php');
+include_once(PHPREPORT_ROOT . '/model/vo/TemplateVO.php');
 
 $parser = new XMLReader();
 
@@ -61,10 +61,12 @@ do {
         break;
     }
 
+    $deleteTemplates = array();
+
     do {
         if ($parser->name == "template") {
 
-            $template = array();
+            $templatesVO = new TemplateVO();
 
             $parser->read();
 
@@ -76,7 +78,7 @@ do {
                         $parser->read();
                         if ($parser->hasValue)
                         {
-                            $template["id"] = $parser->value;
+                            $templatesVO->setId($parser->value);
                             $parser->next();
                             $parser->next();
                         }
@@ -88,34 +90,18 @@ do {
                 }
             }
 
-            $templates['userId'] = $user->getId();
+            $templatesVO->setUserId($user->getId());
 
-            $deleteTemplates[] = $template;
+            $deleteTemplates[] = $templatesVO;
 
         }
 
     } while ($parser->read());
 
     if (count($deleteTemplates) >= 1) {
-        $parameters[] = ConfigurationParametersManager::getParameter('DB_HOST');
-        $parameters[] = ConfigurationParametersManager::getParameter('DB_PORT');
-        $parameters[] = ConfigurationParametersManager::getParameter('DB_USER');
-        $parameters[] = ConfigurationParametersManager::getParameter('DB_NAME');
-        $parameters[] = ConfigurationParametersManager::getParameter('DB_PASSWORD');
+        if (TemplatesFacade::DeleteTemplates($deleteTemplates) == -1)
+            $string = "<return service='deleteTemplates'><success>false</success><error id='1'>There was some error while deleting the tasks</error></return>";
 
-        $connectionString = "host=$parameters[0] port=$parameters[1] user=$parameters[2] dbname=$parameters[3] password=$parameters[4]";
-        $connect = pg_connect($connectionString);
-        pg_set_error_verbosity($connect, PGSQL_ERRORS_VERBOSE);
-
-        foreach ($deleteTemplates as $template) {
-            // FIXME: may delete templates belonging to other users
-            $sql = "DELETE FROM template where ID=" .
-                DBPostgres::checkNull($template["id"]);
-
-            $res = pg_query($connect, $sql);
-            if ($res == NULL)
-                $string = "<return service='deleteTemplates'><success>false</success><error id='1'>There was some error while creating the tasks</error></return>";
-        }
         if (!$string)
         {
             $string = "<return service='deleteTemplates'><success>true</success><ok>Operation Success!</ok><templates></templates></return>";

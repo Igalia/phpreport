@@ -20,8 +20,8 @@
 
 define('PHPREPORT_ROOT', __DIR__ . '/../../');
 include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
-include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
-include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
+include_once(PHPREPORT_ROOT . '/model/facade/TemplatesFacade.php');
+include_once(PHPREPORT_ROOT . '/model/vo/TemplateVO.php');
 
 $sid = $_GET['sid'];
 
@@ -43,47 +43,36 @@ do {
         break;
     }
 
-    $parameters[] = ConfigurationParametersManager::getParameter('DB_HOST');
-    $parameters[] = ConfigurationParametersManager::getParameter('DB_PORT');
-    $parameters[] = ConfigurationParametersManager::getParameter('DB_USER');
-    $parameters[] = ConfigurationParametersManager::getParameter('DB_NAME');
-    $parameters[] = ConfigurationParametersManager::getParameter('DB_PASSWORD');
-
-    $connectionString = "host=$parameters[0] port=$parameters[1] user=$parameters[2] dbname=$parameters[3] password=$parameters[4]";
-    $connect = pg_connect($connectionString);
-    pg_set_error_verbosity($connect, PGSQL_ERRORS_VERBOSE);
-
-    $sql = "select * from template where usrid={$user->getId()}";
-    $res = pg_query($connect, $sql);
+    $templates = TemplatesFacade::GetUserTemplates($user->getId());
 
     $string = "<templates login='" . $user->getLogin() . "'>";
 
-    if(pg_num_rows($res) > 0) {
-        for($i = 0; $i < pg_num_rows($res); $i++) {
-
-            $row = @pg_fetch_array($res);
-            $string .= "<template><id>{$row['id']}</id>";
-            $string .= "<story>" . escape_string($row['story']) . "</story>";
-            $string .= "<ttype>" . escape_string($row['ttype']) . "</ttype>";
-            $string .= "<name>" . escape_string($row['name']) . "</name>";
-            $string .= "<text>" . escape_string($row['text']) . "</text>";
-            $string .= "<userId>{$user->getId()}</userId>";
-            $string .= "<projectId>{$row['projectid']}</projectId>";
-            $string .= "<customerId>{$row['customerid']}</customerId>";
-            $string .= "<taskStoryId>{$row['task_storyid']}</taskStoryId>";
+    if(count($templates) > 0) {
+        foreach ($templates as $templateVO) {
+            $string .= "<template><id>{$templateVO->getId()}</id>";
+            $string .= "<story>" . escape_string( $templateVO->getStory() ) . "</story>";
+            $string .= "<ttype>" . escape_string( $templateVO->getTtype() ) . "</ttype>";
+            $string .= "<name>" . escape_string( $templateVO->getName() ) . "</name>";
+            $string .= "<text>" . escape_string( $templateVO->getText() ) . "</text>";
+            $string .= "<userId>{$templateVO->getUserId()}</userId>";
+            $string .= "<projectId>{$templateVO->getProjectId()}</projectId>";
+            $string .= "<customerId>{$templateVO->getCustomerId()}</customerId>";
+            $string .= "<taskStoryId>{$templateVO->getTaskStoryId()}</taskStoryId>";
 
             $string .= "<telework>";
-            if (strtolower($row['telework']) == "t")
+            if ( strtolower( $templateVO->isTelework() ) == 1 ) {
                 $string .= "true";
-            else
+            } else {
                 $string .= "false";
+            }
             $string .= "</telework>";
 
             $string .= "<onsite>";
-            if (strtolower($row['onsite']) == "t")
+            if ( strtolower( $templateVO->isOnsite() ) == 1 ) {
                 $string .= "true";
-            else
+            } else {
                 $string .= "false";
+            }
             $string .= "</onsite></template>";
         }
     }

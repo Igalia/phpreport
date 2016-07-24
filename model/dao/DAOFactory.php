@@ -424,6 +424,26 @@ class DAOFactory {
     return new $className;
   }
 
+  /** Template DAO creator
+   *
+   * This function returns a new instance of {@link TemplateDAO}.
+   *
+   * @return TemplateDAO a new instance of {@link TemplateDAO}.
+   * @throws {@link UnknownParameterException}
+   */
+  public static function getTemplateDAO() {
+    try {
+      $className = ConfigurationParametersManager::getParameter('TEMPLATE_DAO');
+    }
+    catch(UnknownParameterException $e) {
+      $backend = ConfigurationParametersManager::getParameter('DAO_BACKEND');
+      $className = $backend . 'TemplateDAO';
+    }
+
+    include_once(PHPREPORT_ROOT . '/model/dao/TemplateDAO/' . $className . ".php");
+    return new $className;
+  }
+
     /** Works DAO creator
      *
      * This function returns a new instance of {@link WorksDAO}.
