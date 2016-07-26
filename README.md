@@ -27,11 +27,13 @@ to install it or to upgrade from an earlier release.
 ## Documentation
 
 There is documentation for users and system administrators, it comes packaged
-with every release. The latest version can always be checked straight from the
-repository:
+with every release. Additionally, there is documentation intended for developers
+in the project repository, together with the latest version of user and admin
+documents:
 
 * [User manual](docs/user/index.rst)
 * [Administrator manual](docs/admin/index.rst)
+* [Developer documentation](docs/developer/index.rst)
 
 ## More information 
 
