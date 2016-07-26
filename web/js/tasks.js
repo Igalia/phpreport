@@ -587,23 +587,29 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 handler: function() {
                     var task = this.parent.taskRecord;
 
-                    //create a new template record
-                    var newTemplate = new templateRecord();
-                    newTemplate.set('name', task.get('text'));
-                    newTemplate.set('customerId', task.get('customerId'));
-                    newTemplate.set('projectId', task.get('projectId'));
-                    newTemplate.set('ttype', task.get('ttype'));
-                    newTemplate.set('story', task.get('story'));
-                    newTemplate.set('taskStoryId', task.get('taskStoryId'));
-                    newTemplate.set('telework', task.get('telework'));
-                    newTemplate.set('onsite', task.get('onsite'));
+                    Ext.Msg.prompt('Template', 'Please enter template name:', function (btn, text, cfg) {
+                        if (btn == 'ok' && Ext.isEmpty(text)) {
+                            var newMsg = '<span style="color:red">Please enter template name:</span>';
+                            Ext.Msg.show(Ext.apply({}, {msg: newMsg}, cfg));
+                        }
 
-                    //add the record to the store, it will trigger a save operation
-                    Ext.StoreMgr.get('templatesStore').add(newTemplate);
+                        if(text) {
+                            var newTemplate = new templateRecord();
+                            newTemplate.set('name',text);
+                            newTemplate.set('customerId', task.get('customerId'));
+                            newTemplate.set('projectId', task.get('projectId'));
+                            newTemplate.set('ttype', task.get('ttype'));
+                            newTemplate.set('story', task.get('story'));
+                            newTemplate.set('taskStoryId', task.get('taskStoryId'));
+                            newTemplate.set('telework', task.get('telework'));
+                            newTemplate.set('onsite', task.get('onsite'));
+                            //add the record to the store, it will trigger a save operation
+                            Ext.StoreMgr.get('templatesStore').add(newTemplate);
+                        }
+                    });
                 }
             }),
         });
-
         /* Set the value of the checkboxes correctly */
         this.teleworkCheckBox.setValue((this.taskRecord.data['telework']=='true'));
         this.onsiteCheckBox.setValue((this.taskRecord.data['onsite']=='true'));
