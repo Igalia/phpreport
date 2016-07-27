@@ -596,6 +596,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         if(text) {
                             var newTemplate = new templateRecord();
                             newTemplate.set('name',text);
+                            newTemplate.set('text',task.get('text'));
                             newTemplate.set('customerId', task.get('customerId'));
                             newTemplate.set('projectId', task.get('projectId'));
                             newTemplate.set('ttype', task.get('ttype'));
@@ -1065,6 +1066,7 @@ Ext.onReady(function(){
                     newTask.set('ttype', templateValues['ttype']);
                     newTask.set('story', templateValues['story']);
                     newTask.set('taskStoryId', templateValues['taskStoryId']);
+                    newTask.set('text', templateValues['text']);
                     // For a fresh template, the templateValue of bool fields return '1'
                     if( templateValues['telework'] == '1' || templateValues['telework'] == 'true' ) {
                         newTask.set('telework', 'true');
