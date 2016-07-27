@@ -13,8 +13,10 @@ help:
 	#create dirs
 	mkdir -p help/user
 	mkdir -p help/admin
+	mkdir -p help/developer
 	#copy images
-	cp -r docs/user/i help/user; \
+	cp -r docs/user/i help/user
+	cp -r docs/developer/i help/developer
 	#generate footer \
 	echo -e '\n.. class:: credits\n\n  This file is part of PhpReport $(VERSION) documentation.' > footer; \
 	echo -ne '  Generated on ' >> footer; \
@@ -22,7 +24,7 @@ help:
 	#parse rst
 	for i in `find -name *.rst` ; do \
 	  #rename .rst for .html in links to other doc pages \
-	  sed 's/.rst/.html/g' $$i > tmp; \
+	  sed 's/\.rst/\.html/g' $$i > tmp; \
 	  #append footer \
 	  cat footer >> tmp; \
 	  #extract file name to be used as the output file name \
