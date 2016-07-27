@@ -90,10 +90,10 @@ Creating a new task from a template is as easy as clicking in the button with
 the name of the template.
 
 To add new templates to this list, first you have to create a task; fill it in
-with your data, and write a name for the template in the description area. You
-don't have to fill the start and end times in because they won't be saved in the
-template. Once it's ready, press the *Template* button in the panel of the task,
-and it will be added to the list.
+with your data, put in *optional* description in the Task description box, and
+click on the *template* button. You will be asked to provide a **name** for the template,
+which will add up immediately in your templates deck on the left side.You don't
+have to fill the start and end times in because they won't be saved in the template.
 
 To delete a template, you only have to press the *Delete* button right to the
 button with template name in the list.
