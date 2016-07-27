@@ -1059,13 +1059,19 @@ Ext.onReady(function(){
                     } else {
                         window.setTimeout(createButton.handler, 100);
                     }
+
                     newTask.set('customerId', templateValues['customerId']);
                     newTask.set('projectId', templateValues['projectId']);
                     newTask.set('ttype', templateValues['ttype']);
                     newTask.set('story', templateValues['story']);
                     newTask.set('taskStoryId', templateValues['taskStoryId']);
-                    newTask.set('telework', templateValues['telework']);
-                    newTask.set('onsite', templateValues['onsite']);
+                    // For a fresh template, the templateValue of bool fields return '1'
+                    if( templateValues['telework'] == '1' || templateValues['telework'] == 'true' ) {
+                        newTask.set('telework', 'true');
+                    }
+                    if( templateValues['onsite'] == '1' || templateValues['onsite'] == 'true' ) {
+                        newTask.set('onsite', 'true');
+                    }
                     //add the record to the store
                     myStore.add(newTask);
 
