@@ -32,7 +32,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/CreateTemplateAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteTemplateAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserTemplatesAction.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
-include_once(PHPREPORT_ROOT . '/model/vo/TemplatesVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/TemplateVO.php');
 
 /** Templates Facade
  *
