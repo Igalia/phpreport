@@ -72,6 +72,10 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/GetIterationProjectAreaToday
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetStoryIterationProjectAreaTodayUsersAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetModuleProjectAreaTodayUsersAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetSectionModuleProjectAreaTodayUsersAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/CreateUserGoalAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserGoalsAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateUserGoalAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteUserGoalAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/LoginAction.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/CustomEventVO.php');
@@ -82,6 +86,7 @@ include_once(PHPREPORT_ROOT . '/model/vo/AreaHistoryVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/JourneyHistoryVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/CityHistoryVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/HourCostHistoryVO.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserGoalVO.php');
 
 /** Users Facade
  *
@@ -822,6 +827,45 @@ abstract class UsersFacade {
 
     return $action->execute();
 
+    }
+
+    /**
+     * @param UserGoalVO $userGoal
+     * @return mixed
+     * @throws null
+     */
+    static function CreateUserGoal(UserGoalVO $userGoal) {
+        $action = new CreateUserGoalAction($userGoal);
+        return $action->execute();
+    }
+
+    /**
+     * @param $userLogin
+     * @return mixed
+     * @throws null
+     */
+    static function GetUserGoals($userLogin) {
+        $action = new GetUserGoalsAction($userLogin);
+        return $action->execute();
+    }
+
+    /**
+     * @param UserGoalVO $userGoal
+     * @return mixed
+     * @throws null
+     */
+    static function UpdateUserGoal(UserGoalVO $userGoal) {
+        $action = new UpdateUserGoalAction($userGoal);
+        return $action->execute();
+    }
+
+    /**
+     * @param UserGoalVO $userGoal
+     * @return mixed
+     */
+    static function DeleteUserGoal(UserGoalVO $userGoal) {
+        $action = new DeleteUserGoalAction($userGoal);
+        return $action->execute();
     }
 
 
