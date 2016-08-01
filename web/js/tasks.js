@@ -804,6 +804,7 @@ Ext.onReady(function(){
             },
             'save': function () {
                 if (!myStore.error) {
+                    Ext.getCmp('status_display').setText("Status: saved at "+ new Date());
                     App.setAlert(true, "Task Records Changes Saved");
                     summaryStore.load();
                     unsavedChanges = false;
@@ -816,9 +817,11 @@ Ext.onReady(function(){
             },
             'update': function () {
                 unsavedChanges = true;
+                Ext.getCmp('status_display').setText("Status: Pending changes");
             },
             'remove': function () {
                 unsavedChanges = true;
+                Ext.getCmp('status_display').setText("Status: Pending changes requiring manual save");
             }
         }
     });
@@ -885,33 +888,52 @@ Ext.onReady(function(){
         var content = document.getElementById('content');
         if( HEADER_HEIGHT + content.scrollHeight > window.innerHeight)
             window.scrollTo(0, taskPanel.getEl().getY());
+        // For a fresh task, we need to keep the status as draft, as we havent saved it yet!
+        Ext.getCmp('status_display').setText("Status: Draft");
+    }
+
+    // Validate the inputs in the task panel
+    function validateTasks() {
+        var panels = tasksScrollArea.items;
+        for(var panel=0; panel<panels.getCount(); panel++) {
+            if (!panels.get(panel).initTimeField.isValid() || !panels.get(panel).endTimeField.isValid()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Add the new task to the taskstore
+    function addToMyStore() {
+        myStore.each(function(r) {
+            if (r.data['story'] != undefined)
+                r.data['story'] = xmlencode(r.data['story']);
+            if (r.data['text'] != undefined)
+                r.data['text'] = xmlencode(r.data['text']);
+        });
+        if (myStore.save()) {
+            return true;
+        }
+        return false;
     }
 
     /* Add a callback to save tasks */
     function saveTasks() {
-
-        // First we check if the time fields of all records are valid
-        var panels = tasksScrollArea.items;
-        var valids = true;
-        for(var panel=0; panel<panels.getCount(); panel++) {
-            if (!panels.get(panel).initTimeField.isValid() || !panels.get(panel).endTimeField.isValid()) {
-                valids = false;
-                break;
-            }
-        }
-
-        // If they are so, then we save the changes
-        if (valids) {
-            myStore.each(function(r) {
-                if (r.data['story'] != undefined)
-                    r.data['story'] = xmlencode(r.data['story']);
-                if (r.data['text'] != undefined)
-                    r.data['text'] = xmlencode(r.data['text']);
-            });
-            myStore.save();
+        // First we check if the time fields of all records are valid, and then save
+        if (validateTasks()) {
+            addToMyStore();
         } else  // Otherwise, we print the error message
           App.setAlert(false, "Check For Invalid Field Values");
     }
+
+    // Implement autosave of data, when valid contents are typed in to the task fields
+    window.setInterval(function () {
+        if(isUnsaved()) {
+            if(validateTasks()) {
+                addToMyStore();
+            }
+        }
+    }, 10000);
 
     /* Build a calendar on the auxiliar sidebar */
     new Ext.Panel({
@@ -1063,6 +1085,8 @@ Ext.onReady(function(){
                     } else {
                         window.setTimeout(createButton.handler, 100);
                     }
+                    // When you create a new task, lets keep the status as draft, as its not saved yet.
+                    Ext.getCmp('status_display').setText("Status: Draft");
 
                     newTask.set('customerId', templateValues['customerId']);
                     newTask.set('projectId', templateValues['projectId']);
@@ -1213,7 +1237,12 @@ Ext.onReady(function(){
                 text:'Save changes',
                 handler: saveTasks,
                 disabled: forbidden,
-            }),
+            }), '-',
+            {
+                xtype: 'tbtext',
+                id: 'status_display',
+                text: 'Status: No changes detected'
+            }
         ],
     });
 
