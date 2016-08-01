@@ -1255,4 +1255,19 @@ Ext.onReady(function(){
 
     summaryStore.load();
 
+    // Wait for the page to load, and check if the day is empty to add in a new
+    // empty task
+    function addEmptyTask() {
+        if (isLoaded()) {
+            if(tasksScrollArea.items.getCount() == 0) {
+                newTask();
+            }
+        } else {
+            window.setTimeout(addEmptyTask, 100);
+        }
+    }
+
+    // Adds in a new empty task when an empty day is clicked
+    addEmptyTask();
+
 });
