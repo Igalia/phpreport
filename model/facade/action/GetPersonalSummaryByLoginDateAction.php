@@ -30,6 +30,7 @@
  */
 
 include_once(PHPREPORT_ROOT . '/model/facade/action/Action.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/ExtraHoursReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
@@ -76,6 +77,41 @@ class GetPersonalSummaryByLoginDateAction extends Action{
 
     }
 
+    /**
+     * @return mixed
+     * @throws null
+     */
+    private function getWorkableHoursInThisYear() {
+        $firstDayOfYear = date_create($this->date->format('Y-1-01'));
+        $lastDayOfYear = date_create($this->date->format('Y-12-31'));
+        //Now need to find out the workable hours in this year
+        $extraHoursAction = new ExtraHoursReportAction($firstDayOfYear, $lastDayOfYear, $this->userVO);
+        $results = $extraHoursAction->execute();
+        return $results[1][$this->userVO->getLogin()]['workable_hours'];
+
+    }
+
+    /**
+     * @return mixed
+     * @throws null
+     */
+    private function getWorkedHoursInThisYear() {
+        $firstDayOfYear = date_create($this->date->format('Y-1-01'));
+
+        // We need to get the number of hours worked till date
+        $extraHoursAction = new ExtraHoursReportAction($firstDayOfYear, $this->date, $this->userVO);
+        $results = $extraHoursAction->execute();
+        return $results[1][$this->userVO->getLogin()]['total_hours'];
+    }
+
+    /**
+     * @return float
+     */
+    private function getWeeksTillEndOfYear() {
+        $lastDayOfYear = date_create($this->date->format('Y-12-31'));
+        $interval = $this->date->diff( $lastDayOfYear );
+        return floor($interval->days/7);
+    }
     /** Specific code execute.
      *
      * This is the function that contains the code that obtains the summary.
@@ -100,18 +136,14 @@ class GetPersonalSummaryByLoginDateAction extends Action{
 
         }
 
-        return $dao->getPersonalSummary($user->getId(), $this->date);
+        $numberOfHoursLeftToBeWorked = $this->getWorkableHoursInThisYear() - $this->getWorkedHoursInThisYear();
+        $numberOfWeeksLeftTillEndOfYear = $this->getWeeksTillEndOfYear() + 1;
+
+        $totalResults = $dao->getPersonalSummary($user->getId(), $this->date);
+        $totalResults['weekly_goal'] = floor( ( $numberOfHoursLeftToBeWorked/ $numberOfWeeksLeftTillEndOfYear) * 60 );
+
+        return $totalResults;
 
     }
 
 }
-
-/*//Test code
-
-$user = new UserVO();
-$user->setLogin('jaragunde');
-$action = new GetPersonalSummaryByUserIdDateAction($user, date_create('2009-12-01'));
-//var_dump($action);
-$result = $action->execute();
-var_dump($result);
-*/

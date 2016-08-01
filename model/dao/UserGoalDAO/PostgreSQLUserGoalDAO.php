@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2016 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -19,14 +19,13 @@
  */
 
 
-/** File for PostgreSQLCityHistoryDAO
+/** File for PostgreSQLUserGoalDAO
  *
- *  This file just contains {@link PostgreSQLCityHistoryDAO}.
+ *  This file just contains {@link PostgreSQLUserGoalDAO}.
  *
  * @filesource
  * @package PhpReport
  * @subpackage DAO
- * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
 include_once(PHPREPORT_ROOT . '/util/SQLIncorrectTypeException.php');
@@ -34,32 +33,32 @@ include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserGoalVO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/UserGoalDAO/UserGoalDAO.php');
 
-/** DAO for City Histories in PostgreSQL
+/** DAO for User Goal in PostgreSQL
  *
- *  This is the implementation for PostgreSQL of {@link CityHistoryDAO}.
+ *  This is the implementation for PostgreSQL of {@link UserGoalDAO}.
  *
- * @see CityHistoryDAO, CityHistoryVO
+ * @see UserGoalDAO, UserGoalVO
  */
 class PostgreSQLUserGoalDAO extends UserGoalDAO{
 
-    /** City History DAO for PostgreSQL constructor.
+    /** User Goal DAO for PostgreSQL constructor.
      *
-     * This is the constructor of the implementation for PostgreSQL of {@link CityHistoryDAO}, and it just calls its parent's constructor.
+     * This is the constructor of the implementation for PostgreSQL of {@link UserGoalDAO}, and it just calls its parent's constructor.
      *
      * @throws {@link DBConnectionErrorException}
-     * @see CityHistoryDAO::__construct()
+     * @see UserGoalDAO::__construct()
      */
     function __construct() {
         parent::__construct();
     }
 
-    /** City History value object constructor for PostgreSQL.
+    /** User Goal value object constructor for PostgreSQL.
      *
-     * This function creates a new {@link CityHistoryVO} with data retrieved from database.
+     * This function creates a new {@link UserGoalVO} with data retrieved from database.
      *
-     * @param array $row an array with the City History values from a row.
-     * @return CityHistoryVO a {@link CityHistoryVO} with its properties set to the values from <var>$row</var>.
-     * @see CityHistoryVO
+     * @param array $row an array with the User Goals values from a row.
+     * @return UserGoalVO a {@link UserGoalVO} with its properties set to the values from <var>$row</var>.
+     * @see UserGoalVO
      */
     protected function setValues($row) {
         $userGoalVO = new UserGoalVO();
@@ -99,11 +98,11 @@ class PostgreSQLUserGoalDAO extends UserGoalDAO{
 
     /** User Goal retriever by User id for PostgreSQL.
      *
-     * This function retrieves the rows from City History table that are associated with the User with
-     * the id <var>$userId</var> and creates a {@link CityHistoryVO} with data from each row.
+     * This function retrieves the rows from user_goals table that are associated with the User with
+     * the id <var>$userId</var> and creates a {@link UserGoalVO} with data from each row.
      *
-     * @param int $userId the id of the User whose City History we want to retrieve.
-     * @return array an array with value objects {@link CityHistoryVO} with their properties set to the values from the rows
+     * @param int $userId the id of the User whose goals we want to retrieve.
+     * @return array an array with value objects {@link UserGoalVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      * @throws {@link SQLQueryErrorException}
      */
@@ -117,7 +116,7 @@ class PostgreSQLUserGoalDAO extends UserGoalDAO{
 
     /** User Goal updater for PostgreSQL.
      *
-     * This function updates the data of a City History by its {@link UserGoalVO}.
+     * This function updates the data of a User Goal by its {@link UserGoalVO}.
      *
      * @param UserGoalVO $userGoalVO the {@link UserGoalVO} with the data we want to update on database.
      * @return int the number of rows that have been affected (it should be 1).
@@ -150,7 +149,7 @@ class PostgreSQLUserGoalDAO extends UserGoalDAO{
 
     /** User Goal creator for PostgreSQL.
      *
-     * This function creates a new row for a City History by its {@link UserGoalVO}. The internal id of <var>$cityHistoryVO</var> will be set after its creation.
+     * This function creates a new row for a User Goal by its {@link UserGoalVO}. The internal id of <var>$userGoalVO</var> will be set after its creation.
      *
      * @param UserGoalVO $userGoalVO the {@link UserGoalVO} with the data we want to insert on database.
      * @return int the number of rows that have been affected (it should be 1).
@@ -177,7 +176,7 @@ class PostgreSQLUserGoalDAO extends UserGoalDAO{
 
     /** User Goal deleter for PostgreSQL.
      *
-     * This function deletes the data of a City History by its {@link UserGoalVO}.
+     * This function deletes the data of a User Goal by its {@link UserGoalVO}.
      *
      * @param UserGoalVO $userGoalVO the {@link UserGoalVO} with the data we want to delete from database.
      * @return int the number of rows that have been affected (it should be 1).

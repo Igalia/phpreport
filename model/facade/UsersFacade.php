@@ -76,6 +76,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/CreateUserGoalAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserGoalsAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateUserGoalAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteUserGoalAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetWeeklyGoalSummaryAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/LoginAction.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/CustomEventVO.php');
@@ -865,6 +866,11 @@ abstract class UsersFacade {
      */
     static function DeleteUserGoal(UserGoalVO $userGoal) {
         $action = new DeleteUserGoalAction($userGoal);
+        return $action->execute();
+    }
+
+    static function GetWeeklyGoalSummary(UserVO $userVO, DateTime $date) {
+        $action = new GetWeeklyGoalSummaryAction($userVO, $date);
         return $action->execute();
     }
 

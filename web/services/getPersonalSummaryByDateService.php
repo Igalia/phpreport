@@ -90,7 +90,13 @@
             $monthMinutes = "0" . $monthMinutes;
         $month = $monthHours . ":" . $monthMinutes;
 
-        $string = "<personalSummary login='" . $userVO->getLogin() . "' date='" . $date->format($dateFormat) . "'><hours><day>" . $day  . "</day><week>" . $week  . "</week><month>" . $month  . "</month></hours></personalSummary>";
+        $weeklyGoalHours = floor($summary['weekly_goal']/60);
+        $weeklyGoalMinutes = $summary['weekly_goal']-($weeklyGoalHours*60);
+        if ($weeklyGoalMinutes < 10)
+            $weeklyGoalMinutes = "0" . $weeklyGoalMinutes;
+        $weekGoal = $weeklyGoalHours. ":" . $weeklyGoalMinutes;
+
+        $string = "<personalSummary login='" . $userVO->getLogin() . "' date='" . $date->format($dateFormat) . "'><hours><day>" . $day  . "</day><week>" . $week  . "</week><month>" . $month  . "</month><weekly_goal>" . $weekGoal . "</weekly_goal></hours></personalSummary>";
 
     } while(false);
 

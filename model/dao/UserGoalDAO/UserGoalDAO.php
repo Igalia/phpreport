@@ -21,7 +21,7 @@
 
 /** File for UserGoalDAO
  *
- *  This file just contains {@link CityHistoryDAO}.
+ *  This file just contains {@link UserGoalDAO}.
  *
  * @filesource
  * @package PhpReport
@@ -33,15 +33,15 @@ include_once(PHPREPORT_ROOT . '/model/dao/BaseDAO.php');
 
 /** DAO for UserGoal
  *
- *  This is the base class for all types of City History DAOs responsible for working with data from City History table, providing a common interface.
+ *  This is the base class for all types of User Goal DAOs responsible for working with data from user goals table, providing a common interface.
  *
- * @see DAOFactory::getCityHistoryDAO(), CityHistoryVO
+ * @see DAOFactory::getUserGoalDAO(), UserGoalVO
  */
 abstract class UserGoalDAO extends BaseDAO{
 
-    /** City History DAO constructor.
+    /** User Goal DAO constructor.
      *
-     * This is the base constructor of City History DAOs, and it just calls its parent's constructor.
+     * This is the base constructor of User Goals DAOs, and it just calls its parent's constructor.
      *
      * @throws {@link ConnectionErrorException}
      * @see BaseDAO::__construct()
@@ -50,22 +50,22 @@ abstract class UserGoalDAO extends BaseDAO{
         parent::__construct();
     }
 
-    /** City History retriever by id.
+    /** User Goals retriever by id.
      *
-     * This function retrieves the row from City History table with the id <var>$cityHistoryId</var> and creates a {@link CityHistoryVO} with its data.
+     * This function retrieves the row from User Goals table with the id <var>$userGoalId</var> and creates a {@link UserGoalVO} with its data.
      *
-     * @param int $cityHistoryId the id of the row we want to retrieve.
-     * @return CityHistoryVO a value object {@link CityHistoryVO} with its properties set to the values from the row.
+     * @param int $userGoalId the id of the row we want to retrieve.
+     * @return UserGoalVO a value object {@link UserGoalVO} with its properties set to the values from the row.
      * @throws {@link OperationErrorException}
      */
     public abstract function getById($userGoalId);
 
     /** User Goal retriever by User id.
      *
-     * This function retrieves the rows from City History table that are associated with the User with
-     * the id <var>$userId</var> and creates a {@link CityHistoryVO} with data from each row.
+     * This function retrieves the rows from User Goal table that are associated with the User with
+     * the id <var>$userId</var> and creates a {@link UserGoalVO} with data from each row.
      *
-     * @param int $userId the id of the User whose City History we want to retrieve.
+     * @param int $userId the id of the User whose User Goals we want to retrieve.
      * @return array an array with value objects {@link UserGoalVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      * @throws {@link OperationErrorException}
@@ -102,5 +102,5 @@ abstract class UserGoalDAO extends BaseDAO{
      * @throws {@link OperationErrorException}
      */
     public abstract function delete(UserGoalVO $userGoalVO);
-
+    
 }

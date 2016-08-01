@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2016 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -30,9 +30,9 @@
 
 include_once(PHPREPORT_ROOT . '/model/vo/BaseHistoryVO.php');
 
-/** VO for Area Histories
+/** VO for User Goals
  *
- *  This class just stores Area History data.
+ *  This class just stores User Gsoals data.
  *
  *  @property int $id database internal identifier.
  *  @property int $userId database internal identifier of the associated User.

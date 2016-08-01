@@ -34,96 +34,89 @@ $parser = new XMLReader();
 
 $request = trim(file_get_contents('php://input'));
 
-/*$request = '<?xml version="1.0" encoding="ISO-8859-15"?><areaHistories><areaHistory><id>71</id></areaHistory><areaHistory><id>72</id></areaHistory></areaHistories>';*/
-
 $parser->XML($request);
 
 do {
 
-	$parser->read();
+    $parser->read();
 
-	if ($parser->name == 'userGoals')
-	{
+    if ($parser->name == 'userGoals')
+    {
 
-		$sid = $parser->getAttribute("sid");
+        $sid = $parser->getAttribute("sid");
 
-		$parser->read();
+        $parser->read();
 
-	}
+    }
 
-	/* We check authentication and authorization */
-	require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
+    /* We check authentication and authorization */
+    require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 
-	$user = LoginManager::isLogged($sid);
+    $user = LoginManager::isLogged($sid);
 
-	if (!$user)
-	{
-		$string = "<return service='deleteUserGoals'><error id='2'>You must be logged in</error></return>";
-		break;
-	}
+    if (!$user)
+    {
+        $string = "<return service='deleteUserGoals'><error id='2'>You must be logged in</error></return>";
+        break;
+    }
 
-	if (!LoginManager::isAllowed($sid))
-	{
-		$string = "<return service='deleteUserGoals'><error id='3'>Forbidden service for this User</error></return>";
-		break;
-	}
-	$deleteUserGoals = array();
-	do {
+    if (!LoginManager::isAllowed($sid))
+    {
+        $string = "<return service='deleteUserGoals'><error id='3'>Forbidden service for this User</error></return>";
+        break;
+    }
+    $deleteUserGoals = array();
+    do {
 
-		//print ($parser->name . "\n");
+        //print ($parser->name . "\n");
 
-		if ($parser->name == "userGoal")
-		{
+        if ($parser->name == "userGoal")
+        {
 
-			$userGoalVO = new UserGoalVO();
+            $userGoalVO = new UserGoalVO();
 
-			$parser->read();
+            $parser->read();
 
-			while ($parser->name != "userGoal") {
+            while ($parser->name != "userGoal") {
 
-				//print ($parser->name . "\n");
+                //print ($parser->name . "\n");
 
-				switch ($parser->name ) {
+                switch ($parser->name ) {
 
-					case "id":$parser->read();
-						if ($parser->hasValue)
-						{
-							$userGoalVO->setId($parser->value);
-							$parser->next();
-							$parser->next();
-						}
-						break;
+                    case "id":$parser->read();
+                        if ($parser->hasValue)
+                        {
+                            $userGoalVO->setId($parser->value);
+                            $parser->next();
+                            $parser->next();
+                        }
+                        break;
 
-					default:    $parser->next();
-						break;
+                    default:    $parser->next();
+                        break;
 
-				}
+                }
 
-			}
+            }
 
-			$deleteUserGoals[] = $userGoalVO;
+            $deleteUserGoals[] = $userGoalVO;
 
-		}
+        }
 
-	} while ($parser->read());
+    } while ($parser->read());
 
-	//var_dump($deleteUsers);
+    if (count($deleteUserGoals) >= 1) {
+        foreach ( (array) $deleteUserGoals as $userGoal ) {
+            if ( UsersFacade::DeleteUserGoal( $userGoal ) == -1 ) {
+                $string = "<return service='deleteUserGoals'><error id='1'>There was some error while deleting the user goal entries</error></return>";
+                break;
+            }
+        }
+    }
 
-
-	if (count($deleteUserGoals) >= 1) {
-		foreach ( (array) $deleteUserGoals as $userGoal ) {
-			if ( UsersFacade::DeleteUserGoal( $userGoal ) == -1 ) {
-				$string = "<return service='deleteUserGoals'><error id='1'>There was some error while deleting the user goal entries</error></return>";
-				break;
-			}
-		}
-	}
-
-
-
-	if (!$string) {
-		$string = "<return service='deleteUserGoals'><ok>Operation Success!</ok></return>";
-	}
+    if (!$string) {
+        $string = "<return service='deleteUserGoals'><ok>Operation Success!</ok></return>";
+    }
 
 } while (false);
 

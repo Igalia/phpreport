@@ -1050,7 +1050,7 @@ Ext.onReady(function(){
     });
     <?php } ?>
 
-    /* Schema of the information about City History */
+    /* Schema of the information about User Goals */
     var goalRecord = new Ext.data.Record.create([
         {name: 'id', type: 'int'},
         {name: 'extraTime', type: 'int'},
@@ -1058,7 +1058,7 @@ Ext.onReady(function(){
         {name: 'end', type: 'date', dateFormat: 'Y-m-d', sortDir:'DESC'},
     ]);
 
-    /* Proxy to the services related with load/save City History */
+    /* Proxy to the services related with load/save User Goals */
     var goalProxy = new Ext.data.HttpProxy({
         method: 'POST',
         api: {
@@ -1069,7 +1069,7 @@ Ext.onReady(function(){
         },
     });
 
-    /* Store to load/save City History */
+    /* Store to load/save User Goals */
     var goalStore = new Ext.data.Store({
         id: 'goalStore',
         autoSave: false, //if set true, changes will be sent instantly

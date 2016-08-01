@@ -32,58 +32,50 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/Action.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserGoalVO.php');
 
-/** Delete Area History entry Action
+/** Delete User Goal entry Action
  *
- *  This action is used for deleting an entry in Area History.
+ *  This action is used for deleting an entry in User Goals
  *
  * @package PhpReport
  * @subpackage facade
  */
 class DeleteUserGoalAction extends Action{
 
-	/** The User Goal
-	 *
-	 * This variable contains the Area History entry we want to delete.
-	 *
-	 * @var AreaHistoryVO
-	 */
-	private $userGoal;
+    /** The User Goal
+     *
+     * This variable contains the User Goal entry we want to delete.
+     *
+     * @var AreaHistoryVO
+     */
+    private $userGoal;
 
-	/** DeleteUserGoalAction constructor.
-	 *
-	 * This is just the constructor of this action.
-	 *
-	 * @param UserGoalVO $userGoal the User Goal value object we want to delete.
-	 */
-	public function __construct(UserGoalVO $userGoal) {
-		$this->userGoal=$userGoal;
-		$this->preActionParameter="DELETE_USER_GOAL_PREACTION";
-		$this->postActionParameter="DELETE_USER_GOAL_POSTACTION";
+    /** DeleteUserGoalAction constructor.
+     *
+     * This is just the constructor of this action.
+     *
+     * @param UserGoalVO $userGoal the User Goal value object we want to delete.
+     */
+    public function __construct(UserGoalVO $userGoal) {
+        $this->userGoal=$userGoal;
+        $this->preActionParameter="DELETE_USER_GOAL_PREACTION";
+        $this->postActionParameter="DELETE_USER_GOAL_POSTACTION";
 
-	}
+    }
 
-	/** Specific code execute.
-	 *
-	 * This is the function that contains the code that deletes the Area History entry from persistent storing.
-	 *
-	 * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-	 */
-	protected function doExecute() {
+    /** Specific code execute.
+     *
+     * This is the function that contains the code that deletes the User Goal entry from persistent storing.
+     *
+     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
+     */
+    protected function doExecute() {
 
-		$dao = DAOFactory::getUserGoalDAO();
-		if ($dao->delete($this->userGoal)!=1) {
-			return -1;
-		}
+        $dao = DAOFactory::getUserGoalDAO();
+        if ($dao->delete($this->userGoal)!=1) {
+            return -1;
+        }
 
-		return 0;
-	}
+        return 0;
+    }
 
 }
-
-//
-//$userGOalVO = new UserGoalVO();
-//$userGOalVO->setId(2);
-//$action= new DeleteUserGoalAction($userGOalVO);
-//var_dump($action);
-//$action->execute();
-//var_dump($userGOalVO);

@@ -35,7 +35,7 @@ include_once(PHPREPORT_ROOT . '/model/vo/UserGoalVO.php');
 
 /** Get User Goals Action
  *
- *  This action is used for retrieving the whole City History related to a User.
+ *  This action is used for retrieving the whole User Goals related to a User.
  *
  * @package PhpReport
  * @subpackage facade
@@ -44,7 +44,7 @@ class GetUserGoalsAction extends Action{
 
 	/** The User Login
 	 *
-	 * This variable contains the login of the User whose City Histories we want to retieve.
+	 * This variable contains the login of the User whose User Goals we want to retrieve.
 	 *
 	 * @var string
 	 */
@@ -54,7 +54,7 @@ class GetUserGoalsAction extends Action{
 	 *
 	 * This is just the constructor of this action.
 	 *
-	 * @param int $userId the id of the User whose City History entries we want to retieve.
+	 * @param string $userLogin the login name of the User whose User Goal entries we want to retrieve.
 	 */
 	public function __construct($userLogin) {
 		$this->userLogin=$userLogin;
@@ -65,9 +65,9 @@ class GetUserGoalsAction extends Action{
 
 	/** Specific code execute.
 	 *
-	 * This is the function that contains the code that retrieves the City Histories from persistent storing.
+	 * This is the function that contains the code that retrieves the User Goals from persistent storing.
 	 *
-	 * @return array an array with value objects {@link CityHistoryVO} with their properties set to the values from the rows
+	 * @return array an array with value objects {@link UserGoalVO} with their properties set to the values from the rows
 	 * and ordered ascendantly by their database internal identifier.
 	 */
 	protected function doExecute() {
@@ -83,12 +83,3 @@ class GetUserGoalsAction extends Action{
 	}
 
 }
-
-
-/*//Test code;
-
-$action= new GetUserCityHistoriesAction('jaragunde');
-var_dump($action);
-$result = $action->execute();
-var_dump($result);
-*/

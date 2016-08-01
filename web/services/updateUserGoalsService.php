@@ -34,15 +34,13 @@ $parser = new XMLReader();
 
 $request = trim(file_get_contents('php://input'));
 
-/*$request = '<?xml version="1.0" encoding="ISO-8859-15"?><areaHistories><areaHistory><id>71</id><userId>81</userId><areaId>2</areaId><init format="Y-m-d">2008-06-01</init><end format="Y-m-d">2008-12-01</end></areaHistory><areaHistory><id>72</id><userId>81</userId><areaId>1</areaId><init format="Y-m-d">2008-01-01</init><end format="Y-m-d">2008-06-01</end></areaHistory></areaHistories>';*/
-
 $parser->XML($request);
 
 do {
 
     $parser->read();
 
-    if ($parser->name == 'areaHistories')
+    if ($parser->name == 'updateUserGoals')
     {
 
         $sid = $parser->getAttribute("sid");
@@ -70,8 +68,6 @@ do {
     $updateUserGoals = array();
     do {
 
-        //print ($parser->name . "\n");
-
         if ($parser->name == "userGoal")
         {
 
@@ -81,7 +77,6 @@ do {
 
             while ($parser->name != "userGoal") {
 
-                //print ($parser->name . "\n");
 
                 switch ($parser->name ) {
 
@@ -155,17 +150,14 @@ do {
     } while ($parser->read());
 
 
-    if (count($updateUserGoals) >= 1)
-        foreach((array)$updateUserGoals as $userGoal)
-        {
-            if (UsersFacade::UpdateUserGoal($userGoal) == -1)
-            {
-                $string = "<return service='updateUserGoals'><error id='1'>There was some error while updating the area history entries</error></return>";
+    if (count($updateUserGoals) >= 1) {
+        foreach ( (array) $updateUserGoals as $userGoal ) {
+            if ( UsersFacade::UpdateUserGoal( $userGoal ) == -1 ) {
+                $string = "<return service='updateUserGoals'><error id='1'>There was some error while updating the user goal entries</error></return>";
                 break;
             }
         }
-
-
+    }
 
     if (!$string)
     {

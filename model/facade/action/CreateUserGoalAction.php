@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2016 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -21,12 +21,11 @@
 
 /** File for CreateUserGoalAction
  *
- *  This file just contains {@link CreateAreaHistoryAction}.
+ *  This file just contains {@link CreateUserGoalAction}.
  *
  * @filesource
  * @package PhpReport
  * @subpackage facade
- * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
 include_once(PHPREPORT_ROOT . '/model/facade/action/Action.php');
@@ -42,56 +41,42 @@ include_once(PHPREPORT_ROOT . '/model/vo/UserGoalVO.php');
  */
 class CreateUserGoalAction extends Action{
 
-	/** The Area History
-	 *
-	 * This variable contains the Area History entry we want to create.
-	 *
-	 * @var UserGoalVO
-	 */
-	private $userGoal;
+    /** The User Goal
+     *
+     * This variable contains the User Goal entry we want to create.
+     *
+     * @var UserGoalVO
+     */
+    private $userGoal;
 
-	/** CreateAreaHistoryAction constructor.
-	 *
-	 * This is just the constructor of this action.
-	 *
-	 * @param UserGoalVO $userGoal the Area History value object we want to create.
-	 */
-	public function __construct(UserGoalVO $userGoal) {
-		$this->userGoal = $userGoal;
-		$this->preActionParameter="CREATE_USER_GOAL_PREACTION";
-		$this->postActionParameter="CREATE_USER_GOAL_POSTACTION";
+    /** CreateUserGoalAction constructor.
+     *
+     * This is just the constructor of this action.
+     *
+     * @param UserGoalVO $userGoal the User Goal value object we want to create.
+     */
+    public function __construct(UserGoalVO $userGoal) {
+        $this->userGoal = $userGoal;
+        $this->preActionParameter="CREATE_USER_GOAL_PREACTION";
+        $this->postActionParameter="CREATE_USER_GOAL_POSTACTION";
 
-	}
+    }
 
-	/** Specific code execute.
-	 *
-	 * This is the function that contains the code that creates the new Area History entry, storing it persistently.
-	 *
-	 * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-	 * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
-	 */
-	protected function doExecute() {
+    /** Specific code execute.
+     *
+     * This is the function that contains the code that creates the new User Goal entry, storing it persistently.
+     *
+     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
+     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
+     */
+    protected function doExecute() {
 
-		$dao = DAOFactory::getUserGoalDAO();
-		if ($dao->create($this->userGoal)!=1) {
-			return -1;
-		}
+        $dao = DAOFactory::getUserGoalDAO();
+        if ($dao->create($this->userGoal)!=1) {
+            return -1;
+        }
 
-		return 0;
-	}
+        return 0;
+    }
 
 }
-
-
-/*//Test code
-
-$areahistoryvo= new AreaHistoryVO();
-$areahistoryvo->setAreaId(1);
-$areahistoryvo->setUserId(1);
-$areahistoryvo->setInitDate(date_create("2009-01-01"));
-$areahistoryvo->setEndDate(date_create("2009-06-01"));
-$action= new CreateAreaHistoryAction($areahistoryvo);
-var_dump($action);
-$action->execute();
-var_dump($areahistoryvo);
-*/
