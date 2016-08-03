@@ -201,4 +201,17 @@ class PostgreSQLUserGoalDAO extends UserGoalDAO{
 
         return $affectedRows;
     }
+
+    public function getUserGoalsForCurrentDate($userId, DateTime $date) {
+        if (!is_numeric($userId)) {
+            throw new SQLIncorrectTypeException( $userId );
+        }
+
+        $sql = "SELECT * FROM user_goals WHERE usrid = " . $userId . " 
+                AND init_date < " . DBPostgres::formatDate($date) . "
+                AND end_date > " . DBPostgres::formatDate($date) . ";";
+
+        $result = $this->execute($sql);
+        return $result;
+    }
 }

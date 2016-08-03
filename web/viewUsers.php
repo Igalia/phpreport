@@ -1163,7 +1163,7 @@ Ext.onReady(function(){
         title: 'Goals',
         loadMask: true,
         colModel: goalColModel,
-        delMsg: 'Are you sure you want to delete the selected City History entries?',
+        delMsg: 'Are you sure you want to delete the selected Goal entries?',
 
         /**
          * onAdd

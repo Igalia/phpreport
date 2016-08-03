@@ -102,5 +102,5 @@ abstract class UserGoalDAO extends BaseDAO{
      * @throws {@link OperationErrorException}
      */
     public abstract function delete(UserGoalVO $userGoalVO);
-    
+
 }
