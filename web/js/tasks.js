@@ -816,6 +816,9 @@ Ext.onReady(function(){
             },
             'update': function () {
                 unsavedChanges = true;
+            },
+            'remove': function () {
+                unsavedChanges = true;
             }
         }
     });
