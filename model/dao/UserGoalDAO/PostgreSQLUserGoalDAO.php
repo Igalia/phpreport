@@ -208,7 +208,7 @@ class PostgreSQLUserGoalDAO extends UserGoalDAO{
         }
 
         $sql = "SELECT * FROM user_goals WHERE usrid = " . $userId . " 
-                AND init_date < " . DBPostgres::formatDate($date) . "
+                AND init_date <= " . DBPostgres::formatDate($date) . "
                 AND end_date > " . DBPostgres::formatDate($date) . ";";
 
         $result = $this->execute($sql);

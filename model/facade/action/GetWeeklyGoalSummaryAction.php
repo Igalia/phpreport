@@ -107,13 +107,3 @@ class GetWeeklyGoalSummaryAction extends Action{
 	}
 
 }
-
-/*//Test code
-
-$user = new UserVO();
-$user->setLogin('jaragunde');
-$action = new GetPersonalSummaryByUserIdDateAction($user, date_create('2009-12-01'));
-//var_dump($action);
-$result = $action->execute();
-var_dump($result);
-*/

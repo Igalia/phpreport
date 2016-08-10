@@ -122,14 +122,20 @@ class GetPersonalSummaryByLoginDateAction extends Action{
     private function getWeeksTillEndOfJourneyPeriod() {
         $lastDayOfJourney = $this->currentJourney->getEndDate();
 
-        $interval = $this->currentJourney->getInitDate()->diff( $lastDayOfJourney );
-        return floor($interval->days/7);
+        $interval = $this->date->diff( $lastDayOfJourney );
+        return ceil($interval->days/7);
     }
 
+    /**
+     * @param DateTime $initDate
+     * @param DateTime $endDate
+     * @return float
+     */
     private function getWeeksInBetweenDates(DateTime $initDate, DateTime $endDate) {
         $interval = $initDate->diff( $endDate );
-        return floor($interval->days/7) + 1;
+        return ceil($interval->days/7);
     }
+
     /** Specific code execute.
      *
      * This is the function that contains the code that obtains the summary.
@@ -153,23 +159,30 @@ class GetPersonalSummaryByLoginDateAction extends Action{
                 return NULL;
 
         }
-
-        $userGoaldao = DAOFactory::getUserGoalDAO();
-        $goalsInCurrentDate = $userGoaldao->getUserGoalsForCurrentDate( $this->userVO->getId(), $this->date );
-
-        $extraGoalHoursSet = 0;
-
-        foreach ( $goalsInCurrentDate as $currentUserGoalVO ) {
-            $weeksInBetween = $this->getWeeksInBetweenDates( $currentUserGoalVO->getInitDate(), $currentUserGoalVO->getEndDate());
-            $extraGoalHoursSet += ( $currentUserGoalVO->getExtraHours() / $weeksInBetween );
-        }
-
-
-        $hoursLeftToBeWorked = $this->getWorkableHoursInThisJourneyPeriod() - $this->getWorkedHoursInThisJourneyPeriod();
-        $weeksLeftTillEndOfJourneyPeriod = $this->getWeeksTillEndOfJourneyPeriod() + 1;
-
         $totalResults = $dao->getPersonalSummary($user->getId(), $this->date);
-        $totalResults['weekly_goal'] = floor( ( ( $hoursLeftToBeWorked / $weeksLeftTillEndOfJourneyPeriod) + $extraGoalHoursSet ) * 60);
+
+        if( $this->currentJourney ) {
+            $userGoaldao = DAOFactory::getUserGoalDAO();
+            $goalsInCurrentDate = $userGoaldao->getUserGoalsForCurrentDate( $this->userVO->getId(), $this->date );
+
+            $extraGoalHoursSet = 0;
+            if ( $goalsInCurrentDate ) {
+                // Only if some goal is set for this period
+                foreach ( $goalsInCurrentDate as $currentUserGoalVO ) {
+                    $weeksInBetween = $this->getWeeksInBetweenDates( $currentUserGoalVO->getInitDate(), $currentUserGoalVO->getEndDate() );
+                    $extraGoalHoursSet += ( $currentUserGoalVO->getExtraHours() / $weeksInBetween );
+                }
+            }
+
+            $hoursLeftToBeWorked = $this->getWorkableHoursInThisJourneyPeriod() - $this->getWorkedHoursInThisJourneyPeriod();
+            $weeksLeftTillEndOfJourneyPeriod = $this->getWeeksTillEndOfJourneyPeriod();
+
+            $originalHoursToBeWorked = round($hoursLeftToBeWorked / $weeksLeftTillEndOfJourneyPeriod , 2);
+
+            $totalResults['weekly_goal'] = floor( ( $originalHoursToBeWorked + $extraGoalHoursSet ) * 60);
+        } else {
+            $totalResults['weekly_goal'] = 0;
+        }
 
         //var_dump( $totalResults );
         return $totalResults;
