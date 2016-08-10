@@ -10,11 +10,11 @@ To install PhpReport in your system, you will need the following software:
 
 * PostgreSQL database server (tested with PostgreSQL 9)
 
-* PHP 5.3.0 or higher
+* PHP 5.4 or higher
 
   * Support for PostgreSQL
 
-* Web server (tested with Apache 2.2)
+* Web server (tested with Apache 2.x)
 
   * PHP module
 
@@ -28,10 +28,10 @@ You can find Windows versions of the software in the following sites:
 
 * PostgreSQL at http://www.postgresql.org/download/windows
 
-* Apache 2.2 at http://www.apachelounge.com/download/. This is the recommended
-  version you should install to use PHP 5.3. Follow instructions in ReadMe file.
+* Apache 2.x at http://www.apachelounge.com/download/. This is the recommended
+  version you should install to use PHP 5. Follow instructions in ReadMe file.
 
-* PHP 5.3 at http://windows.php.net/download/. Installation instructions are
+* PHP 5.x at http://windows.php.net/download/. Installation instructions are
   available here: http://www.sitepoint.com/how-to-install-php-on-windows.
 
 Installing dependencies in Debian/Ubuntu systems
