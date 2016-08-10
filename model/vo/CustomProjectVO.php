@@ -96,8 +96,9 @@ class CustomProjectVO extends ProjectVO {
      * @return double the deviation percentage of the estimated work hours according to the worked ones.
      */
     public function getPercDev() {
-        if ($this->estHours > 0)
-            return (($this->workedHours/$this->getFinalEstHours())-1)*100;
+        $finalEstHours = $this->getFinalEstHours();
+        if ($finalEstHours > 0)
+            return (($this->workedHours/$finalEstHours)-1)*100;
         else return null;
     }
 
@@ -118,8 +119,9 @@ class CustomProjectVO extends ProjectVO {
      * @return double the estimated hour invoice.
      */
     public function getEstHourInvoice() {
-        if ($this->estHours > 0)
-            return ($this->invoice/$this->getFinalEstHours());
+        $finalEstHours = $this->getFinalEstHours();
+        if ($finalEstHours > 0)
+            return ($this->invoice/$finalEstHours);
         else return null;
     }
 
@@ -180,9 +182,10 @@ class CustomProjectVO extends ProjectVO {
      * @return {double} the deviation on invoice per hour measured in percentage.
      */
     public function getWorkedHourInvoiceRelativeDeviation() {
-        if ($this->workedHours > 0)
+        $estHourInvoice = $this->getEstHourInvoice();
+        if ($this->workedHours > 0 && $estHourInvoice > 0)
             return (100*$this->getWorkedHourInvoiceAbsoluteDeviation()/
-                    $this->getEstHourInvoice());
+                    $estHourInvoice);
         else return null;
     }
 
