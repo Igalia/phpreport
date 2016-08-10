@@ -41,7 +41,7 @@ inside your PhpReport, to prevent other users from altering your DB.
 
 .. WARNING ::
 
-  Due to a `bug <https://trac.phpreport.igalia.com/ticket/191>`__ in the
+  Due to a `bug <https://github.com/Igalia/phpreport/issues/191>`__ in the
   installation wizard, people who installed PhpReport using this method will
   find the following error during the upgrade process::
 
