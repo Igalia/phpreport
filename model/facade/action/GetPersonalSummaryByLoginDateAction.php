@@ -122,7 +122,12 @@ class GetPersonalSummaryByLoginDateAction extends Action{
     private function getWeeksTillEndOfJourneyPeriod() {
         $lastDayOfJourney = $this->currentJourney->getEndDate();
 
-        $interval = $this->date->diff( $lastDayOfJourney );
+        // Its always better to find the difference in weeks from the start of the week, rather than in between
+        $thisWeekInitDay = DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('last monday', $this->date->getTimestamp())));
+        $lastWeekInitDay = DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('last sunday', $lastDayOfJourney->getTimestamp())));
+
+
+        $interval = $thisWeekInitDay->diff( $lastWeekInitDay );
         return ceil($interval->days/7);
     }
 
@@ -183,8 +188,6 @@ class GetPersonalSummaryByLoginDateAction extends Action{
         } else {
             $totalResults['weekly_goal'] = 0;
         }
-
-        //var_dump( $totalResults );
         return $totalResults;
 
     }
