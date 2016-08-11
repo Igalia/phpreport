@@ -56,19 +56,15 @@ $permissions = array(
         '/services/getProjectAnalysisTrackerTree.php', '/services/getProjectTrackerTree.php',
         '/services/getStoryCustomTaskStoriesService.php', '/services/getSectionCustomTaskSectionsService.php',
         '/services/updateTaskStoriesService.php', '/services/createTaskStoriesService.php',
-        '/services/deleteTaskStoriesService.php',
-        '/services/updateTaskSectionsService.php', '/services/createTaskSectionsService.php',
-        '/services/deleteTaskSectionsService.php',
+        '/services/deleteTaskStoriesService.php', '/services/updateTaskSectionsService.php',
+        '/services/createTaskSectionsService.php', '/services/deleteTaskSectionsService.php',
         //reports
-        '/viewProjectDetails.php', '/viewUserDetails.php', '/projectsSummary.php', '/projectDetails.php',
-        '/viewWorkingHoursResultsReport.php', '/projectsEvaluation.php', '/usersEvaluation.php',
-        '/services/getExtraHoursReportService.php', '/services/getPendingHolidayHoursService.php',
+        '/viewProjectDetails.php', '/viewUserDetails.php', '/projectDetails.php', '/viewWorkingHoursResultsReport.php',
+        '/services/getExtraHoursReportService.php','/services/getPendingHolidayHoursService.php',
         '/services/getProjectTtypeReportService.php', '/services/getProjectUserCustomerReportJsonService.php',
         '/services/getProjectUserCustomerReportService.php', '/services/getProjectUserStoryReportService.php',
         '/services/getUserProjectCustomerReportJsonService.php', '/services/getUsersProjectsReportService.php',
-        '/services/getFilteredCustomProjectsService.php', '/services/getProjectCustomerReportJsonService.php',
-        '/services/getProjectUserReportJsonService.php',
-        '/services/getProjectUserStoryReportJsonService.php', '/services/getUserStoryReportJsonService.php',
+        '/services/getProjectUserStoryReportJsonService.php',
         '/services/getProjectUserWeeklyHoursReportJsonService.php',
         //common services
         '/services/getAllUsersService.php', '/services/getAllCustomersService.php',
@@ -82,6 +78,11 @@ $permissions = array(
         '/services/getUserCityHistoriesService.php', '/services/getUserJourneyHistoriesService.php',
         '/services/getTodayAreaUsersService.php', '/services/getProjectUsersService.php',
         '/services/getProjectCustomersService.php'),
+    'manager' => array(
+        '/projectsEvaluation.php', '/usersEvaluation.php', '/projectsSummary.php', '/services/getFilteredCustomProjectsService.php',
+        '/services/getUserStoryReportJsonService.php', '/services/getProjectCustomerReportJsonService.php',
+        '/services/getProjectUserReportJsonService.php',
+    ),
     'admin' => array(
         //projects management
         '/services/createProjectsService.php', '/services/deleteProjectsService.php',

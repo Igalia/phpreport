@@ -171,7 +171,7 @@ define('ALL_USERS_GROUP', 'staff');
  * @global string all user groups for displaying on the interfaces as
  * a serialized array, compulsory when using LDAP user authentication
  */
-define('USER_GROUPS', serialize(array('staff', 'admin')));
+define('USER_GROUPS', serialize(array('staff', 'admin', 'manager')));
 
 /**
  * @name VACATIONS_PROJECT
