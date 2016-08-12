@@ -100,13 +100,13 @@ class GetPersonalSummaryByLoginDateAction extends Action{
      * @throws null
      */
     private function getWorkableHoursInThisJourneyPeriod() {
-        $initDate = $this->currentJourney->getInitDate();
         if ( $this->currentUserGoal ) {
+            $initDate = max($this->currentJourney->getInitDate(), $this->currentUserGoal->getInitDate());
             $endDate = min($this->currentJourney->getEndDate(), $this->currentUserGoal->getEndDate());
         } else {
+            $initDate  = min($this->currentJourney->getInitDate(), DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('this week', $this->date->getTimestamp()))));
             $endDate = $this->currentJourney->getEndDate();
         }
-
         //Now need to find out the workable hours in this year
         $extraHoursAction = new ExtraHoursReportAction($initDate, $endDate, $this->userVO);
         $results = $extraHoursAction->execute();
@@ -128,7 +128,6 @@ class GetPersonalSummaryByLoginDateAction extends Action{
         $thisWeekInitDay = DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('last sunday', $this->date->getTimestamp())));
         $lastWeekInitDay = DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('next monday', $endDate->getTimestamp())));
 
-
         $interval = $thisWeekInitDay->diff( $lastWeekInitDay );
         return floor($interval->days/7);
     }
@@ -140,7 +139,11 @@ class GetPersonalSummaryByLoginDateAction extends Action{
      */
     private function getWeeksInBetweenDates(DateTime $initDate, DateTime $endDate) {
         $interval = $initDate->diff( $endDate );
-        return floor($interval->days/7);
+        $weeksInBetween = floor($interval->days/7);
+        if ( $weeksInBetween == 0 ) {
+            return 1;
+        }
+        return $weeksInBetween;
     }
 
     /**
