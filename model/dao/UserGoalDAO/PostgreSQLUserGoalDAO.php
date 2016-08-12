@@ -212,6 +212,6 @@ class PostgreSQLUserGoalDAO extends UserGoalDAO{
                 AND end_date > " . DBPostgres::formatDate($date) . ";";
 
         $result = $this->execute($sql);
-        return $result;
+        return $result[0];
     }
 }
