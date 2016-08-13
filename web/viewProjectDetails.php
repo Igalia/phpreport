@@ -37,7 +37,23 @@
 
     $project = ProjectsFacade::GetCustomProject($pid);
 
+    // We are not allowing staff users to view all project details
+    $projectAssignedUsers = ProjectsFacade::GetProjectUsers($pid);
+    $sid = $_GET['sid'];
 
+    if(!LoginManager::isAdmin($sid)) {
+        $userCanViewProject = false;
+        foreach ( $projectAssignedUsers as $userVO ) {
+            if ( $userVO->getLogin() == $_SESSION['user']->getLogin() ) {
+                $userCanViewProject = true;
+                break;
+            }
+        }
+        if(!$userCanViewProject) {
+            echo "You are not allowed to access this page";
+            return;
+        }
+    }
 ?>
 
 <script type="text/javascript" src="js/include/DateIntervalForm.js"></script>
@@ -551,7 +567,6 @@
                 grid2.store.load();
 
                 grid3.store.removeAll();
-                grid3.store.proxy.conn.url = 'services/mytest.json';
 
                 grid3.store.proxy.conn.url= 'services/getProjectUserWeeklyHoursReportJsonService.php?<?php
 
