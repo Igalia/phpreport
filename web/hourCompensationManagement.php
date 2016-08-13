@@ -39,7 +39,7 @@ include_once("include/header.php");
 include_once("include/sidebar.php");
 
 ?>
-
+<script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript" src="js/hourCompensationManagement.js"></script>
 
 <div id="content">

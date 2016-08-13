@@ -1,4 +1,3 @@
-<?php
 /*
  * Copyright (C) 2016 Igalia, S.L. <info@igalia.com>
  *
@@ -18,26 +17,23 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define('PHPREPORT_ROOT', __DIR__ . '/../');
+// Check if session exists, or alert user
 
-/* We check authentication and authorization */
-require_once(PHPREPORT_ROOT . '/web/auth.php');
+function checkIfSessionExists() {
+    Ext.Ajax.request({
+        url: 'services/checkSessionActive.php',
+        failure: function (response) {
+            Ext.MessageBox.confirm('Session Expired', 'Do you want to login again?', function(btn){
+                if(btn === 'yes'){
+                    window.location.href = "login.php";
+                }
+            });
+        }
+    });
 
-/* Include the generic header and sidebar*/
-define('PAGE_TITLE', "PhpReport - Projects Summary");
-include_once("include/header.php");
-include_once("include/sidebar.php");
-include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
-$user = $_SESSION['user'];
-?>
-<script src="js/include/sessionTracker.js"></script>
-<script type="text/javascript" src="js/include/ExportableGridPanel.js"></script>
-<script src="js/projectDetails.js"></script>
+    window.setTimeout(checkIfSessionExists, 300000);
+}
 
-<div id="content">
-</div>
-<div id="variables"/>
-<?php
-/* Include the footer to close the header */
-include("include/footer.php");
-?>
+window.onload = function () {
+    checkIfSessionExists();
+};

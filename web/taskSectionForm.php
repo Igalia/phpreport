@@ -94,7 +94,7 @@ if ( (isset($_POST["name"])) && ( ($_POST["name"] != "") && ($_POST["estHours"] 
 $users = UsersFacade::GetSectionModuleProjectAreaTodayUsers($sectionId);
 
 ?>
-
+<script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript">
 // Add the additional VType to validate date inputs
 Ext.apply(Ext.form.VTypes, {

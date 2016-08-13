@@ -50,7 +50,7 @@ $module = CoordinationFacade::GetModule($section->getModuleId());
 $users = ProjectsFacade::GetProjectUsers($module->getProjectId());
 
 ?>
-
+<script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript">
 
 Ext.onReady(function(){

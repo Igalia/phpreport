@@ -1302,22 +1302,4 @@ Ext.onReady(function(){
     // Adds in a new empty task when an empty day is clicked
     addEmptyTask();
 
-    // Check if session exists, or alert user
-    function checkIfSessionExists() {
-        Ext.Ajax.request({
-            url: 'services/checkSessionActive.php',
-            failure: function (response) {
-                Ext.MessageBox.confirm('Session Expired', 'Do you want to login again?', function(btn){
-                    if(btn === 'yes'){
-                        window.location.href = "login.php";
-                    }
-                });
-            }
-        });
-
-        window.setTimeout(checkIfSessionExists, 15000);
-    }
-
-    checkIfSessionExists();
-
 });

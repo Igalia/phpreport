@@ -41,7 +41,7 @@ include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 $areas = AdminFacade::GetAllAreas();
 
 ?>
-
+<script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript">
 
 Ext.onReady(function(){

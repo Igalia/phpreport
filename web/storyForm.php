@@ -99,7 +99,7 @@ $users = ProjectsFacade::GetProjectUsers($projectId);
 $stories = CoordinationFacade::GetIterationStories($iterationId);
 
 ?>
-
+<script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript">
 // Add the additional VType to validate date inputs
 Ext.apply(Ext.form.VTypes, {

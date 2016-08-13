@@ -33,7 +33,7 @@ $userId = $_SESSION['user']->getId();
 
 include(PHPREPORT_ROOT . 'web/include/header.php');
 ?>
-
+<script src="js/include/sessionTracker.js"></script>
 <script>
     var App = new Ext.App({});
 

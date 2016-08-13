@@ -79,7 +79,7 @@ echo '</script>';
 <div id="content">
     <!-- Here we inject the form from the JavaScript code -->
 </div>
-
+<script src="js/include/sessionTracker.js"></script>
 <script>
 Ext.onReady(function () {
     //show save results if any

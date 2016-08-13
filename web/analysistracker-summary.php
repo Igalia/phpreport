@@ -39,7 +39,7 @@ include("include/sidebar.php");
 ?>
 
 <link rel="stylesheet" type="text/css" href="include/ColumnNodeUI.css" />
-
+<script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript" src="include/ColumnNodeUI.js"></script>
 <script type="text/javascript" src="include/AnalysisTrackerSummaryTree.js"></script>
 
