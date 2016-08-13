@@ -451,7 +451,6 @@
         var grid3 = new Ext.ux.DynamicGridPanel({
             id: 'projectUserWeeklyHoursGrid',
             stateId: 'projectUserWeeklyHoursGrid',
-            storeUrl: "services/mytest.json",
             storeUrl: 'services/getProjectUserWeeklyHoursReportJsonService.php?<?php
 
                 echo "login=" . $login;
