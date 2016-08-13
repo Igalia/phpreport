@@ -97,7 +97,6 @@ class GetProjectUserWeeklyHoursReportAction extends Action{
         $dao3 = DAOFactory::getUserDAO();
 
         $doubleResults = $dao->getProjectUserWeeklyWorkingHours($this->projectVO, $this->init, $this->end,  "USER");
-
         $results = array();
 
         foreach ($doubleResults as $doubleResult)
@@ -105,8 +104,9 @@ class GetProjectUserWeeklyHoursReportAction extends Action{
             $user = $doubleResult['usrid'];
             $userLogin = $dao3->getById($user);
 
+            $year = $doubleResult['year'];
             $week = $doubleResult['week'];
-            $results[$userLogin->getLogin()][$week] =  $doubleResult['total_hours'];
+            $results[$userLogin->getLogin()][$year][$week] =  $doubleResult['total_hours'];
 
         }
 

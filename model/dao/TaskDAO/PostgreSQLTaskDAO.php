@@ -583,18 +583,21 @@ class PostgreSQLTaskDAO extends TaskDAO{
             // Given a start date and end date, only pick weeks in between
             $sql = "select usrid,
                   EXTRACT(WEEK FROM _date) AS week,
+                  EXTRACT(YEAR FROM _date) AS year,
                   COALESCE(SUM(_end-init), 0) AS total_hours
                   from task WHERE projectid = $projectId
                   AND
                     _date >= (timestamp " . DBPostgres::formatDate($initDate)  . ")
                   AND
                     _date <= (timestamp " . DBPostgres::formatDate($endDate)  . ")
-                  GROUP BY week, usrid";
+                  GROUP BY year, week, usrid";
         } else {
             $sql = "select usrid,
-            EXTRACT(WEEK FROM _date) AS week, COALESCE(SUM(_end-init), 0) AS total_hours
+            EXTRACT(WEEK FROM _date) AS week,
+            EXTRACT(YEAR FROM _date) AS year,
+            COALESCE(SUM(_end-init), 0) AS total_hours
             from task WHERE projectid = $projectId
-            GROUP BY week, usrid";
+            GROUP BY year, week, usrid";
         }
 
         $res = pg_query($this->connect, $sql);

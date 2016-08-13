@@ -112,21 +112,17 @@ do {
 
     $weeklyRecords = array();
 
-    foreach((array) $report as $login => $totalHoursList )
-    {
-
+    foreach((array) $report as $login => $totalHoursList ) {
         $record = array();
-
-        $record[login] = $login;
-
-        foreach((array) $totalHoursList as $week => $hours)
-        {
-            $weeklyRecords[$week] = true;
-            $record[$week] = round($hours/60, 2, PHP_ROUND_HALF_DOWN);
+        $record['login'] = $login;
+        foreach((array) $totalHoursList as $year => $weeklyHours)  {
+            foreach( $weeklyHours as $week => $hours ) {
+                $weeklyRecords[$year][$week] = true;
+                $record[$week] = round( $hours / 60, 2, PHP_ROUND_HALF_DOWN );
+            }
         }
 
         $records[] = $record;
-
     }
 
     foreach($records as $record)
@@ -163,22 +159,23 @@ do {
 
     // The weeks should show up in ascending order, sorted by week number
     ksort($weeklyRecords);
-    foreach((array)$weeklyRecords as $week => $dumber )
-    {
-        $field['name'] = (string)$week;
-        $metaData['fields'][] = $field;
+    foreach ($weeklyRecords as $year => $weeklyRecord ) {
+        ksort( $weeklyRecord );
+        foreach ( (array) $weeklyRecord as $week => $dumber ) {
+            $field['name'] = (string) $week;
+            $metaData['fields'][] = $field;
 
-        $column[header] = "Week " . $week;
-        $column[dataIndex] = (string)$week;
-        $response[columns][] = $column;
-
+            $column[header] = "Week " . $week . ", $year";
+            $column[dataIndex] = (string) $week;
+            $response[columns][] = $column;
+        }
     }
 
     $response[metaData] = $metaData;
 
     $response[success] = true;
 
-} while (False);
+} while (false);
 
 // make it into a proper Json document with header etc
 $json = json_encode($response);
