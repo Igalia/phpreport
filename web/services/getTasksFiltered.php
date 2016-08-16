@@ -187,7 +187,7 @@
         if (isset($_GET['userId'])) {
             //Request to check user tasks of other user
             if($_GET['userId'] != $_SESSION['user']->getId()){
-                if(!LoginManager::isAdmin()){
+                if(!LoginManager::hasExtraPermissions()){
                     $string = "<tasks><error id='4'>Forbidden service for this User</error></tasks>";
                     break;
                 }

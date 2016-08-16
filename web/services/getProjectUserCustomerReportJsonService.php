@@ -79,7 +79,7 @@
             break;
         }
 
-        if(!LoginManager::isAdmin($sid)) {
+        if(!LoginManager::hasExtraPermissions($sid)) {
             $projectAssignedUsers = ProjectsFacade::GetProjectUsers( $projectId );
             $userCanViewProject = false;
             foreach($projectAssignedUsers as $userVO) {

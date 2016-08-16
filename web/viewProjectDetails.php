@@ -41,7 +41,7 @@
     $projectAssignedUsers = ProjectsFacade::GetProjectUsers($pid);
     $sid = $_GET['sid'];
 
-    if(!LoginManager::isAdmin($sid)) {
+    if(!LoginManager::hasExtraPermissions($sid)) {
         $userCanViewProject = false;
         foreach ( $projectAssignedUsers as $userVO ) {
             if ( $userVO->getLogin() == $_SESSION['user']->getLogin() ) {

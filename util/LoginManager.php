@@ -164,9 +164,9 @@ class LoginManager {
   }
 
 
-  /** Admin authorization utility function
+  /** Admin/Privileged user authorization utility function
    *
-   * It checks the logged user against the admin permissions array. It
+   * It checks the logged user against the extra permissions array. It
    * will retrieve the user groups and check the permissions of
    * each one to access the current url. If the parameter $sid
    * is passed, it will try to retrieve the data from the session
@@ -176,7 +176,7 @@ class LoginManager {
    * @return boolean true if the user belongs to a admin group for
    * the current url, false otherwise.
    */
-  public static function isAdmin($sid=NULL) {
+  public static function hasExtraPermissions($sid=NULL) {
 
     /* We include the file with the array of permissions */
     require(PHPREPORT_ROOT . '/config/permissions.php');
@@ -191,12 +191,11 @@ class LoginManager {
 
       foreach ($user->getGroups() as $group) {
         $url = explode($urlHeader, $_SERVER["SCRIPT_NAME"]);
-        if (in_array($url[1], $adminPermissions[$group->getName()]))
+        if (in_array($url[1], $extraPermissions[$group->getName()]))
           return true;
       }
     }
     return false;
 
   }
-
 }

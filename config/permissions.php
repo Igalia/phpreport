@@ -125,7 +125,7 @@ $permissions = array(
         '/settings.php')
 );
 
-/** Admin permissions array
+/** Extra permissions array
  *
  * It contains a multiple-level array with the groups and the
  * pages they are allowed to act on as admin. In every element of
@@ -133,10 +133,16 @@ $permissions = array(
  * another array with the urls the group is allowed to open.
  * For example: "clients" => array("/xptracker-summary.php")
  */
-$adminPermissions = array(
+$extraPermissions = array(
     "admin" => array(
         //user tasks report
         "/userTasksReport.php", "/services/getTasksFiltered.php",
         //users management
-        "/viewUsers.php"),
+        "/viewUsers.php",
+    ),
+    'manager' => array(
+        '/viewProjectDetails.php', '/projectDetails.php', '/viewUserDetails.php',
+        '/services/getProjectUserCustomerReportJsonService.php',
+        '/services/getUserProjectCustomerReportJsonService.php'
+    )
 );

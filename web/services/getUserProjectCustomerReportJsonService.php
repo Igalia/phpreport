@@ -78,6 +78,18 @@
             break;
         }
 
+        if(!LoginManager::hasExtraPermissions($sid)) {
+            $user = $_SESSION['user'];
+            $loggedInUserId = $user->getId();
+            if($userId != $loggedInUserId ) {
+                $response[success] = false;
+                $error[id] = 3;
+                $error[message] = "Forbidden service for this User";
+                $response[error] = $error;
+                break;
+            }
+        }
+
         if ($dateFormat=="")
             $dateFormat = "Y-m-d";
 
