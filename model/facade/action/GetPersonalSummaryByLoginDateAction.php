@@ -90,6 +90,17 @@ class GetPersonalSummaryByLoginDateAction extends Action{
         $this->date = $date;
         $this->currentJourney = $dao->getByIntervals( $this->date, $this->date, $this->userVO->getId())[0];
         $this->currentUserGoal = $userGoaldao->getUserGoalsForCurrentDate( $this->userVO->getId(), $this->date );
+
+        if( !$this->currentUserGoal && $this->currentJourney ) {
+            $userGoalVO = new UserGoalVO();
+            $userGoalVO->setUserId( $userVO->getId() );
+            $userGoalVO->setExtraHours( 0 );
+            $userGoalVO->setInitDate( max( $this->currentJourney->getInitDate(),
+                DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('first day of January', $this->date->getTimestamp())))));
+            $userGoalVO->setEndDate( min( $this->currentJourney->getEndDate(),
+                DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('last day of December', $this->date->getTimestamp())))));
+            $this->currentUserGoal = $userGoalVO;
+        }
         $this->preActionParameter="GET_PERSONAL_SUMMARY_BY_USER_LOGIN_DATE_PREACTION";
         $this->postActionParameter="GET_PERSONAL_SUMMARY_BY_USER_LOGIN_DATE_POSTACTION";
 
@@ -103,10 +114,8 @@ class GetPersonalSummaryByLoginDateAction extends Action{
         if ( $this->currentUserGoal ) {
             $initDate = max($this->currentJourney->getInitDate(), $this->currentUserGoal->getInitDate());
             $endDate = min($this->currentJourney->getEndDate(), $this->currentUserGoal->getEndDate());
-        } else {
-            $initDate  = min($this->currentJourney->getInitDate(), DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('this week', $this->date->getTimestamp()))));
-            $endDate = $this->currentJourney->getEndDate();
         }
+
         //Now need to find out the workable hours in this year
         $extraHoursAction = new ExtraHoursReportAction($initDate, $endDate, $this->userVO);
         $results = $extraHoursAction->execute();
@@ -120,8 +129,6 @@ class GetPersonalSummaryByLoginDateAction extends Action{
     private function getWeeksTillEndOfJourneyPeriod() {
         if ( $this->currentUserGoal ) {
             $endDate = min($this->currentJourney->getEndDate(), $this->currentUserGoal->getEndDate());
-        } else {
-            $endDate = $this->currentJourney->getEndDate();
         }
 
         // Its always better to find the difference in weeks from the start of the week, rather than in between
