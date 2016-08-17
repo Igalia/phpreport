@@ -29,6 +29,7 @@
     define('PHPREPORT_ROOT', __DIR__ . '/../../');
     include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
     include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
+    include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
     include_once(PHPREPORT_ROOT . '/model/facade/CustomersFacade.php');
     include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
 
@@ -76,6 +77,24 @@
             $error[message] = "Forbidden service for this User";
             $response[error] = $error;
             break;
+        }
+
+        if(!LoginManager::hasExtraPermissions($sid)) {
+            $projectAssignedUsers = ProjectsFacade::GetProjectUsers( $projectId );
+            $userCanViewProject = false;
+            foreach($projectAssignedUsers as $userVO) {
+                if($userVO->getLogin() == $_SESSION['user']->getLogin()) {
+                    $userCanViewProject = true;
+                    break;
+                }
+            }
+            if(!$userCanViewProject) {
+                $response[success] = false;
+                $error[id] = 3;
+                $error[message] = "Forbidden service for this User";
+                $response[error] = $error;
+                break;
+            }
         }
 
         if ($dateFormat=="")

@@ -35,6 +35,17 @@
 
     $uid = $_GET['uid'];
 
+    // We are allowing only privelaged users to see details of other users
+    if(!LoginManager::hasExtraPermissions($sid)) {
+        $user = $_SESSION['user'];
+        $loggedInUserId = $user->getId();
+
+        if($uid != $loggedInUserId ) {
+            echo "You are not allowed to access this page";
+            return;
+        }
+    }
+
     $userToShow = UsersFacade::GetUser($uid);
 
 ?>
