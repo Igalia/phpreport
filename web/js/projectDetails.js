@@ -106,9 +106,9 @@ Ext.onReady(function(){
     var projectsPanel = new Ext.FormPanel({
         labelWidth: 100,
         frame: true,
-        width: 440,
+        width: 700,
         renderTo: 'content',
-        defaults: {width: 320},
+        defaults: {width: 580},
         items : [customerComboBox, projectComboBox]
     })
 });
