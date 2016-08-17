@@ -164,6 +164,22 @@ class DAOFactory {
     return new $className;
   }
 
+  /**
+   * @return UserGoalDAO
+   * @throws UnknownParameterException
+   */
+  public static function getUserGoalDAO() {
+    try {
+      $className = ConfigurationParametersManager::getParameter('USER_GOAL_DAO');
+    } catch(UnknownParameterException $e) {
+      $backend = ConfigurationParametersManager::getParameter('DAO_BACKEND');
+      $className = $backend . 'UserGoalDAO';
+    }
+
+    include_once(PHPREPORT_ROOT . '/model/dao/UserGoalDAO/' . $className . ".php");
+    return new $className;
+  }
+
     /** City DAO creator
      *
      * This function returns a new instance of {@link CityDAO}.

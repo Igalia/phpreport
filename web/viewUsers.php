@@ -435,6 +435,8 @@ Ext.onReady(function(){
         journeyStore.load({params: {'uid': login}});
         cityStore.writer.tpl = new Ext.XTemplate(tpl).compile();
         cityStore.load({params: {'uid': login}});
+        goalStore.writer.tpl = new Ext.XTemplate(tpl).compile();
+        goalStore.load({params: {'uid': login}});
     };
 
 
@@ -1038,6 +1040,7 @@ Ext.onReady(function(){
             this.getView().refresh();
             this.getSelectionModel().selectRow(0);
             this.inlineEditor.startEditing(0);
+            console.log(u);
         },
     });
 
@@ -1046,6 +1049,146 @@ Ext.onReady(function(){
         cityGrid.deleteBtn.setDisabled(sm.getCount() < 1);
     });
     <?php } ?>
+
+    /* Schema of the information about User Goals */
+    var goalRecord = new Ext.data.Record.create([
+        {name: 'id', type: 'int'},
+        {name: 'extraTime', type: 'int'},
+        {name: 'init', type: 'date', dateFormat: 'Y-m-d', sortDir:'DESC'},
+        {name: 'end', type: 'date', dateFormat: 'Y-m-d', sortDir:'DESC'},
+    ]);
+
+    /* Proxy to the services related with load/save User Goals */
+    var goalProxy = new Ext.data.HttpProxy({
+        method: 'POST',
+        api: {
+            read    : {url: 'services/getUserGoalsService.php', method: 'GET'},
+            create    : 'services/createUserGoalsService.php',
+            update    : 'services/updateUserGoalsService.php',
+            destroy    : 'services/deleteUserGoalsService.php',
+        },
+    });
+
+    /* Store to load/save User Goals */
+    var goalStore = new Ext.data.Store({
+        id: 'goalStore',
+        autoSave: false, //if set true, changes will be sent instantly
+        baseParams: {<?php if ($sid) {?>
+            'sid': sessionId, <?php } ?>
+        },
+        storeId: 'goalCost',
+        proxy: goalProxy,
+        reader: new Ext.data.XmlReader({record: 'userGoal', idProperty:'id' }, goalRecord),
+        writer: new Ext.data.XmlWriter({xmlEncoding: 'UTF-8', writeAllFields: true, root: 'userGoals'}, goalRecord),
+        remoteSort: false,
+        sortInfo: {
+            field: 'init',
+            direction: 'DESC',
+        },
+        listeners: {
+            'write': function() {
+                App.setAlert(true, "Goal Changes Saved");
+            },
+            'exception': function(){
+                App.setAlert(false, "Some Error Occurred While Saving The Changes");
+            },
+            'update': function() {
+                this.save();
+            }
+        }
+    });
+
+
+    var goalColModel =  new Ext.grid.ColumnModel([
+        {
+            header: "From Date",
+            width: 100,
+            format: 'd/m/Y',
+            sortable: true,
+            xtype: 'datecolumn',
+            dataIndex: 'init',
+            editor: {
+                id: 'goalInit',
+                xtype: 'datefieldplus',
+                format: 'd/m/Y',
+                startDay: 1,
+                allowBlank: false,
+                vtype:'daterange',
+                endDateField: 'goalEnd'
+            }
+        },
+        {
+            header: "To Date",
+            width: 100,
+            format: 'd/m/Y',
+            sortable: true,
+            xtype: 'datecolumn',
+            dataIndex: 'end',
+            editor: {
+                id: 'goalEnd',
+                xtype: 'datefieldplus',
+                format: 'd/m/Y',
+                startDay: 1,
+                allowBlank: false,
+                vtype:'daterange',
+                startDateField: 'goalInit'
+            }
+        },
+        {
+            header: "Extra Hours",
+            width: 100,
+            sortable: true,
+            dataIndex: 'extraTime',
+            xtype: 'numbercolumn',
+            format: '0.00',
+            editor: {
+                xtype: 'numberfield',
+                decimalPrecision: 5,
+                allowBlank: false
+            }
+        },
+    ]);
+
+    var goalEditor = new editor();
+
+    var goalGrid = new inlineEditionPanel({
+        inlineEditor: goalEditor,
+        plugins: [goalEditor],
+        id: 'goalGrid',
+        iconCls: 'silk-building',
+        width: 300,
+        store: goalStore,
+        frame: false,
+        header: false,
+        title: 'Goals',
+        loadMask: true,
+        colModel: goalColModel,
+        delMsg: 'Are you sure you want to delete the selected Goal entries?',
+
+        /**
+         * onAdd
+         */
+        onAdd: function(btn, ev) {
+            var date;
+            if (this.store.getAt(0))
+                date = this.store.getAt(0).get('end');
+            for (i=1; i<this.store.getCount(); i++)
+                if (date<this.store.getAt(i).get('end'))
+                    date = this.store.getAt(i).get('end');
+            if (!date)
+                date = new Date();
+            else date = date.add(Date.DAY, 1);
+            var u = new goalRecord({
+                init: date,
+                end: date.add(Date.MONTH, 12).add(Date.DAY, -1),
+            });
+            this.inlineEditor.stopEditing();
+            this.store.insert(0, u);
+            this.getView().refresh();
+            this.getSelectionModel().selectRow(0);
+            this.inlineEditor.startEditing(0);
+        },
+    });
 
     var historyTabs = new Ext.TabPanel({
         autoWidth: true,
@@ -1058,6 +1201,7 @@ Ext.onReady(function(){
             journeyGrid,
             areaGrid,
             cityGrid,
+            goalGrid
             ]
     });
 
@@ -1082,6 +1226,7 @@ Ext.onReady(function(){
         }
     });
 
+    historyTabs.setActiveTab(4);
     historyTabs.setActiveTab(3);
     historyTabs.setActiveTab(1);
     historyTabs.setActiveTab(2);

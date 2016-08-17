@@ -30,6 +30,8 @@
  */
 
 include_once(PHPREPORT_ROOT . '/model/facade/action/Action.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserJourneyHistoriesAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/ExtraHoursReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
@@ -61,6 +63,18 @@ class GetPersonalSummaryByLoginDateAction extends Action{
      */
     private $date;
 
+    /** The current active Journey
+     *
+     * @var JourneyHistoryVO
+     */
+    private $currentJourney;
+
+    /** The current active User Goal
+     * @var UserGoalVO
+     */
+    private $currentUserGoal;
+
+
     /** GetPersonalSummaryByUserIdDateAction constructor.
      *
      * This is just the constructor of this action.
@@ -69,11 +83,87 @@ class GetPersonalSummaryByLoginDateAction extends Action{
      * @param DateTime $date the date on which we want to compute the summary.
      */
     public function __construct(UserVO $userVO, DateTime $date) {
+        $dao = DAOFactory::getJourneyHistoryDAO();
+        $userGoaldao = DAOFactory::getUserGoalDAO();
+
         $this->userVO = $userVO;
         $this->date = $date;
+        $this->currentJourney = $dao->getByIntervals( $this->date, $this->date, $this->userVO->getId())[0];
+        $this->currentUserGoal = $userGoaldao->getUserGoalsForCurrentDate( $this->userVO->getId(), $this->date );
+
+        if( !$this->currentUserGoal && $this->currentJourney ) {
+            $userGoalVO = new UserGoalVO();
+            $userGoalVO->setUserId( $userVO->getId() );
+            $userGoalVO->setExtraHours( 0 );
+            $userGoalVO->setInitDate( max( $this->currentJourney->getInitDate(),
+                DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('first day of January', $this->date->getTimestamp())))));
+            $userGoalVO->setEndDate( min( $this->currentJourney->getEndDate(),
+                DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('last day of December', $this->date->getTimestamp())))));
+            $this->currentUserGoal = $userGoalVO;
+        }
         $this->preActionParameter="GET_PERSONAL_SUMMARY_BY_USER_LOGIN_DATE_PREACTION";
         $this->postActionParameter="GET_PERSONAL_SUMMARY_BY_USER_LOGIN_DATE_POSTACTION";
 
+    }
+
+    /**
+     * @return mixed
+     * @throws null
+     */
+    private function getWorkableHoursInThisJourneyPeriod() {
+        if ( $this->currentUserGoal ) {
+            $initDate = max($this->currentJourney->getInitDate(), $this->currentUserGoal->getInitDate());
+            $endDate = min($this->currentJourney->getEndDate(), $this->currentUserGoal->getEndDate());
+        }
+
+        //Now need to find out the workable hours in this year
+        $extraHoursAction = new ExtraHoursReportAction($initDate, $endDate, $this->userVO);
+        $results = $extraHoursAction->execute();
+        return $results[1][$this->userVO->getLogin()]['workable_hours'];
+
+    }
+
+    /**
+     * @return float
+     */
+    private function getWeeksTillEndOfJourneyPeriod() {
+        if ( $this->currentUserGoal ) {
+            $endDate = min($this->currentJourney->getEndDate(), $this->currentUserGoal->getEndDate());
+        }
+
+        // Its always better to find the difference in weeks from the start of the week, rather than in between
+        $thisWeekInitDay = DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('last sunday', $this->date->getTimestamp())));
+        $lastWeekInitDay = DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('next monday', $endDate->getTimestamp())));
+
+        $interval = $thisWeekInitDay->diff( $lastWeekInitDay );
+        return floor($interval->days/7);
+    }
+
+    /**
+     * @param DateTime $initDate
+     * @param DateTime $endDate
+     * @return float
+     */
+    private function getWeeksInBetweenDates(DateTime $initDate, DateTime $endDate) {
+        $interval = $initDate->diff( $endDate );
+        $weeksInBetween = floor($interval->days/7);
+        if ( $weeksInBetween == 0 ) {
+            return 1;
+        }
+        return $weeksInBetween;
+    }
+
+    /**
+     * @return float
+     * @throws null
+     */
+    private function getWorkedHoursInThisJourneyPeriod() {
+        $thisWeekInitDay = DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('last monday', $this->currentJourney->getInitDate()->getTimestamp())));
+        $lastWeekInitDay = DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('last sunday', $this->date->getTimestamp())));
+
+        $extraHoursAction = new ExtraHoursReportAction($thisWeekInitDay , $lastWeekInitDay , $this->userVO);
+        $results = $extraHoursAction->execute();
+        return floor($results[1][$this->userVO->getLogin()]['total_hours']);
     }
 
     /** Specific code execute.
@@ -99,19 +189,22 @@ class GetPersonalSummaryByLoginDateAction extends Action{
                 return NULL;
 
         }
+        $totalResults = $dao->getPersonalSummary($user->getId(), $this->date);
 
-        return $dao->getPersonalSummary($user->getId(), $this->date);
+        if( $this->currentJourney ) {
+            $extraGoalHoursSet = 0;
+            if ( $this->currentUserGoal ) {
+                // Only if some goal is set for this period
+                $weeksInBetween = $this->getWeeksInBetweenDates( $this->currentUserGoal->getInitDate(), $this->currentUserGoal->getEndDate() );
+                $extraGoalHoursSet += ( $this->currentUserGoal->getExtraHours() / $weeksInBetween );
+            }
+            $originalHoursToBeWorked = round(($this->getWorkableHoursInThisJourneyPeriod() - $this->getWorkedHoursInThisJourneyPeriod())/ $this->getWeeksTillEndOfJourneyPeriod() , 2);
+            $totalResults['weekly_goal'] = floor( ( $originalHoursToBeWorked + $extraGoalHoursSet ) * 60);
+        } else {
+            $totalResults['weekly_goal'] = 0;
+        }
+        return $totalResults;
 
     }
 
 }
-
-/*//Test code
-
-$user = new UserVO();
-$user->setLogin('jaragunde');
-$action = new GetPersonalSummaryByUserIdDateAction($user, date_create('2009-12-01'));
-//var_dump($action);
-$result = $action->execute();
-var_dump($result);
-*/

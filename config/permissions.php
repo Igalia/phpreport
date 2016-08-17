@@ -72,6 +72,8 @@ $permissions = array(
         '/services/getAllCitiesService.php', '/services/getProjectService.php',
         '/services/getAllSectorsService.php', '/services/getAllAreasService.php',
         '/services/getAllExtraHourVOsService.php', '/services/getAllCitiesService.php',
+	    '/services/getUserGoalsService.php', '/services/createUserGoalsService.php', '/services/updateUserGoalsService.php',
+	    '/services/deleteUserGoalsService.php',
         //user management screen (read only)
         '/viewUsers.php',
         '/services/getUserHourCostHistoriesService.php', '/services/getUserAreaHistoriesService.php',
