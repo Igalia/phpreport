@@ -66,17 +66,16 @@ class PostgreSQLModuleDAO extends ModuleDAO{
      */
     protected function setValues($row)
     {
+        $moduleVO = new ModuleVO();
 
-    $moduleVO = new ModuleVO();
+        $moduleVO->setId($row['id']);
+        $moduleVO->setName($row['name']);
+        $moduleVO->setInit(date_create($row['init']));
+        $moduleVO->setEnd(date_create($row['_end']));
+        $moduleVO->setSummary($row['summary']);
+        $moduleVO->setProjectId($row['projectid']);
 
-    $moduleVO->setId($row[id]);
-    $moduleVO->setName($row[name]);
-    $moduleVO->setInit(date_create($row[init]));
-    $moduleVO->setEnd(date_create($row[_end]));
-    $moduleVO->setSummary($row[summary]);
-    $moduleVO->setProjectId($row[projectid]);
-
-    return $moduleVO;
+        return $moduleVO;
     }
 
     /** Module retriever by id for PostgreSQL.

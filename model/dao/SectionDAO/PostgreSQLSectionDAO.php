@@ -64,18 +64,18 @@ class PostgreSQLSectionDAO extends SectionDAO{
      */
     protected function setValues($row)
     {
-
         $sectionVO = new SectionVO();
 
-        $sectionVO->setId($row[id]);
-        $sectionVO->setText($row[text]);
-        if ($row[accepted] == 't')
+        $sectionVO->setId($row['id']);
+        $sectionVO->setText($row['text']);
+        $sectionVO->setName($row['name']);
+        $sectionVO->setUserId($row['usrid']);
+        $sectionVO->setModuleId($row['moduleid']);
+
+        if ($row['accepted'] == 't')
             $sectionVO->setAccepted(true);
-        elseif ($row[accepted] == 'f')
+        elseif ($row['accepted'] == 'f')
             $sectionVO->setAccepted(false);
-        $sectionVO->setName($row[name]);
-        $sectionVO->setUserId($row[usrid]);
-        $sectionVO->setModuleId($row[moduleid]);
 
         return $sectionVO;
     }

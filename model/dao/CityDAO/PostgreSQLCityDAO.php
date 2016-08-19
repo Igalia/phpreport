@@ -65,13 +65,12 @@ class PostgreSQLCityDAO extends CityDAO{
      */
     protected function setValues($row)
     {
+        $cityVO = new CityVO();
 
-    $cityVO = new CityVO();
+        $cityVO->setId($row['id']);
+        $cityVO->setName($row['name']);
 
-        $cityVO->setId($row[id]);
-        $cityVO->setName($row[name]);
-
-    return $cityVO;
+        return $cityVO;
     }
 
     /** Cities retriever by id.

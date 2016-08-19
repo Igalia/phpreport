@@ -66,25 +66,25 @@ class PostgreSQLTaskStoryDAO extends TaskStoryDAO{
      */
     protected function setValues($row)
     {
+        $taskStoryVO = new TaskStoryVO();
 
-    $taskStoryVO = new TaskStoryVO();
+        $taskStoryVO->setId($row['id']);
+        $taskStoryVO->setRisk($row['risk']);
+        $taskStoryVO->setName($row['name']);
+        $taskStoryVO->setEstHours($row['est_hours']);
+        $taskStoryVO->setToDo($row['to_do']);
+        $taskStoryVO->setStoryId($row['storyid']);
+        $taskStoryVO->setUserId($row['usrid']);
+        $taskStoryVO->setTaskSectionId($row['task_sectionid']);
 
-    $taskStoryVO->setId($row[id]);
-    $taskStoryVO->setRisk($row[risk]);
-    $taskStoryVO->setName($row[name]);
-    $taskStoryVO->setEstHours($row[est_hours]);
-    $taskStoryVO->setToDo($row[to_do]);
-    if ($row[est_end])
-        $taskStoryVO->setEstEnd(date_create($row[est_end]));
-    if ($row[_end])
-        $taskStoryVO->setEnd(date_create($row[_end]));
-    if ($row[init])
-        $taskStoryVO->setInit(date_create($row[init]));
-    $taskStoryVO->setStoryId($row[storyid]);
-    $taskStoryVO->setUserId($row[usrid]);
-    $taskStoryVO->setTaskSectionId($row[task_sectionid]);
+        if ($row['est_end'])
+            $taskStoryVO->setEstEnd(date_create($row['est_end']));
+        if ($row['_end'])
+            $taskStoryVO->setEnd(date_create($row['_end']));
+        if ($row['init'])
+            $taskStoryVO->setInit(date_create($row['init']));
 
-    return $taskStoryVO;
+        return $taskStoryVO;
     }
 
     /** TaskStory retriever by id for PostgreSQL.

@@ -65,17 +65,16 @@ class PostgreSQLTaskSectionDAO extends TaskSectionDAO{
      */
     protected function setValues($row)
     {
+        $taskSectionVO = new TaskSectionVO();
 
-    $taskSectionVO = new TaskSectionVO();
+        $taskSectionVO->setId($row['id']);
+        $taskSectionVO->setName($row['name']);
+        $taskSectionVO->setRisk($row['risk']);
+        $taskSectionVO->setEstHours($row['est_hours']);
+        $taskSectionVO->setSectionId($row['sectionid']);
+        $taskSectionVO->setUserId($row['usrid']);
 
-    $taskSectionVO->setId($row[id]);
-    $taskSectionVO->setName($row[name]);
-    $taskSectionVO->setRisk($row[risk]);
-    $taskSectionVO->setEstHours($row[est_hours]);
-    $taskSectionVO->setSectionId($row[sectionid]);
-    $taskSectionVO->setUserId($row[usrid]);
-
-    return $taskSectionVO;
+        return $taskSectionVO;
     }
 
     /** TaskSection retriever by id for PostgreSQL.

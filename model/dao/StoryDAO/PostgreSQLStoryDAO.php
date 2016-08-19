@@ -64,20 +64,18 @@ class PostgreSQLStoryDAO extends StoryDAO{
      */
     protected function setValues($row)
     {
-
         $storyVO = new StoryVO();
 
-        $storyVO->setId($row[id]);
+        $storyVO->setId($row['id']);
+        $storyVO->setName($row['name']);
+        $storyVO->setUserId($row['usrid']);
+        $storyVO->setStoryId($row['storyid']);
+        $storyVO->setIterationId($row['iterationid']);
 
-        if (strtolower($row[accepted]) == "t")
+        if (strtolower($row['accepted']) == "t")
             $storyVO->setAccepted(True);
-        elseif (strtolower($row[accepted]) == "f")
+        elseif (strtolower($row['accepted']) == "f")
             $storyVO->setAccepted(False);
-
-        $storyVO->setName($row[name]);
-        $storyVO->setUserId($row[usrid]);
-        $storyVO->setStoryId($row[storyid]);
-        $storyVO->setIterationId($row[iterationid]);
 
         return $storyVO;
     }

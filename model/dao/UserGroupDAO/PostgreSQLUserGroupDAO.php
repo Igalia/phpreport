@@ -64,13 +64,12 @@ class PostgreSQLUserGroupDAO extends UserGroupDAO{
      */
     protected function setValues($row)
     {
+        $userGroupVO = new UserGroupVO();
 
-    $userGroupVO = new UserGroupVO();
+        $userGroupVO->setId($row['id']);
+        $userGroupVO->setName($row['name']);
 
-        $userGroupVO->setId($row[id]);
-        $userGroupVO->setName($row[name]);
-
-    return $userGroupVO;
+        return $userGroupVO;
     }
 
     /** User Group retriever by name for PostgreSQL.

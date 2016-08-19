@@ -66,17 +66,16 @@ class PostgreSQLIterationDAO extends IterationDAO{
      */
     protected function setValues($row)
     {
+        $iterationVO = new IterationVO();
 
-    $iterationVO = new IterationVO();
+        $iterationVO->setId($row['id']);
+        $iterationVO->setName($row['name']);
+        $iterationVO->setInit(date_create($row['init']));
+        $iterationVO->setEnd(date_create($row['_end']));
+        $iterationVO->setSummary($row['summary']);
+        $iterationVO->setProjectId($row['projectid']);
 
-    $iterationVO->setId($row[id]);
-    $iterationVO->setName($row[name]);
-    $iterationVO->setInit(date_create($row[init]));
-    $iterationVO->setEnd(date_create($row[_end]));
-    $iterationVO->setSummary($row[summary]);
-    $iterationVO->setProjectId($row[projectid]);
-
-    return $iterationVO;
+        return $iterationVO;
     }
 
     /** Iteration retriever by id for PostgreSQL.
