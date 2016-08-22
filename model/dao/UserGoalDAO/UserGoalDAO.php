@@ -103,4 +103,13 @@ abstract class UserGoalDAO extends BaseDAO{
      */
     public abstract function delete(UserGoalVO $userGoalVO);
 
+    /** User Goals fetcher for a given date
+     *
+     *  This function selects all user goals for a given user for a given date
+     *
+     * @param $userId int the id of the user
+     * @param DateTime $date
+     * @return mixed
+     */
+    public abstract function getUserGoalsForCurrentDate($userId, DateTime $date);
 }

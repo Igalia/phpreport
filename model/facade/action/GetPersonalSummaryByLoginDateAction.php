@@ -111,14 +111,8 @@ class GetPersonalSummaryByLoginDateAction extends Action{
      * @throws null
      */
     private function getWorkableHoursInThisPeriod() {
-        $initDate = $this->currentUserGoal ?
-            max(
-                $this->currentJourney->getInitDate(), $this->currentUserGoal->getInitDate()
-            ) : $this->currentJourney->getInitDate();
-        $endDate = $this->currentUserGoal ?
-            min(
-                $this->currentJourney->getEndDate(), $this->currentUserGoal->getEndDate()
-            ) : $this->currentJourney->getEndDate();
+        $initDate = max( $this->currentJourney->getInitDate(), $this->currentUserGoal->getInitDate() );
+        $endDate = min( $this->currentJourney->getEndDate(), $this->currentUserGoal->getEndDate() );
 
         //Now need to find out the workable hours in this year
         $extraHoursAction = new ExtraHoursReportAction($initDate, $endDate, $this->userVO);
@@ -131,31 +125,17 @@ class GetPersonalSummaryByLoginDateAction extends Action{
      * @return float
      */
     private function getWeeksTillEndOfJourneyPeriod() {
-        if ( $this->currentUserGoal ) {
-            $endDate = min($this->currentJourney->getEndDate(), $this->currentUserGoal->getEndDate());
-        }
+        $endDate = min($this->currentJourney->getEndDate(), $this->currentUserGoal->getEndDate());
 
         // Its always better to find the difference in weeks from the start of the week, rather than in between
-        $thisWeekInitDay = DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('last sunday', $this->date->getTimestamp())));
-        $lastWeekInitDay = DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('next monday', $endDate->getTimestamp())));
+        $thisWeekInitDay = new DateTime();
+        $thisWeekInitDay->setTimestamp(strtotime('last sunday', $this->date->getTimestamp()));
+
+        $lastWeekInitDay = new DateTime();
+        $lastWeekInitDay->setTimestamp( strtotime('next monday', $endDate->getTimestamp()));
 
         $interval = $thisWeekInitDay->diff( $lastWeekInitDay );
         return floor($interval->days/7);
-    }
-
-    /**
-     * @param DateTime $initDate
-     * @param DateTime $endDate
-     * @return float
-     */
-    private function getWeeksInBetweenDates(DateTime $initDate, DateTime $endDate) {
-        $interval = $initDate->diff( $endDate );
-        $weeksInBetween = ceil($interval->days/7);
-
-        if ( $weeksInBetween == 0 ) {
-            return 1;
-        }
-        return $weeksInBetween;
     }
 
     /**
@@ -163,16 +143,14 @@ class GetPersonalSummaryByLoginDateAction extends Action{
      * @throws null
      */
     private function getWorkedHoursInThisPeriod() {
-        $initDay = $this->currentUserGoal ?
-            max(
-                $this->currentJourney->getInitDate(), $this->currentUserGoal->getInitDate()
-            ) : $this->currentJourney->getInitDate();
+        $initDay = max( $this->currentJourney->getInitDate(), $this->currentUserGoal->getInitDate() );
 
-        $lastWeekInitDay = DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('last sunday', $this->date->getTimestamp())));
+        $lastWeekInitDay = new DateTime();
+        $lastWeekInitDay->setTimestamp(strtotime('last sunday', $this->date->getTimestamp()));
 
         $extraHoursAction = new ExtraHoursReportAction($initDay , $lastWeekInitDay , $this->userVO);
         $results = $extraHoursAction->execute();
-        return floor($results[1][$this->userVO->getLogin()]['total_hours']);
+        return $results[1][$this->userVO->getLogin()]['total_hours'];
     }
 
     /** Specific code execute.
@@ -202,11 +180,10 @@ class GetPersonalSummaryByLoginDateAction extends Action{
 
         if( $this->currentJourney ) {
             $extraGoalHoursSet = 0;
-            if ( $this->currentUserGoal ) {
-                $extraGoalHoursSet += $this->currentUserGoal->getExtraHours() / $this->getWeeksTillEndOfJourneyPeriod();
-            }
+            $weeksTillEndOfJourneyPeriod = $this->getWeeksTillEndOfJourneyPeriod();
+            $extraGoalHoursSet += $this->currentUserGoal->getExtraHours() / $weeksTillEndOfJourneyPeriod;
 
-            $originalHoursToBeWorked = ($this->getWorkableHoursInThisPeriod() - $this->getWorkedHoursInThisPeriod())/ $this->getWeeksTillEndOfJourneyPeriod();
+            $originalHoursToBeWorked = ($this->getWorkableHoursInThisPeriod() - $this->getWorkedHoursInThisPeriod())/ $weeksTillEndOfJourneyPeriod;
             $totalResults['weekly_goal'] = round( ( $originalHoursToBeWorked + $extraGoalHoursSet ) * 60);
         } else {
             $totalResults['weekly_goal'] = 0;
