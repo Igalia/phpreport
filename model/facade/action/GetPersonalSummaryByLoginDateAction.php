@@ -163,15 +163,14 @@ class GetPersonalSummaryByLoginDateAction extends Action{
      * @throws null
      */
     private function getWorkedHoursInThisPeriod() {
-        $initWeek = $this->currentUserGoal ?
+        $initDay = $this->currentUserGoal ?
             max(
                 $this->currentJourney->getInitDate(), $this->currentUserGoal->getInitDate()
             ) : $this->currentJourney->getInitDate();
 
-        $thisWeekInitDay = DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('last monday', $initWeek->getTimestamp())));
         $lastWeekInitDay = DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('last sunday', $this->date->getTimestamp())));
 
-        $extraHoursAction = new ExtraHoursReportAction($thisWeekInitDay , $lastWeekInitDay , $this->userVO);
+        $extraHoursAction = new ExtraHoursReportAction($initDay , $lastWeekInitDay , $this->userVO);
         $results = $extraHoursAction->execute();
         return floor($results[1][$this->userVO->getLogin()]['total_hours']);
     }
@@ -204,12 +203,11 @@ class GetPersonalSummaryByLoginDateAction extends Action{
         if( $this->currentJourney ) {
             $extraGoalHoursSet = 0;
             if ( $this->currentUserGoal ) {
-                // Only if some goal is set for this period
-                $weeksInBetween = $this->getWeeksInBetweenDates( $this->currentUserGoal->getInitDate(), $this->currentUserGoal->getEndDate() );
-                $extraGoalHoursSet += ( $this->currentUserGoal->getExtraHours() / $weeksInBetween );
+                $extraGoalHoursSet += $this->currentUserGoal->getExtraHours() / $this->getWeeksTillEndOfJourneyPeriod();
             }
-            $originalHoursToBeWorked = round(($this->getWorkableHoursInThisPeriod() - $this->getWorkedHoursInThisPeriod())/ $this->getWeeksTillEndOfJourneyPeriod() , 2);
-            $totalResults['weekly_goal'] = floor( ( $originalHoursToBeWorked + $extraGoalHoursSet ) * 60);
+
+            $originalHoursToBeWorked = ($this->getWorkableHoursInThisPeriod() - $this->getWorkedHoursInThisPeriod())/ $this->getWeeksTillEndOfJourneyPeriod();
+            $totalResults['weekly_goal'] = round( ( $originalHoursToBeWorked + $extraGoalHoursSet ) * 60);
         } else {
             $totalResults['weekly_goal'] = 0;
         }
