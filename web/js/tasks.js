@@ -807,7 +807,9 @@ Ext.onReady(function(){
             'save': function () {
                 if (!myStore.error) {
                     Ext.getCmp('status_display').setText("Status: saved at "+ new Date());
-                    App.setAlert(true, "Task Records Changes Saved");
+                    if(!myStore.autoSaved) {
+                        App.setAlert(true, "Task Records Changes Saved");
+                    }
                     summaryStore.load();
                     unsavedChanges = false;
                 }
@@ -924,6 +926,7 @@ Ext.onReady(function(){
     function saveTasks() {
         // First we check if the time fields of all records are valid, and then save
         if (validateTasks()) {
+            myStore.autoSaved = false;
             addToMyStore();
         } else  // Otherwise, we print the error message
           App.setAlert(false, "Check For Invalid Field Values");
@@ -933,6 +936,7 @@ Ext.onReady(function(){
     window.setInterval(function () {
         if(isUnsaved()) {
             if(validateTasks()) {
+                myStore.autoSaved = true;
                 addToMyStore();
             }
         }
