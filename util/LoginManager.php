@@ -112,8 +112,7 @@ class LoginManager {
    * @return UserVO the User if it's logged in already, or a NULL
    * value otherwise.
    */
-  function isLogged($sid = NULL)
-  {
+  public static function isLogged($sid = NULL) {
 
     if ($sid)
       session_id($sid);
