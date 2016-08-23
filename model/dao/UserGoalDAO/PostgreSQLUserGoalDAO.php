@@ -202,6 +202,15 @@ class PostgreSQLUserGoalDAO extends UserGoalDAO{
         return $affectedRows;
     }
 
+    /** User Goals fetcher for a given date
+     *
+     *  This function selects all user goals for a given user for a given date
+     *
+     * @param $userId int the id of the user
+     * @param DateTime $date
+     * @return mixed
+     * @throws {@link SQLQueryErrorException}
+     */
     public function getUserGoalsForCurrentDate($userId, DateTime $date) {
         if (!is_numeric($userId)) {
             throw new SQLIncorrectTypeException( $userId );
