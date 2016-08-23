@@ -156,6 +156,15 @@
                         }
                         break;
 
+                case "customerId":$parser->read();
+                    if ($parser->hasValue)
+                    {
+                        $projectVO->setCustomerId($parser->value);
+                        $parser->next();
+                        $parser->next();
+                    }
+                    break;
+
                 case "type":    $parser->read();
                         if ($parser->hasValue)
                         {
@@ -211,7 +220,7 @@
         foreach((array) $createProjects as $project)
         {
 
-            $string = $string . "<project><id>{$project->getId()}</id><areaId>{$project->getAreaId()}</areaId><activation>{$project->getActivation()}</activation><description>" . escape_string($project->getDescription()) . "</description><invoice>{$project->getInvoice()}</invoice>";
+            $string = $string . "<project><id>{$project->getId()}</id><areaId>{$project->getAreaId()}</areaId><customerId>{$project->getCustomerId()}</customerId><activation>{$project->getActivation()}</activation><description>" . escape_string($project->getDescription()) . "</description><invoice>{$project->getInvoice()}</invoice>";
 
             if (!is_null($project->getInit()))
                 $string = $string . "<init format='Y-m-d'>{$project->getInit()->format("Y-m-d")}</init>";

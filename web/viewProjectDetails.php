@@ -110,6 +110,13 @@
                               echo "value:'" . $project->getId() . "'";
                         ?>
                     },{
+                    id:'customer',
+                    name: 'customer',
+                    fieldLabel:'Customer',
+                    <?php
+                    echo "value:'" . $project->getCustomerId() . "'";
+                    ?>
+                    },{
                         id:'init',
                         name: 'init',
                         fieldLabel:'Init Date',

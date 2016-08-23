@@ -35,10 +35,12 @@ include_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
 include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
 include_once(PHPREPORT_ROOT . '/model/facade/AdminFacade.php');
+include_once(PHPREPORT_ROOT . '/model/facade/CustomersFacade.php');
 include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 
 // We retrieve the Areas
 $areas = AdminFacade::GetAllAreas();
+$customers = CustomersFacade::GetAllCustomers();
 
 ?>
 <script src="js/include/sessionTracker.js"></script>
@@ -85,6 +87,30 @@ Ext.onReady(function(){
 
     };
 
+    var customersStore = new Ext.data.ArrayStore({
+        id: 0,
+        fields: ['id', 'name'],
+        sortInfo: { field: 'name', direction: 'ASC' },
+        data : [
+            <?php
+
+            foreach((array)$customers as $customer) {
+                $customerName = addslashes($customer->getName());
+                echo "[{$customer->getId()}, '{$customerName}'],";
+            }
+            ?>
+        ]});
+
+    function customers(val){
+
+        var record =  customersStore.getById(val);
+
+        if (record)
+            return record.get('name');
+        else
+            return val;
+
+    };
 
     // Generic fields array to use in both store defs. related to Users
     var fields = [
@@ -559,6 +585,21 @@ Ext.onReady(function(){
                                 }
                             },
                         },{
+                            fieldLabel: 'Customer <font color="red">*</font>',
+                            name: 'customer',
+                            id: 'winCustomer',
+                            xtype: 'combo',
+                            allowBlank: false,
+                            displayField: 'name',
+                            valueField: 'id',
+                            hiddenName: 'hiddenArea',
+                            store: customersStore,
+                            typeAhead: true,
+                            mode: 'local',
+                            triggerAction: 'all',
+                            emptyText:'Customer',
+                            selectOnFocus:true
+                        },{
                             fieldLabel: 'Area <font color="red">*</font>',
                             name: 'area',
                             id: 'winArea',
@@ -665,6 +706,7 @@ Ext.onReady(function(){
                                 movedHours:     Ext.getCmp('winMovedHours').getValue(),
                                 estHours:       Ext.getCmp('winEstHours').getValue(),
                                 areaId:         Ext.getCmp('winArea').getValue(),
+                                customerId:     Ext.getCmp('winCustomer').getValue(),
                                 description:    Ext.getCmp('winDescription').getValue(),
                                 schedType:      Ext.getCmp('winSchedule').getValue(),
                                 type:           Ext.getCmp('winType').getValue(),
@@ -699,6 +741,7 @@ Ext.onReady(function(){
                         Ext.getCmp('winMovedHours').reset();
                         Ext.getCmp('winEstHours').reset();
                         Ext.getCmp('winArea').reset();
+                        Ext.getCmp('winCustomer').reset();
                         Ext.getCmp('winDescription').reset();
                         Ext.getCmp('winSchedule').reset();
                         Ext.getCmp('winType').reset();
@@ -759,6 +802,22 @@ Ext.onReady(function(){
                                     this.setValue(Trim(this.getValue()));
                                 }
                             },
+                        },{
+                            fieldLabel: 'Customer <font color="red">*</font>',
+                            name: 'customer',
+                            id: 'win2Customer',
+                            xtype: 'combo',
+                            allowBlank: false,
+                            displayField: 'name',
+                            valueField: 'id',
+                            hiddenName: 'hiddenArea',
+                            store: customersStore,
+                            typeAhead: true,
+                            mode: 'local',
+                            triggerAction: 'all',
+                            emptyText:'Customer',
+                            selectOnFocus:true,
+                            value: selected.data.customerId,
                         },{
                             fieldLabel: 'Area <font color="red">*</font>',
                             name: 'area',
@@ -859,6 +918,7 @@ Ext.onReady(function(){
                         handler: function(){
                             Ext.getCmp('win2Description').reset();
                             Ext.getCmp('win2Area').reset();
+                            Ext.getCmp('win2Customer').reset();
                             Ext.getCmp('win2Type').reset();
                             Ext.getCmp('win2MovedHours').reset();
                             Ext.getCmp('win2EstHours').reset();
@@ -890,6 +950,7 @@ Ext.onReady(function(){
                            selected.set('movedHours', Ext.getCmp('win2MovedHours').getValue());
                            selected.set('estHours', Ext.getCmp('win2EstHours').getValue());
                            selected.set('areaId', Ext.getCmp('win2Area').getValue());
+                           selected.set('customerId', Ext.getCmp('win2Customer').getValue());
                            selected.set('type', Ext.getCmp('win2Type').getValue());
                            selected.set('schedType', Ext.getCmp('win2Schedule').getValue());
                            selected.set('activation', Ext.getCmp('win2Activation').getValue());
@@ -1351,6 +1412,7 @@ Ext.onReady(function(){
             {name: 'invoice', type: 'float'},
             {name: 'estHours', type: 'float'},
             {name: 'areaId', type: 'int'},
+            {name: 'customerId', type: 'int'},
             {name: 'movedHours', type: 'float'},
             {name: 'schedType', type: 'string'},
             {name: 'type', type: 'string'},
@@ -1431,6 +1493,12 @@ Ext.onReady(function(){
             width: 300,
             sortable: true,
             dataIndex: 'description',
+        },{
+            header: 'Customer',
+            width: 100,
+            sortable: true,
+            dataIndex: 'customerId',
+            renderer: customers,
         },{
             header: 'Activation',
             width: 65,

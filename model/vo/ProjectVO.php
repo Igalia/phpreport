@@ -57,6 +57,7 @@ class ProjectVO {
     protected $invoice = NULL;
     protected $estHours = NULL;
     protected $areaid = NULL;
+    protected $customerId = NULL;
     protected $description = NULL;
     protected $movedHours = NULL;
     protected $schedType = NULL;
@@ -155,6 +156,17 @@ class ProjectVO {
 
     public function getAreaId() {
         return $this->areaId;
+    }
+
+    public function setCustomerId($customerId) {
+        if (is_null($customerId))
+            $this->customerId = $customerId;
+        else
+            $this->customerId = (int) $customerId;
+    }
+
+    public function getCustomerId() {
+        return $this->customerId;
     }
 
     public function setSchedType($schedType) {
