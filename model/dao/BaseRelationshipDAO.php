@@ -109,18 +109,16 @@ abstract class BaseRelationshipDAO {
      */
     protected function execute($sql) {
         $res = @pg_query($this->connect, $sql);
-        $VO = array();
-    if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
+        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
 
+        $VO = array();
         if(pg_num_rows($res) > 0) {
             for($i = 0; $i < pg_num_rows($res); $i++) {
                 $row = @pg_fetch_array($res);
                 $VO[$i] = $row;
             }
         }
-
-    @pg_freeresult($res);
-
+        @pg_freeresult($res);
         return $VO;
     }
 
@@ -137,14 +135,16 @@ abstract class BaseRelationshipDAO {
      */
     protected function executeFromA($sql) {
         $res = @pg_query($this->connect, $sql);
-    if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
+        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
 
+        $VO = array();
         if(pg_num_rows($res) > 0) {
             for($i = 0; $i < pg_num_rows($res); $i++) {
                 $row = @pg_fetch_array($res);
                 $VO[$i] = $this->setBValues($row);
             }
         }
+        @pg_freeresult($res);
         return $VO;
     }
 
@@ -161,14 +161,16 @@ abstract class BaseRelationshipDAO {
      */
     protected function executeFromB($sql) {
         $res = @pg_query($this->connect, $sql);
-    if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
+        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
 
+        $VO = array();
         if(pg_num_rows($res) > 0) {
             for($i = 0; $i < pg_num_rows($res); $i++) {
                 $row = @pg_fetch_array($res);
                 $VO[$i] = $this->setAValues($row);
             }
         }
+        @pg_freeresult($res);
         return $VO;
     }
 }
