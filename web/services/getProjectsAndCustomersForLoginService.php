@@ -85,40 +85,19 @@
             break;
             }
 
-        if ($customerId == "")
-        {
-          $projects = ProjectsFacade::GetProjectsByCustomerUserLogin(NULL, NULL, $active, $order);
-            $string = "<projects";
+        $projects = ProjectsFacade::GetProjectsAndCustomersByUserLogin(NULL, $active, $order);
+        $string = "<projects";
+
+
         if ($active)
             $string = $string . " active = 'True' order='" . $order . "'>";
         else
             $string = $string . " order='" . $order . "'>";
-        }
-        else
-        {
-            if ($onlyUser)
-            {
-              $projects = ProjectsFacade::GetProjectsByCustomerUserLogin($customerId, $login, $active, $order);
-                $string = "<projects cid='" . $customerId . "' login='" . $login . "'";
-
-            } else
-            {
-              $projects = ProjectsFacade::GetProjectsByCustomerUserLogin($customerId, NULL, $active, $order);
-                $string = "<projects cid='" . $customerId . "'";
-            }
-
-            if ($active)
-            $string = $string . " active = 'True' order='" . $order . "'>";
-            else
-            $string = $string . " order='" . $order . "'>";
-
-
-        }
 
         foreach((array) $projects as $project)
         {
 
-        $string = $string . "<project><id>{$project->getId()}</id><areaId>{$project->getAreaId()}</areaId><activation>{$project->getActivation()}</activation><description>" . escape_string($project->getDescription()) . "</description><invoice>{$project->getInvoice()}</invoice>";
+        $string = $string . "<project><id>{$project->getId()}</id><areaId>{$project->getAreaId()}</areaId><customerId>{$project->getCustomerId()}</customerId><activation>{$project->getActivation()}</activation><description>" . escape_string($project->getDescription()) . "</description><customerName>" . escape_string($project->getCustomerName()) . "</customerName><invoice>{$project->getInvoice()}</invoice>";
 
         if (!is_null($project->getInit()))
             $string = $string . "<initDate format='Y-m-d'>{$project->getInit()->format("Y-m-d")}</initDate>";

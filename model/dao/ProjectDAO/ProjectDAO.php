@@ -259,6 +259,17 @@ abstract class ProjectDAO extends BaseDAO{
      */
     public abstract function getByCustomerUserLogin($customerId = NULL, $userLogin = NULL, $active = False, $orderField = 'id');
 
+    /** Project along with Customer retriever
+     *
+     * This function retrieves the rows from the Project table, along with customer details for use in the tasks page
+     *
+     * @param null $userLogin
+     * @param bool $active
+     * @param string $orderField
+     * @return mixed
+     */
+    public abstract function getProjectsAndCustomersByUserLogin($userLogin = NULL, $active = False, $orderField = 'id');
+
     /** Custom Projects retriever.
      *
      * This function retrieves all rows from Project table and creates a {@link CustomProjectVO} with data from each row,

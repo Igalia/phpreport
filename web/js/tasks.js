@@ -69,6 +69,7 @@ var customerRecord = new Ext.data.Record.create([
 var projectRecord = new Ext.data.Record.create([
     {name:'id'},
     {name:'description'},
+    {name: 'customerName'}
 ]);
 /* Schema of the information about task-stories */
 var taskStoryRecord = new Ext.data.Record.create([
@@ -320,11 +321,22 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     autoSave: false, //if set true, changes will be sent instantly
                     baseParams: {
                         'login': user,
-                        'cid': this.taskRecord.data['customerId'],
                         'order': 'description',
                         'active': 'true',
                     },
-                    proxy: new Ext.data.HttpProxy({url: 'services/getCustomerProjectsService.php', method: 'GET'}),
+                    filter: function(property, value, anyMatch, caseSensitive) {
+                        var fn;
+                        if (((property == 'description') || (property == 'customerName')) && !Ext.isEmpty(value, false)) {
+                            value = this.data.createValueMatcher(value, anyMatch, caseSensitive);
+                            fn = function(r){
+                                return value.test(r.data['description']) || value.test(r.data['customerName']);
+                            };
+                        } else {
+                            fn = this.createFilterFn(property, value, anyMatch, caseSensitive);
+                        }
+                        return fn ? this.filterBy(fn) : this.clearFilter();
+                    },
+                    proxy: new Ext.data.HttpProxy({url: 'services/getProjectsAndCustomersForLoginService.php', method: 'GET'}),
                     reader:new Ext.data.XmlReader({record: 'project', id:'id' }, projectRecord),
                     remoteSort: false,
                     listeners: {
@@ -355,17 +367,18 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                                     this.setBaseParam('pid', this.parent.taskRecord.data['projectId']);
                                     this.load();
                                 }
-                            } else
+                            } else {
                                 this.parent.projectComboBox.setValue(this.parent.taskRecord.data['projectId']);
+                            }
                         }
                     },
                 }),
                 mode: 'local',
                 valueField: 'id',
-                typeAhead: true,
                 triggerAction: 'all',
-                displayField: 'description',
                 forceSelection: true,
+                tpl: '<tpl for="."><div class="x-combo-list-item" >{description} - {customerName}</div></tpl>',
+                displayField: 'description',
                 listeners: {
                     'select': function () {
                         this.parent.taskRecord.set('projectId',this.getValue());
@@ -812,9 +825,7 @@ Ext.onReady(function(){
             'save': function () {
                 if (!myStore.error) {
                     Ext.getCmp('status_display').setText("Status: saved at "+ new Date());
-                    if(!myStore.autoSaved) {
-                        App.setAlert(true, "Task Records Changes Saved");
-                    }
+                    App.setAlert(true, "Task Records Changes Saved");
                     summaryStore.load();
                     unsavedChanges = false;
                 }
@@ -938,7 +949,6 @@ Ext.onReady(function(){
     function saveTasks() {
         // First we check if the time fields of all records are valid, and then save
         if (validateTasks()) {
-            myStore.autoSaved = false;
             addToMyStore();
         } else  // Otherwise, we print the error message
           App.setAlert(false, "Check For Invalid Field Values");
@@ -948,7 +958,6 @@ Ext.onReady(function(){
     window.setInterval(function () {
         if(isUnsaved()) {
             if(validateTasks()) {
-                myStore.autoSaved = true;
                 addToMyStore();
             }
         }

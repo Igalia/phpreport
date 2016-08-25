@@ -88,11 +88,16 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         $projectVO->setInvoice($row['invoice']);
         $projectVO->setEstHours($row['est_hours']);
         $projectVO->setAreaId($row['areaid']);
-        $projectVO->setCustomerId($row['customerid']);
         $projectVO->setType($row['type']);
         $projectVO->setDescription($row['description']);
         $projectVO->setMovedHours($row['moved_hours']);
         $projectVO->setSchedType($row['sched_type']);
+        if(isset($row['customer_name'])) {
+            $projectVO->setCustomerName($row['customer_name']);
+        }
+        if(isset($row['customerid'])) {
+            $projectVO->setCustomerId($row['customerid']);
+        }
 
         return $projectVO;
 
@@ -157,13 +162,18 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         $projectVO->setInvoice($row['invoice']);
         $projectVO->setEstHours($row['est_hours']);
         $projectVO->setAreaId($row['areaid']);
-        $projectVO->setCustomerId($row['customerid']);
         $projectVO->setType($row['type']);
         $projectVO->setDescription($row['description']);
         $projectVO->setMovedHours($row['moved_hours']);
         $projectVO->setSchedType($row['sched_type']);
         $projectVO->setWorkedHours($row['worked_hours']);
         $projectVO->setTotalCost($row['total_cost']);
+        if(isset($row['customer_name'])) {
+            $projectVO->setCustomerName($row['customer_name']);
+        }
+        if(isset($row['customerid'])) {
+            $projectVO->setCustomerId($row['customerid']);
+        }
 
         return $projectVO;
 
@@ -488,6 +498,34 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         return $this->execute($sql);
     }
 
+    /** Project and Customer retriever for PostgreSQL
+     *
+     * The function fetch details of a project along with its customers from the project table
+     *
+     * @param null $userLogin
+     * @param bool $active
+     * @param string $orderField
+     * @return array
+     * @throws SQLQueryErrorException
+     */
+    public function getProjectsAndCustomersByUserLogin($userLogin = NULL, $active = False, $orderField = 'id') {
+        $userCondition = "true";
+        $activeCondition = "true";
+
+        if ($userLogin)
+            $userCondition = "project.id IN (SELECT projectid FROM project_usr LEFT JOIN usr ON project_usr.usrid=usr.id ".
+                "WHERE login=" . DBPostgres::checkStringNull($userLogin) . ") ";
+
+        if ($active)
+            $activeCondition = "activation='True'";
+
+        $sql = "SELECT project.*, customer.name AS customer_name FROM
+                project INNER JOIN customer
+                ON project.customerid=customer.id 
+                ORDER BY $orderField ASC";
+        return $this->execute($sql);
+    }
+
     /** Projects retriever for PostgreSQL.
      *
      * This function retrieves all rows from Project table and creates a {@link ProjectVO} with data from each row.
@@ -611,7 +649,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         $sql = $sql . "areaid=" . DBPostgres::checkNull($projectVO->getAreaId()) . ", ";
 
         if ($update['customerId'])
-            $sql = $sql . "customerid=" . DBPostgres::checkNull($projectVO->getCustomerId()) . ", ";
+        $sql = $sql . "customerid=" . DBPostgres::checkNull($projectVO->getCustomerId()) . ", ";
 
         if ($update['description'])
         $sql = $sql . "description=" . DBPostgres::checkStringNull($projectVO->getDescription()) . ", ";
@@ -661,7 +699,8 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         // If the query returned a row then update
         if(sizeof($currProjectVO) > 0) {
 
-            $sql = "UPDATE project SET activation=" . DBPostgres::boolToString($projectVO->getActivation()) . ", init=" . DBPostgres::formatDate($projectVO->getInit()) . ", _end=" . DBPostgres::formatDate($projectVO->getEnd()) . ", invoice=" . DBPostgres::checkNull($projectVO->getInvoice()) . ", est_hours=" . DBPostgres::checkNull($projectVO->getEstHours()) . ", areaid=" . DBPostgres::checkNull($projectVO->getAreaId()) . ", type=" . DBPostgres::checkStringNull($projectVO->getType()) . ", description=" . DBPostgres::checkStringNull($projectVO->getDescription()) . ", moved_hours=" . DBPostgres::checkNull($projectVO->getMovedHours()) . ", sched_type=" . DBPostgres::checkStringNull($projectVO->getSchedType()) . ", customerid=" . DBPostgres::checkNull($projectVO->getCustomerId()) . " WHERE id=".$projectVO->getId();
+            $sql = "UPDATE project SET activation=" . DBPostgres::boolToString($projectVO->getActivation()) . ", init=" . DBPostgres::formatDate($projectVO->getInit()) . ", _end=" . DBPostgres::formatDate($projectVO->getEnd()) . ", invoice=" . DBPostgres::checkNull($projectVO->getInvoice()) . ", est_hours=" . DBPostgres::checkNull($projectVO->getEstHours()) . ", areaid=" . DBPostgres::checkNull($projectVO->getAreaId()) . ", type=" . DBPostgres::checkStringNull($projectVO->getType()) . ", description=" . DBPostgres::checkStringNull($projectVO->getDescription()) . ", moved_hours=" . DBPostgres::checkNull($projectVO->getMovedHours()) . ", sched_type=" . DBPostgres::checkStringNull($projectVO->getSchedType()) . " WHERE id=".$projectVO->getId();
+
             $res = pg_query($this->connect, $sql);
 
             if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
@@ -684,8 +723,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
     public function create(ProjectVO $projectVO) {
         $affectedRows = 0;
 
-        $sql = "INSERT INTO project (activation, init, _end, invoice, est_hours, areaid, type, description, moved_hours, sched_type, customerid) 
-            VALUES(" . DBPostgres::boolToString($projectVO->getActivation()) . ", " . DBPostgres::formatDate($projectVO->getInit()) . ", " . DBPostgres::formatDate($projectVO->getEnd()) . ", " . DBPostgres::checkNull($projectVO->getInvoice()) . ", " . DBPostgres::checkNull($projectVO->getEstHours()) . ", " . DBPostgres::checkNull($projectVO->getAreaId()) . ", " . DBPostgres::checkStringNull($projectVO->getType()) . ", " . DBPostgres::checkStringNull($projectVO->getDescription()) . ", " . DBPostgres::checkNull($projectVO->getMovedHours()) . ", " . DBPostgres::checkStringNull($projectVO->getSchedType()) . ", " . DBPostgres::checkNull($projectVO->getCustomerId()) .")";
+        $sql = "INSERT INTO project (activation, init, _end, invoice, est_hours, areaid, type, description, moved_hours, sched_type) VALUES(" . DBPostgres::boolToString($projectVO->getActivation()) . ", " . DBPostgres::formatDate($projectVO->getInit()) . ", " . DBPostgres::formatDate($projectVO->getEnd()) . ", " . DBPostgres::checkNull($projectVO->getInvoice()) . ", " . DBPostgres::checkNull($projectVO->getEstHours()) . ", " . DBPostgres::checkNull($projectVO->getAreaId()) . ", " . DBPostgres::checkStringNull($projectVO->getType()) . ", " . DBPostgres::checkStringNull($projectVO->getDescription()) . ", " . DBPostgres::checkNull($projectVO->getMovedHours()) . ", " . DBPostgres::checkStringNull($projectVO->getSchedType()) .")";
 
         $res = pg_query($this->connect, $sql);
 

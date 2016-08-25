@@ -40,7 +40,7 @@ $permissions = array(
         '/tasks.php', '/services/getUserTasksService.php',
         '/services/getPersonalSummaryByDateService.php',
         '/services/getUserCustomersService.php',
-        '/services/getCustomerProjectsService.php',  '/services/getOpenTaskStoriesService.php',
+        '/services/getProjectsAndCustomersForLoginService.php',  '/services/getOpenTaskStoriesService.php',
         '/services/createTasksService.php', '/services/deleteTasksService.php',
         '/services/updateTasksService.php', '/services/setTasksJsonService.php',
         '/services/getTasksFiltered.php', '/userTasksReport.php',

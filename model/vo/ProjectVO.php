@@ -58,6 +58,7 @@ class ProjectVO {
     protected $estHours = NULL;
     protected $areaid = NULL;
     protected $customerId = NULL;
+    protected $customerName = NULL;
     protected $description = NULL;
     protected $movedHours = NULL;
     protected $schedType = NULL;
@@ -175,6 +176,14 @@ class ProjectVO {
 
     public function getSchedType() {
         return $this->schedType;
+    }
+
+    public function getCustomerName() {
+        return $this->customerName;
+    }
+
+    public function setCustomerName($customerName) {
+        $this->customerName = (string) $customerName;
     }
 
     /**#@-*/

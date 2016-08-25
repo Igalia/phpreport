@@ -46,6 +46,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/PartialUpdateProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectsByCustomerUserLoginAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectsAndCustomersByUserLoginAction.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
 
@@ -414,6 +415,22 @@ abstract class ProjectsFacade {
           $action = new GetAllProjectsAction($active, $order);
         else
           $action = new GetProjectsByCustomerUserLoginAction($customerId, $userLogin, $active, $order);
+
+        return $action->execute();
+    }
+
+    /** GetProjectsAndCustomersByUserLogin Funciton
+     *
+     *  Retrieve a list of projects using the attributes user and activation as filters
+     *
+     * @param string $userLogin
+     * @param bool $active
+     * @param string $order
+     * @return mixed
+     * @throws null
+     */
+    static function GetProjectsAndCustomersByUserLogin($userLogin = NULL, $active = False, $order = 'id') {
+            $action = new GetProjectsAndCustomersByUserLoginAction($userLogin, $active, $order);
 
         return $action->execute();
     }
