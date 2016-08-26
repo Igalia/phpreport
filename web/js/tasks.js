@@ -1303,11 +1303,12 @@ Ext.onReady(function(){
     // empty task
     function addEmptyTask() {
         if (isLoaded()) {
-            if(tasksScrollArea.items.getCount() == 0) {
+            if(tasksScrollArea.items.getCount() == 0 && !forbidden && today) {
                 newTask();
+                Ext.getCmp('status_display').setText("Status: New empty task created for editing");
             }
         } else {
-            window.setTimeout(addEmptyTask, 100);
+            window.setTimeout(addEmptyTask, 5000);
         }
     }
 
