@@ -520,7 +520,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
             $activeCondition = "activation='True'";
 
         $sql = "SELECT project.*, customer.name AS customer_name FROM
-                project INNER JOIN customer
+                project LEFT JOIN customer
                 ON project.customerid=customer.id 
                 ORDER BY $orderField ASC";
         return $this->execute($sql);

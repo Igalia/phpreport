@@ -377,7 +377,8 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 valueField: 'id',
                 triggerAction: 'all',
                 forceSelection: true,
-                tpl: '<tpl for="."><div class="x-combo-list-item" >{description} - {customerName}</div></tpl>',
+                tpl: '<tpl for="."><div class="x-combo-list-item" > <tpl>{description} </tpl>' +
+                        '<tpl if="customerName">- {customerName}</tpl></div></tpl>',
                 displayField: 'description',
                 listeners: {
                     'select': function () {
