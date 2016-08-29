@@ -69,7 +69,8 @@ var customerRecord = new Ext.data.Record.create([
 var projectRecord = new Ext.data.Record.create([
     {name:'id'},
     {name:'description'},
-    {name: 'customerName'}
+    {name:'customerId'},
+    {name:'customerName'}
 ]);
 /* Schema of the information about task-stories */
 var taskStoryRecord = new Ext.data.Record.create([
@@ -277,8 +278,8 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         'load': function () {
                             //the value of customerComboBox has to be set after loading the data on this store
                             if ((this.findExact("id", this.parent.taskRecord.data['customerId']) == -1) &&
-                                    (this.parent.taskRecord.data['id'] > 0) &&
-                                    (this.parent.taskRecord.data['customerId'] > 0)) {
+                                (this.parent.taskRecord.data['id'] > 0) &&
+                                (this.parent.taskRecord.data['customerId'] > 0)) {
                                 //we couldn't find the customer in the list,
                                 //because the task belongs to a closed project
                                 //we load the list again disabling activation filter
@@ -369,6 +370,21 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                                 }
                             } else {
                                 this.parent.projectComboBox.setValue(this.parent.taskRecord.data['projectId']);
+                                // If the project has an association with a customer, do show it in the select box
+                                if(this.parent.taskRecord.data['customerId']) {
+                                    projectName = this.getAt(
+                                        this.findExact('id', this.parent.taskRecord.data['projectId'])
+                                    ).data['description'];
+
+                                    // Get the correct customer name
+                                    customerName = this.getAt(
+                                        this.findExact('id', this.parent.taskRecord.data['projectId'])
+                                    ).data['customerName'];
+
+                                    selectText = customerName ? projectName + " - " + customerName : projectName ;
+                                    this.parent.projectComboBox.setValue(selectText);
+                                    this.parent.projectComboBox.value = this.parent.taskRecord.id;
+                                }
                             }
                         }
                     },
@@ -377,12 +393,28 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 valueField: 'id',
                 triggerAction: 'all',
                 forceSelection: true,
+                displayField: 'description',
                 tpl: '<tpl for="."><div class="x-combo-list-item" > <tpl>{description} </tpl>' +
                         '<tpl if="customerName">- {customerName}</tpl></div></tpl>',
-                displayField: 'description',
                 listeners: {
-                    'select': function () {
-                        this.parent.taskRecord.set('projectId',this.getValue());
+                    'select': function (combo, record, index) {
+                        customerId = null;
+                        selectText = record.data['description'];
+
+                        this.parent.taskRecord.set('projectId', record.id);
+                        // We take customer name from the select combo, and injects its id to the taskRecord
+                        if (record.data['customerName']) {
+                            customerId = record.data['customerId'];
+                            this.parent.taskRecord.set('customerId',customerId);
+                            selectText = record.data['description'] + " - " + record.data['customerName'];
+                        }
+
+                        // Set the custom value for the select combo box
+                        this.setValue(selectText);
+                        combo.value = record.id;
+
+                        this.parent.taskRecord.set('customerId',customerId);
+                        this.parent.customerComboBox.setValue(customerId);
                         this.parent.taskRecord.set('taskStoryId', "");
                         this.parent.taskStoryComboBox.setValue("");
                     },
