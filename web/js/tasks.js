@@ -103,6 +103,11 @@ var unsavedChanges = false;
 /* Variable to store if all tasks has loaded completely for a day */
 var loaded = false;
 
+/* Variable that will hold a fresh created task on page load */
+var freshCreatedTaskRecord = false;
+
+/* Variable that will hold a fresh panel, once created on page load */
+var freshCreatedTaskPanel = false;
 /**
  * Checks if the tasks for the day has loaded completely.
  *
@@ -858,7 +863,7 @@ Ext.onReady(function(){
     });
 
     /* Add a callback to add new tasks */
-    function newTask() {
+    function newTask(freshCreatedTask) {
         /*We have to wait till the entire list gets loaded, otherwise the new
         item do not get saved.*/
         if (isLoaded()) {
@@ -867,6 +872,7 @@ Ext.onReady(function(){
         } else {
             window.setTimeout(newTask, 100);
         }
+
         taskPanel = new TaskPanel({
             parent: tasksScrollArea,
             taskRecord:newTask,
@@ -876,6 +882,12 @@ Ext.onReady(function(){
                 'beforeexpand': simplifyTitle,
             },
         });
+
+        if(freshCreatedTask) {
+            freshCreatedTaskRecord = newTask;
+            freshCreatedTaskPanel = taskPanel;
+        }
+
         tasksScrollArea.add(taskPanel);
         taskPanel.doLayout();
         tasksScrollArea.doLayout();
@@ -998,6 +1010,15 @@ Ext.onReady(function(){
                         if (cloneDate.getDate() <= 9)
                             dateString += '0';
                         dateString += cloneDate.getDate();
+
+                        // If a fresh empty task exist, just remove it
+                        if(freshCreatedTaskRecord && freshCreatedTaskRecord.dirty) {
+                            myStore.remove(freshCreatedTaskRecord);
+                            tasksScrollArea.remove(freshCreatedTaskPanel);
+                            freshCreatedTaskPanel.doLayout();
+                            tasksScrollArea.doLayout();
+                        }
+
                         // We load that day's tasks and append them into tasks' store
                         myStore.load({
                             params: {'date': dateString},
@@ -1096,6 +1117,14 @@ Ext.onReady(function(){
                         var newTask = new taskRecord();
                     } else {
                         window.setTimeout(createButton.handler, 100);
+                    }
+
+                    // If a fresh empty task exist, just remove it
+                    if(freshCreatedTaskRecord && freshCreatedTaskRecord.dirty) {
+                        myStore.remove(freshCreatedTaskRecord);
+                        tasksScrollArea.remove(freshCreatedTaskPanel);
+                        freshCreatedTaskPanel.doLayout();
+                        tasksScrollArea.doLayout();
                     }
                     // When you create a new task, lets keep the status as draft, as its not saved yet.
                     Ext.getCmp('status_display').setText("Status: Draft");
@@ -1303,11 +1332,12 @@ Ext.onReady(function(){
     // empty task
     function addEmptyTask() {
         if (isLoaded()) {
-            if(tasksScrollArea.items.getCount() == 0) {
-                newTask();
+            if(tasksScrollArea.items.getCount() == 0 && !forbidden) {
+                newTask(true);
+                Ext.getCmp('status_display').setText("Status: New empty task created for editing");
             }
         } else {
-            window.setTimeout(addEmptyTask, 100);
+            window.setTimeout(addEmptyTask, 1000);
         }
     }
 
