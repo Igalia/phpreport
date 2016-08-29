@@ -262,6 +262,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             customerComboBox: new Ext.form.ComboBox({
                 parent: this,
                 tabIndex: tab++,
+                disabled: true,
                 store: new Ext.data.Store({
                     parent: this,
                     autoLoad: true,  //initial data are loaded in the application init
@@ -685,10 +686,10 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         this.length,
                     ]
                 }),
-                new Ext.form.Label({text: 'Customer'}),
-                this.customerComboBox,
                 new Ext.form.Label({text: 'Project'}),
                 this.projectComboBox,
+                new Ext.form.Label({text: 'Customer'}),
+                this.customerComboBox,
                 new Ext.form.Label({text: 'Task type'}),
                 this.taskTypeComboBox,
                 new Ext.form.Label({text: 'Story'}),
