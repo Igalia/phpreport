@@ -1118,6 +1118,14 @@ Ext.onReady(function(){
                     } else {
                         window.setTimeout(createButton.handler, 100);
                     }
+
+                    // If a fresh empty task exist, just remove it
+                    if(freshCreatedTaskRecord && freshCreatedTaskRecord.dirty) {
+                        myStore.remove(freshCreatedTaskRecord);
+                        tasksScrollArea.remove(freshCreatedTaskPanel);
+                        freshCreatedTaskPanel.doLayout();
+                        tasksScrollArea.doLayout();
+                    }
                     // When you create a new task, lets keep the status as draft, as its not saved yet.
                     Ext.getCmp('status_display').setText("Status: Draft");
 
