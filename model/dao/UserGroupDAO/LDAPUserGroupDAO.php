@@ -54,12 +54,12 @@ class LDAPUserGroupDAO extends UserGroupDAO{
      */
     function __construct() {
 
-    $parameters[] = ConfigurationParametersManager::getParameter('LDAP_SERVER');
-    $parameters[] = ConfigurationParametersManager::getParameter('LDAP_PORT');
+        $parameters[] = ConfigurationParametersManager::getParameter('LDAP_SERVER');
+        $parameters[] = ConfigurationParametersManager::getParameter('LDAP_PORT');
 
-    $this->connect = ldap_connect($parameters[0], $parameters[1]);
-     if ($this->connect == NULL) throw new LDAPConnectionErrorException("Server:" . $parameters[0] . " | Port:" . $parameters[1]);
-
+        $this->connect = ldap_connect($parameters[0], $parameters[1]);
+        if ($this->connect == NULL)
+            throw new LDAPConnectionErrorException("Server:" . $parameters[0] . " | Port:" . $parameters[1]);
     }
 
     /** User Group value object constructor for LDAP.
@@ -125,8 +125,7 @@ class LDAPUserGroupDAO extends UserGroupDAO{
     public function getUsersByUserGroupName($userGroupName) {
 
         $dao = DAOFactory::getBelongsDAO();
-    return $dao->getByUserGroupName($userGroupName);
-
+        return $dao->getByUserGroupName($userGroupName);
     }
 
     /** Belongs relationship entry creator by User Group id and User id for LDAP.
