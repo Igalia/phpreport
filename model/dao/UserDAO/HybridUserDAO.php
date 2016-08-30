@@ -682,7 +682,11 @@ class HybridUserDAO extends UserDAO{
                 throw new SQLUniqueViolationException(pg_last_error());
             else throw new SQLQueryErrorException(pg_last_error());
 
+        // populate UserVO with newly created ID from DB
         $userVO->setID(DBPostgres::getId($this->connect, "usr_id_seq"));
+
+        // populate UserVO with existing group assignation in LDAP
+        $userVO->setGroups($this->getGroupsByLogin($userVO->getLogin()));
 
         $affectedRows = pg_affected_rows($res);
 

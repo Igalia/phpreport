@@ -172,17 +172,20 @@
                     break;
                 }
 
-                foreach((array) $createUser->getGroups() as $group)
-                {
-
-                    $group = UsersFacade::GetUserGroupByName($group->getName());
-
-                    if (UsersFacade::AssignUserToUserGroup($createUser->getId(), $group->getId()) == -1)
+                try {
+                    foreach((array) $createUser->getGroups() as $group)
                     {
-                        $string = "<return service='createUsers'><error id='1'>There was some error while updating the user groups new assignements</error></return>";
-                        break;
+                        $group = UsersFacade::GetUserGroupByName($group->getName());
+                        if (UsersFacade::AssignUserToUserGroup($createUser->getId(), $group->getId()) == -1)
+                        {
+                            $string = "<return service='createUsers'><error id='1'>There was some error while updating the user groups new assignements</error></return>";
+                            break;
+                        }
                     }
-
+                }
+                catch (LDAPInvalidOperationException $e) {
+                    // the LDAP backend is enabled so UserGroup operations are forbidden
+                    // we can ignore this error
                 }
             }
 
