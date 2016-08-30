@@ -62,23 +62,6 @@ class LDAPUserGroupDAO extends UserGroupDAO{
 
     }
 
-    /** User Group value object constructor for LDAP.
-     *
-     * This function creates a new {@link UserGroupVO} with data retrieved from LDAP.
-     *
-     * @param array $row an array with the User Group values from a row.
-     * @return UserGroupVO a {@link UserGroupVO} with its properties set to the values from <var>$row</var>.
-     * @see UserGroupVO
-     */
-    protected function setValues($row)
-    {
-    $userGroupVO = new UserGroupVO();
-
-    $userGroupVO->setName($row['name']);
-
-    return $userGroupVO;
-    }
-
     /** User Group retriever by name for LDAP.
      *
      * This function just throws an exception. It exists only for maintaining a common interface.
@@ -164,14 +147,21 @@ class LDAPUserGroupDAO extends UserGroupDAO{
 
     /** User Groups retriever for LDAP.
      *
-     * This function just throws an exception. It exists only for maintaining a common interface.
+     * Retrieves the list of LDAP user groups that PhpReport takes into account,
+     * which are set in the configuration parameter USER_GROUPS.
      *
+     * @return array an array with value objects {@link UserGroupVO}.
      * @throws {@link LDAPInvalidOperationException}
      */
     public function getAll() {
-
-        throw new LDAPInvalidOperationException('getAll');
-
+        $groups = array();
+        $groupNames = unserialize(ConfigurationParametersManager::getParameter('USER_GROUPS'));
+        foreach ($groupNames as $groupName) {
+            $userGroupVO = new UserGroupVO();
+            $userGroupVO->setName($groupName);
+            $groups[] = $userGroupVO;
+        }
+        return $groups;
     }
 
     /** User Group updater for LDAP.

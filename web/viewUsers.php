@@ -43,20 +43,7 @@ $admin = LoginManager::hasExtraPermissions($sid);
 // We retrieve the User Groups, Areas and Cities
 $cities = AdminFacade::GetAllCities();
 $areas = AdminFacade::GetAllAreas();
-
-try{
-
-    $groupNames = unserialize(ConfigurationParametersManager::getParameter('USER_GROUPS'));
-    foreach ($groupNames as $groupName)
-    {
-        $group = new UserGroupVO();
-        $group->setName($groupName);
-        $groups[]=$group;
-    }
-
-} catch (UnknownParameterException $e) {
-     $groups = UsersFacade::GetAllUserGroups();
-}
+$groups = UsersFacade::GetAllUserGroups();
 
 ?>
 <script src="js/include/sessionTracker.js"></script>
