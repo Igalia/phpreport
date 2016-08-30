@@ -113,14 +113,17 @@
 
         } while ($parser->read());
 
-        //var_dump($deleteUsers);
+        try {
+            $groups = UsersFacade::GetAllUserGroups();
 
-        $groups = UsersFacade::GetAllUserGroups();
-
-        foreach ((array)$groups as $group)
-            foreach((array)$deleteUsers as $user)
-                UsersFacade::DeassignUserFromUserGroup($user->getId(), $group->getId());
-
+            foreach ((array)$groups as $group)
+                foreach((array)$deleteUsers as $user)
+                    UsersFacade::DeassignUserFromUserGroup($user->getId(), $group->getId());
+        }
+        catch (LDAPInvalidOperationException $e) {
+            // the LDAP backend is enabled and UserGroup operations are forbidden
+            // we can ignore this error
+        }
 
         if (count($deleteUsers) >= 1)
             foreach((array)$deleteUsers as $user)
