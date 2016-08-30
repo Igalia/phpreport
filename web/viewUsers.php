@@ -39,7 +39,6 @@ include_once(PHPREPORT_ROOT . '/model/facade/AdminFacade.php');
 include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 
 $admin = LoginManager::hasExtraPermissions($sid);
-$ldapEnabled = defined('USER_DAO') && (USER_DAO == 'HybridUserDAO');
 
 // We retrieve the User Groups, Areas and Cities
 $cities = AdminFacade::GetAllCities();
@@ -369,7 +368,7 @@ Ext.onReady(function(){
         id: 'userGrid',
         height: 300,
         <?php
-                if ($admin && !$ldapEnabled)
+                if ($admin)
                     echo "inlineEditor: usersEditor,
                     plugins: [usersEditor],";
         ?>

@@ -659,13 +659,19 @@ class HybridUserDAO extends UserDAO{
     public function create(UserVO $userVO) {
         $affectedRows = 0;
 
-        if (!$sr=ldap_read($this->ldapConnect,"ou=People," .
+        // check if a user with that login exists in LDAP
+        if (!$sr=ldap_list($this->ldapConnect,"ou=People," .
                 ConfigurationParametersManager::getParameter('LDAP_BASE'),
                 "(uid=" . $userVO->getLogin() . ")",
                 array("uid")
             )) {
+            // no connection to LDAP
             return $affectedRows;
         }
+        $ldapResult = ldap_get_entries($this->ldapConnect, $sr);
+        if($ldapResult["count"] == 0)
+            // user does not exist in LDAP
+            return $affectedRows;
 
         $sql = "INSERT INTO usr (login) VALUES(" . DBPostgres::checkStringNull($userVO->getLogin()) . ")";
 
