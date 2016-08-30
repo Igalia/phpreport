@@ -49,9 +49,7 @@
                             (endDate.getMonth()+1) + "-" +
                             endDate.getDate(),
                     };
-                    customersGrid.store.baseParams = params;
                     usersGrid.store.baseParams = params;
-                    customersGrid.store.load();
                     usersGrid.store.load();
                 }
             }
@@ -102,76 +100,6 @@
 
           }
         });
-
-        var customersGrid = new Ext.ux.DynamicGridPanel({
-            id: 'CustomersGrid',
-            storeUrl: 'services/getProjectCustomerReportJsonService.php',
-            rowNumberer: false,
-            checkboxSelModel: false,
-            loadMask: true,
-            columnLines: true,
-            frame: true,
-            title: 'Project - Customer Worked Hours Report',
-            iconCls: 'silk-table',
-            buttons: [{
-                text: 'All data',
-                handler: function () {
-                    showAllColumns(customersGrid.getColumnModel());
-                }
-            },{
-                text: 'Only totals',
-                handler: function () {
-                    hideAllColumnsExceptingTotals(customersGrid.getColumnModel());
-                }
-            }],
-        });
-
-
-            customersGrid.store.on('load', function(){
-              /**
-               * Thats the magic!
-               *
-               * JSON data returned from server has the column definitions
-               */
-              if(typeof(customersGrid.store.reader.jsonData.columns) === 'object') {
-                var columns = [];
-                var width = 0;
-
-                  /**
-                   * Adding RowNumberer or setting selection model as CheckboxSelectionModel
-                   * We need to add them before other columns to display first
-                   */
-                if(customersGrid.rowNumberer) { columns.push(new Ext.grid.RowNumberer()); }
-                if(customersGrid.checkboxSelModel) { columns.push(new Ext.grid.CheckboxSelectionModel()); }
-
-                Ext.each(customersGrid.store.reader.jsonData.columns, function(column){
-                  columns.push(column);
-                  width += column.width;
-                });
-
-                // We add a dumb column we'll hide for preventing rendering
-                // problems on resizing
-                columns.push( new Ext.grid.Column({dataIndex: 'dumb', header: 'dumb', id: 'dumbColumn', width: 25}));
-
-                width += 25;
-
-              /**
-               * Setting column model configuration
-               */
-                customersGrid.getColumnModel().setConfig(columns);
-                customersGrid.setSize(width, 500);
-
-                summaryTabs.setSize(customersGrid.getColumnModel().getTotalWidth(), 500);
-
-                if (!summaryTabs.rendered)
-                    summaryTabs.render(Ext.get("content"));
-
-                // We hide the dumb column
-                customersGrid.getColumnModel().setHidden(customersGrid.getColumnModel().getIndexById('dumbColumn'), true);
-
-              }
-
-            }, this);
 
         var usersGrid = new Ext.ux.DynamicGridPanel({
             id: 'UsersGrid',
@@ -231,6 +159,11 @@
                 usersGrid.getColumnModel().setConfig(columns);
                 usersGrid.setSize(width, 500);
 
+                summaryTabs.setSize(usersGrid.getColumnModel().getTotalWidth(), 500);
+
+                if (!summaryTabs.rendered)
+                summaryTabs.render(Ext.get("content"));
+
                 // We hide the dumb column
                 usersGrid.getColumnModel().setHidden(usersGrid.getColumnModel().getIndexById('dumbColumn'), true);
 
@@ -244,7 +177,6 @@
             frame: true,
             plain: true,
             items:[
-                customersGrid,
                 usersGrid
             ],
             listeners: { 'tabchange' : function(tabPanel, tab){
