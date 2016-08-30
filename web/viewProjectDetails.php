@@ -356,7 +356,7 @@
             height: 250,
             columnLines: true,
             frame: false,
-            title: 'Project User-Customer Worked Hours Report',
+            title: 'Project Users Worked Hours Report',
             iconCls: 'silk-table',
         });
 
