@@ -62,6 +62,18 @@ class LDAPUserGroupDAO extends UserGroupDAO{
 
     }
 
+    /** User Group value object constructor for LDAP.
+     *
+     * This function just throws an exception. It exists only to fulfil the interface
+     * declared in parent classes.
+     *
+     * @throws {@link LDAPInvalidOperationException}
+     */
+    protected function setValues($row) {
+
+         throw new LDAPInvalidOperationException('setValues');
+    }
+
     /** User Group retriever by name for LDAP.
      *
      * This function just throws an exception. It exists only for maintaining a common interface.
