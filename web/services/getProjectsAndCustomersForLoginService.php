@@ -30,8 +30,6 @@
     include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
     include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
 
-    $customerId = $_GET['cid'];
-
     $active = $_GET['active'];
 
     if (strtolower($active) == "true")
@@ -62,8 +60,6 @@
         if (!LoginManager::isLogged($sid))
         {
             $string = "<projects";
-            if ($customerId!="")
-            $string = $string . " cid='" . $customerId . "'";
             if ($active)
             $string = $string . " active = 'True'";
             if ($onlyUser)
@@ -75,8 +71,6 @@
         if (!LoginManager::isAllowed($sid))
         {
             $string = "<projects";
-            if ($customerId!="")
-            $string = $string . " cid='" . $customerId . "'";
             if ($active)
             $string = $string . " active = 'True'";
             if ($onlyUser)

@@ -70,12 +70,11 @@ class GetProjectsAndCustomersByUserLoginAction extends Action{
 	 * This is just the constructor of this action. We pass the id of the Customer, and an optional parameter
 	 * if we want only active projects.
 	 *
-	 * @param int $customerId the id of the Customer whose Projects we want to retrieve.
 	 * @param string $userLogin optional parameter for obtaining only the Projects related to an User.
 	 * @param bool $active optional parameter for obtaining only the active projects (by default it returns all them).
 	 * @param string $order optional parameter for sorting value objects in a specific way (by default, by their internal id).
 	 */
-	public function __construct($customerId, $userLogin = NULL, $active = False, $order = 'id') {
+	public function __construct($userLogin = NULL, $active = False, $order = 'id') {
 		$this->active = $active;
 		$this->userLogin = $userLogin;
 		$this->order = $order;
