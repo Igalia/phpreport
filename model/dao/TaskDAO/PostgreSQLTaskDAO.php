@@ -337,7 +337,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
     public function getFiltered($filterStartDate = NULL, $filterEndDate = NULL,
             $telework = NULL, $onsite = NULL, $filterText = NULL, $type = NULL,
-            $userId = NULL, $projectId = NULL, $customerId = NULL, $taskStoryId = NULL,
+            $userId = NULL, $projectId = NULL, $taskStoryId = NULL,
             $filterStory = NULL, $emptyText = NULL, $emptyStory = NULL) {
 
         $conditions = "TRUE";
@@ -368,9 +368,6 @@ class PostgreSQLTaskDAO extends TaskDAO{
         }
         if ($projectId != NULL) {
             $conditions .= " AND projectid = $projectId";
-        }
-        if ($customerId != NULL) {
-            $conditions .= " AND customerid = $customerId";
         }
         if ($taskStoryId != NULL) {
             $conditions .= " AND task_storyId = $taskStoryId";

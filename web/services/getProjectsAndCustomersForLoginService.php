@@ -77,7 +77,7 @@
             $string = $string . " onlyUser = 'True' order ='" . $order . "'";
             $string = $string . "><error id='3'>Forbidden service for this User</error></projects>";
             break;
-            }
+        }
 
         $projects = ProjectsFacade::GetProjectsAndCustomersByUserLogin(NULL, $active, $order);
         $string = "<projects";

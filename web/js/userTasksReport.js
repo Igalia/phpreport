@@ -30,6 +30,8 @@ Ext.onReady(function () {
     var projectRecord = new Ext.data.Record.create([
         {name:'id'},
         {name:'description'},
+        {name:'customerId'},
+        {name:'customerName'}
     ]);
 
     /* Schema of the information about task-stories */
@@ -83,8 +85,20 @@ Ext.onReady(function () {
         baseParams: {
             'order': 'description',
         },
+        filter: function(property, value, anyMatch, caseSensitive) {
+            var fn;
+            if (((property == 'description') || (property == 'customerName')) && !Ext.isEmpty(value, false)) {
+                value = this.data.createValueMatcher(value, anyMatch, caseSensitive);
+                fn = function(r){
+                    return value.test(r.data['description']) || value.test(r.data['customerName']);
+                };
+            } else {
+                fn = this.createFilterFn(property, value, anyMatch, caseSensitive);
+            }
+            return fn ? this.filterBy(fn) : this.clearFilter();
+        },
         proxy: new Ext.data.HttpProxy({
-            url: 'services/getCustomerProjectsService.php',
+            url: 'services/getProjectsAndCustomersForLoginService.php',
             method: 'GET'
         }),
         reader: new Ext.data.XmlReader(
@@ -253,18 +267,6 @@ Ext.onReady(function () {
             forceSelection: false,
             autoSelect: false,
         },{
-            fieldLabel: 'Customer',
-            name: 'customer',
-            xtype: 'combo',
-            id: 'customer',
-            store: customersStore,
-            mode: 'local',
-            valueField: 'id',
-            typeAhead: true,
-            triggerAction: 'all',
-            displayField: 'name',
-            forceSelection: true,
-        },{
             fieldLabel: 'Project',
             name: 'project',
             xtype: 'combo',
@@ -272,9 +274,44 @@ Ext.onReady(function () {
             store: projectsStore,
             mode: 'local',
             valueField: 'id',
-            typeAhead: true,
+            typeAhead: false,
             triggerAction: 'all',
             displayField: 'description',
+            forceSelection: true,
+            tpl: '<tpl for=".">' +
+                    '<div class="x-combo-list-item" > <tpl>{description} </tpl>' +
+                        '<tpl if="customerName">- {customerName}</tpl>' +
+                    '</div>' +
+                '</tpl>',
+            listeners: {
+                'select': function (combo, record, index) {
+                    customerId = null;
+                    selectText = record.data['description'];
+
+                    // We take customer name from the select combo, and injects its id to the taskRecord
+                    if (record.data['customerName']) {
+                        customerId = record.data['customerId'];
+                        selectText = record.data['description'] + " - " + record.data['customerName'];
+                    }
+
+                    this.setValue(selectText);
+                    combo.value = record.id;
+
+                    Ext.getCmp('customer').setValue(customerId);
+                }
+            }
+        },{
+            fieldLabel: 'Customer',
+            name: 'customer',
+            xtype: 'combo',
+            id: 'customer',
+            store: customersStore,
+            disabled: true,
+            mode: 'local',
+            valueField: 'id',
+            typeAhead: true,
+            triggerAction: 'all',
+            displayField: 'name',
             forceSelection: true,
         },{
             fieldLabel: 'Task type',
@@ -433,7 +470,6 @@ Ext.onReady(function () {
         {name:'phase'},
         {name:'userId'},
         {name:'projectId'},
-        {name:'customerId'},
         {name:'taskStoryId'}
     ]);
 
