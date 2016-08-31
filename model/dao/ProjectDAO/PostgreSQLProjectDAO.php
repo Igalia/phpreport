@@ -351,24 +351,6 @@ class PostgreSQLProjectDAO extends ProjectDAO {
 
     }
 
-    /** Customers retriever by Project id for PostgreSQL.
-     *
-     * This function retrieves the rows from Customer table that are assigned through relationship Requests to the Project with
-     * the id <var>$projectId</var> and creates a {@link CustomerVO} with data from each row.
-     *
-     * @param int $projectId the id of the Project whose Customers we want to retrieve.
-     * @return array an array with value objects {@link CustomerVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see RequestsDAO, CustomerDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getCustomers($projectId) {
-
-        $dao = DAOFactory::getRequestsDAO();
-        return $dao->getByProjectId($projectId);
-
-    }
-
     /** Iterations retriever by Project id for PostgreSQL.
      *
      * This function retrieves the rows from Iteration table that are assigned through relationship Plans to the Project with
