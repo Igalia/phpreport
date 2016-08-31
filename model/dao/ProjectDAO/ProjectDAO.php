@@ -178,32 +178,6 @@ abstract class ProjectDAO extends BaseDAO{
      */
     public abstract function getModules($projectId);
 
-    /** Requests relationship entry creator by Project id and Customer id.
-     *
-     * This function creates a new entry in the table Requests (that represents that relationship between Projects and Customers)
-     * with the Project id <var>$projectId</var> and the Customer id <var>$customerId</var>.
-     *
-     * @param int $projectId the id of the Project we want to relate to the Customer.
-     * @param int $customerId the id of the Customer we want to relate to the Project.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @see RequestsDAO, CustomerDAO
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function addCustomer($projectId, $customerId);
-
-    /** Requests relationship entry deleter by Project id and Customer id.
-     *
-     * This function deletes a entry in the table Requests (that represents that relationship between Projects and Customers)
-     * with the Project id <var>$projectId</var> and the Customer id <var>$customerId</var>.
-     *
-     * @param int $projectId the id of the Project whose relation to the Customer we want to delete.
-     * @param int $customerId the id of the Customer whose relation to the Project we want to delete.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @see RequestsDAO, CustomerDAO
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function removeCustomer($projectId, $customerId);
-
     /** Tasks retriever by Project id.
      *
      * This function retrieves the rows from Task table that are assigned to the Project with

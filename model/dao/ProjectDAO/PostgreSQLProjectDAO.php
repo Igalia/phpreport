@@ -38,7 +38,6 @@ include_once(PHPREPORT_ROOT . '/model/dao/ProjectDAO/ProjectDAO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/ProjectUserDAO/PostgreSQLProjectUserDAO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/WorksDAO/PostgreSQLWorksDAO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/TaskDAO/PostgreSQLTaskDAO.php');
-include_once(PHPREPORT_ROOT . '/model/dao/RequestsDAO/PostgreSQLRequestsDAO.php');
 
 /** DAO for Projects in PostgreSQL
  *
@@ -384,42 +383,6 @@ class PostgreSQLProjectDAO extends ProjectDAO {
 
         $dao = DAOFactory::getModuleDAO();
         return $dao->getByProjectId($projectId);
-
-    }
-
-    /** Requests relationship entry creator by Project id and Customer id for PostgreSQL.
-     *
-     * This function creates a new entry in the table Requests (that represents that relationship between Projects and Customers)
-     * with the Project id <var>$projectId</var> and the Customer id <var>$customerId</var>.
-     *
-     * @param int $projectId the id of the Project we want to relate to the Customer.
-     * @param int $customerId the id of the Customer we want to relate to the Project.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @see RequestsDAO, CustomerDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function addCustomer($projectId, $customerId) {
-
-        $dao = DAOFactory::getRequestsDAO();
-        return $dao->create($customerId, $projectId);
-
-    }
-
-    /** Requests relationship entry deleter by Project id and Customer id for PostgreSQL.
-     *
-     * This function deletes an entry in the table Requests (that represents that relationship between Projects and Customers)
-     * with the Project id <var>$projectId</var> and the Customer id <var>$customerId</var>.
-     *
-     * @param int $projectId the id of the Project whose relation to the Customer we want to delete.
-     * @param int $customerId the id of the Customer whose relation to the Project we want to delete.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @see RequestsDAO, CustomerDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function removeCustomer($projectId, $customerId) {
-
-        $dao = DAOFactory::getRequestsDAO();
-        return $dao->delete($customerId, $projectId);
 
     }
 

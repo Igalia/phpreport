@@ -34,7 +34,6 @@ include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
 include_once(PHPREPORT_ROOT . '/model/vo/CustomerVO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/CustomerDAO/CustomerDAO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/TaskDAO/PostgreSQLTaskDAO.php');
-include_once(PHPREPORT_ROOT . '/model/dao/RequestsDAO/PostgreSQLRequestsDAO.php');
 
 /** DAO for Customers in PostgreSQL
  *
@@ -146,55 +145,6 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
     public function getTasks($customerId) {
         $dao = DAOFactory::getTaskDAO();
         return $dao->getByCustomerId($customerId);
-    }
-
-    /** Projects retriever by Customer id.
-     *
-     * This function retrieves the rows from Project table that are assigned to the Customer with
-     * the id <var>$customerId</var> and creates a {@link ProjectVO} with data from each row.
-     *
-     * @param int $customerId the id of the Customer whose Projects we want to retrieve.
-     * @param bool $active optional parameter for obtaining only the active Projects (by default it returns all them).
-     * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see ProjectDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getProjects($customerId, $active = False) {
-        $dao = DAOFactory::getRequestsDAO();
-        return $dao->getByCustomerId($customerId, $active);
-    }
-
-    /** Requests relationship entry creator by Customer id and Project id.
-     *
-     * This function creates a new entry in the table Requests (that represents that relationship between Projects and Customers)
-     * with the Customer id <var>$customerId</var> and the Project id <var>$projectId</var>.
-     *
-     * @param int $customerId the id of the Customer we want to relate to the Project.
-     * @param int $projectId the id of the Project we want to relate to the Customer.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @see RequestsDAO, ProjectDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function addProject($customerId, $projectId) {
-        $dao = DAOFactory::getRequestsDAO();
-        return $dao->create($customerId, $projectId);
-    }
-
-    /** Requests relationship entry deleter by Customer id and Project id.
-     *
-     * This function deletes an entry in the table Requests (that represents that relationship between Projects and Customers)
-     * with the Customer id <var>$customerId</var> and the Project id <var>$projectId</var>.
-     *
-     * @param int $customerId the id of the Customer whose relation to the Project we want to delete.
-     * @param int $projectId the id of the Project whose relation to the Customer we want to delete.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @see RequestsDAO, ProjectDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function removeProject($customerId, $projectId) {
-        $dao = new PostgreSQLRequestsDAO();
-        return $dao->delete($customerId, $projectId);
     }
 
     /** Customer retriever.
