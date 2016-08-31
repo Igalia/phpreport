@@ -27,10 +27,6 @@
     define('PAGE_TITLE', "PhpReport - Working Hours Results Report");
     include_once("include/header.php");
     include_once("include/sidebar.php");
-    include_once(PHPREPORT_ROOT . '/model/facade/CoordinationFacade.php');
-    include_once(PHPREPORT_ROOT . '/model/vo/StoryVO.php');
-    include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
-    include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 
 
 ?>
@@ -46,11 +42,6 @@ Ext.onReady(function(){
     // can change across page loads, leading to unpredictable results.  The developer
     // should ensure that stable state ids are set for stateful components in real apps.
     Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
-
-    // We initialize some variables
-    var myData = [];
-
-    var init = new Date(1900, 00, 01);
 
     // Variable for controlling the two XML stores loading (they must populate the main store when both have finished loading)
     var loaded = false;
@@ -182,8 +173,6 @@ Ext.onReady(function(){
             {id: 'totalExtraHours', width: 130, header: 'Total Extra Hours', sortable: true, renderer: hours, dataIndex: 'totalExtraHours'}
         ],
         stripeRows: true,
-        //autoExpandColumn: 'workableHours',
-        //loadMask: true,
         height: window.innerHeight - contentElement.offsetTop - DATE_INTERVAL_FORM_HEIGHT - 5,
         width: '100%',
         title: 'Working Hours Results Report',
@@ -254,7 +243,6 @@ Ext.onReady(function(){
 
 <div id="content">
 </div>
-<div id="variables"/>
 <?php
 /* Include the footer to close the header */
 include("include/footer.php");
