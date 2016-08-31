@@ -174,11 +174,11 @@ Ext.onReady(function(){
         id: 'grid',
         store: store,
         columns: [
-            {id:'login',width: 70, header: 'Login',sortable: true, dataIndex: 'login'},
+            {id: 'login', width: 130, header: 'Login', sortable: true, dataIndex: 'login'},
             {id: 'pendingHoliday', width: 130, header: 'Pending Holiday Hours', sortable: true, renderer: hours, dataIndex: 'pendingHoliday'},
-            {id: 'extraHours', width: 100, header: 'Extra Hours', sortable: true, renderer: hours, dataIndex: 'extraHours'},
-            {id: 'workableHours', width: 100, header: 'Workable Hours', sortable: true, renderer: hours, dataIndex: 'workableHours'},
-            {id: 'totalHours', width: 100, header: 'Worked Hours', sortable: true, renderer: hours, dataIndex: 'totalHours'},
+            {id: 'extraHours', width: 130, header: 'Extra Hours', sortable: true, renderer: hours, dataIndex: 'extraHours'},
+            {id: 'workableHours', width: 130, header: 'Workable Hours', sortable: true, renderer: hours, dataIndex: 'workableHours'},
+            {id: 'totalHours', width: 130, header: 'Worked Hours', sortable: true, renderer: hours, dataIndex: 'totalHours'},
             {id: 'totalExtraHours', width: 130, header: 'Total Extra Hours', sortable: true, renderer: hours, dataIndex: 'totalExtraHours'}
         ],
         stripeRows: true,
