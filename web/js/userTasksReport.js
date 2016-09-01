@@ -417,10 +417,6 @@ Ext.onReady(function () {
                     var value = Ext.getCmp('project').getValue();
                     baseParams.projectId = value;
                 }
-                if (Ext.getCmp('customer').getRawValue() != "") {
-                    var value = Ext.getCmp('customer').getValue();
-                    baseParams.customerId = value;
-                }
                 if (Ext.getCmp('type').getRawValue() != "") {
                     var value = Ext.getCmp('type').getValue();
                     baseParams.type = value;

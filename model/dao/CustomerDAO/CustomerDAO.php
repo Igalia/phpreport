@@ -89,19 +89,6 @@ abstract class CustomerDAO extends BaseDAO{
      */
     public abstract function getByProjectUserLogin($userLogin, $active = False, $orderField = 'id');
 
-    /** Tasks retriever by Customer id.
-     *
-     * This function retrieves the rows from Task table that are assigned to the Customer with
-     * the id <var>$customerId</var> and creates a {@link TaskVO} with data from each row.
-     *
-     * @param int $customerId the id of the Customer whose Tasks we want to retrieve.
-     * @return array an array with value objects {@link TaskVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see TaskDAO
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function getTasks($customerId);
-
     /** Customer retriever.
      *
      * This function retrieves all rows from Customer table and creates a {@link CustomerVO} with data from each row.

@@ -90,7 +90,6 @@ class PostgreSQLTaskDAO extends TaskDAO{
     $taskVO->setPhase($row['phase']);
     $taskVO->setUserId($row['usrid']);
     $taskVO->setProjectId($row['projectid']);
-    $taskVO->setCustomerId($row['customerid']);
     $taskVO->setTaskStoryId($row['task_storyid']);
 
     return $taskVO;
@@ -178,25 +177,6 @@ class PostgreSQLTaskDAO extends TaskDAO{
         return true;
 
     return false;
-    }
-
-    /** Tasks retriever by Customer id for PostgreSQL.
-     *
-     * This function retrieves the rows from Task table that are associated with the Customer with
-     * the id <var>$customerId</var> and creates a {@link TaskVO} with data from each row.
-     *
-     * @param int $customerId the id of the Customer whose Tasks we want to retrieve.
-     * @return array an array with value objects {@link TaskVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @throws {@link SQLIncorrectTypeException}
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getByCustomerId($customerId) {
-    if (!is_numeric($customerId))
-        throw new SQLIncorrectTypeException($customerId);
-        $sql = "SELECT * FROM task WHERE customerid=".$customerId . " ORDER BY id ASC";
-    $result = $this->execute($sql);
-    return $result;
     }
 
     /** Tasks retriever by Task Story id.
@@ -728,10 +708,6 @@ class PostgreSQLTaskDAO extends TaskDAO{
             $sql .= "projectid=" .
                     DBPostgres::checkNull($taskVO->getProjectId()) . ", ";
 
-        if ($taskVO->isCustomerIdDirty())
-            $sql .= "customerid=" .
-                    DBPostgres::checkNull($taskVO->getCustomerId()) . ", ";
-
         if ($taskVO->isTaskStoryIdDirty())
             $sql .= "task_storyid=" .
                     DBPostgres::checkNull($taskVO->getTaskStoryId());
@@ -895,7 +871,6 @@ class PostgreSQLTaskDAO extends TaskDAO{
                    ", phase=" . DBPostgres::checkStringNull($taskVO->getPhase()) .
                    ", usrid=" . DBPostgres::checkNull($taskVO->getUserId()) .
                    ", projectid=" . DBPostgres::checkNull($taskVO->getProjectId()) .
-                   ", customerid=" . DBPostgres::checkNull($taskVO->getCustomerId()) .
                    ", task_storyid=" . DBPostgres::checkNull($taskVO->getTaskStoryId()) .
                    " WHERE id=".$taskVO->getId();
 
@@ -925,7 +900,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
     public function create(TaskVO $taskVO) {
         $affectedRows = 0;
 
-        $sql = "INSERT INTO task (_date, init, _end, story, telework, onsite, text, ttype, phase, usrid, projectid, customerid, task_storyid) VALUES(" .
+        $sql = "INSERT INTO task (_date, init, _end, story, telework, onsite, text, ttype, phase, usrid, projectid, task_storyid) VALUES(" .
             DBPostgres::formatDate($taskVO->getDate()) . ", " .
             DBPostgres::checkNull($taskVO->getInit()) . ", " .
             DBPostgres::checkNull($taskVO->getEnd()) . ", " .
@@ -937,7 +912,6 @@ class PostgreSQLTaskDAO extends TaskDAO{
             DBPostgres::checkStringNull($taskVO->getPhase()) . ", " .
             DBPostgres::checkNull($taskVO->getUserId()) . ", " .
             DBPostgres::checkNull($taskVO->getProjectId()) . ", " .
-            DBPostgres::checkNull($taskVO->getCustomerId()). ", " .
             DBPostgres::checkNull($taskVO->getTaskStoryId()) .")";
 
         $res = pg_query($this->connect, $sql);

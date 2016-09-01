@@ -251,18 +251,6 @@
                                 }
                                 break;
 
-                        case "customerId":$parser->read();
-                                if ($parser->hasValue)
-                                {
-                                    $taskVO->setCustomerId($parser->value);
-                                    $parser->next();
-                                    $parser->next();
-                                }
-                                else {
-                                    $taskVO->setCustomerId(NULL);
-                                }
-                                break;
-
                         default:    $parser->next();
                                 break;
 

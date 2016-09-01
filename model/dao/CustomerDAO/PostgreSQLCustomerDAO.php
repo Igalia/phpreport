@@ -131,22 +131,6 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
         return $result;
     }
 
-    /** Tasks retriever by Customer id.
-     *
-     * This function retrieves the rows from Task table that are assigned to the Customer with
-     * the id <var>$customerId</var> and creates a {@link TaskVO} with data from each row.
-     *
-     * @param int $customerId the id of the Customer whose Tasks we want to retrieve.
-     * @return array an array with value objects {@link TaskVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see TaskDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getTasks($customerId) {
-        $dao = DAOFactory::getTaskDAO();
-        return $dao->getByCustomerId($customerId);
-    }
-
     /** Customer retriever.
      *
      * This function retrieves all rows from Customer table and creates a {@link CustomerVO} with data from each row.

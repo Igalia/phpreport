@@ -146,7 +146,6 @@
         $type = NULL;
         $userId = NULL;
         $projectId = NULL;
-        $customerId = NULL;
         $taskStoryId = NULL;
         $filterStory = NULL;
         $emptyText = NULL;
@@ -244,7 +243,7 @@
                 $string .=  "true";
             else $string .= "false";
 
-            $string .= "</onsite><ttype>" . escape_string($task->getTtype()) . "</ttype><text>" . escape_string($task->getText()) . "</text><phase>" . escape_string($task->getPhase()) . "</phase><userId>{$task->getUserId()}</userId><projectId>{$task->getProjectId()}</projectId><customerId>{$task->getCustomerId()}</customerId><taskStoryId>{$task->getTaskStoryId()}</taskStoryId></task>";
+            $string .= "</onsite><ttype>" . escape_string($task->getTtype()) . "</ttype><text>" . escape_string($task->getText()) . "</text><phase>" . escape_string($task->getPhase()) . "</phase><userId>{$task->getUserId()}</userId><projectId>{$task->getProjectId()}</projectId><taskStoryId>{$task->getTaskStoryId()}</taskStoryId></task>";
 
         }
 

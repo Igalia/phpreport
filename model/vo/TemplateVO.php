@@ -59,7 +59,6 @@ class TemplateVO {
     protected $ttype = NULL;
     protected $userId = NULL;
     protected $projectId = NULL;
-    protected $customerId = NULL;
     protected $taskStoryId = NULL;
 
     public function setId($id) {
