@@ -68,7 +68,6 @@ var customerRecord = new Ext.data.Record.create([
 var projectRecord = new Ext.data.Record.create([
     {name:'id'},
     {name:'description'},
-    {name:'customerId'},
     {name:'customerName'}
 ]);
 /* Schema of the information about task-stories */
@@ -261,23 +260,8 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 parent: this,
                 tabIndex: tab++,
                 disabled: true,
-                store: new Ext.data.Store({
-                    parent: this,
-                    autoLoad: true,  //initial data are loaded in the application init
-                    autoSave: false, //if set true, changes will be sent instantly
-                    baseParams: {
-                        'login': user,
-                        'active': 'true',
-                        'order': 'name',
-                    },
-                    proxy: new Ext.data.HttpProxy({url: 'services/getUserCustomersService.php', method: 'GET'}),
-                    reader:new Ext.data.XmlReader({record: 'customer', id:'id' }, customerRecord),
-                    remoteSort: false,
-                }),
                 mode: 'local',
                 typeAhead: true,
-                valueField: 'id',
-                displayField: 'name',
                 triggerAction: 'all',
                 forceSelection: true,
             }),
@@ -367,13 +351,12 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         '<tpl if="customerName">- {customerName}</tpl></div></tpl>',
                 listeners: {
                     'select': function (combo, record, index) {
-                        customerId = null;
                         selectText = record.data['description'];
 
                         this.parent.taskRecord.set('projectId', record.id);
                         // We take customer name from the select combo, and injects its id to the taskRecord
                         if (record.data['customerName']) {
-                            customerId = record.data['customerId'];
+                            customerName = record.data['customerName'];
                             selectText = record.data['description'] + " - " + record.data['customerName'];
                         }
 
@@ -381,9 +364,9 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         this.setValue(selectText);
                         combo.value = record.id;
 
-                        this.parent.customerComboBox.setValue(customerId);
                         this.parent.taskRecord.set('taskStoryId', "");
                         this.parent.taskStoryComboBox.setValue("");
+                        this.parent.customerComboBox.setValue(customerName);
                     },
                     'blur': function () {
                         // workaround in case you set a value, save with ctrl+s,

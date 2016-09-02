@@ -20,17 +20,10 @@
 Ext.onReady(function () {
     var App = new Ext.App({});
 
-    /* Schema of the information about customers */
-    var customerRecord = new Ext.data.Record.create([
-        {name:'id'},
-        {name:'name'},
-    ]);
-
     /* Schema of the information about projects */
     var projectRecord = new Ext.data.Record.create([
         {name:'id'},
         {name:'description'},
-        {name:'customerId'},
         {name:'customerName'}
     ]);
 
@@ -110,22 +103,6 @@ Ext.onReady(function () {
         },
     });
 
-    /* Store object for customers */
-    var customersStore = new Ext.data.Store({
-        autoLoad: true,
-        autoSave: false,
-        baseParams: {
-            'order': 'name',
-        },
-        proxy: new Ext.data.HttpProxy({
-            url: 'services/getUserCustomersService.php',
-            method: 'GET'
-        }),
-        reader: new Ext.data.XmlReader(
-            {record: 'customer', id:'id' }, customerRecord),
-        remoteSort: false,
-    });
-
     /* Store object for taskStory field */
     var taskStoryStore = new Ext.data.Store({
         autoLoad: true,
@@ -179,15 +156,6 @@ Ext.onReady(function () {
         return id;
     };
 
-    /* Renderer to show the customer name in the grid */
-    function customerRenderer(id) {
-        var record =  customersStore.getById(id);
-        if (record) {
-            return record.get('name');
-        }
-        return id;
-    };
-
     /* Renderer to show the task story name in the grid */
     function taskStoryRenderer(id) {
         var record =  taskStoryStore.getById(id);
@@ -197,7 +165,7 @@ Ext.onReady(function () {
         return id;
     };
 
-    /* Renderer to show the customer name in the grid */
+    /* Renderer to show the task type in the grid */
     function taskTypeRenderer(value) {
         var record =  taskTypeStore.getById(value);
         if (record) {
@@ -285,34 +253,17 @@ Ext.onReady(function () {
                 '</tpl>',
             listeners: {
                 'select': function (combo, record, index) {
-                    customerId = null;
                     selectText = record.data['description'];
 
                     // We take customer name from the select combo, and injects its id to the taskRecord
                     if (record.data['customerName']) {
-                        customerId = record.data['customerId'];
                         selectText = record.data['description'] + " - " + record.data['customerName'];
                     }
 
                     this.setValue(selectText);
                     combo.value = record.id;
-
-                    Ext.getCmp('customer').setValue(customerId);
                 }
             }
-        },{
-            fieldLabel: 'Customer',
-            name: 'customer',
-            xtype: 'combo',
-            id: 'customer',
-            store: customersStore,
-            disabled: true,
-            mode: 'local',
-            valueField: 'id',
-            typeAhead: true,
-            triggerAction: 'all',
-            displayField: 'name',
-            forceSelection: true,
         },{
             fieldLabel: 'Task type',
             name: 'type',
@@ -508,11 +459,6 @@ Ext.onReady(function () {
             sortable: true,
             dataIndex: 'endTime',
         },{
-            header: "Customer",
-            sortable: true,
-            dataIndex: 'customerId',
-            renderer: customerRenderer,
-        },{
             header: "Project",
             sortable: true,
             dataIndex: 'projectId',
@@ -583,21 +529,20 @@ Ext.onReady(function () {
         columnModel.setHidden(0, false);  //date
         columnModel.setHidden(1, false);  //init
         columnModel.setHidden(2, false);  //end
-        columnModel.setHidden(3, true);   //customer
-        columnModel.setHidden(4, false);  //project
-        columnModel.setHidden(5, true);   //task type
-        columnModel.setHidden(6, true);   //telework
-        columnModel.setHidden(7, true);   //onsite
-        columnModel.setHidden(8, false);  //story
-        columnModel.setHidden(9, false);  //taskStory
-        columnModel.setHidden(10, false);  //description
+        columnModel.setHidden(3, false);  //project
+        columnModel.setHidden(4, false); //task type
+        columnModel.setHidden(5, true);   //telework
+        columnModel.setHidden(6, true);   //onsite
+        columnModel.setHidden(7, true);   //story
+        columnModel.setHidden(8, false);  //taskStory
+        columnModel.setHidden(9, false);  //description
         columnModel.setColumnWidth(0, 80);
         columnModel.setColumnWidth(1, 55);
         columnModel.setColumnWidth(2, 55);
+        columnModel.setColumnWidth(3, 200);
         columnModel.setColumnWidth(4, 120);
         columnModel.setColumnWidth(8, 120);
-        columnModel.setColumnWidth(9, 100);
-        columnModel.setColumnWidth(10, 435);
+        columnModel.setColumnWidth(9, 435);
     }
 
     //function to show all the columns
@@ -605,25 +550,23 @@ Ext.onReady(function () {
         columnModel.setHidden(0, false);  //date
         columnModel.setHidden(1, false);  //init
         columnModel.setHidden(2, false);  //end
-        columnModel.setHidden(3, false);  //customer
-        columnModel.setHidden(4, false);  //project
-        columnModel.setHidden(5, false);  //task type
-        columnModel.setHidden(6, false);  //telework
-        columnModel.setHidden(7, false);  //onsite
-        columnModel.setHidden(8, false);  //story
-        columnModel.setHidden(9, false);  //taskStory
-        columnModel.setHidden(10, false);  //description
+        columnModel.setHidden(3, false);  //project
+        columnModel.setHidden(4, false); //task type
+        columnModel.setHidden(5, false);   //telework
+        columnModel.setHidden(6, false);   //onsite
+        columnModel.setHidden(7, false);   //story
+        columnModel.setHidden(8, false);  //taskStory
+        columnModel.setHidden(9, false);  //description
         columnModel.setColumnWidth(0, 80);
         columnModel.setColumnWidth(1, 55);
         columnModel.setColumnWidth(2, 55);
-        columnModel.setColumnWidth(3, 90);
+        columnModel.setColumnWidth(3, 200);
         columnModel.setColumnWidth(4, 100);
         columnModel.setColumnWidth(5, 80);
         columnModel.setColumnWidth(6, 50);
         columnModel.setColumnWidth(7, 50);
         columnModel.setColumnWidth(8, 100);
-        columnModel.setColumnWidth(9, 100);
-        columnModel.setColumnWidth(10, 205);
+        columnModel.setColumnWidth(9, 435);
     }
 
     //hide the advanced columns
