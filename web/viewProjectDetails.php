@@ -110,6 +110,13 @@
                               echo "value:'" . $project->getId() . "'";
                         ?>
                     },{
+                    id:'customer',
+                    name: 'customer',
+                    fieldLabel:'Customer',
+                    <?php
+                    echo "value:'" . $project->getCustomerId() . "'";
+                    ?>
+                    },{
                         id:'init',
                         name: 'init',
                         fieldLabel:'Init Date',
@@ -349,7 +356,7 @@
             height: 250,
             columnLines: true,
             frame: false,
-            title: 'Project User-Customer Worked Hours Report',
+            title: 'Project Users Worked Hours Report',
             iconCls: 'silk-table',
         });
 

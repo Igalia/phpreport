@@ -124,18 +124,6 @@ abstract class TaskDAO extends BaseDAO{
      */
     public abstract function checkTaskUserId($taskId, $userId);
 
-    /** Tasks retriever by Customer id.
-     *
-     * This function retrieves the rows from Task table that are associated with the Customer with
-     * the id <var>$customerId</var> and creates a {@link TaskVO} with data from each row.
-     *
-     * @param int $customerId the id of the Customer whose Tasks we want to retrieve.
-     * @return array an array with value objects {@link TaskVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function getByCustomerId($customerId);
-
     /** Tasks retriever by Project id.
      *
      * This function retrieves the rows from Task table that are associated with the Project with
@@ -212,8 +200,6 @@ abstract class TaskDAO extends BaseDAO{
      *        deactivate filtering by this field.
      * @param int $projectId id of the project which tasks will be filtered by.
      *        NULL to deactivate filtering by this field.
-     * @param int $customerId id of the customer whose tasks will be filtered.
-     *        NULL to deactivate filtering by this field.
      * @param int $taskStoryId id of the story inside the XP tracker which tasks
      *        will be filtered. NULL to deactivate filtering by this field.
      * @param string $filterStory string to filter tasks by their story field.
@@ -232,7 +218,7 @@ abstract class TaskDAO extends BaseDAO{
      */
     public abstract function getFiltered($filterStartDate = NULL,
             $filterEndDate = NULL, $telework = NULL, $onsite = NULL, $filterText = NULL,
-            $type = NULL, $userId = NULL, $projectId = NULL, $customerId = NULL,
+            $type = NULL, $userId = NULL, $projectId = NULL,
             $taskStoryId = NULL, $filterStory = NULL, $emptyText = NULL, $emptyStory = NULL);
 
     /** Tasks report generator.

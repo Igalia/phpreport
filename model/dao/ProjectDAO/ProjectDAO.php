@@ -152,19 +152,6 @@ abstract class ProjectDAO extends BaseDAO{
      */
     public abstract function removeUserWorks($projectId, $userId);
 
-    /** Customers retriever by Project id.
-     *
-     * This function retrieves the rows from Customer table that are assigned through relationship Requests to the Project with
-     * the id <var>$projectId</var> and creates a {@link CustomerVO} with data from each row.
-     *
-     * @param int $projectId the id of the Project whose Customers we want to retrieve.
-     * @return array an array with value objects {@link CustomerVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see RequestsDAO, CustomerDAO
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function getCustomers($projectId);
-
     /** Iterations retriever by Project id for PostgreSQL.
      *
      * This function retrieves the rows from Iteration table that are assigned through relationship Plans to the Project with
@@ -190,32 +177,6 @@ abstract class ProjectDAO extends BaseDAO{
      * @throws {@link SQLQueryErrorException}
      */
     public abstract function getModules($projectId);
-
-    /** Requests relationship entry creator by Project id and Customer id.
-     *
-     * This function creates a new entry in the table Requests (that represents that relationship between Projects and Customers)
-     * with the Project id <var>$projectId</var> and the Customer id <var>$customerId</var>.
-     *
-     * @param int $projectId the id of the Project we want to relate to the Customer.
-     * @param int $customerId the id of the Customer we want to relate to the Project.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @see RequestsDAO, CustomerDAO
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function addCustomer($projectId, $customerId);
-
-    /** Requests relationship entry deleter by Project id and Customer id.
-     *
-     * This function deletes a entry in the table Requests (that represents that relationship between Projects and Customers)
-     * with the Project id <var>$projectId</var> and the Customer id <var>$customerId</var>.
-     *
-     * @param int $projectId the id of the Project whose relation to the Customer we want to delete.
-     * @param int $customerId the id of the Customer whose relation to the Project we want to delete.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @see RequestsDAO, CustomerDAO
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function removeCustomer($projectId, $customerId);
 
     /** Tasks retriever by Project id.
      *
@@ -258,6 +219,17 @@ abstract class ProjectDAO extends BaseDAO{
      * @throws {@link SQLQueryErrorException}
      */
     public abstract function getByCustomerUserLogin($customerId = NULL, $userLogin = NULL, $active = False, $orderField = 'id');
+
+    /** Project along with Customer retriever
+     *
+     * This function retrieves the rows from the Project table, along with customer details for use in the tasks page
+     *
+     * @param null $userLogin
+     * @param bool $active
+     * @param string $orderField
+     * @return mixed
+     */
+    public abstract function getProjectsAndCustomersByUserLogin($userLogin = NULL, $active = False, $orderField = 'id');
 
     /** Custom Projects retriever.
      *

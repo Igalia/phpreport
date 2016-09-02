@@ -56,7 +56,6 @@ do {
             $string .= "<text>" . escape_string( $templateVO->getText() ) . "</text>";
             $string .= "<userId>{$templateVO->getUserId()}</userId>";
             $string .= "<projectId>{$templateVO->getProjectId()}</projectId>";
-            $string .= "<customerId>{$templateVO->getCustomerId()}</customerId>";
             $string .= "<taskStoryId>{$templateVO->getTaskStoryId()}</taskStoryId>";
 
             $string .= "<telework>";

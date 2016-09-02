@@ -104,7 +104,7 @@ class GetTasksFilteredAction extends Action{
      */
     public function __construct($filterStartDate = NULL, $filterEndDate = NULL,
             $telework = NULL, $onsite = NULL, $filterText = NULL, $type = NULL, $userId = NULL,
-            $projectId = NULL, $customerId = NULL, $taskStoryId = NULL,
+            $projectId = NULL, $taskStoryId = NULL,
             $filterStory = NULL, $emptyText = NULL, $emptyStory = NULL) {
         $this->filterStartDate = $filterStartDate;
         $this->filterEndDate = $filterEndDate;
@@ -114,7 +114,6 @@ class GetTasksFilteredAction extends Action{
         $this->type = $type;
         $this->userId = $userId;
         $this->projectId = $projectId;
-        $this->customerId = $customerId;
         $this->taskStoryId = $taskStoryId;
         $this->filterStory = $filterStory;
         $this->emptyText = $emptyText;
@@ -137,7 +136,7 @@ class GetTasksFilteredAction extends Action{
 
         return $dao->getFiltered($this->filterStartDate, $this->filterEndDate,
                 $this->telework, $this->onsite, $this->filterText, $this->type,
-                $this->userId, $this->projectId, $this->customerId, $this->taskStoryId,
+                $this->userId, $this->projectId, $this->taskStoryId,
                 $this->filterStory, $this->emptyText, $this->emptyStory);
     }
 }

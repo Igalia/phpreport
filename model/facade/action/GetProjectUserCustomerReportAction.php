@@ -106,14 +106,14 @@ class GetProjectUserCustomerReportAction extends Action{
 
         $dao2 = DAOFactory::getUserDAO();
 
-        $doubleResults = $dao->getTaskReport($this->projectVO, $this->init, $this->end, "CUSTOMER", "USER");
+        $doubleResults = $dao->getTaskReport($this->projectVO, $this->init, $this->end, "USER");
 
         foreach ($doubleResults as $doubleResult)
         {
 
             $user = $dao2->getById($doubleResult['usrid']);
 
-            $results[$user->getLogin()][$doubleResult['customerid']] =  $doubleResult['add_hours'];
+            $results[$user->getLogin()] =  $doubleResult['add_hours'];
 
         }
 

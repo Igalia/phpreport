@@ -35,17 +35,15 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllCustomProjectsAction.p
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetFilteredCustomProjectsAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserProjectsAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectUsersAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectCustomersAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetCustomProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/AssignUserToProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeassignUserFromProjectAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/AssignCustomerToProjectAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/DeassignCustomerFromProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/PartialUpdateProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectsByCustomerUserLoginAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectsAndCustomersByUserLoginAction.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
 
@@ -293,59 +291,6 @@ abstract class ProjectsFacade {
 
     }
 
-    /** Project Customer Assigning
-     *
-     *  This function is used for assigning a Customer to a Project by their ids.
-     *
-     * @param int $customerId the id of the Customer we want to assign.
-     * @param int $projectId the Project which we want to assign the User to.
-     *
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
-     */
-    static function AssignCustomerToProject($customerId, $projectId) {
-
-        $action = new AssignCustomerToProjectAction($customerId, $projectId);
-
-        return $action->execute();
-
-    }
-
-    /** Project Customer Deassigning
-     *
-     *  This function is used for deassigning a Customer from a Project by their ids.
-     *
-     * @param int $customerId the id of the Customer we want to deassign.
-     * @param int $projectId the UserGroup which we want to deassign the Project from.
-     *
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
-     */
-    static function DeassignCustomerFromProject($customerId, $projectId) {
-
-        $action = new DeassignCustomerFromProjectAction($customerId, $projectId);
-
-        return $action->execute();
-
-    }
-
-    /** Customers retriever by Project id for PostgreSQL.
-     *
-     * This function retrieves the rows from Customer table that are assigned through relationship Requests to the
-     * Project with the id <var>$projectId</var> and creates a {@link CustomerVO} with data from each row.
-     *
-     * @param int $projectId the id of the Project whose Customers we want to retrieve.
-     * @return array an array with value objects {@link CustomerVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     */
-    static function GetProjectCustomers($projectId) {
-
-        $action = new GetProjectCustomersAction($projectId);
-
-        return $action->execute();
-
-    }
-
     /** Update Project Function
      *
      *  This function is used for updating a Project.
@@ -414,6 +359,22 @@ abstract class ProjectsFacade {
           $action = new GetAllProjectsAction($active, $order);
         else
           $action = new GetProjectsByCustomerUserLoginAction($customerId, $userLogin, $active, $order);
+
+        return $action->execute();
+    }
+
+    /** GetProjectsAndCustomersByUserLogin Funciton
+     *
+     *  Retrieve a list of projects using the attributes user and activation as filters
+     *
+     * @param string $userLogin
+     * @param bool $active
+     * @param string $order
+     * @return mixed
+     * @throws null
+     */
+    static function GetProjectsAndCustomersByUserLogin($userLogin = NULL, $active = False, $order = 'id') {
+            $action = new GetProjectsAndCustomersByUserLoginAction($userLogin, $active, $order);
 
         return $action->execute();
     }

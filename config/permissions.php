@@ -40,7 +40,7 @@ $permissions = array(
         '/tasks.php', '/services/getUserTasksService.php',
         '/services/getPersonalSummaryByDateService.php',
         '/services/getUserCustomersService.php',
-        '/services/getCustomerProjectsService.php',  '/services/getOpenTaskStoriesService.php',
+        '/services/getProjectsAndCustomersForLoginService.php',  '/services/getOpenTaskStoriesService.php',
         '/services/createTasksService.php', '/services/deleteTasksService.php',
         '/services/updateTasksService.php', '/services/setTasksJsonService.php',
         '/services/getTasksFiltered.php', '/userTasksReport.php',
@@ -78,8 +78,8 @@ $permissions = array(
         '/viewUsers.php',
         '/services/getUserHourCostHistoriesService.php', '/services/getUserAreaHistoriesService.php',
         '/services/getUserCityHistoriesService.php', '/services/getUserJourneyHistoriesService.php',
-        '/services/getTodayAreaUsersService.php', '/services/getProjectUsersService.php',
-        '/services/getProjectCustomersService.php'),
+        '/services/getTodayAreaUsersService.php', '/services/getProjectUsersService.php'
+    ),
     'manager' => array(
         '/projectsEvaluation.php', '/usersEvaluation.php', '/projectsSummary.php', '/services/getFilteredCustomProjectsService.php',
         '/services/getUserStoryReportJsonService.php', '/services/getProjectCustomerReportJsonService.php',
@@ -91,7 +91,6 @@ $permissions = array(
         '/services/updateProjectsService.php', '/viewProjects.php',
         //project attributes management
         '/services/assignUsersToProjectService.php', '/services/deassignUsersFromProjectService.php',
-        '/services/assignCustomersToProjectService.php', '/services/deassignCustomersFromProjectService.php',
         //users management
         '/services/updateUsersService.php', '/services/createUsersService.php',
         '/services/deleteUsersService.php',

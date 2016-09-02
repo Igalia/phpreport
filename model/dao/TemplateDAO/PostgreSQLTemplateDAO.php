@@ -78,7 +78,6 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
         $templateVO->setTtype($row['ttype']);
         $templateVO->setUserId($row['usrid']);
         $templateVO->setProjectId($row['projectid']);
-        $templateVO->setCustomerId($row['customerid']);
         $templateVO->setTaskStoryId($row['task_storyid']);
 
         return $templateVO;
@@ -131,7 +130,7 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
     public function create(TemplateVO $templateVO) {
         $affectedRows = 0;
 
-        $sql = "INSERT INTO template (name, story, telework, onsite, text, ttype, usrid, projectid, customerid, task_storyid) VALUES(" .
+        $sql = "INSERT INTO template (name, story, telework, onsite, text, ttype, usrid, projectid, task_storyid) VALUES(" .
             DBPostgres::checkStringNull($templateVO->getName()) . ", " .
             DBPostgres::checkStringNull($templateVO->getStory()) . ", " .
             DBPostgres::boolToString($templateVO->isTelework()) . ", " .
@@ -140,7 +139,6 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
             DBPostgres::checkStringNull($templateVO->getTtype()) . ", " .
             DBPostgres::checkNull($templateVO->getUserId()) . ", " .
             DBPostgres::checkNull($templateVO->getProjectId()) . ", " .
-            DBPostgres::checkNull($templateVO->getCustomerId()). ", " .
             DBPostgres::checkNull($templateVO->getTaskStoryId()) .")";
 
         $res = pg_query($this->connect, $sql);

@@ -400,26 +400,6 @@ class DAOFactory {
     return new $className;
   }
 
-    /** Requests DAO creator
-     *
-     * This function returns a new instance of {@link RequestsDAO}.
-     *
-     * @return RequestsDAO a new instance of {@link RequestsDAO}.
-     * @throws {@link UnknownParameterException}
-     */
-  public static function getRequestsDAO() {
-    try {
-      $className = ConfigurationParametersManager::getParameter('REQUESTS_DAO');
-    }
-    catch(UnknownParameterException $e) {
-      $backend = ConfigurationParametersManager::getParameter('DAO_BACKEND');
-      $className = $backend . 'RequestsDAO';
-    }
-
-    include_once(PHPREPORT_ROOT . '/model/dao/RequestsDAO/' . $className . ".php");
-    return new $className;
-  }
-
     /** Task DAO creator
      *
      * This function returns a new instance of {@link TaskDAO}.
@@ -630,7 +610,6 @@ var_dump(DAOFactory::getBelongsDAO());
 var_dump(DAOFactory::getAreaDAO());
 var_dump(DAOFactory::getAreaHistoryDAO());
 var_dump(DAOFactory::getWorksDAO());
-var_dump(DAOFactory::getRequestsDAO());
 var_dump(DAOFactory::getCustomerDAO());
 var_dump(DAOFactory::getTaskDAO());
 var_dump(DAOFactory::getProjectDAO());

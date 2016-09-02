@@ -122,15 +122,15 @@
 
         $userVO->setId($userId);
 
-        $report = TasksFacade::GetUserProjectCustomerReport($userVO, $init, $end);
+        $report = TasksFacade::GetUserProjectWorkReport($userVO, $init, $end);
 
         $count = 0;
 
         $totalHours[total] = 0;
 
-        foreach((array) $report as $projectId => $report2)
+        foreach((array) $report as $projectId => $hours)
         {
-            $count += count($report2);
+            $count += count($hours);
 
             if ($projectId != "")
             {
@@ -146,19 +146,8 @@
 
             $record['id'] = $projectId;
 
-            foreach((array) $report2 as $customerId => $hours)
-            {
-                if ($customerId != "")
-                {
-                    $customerVO = CustomersFacade::GetCustomer($customerId);
-                    $customerName = $customerVO->getName();
-                } else $customerName = "-- Unknown --";
-
-                $customers[$customerName] = true;
-                $record[str_replace('.', ',', $customerName)] = round($hours, 2, PHP_ROUND_HALF_DOWN);
-                $totalHours[$projectName] += round($hours, 2, PHP_ROUND_HALF_DOWN);
-                $totalHours[total] += round($hours, 2, PHP_ROUND_HALF_DOWN);
-            }
+            $totalHours[$projectName] += round($hours, 2, PHP_ROUND_HALF_DOWN);
+            $totalHours[total] += round($hours, 2, PHP_ROUND_HALF_DOWN);
 
             $record[total] = $totalHours[$projectName];
 
@@ -214,16 +203,6 @@
         $field[type] = "float";
 
         $column['hidden'] = false;
-        foreach((array)$customers as $name => $dumber)
-        {
-            $field[name] = str_replace('.', ',', $name);
-            $metaData[fields][] = $field;
-
-            $column[header] = $name;
-            $column[dataIndex] = str_replace('.', ',', $name);
-            $response[columns][] = $column;
-        }
-
 
         $column[header] = "Total";
         $column[dataIndex] = "total";

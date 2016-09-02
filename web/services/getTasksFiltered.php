@@ -146,7 +146,6 @@
         $type = NULL;
         $userId = NULL;
         $projectId = NULL;
-        $customerId = NULL;
         $taskStoryId = NULL;
         $filterStory = NULL;
         $emptyText = NULL;
@@ -197,9 +196,6 @@
         if (isset($_GET['projectId'])) {
             $projectId = $_GET['projectId'];
         }
-        if (isset($_GET['customerId'])) {
-            $customerId = $_GET['customerId'];
-        }
         if (isset($_GET['taskStoryId'])) {
             $taskStoryId = $_GET['taskStoryId'];
         }
@@ -224,7 +220,7 @@
         }
 
         $tasks = TasksFacade::GetTasksFiltered($filterStartDate, $filterEndDate,
-                $telework, $onsite, $filterText, $type, $userId, $projectId, $customerId,
+                $telework, $onsite, $filterText, $type, $userId, $projectId,
                 $taskStoryId, $filterStory, $emptyText, $emptyStory);
 
         $string = "<tasks>";
@@ -247,7 +243,7 @@
                 $string .=  "true";
             else $string .= "false";
 
-            $string .= "</onsite><ttype>" . escape_string($task->getTtype()) . "</ttype><text>" . escape_string($task->getText()) . "</text><phase>" . escape_string($task->getPhase()) . "</phase><userId>{$task->getUserId()}</userId><projectId>{$task->getProjectId()}</projectId><customerId>{$task->getCustomerId()}</customerId><taskStoryId>{$task->getTaskStoryId()}</taskStoryId></task>";
+            $string .= "</onsite><ttype>" . escape_string($task->getTtype()) . "</ttype><text>" . escape_string($task->getText()) . "</text><phase>" . escape_string($task->getPhase()) . "</phase><userId>{$task->getUserId()}</userId><projectId>{$task->getProjectId()}</projectId><taskStoryId>{$task->getTaskStoryId()}</taskStoryId></task>";
 
         }
 

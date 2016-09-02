@@ -56,7 +56,6 @@ var taskRecord = new Ext.data.Record.create([
     {name:'phase'},
     {name:'userId'},
     {name:'projectId'},
-    {name:'customerId'},
     {name:'taskStoryId'}
 ]);
 
@@ -69,6 +68,7 @@ var customerRecord = new Ext.data.Record.create([
 var projectRecord = new Ext.data.Record.create([
     {name:'id'},
     {name:'description'},
+    {name:'customerName'}
 ]);
 /* Schema of the information about task-stories */
 var taskStoryRecord = new Ext.data.Record.create([
@@ -86,7 +86,6 @@ var summaryRecord = new Ext.data.Record.create([
 /* Schema of the information about task templates */
 var templateRecord = new Ext.data.Record.create([
     {name:'id'},
-    {name:'customerId'},
     {name:'projectId'},
     {name:'ttype'},
     {name:'story'},
@@ -260,56 +259,11 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             customerComboBox: new Ext.form.ComboBox({
                 parent: this,
                 tabIndex: tab++,
-                store: new Ext.data.Store({
-                    parent: this,
-                    autoLoad: true,  //initial data are loaded in the application init
-                    autoSave: false, //if set true, changes will be sent instantly
-                    baseParams: {
-                        'login': user,
-                        'active': 'true',
-                        'order': 'name',
-                    },
-                    proxy: new Ext.data.HttpProxy({url: 'services/getUserCustomersService.php', method: 'GET'}),
-                    reader:new Ext.data.XmlReader({record: 'customer', id:'id' }, customerRecord),
-                    remoteSort: false,
-                    listeners: {
-                        'load': function () {
-                            //the value of customerComboBox has to be set after loading the data on this store
-                            if ((this.findExact("id", this.parent.taskRecord.data['customerId']) == -1) &&
-                                    (this.parent.taskRecord.data['id'] > 0) &&
-                                    (this.parent.taskRecord.data['customerId'] > 0)) {
-                                //we couldn't find the customer in the list,
-                                //because the task belongs to a closed project
-                                //we load the list again disabling activation filter
-                                this.setBaseParam('active', false);
-                                this.load();
-                            } else
-                                this.parent.customerComboBox.setValue(this.parent.taskRecord.data['customerId']);
-                        }
-                    },
-                }),
+                disabled: true,
                 mode: 'local',
                 typeAhead: true,
-                valueField: 'id',
-                displayField: 'name',
                 triggerAction: 'all',
                 forceSelection: true,
-                listeners: {
-                    'select': function () {
-                        this.parent.taskRecord.set('customerId',this.getValue());
-                    },
-                    'blur': function () {
-                        // workaround in case you set a value, save with ctrl+s,
-                        // delete the value and change the focus. In that case,
-                        // 'select' or 'change' events wouldn't be triggered.
-                        this.parent.taskRecord.set('customerId',this.getValue());
-
-                        //invoke changes in the "Projects" combo box
-                        this.parent.projectComboBox.store.setBaseParam('cid',this.parent.taskRecord.data['customerId']);
-                        this.parent.projectComboBox.store.setBaseParam('customerChanged', true);
-                        this.parent.projectComboBox.store.load();
-                    }
-                },
             }),
             projectComboBox: new Ext.form.ComboBox({
                 parent: this,
@@ -320,11 +274,22 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     autoSave: false, //if set true, changes will be sent instantly
                     baseParams: {
                         'login': user,
-                        'cid': this.taskRecord.data['customerId'],
                         'order': 'description',
                         'active': 'true',
                     },
-                    proxy: new Ext.data.HttpProxy({url: 'services/getCustomerProjectsService.php', method: 'GET'}),
+                    filter: function(property, value, anyMatch, caseSensitive) {
+                        var fn;
+                        if (((property == 'description') || (property == 'customerName')) && !Ext.isEmpty(value, false)) {
+                            value = this.data.createValueMatcher(value, anyMatch, caseSensitive);
+                            fn = function(r){
+                                return value.test(r.data['description']) || value.test(r.data['customerName']);
+                            };
+                        } else {
+                            fn = this.createFilterFn(property, value, anyMatch, caseSensitive);
+                        }
+                        return fn ? this.filterBy(fn) : this.clearFilter();
+                    },
+                    proxy: new Ext.data.HttpProxy({url: 'services/getProjectsAndCustomersForLoginService.php', method: 'GET'}),
                     reader:new Ext.data.XmlReader({record: 'project', id:'id' }, projectRecord),
                     remoteSort: false,
                     listeners: {
@@ -355,22 +320,53 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                                     this.setBaseParam('pid', this.parent.taskRecord.data['projectId']);
                                     this.load();
                                 }
-                            } else
-                                this.parent.projectComboBox.setValue(this.parent.taskRecord.data['projectId']);
+                            } else {
+                                if(this.parent.taskRecord.data['projectId']) {
+                                    this.parent.projectComboBox.setValue(this.parent.taskRecord.data['projectId']);
+                                    // If the project has an association with a customer, do show it in the select box
+                                    projectName = this.getAt(
+                                        this.findExact('id', this.parent.taskRecord.data['projectId'])
+                                    ).data['description'];
+
+                                    // Get the correct customer name
+                                    customerName = this.getAt(
+                                        this.findExact('id', this.parent.taskRecord.data['projectId'])
+                                    ).data['customerName'];
+
+                                    selectText = customerName ? projectName + " - " + customerName : projectName;
+                                    this.parent.projectComboBox.setValue(selectText);
+                                    this.parent.projectComboBox.value = this.parent.taskRecord.id;
+                                    this.parent.customerComboBox.setValue(customerName);
+                                }
+                            }
                         }
                     },
                 }),
                 mode: 'local',
                 valueField: 'id',
-                typeAhead: true,
                 triggerAction: 'all',
-                displayField: 'description',
                 forceSelection: true,
+                displayField: 'description',
+                tpl: '<tpl for="."><div class="x-combo-list-item" > <tpl>{description} </tpl>' +
+                        '<tpl if="customerName">- {customerName}</tpl></div></tpl>',
                 listeners: {
-                    'select': function () {
-                        this.parent.taskRecord.set('projectId',this.getValue());
+                    'select': function (combo, record, index) {
+                        selectText = record.data['description'];
+
+                        this.parent.taskRecord.set('projectId', record.id);
+                        // We take customer name from the select combo, and injects its id to the taskRecord
+                        if (record.data['customerName']) {
+                            customerName = record.data['customerName'];
+                            selectText = record.data['description'] + " - " + record.data['customerName'];
+                        }
+
+                        // Set the custom value for the select combo box
+                        this.setValue(selectText);
+                        combo.value = record.id;
+
                         this.parent.taskRecord.set('taskStoryId', "");
                         this.parent.taskStoryComboBox.setValue("");
+                        this.parent.customerComboBox.setValue(customerName);
                     },
                     'blur': function () {
                         // workaround in case you set a value, save with ctrl+s,
@@ -604,7 +600,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                             var newTemplate = new templateRecord();
                             newTemplate.set('name',text);
                             newTemplate.set('text',task.get('text'));
-                            newTemplate.set('customerId', task.get('customerId'));
                             newTemplate.set('projectId', task.get('projectId'));
                             newTemplate.set('ttype', task.get('ttype'));
                             newTemplate.set('story', task.get('story'));
@@ -639,10 +634,10 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         this.length,
                     ]
                 }),
-                new Ext.form.Label({text: 'Customer'}),
-                this.customerComboBox,
                 new Ext.form.Label({text: 'Project'}),
                 this.projectComboBox,
+                new Ext.form.Label({text: 'Customer'}),
+                this.customerComboBox,
                 new Ext.form.Label({text: 'Task type'}),
                 this.taskTypeComboBox,
                 new Ext.form.Label({text: 'Story'}),
@@ -812,9 +807,7 @@ Ext.onReady(function(){
             'save': function () {
                 if (!myStore.error) {
                     Ext.getCmp('status_display').setText("Status: saved at "+ new Date());
-                    if(!myStore.autoSaved) {
-                        App.setAlert(true, "Task Records Changes Saved");
-                    }
+                    App.setAlert(true, "Task Records Changes Saved");
                     summaryStore.load();
                     unsavedChanges = false;
                 }
@@ -938,7 +931,6 @@ Ext.onReady(function(){
     function saveTasks() {
         // First we check if the time fields of all records are valid, and then save
         if (validateTasks()) {
-            myStore.autoSaved = false;
             addToMyStore();
         } else  // Otherwise, we print the error message
           App.setAlert(false, "Check For Invalid Field Values");
@@ -948,7 +940,6 @@ Ext.onReady(function(){
     window.setInterval(function () {
         if(isUnsaved()) {
             if(validateTasks()) {
-                myStore.autoSaved = true;
                 addToMyStore();
             }
         }
@@ -1129,7 +1120,6 @@ Ext.onReady(function(){
                     // When you create a new task, lets keep the status as draft, as its not saved yet.
                     Ext.getCmp('status_display').setText("Status: Draft");
 
-                    newTask.set('customerId', templateValues['customerId']);
                     newTask.set('projectId', templateValues['projectId']);
                     newTask.set('ttype', templateValues['ttype']);
                     newTask.set('story', templateValues['story']);

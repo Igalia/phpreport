@@ -38,7 +38,6 @@ include_once(PHPREPORT_ROOT . '/model/dao/ProjectDAO/ProjectDAO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/ProjectUserDAO/PostgreSQLProjectUserDAO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/WorksDAO/PostgreSQLWorksDAO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/TaskDAO/PostgreSQLTaskDAO.php');
-include_once(PHPREPORT_ROOT . '/model/dao/RequestsDAO/PostgreSQLRequestsDAO.php');
 
 /** DAO for Projects in PostgreSQL
  *
@@ -92,6 +91,12 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         $projectVO->setDescription($row['description']);
         $projectVO->setMovedHours($row['moved_hours']);
         $projectVO->setSchedType($row['sched_type']);
+        if(isset($row['customer_name'])) {
+            $projectVO->setCustomerName($row['customer_name']);
+        }
+        if(isset($row['customerid'])) {
+            $projectVO->setCustomerId($row['customerid']);
+        }
 
         return $projectVO;
 
@@ -162,6 +167,12 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         $projectVO->setSchedType($row['sched_type']);
         $projectVO->setWorkedHours($row['worked_hours']);
         $projectVO->setTotalCost($row['total_cost']);
+        if(isset($row['customer_name'])) {
+            $projectVO->setCustomerName($row['customer_name']);
+        }
+        if(isset($row['customerid'])) {
+            $projectVO->setCustomerId($row['customerid']);
+        }
 
         return $projectVO;
 
@@ -339,24 +350,6 @@ class PostgreSQLProjectDAO extends ProjectDAO {
 
     }
 
-    /** Customers retriever by Project id for PostgreSQL.
-     *
-     * This function retrieves the rows from Customer table that are assigned through relationship Requests to the Project with
-     * the id <var>$projectId</var> and creates a {@link CustomerVO} with data from each row.
-     *
-     * @param int $projectId the id of the Project whose Customers we want to retrieve.
-     * @return array an array with value objects {@link CustomerVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see RequestsDAO, CustomerDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getCustomers($projectId) {
-
-        $dao = DAOFactory::getRequestsDAO();
-        return $dao->getByProjectId($projectId);
-
-    }
-
     /** Iterations retriever by Project id for PostgreSQL.
      *
      * This function retrieves the rows from Iteration table that are assigned through relationship Plans to the Project with
@@ -390,42 +383,6 @@ class PostgreSQLProjectDAO extends ProjectDAO {
 
         $dao = DAOFactory::getModuleDAO();
         return $dao->getByProjectId($projectId);
-
-    }
-
-    /** Requests relationship entry creator by Project id and Customer id for PostgreSQL.
-     *
-     * This function creates a new entry in the table Requests (that represents that relationship between Projects and Customers)
-     * with the Project id <var>$projectId</var> and the Customer id <var>$customerId</var>.
-     *
-     * @param int $projectId the id of the Project we want to relate to the Customer.
-     * @param int $customerId the id of the Customer we want to relate to the Project.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @see RequestsDAO, CustomerDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function addCustomer($projectId, $customerId) {
-
-        $dao = DAOFactory::getRequestsDAO();
-        return $dao->create($customerId, $projectId);
-
-    }
-
-    /** Requests relationship entry deleter by Project id and Customer id for PostgreSQL.
-     *
-     * This function deletes an entry in the table Requests (that represents that relationship between Projects and Customers)
-     * with the Project id <var>$projectId</var> and the Customer id <var>$customerId</var>.
-     *
-     * @param int $projectId the id of the Project whose relation to the Customer we want to delete.
-     * @param int $customerId the id of the Customer whose relation to the Project we want to delete.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @see RequestsDAO, CustomerDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function removeCustomer($projectId, $customerId) {
-
-        $dao = DAOFactory::getRequestsDAO();
-        return $dao->delete($customerId, $projectId);
 
     }
 
@@ -482,6 +439,36 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         $sql = "SELECT * FROM project".
             " WHERE ".$customerCondition." AND ".$userCondition." AND ".$activeCondition.
             " ORDER BY " . $orderField . " ASC";
+
+        return $this->execute($sql);
+    }
+
+    /** Project and Customer retriever for PostgreSQL
+     *
+     * The function fetch details of a project along with its customers from the project table
+     *
+     * @param null $userLogin
+     * @param bool $active
+     * @param string $orderField
+     * @return array
+     * @throws SQLQueryErrorException
+     */
+    public function getProjectsAndCustomersByUserLogin($userLogin = NULL, $active = False, $orderField = 'id') {
+        $userCondition = "true";
+        $activeCondition = "true";
+
+        if ($userLogin)
+            $userCondition = "project.id IN (SELECT projectid FROM project_usr LEFT JOIN usr ON project_usr.usrid=usr.id ".
+                "WHERE login=" . DBPostgres::checkStringNull($userLogin) . ") ";
+
+        if ($active)
+            $activeCondition = "activation='True'";
+
+        $sql = "SELECT project.*, customer.name AS customer_name FROM
+                project LEFT JOIN customer
+                ON project.customerid=customer.id
+                WHERE $activeCondition
+                ORDER BY $orderField ASC";
 
         return $this->execute($sql);
     }
@@ -607,6 +594,9 @@ class PostgreSQLProjectDAO extends ProjectDAO {
 
         if ($update['areaId'])
         $sql = $sql . "areaid=" . DBPostgres::checkNull($projectVO->getAreaId()) . ", ";
+
+        if ($update['customerId'])
+        $sql = $sql . "customerid=" . DBPostgres::checkNull($projectVO->getCustomerId()) . ", ";
 
         if ($update['description'])
         $sql = $sql . "description=" . DBPostgres::checkStringNull($projectVO->getDescription()) . ", ";

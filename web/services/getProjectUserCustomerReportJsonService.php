@@ -131,11 +131,11 @@
 
         $report = TasksFacade::GetProjectUserCustomerReport($projectVO, $init, $end);
 
-            $count = 0;
+        $count = 0;
 
-            $totalHours[total] = 0;
+        $totalHours[total] = 0;
 
-        foreach((array) $report as $login => $report2)
+        foreach((array) $report as $login => $hours)
         {
             $count += count($report2);
 
@@ -144,31 +144,18 @@
             $totalHours[$login] = 0;
             $record[login] = $login;
 
-            foreach((array) $report2 as $customer => $hours)
-            {
-                if ($customerId != "")
-                {
-                    $customerVO = CustomersFacade::GetCustomer($customerId);
-                    $customerName = $customerVO->getName();
-                } else $customerName = "-- Unknown --";
-
-                $customers[$customerName] = true;
-                $record[str_replace(".", ",", $customerName)] = round($hours, 2, PHP_ROUND_HALF_DOWN);
-                $totalHours[$login] += round($hours, 2, PHP_ROUND_HALF_DOWN);
-                $totalHours[total] += round($hours, 2, PHP_ROUND_HALF_DOWN);
-
-            }
+            $totalHours[$login] += round($hours, 2, PHP_ROUND_HALF_DOWN);
+            $totalHours[total] += round($hours, 2, PHP_ROUND_HALF_DOWN);
 
             $record[total] = $totalHours[$login];
 
             $records[] = $record;
-                }
+        }
 
-              foreach($records as $record)
-                {
-                    $record[percentage] = round(100 * $totalHours[$record[login]]/$totalHours[total], 2, PHP_ROUND_HALF_DOWN);
+      foreach($records as $record) {
+          $record[percentage] = round(100 * $totalHours[$record[login]]/$totalHours[total], 2, PHP_ROUND_HALF_DOWN);
           $response[records][] = $record;
-                }
+      }
 
         $response[total] = $count;
 
@@ -176,8 +163,8 @@
         $metaData[root] = "records";
         $metaData[id] = "login";
 
-                $metaData[sortInfo][field] = 'login';
-                $metaData[sortInfo][direction] = 'ASC';
+        $metaData[sortInfo][field] = 'login';
+        $metaData[sortInfo][direction] = 'ASC';
 
         $field[name] = "login";
                 $field[type] = "string";
@@ -199,20 +186,9 @@
         $column[sortable] = true;
         $column['width'] = 100;
 
-                $response[columns][] = $column;
+        $response[columns][] = $column;
 
         $field[type] = "float";
-
-        foreach((array)$customers as $name => $dumber)
-        {
-            $field[name] = str_replace(".", ",", $name);
-            $metaData[fields][] = $field;
-
-            $column[header] = $name;
-            $column[dataIndex] = str_replace('.', ',', $name);
-            $response[columns][] = $column;
-        }
-
 
         $column[header] = "Total";
         $column[dataIndex] = "total";

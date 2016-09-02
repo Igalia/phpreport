@@ -19,9 +19,9 @@
  */
 
 
-/** File for GetUserProjectCustomerReportAction
+/** File for GetUserProjectWorkReportAction
  *
- *  This file just contains {@link GetUserProjectCustomerReportAction}.
+ *  This file just contains {@link GetUserProjectWorkReportAction}.
  *
  * @filesource
  * @package PhpReport
@@ -33,15 +33,15 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/Action.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
-/** Get User Project Customer report Action
+/** Get User Project Work report Action
  *
- *  This action is used for retrieving information about worked hours in Tasks done by a User for each Project and Customer.
+ *  This action is used for retrieving information about worked hours in Tasks done by a User for each Project.
  *
  * @package PhpReport
  * @subpackage facade
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
-class GetUserProjectCustomerReportAction extends Action{
+class GetUserProjectWorkReportAction extends Action{
 
     /** The User.
      *
@@ -67,7 +67,7 @@ class GetUserProjectCustomerReportAction extends Action{
      */
     private $end;
 
-    /** GetUserProjectCustomerReportAction constructor.
+    /** GetUserProjectWorkReportAction constructor.
      *
      * This is just the constructor of this action. We can pass dates with optional parameters <var>$init</var> and <var>$end</var>
      * if we want to retrieve information about only an interval.
@@ -89,8 +89,8 @@ class GetUserProjectCustomerReportAction extends Action{
         else
             $this->end = $end;
 
-        $this->preActionParameter="GET_USER_PROJECTS_CUSTOMERS_REPORT_PREACTION";
-        $this->postActionParameter="GET_USER_PROJECTS_CUSTOMERS_REPORT_POSTACTION";
+        $this->preActionParameter="GET_USER_PROJECTS_WORK_REPORT_PREACTION";
+        $this->postActionParameter="GET_USER_PROJECTS_WORK_REPORT_POSTACTION";
 
     }
 
@@ -105,12 +105,12 @@ class GetUserProjectCustomerReportAction extends Action{
 
         $dao = DAOFactory::getTaskDAO();
 
-        $doubleResults = $dao->getTaskReport($this->userVO, $this->init, $this->end, "PROJECT", "CUSTOMER");
+        $doubleResults = $dao->getTaskReport($this->userVO, $this->init, $this->end, "PROJECT");
 
         foreach($doubleResults as $doubleResult)
         {
 
-            $results[$doubleResult[projectid]][$doubleResult[customerid]] = $doubleResult[add_hours];
+            $results[$doubleResult[projectid]] = $doubleResult[add_hours];
 
         }
 
@@ -119,16 +119,3 @@ class GetUserProjectCustomerReportAction extends Action{
     }
 
 }
-
-
-/*//Test code;
-
-$user = new UserVO();
-
-$user->setId(58);
-
-$action= new GetUserProjectsCustomersReportAction($user);
-var_dump($action);
-$result = $action->execute();
-var_dump($result);
-*/

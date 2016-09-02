@@ -170,6 +170,16 @@
                         $update[areaId] = true;
                         break;
 
+                case "customerId":$parser->read();
+                    if ($parser->hasValue)
+                    {
+                        $projectVO->setCustomerId($parser->value);
+                        $parser->next();
+                        $parser->next();
+                    }
+                    $update[customerId] = true;
+                    break;
+
                 case "type":    $parser->read();
                         if ($parser->hasValue)
                         {

@@ -17,60 +17,13 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var customerId = '';
-
-/* Schema of the information about customers */
-var customerRecord = new Ext.data.Record.create([
-    {name:'id'},
-    {name:'name'},
-]);
-
 /* Schema of the information about projects */
 var projectRecord = new Ext.data.Record.create([
     {name:'id'},
     {name:'description'},
+    {name:'customerId'},
+    {name:'customerName'}
 ]);
-
-var customerComboBox =  new Ext.form.ComboBox({
-    parent: this,
-    fieldLabel: 'Customer',
-    store: new Ext.data.Store({
-        parent: this,
-        autoLoad: true,  //initial data are loaded in the application init
-        autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {
-            'active': 'false',
-            'order': 'name',
-        },
-        proxy: new Ext.data.HttpProxy({url: 'services/getUserCustomersService.php', method: 'GET'}),
-        reader: new Ext.data.XmlReader({record: 'customer', id: 'id'}, customerRecord),
-        remoteSort: false,
-    }),
-    mode: 'local',
-    typeAhead: true,
-    valueField: 'id',
-    displayField: 'name',
-    triggerAction: 'all',
-    forceSelection: true,
-    listeners: {
-        'select': function () {
-            customerId = this.getValue();
-            if(projectComboBox.store.baseParams['cid'] !== customerId) {
-                projectComboBox.store.setBaseParam('cid', customerId);
-                projectComboBox.store.setBaseParam('customerChanged', true);
-                projectComboBox.store.load();
-            }
-        },
-        'blur': function () {
-            customerId = this.getValue();
-            if(projectComboBox.store.baseParams['cid'] !== customerId) {
-                projectComboBox.store.setBaseParam('cid', customerId);
-                projectComboBox.store.setBaseParam('customerChanged', true);
-                projectComboBox.store.load();
-            }
-        }
-    }
-});
 
 var projectComboBox = new Ext.form.ComboBox({
     fieldLabel :'Project',
@@ -80,22 +33,46 @@ var projectComboBox = new Ext.form.ComboBox({
         autoLoad: true,  //initial data are loaded in the application init
         autoSave: false, //if set true, changes will be sent instantly
         baseParams: {
-            'cid': customerId,
             'order': 'description',
             'active': 'false',
         },
-        proxy: new Ext.data.HttpProxy({url: 'services/getCustomerProjectsService.php', method: 'GET'}),
+        filter: function(property, value, anyMatch, caseSensitive) {
+            var fn;
+            if (((property == 'description') || (property == 'customerName')) && !Ext.isEmpty(value, false)) {
+                value = this.data.createValueMatcher(value, anyMatch, caseSensitive);
+                fn = function(r){
+                    return value.test(r.data['description']) || value.test(r.data['customerName']);
+                };
+            } else {
+                fn = this.createFilterFn(property, value, anyMatch, caseSensitive);
+            }
+            return fn ? this.filterBy(fn) : this.clearFilter();
+        },
+        proxy: new Ext.data.HttpProxy({url: 'services/getProjectsAndCustomersForLoginService.php', method: 'GET'}),
         reader:new Ext.data.XmlReader({record: 'project', id:'id' }, projectRecord),
         remoteSort: false,
     }),
     mode: 'local',
     valueField: 'id',
-    typeAhead: true,
+    typeAhead: false,
     triggerAction: 'all',
-    displayField: 'description',
     forceSelection: true,
+    displayField: 'description',
+    tpl: '<tpl for="."><div class="x-combo-list-item" > <tpl>{description} </tpl>' +
+    '<tpl if="customerName">- {customerName}</tpl></div></tpl>',
     listeners: {
-        'select': function () {
+        'select': function (combo, record, index) {
+            customerId = null;
+            selectText = record.data['description'];
+
+            // We take customer name from the select combo, and injects its id to the taskRecord
+            if (record.data['customerName']) {
+                customerId = record.data['customerId'];
+                selectText = record.data['description'] + " - " + record.data['customerName'];
+            }
+            this.setValue(selectText);
+            combo.value = record.id;
+
             window.open('viewProjectDetails.php?pid=' + this.getValue() ,"_self")
         }
     }
@@ -109,6 +86,6 @@ Ext.onReady(function(){
         width: 700,
         renderTo: 'content',
         defaults: {width: 580},
-        items : [customerComboBox, projectComboBox]
+        items : [projectComboBox]
     })
 });

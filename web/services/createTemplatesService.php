@@ -157,17 +157,6 @@ do {
                             $parser->next();
                         }
                         break;
-
-                    case "customerId":
-                        $parser->read();
-                        if ($parser->hasValue)
-                        {
-                            $templatesVO->setCustomerId($parser->value);
-                            $parser->next();
-                            $parser->next();
-                        }
-                        break;
-
                     default:
                         $parser->next();
                         break;
