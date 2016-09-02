@@ -156,7 +156,7 @@
             width: 1000,
             height: 250,
             frame: false,
-            title: 'User Project-Customer Worked Hours Report',
+            title: 'User Project Worked Hours Report',
             iconCls: 'icon-grid',
         });
 

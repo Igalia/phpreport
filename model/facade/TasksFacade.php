@@ -43,7 +43,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/GetGlobalUsersStoriesReportA
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetGlobalProjectsUsersReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetGlobalProjectsCustomersReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetGlobalUsersProjectsCustomersReportAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserProjectCustomerReportAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserProjectWorkReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectTtypeReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserProjectReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectUserWeeklyHoursReportAction.php');
@@ -494,7 +494,7 @@ abstract class TasksFacade {
 
     }
 
-    /** Get User Project Customer report Action
+    /** Get User Project Work report Action
      *
      *  This function is used for for retrieving information about Tasks done by a User. We can pass dates with optional
      *  parameters <var>$init</var> and <var>$end</var> if we want to retrieve information about only an interval.
@@ -504,9 +504,9 @@ abstract class TasksFacade {
      * @return array an associative array with the worked hours data, with the Project description as first level key and
      * the Customer id as second level one.
      */
-    static function GetUserProjectCustomerReport(UserVO $userVO, DateTime $init = NULL, DateTime $end = NULL) {
+    static function GetUserProjectWorkReport(UserVO $userVO, DateTime $init = NULL, DateTime $end = NULL) {
 
-    $action = new GetUserProjectCustomerReportAction($userVO, $init, $end);
+    $action = new GetUserProjectWorkReportAction($userVO, $init, $end);
 
     return $action->execute();
 
