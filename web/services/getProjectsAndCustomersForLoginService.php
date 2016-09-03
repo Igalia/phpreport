@@ -79,7 +79,7 @@
             break;
         }
 
-        $projects = ProjectsFacade::GetProjectsAndCustomersByUserLogin(NULL, $active, $order);
+        $projects = ProjectsFacade::GetProjectsAndCustomersByUserLogin($login, $active, $order);
         $string = "<projects";
 
 

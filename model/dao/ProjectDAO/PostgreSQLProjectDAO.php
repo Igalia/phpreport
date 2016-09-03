@@ -467,7 +467,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         $sql = "SELECT project.*, customer.name AS customer_name FROM
                 project LEFT JOIN customer
                 ON project.customerid=customer.id
-                WHERE $activeCondition
+                WHERE " . $activeCondition . " AND " . $userCondition . "
                 ORDER BY $orderField ASC";
 
         return $this->execute($sql);
