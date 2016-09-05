@@ -31,6 +31,7 @@
 .silk-book-open { background-image: url(icons/book_open.png) !important; background-repeat: no-repeat; }
 .silk-book-key { background-image: url(icons/book_key.png) !important; background-repeat: no-repeat; }
 .silk-book-go { background-image: url(icons/book_go.png) !important; background-repeat: no-repeat; }
+.silk-book-link { background-image: url(icons/book_link.png) !important; background-repeat: no-repeat; }
 .silk-building-go { background-image: url(icons/building_go.png) !important; background-repeat: no-repeat; }
 .silk-building { background-image: url(icons/building.png) !important; background-repeat: no-repeat; }
 .silk-cancel { background-image: url(icons/cancel.png) !important; background-repeat: no-repeat; }

@@ -311,7 +311,6 @@ Ext.onReady(function(){
 
             // build toolbars and buttons.
             this.tbar = this.buildTopToolbar();
-            this.bbar = this.buildBottomToolbar();
 
             this.on('rowdblclick', function(g, n) {
                 this.onEdit();
@@ -341,6 +340,14 @@ Ext.onReady(function(){
                 handler: this.onEdit,
                 scope: this
                 }, '-', {
+                text: 'Assign people',
+                id: this.id + 'AssignBtn',
+                ref: '../assignBtn',
+                disabled: true,
+                iconCls: this.iconCls + '-link',
+                handler: this.onAssign,
+                scope: this
+                }, '-', {
                 text: 'Delete',
                 id: this.id + 'DeleteBtn',
                 ref: '../deleteBtn',
@@ -357,21 +364,6 @@ Ext.onReady(function(){
                 handler: this.onDetails,
                 scope: this
                 }, '-']
-        },
-
-        /**
-         * buildBottomToolbar
-         */
-        buildBottomToolbar : function() {
-            return ['->',{
-                text: 'Assign People',
-                id: this.id + 'AssignBtn',
-                ref: '../assignBtn',
-                disabled: true,
-                iconCls: 'silk-group-link',
-                handler: this.onAssign,
-                scope: this
-                }]
         },
 
         onAdd: function() {
