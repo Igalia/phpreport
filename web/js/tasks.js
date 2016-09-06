@@ -1003,7 +1003,7 @@ Ext.onReady(function(){
                         dateString += cloneDate.getDate();
 
                         // If a fresh empty task exist, just remove it
-                        if(freshCreatedTaskRecord && freshCreatedTaskRecord.dirty) {
+                        if(freshCreatedTaskRecord && freshCreatedTaskRecord.dirty && isUnToched(freshCreatedTaskRecord)) {
                             myStore.remove(freshCreatedTaskRecord);
                             tasksScrollArea.remove(freshCreatedTaskPanel);
                             freshCreatedTaskPanel.doLayout();
@@ -1111,7 +1111,7 @@ Ext.onReady(function(){
                     }
 
                     // If a fresh empty task exist, just remove it
-                    if(freshCreatedTaskRecord && freshCreatedTaskRecord.dirty) {
+                    if(freshCreatedTaskRecord && freshCreatedTaskRecord.dirty && isUnToched(freshCreatedTaskRecord)) {
                         myStore.remove(freshCreatedTaskRecord);
                         tasksScrollArea.remove(freshCreatedTaskPanel);
                         freshCreatedTaskPanel.doLayout();
@@ -1317,6 +1317,12 @@ Ext.onReady(function(){
     });
 
     summaryStore.load();
+
+    function isUnToched(taskRecord) {
+        if(!taskRecord.get('text') && !taskRecord.get('initTime') && !taskRecord.get('projectId')) {
+            return true;
+        }
+    }
 
     // Wait for the page to load, and check if the day is empty to add in a new
     // empty task
