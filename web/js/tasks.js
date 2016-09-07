@@ -293,16 +293,25 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     reader:new Ext.data.XmlReader({record: 'project', id:'id' }, projectRecord),
                     remoteSort: false,
                     listeners: {
-                        'load': function () {
+                        'load': function (store) {
+                            var dummyRecord = new projectRecord({
+                                id: -1,                  // some invalid id
+                                description: "Load all projects",
+                                customerName: ""
+                            });
+
+                            store.add(dummyRecord);
+                            store.commitChanges();
+
                             //the value of projectComboBox has to be set after loading the data on this store
                             if ((this.findExact("id", this.parent.taskRecord.data['projectId']) == -1) &&
                                     (this.parent.taskRecord.data['projectId'] > 0)) {
                                 //no project with that id was found in this store
-                                if(this.baseParams.customerChanged) {
-                                    //the project could not be found because the user
-                                    //has just changed the client
-                                    this.parent.projectComboBox.setValue(null);
-                                    this.parent.taskRecord.set('projectId', null);
+                                if(this.baseParams.login) {
+                                    //the project could not be found as the current user is not assigned to it
+                                    //lets load the entire list of projects and check
+                                    this.parent.projectComboBox.store.setBaseParam('login',null);
+                                    this.parent.projectComboBox.store.load();
                                 }
                                 else if(this.parent.taskRecord.id == null) {
                                     //this is a cloned task
@@ -320,24 +329,21 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                                     this.setBaseParam('pid', this.parent.taskRecord.data['projectId']);
                                     this.load();
                                 }
-                            } else {
-                                if(this.parent.taskRecord.data['projectId']) {
-                                    this.parent.projectComboBox.setValue(this.parent.taskRecord.data['projectId']);
-                                    // If the project has an association with a customer, do show it in the select box
-                                    projectName = this.getAt(
-                                        this.findExact('id', this.parent.taskRecord.data['projectId'])
-                                    ).data['description'];
+                            } else if(this.parent.taskRecord.data['projectId']) {
+                                // If the project has an association with a customer, do show it in the select box
+                                projectName = this.getAt(
+                                    this.findExact('id', this.parent.taskRecord.data['projectId'])
+                                ).data['description'];
 
-                                    // Get the correct customer name
-                                    customerName = this.getAt(
-                                        this.findExact('id', this.parent.taskRecord.data['projectId'])
-                                    ).data['customerName'];
+                                // Get the correct customer name
+                                customerName = this.getAt(
+                                    this.findExact('id', this.parent.taskRecord.data['projectId'])
+                                ).data['customerName'];
 
-                                    selectText = customerName ? projectName + " - " + customerName : projectName;
-                                    this.parent.projectComboBox.setValue(selectText);
-                                    this.parent.projectComboBox.value = this.parent.taskRecord.id;
-                                    this.parent.customerComboBox.setValue(customerName);
-                                }
+                                selectText = customerName ? projectName + " - " + customerName : projectName;
+                                this.parent.projectComboBox.setValue(selectText);
+                                this.parent.projectComboBox.value = this.parent.taskRecord.data['projectId'];
+                                this.parent.customerComboBox.setValue(customerName);
                             }
                         }
                     },
@@ -351,6 +357,14 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         '<tpl if="customerName">- {customerName}</tpl></div></tpl>',
                 listeners: {
                     'select': function (combo, record, index) {
+                        if(record.data['id'] == -1) {
+                            this.store.setBaseParam('login',null);
+                            this.store.load();
+                            this.clearValue();
+                            return;
+                        }
+
+                        customerName = "";
                         selectText = record.data['description'];
 
                         this.parent.taskRecord.set('projectId', record.id);
