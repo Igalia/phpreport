@@ -298,11 +298,12 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                             if ((this.findExact("id", this.parent.taskRecord.data['projectId']) == -1) &&
                                     (this.parent.taskRecord.data['projectId'] > 0)) {
                                 //no project with that id was found in this store
-                                if(this.baseParams.customerChanged) {
-                                    //the project could not be found because the user
-                                    //has just changed the client
-                                    this.parent.projectComboBox.setValue(null);
-                                    this.parent.taskRecord.set('projectId', null);
+                                if(this.baseParams.login) {
+                                    // Just load in all the projects, and this should be there.
+                                    this.parent.projectComboBox.store.setBaseParam('login',null);
+                                    this.parent.projectComboBox.store.load();
+                                    this.parent.loadAllCheckBox.setValue(true);
+                                    this.parent.loadAllCheckBox.setDisabled(true);
                                 }
                                 else if(this.parent.taskRecord.id == null) {
                                     //this is a cloned task
@@ -379,6 +380,23 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         this.parent.taskStoryComboBox.store.setBaseParam('pid',this.parent.taskRecord.data['projectId']);
                         this.parent.taskStoryComboBox.store.load();
                     },
+                }
+            }),
+            loadAllCheckBox: new Ext.form.Checkbox({
+                parent: this,
+                default: false,
+                boxLabel: "Load all projects",
+                tabIndex: tab++,
+                listeners: {
+                    'check': function() {
+                        if(this.getValue() == true) {
+                            this.parent.projectComboBox.store.setBaseParam('login',null);
+                            this.parent.projectComboBox.store.load();
+                            this.parent.projectComboBox.focus();
+                            this.setDisabled(true);
+                        }
+
+                    }
                 }
             }),
             taskTypeComboBox: new Ext.form.ComboBox({
@@ -511,7 +529,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
             descriptionTextArea: new Ext.form.TextArea({
                 parent: this,
-                height: 195,
+                height: 215,
                 anchor: '100%',
                 tabIndex: tab++,
                 value: this.taskRecord.data['text'],
@@ -636,6 +654,11 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 }),
                 new Ext.form.Label({text: 'Project'}),
                 this.projectComboBox,
+                new Ext.Container({
+                    layout: 'hbox',
+                    layoutConfig: {defaultMargins: "0 0 5px 0"},
+                    items: [this.loadAllCheckBox]
+                }),
                 new Ext.form.Label({text: 'Customer'}),
                 this.customerComboBox,
                 new Ext.form.Label({text: 'Task type'}),
