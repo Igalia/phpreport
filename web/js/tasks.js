@@ -392,6 +392,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         if(this.getValue() == true) {
                             this.parent.projectComboBox.store.setBaseParam('login',null);
                             this.parent.projectComboBox.store.load();
+                            this.parent.projectComboBox.focus();
                             this.setDisabled(true);
                         }
 
