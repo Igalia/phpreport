@@ -115,11 +115,27 @@ var freshCreatedTaskPanel = false;
 function isLoaded() {
     return loaded;
 }
+
+/**
+ * Check if a task is modified
+ *
+ * @param taskRecord
+ * @returns {boolean}
+ */
+function isUnTouched(taskRecord) {
+    if(!taskRecord.get('text') && !taskRecord.get('initTime') && !taskRecord.get('projectId')) {
+        return true;
+    }
+}
+
 /**
  * Checks if there are unsaved changes in this page.
  */
 function isUnsaved() {
-    return unsavedChanges;
+    if(!freshCreatedTaskRecord || !isUnTouched(freshCreatedTaskRecord)) {
+        return unsavedChanges;
+    }
+    return false;
 }
 
 function updateTasksLength(taskPanel) {
@@ -890,7 +906,7 @@ Ext.onReady(function(){
             },
         });
 
-        if(freshCreatedTask) {
+        if(typeof(freshCreatedTask) === 'boolean') {
             freshCreatedTaskRecord = newTask;
             freshCreatedTaskPanel = taskPanel;
         }
@@ -1017,7 +1033,7 @@ Ext.onReady(function(){
                         dateString += cloneDate.getDate();
 
                         // If a fresh empty task exist, just remove it
-                        if(freshCreatedTaskRecord && freshCreatedTaskRecord.dirty && isUnToched(freshCreatedTaskRecord)) {
+                        if(freshCreatedTaskRecord && freshCreatedTaskRecord.dirty && isUnTouched(freshCreatedTaskRecord)) {
                             myStore.remove(freshCreatedTaskRecord);
                             tasksScrollArea.remove(freshCreatedTaskPanel);
                             freshCreatedTaskPanel.doLayout();
@@ -1125,7 +1141,7 @@ Ext.onReady(function(){
                     }
 
                     // If a fresh empty task exist, just remove it
-                    if(freshCreatedTaskRecord && freshCreatedTaskRecord.dirty && isUnToched(freshCreatedTaskRecord)) {
+                    if(freshCreatedTaskRecord && freshCreatedTaskRecord.dirty && isUnTouched(freshCreatedTaskRecord)) {
                         myStore.remove(freshCreatedTaskRecord);
                         tasksScrollArea.remove(freshCreatedTaskPanel);
                         freshCreatedTaskPanel.doLayout();
@@ -1331,12 +1347,6 @@ Ext.onReady(function(){
     });
 
     summaryStore.load();
-
-    function isUnToched(taskRecord) {
-        if(!taskRecord.get('text') && !taskRecord.get('initTime') && !taskRecord.get('projectId')) {
-            return true;
-        }
-    }
 
     // Wait for the page to load, and check if the day is empty to add in a new
     // empty task
