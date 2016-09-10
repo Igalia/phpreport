@@ -541,9 +541,9 @@ class PostgreSQLProjectDAO extends ProjectDAO {
             $conditions .= " AND project.type = '$type'";
         }
         $sql =
-            "SELECT project.*, SUM((task._end-task.init)/60.0) AS worked_hours, ".
+            "SELECT project.*, customer.name AS customer_name, SUM((task._end-task.init)/60.0) AS worked_hours, ".
             "SUM(((task._end-task.init)/60.0) * hour_cost) AS total_cost ".
-            "FROM project LEFT JOIN task ON project.id = task.projectid ".
+            "FROM project LEFT JOIN customer ON project.customerid=customer.id LEFT JOIN task ON project.id = task.projectid ".
             "LEFT JOIN hour_cost_history ON ".
             "hour_cost_history.usrid = task.usrid AND ".
             "task._date >= hour_cost_history.init_date ".
@@ -551,7 +551,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
             "GROUP BY project.id, project.description, project.activation, ".
             "project.init, project._end, project.invoice, project.est_hours, ".
             "project.areaid, project.description, project.type, ".
-            "project.moved_hours, project.sched_type";
+            "project.moved_hours, project.sched_type, customer.name";
         return $this->customExecute($sql);
     }
 

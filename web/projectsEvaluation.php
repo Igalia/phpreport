@@ -230,6 +230,7 @@ Ext.onReady(function(){
     var projectRecord = new Ext.data.Record.create([
             {name: 'id', type: 'int'},
             {name: 'description', type: 'string'},
+            {name: 'customerName', type: 'string'},
             {name: 'activation', type: 'bool'},
             {name: 'init', type: 'date', dateFormat: 'Y-m-d'},
             {name: 'end', type: 'date', dateFormat: 'Y-m-d'},
@@ -280,7 +281,13 @@ Ext.onReady(function(){
             header: 'Name',
             sortable: true,
             dataIndex: 'description',
-        },{
+        },
+        {
+            header: 'Customer',
+            sortable: true,
+            dataIndex: 'customerName',
+        },
+        {
             header: 'Start Date',
             xtype: 'datecolumn',
             format: 'd/m/Y',
@@ -426,23 +433,25 @@ Ext.onReady(function(){
     //function to show only a subset of columns and hide the others
     function showStandardView() {
         projectColModel.setHidden(0, false);  //name
-        projectColModel.setHidden(1, false);  //start
-        projectColModel.setHidden(2, false);  //end
-        projectColModel.setHidden(3, true);   //activation
-        projectColModel.setHidden(4, true);   //area
-        projectColModel.setHidden(5, false);  //invoice
-        projectColModel.setHidden(6, true);   //total cost
-        projectColModel.setHidden(7, true);   //total profit
-        projectColModel.setHidden(8, false);  //estimated hours
-        projectColModel.setHidden(9, false);  //worked hours
-        projectColModel.setHidden(10, false); //abs. deviation
-        projectColModel.setHidden(11, false); //deviation %
-        projectColModel.setHidden(12, true);  //moved hours
-        projectColModel.setHidden(13, true);  //est hours invoice
-        projectColModel.setHidden(14, true);  //work hours invoice
-        projectColModel.setHidden(15, false); //hour profit
-        projectColModel.setHidden(16, true);  //schedule
-        projectColModel.setHidden(17, true);  //type
+        projectColModel.setHidden(1, false);  //customer
+        projectColModel.setHidden(2, false);  //start
+        projectColModel.setHidden(3, false);  //end
+        projectColModel.setHidden(4, true);   //activation
+        projectColModel.setHidden(5, true);   //area
+        projectColModel.setHidden(6, false);  //invoice
+        projectColModel.setHidden(7, true);   //total cost
+        projectColModel.setHidden(8, true);   //total profit
+        projectColModel.setHidden(9, false);  //estimated hours
+        projectColModel.setHidden(10, false);  //worked hours
+        projectColModel.setHidden(11, false); //abs. deviation
+        projectColModel.setHidden(12, false); //deviation %
+        projectColModel.setHidden(13, true);  //moved hours
+        projectColModel.setHidden(14, true);  //est hours invoice
+        projectColModel.setHidden(15, true);  //work hours invoice
+        projectColModel.setHidden(16, false); //hour profit
+        projectColModel.setHidden(17, true);  //schedule
+        projectColModel.setHidden(18, true);  //type
+
 
         projectColModel.setColumnWidth(0, 300);
         projectColModel.setColumnWidth(1, 80);
@@ -458,23 +467,24 @@ Ext.onReady(function(){
     //function to show all the columns
     function showExtendedView() {
         projectColModel.setHidden(0, false);  //name
-        projectColModel.setHidden(1, false);  //start
-        projectColModel.setHidden(2, false);  //end
-        projectColModel.setHidden(3, false);  //activation
-        projectColModel.setHidden(4, false);  //area
-        projectColModel.setHidden(5, false);  //invoice
-        projectColModel.setHidden(6, false);  //total cost
-        projectColModel.setHidden(7, false);  //total profit
-        projectColModel.setHidden(8, false);  //estimated hours
-        projectColModel.setHidden(9, false);  //worked hours
-        projectColModel.setHidden(10, false); //abs. deviation
-        projectColModel.setHidden(11, false); //deviation %
-        projectColModel.setHidden(12, false); //moved hours
-        projectColModel.setHidden(13, false); //est hours invoice
-        projectColModel.setHidden(14, false); //work hours invoice
-        projectColModel.setHidden(15, false); //hour profit
-        projectColModel.setHidden(16, false); //schedule
-        projectColModel.setHidden(17, false); //type
+        projectColModel.setHidden(1, false);  //customer
+        projectColModel.setHidden(2, false);  //start
+        projectColModel.setHidden(3, false);  //end
+        projectColModel.setHidden(4, false);  //activation
+        projectColModel.setHidden(5, false);  //area
+        projectColModel.setHidden(6, false);  //invoice
+        projectColModel.setHidden(7, false);  //total cost
+        projectColModel.setHidden(8, false);  //total profit
+        projectColModel.setHidden(9, false);  //estimated hours
+        projectColModel.setHidden(10, false);  //worked hours
+        projectColModel.setHidden(11, false); //abs. deviation
+        projectColModel.setHidden(12, false); //deviation %
+        projectColModel.setHidden(13, false); //moved hours
+        projectColModel.setHidden(14, false); //est hours invoice
+        projectColModel.setHidden(15, false); //work hours invoice
+        projectColModel.setHidden(16, false); //hour profit
+        projectColModel.setHidden(17, false); //schedule
+        projectColModel.setHidden(18, false); //type
 
         projectColModel.setColumnWidth(0, 300);
         projectColModel.setColumnWidth(1, 80);
