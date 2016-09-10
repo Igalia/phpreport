@@ -114,7 +114,7 @@
                     name: 'customer',
                     fieldLabel:'Customer',
                     <?php
-                    echo "value:'" . $project->getCustomerId() . "'";
+                    echo "value:'" . $project->getCustomerName() . "'";
                     ?>
                     },{
                         id:'init',
