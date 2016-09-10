@@ -49,6 +49,7 @@ class GetFilteredCustomProjectsAction extends Action{
     private $activation;
     private $areaId;
     private $type;
+    private $cname;
 
     /** GetAllCustomProjectsAction constructor.
      *
@@ -71,10 +72,12 @@ class GetFilteredCustomProjectsAction extends Action{
      *        Only trojects with a type field that matches completely with this
      *        string will be returned. NULL to deactivate filtering by this
      *        field.
+     * @param string $cname string to filter projects by their customer name. NULL
+     *        to deactivate filtyering by this field
      */
     public function __construct($description = NULL, $filterStartDate = NULL,
             $filterEndDate = NULL, $activation = NULL, $areaId = NULL,
-            $type = NULL) {
+            $type = NULL, $cname = NULL) {
 
         $this->preActionParameter="GET_FILTERED_CUSTOM_PROJECTS_PREACTION";
         $this->postActionParameter="GET_FILTERED_CUSTOM_PROJECTS_POSTACTION";
@@ -85,7 +88,7 @@ class GetFilteredCustomProjectsAction extends Action{
         $this->activation = $activation;
         $this->areaId = $areaId;
         $this->type = $type;
-
+        $this->cname = $cname;
     }
 
     /** Specific code execute.
@@ -98,7 +101,7 @@ class GetFilteredCustomProjectsAction extends Action{
         $dao = DAOFactory::getProjectDAO();
         return $dao->getFilteredCustom($this->description,
             $this->filterStartDate, $this->filterEndDate, $this->activation,
-            $this->areaId, $this->type);
+            $this->areaId, $this->type, $this->cname);
     }
 
 }

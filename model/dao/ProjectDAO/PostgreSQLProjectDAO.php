@@ -512,7 +512,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
 
     public function getFilteredCustom($description = NULL,
             $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL,
-            $areaId = NULL, $type = NULL) {
+            $areaId = NULL, $type = NULL, $filterCname = NULL) {
 
         $conditions = "TRUE";
         if ($description != NULL) {
@@ -539,6 +539,12 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         }
         if ($type != NULL) {
             $conditions .= " AND project.type = '$type'";
+        }
+        if ($filterCname != NULL) {
+            foreach(explode(" ", $filterCname) as $word) {
+                $conditions .= " AND UPPER(customer.name)" .
+                    " LIKE ('%' || UPPER('$word') || '%')";
+            }
         }
         $sql =
             "SELECT project.*, customer.name AS customer_name, SUM((task._end-task.init)/60.0) AS worked_hours, ".

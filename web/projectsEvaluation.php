@@ -112,6 +112,9 @@ Ext.onReady(function(){
         if (Ext.getCmp('name').getRawValue() != "") {
             baseParams.description = Ext.getCmp('name').getValue();
         }
+        if (Ext.getCmp('cname').getRawValue() != "") {
+            baseParams.cname = Ext.getCmp('cname').getValue();
+        }
         if (Ext.getCmp('startDate').getRawValue() != "") {
             var date = Ext.getCmp('startDate').getValue();
             baseParams.filterStartDate = date.getFullYear() + "-"
@@ -149,6 +152,11 @@ Ext.onReady(function(){
             name: 'name',
             xtype: 'textfield',
             id: 'name',
+        },{
+            fieldLabel: 'Customer name',
+            name: 'cname',
+            xtype: 'textfield',
+            id: 'cname',
         },{
             fieldLabel: 'Activation',
             name: 'activation',

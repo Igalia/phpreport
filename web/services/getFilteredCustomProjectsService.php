@@ -56,6 +56,7 @@
         $activation = NULL;
         $areaId = NULL;
         $type = NULL;
+        $cname = NULL;
         if (isset($_GET['description'])) {
             $description = $_GET['description'];
         }
@@ -74,9 +75,12 @@
         if (isset($_GET['type'])) {
             $type = $_GET['type'];
         }
+        if (isset($_GET['cname'])) {
+            $cname = $_GET['cname'];
+        }
 
         $projects = ProjectsFacade::GetFilteredCustomProjects($description,
-                $filterStartDate, $filterEndDate, $activation, $areaId, $type);
+                $filterStartDate, $filterEndDate, $activation, $areaId, $type, $cname);
 
         $string = "<projects>";
 

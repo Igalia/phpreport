@@ -269,6 +269,8 @@ abstract class ProjectDAO extends BaseDAO{
      *        Only trojects with a type field that matches completely with this
      *        string will be returned. NULL to deactivate filtering by this
      *        field.
+     * @param string $cname string to filter projects by their customer name. NULL
+     *        to deactivate filtyering by this field
      * @return array an array with value objects {@link CustomProjectVO} with
      *         their properties set to the values from the rows and the
      *         additional data.
@@ -276,7 +278,7 @@ abstract class ProjectDAO extends BaseDAO{
      */
     public abstract function getFilteredCustom($description = NULL,
             $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL,
-            $areaId = NULL, $type = NULL);
+            $areaId = NULL, $type = NULL, $cname = NULL);
 
     /** Project partial updater.
      *

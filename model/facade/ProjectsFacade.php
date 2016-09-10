@@ -137,16 +137,20 @@ abstract class ProjectsFacade {
      * @param long $areaId value to filter projects by their area field.
      *        projects. NULL to deactivate filtering by this field.
      * @param string $type string to filter projects by their type field.
-     *        Only trojects with a type field that matches completely with this
+     *        Only projects with a type field that matches completely with this
      *        string will be returned. NULL to deactivate filtering by this
      *        field.
+     * @param string $cname string to filter projects by their customer name. NULL
+     *        to deactivate filtyering by this field
+     * @return mixed
+     * @throws null
      */
     static function GetFilteredCustomProjects($description = NULL,
             $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL,
-            $areaId = NULL, $type = NULL) {
+            $areaId = NULL, $type = NULL, $cname = NULL) {
 
         $action = new GetFilteredCustomProjectsAction($description,
-            $filterStartDate, $filterEndDate, $activation, $areaId, $type);
+            $filterStartDate, $filterEndDate, $activation, $areaId, $type, $cname);
 
         return $action->execute();
     }
