@@ -103,7 +103,7 @@
 
         if ($project)
         {
-          $string = $string . "<project><id>{$project->getId()}</id><areaId>{$project->getAreaId()}</areaId><customerId>{$project->getCustomerId()}</customerId><activation>{$project->getActivation()}</activation><description>" . escape_string($project->getDescription()) . "</description><invoice>{$project->getInvoice()}</invoice>";
+          $string = $string . "<project><id>{$project->getId()}</id><areaId>{$project->getAreaId()}</areaId><customerId>{$project->getCustomerId()}</customerId><customerName>{$project->getCustomerName()}</customerName><activation>{$project->getActivation()}</activation><description>" . escape_string($project->getDescription()) . "</description><invoice>{$project->getInvoice()}</invoice>";
 
           if (!is_null($project->getInit()))
                 $string = $string . "<initDate format='Y-m-d'>{$project->getInit()->format("Y-m-d")}</initDate>";

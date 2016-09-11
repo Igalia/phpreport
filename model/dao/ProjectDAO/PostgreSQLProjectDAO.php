@@ -189,7 +189,9 @@ class PostgreSQLProjectDAO extends ProjectDAO {
     public function getById($projectId) {
         if (!is_numeric($projectId))
             throw new SQLIncorrectTypeException($projectId);
-        $sql = "SELECT * FROM project WHERE id=".$projectId;
+        $sql = "SELECT project.*, customer.name AS customer_name
+            FROM project LEFT JOIN customer ON project.customerid=customer.id 
+            WHERE project.id=".$projectId. " GROUP BY project.id, customer.name";
         $result = $this->execute($sql);
         return $result[0];
     }
