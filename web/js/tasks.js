@@ -340,15 +340,13 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                                     //lets load the entire list of projects and check
                                     this.parent.projectComboBox.store.setBaseParam('login',null);
                                     this.parent.projectComboBox.store.load();
-                                }
-                                else if(this.parent.taskRecord.id == null) {
+                                } else if(this.parent.taskRecord.id == null) {
                                     //this is a cloned task
                                     //the original task belonged to a closed project
                                     //we remove the project value
                                     this.parent.projectComboBox.setValue(null);
                                     this.parent.taskRecord.set('projectId', null);
-                                }
-                                else {
+                                } else {
                                     //this is a saved task belonging to a closed project
                                     //we disable edition for this task and reload
                                     //the list with that only project
@@ -357,7 +355,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                                     this.setBaseParam('pid', this.parent.taskRecord.data['projectId']);
                                     this.load();
                                 }
-                            } else if(this.parent.taskRecord.data['projectId']) {
+                            } else if(this.parent.taskRecord.data['projectId'] != -1) {
                                 // If the project has an association with a customer, do show it in the select box
                                 projectName = this.getAt(
                                     this.findExact('id', this.parent.taskRecord.data['projectId'])
@@ -372,6 +370,11 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                                 this.parent.projectComboBox.setValue(selectText);
                                 this.parent.projectComboBox.value = this.parent.taskRecord.data['projectId'];
                                 this.parent.customerComboBox.setValue(customerName);
+
+                                Ext.QuickTips.register({
+                                    target: this.parent.projectComboBox,
+                                    text: projectName,
+                                });
                             }
                         }
                     },
@@ -409,6 +412,11 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         this.parent.taskRecord.set('taskStoryId', "");
                         this.parent.taskStoryComboBox.setValue("");
                         this.parent.customerComboBox.setValue(customerName);
+
+                        Ext.QuickTips.register({
+                            target: this.parent.projectComboBox,
+                            text: record.data['description'],
+                        });
                     },
                     'blur': function () {
                         // workaround in case you set a value, save with ctrl+s,
