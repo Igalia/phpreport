@@ -127,6 +127,22 @@ function isUnTouched(taskRecord) {
     }
 }
 
+// Navigate to Next day
+function navigateToNextDay() {
+    currentDate = new Date(date);
+    nextDate = new Date();
+    nextDate.setTime(currentDate.getTime() + 86400000);
+    window.location = "tasks.php?date=" + nextDate.format('Y-m-d');
+}
+
+// Navigate to Prev day
+function navigateToPrevDay() {
+    currentDate = new Date(date);
+    previousDate = new Date();
+    previousDate.setTime(currentDate.getTime() - 86400000);
+    window.location = "tasks.php?date=" + previousDate.format('Y-m-d');
+}
+
 function updateTasksLength(taskPanel) {
     if (taskPanel.initTimeField.getRawValue()!='' && taskPanel.endTimeField.getRawValue()!='' && taskPanel.endTimeField.isValid() && taskPanel.initTimeField.isValid()) {
         // We write the task's length label
@@ -1428,6 +1444,21 @@ Ext.onReady(function(){
             window.setTimeout(addEmptyTask, 1000);
         }
     }
+
+    // Navigate on key left and right arrow press
+    function checkKeyAndNavigate(e) {
+        switch (e.keyCode) {
+            case 37:
+                navigateToPrevDay();
+                break;
+            case 39:
+                navigateToNextDay();
+                break;
+        }
+    }
+
+    // Add handler to check keyboard left/right clicks and change current date
+    document.onkeydown = checkKeyAndNavigate;
 
     // Adds in a new empty task when an empty day is clicked
     addEmptyTask();
