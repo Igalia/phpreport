@@ -1388,7 +1388,15 @@ Ext.onReady(function(){
                 xtype: 'tbtext',
                 id: 'status_display',
                 text: 'Status: No changes detected'
-            }
+            }, '->',
+            new Ext.Button({
+                text:'Previous date',
+                handler: navigateToPrevDay,
+            }), '-',
+            new Ext.Button({
+                text:'Next date',
+                handler: navigateToNextDay,
+            }),
         ],
     });
     //hotkeys
@@ -1447,13 +1455,16 @@ Ext.onReady(function(){
 
     // Navigate on key left and right arrow press
     function checkKeyAndNavigate(e) {
-        switch (e.keyCode) {
-            case 37:
-                navigateToPrevDay();
-                break;
-            case 39:
-                navigateToNextDay();
-                break;
+        // We do not want navigation working while a user is editing a task
+        if( document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA" ) {
+            switch (e.keyCode) {
+                case 37:
+                    navigateToPrevDay();
+                    break;
+                case 39:
+                    navigateToNextDay();
+                    break;
+            }
         }
     }
 
