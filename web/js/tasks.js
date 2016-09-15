@@ -258,7 +258,8 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
             length: new Ext.form.Label({
                 parent: this,
-                ref: '../length'
+                ref: '../length',
+                style: 'display:block; padding:5px 0 5px 2px'
             }),
             endTimeField: new Ext.form.TimeField({
                 parent: this,
@@ -377,6 +378,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 mode: 'local',
                 valueField: 'id',
                 triggerAction: 'all',
+                width: 250,
                 forceSelection: true,
                 displayField: 'description',
                 tpl: '<tpl for="."><div class="x-combo-list-item" > <tpl>{description} </tpl>' +
@@ -491,6 +493,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             taskStoryComboBox: new Ext.form.ComboBox({
                 parent: this,
                 tabIndex: tab++,
+                width: 180,
                 store: new Ext.data.Store({
                     parent: this,
                     autoLoad: true,  //initial data are loaded in the application init
@@ -551,8 +554,8 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
             descriptionTextArea: new Ext.form.TextArea({
                 parent: this,
-                height: 195,
-                anchor: '100%',
+                height: 110,
+                style: "width: 91%",
                 tabIndex: tab++,
                 value: this.taskRecord.data['text'],
                 enableKeyEvents: true,
@@ -571,7 +574,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             deleteButton: new Ext.Button({
                 parent: this,
                 text:'Delete',
-                width: 40,
+                width: 100,
                 tabIndex: tab++,
                 margins: "7px 0 0 5px",
                 handler: function() {
@@ -585,7 +588,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             cloneButton: new Ext.Button({
                 parent: this,
                 text:'Clone',
-                width: 40,
+                width: 100,
                 tabIndex: tab++,
                 margins: "7px 0 0 5px",
                 handler: function() {
@@ -624,7 +627,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             createTemplateButton: new Ext.Button({
                 parent: this,
                 text:'Template',
-                width: 40,
+                width: 100,
                 tabIndex: tab++,
                 margins: "7px 0 0 5px",
                 handler: function() {
@@ -657,57 +660,63 @@ var TaskPanel = Ext.extend(Ext.Panel, {
         this.teleworkCheckBox.setValue((this.taskRecord.data['telework']=='true'));
         this.onsiteCheckBox.setValue((this.taskRecord.data['onsite']=='true'));
 
-        /* Place the subelements correctly into the form */
-        leftBox = new Ext.Panel({
+        topBox = new Ext.Panel({
             layout: 'anchor',
-            width: 230,
-            defaults: {width: 225},
+            columnWidth: 1,
+            monitorResize: true,
             items: [
                 new Ext.Container({
                     layout: 'hbox',
-                    layoutConfig: {defaultMargins: "0 5px 0 0"},
+                    layoutConfig: {defaultMargins: "0 5px 5px 0"},
                     items:[
-                        new Ext.form.Label({text: 'Time '}),
-                        this.initTimeField,
-                        new Ext.form.Label({text: ' - '}),
-                        this.endTimeField,
-                        this.length,
+                    new Ext.Container({
+                        layout: 'column',
+                        layoutConfig: {defaultMargins: "0 5px 10px 0"},
+                        width: 190,
+                        items:[
+                            new Ext.form.Label({text: 'Time ', style:'display:block; padding:5px 2px 5px 0px'}),
+                            this.initTimeField,
+                            new Ext.form.Label({text: ' - ', style:'display:block; padding:5px 2px 5px 2px'}),
+                            this.endTimeField,
+                            this.length,
+                        ]
+                    }),
+                        new Ext.form.Label({text: 'Project', style:'display:block; padding:5px 2px 5px 0px'}),
+                        this.projectComboBox,
+                        new Ext.form.Label({text: 'Story', style:'display:block; padding:5px 2px 5px 0px'}),
+                        this.storyField,
+                        new Ext.form.Label({text: 'Task type', style:'display:block; padding:5px 2px 5px 0px'}),
+                        this.taskTypeComboBox,
+                        new Ext.form.Label({text: 'TaskStory', style:'display:block; padding:5px 2px 5px 0px'}),
+                        this.taskStoryComboBox,
+
                     ]
                 }),
-                new Ext.form.Label({text: 'Project'}),
-                this.projectComboBox,
-                new Ext.form.Label({text: 'Customer'}),
-                this.customerComboBox,
-                new Ext.form.Label({text: 'Task type'}),
-                this.taskTypeComboBox,
-                new Ext.form.Label({text: 'Story'}),
-                this.storyField,
-                new Ext.form.Label({text: 'TaskStory'}),
-                this.taskStoryComboBox,
-                new Ext.Container({
-                    layout: 'hbox',
-                    layoutConfig: {defaultMargins: "7px 5px 0 0"},
-                    items: [this.teleworkCheckBox, this.onsiteCheckBox]}),
+
             ],
         });
-        rightBox = new Ext.Panel({
-            layout:'anchor',
-            monitorResize: true,
+        bottomBox = new Ext.Panel({
+            layout: 'column',
             columnWidth: 1,
             items:[
                 this.descriptionTextArea,
                 new Ext.Container({
-                    layout: 'hbox',
-                    layoutConfig: {defaultMargins: "7px 5px 0 0"},
+                    layout: 'anchor',
                     items:[
                         this.deleteButton,
                         this.cloneButton,
                         this.createTemplateButton,
+                        new Ext.Container({
+                            layout: '',
+                            style: 'display:block; padding:0 0 5px 2px',
+                            layoutConfig: {defaultMargins: "7px 5px 0 5px"},
+                            items: [this.teleworkCheckBox, this.onsiteCheckBox]
+                        }),
                     ]
-                })
-            ],
+                }),
+            ]
         });
-        this.items = [leftBox, rightBox];
+        this.items = [topBox, bottomBox];
 
         /* call the superclass to preserve base class functionality */
         TaskPanel.superclass.initComponent.apply(this, arguments);
