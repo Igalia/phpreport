@@ -19,9 +19,9 @@
  */
 
 
-/** File for GetAllCustomProjectsAction
+/** File for GetFilteredCustomProjectsAction
  *
- *  This file just contains {@link GetAllCustomProjectsAction}.
+ *  This file just contains {@link GetFilteredCustomProjectsAction}.
  *
  * @filesource
  * @package PhpReport
@@ -51,7 +51,7 @@ class GetFilteredCustomProjectsAction extends Action{
     private $type;
     private $cname;
 
-    /** GetAllCustomProjectsAction constructor.
+    /** GetFilteredCustomProjectsActions constructor.
      *
      * This is just the constructor of this action.
      *
