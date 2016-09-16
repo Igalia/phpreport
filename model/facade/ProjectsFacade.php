@@ -31,7 +31,6 @@
 
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllProjectsAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllCustomProjectsAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetFilteredCustomProjectsAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserProjectsAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectUsersAction.php');
@@ -104,22 +103,7 @@ abstract class ProjectsFacade {
 
     }
 
-     /** Get all Custom Projects Function
-     *
-     *  This action is used for retrieving all Projects with additional data.
-     *
-     * @return array an array with value objects {@link CustomProjectVO} with their properties set to the values from the rows
-     * and with additional data, and ordered ascendantly by their database internal identifier.
-     */
-    static function GetAllCustomProjects() {
-
-        $action = new GetAllCustomProjectsAction();
-
-        return $action->execute();
-
-    }
-
-    /** GetAllCustomProjectsAction constructor.
+    /** GetFilteredCustomProjects constructor.
      *
      * This is just the constructor of this action.
      *

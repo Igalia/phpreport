@@ -68,8 +68,7 @@ $permissions = array(
         '/services/getProjectUserWeeklyHoursReportJsonService.php',
         //common services
         '/services/getAllUsersService.php', '/services/getAllCustomersService.php',
-        '/services/getAllProjectsService.php', '/services/getAllCustomProjectsService.php',
-        '/services/getAllCitiesService.php', '/services/getProjectService.php',
+        '/services/getAllProjectsService.php', '/services/getAllCitiesService.php', '/services/getProjectService.php',
         '/services/getAllSectorsService.php', '/services/getAllAreasService.php',
         '/services/getAllExtraHourVOsService.php', '/services/getAllCitiesService.php',
 	    '/services/getUserGoalsService.php', '/services/createUserGoalsService.php', '/services/updateUserGoalsService.php',

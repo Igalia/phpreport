@@ -491,25 +491,6 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         return $this->execute($sql);
     }
 
-    /** Custom Projects retriever for PostgreSQL.
-     *
-     * This function retrieves all rows from Project table and creates a {@link CustomProjectVO} with data from each row,
-     * and additional ones.
-     *
-     * @param bool $active optional parameter for obtaining only the active projects (by default it returns all them).
-     * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
-     * @return array an array with value objects {@link CustomProjectVO} with their properties set to the values from the rows
-     * and the additional data, and ordered ascendantly by their database internal identifier.
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getAllCustom($active = False, $orderField = 'id') {
-        $sql = "SELECT project.*, SUM((task._end-task.init)/60.0) AS worked_hours, SUM(((task._end-task.init)/60.0) * hour_cost) AS total_cost FROM project LEFT JOIN task ON project.id = task.projectid LEFT JOIN hour_cost_history ON hour_cost_history.usrid = task.usrid AND task._date >= hour_cost_history.init_date AND task._date <= hour_cost_history.end_date ";
-        if ($active)
-            $sql = $sql . " WHERE project.activation= 'True'";
-        $sql = $sql . " GROUP BY project.id, project.description, project.activation, project.init, project._end, project.invoice, project.est_hours, project.areaid, project.description, project.type, project.moved_hours, project.sched_type ORDER BY project." . $orderField . " ASC";
-        return $this->customExecute($sql);
-    }
-
     public function getFilteredCustom($description = NULL,
             $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL,
             $areaId = NULL, $type = NULL) {
@@ -720,8 +701,6 @@ class PostgreSQLProjectDAO extends ProjectDAO {
 
 
 $dao = new PostgreSQLProjectDAO();
-
-$projs = $dao->getAllCustom();
 
 var_dump($projs);
 
