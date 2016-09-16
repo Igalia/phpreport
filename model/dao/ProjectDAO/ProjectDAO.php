@@ -195,13 +195,14 @@ abstract class ProjectDAO extends BaseDAO{
      *
      * This function retrieves all rows from Project table and creates a {@link ProjectVO} with data from each row.
      *
+     * @param null $userLogin optional parameter to list down only projects assigned to a user
      * @param bool $active optional parameter for obtaining only the active projects (by default it returns all them).
      * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
      * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      * @throws {@link OperationErrorException}
      */
-    public abstract function getAll($active = False, $orderField = 'id');
+    public abstract function getAll($userLogin = NULL, $active = False, $orderField = 'id');
 
     /** Projects retriever.
      *
@@ -220,16 +221,18 @@ abstract class ProjectDAO extends BaseDAO{
      */
     public abstract function getByCustomerUserLogin($customerId = NULL, $userLogin = NULL, $active = False, $orderField = 'id');
 
-    /** Project along with Customer retriever
+    /** Custom Projects retriever.
      *
-     * This function retrieves the rows from the Project table, along with customer details for use in the tasks page
+     * This function retrieves all rows from Project table and creates a {@link CustomProjectVO} with data from each row,
+     * and additional ones.
      *
-     * @param null $userLogin
-     * @param bool $active
-     * @param string $orderField
-     * @return mixed
+     * @param bool $active optional parameter for obtaining only the active projects (by default it returns all them).
+     * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
+     * @return array an array with value objects {@link CustomProjectVO} with their properties set to the values from the rows
+     * and the additional data, and ordered ascendantly by their database internal identifier.
+     * @throws {@link SQLQueryErrorException}
      */
-    public abstract function getProjectsAndCustomersByUserLogin($userLogin = NULL, $active = False, $orderField = 'id');
+    public abstract function getAllCustom($active = False, $orderField = 'id');
 
     /** Custom Projects retriever with filters.
      *

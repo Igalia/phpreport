@@ -64,10 +64,11 @@ class GetAllProjectsAction extends Action{
      *
      * @param bool $active optional parameter for obtaining only the active projects (by default it returns all them).
      */
-    public function __construct($active = False, $order = 'id') {
+    public function __construct($userLogin = NULL, $active = False, $active = False, $order = 'id') {
         $this->preActionParameter="GET_ALL_PROJECTS_PREACTION";
         $this->postActionParameter="GET_ALL_PROJECTS_POSTACTION";
         $this->active = $active;
+        $this->userLogin = $userLogin;
         $this->order = $order;
     }
 
@@ -79,15 +80,7 @@ class GetAllProjectsAction extends Action{
      */
     protected function doExecute() {
         $dao = DAOFactory::getProjectDAO();
-        return $dao->getAll($this->active, $this->order);
+        return $dao->getAll($this->userLogin, $this->active, $this->order);
     }
 
 }
-
-
-/*//Test code;
-
-$action= new GetAllProjectsAction(True);
-//var_dump($action);
-$result = $action->execute();
-var_dump($result);*/

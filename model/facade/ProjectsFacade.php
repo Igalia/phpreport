@@ -42,7 +42,6 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/PartialUpdateProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectsByCustomerUserLoginAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectsAndCustomersByUserLoginAction.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
 
@@ -74,17 +73,18 @@ abstract class ProjectsFacade {
 
      /** Get all Projects Function
      *
-     *  This action is used for retrieving all Projects.
+     * This action is used for retrieving all Projects.
+     *
+     * @param string $userLogin
+     * @param bool $active
+     * @param string $order
      *
      * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      */
-    static function GetAllProjects() {
-
-        $action = new GetAllProjectsAction();
-
+    static function GetAllProjects($userLogin = NULL, $active = False, $order = 'id') {
+        $action = new GetAllProjectsAction($userLogin, $active, $order);
         return $action->execute();
-
     }
 
     /** Get Custom Project Function
@@ -350,23 +350,6 @@ abstract class ProjectsFacade {
 
         return $action->execute();
     }
-
-    /** GetProjectsAndCustomersByUserLogin Funciton
-     *
-     *  Retrieve a list of projects using the attributes user and activation as filters
-     *
-     * @param string $userLogin
-     * @param bool $active
-     * @param string $order
-     * @return mixed
-     * @throws null
-     */
-    static function GetProjectsAndCustomersByUserLogin($userLogin = NULL, $active = False, $order = 'id') {
-            $action = new GetProjectsAndCustomersByUserLoginAction($userLogin, $active, $order);
-
-        return $action->execute();
-    }
-
 }
 
 //var_dump(ProjectsFacade::GetProjectUsers(4));

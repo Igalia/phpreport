@@ -1074,7 +1074,7 @@ Ext.onReady(function(){
     var projectProxy = new Ext.data.HttpProxy({
     method: 'POST',
         api: {
-            read    : {url: 'services/getAllProjectsService.php', method: 'GET'},
+            read    : {url: 'services/getProjectsService.php', method: 'GET'},
             create  : 'services/createProjectsService.php',
             update  : 'services/updateProjectsService.php',
             destroy : 'services/deleteProjectsService.php'
