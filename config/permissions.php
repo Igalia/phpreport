@@ -79,9 +79,8 @@ $permissions = array(
         '/services/getTodayAreaUsersService.php', '/services/getProjectUsersService.php'
     ),
     'manager' => array(
-        '/projectsEvaluation.php', '/usersEvaluation.php', '/projectsSummary.php', '/services/getFilteredCustomProjectsService.php',
-        '/services/getUserStoryReportJsonService.php', '/services/getProjectCustomerReportJsonService.php',
-        '/services/getProjectUserReportJsonService.php',
+        '/projectsEvaluation.php', '/usersEvaluation.php', '/projectsSummary.php', '/services/getUserStoryReportJsonService.php',
+        '/services/getProjectCustomerReportJsonService.php', '/services/getProjectUserReportJsonService.php',
     ),
     'admin' => array(
         //projects management

@@ -551,58 +551,6 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         return $this->customExecute($sql);
     }
 
-    public function getFilteredCustom($description = NULL,
-            $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL,
-            $areaId = NULL, $type = NULL, $filterCname = NULL) {
-
-        $conditions = "TRUE";
-        if ($description != NULL) {
-            foreach(explode(" ", $description) as $word) {
-                $conditions .= " AND UPPER(project.description)" .
-                    " LIKE ('%' || UPPER('$word') || '%')";
-            }
-        }
-        if ($filterStartDate != NULL) {
-            $conditions .= " AND (project._end >= ".
-                DBPostgres::formatDate($filterStartDate) .
-                " OR project._end is NULL)";
-        }
-        if ($filterEndDate != NULL) {
-            $conditions .= " AND (project.init <= ".
-                DBPostgres::formatDate($filterEndDate) .
-                " OR project.init is NULL)";
-        }
-        if ($activation != NULL) {
-            $conditions .= " AND project.activation = " . $activation;
-        }
-        if ($areaId != NULL) {
-            $conditions .= " AND project.areaid = $areaId";
-        }
-        if ($type != NULL) {
-            $conditions .= " AND project.type = '$type'";
-        }
-        if ($filterCname != NULL) {
-            foreach(explode(" ", $filterCname) as $word) {
-                $conditions .= " AND UPPER(customer.name)" .
-                    " LIKE ('%' || UPPER('$word') || '%')";
-            }
-        }
-        $sql =
-            "SELECT project.*, customer.name AS customer_name, SUM((task._end-task.init)/60.0) AS worked_hours, ".
-            "SUM(((task._end-task.init)/60.0) * hour_cost) AS total_cost ".
-            "FROM project LEFT JOIN customer ON project.customerid=customer.id LEFT JOIN task ON project.id = task.projectid ".
-            "LEFT JOIN hour_cost_history ON ".
-            "hour_cost_history.usrid = task.usrid AND ".
-            "task._date >= hour_cost_history.init_date ".
-            "AND task._date <= hour_cost_history.end_date WHERE $conditions ".
-            "GROUP BY project.id, project.description, project.activation, ".
-            "project.init, project._end, project.invoice, project.est_hours, ".
-            "project.areaid, project.description, project.type, ".
-            "project.moved_hours, project.sched_type, project.customerid, ".
-            "customer.name";
-        return $this->customExecute($sql);
-    }
-
     /** Project partial updater for PostgreSQL.
      *
      * This function updates only some fields of the data of a Project by its {@link ProjectVO}, reading

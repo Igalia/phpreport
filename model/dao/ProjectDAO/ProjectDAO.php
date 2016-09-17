@@ -252,42 +252,6 @@ abstract class ProjectDAO extends BaseDAO{
      */
     public abstract function getAllCustom($active = False, $orderField = 'id');
 
-    /** Custom Projects retriever with filters.
-     *
-     * This function retrieves a subset of rows from Project table and creates a
-     * {@link CustomProjectVO} with data from each row.
-     *
-     * Multiple fields can be used as filters; to disable a filter, a NULL value
-     * has to be passed on that parameter.
-     *
-     * @param string $description string to filter projects by their description
-     *        field. Projects with a description that contains this string will
-     *        be returned. NULL to deactivate filtering by this field.
-     * @param DateTime $filterStartDate start date of the time filter for
-     *        projects. Projects will a finish date later than this date will
-     *        be returned. NULL to deactivate filtering by this field.
-     * @param DateTime $filterEndDate end date of the time filter for projects.
-     *        Projects will a start date sooner than this date will be returned.
-     *        NULL to deactivate filtering by this field.
-     * @param boolean $activation filter projects by their activation field.
-     *        NULL to deactivate filtering by this field.
-     * @param long $areaId value to filter projects by their area field.
-     *        projects. NULL to deactivate filtering by this field.
-     * @param string $type string to filter projects by their type field.
-     *        Only trojects with a type field that matches completely with this
-     *        string will be returned. NULL to deactivate filtering by this
-     *        field.
-     * @param string $cname string to filter projects by their customer name. NULL
-     *        to deactivate filtyering by this field
-     * @return array an array with value objects {@link CustomProjectVO} with
-     *         their properties set to the values from the rows and the
-     *         additional data.
-     * @throws {@link SQLQueryErrorException}
-     */
-    public abstract function getFilteredCustom($description = NULL,
-            $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL,
-            $areaId = NULL, $type = NULL, $cname = NULL);
-
     /** Project partial updater.
      *
      * This function updates only some fields of the data of a Project by its {@link ProjectVO}, reading

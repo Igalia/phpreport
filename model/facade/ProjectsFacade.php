@@ -31,7 +31,6 @@
 
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllProjectsAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/GetFilteredCustomProjectsAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserProjectsAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectUsersAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectAction.php');
