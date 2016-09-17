@@ -198,11 +198,29 @@ abstract class ProjectDAO extends BaseDAO{
      * @param null $userLogin optional parameter to list down only projects assigned to a user
      * @param bool $active optional parameter for obtaining only the active projects (by default it returns all them).
      * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
+     * @param string $description string to filter projects by their description
+     *        field. Projects with a description that contains this string will
+     *        be returned. NULL to deactivate filtering by this field.
+     * @param DateTime $filterStartDate start date of the time filter for
+     *        projects. Projects will a finish date later than this date will
+     *        be returned. NULL to deactivate filtering by this field.
+     * @param DateTime $filterEndDate end date of the time filter for projects.
+     *        Projects will a start date sooner than this date will be returned.
+     *        NULL to deactivate filtering by this field.
+     * @param boolean $activation filter projects by their activation field.
+     *        NULL to deactivate filtering by this field.
+     * @param long $areaId value to filter projects by their area field.
+     *        projects. NULL to deactivate filtering by this field.
+     * @param string $type string to filter projects by their type field.
+     *        Only trojects with a type field that matches completely with this
+     *        string will be returned. NULL to deactivate filtering by this
+     *        field.
      * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      * @throws {@link OperationErrorException}
      */
-    public abstract function getAll($userLogin = NULL, $active = False, $orderField = 'id');
+    public abstract function getAll($userLogin = NULL, $active = False, $orderField = 'id', $description = NULL,
+        $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL, $areaId = NULL, $type = NULL);
 
     /** Projects retriever.
      *

@@ -33,10 +33,37 @@ include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
 
 $sid = $_GET['sid'];
 $login = $_GET['login'];
+$order = 'id';
 
-$order = $_GET['order'];
-if ($order == '') {
-    $order = 'id';
+// In case some filtering args are set, retrieve them
+$description = NULL;
+$filterStartDate = NULL;
+$filterEndDate = NULL;
+$activation = NULL;
+$areaId = NULL;
+$type = NULL;
+
+
+if (isset($_GET['description'])) {
+    $description = $_GET['description'];
+}
+if (isset($_GET['filterStartDate'])) {
+    $filterStartDate = DateTime::createFromFormat("Y-m-d", $_GET['filterStartDate']);
+}
+if (isset($_GET['filterEndDate'])) {
+    $filterEndDate = DateTime::createFromFormat("Y-m-d", $_GET['filterEndDate']);
+}
+if (isset($_GET['activation'])) {
+    $activation = $_GET['activation'];
+}
+if (isset($_GET['areaId'])) {
+    $areaId = $_GET['areaId'];
+}
+if (isset($_GET['type'])) {
+    $type = $_GET['type'];
+}
+if (isset($_GET['order'])) {
+    $order = $_GET['order'];
 }
 
 do {
@@ -55,7 +82,8 @@ do {
         break;
     }
 
-    $projects = ProjectsFacade::GetAllProjects($login, $active, $order);
+    $projects = ProjectsFacade::GetAllProjects($login, $active, $order,$description, $filterStartDate, $filterEndDate,
+        $activation, $areaId, $type);
 
     $string = "<projects>";
 

@@ -58,18 +58,81 @@ class GetAllProjectsAction extends Action{
      */
     private $order;
 
+    /**
+     * @var  string
+     */
+    private $description;
+
+    /**
+     * @var  DateTime
+     */
+    private $filterStartDate;
+
+    /**
+     * @var  DateTime
+     */
+    private $filterEndDate;
+
+    /**
+     * @var boolean
+     */
+    private $activation;
+
+    /**
+     * @var long
+     */
+    private $areaId;
+
+    /**
+     * @var string
+     */
+    private $type;
+
+    /**
+     * @var string
+     */
+    private $userLogin;
+
     /** GetAllProjectsAction constructor.
      *
      * This is just the constructor of this action.
      *
+     * @param string $userLogin
      * @param bool $active optional parameter for obtaining only the active projects (by default it returns all them).
+     * @param string $order
+     * @param string $description string to filter projects by their description
+     *        field. Projects with a description that contains this string will
+     *        be returned. NULL to deactivate filtering by this field.
+     * @param DateTime $filterStartDate start date of the time filter for
+     *        projects. Projects will a finish date later than this date will
+     *        be returned. NULL to deactivate filtering by this field.
+     * @param DateTime $filterEndDate end date of the time filter for projects.
+     *        Projects will a start date sooner than this date will be returned.
+     *        NULL to deactivate filtering by this field.
+     * @param boolean $activation filter projects by their activation field.
+     *        NULL to deactivate filtering by this field.
+     * @param long $areaId value to filter projects by their area field.
+     *        projects. NULL to deactivate filtering by this field.
+     * @param string $type string to filter projects by their type field.
+     *        Only trojects with a type field that matches completely with this
+     *        string will be returned. NULL to deactivate filtering by this
+     *        field.
      */
-    public function __construct($userLogin = NULL, $active = False, $active = False, $order = 'id') {
+    public function __construct($userLogin = NULL, $active = False, $order = 'id', $description = NULL, $filterStartDate = NULL,
+        $filterEndDate = NULL, $activation = NULL, $areaId = NULL,
+        $type = NULL) {
         $this->preActionParameter="GET_ALL_PROJECTS_PREACTION";
         $this->postActionParameter="GET_ALL_PROJECTS_POSTACTION";
         $this->active = $active;
         $this->userLogin = $userLogin;
         $this->order = $order;
+        $this->description = $description;
+        $this->filterStartDate = $filterStartDate;
+        $this->filterEndDate = $filterEndDate;
+        $this->activation = $activation;
+        $this->areaId = $areaId;
+        $this->type = $type;
+
     }
 
     /** Specific code execute.
@@ -80,7 +143,8 @@ class GetAllProjectsAction extends Action{
      */
     protected function doExecute() {
         $dao = DAOFactory::getProjectDAO();
-        return $dao->getAll($this->userLogin, $this->active, $this->order);
+        return $dao->getAll($this->userLogin, $this->active, $this->order, $this->description, $this->filterStartDate,
+            $this->filterEndDate, $this->activation, $this->areaId, $this->type);
     }
 
 }

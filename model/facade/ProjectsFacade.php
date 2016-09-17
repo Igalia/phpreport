@@ -71,19 +71,38 @@ abstract class ProjectsFacade {
 
     }
 
-     /** Get all Projects Function
-     *
-     * This action is used for retrieving all Projects.
-     *
-     * @param string $userLogin
-     * @param bool $active
-     * @param string $order
-     *
-     * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     */
-    static function GetAllProjects($userLogin = NULL, $active = False, $order = 'id') {
-        $action = new GetAllProjectsAction($userLogin, $active, $order);
+    /** Get all Projects Function
+    *
+    * This action is used for retrieving all Projects.
+    *
+    * @param string $userLogin
+    * @param bool $active
+    * @param string $order
+    * @param string $description string to filter projects by their description
+    *        field. Projects with a description that contains this string will
+    *        be returned. NULL to deactivate filtering by this field.
+    * @param DateTime $filterStartDate start date of the time filter for
+    *        projects. Projects will a finish date later than this date will
+    *        be returned. NULL to deactivate filtering by this field.
+    * @param DateTime $filterEndDate end date of the time filter for projects.
+    *        Projects will a start date sooner than this date will be returned.
+    *        NULL to deactivate filtering by this field.
+    * @param boolean $activation filter projects by their activation field.
+    *        NULL to deactivate filtering by this field.
+    * @param long $areaId value to filter projects by their area field.
+    *        projects. NULL to deactivate filtering by this field.
+    * @param string $type string to filter projects by their type field.
+    *        Only trojects with a type field that matches completely with this
+    *        string will be returned. NULL to deactivate filtering by this
+    *        field.
+    *
+    * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
+    * and ordered ascendantly by their database internal identifier.
+    */
+    static function GetAllProjects($userLogin = NULL, $active = False, $order = 'id', $description = NULL,
+        $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL, $areaId = NULL, $type = NULL) {
+        $action = new GetAllProjectsAction($userLogin, $active, $order, $description, $filterStartDate,
+            $filterEndDate, $activation, $areaId, $type);
         return $action->execute();
     }
 
