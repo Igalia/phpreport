@@ -264,7 +264,7 @@ Ext.onReady(function(){
                 icon: Ext.Msg.QUESTION,
                 closable: false,
             });
-                  }
+        },
 
     });
 
@@ -441,6 +441,8 @@ Ext.onReady(function(){
         onAdd: function(btn, ev) {
             var u = new customerRecord({
                 name: 'New Client',
+                sectorId: sectorsStore.getAt(0).get('id'),
+                type: typesStore.getAt(0).get('name'),
             });
             this.inlineEditor.stopEditing();
             this.store.insert(0, u);
