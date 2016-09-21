@@ -27,9 +27,10 @@
     define('PAGE_TITLE', "PhpReport - Working Hours Results Report");
     include_once("include/header.php");
     include_once("include/sidebar.php");
-
-
 ?>
+<script>
+var loggedInUser = '<?php echo $_SESSION['user']->getLogin(); ?>';
+</script>
 <script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript" src="js/include/DateIntervalForm.js"></script>
 <script type="text/javascript" src="js/include/ExportableGridPanel.js"></script>
@@ -136,11 +137,11 @@ Ext.onReady(function(){
             extraHours.each(move);
 
             store.sort('login', 'ASC');
-
-            if (!grid.rendered)
+            if (!grid.rendered) {
                 grid.render(Ext.get("content"));
-            else {
-                // select and scroll to previously selected row
+                //Handler to set default row as logged in user
+                grid.on('viewReady', selectDefaultRow);
+            } else {                // select and scroll to previously selected row
                 if(selectedLogin !== undefined) {
                     var index = store.findExact('login', selectedLogin);
                     grid.getSelectionModel().selectRow(index);
@@ -152,7 +153,12 @@ Ext.onReady(function(){
             }
 
         } else loaded = true;
+    }
 
+    function selectDefaultRow() {
+        var index = store.findExact('login', loggedInUser);
+        grid.getSelectionModel().selectRow(index);
+        grid.getView().focusRow(index);
     }
 
     extraHours.on('load', populate);
@@ -198,8 +204,6 @@ Ext.onReady(function(){
                 // store selected row to restore it after load
                 if (grid.getSelectionModel().getSelected() !== undefined)
                     selectedLogin = grid.getSelectionModel().getSelected().get('login');
-                else
-                    selectedLogin = undefined;
 
                 if (grid.rendered)
                     grid.customMask.show();
