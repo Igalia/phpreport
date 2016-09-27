@@ -208,11 +208,11 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         if (!is_numeric($projectId))
             throw new SQLIncorrectTypeException($projectId);
         $sql =
-            "SELECT project.*, ".
+            "SELECT project.*, customer.name AS customer_name,".
                 "SUM((task._end-task.init)/60.0) AS worked_hours, ".
                 "SUM(((task._end-task.init)/60.0) * hour_cost) AS total_cost ".
             "FROM project ".
-                "LEFT JOIN task ON project.id = task.projectid ".
+                "LEFT JOIN customer ON project.customerid=customer.id LEFT JOIN task ON project.id = task.projectid ".
                 "LEFT JOIN hour_cost_history ON hour_cost_history.usrid = task.usrid ".
                     "AND task._date >= hour_cost_history.init_date ".
                     "AND task._date <= hour_cost_history.end_date ".
@@ -220,7 +220,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
             "GROUP BY project.id, project.description, project.activation, ".
                 "project.init, project._end, project.invoice, ".
                 "project.est_hours, project.areaid, project.description, ".
-                "project.type, project.moved_hours, project.sched_type";
+                "project.type, project.moved_hours, project.sched_type, customer.name";
         $result = $this->customExecute($sql);
         return $result[0];
     }
@@ -512,7 +512,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
 
     public function getFilteredCustom($description = NULL,
             $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL,
-            $areaId = NULL, $type = NULL) {
+            $areaId = NULL, $type = NULL, $filterCname = NULL) {
 
         $conditions = "TRUE";
         if ($description != NULL) {
@@ -540,10 +540,16 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         if ($type != NULL) {
             $conditions .= " AND project.type = '$type'";
         }
+        if ($filterCname != NULL) {
+            foreach(explode(" ", $filterCname) as $word) {
+                $conditions .= " AND UPPER(customer.name)" .
+                    " LIKE ('%' || UPPER('$word') || '%')";
+            }
+        }
         $sql =
-            "SELECT project.*, SUM((task._end-task.init)/60.0) AS worked_hours, ".
+            "SELECT project.*, customer.name AS customer_name, SUM((task._end-task.init)/60.0) AS worked_hours, ".
             "SUM(((task._end-task.init)/60.0) * hour_cost) AS total_cost ".
-            "FROM project LEFT JOIN task ON project.id = task.projectid ".
+            "FROM project LEFT JOIN customer ON project.customerid=customer.id LEFT JOIN task ON project.id = task.projectid ".
             "LEFT JOIN hour_cost_history ON ".
             "hour_cost_history.usrid = task.usrid AND ".
             "task._date >= hour_cost_history.init_date ".
@@ -551,7 +557,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
             "GROUP BY project.id, project.description, project.activation, ".
             "project.init, project._end, project.invoice, project.est_hours, ".
             "project.areaid, project.description, project.type, ".
-            "project.moved_hours, project.sched_type";
+            "project.moved_hours, project.sched_type, customer.name";
         return $this->customExecute($sql);
     }
 
