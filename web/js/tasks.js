@@ -95,10 +95,6 @@ var templateRecord = new Ext.data.Record.create([
     {name:'text'},
     {name:'name'}
 ]);
-
-/* Variable to store if there are unsaved changes */
-var unsavedChanges = false;
-
 /* Variable to store if all tasks has loaded completely for a day */
 var loaded = false;
 
@@ -126,16 +122,6 @@ function isUnTouched(taskRecord) {
     if(!taskRecord.get('text') && !taskRecord.get('initTime') && !taskRecord.get('projectId')) {
         return true;
     }
-}
-
-/**
- * Checks if there are unsaved changes in this page.
- */
-function isUnsaved() {
-    if(!freshCreatedTaskRecord || !isUnTouched(freshCreatedTaskRecord)) {
-        return unsavedChanges;
-    }
-    return false;
 }
 
 function updateTasksLength(taskPanel) {
@@ -190,6 +176,30 @@ function updateTitle(p){
 
 function simplifyTitle(p){
     this.setTitle('Task');
+}
+
+
+/**
+ * Checks if there are unsaved changes in this page.
+ */
+function isUnsaved() {
+    modifiedRecords = myStore.getModifiedRecords();
+    if(modifiedRecords.length == 0) {
+        return false;
+    }
+    if(modifiedRecords.length == 1) {
+        if(modifiedRecords[0] == freshCreatedTaskRecord) {
+            if(!isUnTouched(freshCreatedTaskRecord)) {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
+    if(modifiedRecords.length > 1) {
+        return true;
+    }
+    return false;
 }
 
 /*  Class that stores a taskRecord element and shows it on screen.
@@ -724,7 +734,7 @@ Ext.onReady(function(){
     });
 
     /* Store to load/save tasks */
-    var myStore = new Ext.ux.TasksStore({
+    myStore = new Ext.ux.TasksStore({
         autoLoad: true,  //initial data are loaded in the application init
         autoSave: false, //if set true, changes will be sent instantly
         baseParams: {
@@ -763,7 +773,7 @@ Ext.onReady(function(){
             'load': function (store, records, options) {
                 if (options.add == true) {
                     for (i in records) {
-                        if (i >=0) {
+                        if (i >= 0) {
                             records[i].markDirty();
                             records[i].id = null;
                             records[i].phantom = true;
@@ -774,7 +784,7 @@ Ext.onReady(function(){
                             taskPanel = new TaskPanel({
                                 parent: tasksScrollArea,
                                 store: myStore,
-                                taskRecord:r,
+                                taskRecord: r,
                                 listeners: {
                                     'collapse': updateTitle,
                                     'beforeexpand': simplifyTitle,
@@ -791,14 +801,13 @@ Ext.onReady(function(){
                             taskPanel.endTimeField.setRawValue(r.data['endTime']);
                             taskPanel.endTimeField.validate();
 
-                            if(forbidden) {
+                            if (forbidden) {
                                 taskPanel.setReadOnly(true);
                             }
 
                             updateTasksLength(taskPanel);
                         }
                     }
-                    unsavedChanges = true;
                 } else {
                     this.each(function(r) {
                         taskPanel = new TaskPanel({
@@ -839,7 +848,6 @@ Ext.onReady(function(){
                     Ext.getCmp('status_display').setText("Status: saved at "+ new Date());
                     App.setAlert(true, "Task Records Changes Saved");
                     summaryStore.load();
-                    unsavedChanges = false;
                 }
                 myStore.error = false;
             },
@@ -848,11 +856,9 @@ Ext.onReady(function(){
                 myStore.error = true;
             },
             'update': function () {
-                unsavedChanges = true;
                 Ext.getCmp('status_display').setText("Status: Pending changes");
             },
             'remove': function () {
-                unsavedChanges = true;
                 Ext.getCmp('status_display').setText("Status: Pending changes requiring manual save");
             }
         }
@@ -906,7 +912,7 @@ Ext.onReady(function(){
             },
         });
 
-        if(typeof(freshCreatedTask) === 'boolean') {
+        if(typeof(freshCreatedTask) === 'boolean' && freshCreatedTask == true) {
             freshCreatedTaskRecord = newTask;
             freshCreatedTaskPanel = taskPanel;
         }
@@ -1306,7 +1312,6 @@ Ext.onReady(function(){
             }
         ],
     });
-
     //hotkeys
     new Ext.KeyMap(document, {
         key: 's',
