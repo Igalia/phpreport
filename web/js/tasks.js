@@ -423,6 +423,43 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     },
                 }
             }),
+            storyField: new Ext.form.TextField({
+                parent: this,
+                value: this.taskRecord.data['story'],
+                tabIndex: tab++,
+                width: 423,
+                enableKeyEvents: true,
+                listeners: {
+                    'change': function () {
+                        this.parent.taskRecord.set('story',Trim(this.getValue()));
+                    },
+                    'keyup': function () {
+                        this.parent.taskRecord.set('story',Trim(this.getValue()));
+                    },
+                    'blur': function () {
+                        this.setValue(Trim(this.getValue()));
+                    }
+                }
+            }),
+            descriptionTextArea: new Ext.form.TextArea({
+                parent: this,
+                height: 110,
+                style: "width: 91%",
+                tabIndex: tab++,
+                value: this.taskRecord.data['text'],
+                enableKeyEvents: true,
+                listeners: {
+                    'keyup': function () {
+                        this.parent.taskRecord.set('text',Trim(this.getValue()));
+                    },
+                    'change': function () {
+                        this.parent.taskRecord.set('text',Trim(this.getValue()));
+                    },
+                    'blur': function () {
+                        this.setValue(Trim(this.getValue()));
+                    }
+                }
+            }),
             taskTypeComboBox: new Ext.form.ComboBox({
                 parent: this,
                 value: this.taskRecord.data['ttype'],
@@ -470,24 +507,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     // 'select' or 'change' events wouldn't be triggered.
                     'blur': function () {
                         this.parent.taskRecord.set('ttype',this.getValue());
-                    }
-                }
-            }),
-            storyField: new Ext.form.TextField({
-                parent: this,
-                value: this.taskRecord.data['story'],
-                tabIndex: tab++,
-                width: 423,
-                enableKeyEvents: true,
-                listeners: {
-                    'change': function () {
-                        this.parent.taskRecord.set('story',Trim(this.getValue()));
-                    },
-                    'keyup': function () {
-                        this.parent.taskRecord.set('story',Trim(this.getValue()));
-                    },
-                    'blur': function () {
-                        this.setValue(Trim(this.getValue()));
                     }
                 }
             }),
@@ -550,25 +569,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 listeners: {
                     'check': function() {
                         this.parent.taskRecord.set('onsite',String(this.getValue()));
-                    }
-                }
-            }),
-            descriptionTextArea: new Ext.form.TextArea({
-                parent: this,
-                height: 110,
-                style: "width: 91%",
-                tabIndex: tab++,
-                value: this.taskRecord.data['text'],
-                enableKeyEvents: true,
-                listeners: {
-                    'keyup': function () {
-                        this.parent.taskRecord.set('text',Trim(this.getValue()));
-                    },
-                    'change': function () {
-                        this.parent.taskRecord.set('text',Trim(this.getValue()));
-                    },
-                    'blur': function () {
-                        this.setValue(Trim(this.getValue()));
                     }
                 }
             }),
