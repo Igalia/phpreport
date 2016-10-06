@@ -258,7 +258,8 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
             length: new Ext.form.Label({
                 parent: this,
-                ref: '../length'
+                ref: '../length',
+                style: 'display:block; padding:5px 0 5px 2px'
             }),
             endTimeField: new Ext.form.TimeField({
                 parent: this,
@@ -294,6 +295,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             projectComboBox: new Ext.form.ComboBox({
                 parent: this,
                 tabIndex: tab++,
+                flex:1,
                 store: new Ext.data.Store({
                     parent: this,
                     autoLoad: true,  //initial data are loaded in the application init
@@ -421,6 +423,44 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     },
                 }
             }),
+            storyField: new Ext.form.TextField({
+                parent: this,
+                value: this.taskRecord.data['story'],
+                tabIndex: tab++,
+                style: "width: 92.5%",
+                enableKeyEvents: true,
+                listeners: {
+                    'change': function () {
+                        this.parent.taskRecord.set('story',Trim(this.getValue()));
+                    },
+                    'keyup': function () {
+                        this.parent.taskRecord.set('story',Trim(this.getValue()));
+                    },
+                    'blur': function () {
+                        this.setValue(Trim(this.getValue()));
+                    }
+                }
+            }),
+            descriptionTextArea: new Ext.form.TextArea({
+                parent: this,
+                height: 110,
+                style: "width: 100%",
+                columnWidth: 1,
+                tabIndex: tab++,
+                value: this.taskRecord.data['text'],
+                enableKeyEvents: true,
+                listeners: {
+                    'keyup': function () {
+                        this.parent.taskRecord.set('text',Trim(this.getValue()));
+                    },
+                    'change': function () {
+                        this.parent.taskRecord.set('text',Trim(this.getValue()));
+                    },
+                    'blur': function () {
+                        this.setValue(Trim(this.getValue()));
+                    }
+                }
+            }),
             taskTypeComboBox: new Ext.form.ComboBox({
                 parent: this,
                 value: this.taskRecord.data['ttype'],
@@ -471,26 +511,10 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     }
                 }
             }),
-            storyField: new Ext.form.TextField({
-                parent: this,
-                value: this.taskRecord.data['story'],
-                tabIndex: tab++,
-                enableKeyEvents: true,
-                listeners: {
-                    'change': function () {
-                        this.parent.taskRecord.set('story',Trim(this.getValue()));
-                    },
-                    'keyup': function () {
-                        this.parent.taskRecord.set('story',Trim(this.getValue()));
-                    },
-                    'blur': function () {
-                        this.setValue(Trim(this.getValue()));
-                    }
-                }
-            }),
             taskStoryComboBox: new Ext.form.ComboBox({
                 parent: this,
                 tabIndex: tab++,
+                width: 180,
                 store: new Ext.data.Store({
                     parent: this,
                     autoLoad: true,  //initial data are loaded in the application init
@@ -549,30 +573,11 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     }
                 }
             }),
-            descriptionTextArea: new Ext.form.TextArea({
-                parent: this,
-                height: 195,
-                anchor: '100%',
-                tabIndex: tab++,
-                value: this.taskRecord.data['text'],
-                enableKeyEvents: true,
-                listeners: {
-                    'keyup': function () {
-                        this.parent.taskRecord.set('text',Trim(this.getValue()));
-                    },
-                    'change': function () {
-                        this.parent.taskRecord.set('text',Trim(this.getValue()));
-                    },
-                    'blur': function () {
-                        this.setValue(Trim(this.getValue()));
-                    }
-                }
-            }),
             deleteButton: new Ext.Button({
                 parent: this,
                 text:'Delete',
-                width: 40,
                 tabIndex: tab++,
+                width: 60,
                 margins: "7px 0 0 5px",
                 handler: function() {
                     // We remove the TaskRecord from the Store, the TaskPanel
@@ -585,8 +590,8 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             cloneButton: new Ext.Button({
                 parent: this,
                 text:'Clone',
-                width: 40,
                 tabIndex: tab++,
+                width: 60,
                 margins: "7px 0 0 5px",
                 handler: function() {
                     newTask = this.parent.taskRecord.copy();
@@ -624,9 +629,9 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             createTemplateButton: new Ext.Button({
                 parent: this,
                 text:'Template',
-                width: 40,
                 tabIndex: tab++,
                 margins: "7px 0 0 5px",
+                width: 60,
                 handler: function() {
                     var task = this.parent.taskRecord;
 
@@ -657,57 +662,80 @@ var TaskPanel = Ext.extend(Ext.Panel, {
         this.teleworkCheckBox.setValue((this.taskRecord.data['telework']=='true'));
         this.onsiteCheckBox.setValue((this.taskRecord.data['onsite']=='true'));
 
-        /* Place the subelements correctly into the form */
-        leftBox = new Ext.Panel({
-            layout: 'anchor',
-            width: 230,
-            defaults: {width: 225},
+        topBox = new Ext.Panel({
+            layout: 'column',
+            columnWidth: 1,
+            style:"padding-bottom:3px",
             items: [
                 new Ext.Container({
                     layout: 'hbox',
-                    layoutConfig: {defaultMargins: "0 5px 0 0"},
+                    width:170,
                     items:[
-                        new Ext.form.Label({text: 'Time '}),
                         this.initTimeField,
-                        new Ext.form.Label({text: ' - '}),
+                        new Ext.form.Label({text: ' - ', style:'display:block; padding:5px 2px 5px 2px'}),
                         this.endTimeField,
                         this.length,
                     ]
                 }),
-                new Ext.form.Label({text: 'Project'}),
-                this.projectComboBox,
-                new Ext.form.Label({text: 'Customer'}),
-                this.customerComboBox,
-                new Ext.form.Label({text: 'Task type'}),
-                this.taskTypeComboBox,
-                new Ext.form.Label({text: 'Story'}),
-                this.storyField,
-                new Ext.form.Label({text: 'TaskStory'}),
-                this.taskStoryComboBox,
                 new Ext.Container({
+                    columnWidth: 1,
                     layout: 'hbox',
-                    layoutConfig: {defaultMargins: "7px 5px 0 0"},
-                    items: [this.teleworkCheckBox, this.onsiteCheckBox]}),
-            ],
+                    items:[
+                        new Ext.form.Label({text: 'Project', style:'display:block; padding:5px 2px 5px 0px'}),
+                        this.projectComboBox,
+                        new Ext.Container({
+                            layout: 'hbox',
+                            flex:1,
+                            items:[
+                                new Ext.form.Label({text: 'Story', style: 'display:block; padding:5px 2px 5px 2px'}),
+                                this.storyField,
+                            ]
+                        }),
+                    ]
+                }),
+
+            ]
         });
-        rightBox = new Ext.Panel({
-            layout:'anchor',
-            monitorResize: true,
+        centerBox = new Ext.Panel({
+            layout: 'column',
             columnWidth: 1,
+            monitorResize: true,
             items:[
                 this.descriptionTextArea,
                 new Ext.Container({
-                    layout: 'hbox',
-                    layoutConfig: {defaultMargins: "7px 5px 0 0"},
-                    items:[
+                    width:60,
+                    layout: 'anchor',
+                    items: [
                         this.deleteButton,
                         this.cloneButton,
                         this.createTemplateButton,
                     ]
-                })
-            ],
+                }),
+            ]
         });
-        this.items = [leftBox, rightBox];
+        bottomBox = new Ext.Panel({
+            layout: 'hbox',
+            layoutConfig: {defaultMargins: "5px 0px 0px 2px"},
+            columnWidth: 1,
+            items:[
+                new Ext.Container({
+                    layout: 'column',
+                    style:"padding-right:3px",
+                    items: [
+                        new Ext.form.Label({text: 'Task type', style: 'display:block; padding:5px 2px 5px 2px'}),
+                        this.taskTypeComboBox,
+                        new Ext.form.Label({text: 'TaskStory', style: 'display:block; padding:5px 2px 5px 2px'}),
+                        this.taskStoryComboBox,
+                    ]
+                }),
+                new Ext.Container({
+                    layout: 'column',
+                    layoutConfig: {defaultMargins: "7px 5px 10px 10px"},
+                    items: [this.teleworkCheckBox, this.onsiteCheckBox ]
+                }),
+            ]
+        });
+        this.items = [topBox, centerBox, bottomBox];
 
         /* call the superclass to preserve base class functionality */
         TaskPanel.superclass.initComponent.apply(this, arguments);
@@ -994,8 +1022,8 @@ Ext.onReady(function(){
                 value: Date.parseDate(date, 'Y-m-d'),
                 startDay: 1,
                 listeners: {'select': function (item, date) {
-			    window.location = "tasks.php?date=" + date.format('Y-m-d');
-		}}
+                window.location = "tasks.php?date=" + date.format('Y-m-d');
+        }}
             }),
         ],
     });
