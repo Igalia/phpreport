@@ -409,6 +409,7 @@ Ext.onReady(function () {
         {name:'date'},
         {name:'initTime'},
         {name:'endTime'},
+        {name: 'hours'},
         {name:'story'},
         {name:'telework'},
         {name:'onsite'},
@@ -459,6 +460,10 @@ Ext.onReady(function () {
             sortable: true,
             dataIndex: 'endTime',
         },{
+            header: 'Hours',
+            sortable: true,
+            dataIndex: 'hours',
+        }, {
             header: "Project",
             sortable: true,
             dataIndex: 'projectId',
@@ -527,22 +532,25 @@ Ext.onReady(function () {
     //function to show only a subset of columns and hide the others
     function showStandardView() {
         columnModel.setHidden(0, false);  //date
-        columnModel.setHidden(1, false);  //init
-        columnModel.setHidden(2, false);  //end
-        columnModel.setHidden(3, false);  //project
-        columnModel.setHidden(4, false); //task type
-        columnModel.setHidden(5, true);   //telework
-        columnModel.setHidden(6, true);   //onsite
-        columnModel.setHidden(7, true);   //story
-        columnModel.setHidden(8, false);  //taskStory
-        columnModel.setHidden(9, false);  //description
+        columnModel.setHidden(1, true);  //init
+        columnModel.setHidden(2, true);  //end
+        columnModel.setHidden(3, false);  //hours
+        columnModel.setHidden(4, false);  //project
+        columnModel.setHidden(5, true); //task type
+        columnModel.setHidden(6, true);   //telework
+        columnModel.setHidden(7, true);   //onsite
+        columnModel.setHidden(8, false);   //story
+        columnModel.setHidden(9, false);  //taskStory
+        columnModel.setHidden(10, false);  //description
         columnModel.setColumnWidth(0, 80);
         columnModel.setColumnWidth(1, 55);
         columnModel.setColumnWidth(2, 55);
-        columnModel.setColumnWidth(3, 200);
-        columnModel.setColumnWidth(4, 120);
+        columnModel.setColumnWidth(3, 55);
+        columnModel.setColumnWidth(4, 200);
+        columnModel.setColumnWidth(5, 120);
         columnModel.setColumnWidth(8, 120);
-        columnModel.setColumnWidth(9, 435);
+        columnModel.setColumnWidth(9, 120);
+        columnModel.setColumnWidth(10, 435);
     }
 
     //function to show all the columns
@@ -550,23 +558,25 @@ Ext.onReady(function () {
         columnModel.setHidden(0, false);  //date
         columnModel.setHidden(1, false);  //init
         columnModel.setHidden(2, false);  //end
-        columnModel.setHidden(3, false);  //project
-        columnModel.setHidden(4, false); //task type
-        columnModel.setHidden(5, false);   //telework
-        columnModel.setHidden(6, false);   //onsite
-        columnModel.setHidden(7, false);   //story
-        columnModel.setHidden(8, false);  //taskStory
-        columnModel.setHidden(9, false);  //description
+        columnModel.setHidden(3, false);  //hours
+        columnModel.setHidden(4, false);  //project
+        columnModel.setHidden(5, false); //task type
+        columnModel.setHidden(6, false);   //telework
+        columnModel.setHidden(7, false);   //onsite
+        columnModel.setHidden(8, false);   //story
+        columnModel.setHidden(9, false);  //taskStory
+        columnModel.setHidden(10, false);  //description
         columnModel.setColumnWidth(0, 80);
         columnModel.setColumnWidth(1, 55);
         columnModel.setColumnWidth(2, 55);
-        columnModel.setColumnWidth(3, 200);
-        columnModel.setColumnWidth(4, 100);
-        columnModel.setColumnWidth(5, 80);
-        columnModel.setColumnWidth(6, 50);
+        columnModel.setColumnWidth(3, 55);
+        columnModel.setColumnWidth(4, 200);
+        columnModel.setColumnWidth(5, 100);
+        columnModel.setColumnWidth(6, 80);
         columnModel.setColumnWidth(7, 50);
         columnModel.setColumnWidth(8, 100);
-        columnModel.setColumnWidth(9, 435);
+        columnModel.setColumnWidth(9, 100);
+        columnModel.setColumnWidth(10, 435);
     }
 
     //hide the advanced columns

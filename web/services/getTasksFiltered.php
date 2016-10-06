@@ -232,6 +232,8 @@
                     ":" . str_pad($task->getInit()%60, 2, "0", STR_PAD_LEFT)  . "</initTime>" .
                     "<endTime>" . str_pad(floor($task->getEnd()/60)%24, 2, "0", STR_PAD_LEFT) .
                     ":" . str_pad($task->getEnd()%60, 2, "0", STR_PAD_LEFT)  . "</endTime>" .
+                    "<hours>" . str_pad(floor(($task->getEnd() - $task->getInit())/60)%24, 2, "0", STR_PAD_LEFT) .
+                    ":" . str_pad(($task->getEnd() - $task->getInit())%60, 2, "0", STR_PAD_LEFT)  . "</hours>" .
                     "<story>" . escape_string($task->getStory()) . "</story>" .
                     "<telework>";
 
