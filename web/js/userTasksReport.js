@@ -536,10 +536,10 @@ Ext.onReady(function () {
         columnModel.setHidden(2, true);  //end
         columnModel.setHidden(3, false);  //hours
         columnModel.setHidden(4, false);  //project
-        columnModel.setHidden(5, false); //task type
+        columnModel.setHidden(5, true); //task type
         columnModel.setHidden(6, true);   //telework
         columnModel.setHidden(7, true);   //onsite
-        columnModel.setHidden(8, true);   //story
+        columnModel.setHidden(8, false);   //story
         columnModel.setHidden(9, false);  //taskStory
         columnModel.setHidden(10, false);  //description
         columnModel.setColumnWidth(0, 80);
@@ -548,6 +548,7 @@ Ext.onReady(function () {
         columnModel.setColumnWidth(3, 55);
         columnModel.setColumnWidth(4, 200);
         columnModel.setColumnWidth(5, 120);
+        columnModel.setColumnWidth(8, 120);
         columnModel.setColumnWidth(9, 120);
         columnModel.setColumnWidth(10, 435);
     }
@@ -573,7 +574,7 @@ Ext.onReady(function () {
         columnModel.setColumnWidth(5, 100);
         columnModel.setColumnWidth(6, 80);
         columnModel.setColumnWidth(7, 50);
-        columnModel.setColumnWidth(8, 50);
+        columnModel.setColumnWidth(8, 100);
         columnModel.setColumnWidth(9, 100);
         columnModel.setColumnWidth(10, 435);
     }
