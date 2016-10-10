@@ -190,8 +190,8 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         if (!is_numeric($projectId))
             throw new SQLIncorrectTypeException($projectId);
         $sql = "SELECT project.*, customer.name AS customer_name
-            FROM project LEFT JOIN customer ON project.customerid=customer.id 
-            WHERE project.id=".$projectId. " GROUP BY project.id, customer.name";
+            FROM project LEFT JOIN customer ON project.customerid=customer.id
+            WHERE project.id={$projectId}";
         $result = $this->execute($sql);
         return $result[0];
     }
@@ -222,7 +222,8 @@ class PostgreSQLProjectDAO extends ProjectDAO {
             "GROUP BY project.id, project.description, project.activation, ".
                 "project.init, project._end, project.invoice, ".
                 "project.est_hours, project.areaid, project.description, ".
-                "project.type, project.moved_hours, project.sched_type, customer.name";
+                "project.type, project.moved_hours, project.sched_type, ".
+                "project.customerid, customer.name";
         $result = $this->customExecute($sql);
         return $result[0];
     }
@@ -559,7 +560,8 @@ class PostgreSQLProjectDAO extends ProjectDAO {
             "GROUP BY project.id, project.description, project.activation, ".
             "project.init, project._end, project.invoice, project.est_hours, ".
             "project.areaid, project.description, project.type, ".
-            "project.moved_hours, project.sched_type, customer.name";
+            "project.moved_hours, project.sched_type, project.customerid, ".
+            "customer.name";
         return $this->customExecute($sql);
     }
 
