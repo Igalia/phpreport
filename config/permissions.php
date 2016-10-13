@@ -135,14 +135,17 @@ $permissions = array(
  */
 $extraPermissions = array(
     "admin" => array(
-        //user tasks report
-        "/userTasksReport.php", "/services/getTasksFiltered.php",
         //users management
         "/viewUsers.php",
     ),
     'manager' => array(
-        '/viewProjectDetails.php', '/projectDetails.php', '/viewUserDetails.php',
+        //user tasks report: enable user field to check any user
+        "/userTasksReport.php", "/services/getTasksFiltered.php",
+        //project details reports: check any project
+        '/viewProjectDetails.php', '/projectDetails.php',
         '/services/getProjectUserCustomerReportJsonService.php',
+        //user details report: check any user
+        '/viewUserDetails.php',
         '/services/getUserProjectCustomerReportJsonService.php'
     )
 );
