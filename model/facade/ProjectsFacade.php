@@ -94,14 +94,16 @@ abstract class ProjectsFacade {
     *        Only trojects with a type field that matches completely with this
     *        string will be returned. NULL to deactivate filtering by this
     *        field.
+    * @param string $cname string to filter projects by their customer name. NULL
+    *        to deactivate filtyering by this field
     *
     * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
     * and ordered ascendantly by their database internal identifier.
     */
     static function GetAllProjects($userLogin = NULL, $active = False, $order = 'id', $description = NULL,
-        $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL, $areaId = NULL, $type = NULL) {
+        $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL, $areaId = NULL, $type = NULL, $cname = NULL) {
         $action = new GetAllProjectsAction($userLogin, $active, $order, $description, $filterStartDate,
-            $filterEndDate, $activation, $areaId, $type);
+            $filterEndDate, $activation, $areaId, $type, $cname);
         return $action->execute();
     }
 

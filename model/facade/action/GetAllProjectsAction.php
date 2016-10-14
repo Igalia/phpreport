@@ -117,10 +117,12 @@ class GetAllProjectsAction extends Action{
      *        Only trojects with a type field that matches completely with this
      *        string will be returned. NULL to deactivate filtering by this
      *        field.
+     * @param string $cname string to filter projects by their customer name. NULL
+     *        to deactivate filtyering by this field
      */
     public function __construct($userLogin = NULL, $active = False, $order = 'id', $description = NULL, $filterStartDate = NULL,
         $filterEndDate = NULL, $activation = NULL, $areaId = NULL,
-        $type = NULL) {
+        $type = NULL, $cname = NULL) {
         $this->preActionParameter="GET_ALL_PROJECTS_PREACTION";
         $this->postActionParameter="GET_ALL_PROJECTS_POSTACTION";
         $this->active = $active;
@@ -132,6 +134,7 @@ class GetAllProjectsAction extends Action{
         $this->activation = $activation;
         $this->areaId = $areaId;
         $this->type = $type;
+        $this->cname = $cname;
 
     }
 
@@ -144,7 +147,7 @@ class GetAllProjectsAction extends Action{
     protected function doExecute() {
         $dao = DAOFactory::getProjectDAO();
         return $dao->getAll($this->userLogin, $this->active, $this->order, $this->description, $this->filterStartDate,
-            $this->filterEndDate, $this->activation, $this->areaId, $this->type);
+            $this->filterEndDate, $this->activation, $this->areaId, $this->type, $this->cname);
     }
 
 }

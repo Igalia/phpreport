@@ -470,13 +470,15 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      *        Only trojects with a type field that matches completely with this
      *        string will be returned. NULL to deactivate filtering by this
      *        field.
+     * @param string $filterCname string to filter projects by their customer name. NULL
+     *        to deactivate filtyering by this field
      * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      * @throws {@link SQLQueryErrorException}
      */
     public function getAll($userLogin = NULL, $active = False, $orderField = 'id', $description = NULL,
         $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL,
-        $areaId = NULL, $type = NULL) {
+        $areaId = NULL, $type = NULL, $filterCname = NULL) {
         $userCondition = "true";
         $activeCondition = "true";
         $conditions = "TRUE";
@@ -511,6 +513,12 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         }
         if ($type != NULL) {
             $conditions .= " AND project.type = '$type'";
+        }
+        if ($filterCname != NULL) {
+            foreach(explode(" ", $filterCname) as $word) {
+                $conditions .= " AND UPPER(customer.name)" .
+                    " LIKE ('%' || UPPER('$word') || '%')";
+            }
         }
 
         $sql = "SELECT project.*, customer.name AS customer_name,

@@ -42,7 +42,7 @@ $filterEndDate = NULL;
 $activation = NULL;
 $areaId = NULL;
 $type = NULL;
-
+$cname = NULL;
 
 if (isset($_GET['description'])) {
     $description = $_GET['description'];
@@ -65,6 +65,9 @@ if (isset($_GET['type'])) {
 if (isset($_GET['order'])) {
     $order = $_GET['order'];
 }
+if (isset($_GET['cname'])) {
+    $cname = $_GET['cname'];
+}
 
 do {
     /* We check authentication and authorization */
@@ -83,7 +86,7 @@ do {
     }
 
     $projects = ProjectsFacade::GetAllProjects($login, $active, $order,$description, $filterStartDate, $filterEndDate,
-        $activation, $areaId, $type);
+        $activation, $areaId, $type, $cname);
 
     $string = "<projects>";
 
