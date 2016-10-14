@@ -96,14 +96,15 @@ abstract class ProjectsFacade {
     *        field.
     * @param string $cname string to filter projects by their customer name. NULL
     *        to deactivate filtyering by this field
-    *
+    * @param boolean $returnExtendedInfo flag to check if the response should include more information
     * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
     * and ordered ascendantly by their database internal identifier.
     */
     static function GetAllProjects($userLogin = NULL, $active = False, $order = 'id', $description = NULL,
-        $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL, $areaId = NULL, $type = NULL, $cname = NULL) {
+        $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL, $areaId = NULL,
+        $type = NULL, $cname = NULL, $returnExtendedInfo = False) {
         $action = new GetAllProjectsAction($userLogin, $active, $order, $description, $filterStartDate,
-            $filterEndDate, $activation, $areaId, $type, $cname);
+            $filterEndDate, $activation, $areaId, $type, $cname, $returnExtendedInfo);
         return $action->execute();
     }
 

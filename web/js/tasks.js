@@ -303,7 +303,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     baseParams: {
                         'login': user,
                         'order': 'description',
-                        'activation': 'true',
+                        'active': 'true',
                     },
                     filter: function(property, value, anyMatch, caseSensitive) {
                         var fn;

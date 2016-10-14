@@ -109,6 +109,7 @@ Ext.onReady(function(){
                 'sid': sessionId,
             <?php } ?>
         };
+        baseParams.returnExtendedInfo = true;
         if (Ext.getCmp('name').getRawValue() != "") {
             baseParams.description = Ext.getCmp('name').getValue();
         }
