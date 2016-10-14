@@ -123,42 +123,6 @@ abstract class ProjectsFacade {
 
     }
 
-    /** GetFilteredCustomProjects constructor.
-     *
-     * This is just the constructor of this action.
-     *
-     * @param string $description string to filter projects by their description
-     *        field. Projects with a description that contains this string will
-     *        be returned. NULL to deactivate filtering by this field.
-     * @param DateTime $filterStartDate start date of the time filter for
-     *        projects. Projects will a finish date later than this date will
-     *        be returned. NULL to deactivate filtering by this field.
-     * @param DateTime $filterEndDate end date of the time filter for projects.
-     *        Projects will a start date sooner than this date will be returned.
-     *        NULL to deactivate filtering by this field.
-     * @param boolean $activation filter projects by their activation field.
-     *        NULL to deactivate filtering by this field.
-     * @param long $areaId value to filter projects by their area field.
-     *        projects. NULL to deactivate filtering by this field.
-     * @param string $type string to filter projects by their type field.
-     *        Only projects with a type field that matches completely with this
-     *        string will be returned. NULL to deactivate filtering by this
-     *        field.
-     * @param string $cname string to filter projects by their customer name. NULL
-     *        to deactivate filtyering by this field
-     * @return mixed
-     * @throws null
-     */
-    static function GetFilteredCustomProjects($description = NULL,
-            $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL,
-            $areaId = NULL, $type = NULL, $cname = NULL) {
-
-        $action = new GetFilteredCustomProjectsAction($description,
-            $filterStartDate, $filterEndDate, $activation, $areaId, $type, $cname);
-
-        return $action->execute();
-    }
-
     /** Create Project Function
      *
      *  This function is used for creating a new Project.
