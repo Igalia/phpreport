@@ -534,7 +534,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
                 GROUP BY project.id, project.description, project.activation,
                 project.init, project._end, project.invoice, project.est_hours,
                 project.areaid, project.description, project.type,
-                project.moved_hours, project.sched_type, customer_name
+                project.moved_hours, project.sched_type, project.customerid, customer_name
                 ORDER BY " . $orderField . " ASC";
 
         return $this->execute($sql);
