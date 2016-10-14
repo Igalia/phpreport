@@ -31,7 +31,6 @@
 
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllProjectsAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/GetFilteredCustomProjectsAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserProjectsAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectUsersAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectAction.php');
@@ -42,7 +41,6 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/PartialUpdateProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectsByCustomerUserLoginAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectsAndCustomersByUserLoginAction.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
 
@@ -72,19 +70,41 @@ abstract class ProjectsFacade {
 
     }
 
-     /** Get all Projects Function
-     *
-     *  This action is used for retrieving all Projects.
-     *
-     * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     */
-    static function GetAllProjects() {
-
-        $action = new GetAllProjectsAction();
-
+    /** Get all Projects Function
+    *
+    * This action is used for retrieving all Projects.
+    *
+    * @param string $userLogin
+    * @param bool $active
+    * @param string $order
+    * @param string $description string to filter projects by their description
+    *        field. Projects with a description that contains this string will
+    *        be returned. NULL to deactivate filtering by this field.
+    * @param DateTime $filterStartDate start date of the time filter for
+    *        projects. Projects will a finish date later than this date will
+    *        be returned. NULL to deactivate filtering by this field.
+    * @param DateTime $filterEndDate end date of the time filter for projects.
+    *        Projects will a start date sooner than this date will be returned.
+    *        NULL to deactivate filtering by this field.
+    * @param boolean $activation filter projects by their activation field.
+    *        NULL to deactivate filtering by this field.
+    * @param long $areaId value to filter projects by their area field.
+    *        projects. NULL to deactivate filtering by this field.
+    * @param string $type string to filter projects by their type field.
+    *        Only trojects with a type field that matches completely with this
+    *        string will be returned. NULL to deactivate filtering by this
+    *        field.
+    * @param string $cname string to filter projects by their customer name. NULL
+    *        to deactivate filtyering by this field
+    *
+    * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
+    * and ordered ascendantly by their database internal identifier.
+    */
+    static function GetAllProjects($userLogin = NULL, $active = False, $order = 'id', $description = NULL,
+        $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL, $areaId = NULL, $type = NULL, $cname = NULL) {
+        $action = new GetAllProjectsAction($userLogin, $active, $order, $description, $filterStartDate,
+            $filterEndDate, $activation, $areaId, $type, $cname);
         return $action->execute();
-
     }
 
     /** Get Custom Project Function
@@ -101,42 +121,6 @@ abstract class ProjectsFacade {
 
     return $action->execute();
 
-    }
-
-    /** GetFilteredCustomProjects constructor.
-     *
-     * This is just the constructor of this action.
-     *
-     * @param string $description string to filter projects by their description
-     *        field. Projects with a description that contains this string will
-     *        be returned. NULL to deactivate filtering by this field.
-     * @param DateTime $filterStartDate start date of the time filter for
-     *        projects. Projects will a finish date later than this date will
-     *        be returned. NULL to deactivate filtering by this field.
-     * @param DateTime $filterEndDate end date of the time filter for projects.
-     *        Projects will a start date sooner than this date will be returned.
-     *        NULL to deactivate filtering by this field.
-     * @param boolean $activation filter projects by their activation field.
-     *        NULL to deactivate filtering by this field.
-     * @param long $areaId value to filter projects by their area field.
-     *        projects. NULL to deactivate filtering by this field.
-     * @param string $type string to filter projects by their type field.
-     *        Only projects with a type field that matches completely with this
-     *        string will be returned. NULL to deactivate filtering by this
-     *        field.
-     * @param string $cname string to filter projects by their customer name. NULL
-     *        to deactivate filtyering by this field
-     * @return mixed
-     * @throws null
-     */
-    static function GetFilteredCustomProjects($description = NULL,
-            $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL,
-            $areaId = NULL, $type = NULL, $cname = NULL) {
-
-        $action = new GetFilteredCustomProjectsAction($description,
-            $filterStartDate, $filterEndDate, $activation, $areaId, $type, $cname);
-
-        return $action->execute();
     }
 
     /** Create Project Function
@@ -350,23 +334,6 @@ abstract class ProjectsFacade {
 
         return $action->execute();
     }
-
-    /** GetProjectsAndCustomersByUserLogin Funciton
-     *
-     *  Retrieve a list of projects using the attributes user and activation as filters
-     *
-     * @param string $userLogin
-     * @param bool $active
-     * @param string $order
-     * @return mixed
-     * @throws null
-     */
-    static function GetProjectsAndCustomersByUserLogin($userLogin = NULL, $active = False, $order = 'id') {
-            $action = new GetProjectsAndCustomersByUserLoginAction($userLogin, $active, $order);
-
-        return $action->execute();
-    }
-
 }
 
 //var_dump(ProjectsFacade::GetProjectUsers(4));

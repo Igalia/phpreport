@@ -265,7 +265,7 @@ Ext.onReady(function(){
     var projectProxy = new Ext.data.HttpProxy({
     method: 'POST',
         api: {
-            read: {url: 'services/getFilteredCustomProjectsService.php', method: 'GET'},
+            read: {url: 'services/getProjectsService.php', method: 'GET'},
         },
     });
 

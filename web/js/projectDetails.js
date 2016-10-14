@@ -48,7 +48,7 @@ var projectComboBox = new Ext.form.ComboBox({
             }
             return fn ? this.filterBy(fn) : this.clearFilter();
         },
-        proxy: new Ext.data.HttpProxy({url: 'services/getProjectsAndCustomersForLoginService.php', method: 'GET'}),
+        proxy: new Ext.data.HttpProxy({url: 'services/getProjectsService.php', method: 'GET'}),
         reader:new Ext.data.XmlReader({record: 'project', id:'id' }, projectRecord),
         remoteSort: false,
     }),

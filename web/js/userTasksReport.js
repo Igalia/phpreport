@@ -91,7 +91,7 @@ Ext.onReady(function () {
             return fn ? this.filterBy(fn) : this.clearFilter();
         },
         proxy: new Ext.data.HttpProxy({
-            url: 'services/getProjectsAndCustomersForLoginService.php',
+            url: 'services/getProjectsService.php',
             method: 'GET'
         }),
         reader: new Ext.data.XmlReader(

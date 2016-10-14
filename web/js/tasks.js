@@ -303,7 +303,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     baseParams: {
                         'login': user,
                         'order': 'description',
-                        'active': 'true',
+                        'activation': 'true',
                     },
                     filter: function(property, value, anyMatch, caseSensitive) {
                         var fn;
@@ -317,7 +317,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         }
                         return fn ? this.filterBy(fn) : this.clearFilter();
                     },
-                    proxy: new Ext.data.HttpProxy({url: 'services/getProjectsAndCustomersForLoginService.php', method: 'GET'}),
+                    proxy: new Ext.data.HttpProxy({url: 'services/getProjectsService.php', method: 'GET'}),
                     reader:new Ext.data.XmlReader({record: 'project', id:'id' }, projectRecord),
                     remoteSort: false,
                     listeners: {

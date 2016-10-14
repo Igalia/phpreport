@@ -446,59 +446,49 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         return $this->execute($sql);
     }
 
-    /** Project and Customer retriever for PostgreSQL
-     *
-     * The function fetch details of a project along with its customers from the project table
-     *
-     * @param null $userLogin
-     * @param bool $active
-     * @param string $orderField
-     * @return array
-     * @throws SQLQueryErrorException
-     */
-    public function getProjectsAndCustomersByUserLogin($userLogin = NULL, $active = False, $orderField = 'id') {
-        $userCondition = "true";
-        $activeCondition = "true";
-
-        if ($userLogin)
-            $userCondition = "project.id IN (SELECT projectid FROM project_usr LEFT JOIN usr ON project_usr.usrid=usr.id ".
-                "WHERE login=" . DBPostgres::checkStringNull($userLogin) . ") ";
-
-        if ($active)
-            $activeCondition = "activation='True'";
-
-        $sql = "SELECT project.*, customer.name AS customer_name FROM
-                project LEFT JOIN customer
-                ON project.customerid=customer.id
-                WHERE " . $activeCondition . " AND " . $userCondition . "
-                ORDER BY $orderField ASC";
-
-        return $this->execute($sql);
-    }
-
     /** Projects retriever for PostgreSQL.
      *
      * This function retrieves all rows from Project table and creates a {@link ProjectVO} with data from each row.
      *
+     * @param null $userLogin
      * @param bool $active optional parameter for obtaining only the active projects (by default it returns all them).
      * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
+     * @param string $description string to filter projects by their description
+     *        field. Projects with a description that contains this string will
+     *        be returned. NULL to deactivate filtering by this field.
+     * @param DateTime $filterStartDate start date of the time filter for
+     *        projects. Projects will a finish date later than this date will
+     *        be returned. NULL to deactivate filtering by this field.
+     * @param DateTime $filterEndDate end date of the time filter for projects.
+     *        Projects will a start date sooner than this date will be returned.
+     *        NULL to deactivate filtering by this field.
+     * @param boolean $activation filter projects by their activation field.
+     *        NULL to deactivate filtering by this field.
+     * @param long $areaId value to filter projects by their area field.
+     *        projects. NULL to deactivate filtering by this field.
+     * @param string $type string to filter projects by their type field.
+     *        Only trojects with a type field that matches completely with this
+     *        string will be returned. NULL to deactivate filtering by this
+     *        field.
+     * @param string $filterCname string to filter projects by their customer name. NULL
+     *        to deactivate filtyering by this field
      * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      * @throws {@link SQLQueryErrorException}
      */
-    public function getAll($active = False, $orderField = 'id') {
-        $sql = "SELECT * FROM project";
-        if ($active)
-            $sql = $sql . " WHERE activation='True'";
-        $sql = $sql . " ORDER BY " . $orderField . " ASC";
-        return $this->execute($sql);
-    }
-
-    public function getFilteredCustom($description = NULL,
-            $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL,
-            $areaId = NULL, $type = NULL, $filterCname = NULL) {
-
+    public function getAll($userLogin = NULL, $active = False, $orderField = 'id', $description = NULL,
+        $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL,
+        $areaId = NULL, $type = NULL, $filterCname = NULL) {
+        $userCondition = "true";
+        $activeCondition = "true";
         $conditions = "TRUE";
+
+        if ($userLogin) {
+            $userCondition = "project.id IN (SELECT projectid FROM project_usr LEFT JOIN usr ON project_usr.usrid=usr.id " . "WHERE login=" . DBPostgres::checkStringNull( $userLogin ) . ") ";
+        }
+        if ($active) {
+            $activeCondition = "activation='True'";
+        }
         if ($description != NULL) {
             foreach(explode(" ", $description) as $word) {
                 $conditions .= " AND UPPER(project.description)" .
@@ -530,19 +520,42 @@ class PostgreSQLProjectDAO extends ProjectDAO {
                     " LIKE ('%' || UPPER('$word') || '%')";
             }
         }
-        $sql =
-            "SELECT project.*, customer.name AS customer_name, SUM((task._end-task.init)/60.0) AS worked_hours, ".
-            "SUM(((task._end-task.init)/60.0) * hour_cost) AS total_cost ".
-            "FROM project LEFT JOIN customer ON project.customerid=customer.id LEFT JOIN task ON project.id = task.projectid ".
-            "LEFT JOIN hour_cost_history ON ".
-            "hour_cost_history.usrid = task.usrid AND ".
-            "task._date >= hour_cost_history.init_date ".
-            "AND task._date <= hour_cost_history.end_date WHERE $conditions ".
-            "GROUP BY project.id, project.description, project.activation, ".
-            "project.init, project._end, project.invoice, project.est_hours, ".
-            "project.areaid, project.description, project.type, ".
-            "project.moved_hours, project.sched_type, project.customerid, ".
-            "customer.name";
+
+        $sql = "SELECT project.*, customer.name AS customer_name,
+                SUM((task._end-task.init)/60.0) AS worked_hours,
+                SUM(((task._end-task.init)/60.0) * hour_cost) AS total_cost
+                FROM project
+                LEFT JOIN customer ON project.customerid=customer.id
+                LEFT JOIN task ON project.id = task.projectid
+                LEFT JOIN hour_cost_history ON hour_cost_history.usrid = task.usrid
+                AND task._date >= hour_cost_history.init_date
+                AND task._date <= hour_cost_history.end_date
+                WHERE $conditions AND $activeCondition AND $userCondition
+                GROUP BY project.id, project.description, project.activation,
+                project.init, project._end, project.invoice, project.est_hours,
+                project.areaid, project.description, project.type,
+                project.moved_hours, project.sched_type, customer_name
+                ORDER BY " . $orderField . " ASC";
+
+        return $this->execute($sql);
+    }
+
+    /** Custom Projects retriever for PostgreSQL.
+     *
+     * This function retrieves all rows from Project table and creates a {@link CustomProjectVO} with data from each row,
+     * and additional ones.
+     *
+     * @param bool $active optional parameter for obtaining only the active projects (by default it returns all them).
+     * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
+     * @return array an array with value objects {@link CustomProjectVO} with their properties set to the values from the rows
+     * and the additional data, and ordered ascendantly by their database internal identifier.
+     * @throws {@link SQLQueryErrorException}
+     */
+    public function getAllCustom($active = False, $orderField = 'id') {
+        $sql = "SELECT project.*, SUM((task._end-task.init)/60.0) AS worked_hours, SUM(((task._end-task.init)/60.0) * hour_cost) AS total_cost FROM project LEFT JOIN task ON project.id = task.projectid LEFT JOIN hour_cost_history ON hour_cost_history.usrid = task.usrid AND task._date >= hour_cost_history.init_date AND task._date <= hour_cost_history.end_date ";
+        if ($active)
+            $sql = $sql . " WHERE project.activation= 'True'";
+        $sql = $sql . " GROUP BY project.id, project.description, project.activation, project.init, project._end, project.invoice, project.est_hours, project.areaid, project.description, project.type, project.moved_hours, project.sched_type ORDER BY project." . $orderField . " ASC";
         return $this->customExecute($sql);
     }
 

@@ -39,8 +39,7 @@ $permissions = array(
         //tasks
         '/tasks.php', '/services/getUserTasksService.php',
         '/services/getPersonalSummaryByDateService.php',
-        '/services/getUserCustomersService.php',
-        '/services/getProjectsAndCustomersForLoginService.php',  '/services/getOpenTaskStoriesService.php',
+        '/services/getUserCustomersService.php', '/services/getOpenTaskStoriesService.php',
         '/services/createTasksService.php', '/services/deleteTasksService.php',
         '/services/updateTasksService.php', '/services/setTasksJsonService.php',
         '/services/getTasksFiltered.php', '/userTasksReport.php',
@@ -68,7 +67,7 @@ $permissions = array(
         '/services/getProjectUserWeeklyHoursReportJsonService.php',
         //common services
         '/services/getAllUsersService.php', '/services/getAllCustomersService.php',
-        '/services/getAllProjectsService.php', '/services/getAllCitiesService.php', '/services/getProjectService.php',
+        '/services/getAllCitiesService.php', '/services/getProjectService.php', '/services/getProjectsService.php',
         '/services/getAllSectorsService.php', '/services/getAllAreasService.php',
         '/services/getAllExtraHourVOsService.php', '/services/getAllCitiesService.php',
 	    '/services/getUserGoalsService.php', '/services/createUserGoalsService.php', '/services/updateUserGoalsService.php',
@@ -80,9 +79,8 @@ $permissions = array(
         '/services/getTodayAreaUsersService.php', '/services/getProjectUsersService.php'
     ),
     'manager' => array(
-        '/projectsEvaluation.php', '/usersEvaluation.php', '/projectsSummary.php', '/services/getFilteredCustomProjectsService.php',
-        '/services/getUserStoryReportJsonService.php', '/services/getProjectCustomerReportJsonService.php',
-        '/services/getProjectUserReportJsonService.php',
+        '/projectsEvaluation.php', '/usersEvaluation.php', '/projectsSummary.php', '/services/getUserStoryReportJsonService.php',
+        '/services/getProjectCustomerReportJsonService.php', '/services/getProjectUserReportJsonService.php',
     ),
     'admin' => array(
         //projects management
