@@ -20,6 +20,12 @@
 Ext.onReady(function () {
     var App = new Ext.App({});
 
+    /* Schema of the information about customers */
+    var customerRecord = new Ext.data.Record.create([
+        {name:'id'},
+        {name:'name'},
+    ]);
+
     /* Schema of the information about projects */
     var projectRecord = new Ext.data.Record.create([
         {name:'id'},
@@ -68,6 +74,22 @@ Ext.onReady(function () {
                 Ext.getCmp('userLogin').setValue(userId);
             }
         },
+    });
+
+    /* Store object for customers */
+    var customersStore = new Ext.data.Store({
+        autoLoad: true,
+        autoSave: false,
+        baseParams: {
+            'order': 'name',
+        },
+        proxy: new Ext.data.HttpProxy({
+            url: 'services/getUserCustomersService.php',
+            method: 'GET'
+        }),
+        reader: new Ext.data.XmlReader(
+            {record: 'customer', id:'id'}, customerRecord),
+        remoteSort: false,
     });
 
     /* Store object for the projects */
@@ -265,6 +287,19 @@ Ext.onReady(function () {
                 }
             }
         },{
+            fieldLabel: 'Customer',
+            name: 'customer',
+            xtype: 'combo',
+            id: 'customer',
+            store: customersStore,
+            mode: 'local',
+            valueField: 'id',
+            displayField: 'name',
+            typeAhead: true,
+            triggerAction: 'all',
+            displayField: 'name',
+            forceSelection: true,
+        },{
             fieldLabel: 'Task type',
             name: 'type',
             xtype: 'combo',
@@ -367,6 +402,10 @@ Ext.onReady(function () {
                 if (Ext.getCmp('project').getRawValue() != "") {
                     var value = Ext.getCmp('project').getValue();
                     baseParams.projectId = value;
+                }
+                if (Ext.getCmp('customer').getRawValue() != "") {
+                    var value = Ext.getCmp('customer').getValue();
+                    baseParams.customerId = value;
                 }
                 if (Ext.getCmp('type').getRawValue() != "") {
                     var value = Ext.getCmp('type').getValue();

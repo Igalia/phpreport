@@ -200,6 +200,8 @@ abstract class TaskDAO extends BaseDAO{
      *        deactivate filtering by this field.
      * @param int $projectId id of the project which tasks will be filtered by.
      *        NULL to deactivate filtering by this field.
+     * @param int $customerId id of the customer whose tasks will be filtered.
+     *        NULL to deactivate filtering by this field.
      * @param int $taskStoryId id of the story inside the XP tracker which tasks
      *        will be filtered. NULL to deactivate filtering by this field.
      * @param string $filterStory string to filter tasks by their story field.
@@ -218,7 +220,7 @@ abstract class TaskDAO extends BaseDAO{
      */
     public abstract function getFiltered($filterStartDate = NULL,
             $filterEndDate = NULL, $telework = NULL, $onsite = NULL, $filterText = NULL,
-            $type = NULL, $userId = NULL, $projectId = NULL,
+            $type = NULL, $userId = NULL, $projectId = NULL, $customerId = NULL,
             $taskStoryId = NULL, $filterStory = NULL, $emptyText = NULL, $emptyStory = NULL);
 
     /** Tasks report generator.

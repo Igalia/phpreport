@@ -146,6 +146,7 @@
         $type = NULL;
         $userId = NULL;
         $projectId = NULL;
+        $customerId = NULL;
         $taskStoryId = NULL;
         $filterStory = NULL;
         $emptyText = NULL;
@@ -196,6 +197,10 @@
         if (isset($_GET['projectId'])) {
             $projectId = $_GET['projectId'];
         }
+        if (isset($_GET['customerId'])) {
+            $customerId = $_GET['customerId'];
+        }
+
         if (isset($_GET['taskStoryId'])) {
             $taskStoryId = $_GET['taskStoryId'];
         }
@@ -220,7 +225,7 @@
         }
 
         $tasks = TasksFacade::GetTasksFiltered($filterStartDate, $filterEndDate,
-                $telework, $onsite, $filterText, $type, $userId, $projectId,
+                $telework, $onsite, $filterText, $type, $userId, $projectId, $customerId,
                 $taskStoryId, $filterStory, $emptyText, $emptyStory);
 
         $string = "<tasks>";
