@@ -384,8 +384,40 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 triggerAction: 'all',
                 forceSelection: true,
                 displayField: 'description',
+                // overwrite standard implementation of typeAhead because it
+                // conflicts with the filter by customer name
+                typeAhead: true,
+                onTypeAhead : function () {
+                    if(this.store.getCount() > 0) {
+                        //get the highlighted project
+                        var record = this.store.getAt(this.selectedIndex);
+
+                        // set value of the combo underneath, not altering the text in the box
+                        this.value = record.id;
+                        this.parent.taskRecord.set('projectId', record.id);
+                    }
+                },
                 tpl: '<tpl for="."><div class="x-combo-list-item" > <tpl>{description} </tpl>' +
                         '<tpl if="customerName">- {customerName}</tpl></div></tpl>',
+                setCustomValue: function (record) {
+                    // this function sets the value of the combo box to a certain
+                    // project record, and sets the text in the combo box as a
+                    // combination of project and client names
+
+                    if (record !== undefined) {
+                        var text = record.data['description'];
+
+                        // Append customer name to the project name to display in the combo
+                        if (record.data['customerName']) {
+                            text = record.data['description'] +
+                                    " - " + record.data['customerName'];
+                        }
+
+                        // Set the custom value for the select combo box
+                        this.setValue(record.id);
+                        this.setRawValue(text);
+                    }
+                },
                 listeners: {
                     'select': function (combo, record, index) {
                         if(record.data['id'] == -1) {
@@ -395,19 +427,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                             return;
                         }
 
-                        customerName = "";
-                        selectText = record.data['description'];
-
-                        this.parent.taskRecord.set('projectId', record.id);
-                        // We take customer name from the select combo, and injects its id to the taskRecord
-                        if (record.data['customerName']) {
-                            customerName = record.data['customerName'];
-                            selectText = record.data['description'] + " - " + record.data['customerName'];
-                        }
-
-                        // Set the custom value for the select combo box
-                        this.setValue(selectText);
-                        combo.value = record.id;
+                        this.setCustomValue(record);
 
                         this.parent.taskRecord.set('taskStoryId', "");
                         this.parent.taskStoryComboBox.setValue("");
@@ -419,6 +439,11 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         });
                     },
                     'blur': function () {
+                        // works in combination with typeAhead, fills the
+                        // combo box with the highlighted project
+                        var record = this.store.getAt(this.selectedIndex);
+                        this.setCustomValue(record);
+
                         // workaround in case you set a value, save with ctrl+s,
                         // delete the value and change the focus. In that case,
                         // 'select' or 'change' events wouldn't be triggered.
@@ -429,6 +454,16 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         this.parent.taskStoryComboBox.store.setBaseParam('pid',this.parent.taskRecord.data['projectId']);
                         this.parent.taskStoryComboBox.store.load();
                     },
+                    'collapse': function () {
+                        // clear the project by deleting the text and closing
+                        // the combo (esc key or tab)
+                        var text = this.getRawValue();
+                        if (text == "") {
+                            this.selectedIndex = -1;
+                            this.setValue();
+                            this.parent.taskRecord.set('projectId',"");
+                        }
+                    }
                 }
             }),
             storyField: new Ext.form.TextField({
