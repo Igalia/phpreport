@@ -217,12 +217,14 @@ abstract class ProjectDAO extends BaseDAO{
      *        field.
      * @param string $cname string to filter projects by their customer name. NULL
      *        to deactivate filtyering by this field
+     * @param boolean $returnExtendedInfo flag to check if the response should include more information
      * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      * @throws {@link OperationErrorException}
      */
     public abstract function getAll($userLogin = NULL, $active = False, $orderField = 'id', $description = NULL,
-        $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL, $areaId = NULL, $type = NULL, $cname = NULL);
+        $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL, $areaId = NULL, $type = NULL, $cname = NULL,
+        $returnExtendedInfo = False);
 
     /** Projects retriever.
      *

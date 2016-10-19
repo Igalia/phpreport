@@ -472,13 +472,14 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      *        field.
      * @param string $filterCname string to filter projects by their customer name. NULL
      *        to deactivate filtyering by this field
+     * @param boolean $returnExtendedInfo flag to check if the response should include more information
      * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
      * and ordered ascendantly by their database internal identifier.
      * @throws {@link SQLQueryErrorException}
      */
     public function getAll($userLogin = NULL, $active = False, $orderField = 'id', $description = NULL,
-        $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL,
-        $areaId = NULL, $type = NULL, $filterCname = NULL) {
+        $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL, $areaId = NULL, $type = NULL,
+        $filterCname = NULL, $returnExtendedInfo = False) {
         $userCondition = "true";
         $activeCondition = "true";
         $conditions = "TRUE";
@@ -489,39 +490,34 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         if ($active) {
             $activeCondition = "activation='True'";
         }
-        if ($description != NULL) {
+        if ($description != null) {
             foreach(explode(" ", $description) as $word) {
-                $conditions .= " AND UPPER(project.description)" .
-                    " LIKE ('%' || UPPER('$word') || '%')";
+                $conditions .= " AND UPPER(project.description)" . " LIKE ('%' || UPPER('$word') || '%')";
             }
         }
-        if ($filterStartDate != NULL) {
-            $conditions .= " AND (project._end >= ".
-                DBPostgres::formatDate($filterStartDate) .
-                " OR project._end is NULL)";
+        if ($filterStartDate != null) {
+            $conditions .= " AND (project._end >= " . DBPostgres::formatDate( $filterStartDate ) . " OR project._end is NULL)";
         }
-        if ($filterEndDate != NULL) {
-            $conditions .= " AND (project.init <= ".
-                DBPostgres::formatDate($filterEndDate) .
-                " OR project.init is NULL)";
+        if ($filterEndDate != null) {
+            $conditions .= " AND (project.init <= " . DBPostgres::formatDate( $filterEndDate ) . " OR project.init is NULL)";
         }
         if ($activation != NULL) {
             $conditions .= " AND project.activation = " . $activation;
         }
-        if ($areaId != NULL) {
+        if ($areaId != null) {
             $conditions .= " AND project.areaid = $areaId";
         }
-        if ($type != NULL) {
+        if ($type != null) {
             $conditions .= " AND project.type = '$type'";
         }
-        if ($filterCname != NULL) {
-            foreach(explode(" ", $filterCname) as $word) {
-                $conditions .= " AND UPPER(customer.name)" .
-                    " LIKE ('%' || UPPER('$word') || '%')";
+        if ($filterCname != null) {
+            foreach (explode(" ", $filterCname) as $word) {
+                $conditions .= " AND UPPER(customer.name)" . " LIKE ('%' || UPPER('$word') || '%')";
             }
         }
 
-        $sql = "SELECT project.*, customer.name AS customer_name,
+        if ($returnExtendedInfo) {
+            $sql = "SELECT project.*, customer.name AS customer_name,
                 SUM((task._end-task.init)/60.0) AS worked_hours,
                 SUM(((task._end-task.init)/60.0) * hour_cost) AS total_cost
                 FROM project
@@ -536,8 +532,16 @@ class PostgreSQLProjectDAO extends ProjectDAO {
                 project.areaid, project.description, project.type,
                 project.moved_hours, project.sched_type, project.customerid, customer_name
                 ORDER BY " . $orderField . " ASC";
-
-        return $this->execute($sql);
+            $result = $this->customExecute($sql);
+        } else {
+            $sql = "SELECT project.*, customer.name AS customer_name FROM
+                    project LEFT JOIN customer
+                    ON project.customerid=customer.id
+                    WHERE " . $activeCondition . " AND " . $userCondition . " AND " . $conditions . "
+                    ORDER BY $orderField ASC";
+            $result = $this->execute($sql);
+        }
+        return $result;
     }
 
     /** Custom Projects retriever for PostgreSQL.

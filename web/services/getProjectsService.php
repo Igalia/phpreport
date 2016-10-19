@@ -35,6 +35,7 @@ $sid = $_GET['sid'];
 $login = $_GET['login'];
 $order = 'id';
 
+
 // In case some filtering args are set, retrieve them
 $description = NULL;
 $filterStartDate = NULL;
@@ -43,6 +44,8 @@ $activation = NULL;
 $areaId = NULL;
 $type = NULL;
 $cname = NULL;
+$active = false;
+$returnExtendedInfo = False;
 
 if (isset($_GET['description'])) {
     $description = $_GET['description'];
@@ -68,6 +71,12 @@ if (isset($_GET['order'])) {
 if (isset($_GET['cname'])) {
     $cname = $_GET['cname'];
 }
+if (isset($_GET['returnExtendedInfo'])) {
+    $returnExtendedInfo = $_GET['returnExtendedInfo'];
+}
+if (isset($_GET['active'])) {
+    $active = $_GET['active'];
+}
 
 do {
     /* We check authentication and authorization */
@@ -85,26 +94,31 @@ do {
         break;
     }
 
-    $projects = ProjectsFacade::GetAllProjects($login, $active, $order,$description, $filterStartDate, $filterEndDate,
-        $activation, $areaId, $type, $cname);
-
+    $projects = ProjectsFacade::GetAllProjects($login, $active, $order, $description, $filterStartDate,
+        $filterEndDate, $activation, $areaId, $type, $cname, $returnExtendedInfo);
     $string = "<projects>";
 
-    foreach((array) $projects as $project)
-    {
 
-        $string = $string . "<project><id>{$project->getId()}</id><areaId>{$project->getAreaId()}</areaId><customerId>{$project->getCustomerId()}</customerId><activation>{$project->getActivation()}</activation><description>" . escape_string($project->getDescription()) . "</description><customerName>" . escape_string($project->getCustomerName()) . "</customerName><invoice>{$project->getInvoice()}</invoice>";
+    foreach ((array) $projects as $project) {
+        $string = $string . "<project><id>{$project->getId()}</id><areaId>{$project->getAreaId()}</areaId><customerId>{$project->getCustomerId()}</customerId><activation>{$project->getActivation()}</activation><description>" . escape_string( $project->getDescription() ) . "</description><customerName>" . escape_string( $project->getCustomerName() ) . "</customerName><invoice>{$project->getInvoice()}</invoice>";
 
-        if (!is_null($project->getInit()))
+        if (!is_null($project->getInit())) {
             $string = $string . "<init format='Y-m-d'>{$project->getInit()->format("Y-m-d")}</init>";
-        else $string = $string . "<init/>";
+        } else {
+            $string = $string . "<init/>";
+        }
 
-        if (!is_null($project->getEnd()))
+        if (!is_null($project->getEnd())) {
             $string = $string . "<end format='Y-m-d'>{$project->getEnd()->format("Y-m-d")}</end>";
-        else $string = $string . "<end/>";
+        } else {
+            $string = $string . "<end/>";
+        }
 
-        $string = $string . "<estHours>{$project->getEstHours()}</estHours><type>" . escape_string($project->getType()) . "</type><movedHours>{$project->getMovedHours()}</movedHours><schedType>" . escape_string($project->getSchedType()) . "</schedType></project>";
-
+        if ($returnExtendedInfo) {
+            $string = $string . "<estHours>{$project->getEstHours()}</estHours><type>" . escape_string( $project->getType() ) . "</type><movedHours>{$project->getMovedHours()}</movedHours><schedType>" . escape_string( $project->getSchedType() ) . "</schedType><workedHours>{$project->getWorkedHours()}</workedHours><totalCost>{$project->getTotalCost()}</totalCost><percDev>{$project->getPercDev()}</percDev><absDev>{$project->getAbsDev()}</absDev><estHourInvoice>{$project->getEstHourInvoice()}</estHourInvoice><totalProfit>{$project->getTotalProfit()}</totalProfit><hourProfit>{$project->getHourProfit()}</hourProfit><workedHourInvoice>{$project->getWorkedHourInvoice()}</workedHourInvoice></project>";
+        } else {
+            $string = $string . "<estHours>{$project->getEstHours()}</estHours><type>" . escape_string($project->getType()) . "</type><movedHours>{$project->getMovedHours()}</movedHours><schedType>" . escape_string($project->getSchedType()) . "</schedType></project>";
+        }
     }
 
     $string = $string . "</projects>";

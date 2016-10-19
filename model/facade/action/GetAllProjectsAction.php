@@ -93,6 +93,16 @@ class GetAllProjectsAction extends Action{
      */
     private $userLogin;
 
+    /**
+     * @var null|string
+     */
+    private $cname;
+
+    /**
+     * @var bool
+     */
+    private $returnExtendedInfo;
+
     /** GetAllProjectsAction constructor.
      *
      * This is just the constructor of this action.
@@ -114,15 +124,17 @@ class GetAllProjectsAction extends Action{
      * @param long $areaId value to filter projects by their area field.
      *        projects. NULL to deactivate filtering by this field.
      * @param string $type string to filter projects by their type field.
-     *        Only trojects with a type field that matches completely with this
+     *        Only projects with a type field that matches completely with this
      *        string will be returned. NULL to deactivate filtering by this
      *        field.
      * @param string $cname string to filter projects by their customer name. NULL
-     *        to deactivate filtyering by this field
+     *        to deactivate filtering by this field
+     * @param boolean $returnExtendedInfo flag to check if the response should include more information
+     *
      */
     public function __construct($userLogin = NULL, $active = False, $order = 'id', $description = NULL, $filterStartDate = NULL,
         $filterEndDate = NULL, $activation = NULL, $areaId = NULL,
-        $type = NULL, $cname = NULL) {
+        $type = NULL, $cname = NULL, $returnExtendedInfo = False) {
         $this->preActionParameter="GET_ALL_PROJECTS_PREACTION";
         $this->postActionParameter="GET_ALL_PROJECTS_POSTACTION";
         $this->active = $active;
@@ -135,7 +147,7 @@ class GetAllProjectsAction extends Action{
         $this->areaId = $areaId;
         $this->type = $type;
         $this->cname = $cname;
-
+        $this->returnExtendedInfo = $returnExtendedInfo;
     }
 
     /** Specific code execute.
@@ -147,7 +159,7 @@ class GetAllProjectsAction extends Action{
     protected function doExecute() {
         $dao = DAOFactory::getProjectDAO();
         return $dao->getAll($this->userLogin, $this->active, $this->order, $this->description, $this->filterStartDate,
-            $this->filterEndDate, $this->activation, $this->areaId, $this->type, $this->cname);
+            $this->filterEndDate, $this->activation, $this->areaId, $this->type, $this->cname, $this->returnExtendedInfo);
     }
 
 }
