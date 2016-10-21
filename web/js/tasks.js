@@ -119,7 +119,8 @@ function isLoaded() {
  * @returns {boolean}
  */
 function isUnTouched(taskRecord) {
-    if(!taskRecord.get('text') && !taskRecord.get('initTime') && !taskRecord.get('projectId')) {
+    if(!taskRecord.get('initTime') && !taskRecord.get('endTime') && !taskRecord.get('projectId') &&
+            !taskRecord.get('story') && !taskRecord.get('text')) {
         return true;
     }
 }
@@ -982,12 +983,6 @@ Ext.onReady(function(){
         tasksScrollArea.add(taskPanel);
         taskPanel.doLayout();
         tasksScrollArea.doLayout();
-
-        // We set the current time as end
-        var now = new Date();
-        taskPanel.endTimeField.setRawValue(now.format('H:i'));
-        newTask.set('endTime',now.format('H:i'));
-        taskPanel.endTimeField.validate();
 
         // Put the focus on the init time field
         taskPanel.initTimeField.focus();
