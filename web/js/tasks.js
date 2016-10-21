@@ -416,6 +416,11 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         // Set the custom value for the select combo box
                         this.setValue(record.id);
                         this.setRawValue(text);
+
+                        Ext.QuickTips.register({
+                            target: this.parent.projectComboBox,
+                            text: record.data['description'],
+                        });
                     }
                 },
                 listeners: {
@@ -432,11 +437,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         this.parent.taskRecord.set('taskStoryId', "");
                         this.parent.taskStoryComboBox.setValue("");
                         this.parent.customerComboBox.setValue(customerName);
-
-                        Ext.QuickTips.register({
-                            target: this.parent.projectComboBox,
-                            text: record.data['description'],
-                        });
                     },
                     'blur': function () {
                         // works in combination with typeAhead, fills the
@@ -462,6 +462,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                             this.selectedIndex = -1;
                             this.setValue();
                             this.parent.taskRecord.set('projectId',"");
+                            Ext.QuickTips.unregister(this.parent.projectComboBox);
                         }
                     }
                 }
