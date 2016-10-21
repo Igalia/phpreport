@@ -209,7 +209,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
     setReadOnly: function(readOnly) {
         this.initTimeField.setDisabled(readOnly);
         this.endTimeField.setDisabled(readOnly);
-        this.customerComboBox.setDisabled(readOnly);
         this.projectComboBox.setDisabled(readOnly);
         this.taskTypeComboBox.setDisabled(readOnly);
         this.storyField.setDisabled(readOnly);
@@ -282,15 +281,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         this.parent.taskRecord.set('endTime',this.getRawValue());
                     }
                 },
-            }),
-            customerComboBox: new Ext.form.ComboBox({
-                parent: this,
-                tabIndex: tab++,
-                disabled: true,
-                mode: 'local',
-                typeAhead: true,
-                triggerAction: 'all',
-                forceSelection: true,
             }),
             projectComboBox: new Ext.form.ComboBox({
                 parent: this,
@@ -369,7 +359,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                                 selectText = customerName ? projectName + " - " + customerName : projectName;
                                 this.parent.projectComboBox.setValue(selectText);
                                 this.parent.projectComboBox.value = this.parent.taskRecord.data['projectId'];
-                                this.parent.customerComboBox.setValue(customerName);
 
                                 Ext.QuickTips.register({
                                     target: this.parent.projectComboBox,
@@ -436,7 +425,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
 
                         this.parent.taskRecord.set('taskStoryId', "");
                         this.parent.taskStoryComboBox.setValue("");
-                        this.parent.customerComboBox.setValue(customerName);
                     },
                     'blur': function () {
                         // works in combination with typeAhead, fills the
