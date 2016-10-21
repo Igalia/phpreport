@@ -110,16 +110,12 @@ Ext.apply(Ext.form.VTypes, {
             var time2 = start.parseDate(start.getValue());
             if (time2)
                 if ((time <= time2) && (val != "00:00")) return false;
-            if (val == "00:00")
-                updateTimes(start, null, null);
-            else updateTimes(start, null, time);
         }
         else if (field.initTimeField) {
             var end = field.parent.endTimeField;
             var time2 = end.parseDate(end.getValue());
             if (time2)
                 if ((time2 <= time) && (end.getValue() != "00:00")) return false;
-            updateTimes(end, time, null, open);
         }
         return true;
     },

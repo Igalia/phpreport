@@ -18,12 +18,14 @@
  */
 
 function updateTimes(field, min, max, open) {
-    if(min == null){
-        min = field.parseDate('00:00');
+    if (min == null || min == "") {
+        min = '00:00';
     }
-    if(max == null){
-        max = field.parseDate('23:59');
+    if (max == null || max == "") {
+        max = '23:59';
     }
+    min = field.parseDate(min);
+    max = field.parseDate(max);
     var times = [];
     min = min.add('mi', field.increment);
     while(min < max){
@@ -250,6 +252,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         this.parent.endTimeField.validate();
                         this.parent.taskRecord.set('initTime',this.getValue());
                         updateTasksLength(this.parent);
+                        updateTimes(this.parent.endTimeField, this.getValue(), null, true);
                     },
                     'valid': function () {
                         this.parent.taskRecord.set('initTime',this.getRawValue());
@@ -277,6 +280,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         this.parent.initTimeField.validate();
                         this.parent.taskRecord.set('endTime',this.getValue());
                         updateTasksLength(this.parent);
+                        updateTimes(this.parent.initTimeField, null, this.getValue(), false);
                     },
                     'valid': function () {
                         this.parent.taskRecord.set('endTime',this.getRawValue());
