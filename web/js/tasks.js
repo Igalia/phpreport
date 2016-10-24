@@ -167,8 +167,6 @@ function updateTasksLength(taskPanel) {
     }
 }
 
-var tab = 3;
-
 function updateTitle(p){
     var title = 'Task';
 
@@ -262,7 +260,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 initTimeField: true,
                 vtype: 'timerange',
                 vtypeText: 'Time must be earlier than the end time.',
-                tabIndex: tab++,
                 listeners: {
                     'change': function () {
                         this.parent.endTimeField.validate();
@@ -290,7 +287,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 endTimeField: true,
                 vtype: 'timerange',
                 vtypeText: 'Time must be later than the init time.',
-                tabIndex: tab++,
                 listeners: {
                     'change': function () {
                         this.parent.initTimeField.validate();
@@ -305,7 +301,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
             projectComboBox: new Ext.form.ComboBox({
                 parent: this,
-                tabIndex: tab++,
                 flex:1,
                 store: new Ext.data.Store({
                     parent: this,
@@ -479,7 +474,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             storyField: new Ext.form.TextField({
                 parent: this,
                 value: this.taskRecord.data['story'],
-                tabIndex: tab++,
                 style: "width: 92.5%",
                 enableKeyEvents: true,
                 listeners: {
@@ -499,7 +493,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 height: 110,
                 style: "width: 100%",
                 columnWidth: 1,
-                tabIndex: tab++,
                 value: this.taskRecord.data['text'],
                 enableKeyEvents: true,
                 listeners: {
@@ -517,7 +510,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             taskTypeComboBox: new Ext.form.ComboBox({
                 parent: this,
                 value: this.taskRecord.data['ttype'],
-                tabIndex: tab++,
                 valueField: 'value',
                 displayField: 'displayText',
                 mode: 'local',
@@ -566,7 +558,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
             taskStoryComboBox: new Ext.form.ComboBox({
                 parent: this,
-                tabIndex: tab++,
                 width: 180,
                 store: new Ext.data.Store({
                     parent: this,
@@ -608,7 +599,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 parent: this,
                 value: this.taskRecord.data['telework']=='true',
                 boxLabel: "Telework",
-                tabIndex: tab++,
                 listeners: {
                     'check': function() {
                         this.parent.taskRecord.set('telework',String(this.getValue()));
@@ -619,7 +609,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 parent: this,
                 value: this.taskRecord.data['onsite']=='true',
                 boxLabel: "Onsite",
-                tabIndex: tab++,
                 listeners: {
                     'check': function() {
                         this.parent.taskRecord.set('onsite',String(this.getValue()));
@@ -629,7 +618,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             deleteButton: new Ext.Button({
                 parent: this,
                 text:'Delete',
-                tabIndex: tab++,
                 width: 60,
                 margins: "7px 0 0 5px",
                 handler: function() {
@@ -643,7 +631,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             cloneButton: new Ext.Button({
                 parent: this,
                 text:'Clone',
-                tabIndex: tab++,
                 width: 60,
                 margins: "7px 0 0 5px",
                 handler: function() {
@@ -682,7 +669,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             createTemplateButton: new Ext.Button({
                 parent: this,
                 text:'Template',
-                tabIndex: tab++,
                 margins: "7px 0 0 5px",
                 width: 60,
                 handler: function() {
