@@ -127,6 +127,22 @@ function isUnTouched(taskRecord) {
     }
 }
 
+// Navigate to Next day
+function navigateToNextDay() {
+    currentDate = new Date(date);
+    nextDate = new Date();
+    nextDate.setTime(currentDate.getTime() + 86400000);
+    window.location = "tasks.php?date=" + nextDate.format('Y-m-d');
+}
+
+// Navigate to Prev day
+function navigateToPrevDay() {
+    currentDate = new Date(date);
+    previousDate = new Date();
+    previousDate.setTime(currentDate.getTime() - 86400000);
+    window.location = "tasks.php?date=" + previousDate.format('Y-m-d');
+}
+
 function updateTasksLength(taskPanel) {
     if (taskPanel.initTimeField.getRawValue()!='' && taskPanel.endTimeField.getRawValue()!='' && taskPanel.endTimeField.isValid() && taskPanel.initTimeField.isValid()) {
         // We write the task's length label
@@ -150,8 +166,6 @@ function updateTasksLength(taskPanel) {
         taskPanel.length.setText(diffHour + ":" + diffMinute + " h");
     }
 }
-
-var tab = 3;
 
 function updateTitle(p){
     var title = 'Task';
@@ -246,7 +260,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 initTimeField: true,
                 vtype: 'timerange',
                 vtypeText: 'Time must be earlier than the end time.',
-                tabIndex: tab++,
                 listeners: {
                     'change': function () {
                         this.parent.endTimeField.validate();
@@ -274,7 +287,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 endTimeField: true,
                 vtype: 'timerange',
                 vtypeText: 'Time must be later than the init time.',
-                tabIndex: tab++,
                 listeners: {
                     'change': function () {
                         this.parent.initTimeField.validate();
@@ -289,7 +301,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
             projectComboBox: new Ext.form.ComboBox({
                 parent: this,
-                tabIndex: tab++,
                 flex:1,
                 store: new Ext.data.Store({
                     parent: this,
@@ -463,7 +474,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             storyField: new Ext.form.TextField({
                 parent: this,
                 value: this.taskRecord.data['story'],
-                tabIndex: tab++,
                 style: "width: 92.5%",
                 enableKeyEvents: true,
                 listeners: {
@@ -483,7 +493,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 height: 110,
                 style: "width: 100%",
                 columnWidth: 1,
-                tabIndex: tab++,
                 value: this.taskRecord.data['text'],
                 enableKeyEvents: true,
                 listeners: {
@@ -501,7 +510,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             taskTypeComboBox: new Ext.form.ComboBox({
                 parent: this,
                 value: this.taskRecord.data['ttype'],
-                tabIndex: tab++,
                 valueField: 'value',
                 displayField: 'displayText',
                 mode: 'local',
@@ -550,7 +558,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
             taskStoryComboBox: new Ext.form.ComboBox({
                 parent: this,
-                tabIndex: tab++,
                 width: 180,
                 store: new Ext.data.Store({
                     parent: this,
@@ -592,7 +599,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 parent: this,
                 value: this.taskRecord.data['telework']=='true',
                 boxLabel: "Telework",
-                tabIndex: tab++,
                 listeners: {
                     'check': function() {
                         this.parent.taskRecord.set('telework',String(this.getValue()));
@@ -603,7 +609,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 parent: this,
                 value: this.taskRecord.data['onsite']=='true',
                 boxLabel: "Onsite",
-                tabIndex: tab++,
                 listeners: {
                     'check': function() {
                         this.parent.taskRecord.set('onsite',String(this.getValue()));
@@ -613,7 +618,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             deleteButton: new Ext.Button({
                 parent: this,
                 text:'Delete',
-                tabIndex: tab++,
                 width: 60,
                 margins: "7px 0 0 5px",
                 handler: function() {
@@ -627,7 +631,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             cloneButton: new Ext.Button({
                 parent: this,
                 text:'Clone',
-                tabIndex: tab++,
                 width: 60,
                 margins: "7px 0 0 5px",
                 handler: function() {
@@ -666,7 +669,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             createTemplateButton: new Ext.Button({
                 parent: this,
                 text:'Template',
-                tabIndex: tab++,
                 margins: "7px 0 0 5px",
                 width: 60,
                 handler: function() {
@@ -1372,7 +1374,15 @@ Ext.onReady(function(){
                 xtype: 'tbtext',
                 id: 'status_display',
                 text: 'Status: No changes detected'
-            }
+            }, '->',
+            new Ext.Button({
+                text:'Previous date',
+                handler: navigateToPrevDay,
+            }), '-',
+            new Ext.Button({
+                text:'Next date',
+                handler: navigateToNextDay,
+            }),
         ],
     });
     //hotkeys
@@ -1428,6 +1438,24 @@ Ext.onReady(function(){
             window.setTimeout(addEmptyTask, 1000);
         }
     }
+
+    // Navigate on key left and right arrow press
+    function checkKeyAndNavigate(e) {
+        // We do not want navigation working while a user is editing a task
+        if( document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA" ) {
+            switch (e.keyCode) {
+                case 37:
+                    navigateToPrevDay();
+                    break;
+                case 39:
+                    navigateToNextDay();
+                    break;
+            }
+        }
+    }
+
+    // Add handler to check keyboard left/right clicks and change current date
+    document.onkeydown = checkKeyAndNavigate;
 
     // Adds in a new empty task when an empty day is clicked
     addEmptyTask();
