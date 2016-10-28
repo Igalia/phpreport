@@ -271,39 +271,8 @@ class HybridUserDAO extends UserDAO{
      */
     public function getAll() {
 
-        $dao = DAOFactory::getBelongsDAO();
-
-        $usersLDAP = $dao->getByUserGroupName(ConfigurationParametersManager::getParameter("ALL_USERS_GROUP"));
-
         $sql = "SELECT * FROM usr ORDER BY id ASC";
-
-        $usersDB = $this->execute($sql);
-
-        foreach((array) $usersLDAP as $index => $userLDAP) {
-            foreach((array) $usersDB as $userDB)
-                if ($userLDAP->getLogin() == $userDB->getLogin())
-                    $userLDAP->setId($userDB->getId());
-            if($userLDAP->getId() == null)
-                //the user doesn't exist in DB, delete it
-                unset($usersLDAP[$index]);
-        }
-
-        foreach((array) $usersDB as $userDB)
-        {
-            foreach((array) $usersLDAP as $userLDAP)
-            {
-                $exists = FALSE;
-                if ($userDB->getLogin() == $userLDAP->getLogin())
-                {
-                    $exists = TRUE;
-                    break;
-                }
-            }
-            if (!$exists)
-                $usersLDAP[]=$userDB;
-        }
-
-        return $usersLDAP;
+        return $this->execute($sql);
 
     }
 
