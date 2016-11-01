@@ -654,6 +654,26 @@ abstract class UsersFacade {
 
     }
 
+    /** Get user journey histories by intervals
+     *
+     * This function retrieves the objects from Journey History that are associated with the User with
+     * the id <var>$userId</var> ad that full lay inside the interval defined by <var>$init</var> ad <var>$end</var>
+     * ad creates a {@link JourneyHistoryVO} with data from each row.
+     *
+     * @param DateTime $init the DateTime object that represents the beginning of the date interval.
+     * @param DateTime $end the DateTime object that represents the end of the date interval (included).
+     * @param string $userId the id of the User whose Journey History entries we want to retieve.
+     * @return array an array with value objects {@link JourneyHistoryVO} with their properties set to the values from the rows
+     * and ordered ascendantly by their database internal identifier.
+     */
+    static function GetUserJourneyHistoriesByIntervals(DateTime $init, DateTime $end, $userId) {
+
+        $dao = DAOFactory::getJourneyHistoryDAO();
+
+        return $dao->getByIntervals($init, $end, $userId);
+
+    }
+
     /** Create Journey History entry Function
      *
      *  This function is used for creating a new entry on Journey History.

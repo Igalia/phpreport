@@ -264,6 +264,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             /* Inputs of the task form */
             initTimeField: new Ext.form.TimeField({
                 parent: this,
+                value: this.taskRecord.data['initTime'],
                 ref: '../initField',
                 allowBlank: false,
                 width: 60,
@@ -291,6 +292,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
             endTimeField: new Ext.form.TimeField({
                 parent: this,
+                value: this.taskRecord.data['endTime'],
                 ref: '../endField',
                 allowBlank: false,
                 width: 60,
@@ -1199,6 +1201,60 @@ Ext.onReady(function(){
         defaults: {
             width: '100%',
         },
+        items: [
+            // Default button for full-day task
+            new Ext.Button({
+                id: 'fullDayTaskButton',
+                text: 'Full-day task',
+                disabled: forbidden,
+                handler: function () {
+                    // Delay task creation until store gets loaded or it won't be properly added
+                    if (!isLoaded()) {
+                        window.setTimeout(Ext.getCmp('fullDayTaskButton').handler, 100);
+                        return;
+                    }
+
+                    removeFreshEmptyTask();
+
+                    // Change status message to 'draft' due to new, yet unsaved task
+                    Ext.getCmp('status_display').setText("Status: Draft");
+
+                    // Create task and fill init and end times
+                    var newTask = new taskRecord();
+                    var init = new Date();
+                    init.setHours(0, 0, 0, 0);
+                    var end = new Date();
+                    end.setHours(0, currentJourney*60, 0, 0);
+                    newTask.set('initTime', init.format('H:i'));
+                    newTask.set('endTime', end.format('H:i'));
+
+                    // Add the record to the store
+                    myStore.add(newTask);
+
+                    // Create and show a panel for the task
+                    var taskPanel = new TaskPanel({
+                        parent: tasksScrollArea,
+                        taskRecord: newTask,
+                        store: myStore,
+                        listeners: {
+                            'collapse': updateTitle,
+                            'beforeexpand': simplifyTitle,
+                        },
+                    });
+                    tasksScrollArea.add(taskPanel);
+                    taskPanel.doLayout();
+                    tasksScrollArea.doLayout();
+
+                    // Put the focus on the project field
+                    taskPanel.projectComboBox.focus();
+
+                    // If contents don't fit the screen, scroll to the new task
+                    var content = document.getElementById('content');
+                    if(HEADER_HEIGHT + content.scrollHeight > window.innerHeight)
+                        window.scrollTo(0, taskPanel.getEl().getY());
+                }
+            })
+        ],
         addButtonForTemplate: function (templateValues) {
             var createButton = new Ext.Button({
                 text: ((templateValues['name'] != undefined) &&

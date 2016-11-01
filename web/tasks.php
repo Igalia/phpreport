@@ -23,6 +23,7 @@ define('PHPREPORT_ROOT', __DIR__ . '/../');
 /* We check authentication and authorization */
 require_once(PHPREPORT_ROOT . '/web/auth.php');
 include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
+include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
 
 $user = $_SESSION['user'];
 
@@ -61,6 +62,13 @@ if(!TasksFacade::IsWriteAllowedForDate($date)) {
     $forbidden = true;
 }
 
+//get user journey for the date
+$currentJourney = 0;
+$journeys = UsersFacade::GetUserJourneyHistoriesByIntervals($date, $date, $user->getId());
+if(count($journeys)==1) {
+    $currentJourney = $journeys[0]->getJourney();
+}
+
 //output vars as JS code
 echo "<!-- Global variables extracted from the PHP side -->\n";
 echo "<script type='text/javascript'>\n";
@@ -68,6 +76,7 @@ echo "var lastTaskDate = Date.parseDate('" . $lastTaskDate . "', 'Y-m-d');\n";
 echo "var forbidden = " . ($forbidden? "true": "false") . ";\n";
 echo "var date = '" . $dateString . "';\n";
 echo "var user = '" . $user->getLogin() . "';\n";
+echo "var currentJourney = '$currentJourney';\n";
 echo "</script>\n";
 
 ?>
