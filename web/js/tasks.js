@@ -993,13 +993,12 @@ Ext.onReady(function(){
 
     /* Add a callback to add new tasks */
     function newTask(freshCreatedTask) {
-        /*We have to wait till the entire list gets loaded, otherwise the new
-        item do not get saved.*/
-        if (isLoaded()) {
-            newTask = new taskRecord();
-        } else {
+        // Delay task creation until store gets loaded or it won't be properly added
+        if (!isLoaded()) {
             window.setTimeout(newTask, 100);
+            return;
         }
+        var newTask = new taskRecord();
 
         // Add record to store and show in a panel
         taskPanel = addTask(newTask);
@@ -1240,17 +1239,16 @@ Ext.onReady(function(){
                 flex: 3,
                 disabled: forbidden,
                 handler: function () {
-                    /*We have to wait till the entire list gets loaded, otherwise the new
-                     item do not get saved.*/
-                    if (isLoaded()) {
-                        //create and populate a record
-                        var newTask = new taskRecord();
-                    } else {
+                    // Delay task creation until store gets loaded or it won't be properly added
+                    if (!isLoaded()) {
                         window.setTimeout(createButton.handler, 100);
+                        return;
                     }
 
                     removeFreshEmptyTask();
 
+                    // Create and populate a record
+                    var newTask = new taskRecord();
                     newTask.set('projectId', templateValues['projectId']);
                     newTask.set('ttype', templateValues['ttype']);
                     newTask.set('story', templateValues['story']);
