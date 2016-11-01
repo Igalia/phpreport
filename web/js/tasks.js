@@ -231,6 +231,41 @@ function removeFreshEmptyTask() {
     }
 }
 
+/**
+ * Creates and show a panel for a task, and adds that task to the store.
+ * @param newRecord the task record to be added.
+ * @return the TaskPanel object that has been created.
+ */
+function addTask(newRecord) {
+
+    // Add task to store
+    myStore.add(newRecord);
+
+    // Create and show a panel for the task
+    var taskPanel = new TaskPanel({
+        parent: tasksScrollArea,
+        taskRecord: newRecord,
+        store: myStore,
+        listeners: {
+            'collapse': updateTitle,
+            'beforeexpand': simplifyTitle,
+        },
+    });
+    tasksScrollArea.add(taskPanel);
+    taskPanel.doLayout();
+    tasksScrollArea.doLayout();
+
+    // If contents don't fit the screen, scroll to the new task
+    var content = document.getElementById('content');
+    if( HEADER_HEIGHT + content.scrollHeight > window.innerHeight)
+        window.scrollTo(0, taskPanel.getEl().getY());
+
+    // Change status message to 'draft' due to new, still unsaved task
+    Ext.getCmp('status_display').setText("Status: Draft");
+
+    return taskPanel;
+}
+
 /*  Class that stores a taskRecord element and shows it on screen.
     It keeps the taskRecord in synch with the content of the form on screen,
     in real-time (as soon as it changes). */
@@ -648,34 +683,18 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 width: 60,
                 margins: "7px 0 0 5px",
                 handler: function() {
-                    newTask = this.parent.taskRecord.copy();
+                    var newTask = this.parent.taskRecord.copy();
                     Ext.data.Record.id(newTask);
-                    this.parent.store.add(newTask);
-                    taskPanel = new TaskPanel({
-                        parent: this.parent.parent,
-                        taskRecord:newTask,
-                        store: this.parent.store,
-                        listeners: {
-                            'collapse': updateTitle,
-                            'beforeexpand': simplifyTitle,
-                        },
-                    });
-                    this.parent.parent.add(taskPanel);
-                    taskPanel.doLayout();
-                    this.parent.parent.doLayout();
 
                     // We empty the init and end time
                     newTask.set('initTime','');
                     newTask.set('endTime','');
-                    taskPanel.initTimeField.setRawValue('');
-                    taskPanel.endTimeField.setRawValue('');
 
+                    // Add record to store and show in a panel
+                    var taskPanel = addTask(newTask);
+
+                    // Put the focus on the init time field
                     taskPanel.initTimeField.focus();
-
-                    // If contents don't fit the screen, scroll to the new task
-                    var content = document.getElementById('content');
-                    if( HEADER_HEIGHT + content.scrollHeight > window.innerHeight)
-                        window.scrollTo(0, taskPanel.getEl().getY());
                 }
             }),
             createTemplateButton: new Ext.Button({
@@ -978,39 +997,20 @@ Ext.onReady(function(){
         item do not get saved.*/
         if (isLoaded()) {
             newTask = new taskRecord();
-            myStore.add(newTask);
         } else {
             window.setTimeout(newTask, 100);
         }
 
-        taskPanel = new TaskPanel({
-            parent: tasksScrollArea,
-            taskRecord:newTask,
-            store: myStore,
-            listeners: {
-                'collapse': updateTitle,
-                'beforeexpand': simplifyTitle,
-            },
-        });
+        // Add record to store and show in a panel
+        taskPanel = addTask(newTask);
 
         if(typeof(freshCreatedTask) === 'boolean' && freshCreatedTask == true) {
             freshCreatedTaskRecord = newTask;
             freshCreatedTaskPanel = taskPanel;
         }
 
-        tasksScrollArea.add(taskPanel);
-        taskPanel.doLayout();
-        tasksScrollArea.doLayout();
-
         // Put the focus on the init time field
         taskPanel.initTimeField.focus();
-
-        // If contents don't fit the screen, scroll to the new task
-        var content = document.getElementById('content');
-        if( HEADER_HEIGHT + content.scrollHeight > window.innerHeight)
-            window.scrollTo(0, taskPanel.getEl().getY());
-        // For a fresh task, we need to keep the status as draft, as we havent saved it yet!
-        Ext.getCmp('status_display').setText("Status: Draft");
     }
 
     // Validate the inputs in the task panel
@@ -1214,9 +1214,6 @@ Ext.onReady(function(){
 
                     removeFreshEmptyTask();
 
-                    // Change status message to 'draft' due to new, yet unsaved task
-                    Ext.getCmp('status_display').setText("Status: Draft");
-
                     // Create task and fill init and end times
                     var newTask = new taskRecord();
                     var init = new Date();
@@ -1226,30 +1223,11 @@ Ext.onReady(function(){
                     newTask.set('initTime', init.format('H:i'));
                     newTask.set('endTime', end.format('H:i'));
 
-                    // Add the record to the store
-                    myStore.add(newTask);
-
-                    // Create and show a panel for the task
-                    var taskPanel = new TaskPanel({
-                        parent: tasksScrollArea,
-                        taskRecord: newTask,
-                        store: myStore,
-                        listeners: {
-                            'collapse': updateTitle,
-                            'beforeexpand': simplifyTitle,
-                        },
-                    });
-                    tasksScrollArea.add(taskPanel);
-                    taskPanel.doLayout();
-                    tasksScrollArea.doLayout();
+                    // Add record to store and show in a panel
+                    var taskPanel = addTask(newTask);
 
                     // Put the focus on the project field
                     taskPanel.projectComboBox.focus();
-
-                    // If contents don't fit the screen, scroll to the new task
-                    var content = document.getElementById('content');
-                    if(HEADER_HEIGHT + content.scrollHeight > window.innerHeight)
-                        window.scrollTo(0, taskPanel.getEl().getY());
                 }
             })
         ],
@@ -1273,9 +1251,6 @@ Ext.onReady(function(){
 
                     removeFreshEmptyTask();
 
-                    // When you create a new task, lets keep the status as draft, as its not saved yet.
-                    Ext.getCmp('status_display').setText("Status: Draft");
-
                     newTask.set('projectId', templateValues['projectId']);
                     newTask.set('ttype', templateValues['ttype']);
                     newTask.set('story', templateValues['story']);
@@ -1288,30 +1263,12 @@ Ext.onReady(function(){
                     if( templateValues['onsite'] == '1' || templateValues['onsite'] == 'true' ) {
                         newTask.set('onsite', 'true');
                     }
-                    //add the record to the store
-                    myStore.add(newTask);
 
-                    //create and show a panel for the task
-                    var taskPanel = new TaskPanel({
-                        parent: tasksScrollArea,
-                        taskRecord:newTask,
-                        store: myStore,
-                        listeners: {
-                            'collapse': updateTitle,
-                            'beforeexpand': simplifyTitle,
-                        },
-                    });
-                    tasksScrollArea.add(taskPanel);
-                    taskPanel.doLayout();
-                    tasksScrollArea.doLayout();
+                    // Add record to store and show in a panel
+                    var taskPanel = addTask(newTask);
 
                     //put the focus on the init time field
                     taskPanel.initTimeField.focus();
-
-                    // If contents don't fit the screen, scroll to the new task
-                    var content = document.getElementById('content');
-                    if( HEADER_HEIGHT + content.scrollHeight > window.innerHeight)
-                        window.scrollTo(0, taskPanel.getEl().getY());
                 },
             });
             var deleteButton = new Ext.Button({
