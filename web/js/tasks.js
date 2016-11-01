@@ -664,13 +664,11 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     taskPanel.doLayout();
                     this.parent.parent.doLayout();
 
-                    // We set the current time as end and empty as init
-                    var now = new Date();
-                    taskPanel.endTimeField.setRawValue(now.format('H:i'));
-                    newTask.set('endTime',now.format('H:i'));
+                    // We empty the init and end time
                     newTask.set('initTime','');
-                    taskPanel.endTimeField.validate();
+                    newTask.set('endTime','');
                     taskPanel.initTimeField.setRawValue('');
+                    taskPanel.endTimeField.setRawValue('');
 
                     taskPanel.initTimeField.focus();
 
