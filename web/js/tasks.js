@@ -219,6 +219,18 @@ function isUnsaved() {
     return false;
 }
 
+/**
+ * Removes the empty task that is created by default, but only if it is unchanged.
+ */
+function removeFreshEmptyTask() {
+    if(freshCreatedTaskRecord && freshCreatedTaskRecord.dirty && isUnTouched(freshCreatedTaskRecord)) {
+        myStore.remove(freshCreatedTaskRecord);
+        tasksScrollArea.remove(freshCreatedTaskPanel);
+        freshCreatedTaskPanel.doLayout();
+        tasksScrollArea.doLayout();
+    }
+}
+
 /*  Class that stores a taskRecord element and shows it on screen.
     It keeps the taskRecord in synch with the content of the form on screen,
     in real-time (as soon as it changes). */
@@ -787,7 +799,7 @@ Ext.onReady(function(){
     Ext.QuickTips.init();
 
     /* Container for the TaskPanels (with scroll bars enabled) */
-    var tasksScrollArea = new Ext.Container({autoScroll:true,  renderTo: 'tasks'});
+    tasksScrollArea = new Ext.Container({autoScroll:true,  renderTo: 'tasks'});
 
     /* Proxy to the services related with load/save tasks */
     var myProxy = new Ext.data.HttpProxy({
@@ -1103,13 +1115,7 @@ Ext.onReady(function(){
                             dateString += '0';
                         dateString += cloneDate.getDate();
 
-                        // If a fresh empty task exist, just remove it
-                        if(freshCreatedTaskRecord && freshCreatedTaskRecord.dirty && isUnTouched(freshCreatedTaskRecord)) {
-                            myStore.remove(freshCreatedTaskRecord);
-                            tasksScrollArea.remove(freshCreatedTaskPanel);
-                            freshCreatedTaskPanel.doLayout();
-                            tasksScrollArea.doLayout();
-                        }
+                        removeFreshEmptyTask();
 
                         // We load that day's tasks and append them into tasks' store
                         myStore.load({
@@ -1211,13 +1217,8 @@ Ext.onReady(function(){
                         window.setTimeout(createButton.handler, 100);
                     }
 
-                    // If a fresh empty task exist, just remove it
-                    if(freshCreatedTaskRecord && freshCreatedTaskRecord.dirty && isUnTouched(freshCreatedTaskRecord)) {
-                        myStore.remove(freshCreatedTaskRecord);
-                        tasksScrollArea.remove(freshCreatedTaskPanel);
-                        freshCreatedTaskPanel.doLayout();
-                        tasksScrollArea.doLayout();
-                    }
+                    removeFreshEmptyTask();
+
                     // When you create a new task, lets keep the status as draft, as its not saved yet.
                     Ext.getCmp('status_display').setText("Status: Draft");
 
