@@ -62,3 +62,96 @@ ALTER TABLE extra_hour ADD COLUMN comment VARCHAR(256);
 --
 
 UPDATE config SET version='2.16';
+
+--
+-- New table for task templates.
+--
+-- It contains the same rows as the tasks table, with just some changes:
+-- * removed init and _end rows.
+-- * added name row.
+--
+
+create table template (
+  id                        serial not null primary key,
+  name                      varchar(80) not null,
+  story                     varchar(80),
+  telework                  boolean,
+  onsite                    boolean,
+  text                      varchar(8192),
+  ttype                     varchar(40),
+  usrId                     integer not null,
+  projectId                 integer,
+  task_storyId              integer
+) ;
+
+--
+-- Foreign key constraints for task templates table.
+--
+-- It has the same relations as the tasks table.
+--
+
+alter table template add constraint does
+  foreign key (usrId)
+  references usr (id)  ;
+alter table template add constraint makeUp
+  foreign key (projectId)
+  references project (id)  ;
+alter table template add constraint includes
+  foreign key (task_storyId)
+  references task_story (id)  ;
+
+--
+-- Add new manager user group to the user_group table
+-- Restricts access to default staff profile
+--
+
+INSERT INTO user_group VALUES (3,'manager');
+SELECT nextval(pg_get_serial_sequence('user_group', 'id'));
+--
+-- Add admin user to the manager group
+--
+
+INSERT INTO belongs VALUES (3, 2);
+
+--
+-- Create manager user and give proper permissions (staff and manager)
+--
+
+INSERT INTO usr VALUES (3, md5('manager'), 'manager');
+SELECT nextval(pg_get_serial_sequence('usr', 'id'));
+INSERT INTO belongs VALUES (1, 3);
+INSERT INTO belongs VALUES (3, 3);
+
+--
+-- New table for user goals templates.
+--
+
+create table user_goals (
+  id                        serial not null primary key,
+  init_date                 date not null,
+  end_date                  date not null,
+  usrId                     integer not null,
+  extra_hours               double precision not null
+);
+
+--
+-- Foreign key constraints for goals table.
+--
+
+alter table user_goals add constraint does
+  foreign key (usrId)
+  references usr (id)  ;
+
+--
+-- Add customerId to projects table to link projects to clients
+--
+
+ALTER TABLE project
+ADD COLUMN customerId integer;
+
+--
+-- Foreign key constraint for customers
+--
+
+ALTER TABLE project
+ADD FOREIGN KEY(customerId) REFERENCES customer(id);
