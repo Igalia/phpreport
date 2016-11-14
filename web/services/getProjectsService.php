@@ -100,7 +100,17 @@ do {
 
 
     foreach ((array) $projects as $project) {
-        $string = $string . "<project><id>{$project->getId()}</id><areaId>{$project->getAreaId()}</areaId><customerId>{$project->getCustomerId()}</customerId><activation>{$project->getActivation()}</activation><description>" . escape_string( $project->getDescription() ) . "</description><customerName>" . escape_string( $project->getCustomerName() ) . "</customerName><invoice>{$project->getInvoice()}</invoice>";
+        $string = $string . "<project><id>{$project->getId()}</id><areaId>{$project->getAreaId()}</areaId><customerId>{$project->getCustomerId()}</customerId><activation>{$project->getActivation()}</activation><invoice>{$project->getInvoice()}</invoice>";
+
+        $description = escape_string($project->getDescription());
+        $customerName = escape_string($project->getCustomerName());
+        $string .= "<description>{$description}</description><customerName>{$customerName}</customerName>";
+
+        if (empty($customerName)) {
+            $string .= "<fullDescription>{$description}</fullDescription>";
+        } else {
+            $string .= "<fullDescription>{$description} - {$customerName}</fullDescription>";
+        }
 
         if (!is_null($project->getInit())) {
             $string = $string . "<init format='Y-m-d'>{$project->getInit()->format("Y-m-d")}</init>";
