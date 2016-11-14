@@ -110,6 +110,10 @@ class GetGlobalProjectsUsersReportAction extends Action{
                 $project = $dao2->getById($doubleResult['projectid']);
 
                 $projectName = $project->getDescription();
+                $customerName = $project->getCustomerName();
+                if (!empty($customerName)) {
+                    $projectName .= " - " . $customerName;
+                }
             }
 
             if (is_null($doubleResult['usrid']))
