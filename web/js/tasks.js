@@ -411,24 +411,10 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                                     this.load();
                                 }
                             } else if(this.parent.taskRecord.data['projectId'] != -1) {
-                                // If the project has an association with a customer, do show it in the select box
-                                projectName = this.getAt(
-                                    this.findExact('id', this.parent.taskRecord.data['projectId'])
-                                ).data['description'];
+                                // Set value and tooltip in the combo box if there is some project value
+                                var project = this.getAt(this.findExact('id', this.parent.taskRecord.data['projectId']));
 
-                                // Get the correct customer name
-                                customerName = this.getAt(
-                                    this.findExact('id', this.parent.taskRecord.data['projectId'])
-                                ).data['customerName'];
-
-                                selectText = customerName ? projectName + " - " + customerName : projectName;
-                                this.parent.projectComboBox.setValue(selectText);
-                                this.parent.projectComboBox.value = this.parent.taskRecord.data['projectId'];
-
-                                Ext.QuickTips.register({
-                                    target: this.parent.projectComboBox,
-                                    text: projectName,
-                                });
+                                this.parent.projectComboBox.setCustomValue(project);
                             }
                         }
                     },
