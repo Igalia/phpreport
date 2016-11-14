@@ -61,11 +61,6 @@ var taskRecord = new Ext.data.Record.create([
     {name:'taskStoryId'}
 ]);
 
-/* Schema of the information about customers */
-var customerRecord = new Ext.data.Record.create([
-    {name:'id'},
-    {name:'name'},
-]);
 /* Schema of the information about projects */
 var projectRecord = new Ext.data.Record.create([
     {name:'id'},
