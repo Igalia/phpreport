@@ -70,6 +70,7 @@ var customerRecord = new Ext.data.Record.create([
 var projectRecord = new Ext.data.Record.create([
     {name:'id'},
     {name:'description'},
+    {name:'fullDescription'},
     {name:'customerName'}
 ]);
 /* Schema of the information about task-stories */
@@ -362,10 +363,10 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     },
                     filter: function(property, value, anyMatch, caseSensitive) {
                         var fn;
-                        if (((property == 'description') || (property == 'customerName')) && !Ext.isEmpty(value, false)) {
+                        if (((property == 'fullDescription') || (property == 'customerName')) && !Ext.isEmpty(value, false)) {
                             value = this.data.createValueMatcher(value, anyMatch, caseSensitive);
                             fn = function(r){
-                                return value.test(r.data['description']) || value.test(r.data['customerName']);
+                                return value.test(r.data['fullDescription']) || value.test(r.data['customerName']);
                             };
                         } else {
                             fn = this.createFilterFn(property, value, anyMatch, caseSensitive);
