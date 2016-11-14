@@ -379,7 +379,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         'load': function (store) {
                             var dummyRecord = new projectRecord({
                                 id: -1,                  // some invalid id
-                                description: "Load all projects",
+                                fullDescription: "Load all projects",
                                 customerName: ""
                             });
 
@@ -411,10 +411,9 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                                     this.load();
                                 }
                             } else if(this.parent.taskRecord.data['projectId'] != -1) {
-                                // Set value and tooltip in the combo box if there is some project value
                                 var project = this.getAt(this.findExact('id', this.parent.taskRecord.data['projectId']));
 
-                                this.parent.projectComboBox.setCustomValue(project);
+                                this.parent.projectComboBox.setValueFromRecord(project);
                             }
                         }
                     },
@@ -423,7 +422,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 valueField: 'id',
                 triggerAction: 'all',
                 forceSelection: true,
-                displayField: 'description',
+                displayField: 'fullDescription',
                 // overwrite standard implementation of typeAhead because it
                 // conflicts with the filter by customer name
                 typeAhead: true,
@@ -437,29 +436,16 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         this.parent.taskRecord.set('projectId', record.id);
                     }
                 },
-                tpl: '<tpl for="."><div class="x-combo-list-item" > <tpl>{description} </tpl>' +
-                        '<tpl if="customerName">- {customerName}</tpl></div></tpl>',
-                setCustomValue: function (record) {
-                    // this function sets the value of the combo box to a certain
-                    // project record, and sets the text in the combo box as a
-                    // combination of project and client names
+                setValueFromRecord: function (record) {
+                    // Set value and tooltip for the combo box from a project record
 
                     if (record !== undefined) {
-                        var text = record.data['description'];
-
-                        // Append customer name to the project name to display in the combo
-                        if (record.data['customerName']) {
-                            text = record.data['description'] +
-                                    " - " + record.data['customerName'];
-                        }
-
-                        // Set the custom value for the select combo box
+                        // Set the value for the select combo box
                         this.setValue(record.id);
-                        this.setRawValue(text);
 
                         Ext.QuickTips.register({
                             target: this.parent.projectComboBox,
-                            text: record.data['description'],
+                            text: record.data['fullDescription'],
                         });
                     }
                 },
@@ -472,7 +458,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                             return;
                         }
 
-                        this.setCustomValue(record);
+                        this.setValueFromRecord(record);
 
                         this.parent.taskRecord.set('taskStoryId', "");
                         this.parent.taskStoryComboBox.setValue("");
@@ -481,7 +467,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         // works in combination with typeAhead, fills the
                         // combo box with the highlighted project
                         var record = this.store.getAt(this.selectedIndex);
-                        this.setCustomValue(record);
+                        this.setValueFromRecord(record);
 
                         // workaround in case you set a value, save with ctrl+s,
                         // delete the value and change the focus. In that case,
