@@ -290,7 +290,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             title: 'Task',
             monitorResize: true,
             collapsible: true,
-            layout:'column',
 
             /* Inputs of the task form */
             initTimeField: new Ext.form.TimeField({
@@ -346,7 +345,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
             projectComboBox: new Ext.form.ComboBox({
                 parent: this,
-                flex:1,
+                flex: 2,
                 store: new Ext.data.Store({
                     parent: this,
                     autoLoad: true,  //initial data are loaded in the application init
@@ -491,7 +490,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             storyField: new Ext.form.TextField({
                 parent: this,
                 value: this.taskRecord.data['story'],
-                style: "width: 92.5%",
+                flex: 1,
                 enableKeyEvents: true,
                 listeners: {
                     'change': function () {
@@ -702,7 +701,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
 
         topBox = new Ext.Panel({
             layout: 'column',
-            columnWidth: 1,
             style:"padding-bottom:3px",
             items: [
                 new Ext.Container({
@@ -721,14 +719,8 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     items:[
                         new Ext.form.Label({text: 'Project', style:'display:block; padding:5px 2px 5px 0px'}),
                         this.projectComboBox,
-                        new Ext.Container({
-                            layout: 'hbox',
-                            flex:1,
-                            items:[
-                                new Ext.form.Label({text: 'Story', style: 'display:block; padding:5px 2px 5px 2px'}),
-                                this.storyField,
-                            ]
-                        }),
+                        new Ext.form.Label({text: 'Story', style: 'display:block; padding:5px 2px 5px 2px'}),
+                        this.storyField,
                     ]
                 }),
 
@@ -736,7 +728,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
         });
         centerBox = new Ext.Panel({
             layout: 'column',
-            columnWidth: 1,
             monitorResize: true,
             items:[
                 this.descriptionTextArea,
@@ -754,7 +745,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
         bottomBox = new Ext.Panel({
             layout: 'hbox',
             layoutConfig: {defaultMargins: "5px 0px 0px 2px"},
-            columnWidth: 1,
             items:[
                 new Ext.Container({
                     layout: 'column',
