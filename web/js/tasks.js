@@ -525,6 +525,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
             taskTypeComboBox: new Ext.form.ComboBox({
                 parent: this,
+                width: 170,
                 value: this.taskRecord.data['ttype'],
                 valueField: 'value',
                 displayField: 'displayText',
@@ -574,7 +575,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
             taskStoryComboBox: new Ext.form.ComboBox({
                 parent: this,
-                width: 180,
+                width: 170,
                 store: new Ext.data.Store({
                     parent: this,
                     autoLoad: true,  //initial data are loaded in the application init
@@ -731,18 +732,38 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             ]
         });
         bottomBox = new Ext.Panel({
-            layout: 'hbox',
-            layoutConfig: {defaultMargins: "5px 2px 0px 0px"},
+            layout: 'column',
+            defaults: {
+                layoutConfig: {defaultMargins: "5px 2px 0px 0px"}
+            },
             items:[
-                this.deleteButton,
-                this.cloneButton,
-                this.createTemplateButton,
-                new Ext.form.Label({text: 'Task type', style: 'display:block; padding:5px 2px 5px 2px'}),
-                this.taskTypeComboBox,
-                new Ext.form.Label({text: 'TaskStory', style: 'display:block; padding:5px 2px 5px 2px'}),
-                this.taskStoryComboBox,
-                this.teleworkCheckBox,
-                this.onsiteCheckBox
+                new Ext.Container({
+                    width: 186,
+                    layout: 'hbox',
+                    items:[
+                        this.deleteButton,
+                        this.cloneButton,
+                        this.createTemplateButton,
+                    ]
+                }),
+                new Ext.Container({
+                    width: 460,
+                    layout: 'hbox',
+                    items:[
+                        new Ext.form.Label({text: 'Task type', style: 'display:block; padding:5px 2px 5px 2px'}),
+                        this.taskTypeComboBox,
+                        new Ext.form.Label({text: 'TaskStory', style: 'display:block; padding:5px 2px 5px 2px'}),
+                        this.taskStoryComboBox,
+                    ]
+                }),
+                new Ext.Container({
+                    width: 122,
+                    layout: 'hbox',
+                    items:[
+                        this.teleworkCheckBox,
+                        this.onsiteCheckBox
+                    ]
+                }),
             ]
         });
         this.items = [topBox, centerBox, bottomBox];
