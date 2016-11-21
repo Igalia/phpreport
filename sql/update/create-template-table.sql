@@ -16,7 +16,6 @@ create table template (
   ttype                     varchar(40),
   usrId                     integer not null,
   projectId                 integer,
-  customerId                integer,
   task_storyId              integer
 ) ;
 
@@ -32,9 +31,6 @@ alter table template add constraint does
 alter table template add constraint makeUp
   foreign key (projectId)
   references project (id)  ;
-alter table template add constraint finances
-  foreign key (customerId)
-  references customer (id)  ;
 alter table template add constraint includes
   foreign key (task_storyId)
   references task_story (id)  ;
