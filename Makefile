@@ -3,7 +3,7 @@ VERSION=2.16
 tgz: help
 	cp config/config.php config/config.defaults
 	tar zcf phpreport_$(VERSION).tar.gz --exclude=Makefile --exclude=*~ \
-		--exclude=docs \
+		--exclude=docs --exclude=web/ext/ext-all-debug* \
 		--exclude=config/config.php --exclude=*.tar.gz --exclude=*.zip *
 
 zip: tgz
