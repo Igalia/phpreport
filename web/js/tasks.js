@@ -757,7 +757,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     ]
                 }),
                 new Ext.Container({
-                    width: 122,
+                    width: 145,
                     layout: 'hbox',
                     items:[
                         this.teleworkCheckBox,
