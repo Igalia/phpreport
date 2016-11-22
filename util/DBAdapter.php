@@ -65,14 +65,6 @@ abstract class DBAdapter {
     }
 
     /**
-     * This method is used to ignore case.
-     *
-     * @param      string The string to transform to upper case.
-     * @return     string The upper case string.
-     */
-    public abstract static function toUpperCase($in);
-
-    /**
      * Returns the character used to indicate the beginning and end of
      * a piece of text used in a SQL statement (generally a single
      * quote).
@@ -83,68 +75,6 @@ abstract class DBAdapter {
     {
         return '\'';
     }
-
-    /**
-     * This method is used to ignore case.
-     *
-     * @param      string $in The string whose case to ignore.
-     * @return     string The string in a case that can be ignored.
-     */
-    public abstract static function ignoreCase($in);
-
-    /**
-     * This method is used to ignore case in an ORDER BY clause.
-     * Usually it is the same as ignoreCase, but some databases
-     * (Interbase for example) does not use the same SQL in ORDER BY
-     * and other clauses.
-     *
-     * @param      string $in The string whose case to ignore.
-     * @return     string The string in a case that can be ignored.
-     */
-    public abstract static function ignoreCaseInOrderBy($in);
-
-    /**
-     * Returns SQL which concatenates the second string to the first.
-     *
-     * @param      string String to concatenate.
-     * @param      string String to append.
-     * @return     string
-     */
-    public abstract static function concatString($s1, $s2);
-
-    /**
-     * Returns SQL which extracts a substring.
-     *
-     * @param      string String to extract from.
-     * @param      int Offset to start from.
-     * @param      int Number of characters to extract.
-     * @return     string
-     */
-    public abstract static function subString($s, $pos, $len);
-
-    /**
-     * Returns SQL which calculates the length (in chars) of a string.
-     *
-     * @param      string String to calculate length of.
-     * @return     string
-     */
-    public abstract static function strLength($s);
-
-    /**
-     * Returns string with special characters escaped.
-     *
-     * @param      string $str to escape.
-     * @return     string $str escaped.
-     */
-    public abstract static function escapeString($s);
-
-    /**
-     * Checks if string is NULL, so it can be inserted in database without quotes.
-     * In other case, it quotes it.
-     * @param      string $str The string to quote.
-     * @return     string The quoted string, or just "NULL".
-     */
-    public abstract static function checkStringNull($str);
 
     /**
      * Checks if data is not NULL, so it can be inserted directly in database.
@@ -282,17 +212,5 @@ abstract class DBAdapter {
     {
         return false;
     }
-
-    /**
-     * Modifies the passed-in SQL to add LIMIT and/or OFFSET.
-     */
-    public abstract static function applyLimit(&$sql, $offset, $limit);
-
-    /**
-     * Gets the SQL string that this adapter uses for getting a random number.
-     *
-     * @param      mixed $seed (optional) seed value for databases that support this
-     */
-    public abstract static function random($seed = null);
 
 }

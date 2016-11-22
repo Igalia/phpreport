@@ -188,7 +188,7 @@ class DBPostgres extends DBAdapter {
     }
 
     /**
-     * @see        DBAdapter::applyLimit()
+     * Modifies the passed-in SQL to add LIMIT and/or OFFSET.
      */
     public static function applyLimit(&$sql, $offset, $limit)
     {
@@ -201,7 +201,9 @@ class DBPostgres extends DBAdapter {
     }
 
     /**
-     * @see        DBAdapter::random()
+     * Gets the SQL string that this adapter uses for getting a random number.
+     *
+     * @param      mixed $seed (optional) seed value for databases that support this
      */
     public static function random($seed=NULL)
     {
