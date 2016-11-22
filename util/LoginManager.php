@@ -190,7 +190,8 @@ class LoginManager {
 
       foreach ($user->getGroups() as $group) {
         $url = explode($urlHeader, $_SERVER["SCRIPT_NAME"]);
-        if (in_array($url[1], $extraPermissions[$group->getName()]))
+        if (isset($extraPermissions[$group->getName()]) &&
+            in_array($url[1], $extraPermissions[$group->getName()]))
           return true;
       }
     }
