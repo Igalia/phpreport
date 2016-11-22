@@ -838,8 +838,6 @@ class PostgreSQLTaskDAO extends TaskDAO{
         //compare the end of one task with the beginning of the next one
         for ($i = 1; $i < count($sortedTasks); $i++) {
             if ($sortedTasks[$i]->getInit() < $sortedTasks[$i-1]->getEnd()) {
-            error_log($sortedTasks[$i]->getInit());
-            error_log($sortedTasks[$i-1]->getEnd());
                 return false;
             }
         }

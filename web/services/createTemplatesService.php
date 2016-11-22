@@ -178,7 +178,6 @@ do {
                 $string .= $template->toXml();
             }
             $string .= "</templates></return>";
-            error_log($string);
         }
     }
 
