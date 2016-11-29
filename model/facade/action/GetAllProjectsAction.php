@@ -94,6 +94,11 @@ class GetAllProjectsAction extends Action{
     private $userLogin;
 
     /**
+     * @var long
+     */
+    private $customerId;
+
+    /**
      * @var null|string
      */
     private $cname;
@@ -134,7 +139,7 @@ class GetAllProjectsAction extends Action{
      */
     public function __construct($userLogin = NULL, $active = False, $order = 'id', $description = NULL, $filterStartDate = NULL,
         $filterEndDate = NULL, $activation = NULL, $areaId = NULL,
-        $type = NULL, $cname = NULL, $returnExtendedInfo = False) {
+        $type = NULL, $customerId = NULL, $cname = NULL, $returnExtendedInfo = False) {
         $this->preActionParameter="GET_ALL_PROJECTS_PREACTION";
         $this->postActionParameter="GET_ALL_PROJECTS_POSTACTION";
         $this->active = $active;
@@ -146,6 +151,7 @@ class GetAllProjectsAction extends Action{
         $this->activation = $activation;
         $this->areaId = $areaId;
         $this->type = $type;
+        $this->customerId = $customerId;
         $this->cname = $cname;
         $this->returnExtendedInfo = $returnExtendedInfo;
     }
@@ -158,8 +164,10 @@ class GetAllProjectsAction extends Action{
      */
     protected function doExecute() {
         $dao = DAOFactory::getProjectDAO();
-        return $dao->getAll($this->userLogin, $this->active, $this->order, $this->description, $this->filterStartDate,
-            $this->filterEndDate, $this->activation, $this->areaId, $this->type, $this->cname, $this->returnExtendedInfo);
+        return $dao->getAll($this->userLogin, $this->active, $this->order,
+            $this->description, $this->filterStartDate, $this->filterEndDate,
+            $this->activation, $this->areaId, $this->type, $this->customerId,
+            $this->cname, $this->returnExtendedInfo);
     }
 
 }

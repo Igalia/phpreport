@@ -43,6 +43,7 @@ $filterEndDate = NULL;
 $activation = NULL;
 $areaId = NULL;
 $type = NULL;
+$customerId = NULL;
 $cname = NULL;
 $active = false;
 $returnExtendedInfo = False;
@@ -67,6 +68,9 @@ if (isset($_GET['type'])) {
 }
 if (isset($_GET['order'])) {
     $order = $_GET['order'];
+}
+if (isset($_GET['customerId'])) {
+    $customerId = $_GET['customerId'];
 }
 if (isset($_GET['cname'])) {
     $cname = $_GET['cname'];
@@ -95,7 +99,7 @@ do {
     }
 
     $projects = ProjectsFacade::GetAllProjects($login, $active, $order, $description, $filterStartDate,
-        $filterEndDate, $activation, $areaId, $type, $cname, $returnExtendedInfo);
+        $filterEndDate, $activation, $areaId, $type, $customerId, $cname, $returnExtendedInfo);
     $string = "<projects>";
 
 

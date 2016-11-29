@@ -470,6 +470,8 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      *        Only trojects with a type field that matches completely with this
      *        string will be returned. NULL to deactivate filtering by this
      *        field.
+     * @param long $customerId value to filter projects by their customer field.
+     *        NULL to deactivate filtering by this field.
      * @param string $filterCname string to filter projects by their customer name. NULL
      *        to deactivate filtyering by this field
      * @param boolean $returnExtendedInfo flag to check if the response should include more information
@@ -479,7 +481,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      */
     public function getAll($userLogin = NULL, $active = False, $orderField = 'id', $description = NULL,
         $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL, $areaId = NULL, $type = NULL,
-        $filterCname = NULL, $returnExtendedInfo = False) {
+        $customerId = NULL, $filterCname = NULL, $returnExtendedInfo = False) {
         $userCondition = "true";
         $activeCondition = "true";
         $conditions = "TRUE";
@@ -509,6 +511,9 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         }
         if ($type != null) {
             $conditions .= " AND project.type = '$type'";
+        }
+        if ($customerId != null) {
+            $conditions .= " AND project.customerid = $customerId";
         }
         if ($filterCname != null) {
             foreach (explode(" ", $filterCname) as $word) {

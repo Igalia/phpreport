@@ -102,9 +102,9 @@ abstract class ProjectsFacade {
     */
     static function GetAllProjects($userLogin = NULL, $active = False, $order = 'id', $description = NULL,
         $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL, $areaId = NULL,
-        $type = NULL, $cname = NULL, $returnExtendedInfo = False) {
+        $type = NULL, $customerId = NULL, $cname = NULL, $returnExtendedInfo = False) {
         $action = new GetAllProjectsAction($userLogin, $active, $order, $description, $filterStartDate,
-            $filterEndDate, $activation, $areaId, $type, $cname, $returnExtendedInfo);
+            $filterEndDate, $activation, $areaId, $type, $customerId, $cname, $returnExtendedInfo);
         return $action->execute();
     }
 

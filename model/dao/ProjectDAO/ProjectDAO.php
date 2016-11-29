@@ -210,11 +210,13 @@ abstract class ProjectDAO extends BaseDAO{
      * @param boolean $activation filter projects by their activation field.
      *        NULL to deactivate filtering by this field.
      * @param long $areaId value to filter projects by their area field.
-     *        projects. NULL to deactivate filtering by this field.
+     *        NULL to deactivate filtering by this field.
      * @param string $type string to filter projects by their type field.
      *        Only trojects with a type field that matches completely with this
      *        string will be returned. NULL to deactivate filtering by this
      *        field.
+     * @param long $customerId value to filter projects by their customer field.
+     *        NULL to deactivate filtering by this field.
      * @param string $cname string to filter projects by their customer name. NULL
      *        to deactivate filtyering by this field
      * @param boolean $returnExtendedInfo flag to check if the response should include more information
@@ -223,8 +225,8 @@ abstract class ProjectDAO extends BaseDAO{
      * @throws {@link OperationErrorException}
      */
     public abstract function getAll($userLogin = NULL, $active = False, $orderField = 'id', $description = NULL,
-        $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL, $areaId = NULL, $type = NULL, $cname = NULL,
-        $returnExtendedInfo = False);
+        $filterStartDate = NULL, $filterEndDate = NULL, $activation = NULL, $areaId = NULL, $type = NULL,
+        $customerId = NULL, $cname = NULL, $returnExtendedInfo = False);
 
     /** Projects retriever.
      *
