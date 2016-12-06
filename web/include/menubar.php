@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009-2018 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -22,142 +22,45 @@ include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
 $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINATION');
 ?>
 
-<script type="text/javascript">
+<link rel="stylesheet" type="text/css" href="include/menubar.css"/>
+<script type="text/javascript" src="js/include/menubar.js"></script>
 
-var menuToolbar = new Ext.Toolbar({
-        items: [{
-            text: 'Tasks', handler: onItemClick,
-            destination: "tasks.php?date=" + (new Date()).format('Y-m-d'),
-        },<?php if ($MENU_COORDINATION) echo "{
-            text: 'Coordination',
-            menu: [
-            {
-                text: 'XP Tracker',
-                handler: onItemClick,
-                destination: 'xptracker-summary.php',
-                iconCls: 'silk-sitemap',
-            },{
-                text: 'Analysis Tracker',
-                handler: onItemClick,
-                destination: 'analysistracker-summary.php',
-                iconCls: 'silk-sitemap-color',
-            }],
-        },"; ?>{
-            text: 'Reports',
-            menu: [
-            {
-                text: 'User tasks',
-                handler: onItemClick,
-                destination: "userTasksReport.php",
-                iconCls: 'silk-pencil',
-            },'-',
-                <?php
-                    if (isset($_SESSION['user'])){
-                        $user = $_SESSION['user'];
-                        echo "{ text: 'User details', ".
-                            "handler: onItemClick, ".
-                            "iconCls: 'silk-user-green', ".
-                            "destination:'viewUserDetails.php?uid=" . $user->getId().
-                            "',},";
-                    }
-                ?>
-            {
-                text: 'Users evaluation',
-                handler: onItemClick,
-                destination: 'usersEvaluation.php',
-                iconCls: 'silk-user',
-            },{
-                text: 'Accumulated hours',
-                handler: onItemClick,
-                destination: 'viewWorkingHoursResultsReport.php',
-                iconCls: 'silk-report-user',
-            },'-',{
-                    text: 'Project details',
-                    handler: onItemClick,
-                    destination: 'projectDetails.php',
-                    iconCls: 'silk-book-go',
-            },{
-                text: 'Project evaluation',
-                handler: onItemClick,
-                destination: 'projectsEvaluation.php',
-                iconCls: 'silk-book-open',
-            },{
-                text: 'Projects summary',
-                handler: onItemClick,
-                destination: 'projectsSummary.php',
-                iconCls: 'silk-book',
-            }],
-        },{
-            text: 'Data management',
-            menu: [{
-                text: 'Users',
-                handler: onItemClick,
-                destination: 'viewUsers.php',
-                iconCls: 'silk-user-edit',
-            },{
-                text: 'Projects',
-                handler: onItemClick,
-                destination: 'viewProjects.php',
-                iconCls: 'silk-book-edit',
-            },{
-                text: 'Clients',
-                handler: onItemClick,
-                destination: 'viewCustomers.php',
-                iconCls: 'silk-vcard-edit',
-            },{
-                text: 'Areas',
-                handler: onItemClick,
-                destination: 'viewAreas.php',
-                iconCls: 'silk-brick-edit',
-            },{
-                text: 'Cities',
-                handler: onItemClick,
-                destination: 'cityManagement.php',
-                iconCls: 'silk-building-edit',
-            },{
-                text: 'Calendars',
-                handler: onItemClick,
-                destination: 'calendarManagement.php',
-                iconCls: 'silk-calendar-edit'
-            },{
-                text: 'Hour compensations',
-                handler: onItemClick,
-                destination: 'hourCompensationManagement.php',
-                iconCls: 'silk-script-edit'
-            },{
-                text: 'Application settings',
-                handler: onItemClick,
-                destination: 'settings.php',
-                iconCls: 'silk-brick-edit'
-            }],
-        },
-        new Ext.Toolbar.Fill(),
-        {
-            text: 'Help', handler: onItemClick,
-            destination: "../help/user",
-            newWindow: true
-        },{
-            text: 'Logout', handler: onItemClick,
-            destination: "logout.php",
-        }],
-});
-
-function onItemClick(item){
-    if (item.destination) {
-        if(item.newWindow) {
-            window.open(item.destination);
-        } else {
-            window.location = item.destination;
-        }
-    } else {
-        Ext.Msg.alert('Menu Click', 'The page "' + item.text +
-                                    '" is not implemented yet.');
-    }
-}
-
-Ext.onReady(function(){
-    menuToolbar.render('menubar');
-});
-
-</script>
-
+<ul id="menubar">
+    <li><a href="tasks.php">Tasks</a></li>
+    <?php if ($MENU_COORDINATION) {?>
+    <li class="dropdown">
+        <a href="#" class="dropdown-button" >Coordination</a>
+        <ul class="dropdown-content">
+            <a href="xptracker-summary.php">XP Tracker</a>
+            <a href="analysistracker-summary.php">Analysis Tracker</a>
+        </ul>
+    </li>
+    <?php } // endif ($MENU_COORDINATION) ?>
+    <li class="dropdown">
+        <a href="#" class="dropdown-button" >Reports</a>
+        <ul class="dropdown-content">
+            <a href="userTasksReport.php">User tasks</a>
+            <a href="viewUserDetails.php">User details</a>
+            <a href="usersEvaluation.php">Users evaluation</a>
+            <a href="viewWorkingHoursResultsReport.php">Accumulated hours</a>
+            <a href="projectDetails.php">Project details</a>
+            <a href="projectsEvaluation.php">Project evaluation</a>
+            <a href="projectsSummary.php">Projects summary</a>
+        </ul>
+    </li>
+    <li class="dropdown">
+        <a href="#" class="dropdown-button" >Data management</a>
+        <ul class="dropdown-content">
+            <a href="viewUsers.php">Users</a>
+            <a href="viewProjects.php">Projects</a>
+            <a href="viewCustomers.php">Clients</a>
+            <a href="viewAreas.php">Areas</a>
+            <a href="cityManagement.php">Cities</a>
+            <a href="calendarManagement.php">Calendars</a>
+            <a href="hourCompensationManagement.php">Hour compensations</a>
+            <a href="settings.php">Application settings</a>
+        </ul>
+    </li>
+    <li><a href="../help/user" target="blank">Help</a></li>
+    <li><a href="logout.php">Logout</a></li>
+</ul>
