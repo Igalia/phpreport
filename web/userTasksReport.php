@@ -33,7 +33,7 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
 /* Include the generic header and sidebar*/
 define('PAGE_TITLE', "PhpReport - User tasks report");
 include_once("include/header.php");
-include_once("include/sidebar.php");
+include_once("include/menubar.php");
 $user = $_SESSION['user'];
 
 //output vars as JS code

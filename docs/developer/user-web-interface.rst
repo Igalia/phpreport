@@ -19,7 +19,7 @@ bar, content area and footer:
   page header where the application name is shown.
 
 * The menu bar contains the application menu and is included from
-  ``web/include/sidebar.php``.
+  ``web/include/menubar.php``.
 
 * The content area is where the contents of the particular PhpReport screen are
   rendered. It usually contains a ``<div>`` area with the ``content`` id, but it

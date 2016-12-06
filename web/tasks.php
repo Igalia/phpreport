@@ -34,7 +34,7 @@ $user = $_SESSION['user'];
 /* Include the generic header and sidebar*/
 define('PAGE_TITLE', "PhpReport - Tasks");
 include("include/header.php");
-include("include/sidebar.php");
+include("include/menubar.php");
 
 /* If no date is specified, get client date via JS and reload */
 if(!isset($_GET["date"])) {

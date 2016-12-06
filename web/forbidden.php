@@ -22,7 +22,7 @@
 /* Include the generic header and sidebar*/
 define('PAGE_TITLE', "PhpReport - Forbidden page");
 include("include/header.php");
-include("include/sidebar.php");
+include("include/menubar.php");
 
 echo _("You are not allowed to access this page");
 

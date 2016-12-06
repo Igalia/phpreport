@@ -30,7 +30,7 @@ require_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
 /* Include the generic header and sidebar*/
 define("PAGE_TITLE", "PhpReport - XP tracker summary");
 include("include/header.php");
-include("include/sidebar.php");
+include("include/menubar.php");
 
 /* Check GET parameters */
 if(isset($_GET["projectId"])) {

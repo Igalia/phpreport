@@ -26,7 +26,7 @@
     /* Include the generic header and sidebar*/
     define('PAGE_TITLE', "PhpReport - Working Hours Results Report");
     include_once("include/header.php");
-    include_once("include/sidebar.php");
+    include_once("include/menubar.php");
 ?>
 <script>
 var loggedInUser = '<?php echo $_SESSION['user']->getLogin(); ?>';
