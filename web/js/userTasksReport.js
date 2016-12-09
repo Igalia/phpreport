@@ -620,4 +620,6 @@ Ext.onReady(function () {
 
     //hide the advanced columns
     showStandardView();
+
+    Ext.getCmp("startDate").focus();
 });

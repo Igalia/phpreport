@@ -518,6 +518,7 @@ Ext.onReady(function(){
     //hide the advanced columns
     showStandardView();
 
+    Ext.getCmp("name").focus();
 });
 
 </script>

@@ -87,5 +87,6 @@ Ext.onReady(function(){
         renderTo: 'content',
         defaults: {width: 580},
         items : [projectComboBox]
-    })
+    });
+    projectComboBox.focus();
 });

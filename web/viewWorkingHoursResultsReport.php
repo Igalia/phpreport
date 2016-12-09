@@ -240,6 +240,7 @@ Ext.onReady(function(){
     defaultStartDate.setMonth(0);
     defaultStartDate.setDate(1); //defaultStartDate is 1st Jan of current year
     workingResultsForm.setStartDate(defaultStartDate);
+    workingResultsForm.focus(true);
 
 });
 

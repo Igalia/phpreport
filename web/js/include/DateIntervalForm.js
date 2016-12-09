@@ -115,6 +115,16 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
     },
 
     /**
+     * Tries to focus this form, in particular its start date field.
+     * @param {Boolean} selectText (optional) If applicable, true to also select the text in this component
+     * @param {Boolean/Number} delay (optional) Delay the focus this number of milliseconds (true for 10 milliseconds)
+     * @return {Ext.Component} this
+     */
+    focus: function (selectText, delay) {
+        this.get('form').get('startDate').focus(selectText, delay);
+    },
+
+    /**
      * Gets the field that contains the start date in this form.
      * This method is intended to be private, only used inside DateIntervalForm.
      * @return {DateField} start date field.

@@ -214,6 +214,7 @@
             }
         }
     });
+    dates.focus();
 
     grid.render(Ext.get('content'));
     grid.store.load();

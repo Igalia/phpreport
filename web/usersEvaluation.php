@@ -101,7 +101,7 @@
                 }
             }
         });
-
+        userEvaluationResultsForm.focus();
 
         var storiesGrid = new Ext.ux.DynamicGridPanel({
             id: 'StoriesGrid',

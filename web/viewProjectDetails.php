@@ -587,6 +587,7 @@
             }
         }
     });
+    workingResultsForm.focus();
 
     grid.store.load();
     grid2.store.load();

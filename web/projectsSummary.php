@@ -54,6 +54,7 @@
                 }
             }
         });
+        dates.focus();
 
         Ext.ux.DynamicGridPanel = Ext.extend(Ext.ux.ExportableGridPanel, {
 
