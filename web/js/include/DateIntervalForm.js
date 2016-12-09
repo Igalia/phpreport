@@ -142,6 +142,13 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
         return this.get('form').get('endDate');
     },
 
+    /**
+     * Triggers the 'view' event of the form with the proper parameters.
+     */
+    _fireViewEvent: function () {
+        this.fireEvent("view", this, this.getStartDate(), this.getEndDate());
+    },
+
     initComponent: function () {
 
         Ext.apply(this, {
@@ -193,10 +200,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
                 buttons: [{
                     text: 'View',
                     scope: this, //scope inside the handler will be the Form object
-                    handler: function () {
-                        this.fireEvent("view", this,
-                            this.getStartDate(), this.getEndDate());
-                    }
+                    handler: this._fireViewEvent,
                 }],
             }],
             bbar: {
@@ -211,8 +215,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
                         this._getStartDateField().setValue(getPreviousMonday(lastWeek));
                         this._getEndDateField().setValue(getNextSunday(lastWeek));
 
-                        this.fireEvent("view", this,
-                            this.getStartDate(), this.getEndDate());
+                        this._fireViewEvent();
                     }
                 }, {
                     text: 'This week',
@@ -223,8 +226,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
                         this._getStartDateField().setValue(getPreviousMonday(now));
                         this._getEndDateField().setValue(now);
 
-                        this.fireEvent("view", this,
-                            this.getStartDate(), this.getEndDate());
+                        this._fireViewEvent();
                     }
                 }, '-', {
                     text: 'This month',
@@ -236,8 +238,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
                         date.setDate(1);
                         this._getStartDateField().setValue(date);
 
-                        this.fireEvent("view", this,
-                            this.getStartDate(), this.getEndDate());
+                        this._fireViewEvent();
                     }
                 }, '-', {
                     text: 'This year',
@@ -250,11 +251,15 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
                         date.setMonth(0);
                         this._getStartDateField().setValue(date);
 
-                        this.fireEvent("view", this,
-                            this.getStartDate(), this.getEndDate());
+                        this._fireViewEvent();
                     }
                 }],
-            }
+            },
+            keys: [{
+                key: [Ext.EventObject.ENTER],
+                scope: this, //scope inside the handler will be the Form object
+                handler: this._fireViewEvent,
+            }],
         });
 
         this.addEvents(
