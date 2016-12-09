@@ -140,13 +140,12 @@ Ext.onReady(function(){
             if (!grid.rendered) {
                 grid.render(Ext.get("content"));
                 //Handler to set default row as logged in user
-                grid.on('viewReady', selectDefaultRow);
-            } else {                // select and scroll to previously selected row
-                if(selectedLogin !== undefined) {
-                    var index = store.findExact('login', selectedLogin);
-                    grid.getSelectionModel().selectRow(index);
-                    grid.getView().focusRow(index);
-                }
+                grid.on('viewReady', function () {
+                    selectRowForUser(loggedInUser);
+                });
+            } else {
+                // select and scroll to previously selected row
+                selectRowForUser(selectedLogin);
 
                 //hide "loading"
                 grid.customMask.hide();
@@ -155,8 +154,9 @@ Ext.onReady(function(){
         } else loaded = true;
     }
 
-    function selectDefaultRow() {
-        var index = store.findExact('login', loggedInUser);
+    // Find the row corresponding to a certain user login, selects and scrolls to it
+    function selectRowForUser(login) {
+        var index = store.findExact('login', login);
         grid.getSelectionModel().selectRow(index);
         grid.getView().focusRow(index);
     }
