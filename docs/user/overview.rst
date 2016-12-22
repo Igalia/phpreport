@@ -25,8 +25,7 @@ entities:
 
 * Project entity represents a project, a common goal for a set of tasks.
 
-* Client entity represents an organization who requests a project and usually
-  finances the tasks needed to carry over that project.
+* Client entity represents an organization who requests a project.
 
 .. figure:: i/main-classes.png
 
@@ -41,12 +40,8 @@ The relations stablished between them are the following:
 
 * Every task belongs to one project; projects can have any number of tasks.
 
-* Clients request projects; multiple clients can request the same project, and
-  a client can request more than one project.
-
-* In a scenario where multiple clients have requested the same project, every
-  task is related with one specific client who in theory finances the cost of
-  that task.
+* Clients request projects; a client can request more than one project but each
+  project is requested only by one client.
 
 Data model for working day management
 =====================================

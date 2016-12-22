@@ -24,8 +24,8 @@ entities and relations:
 
 * The entity *task* could consider the main object of the application,
   since the main purpose of PhpReport is to store, classify and extract
-  information about tasks. It has important relations with *user*,
-  *customer* and *project*, that serve to classify the task.
+  information about tasks. It has important relations with *user* and *project*,
+  that serve to classify the task.
 
 * The entity *user* is used mainly to control the access to the application,
   besides classifying tasks. There is a series of entities related with user
@@ -37,7 +37,7 @@ entities and relations:
   mention the relation called *works* with *user*, which could be used to
   restrict the access to certain information in the application.
 
-* The entity *customer* classifies projects and tasks.
+* The entity *customer* classifies projects.
 
 * The entity *sector* classifies customers.
 
