@@ -18,35 +18,18 @@ To install PhpReport in your system, you will need the following software:
 
   * PHP module
 
-Installing dependencies in Windows systems
-------------------------------------------
+Installing dependencies on selected GNU/Linux distros
+-----------------------------------------------------
 
-You will have to download and install the software by yourself. Check each
-program documentation for detailed instructions.
+Run the following command with root privileges:
 
-You can find Windows versions of the software in the following sites:
+* Debian: ``apt-get install postgresql apache2 php5 php5-pgsql``
 
-* PostgreSQL at http://www.postgresql.org/download/windows
+* Ubuntu: ``apt-get install postgresql apache2 php php-pgsql php-xml``
 
-* Apache 2.x at http://www.apachelounge.com/download/. This is the recommended
-  version you should install to use PHP 5. Follow instructions in ReadMe file.
+* Fedora: ``dnf install postgresql-server httpd php php-pgsql php-xml``
 
-* PHP 5.x at http://windows.php.net/download/. Installation instructions are
-  available here: http://www.sitepoint.com/how-to-install-php-on-windows.
-
-Installing dependencies in Debian/Ubuntu systems
-------------------------------------------------
-
-Run the following command with root permission::
-
-  apt-get install postgresql apache2 php5 php5-pgsql
-
-Installing dependencies in Red Hat/Fedora systems
--------------------------------------------------
-
-Run the following command with root permission::
-
-  yum install postgresql-server httpd php php-pgsql php-xml
+* RHEL: ``yum install postgresql-server httpd php php-pgsql php-xml``
 
 Step 1: Setting up the database
 ===============================
@@ -54,11 +37,9 @@ Step 1: Setting up the database
 Connect to your database server as superuser, or a user with enough
 permissions to create databases and users.
 
-* On Windows: go to *Start Menu -> Programs -> PostgreSQL -> SQL Shell*, connect
-  as the user ``postgres``.
-* On GNU/Linux systems: run the following command with root permissions::
+Run the following command with root permissions::
 
-    su postgres -c psql
+  su postgres -c psql
 
 Once you have logged into PostgreSQL shell, run the following commands
 to create a database, a user and grant enough permissions (change the
@@ -74,9 +55,8 @@ Step 2: Setting up the files
 Just move the program files to a location available for the web server, inside
 a directory called phpreport. Usual default locations for web servers are:
 
-* On Windows: ``C:\Apache2\htdocs\``
 * On Debian, Ubuntu: ``/var/www/``
-* On Red Hat, Fedora: ``/var/www/html/``
+* On Fedora, RHEL: ``/var/www/html/``
 
 Step 3: Creating the schema and initial data of the database
 ============================================================
