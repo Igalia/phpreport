@@ -48,8 +48,8 @@ Admin:
 To delete an user you must select it with a single click on the corresponding
 row and use the *Delete* button located next to *Add* button.
 You will be asked for confirmation before actually
-trying to delete. If the user is assigned to some project, or he has already
-entered some tasks, you won't be allowed to delete it. You have to remove the
+trying to delete. Users who have been assigned to some project, or who have
+already entered some tasks, won't be allowed to be deleted. You have to remove
 existing assignations or tasks and try the deletion later.
 
 Setting the hour cost for a user

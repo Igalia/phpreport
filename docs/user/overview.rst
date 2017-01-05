@@ -21,7 +21,7 @@ entities:
 
 * User entity represents a user of the system, who is meant to be a member of the
   organization being tracked. Every member is supposed to be working and tracking
-  his/her hours in the system.
+  their hours in the system.
 
 * Project entity represents a project, a common goal for a set of tasks.
 
@@ -146,10 +146,10 @@ Data model for holiday management
 =================================
 
 PhpReport can also calculate the number of holiday hours corresponding to every
-worker according to his contract and journey conditions. Holidays are treated as
-tasks belonging to a specific project called "Holidays". A user taking one day
+worker according to their contract and journey conditions. Holidays are treated
+as tasks belonging to a specific project called "Holidays". Users taking one day
 of holidays should fill a task specifying that project, and with a number of
-hours equal to the lenght of his working day (which is 8 hours by default).
+hours equal to the length of their working day (which is 8 hours by default).
 
 The entities involved in this process are:
 
