@@ -507,8 +507,8 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             descriptionTextArea: new Ext.form.TextArea({
                 parent: this,
                 height: 110,
-                style: "width: 100%",
                 columnWidth: 1,
+                autoScroll: true,
                 value: this.taskRecord.data['text'],
                 enableKeyEvents: true,
                 listeners: {
