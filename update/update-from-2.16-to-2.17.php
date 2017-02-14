@@ -33,7 +33,11 @@ define('SQLPATH', PHPREPORT_ROOT . 'sql/update/');
  * IMPORTANT: they must be ordered for their proper execution.
  */
 $sqlFiles = array();
+$sqlFiles[] = SQLPATH . "add-manager-user-group.sql";
+$sqlFiles[] = SQLPATH . "create-template-table.sql";
+$sqlFiles[] = SQLPATH . "create-user_goals-table.sql";
 $sqlFiles[] = SQLPATH . "update-project-add-customer-relation.sql";
+$sqlFiles[] = SQLPATH . "bump-db-version-2-17.sql";
 
 // run upgrade scripts
 
