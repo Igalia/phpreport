@@ -18,12 +18,16 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once('utils.php');
+
 /**
  * This script selects the customer id related to each project and populate the new customerid
  * column in project table.
  */
+
 define('PHPREPORT_ROOT', __DIR__ . '/../');
 define('SQLPATH', PHPREPORT_ROOT . 'sql/update/');
+
 /* These are the sql files that must be executed to prepare DB.
  *
  * IMPORTANT: they must be ordered for their proper execution.
@@ -31,60 +35,13 @@ define('SQLPATH', PHPREPORT_ROOT . 'sql/update/');
 $sqlFiles = array();
 $sqlFiles[] = SQLPATH . "update-project-add-customer-relation.sql";
 
-// function inspired by code from install/setup-config.php
-function parse_psql_dump($url,$nowhost,$nowport,$nowdatabase,$nowuser,$nowpass){
-    $link = pg_connect("host=$nowhost port=$nowport user=$nowuser dbname=$nowdatabase password=$nowpass");
-    if (!$link) {
-        return false;
-    }
-
-    $file_content = file($url);
-    $string = "";
-    $success = true;
-    foreach($file_content as $sql_line){
-        $string = $string . $sql_line;
-        if(trim($string) != "" && strstr($string, "--") === false){
-            if (strstr($string, "\\.") != false)
-            {
-                pg_put_line($link, $string);
-                pg_end_copy($link);
-                $string = "";
-            } elseif (strstr($string, ";") != false)
-            {
-                if (!pg_query($link, $string)) {
-                    $success = false;
-                }
-                $string = "";
-            }
-        } else $string = "";
-    }
-
-    return $success;
-}
-
-function check_db_version($nowhost,$nowport,$nowdatabase,$nowuser,$nowpass){
-    $link = pg_connect("host=$nowhost port=$nowport user=$nowuser dbname=$nowdatabase password=$nowpass");
-    if (!$link) {
-        return false;
-    }
-
-    $result = pg_query($link, "select version from config");
-
-    if ($result != NULL) {
-        $version = pg_fetch_array($result);
-        if (strcmp($version["version"], "2.16") == 0) {
-            return true;
-        }
-    }
-    return false;
-}
 // run upgrade scripts
 
 require_once(PHPREPORT_ROOT . 'config/config.php');
 include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
 
 
-if (!check_db_version(DB_HOST,DB_PORT,DB_NAME,DB_USER,DB_PASSWORD)) {
+if (strcmp(get_db_version(DB_HOST,DB_PORT,DB_NAME,DB_USER,DB_PASSWORD), "2.16") != 0) {
     print ("Wrong database version. " .
         "Make sure DB is on 2.16 version before running this upgrade.\n");
     exit();

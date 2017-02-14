@@ -18,6 +18,7 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once('utils.php');
 
 define('PHPREPORT_ROOT', __DIR__ . '/../');
 define('SQLPATH', PHPREPORT_ROOT . 'sql/update/');
@@ -31,37 +32,6 @@ $sqlFiles[] = SQLPATH . "create-config-table.sql";
 $sqlFiles[] = SQLPATH . "add-block-task-columns-in-config-table.sql";
 $sqlFiles[] = SQLPATH . "add-onsite-column-to-task.sql";
 $sqlFiles[] = SQLPATH . "remove-triggers-for-overlapping-control.sql";
-
-// function inspired by code from install/setup-config.php
-function parse_psql_dump($url,$nowhost,$nowport,$nowdatabase,$nowuser,$nowpass){
-    $link = pg_connect("host=$nowhost port=$nowport user=$nowuser dbname=$nowdatabase password=$nowpass");
-    if (!$link) {
-        return false;
-    }
-
-    $file_content = file($url);
-    $string = "";
-    $success = true;
-    foreach($file_content as $sql_line){
-        $string = $string . $sql_line;
-        if(trim($string) != "" && strstr($string, "--") === false){
-            if (strstr($string, "\\.") != false)
-            {
-                pg_put_line($link, $string);
-                pg_end_copy($link);
-                $string = "";
-            } elseif (strstr($string, ";") != false)
-            {
-                if (!pg_query($link, $string)) {
-                    $success = false;
-                }
-                $string = "";
-            }
-        } else $string = "";
-    }
-
-    return $success;
-}
 
 // run upgrade scripts
 $success = true;
