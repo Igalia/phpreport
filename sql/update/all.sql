@@ -155,3 +155,9 @@ ADD COLUMN customerId integer;
 
 ALTER TABLE project
 ADD FOREIGN KEY(customerId) REFERENCES customer(id);
+
+--
+-- Set database version to 2.17
+--
+
+UPDATE config SET version='2.17';
