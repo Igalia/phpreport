@@ -509,6 +509,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 height: 110,
                 columnWidth: 1,
                 autoScroll: true,
+                style: "float:none", // workaround for webkit bug #132188
                 value: this.taskRecord.data['text'],
                 enableKeyEvents: true,
                 listeners: {
