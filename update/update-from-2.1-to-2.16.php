@@ -31,28 +31,11 @@ $sqlFiles = array();
 $sqlFiles[] = SQLPATH . "add-comments-column-to-extra-hours-table.sql";
 $sqlFiles[] = SQLPATH . "bump-db-version-2-16.sql";
 
-function check_db_version($nowhost,$nowport,$nowdatabase,$nowuser,$nowpass){
-    $link = pg_connect("host=$nowhost port=$nowport user=$nowuser dbname=$nowdatabase password=$nowpass");
-    if (!$link) {
-        return false;
-    }
-
-    $result = pg_query($link, "select version from config");
-
-    if ($result != NULL) {
-        $version = pg_fetch_array($result);
-        if (strcmp($version["version"], "2.1") == 0) {
-            return true;
-        }
-    }
-    return false;
-}
-
 // run upgrade scripts
 
 require_once(PHPREPORT_ROOT . 'config/config.php');
 
-if (!check_db_version(DB_HOST,DB_PORT,DB_NAME,DB_USER,DB_PASSWORD)) {
+if (strcmp(get_db_version(DB_HOST,DB_PORT,DB_NAME,DB_USER,DB_PASSWORD), "2.1") != 0) {
     print ("Wrong database version. " .
             "Make sure DB is on 2.1 version before running this upgrade.\n");
     exit();

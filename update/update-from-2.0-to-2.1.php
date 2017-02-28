@@ -33,9 +33,15 @@ $sqlFiles[] = SQLPATH . "add-block-task-columns-in-config-table.sql";
 $sqlFiles[] = SQLPATH . "add-onsite-column-to-task.sql";
 $sqlFiles[] = SQLPATH . "remove-triggers-for-overlapping-control.sql";
 
+require_once(PHPREPORT_ROOT . 'config/config.php');
+if (strcmp(get_db_version(DB_HOST,DB_PORT,DB_NAME,DB_USER,DB_PASSWORD), "2.0") != 0) {
+    print ("Wrong database version. " .
+            "Make sure DB is on 2.0 version before running this upgrade.\n");
+    exit();
+}
+
 // run upgrade scripts
 $success = true;
-require_once(PHPREPORT_ROOT . 'config/config.php');
 foreach ($sqlFiles as $file) {
     if (!parse_psql_dump($file,DB_HOST,DB_PORT,DB_NAME,DB_USER,DB_PASSWORD)) {
         $success = false;
