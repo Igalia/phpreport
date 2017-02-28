@@ -3,6 +3,48 @@ Upgrade instructions
 
 .. contents::
 
+.. WARNING ::
+
+  Please backup your database before running an upgrade, in case things go
+  wrong during the process.
+
+From version 2.16 to 2.17
+=========================
+
+Unpack the files of PhpReport 2.17 at the same location of the original files,
+overwriting the existing contents. After that run the upgrade script located at
+the directory ``update/``::
+
+  cd update
+  php -f update-from-2.16-to-2.17.php
+
+Alternatively, you can open the following URL in your browser to run the
+script::
+
+  http://your-web-server/phpreport/update/update-from-2.16-to-2.17.php
+
+This upgrade will make task templates persistent. These used to be stored as
+browser cookies and, therefore, should be migrated by every individual user.
+Users willing to migrate their old templates must open this URL once::
+
+  http://your-web-server/phpreport/web/migrate-templates.php
+
+Also take into account this upgrade simplifies the relation between projects
+and customers. Any project assigned to more than one customer will be reassigned
+to the most frequent customer. In case the default assignment does not suit for
+you, you can use the old DB values to fine-tune the migration: the table
+``requests`` contains the relations between customers and projects before the
+migration, and the field ``customerid`` in the ``tasks`` table indicates the
+customer every task was assigned to.
+
+Finally, this upgrade also adds a new permission level called "manager".
+Standard users will see access to certain reports restricted, you need to decide
+which of your users require access to all reports and give them the "manager"
+role.
+
+Once the process is complete, remove the directories ``update/`` and ``install/``
+inside your PhpReport, to prevent other users from altering your DB.
+
 From version 2.1 to 2.16
 ========================
 
@@ -50,6 +92,24 @@ inside your PhpReport, to prevent other users from altering your DB.
 
   If this is the only error message, you can safely ignore it: the migration has
   been completed successfully.
+
+Between any 2.x versions
+========================
+
+You can migrate between any 2.x releases by unpacking the files of the latest
+release at the same location of the original files, overwriting the existing
+contents, and then running the upgrade scripts in order. For example, if you
+are migrating from 2.1 to 2.17::
+
+  cd update
+  php -f update-from-2.1-to-2.16.php
+  php -f update-from-2.16-to-2.17.php
+
+Please, also read carefully the documentation about every individual step in the
+sections above.
+
+Remember to remove the directories ``update/`` and ``install/`` inside your
+PhpReport when the migration is done.
 
 From version 1.x to 2.0
 =======================
