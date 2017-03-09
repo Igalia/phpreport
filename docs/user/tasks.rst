@@ -27,24 +27,32 @@ In the left column, you can find:
   and use templates.
 
 In the central area, you will see the tasks stored in the currently selected
-date, one panel per task. All panels have the same components:
+date, one panel per task. All panels have the same components, some are used to
+fill the information about the task:
 
 * Time: fill the start and end dates in.
 
-* Customer: customer financing the task. Selecting one customer will filter the
-  projects in the next box to see only those belonging to the customer.
-
-* Project: project the task belongs to.
-
-* Task type: select one of the types for additional info about the task.
+* Project: project the task belongs to. You may search by the project or the
+  customer name. There is one special entry in the combo box, *Load all
+  projects*, that would let you load the complete list of projects in the
+  system; users will only see projects they are assigned to by default.
 
 * Story: you can fill this field with a keyword to help you to differentiate
-  tasks with the same customer and project.
+  tasks inside the same project.
+
+* Description: the big text area in the center can be used to write a
+  description of the task.
+
+* Task type: select one of the types for additional info about the task.
 
 * TaskStory: when using XP tracker for a project, this field is used to relate
   the task with a category inside an iteration.
 
 * Telework: flag to differentiate telework tasks.
+
+* Onsite: flag to differentiate on-site tasks.
+
+Actions in task panels:
 
 * Delete: delete the task. Remember to save to do the actual deletion.
 
@@ -52,14 +60,12 @@ date, one panel per task. All panels have the same components:
 
 * Template: create a template based on that task.
 
-* Description: the big text area on the right can be used to write a description
-  of the task.
-
 * Collapse: the arrow icon in the top-right corner collapses the panel; it's
   useful to save vertical space when there are many tasks.
 
-Below the list of tasks in the central area, there are two more icons for *New
-task* and *Save changes*.
+Below the list of tasks in the central area, there are two additional buttons
+for *New task* and *Save changes*, for easy tab-navigation. There are another
+two quick-access buttons to the next and previous dates.
 
 Managing tasks
 ==============
@@ -69,16 +75,19 @@ fill tasks for a different date select it from the calendar on the left. Be
 careful, if there are unsaved changes, they will be lost when you select a
 different date.
 
-Create a new task with any of the two *New task* buttons and fill in its data.
+Fill the data of the empty task that pops up by default, and add any number of
+new tasks using one of the two *New task* buttons.
 There are more ways to create new tasks: using the clone button in a different
 task, using a template button, or copying from another date.
 Repeat as many times as you want until you have filled all the tasks of the day,
-and don't forget to save once you're done using any of the two *Save* buttons.
+changes will be auto-saved every some seconds, there is a message in the bottom
+bar that will let you know.
+
 You can delete a task pressing the *Delete* button inside the task panel; the
 panel disappears but the deletion won't be saved until you do it manually with
-the *Save* button.
+any of the two *Save* buttons.
 
-Take care with the start and end times of the dates, because they can't overlap;
+Be careful with the start and end times of the dates, because they can't overlap;
 if they do, tasks won't be saved until you correct the problem and save again.
 
 Using templates
@@ -97,6 +106,11 @@ have to fill the start and end times in because they won't be saved in the templ
 
 To delete a template, you only have to press the *Delete* button right to the
 button with template name in the list.
+
+There is one default template named *Full day task*, it will create a task and
+set its start and end times so it fills one full day of work. The values will be
+set according to the users' journey values. It's useful to fill in holidays, for
+example. This template cannot be deleted.
 
 Copying tasks from another date
 ===============================
