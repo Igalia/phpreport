@@ -1,6 +1,89 @@
 NEWS
 ====
 
+Version 2.17 (unreleased)
+-------------------------------
+
+List of changes
+~~~~~~~~~~~~~~~
+
+* Tasks screen:
+  * #219: Show up tooltip to see the full project name [Tony Thomas][Jacobo Aragunde Pérez]
+  * #225: Fix: tasks created too soon cannot be saved [Tony Thomas]
+  * #243: Implement overtime control: set per-user dedication goals for a period and track it weekly [Tony Thomas]
+  * #246: Autosave tasks [Tony Thomas]
+  * #247: Open empty days with a new, empty task [Tony Thomas]
+  * #248: Remove customer as field for tasks and implement 1:N relation between projects and customers [Tony Thomas]
+  * #249: Project combo to list only projects assigned to user [Tony Thomas]
+  * #250: Change layout of fields in the tasks screen [Tony Thomas]
+  * #252: Add previous/next day buttons and keyboard shortcuts [Tony Thomas]
+  * #254: Implement persistent templates and migration from cookie-based templates [Jacobo Aragunde Pérez][Tony Thomas]
+  * #265: Include task description in the template, prompt for template name on template creation [Tony Thomas]
+  * #271: Combined search in combo box for customers and projects [Tony Thomas]
+  * #293: Fix: template tasks may delete new tasks [Tony Thomas]
+  * #309: Fix end time dropdown list scrolling itself back to the top [Jacobo Aragunde Pérez]
+  * #310: Do not show close confirmation when it's just the empty task on screen [Tony Thomas]
+  * #314: Don't automatically fill in the end time as the current time [Jacobo Aragunde Pérez]
+  * #317: Fix JS error for empty tasks [Jacobo Aragunde Pérez]
+  * #319: Fill project combo box while typing or when tabbing away [Jacobo Aragunde Pérez]
+  * #327: Add a template button to create a full-day task [Jacobo Aragunde Pérez]
+  * #329: Fix: Project combo doesn't support naive copy+paste between tasks [Jacobo Aragunde Pérez]
+  * #342: Allow scroll bar for task text input [Jacobo Aragunde Pérez]
+  * Code refactor and cleanup [Jacobo Aragunde Pérez]
+
+* Reports:
+  * #186: Add customer name to project details report and to projects evaluation table [Tony Thomas]
+  * #194: Add hours column to user tasks report [Tony Thomas]
+  * #235: Scroll to logged in username in acc hours report [Tony Thomas]
+  * #238: Add button to go to project details from project evaluation report [Tony Thomas]
+  * #240: Implement new report to list weekly work hours per user for a project [Tony Thomas]
+  * #241: Create 'Project Details' page and add top menu entry [Tony Thomas]
+  * #242: New report: tasks done by a person between two dates [Tony Thomas]
+  * #266: Make Project input wider on project details page [Tony Thomas]
+  * #281: Implement better sorting on weekly hours reports, respecting year of tasks [Tony Thomas]
+  * #290: Add customer filter to the project evaluation report [Tony Thomas]
+  * Make all columns in acc hours report wider [Jacobo Aragunde Pérez]
+  * Show project description + customer name in projects summary report [Jacobo Aragunde Pérez]
+  * Focus the first filter field on every report [Jacobo Aragunde Pérez]
+  * Load the report when ENTER is pressed, in DateIntervalForm reports [Jacobo Aragunde Pérez]
+
+* Project management screen:
+  * #245: Apply alphabetical sort of areas in project management screen [Tony Thomas]
+  * #248: Remove customer as field for tasks and implement 1:N relation between projects and customers [Tony Thomas]
+  * #268: Re-enable user management screen for admin users [Tony Thomas]
+  * #328: Fix customer not saved in project creation [Jacobo Aragunde Pérez]
+  * Move 'assign people' button to the top toolbar [Jacobo Aragunde Pérez]
+
+* User management screen:
+  * #111: Fix new groups not appearing in user administration web page [Jacobo Aragunde Pérez]
+  * #142: Allow creation of users from the UI with LDAP authentication [Jacobo Aragunde Pérez]
+  * Allow deletion of users with the LDAP backend [Jacobo Aragunde Pérez]
+
+* Other:
+  * #65: Prompt user to login again when session has expired in background [Tony Thomas]
+  * #69: Simplify implementation of HybridUserDAO->getAll() [Jacobo Aragunde Pérez]
+  * #220: Fix strange behaviour of sector and type fields when creating a client [Tony Thomas]
+  * #223: Force HTTP Authentication for login service [Tony Thomas]
+  * #244: Introduce new 'manager' profile, restrict 'staff' access [Tony Thomas]
+  * #273: Fix PHP error due to incorrect filename [Tony Thomas]
+  * #279: Prevent different kinds of division by zero warnings [Jacobo Aragunde Pérez]
+  * #291,#297: Remove unused getAllCustomProjectsService from codebase [Tony Thomas]
+  * #297: Unify the different getProject services [Tony Thomas]
+  * Add documentation for developers [Jacobo Aragunde Pérez]
+  * Update user and admin documentation [Jacobo Aragunde Pérez]
+  * Fix issues in help file generation [Jacobo Aragunde Pérez]
+  * Add script to clear sensitive data from a PhpReport database [Jacobo Aragunde Pérez]
+  * Remove several 'undefined constant' errors in DAOs [Jacobo Aragunde Pérez]
+  * Fix undefined variable errors in BaseRelationshipDAO [Jacobo Aragunde Pérez]
+  * Fix non-static method LoginManager::isLogged() called statically [Jacobo Aragunde Pérez]
+  * Remove some unused code and debug statements left behind [Jacobo Aragunde Pérez]
+  * Modify some queries for better compatibility with PostgreSQL < 9.5 [Jacobo Aragunde Pérez]
+  * Fix PHP warning about null being passed to in_array() [Jacobo Aragunde Pérez]
+  * Unify init/end field names in all project-related services [Jacobo Aragunde Pérez]
+  * Remove abstract static methods that caused PHP warnings [Jacobo Aragunde Pérez]
+  * Simplify and harden upgrade scripts [Jacobo Aragunde Pérez]
+
+
 Version 2.16 (31 March 2016)
 -------------------------------
 
