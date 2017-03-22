@@ -15,8 +15,7 @@ The tasks management screen
 
 In the left column, you can find:
 
-* User work summary: counts the number of hours worked in the selected day, week
-  and month.
+* User work summary: contains useful information about the user work status.
 
 * Calendar: indicates the selected date and you can click on it to go to a
   different date.
@@ -139,6 +138,23 @@ create new ones on certain dates. It can happen because of two reasons:
 * Managers have blocked tasks reports older than a certain date: a number of
   days can be set so any tasks older than that cannot be changed. In this case,
   even the *New task* and *Save changes* buttons would be blocked.
+
+User work summary
+=================
+
+The *User work summary* panel on the left contains the following information:
+
+* Number of hours worked in the selected day, week and month.
+
+* Week goal for the selected week. This value is calculated taking into account
+  the users' journey values and the amount of worked hours so far. By default,
+  it represents the number of hours users must work per week to finish the year
+  with zero accumulated hours in that period: for example, if you have worked
+  some extra hours in the last weeks the weekly goal will become lower than your
+  weekly schedule so you finish the year with zero accumulated hours.
+
+  Managers can customize per-user weekly goals with other time periods and
+  amounts of hours different of zero.
 
 Hotkeys
 =======
