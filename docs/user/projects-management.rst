@@ -32,6 +32,9 @@ In the window you must enter the data of the project:
 Name:
   Name of the project.
 
+Customer:
+  Customer the project will be assigned to.
+
 Area:
   Area of the company this project belongs to.
 
@@ -76,31 +79,11 @@ Finally, the last button, *Details*, will open the
 `project details report <reports.rst#project-details>`__ for the selected
 project.
 
-Assigning clients
-=================
-
-To assign clients to the selected project, press the *Assign Client* button
-located below the projects grid (in the bottom-right corner). The following
-subwindow will appear:
-
-.. figure:: i/client-assignment-subwindow.png
-
-To assign a client, you have to drag it from the right list and drop it on the
-left list.
-
-Once you're done, press the *Accept* button to save the assignment or
-*Cancel* to discard it. You can also use the *Reset* button to return the data
-in the window to the original state.
-
-.. TIP:: You can select more than one client to drag'n'drop them at once, using
-         the *Ctrl* or *Shift* keys.
-
 Assigning users
 =================
 
 To assign users to the selected project, press the *Assign People* button
-located below the projects grid (in the bottom-right corner). The following
-subwindow will appear:
+located above the projects grid. The following subwindow will appear:
 
 .. figure:: i/user-assignment-subwindow.png
 

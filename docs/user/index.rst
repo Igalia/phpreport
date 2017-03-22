@@ -30,7 +30,6 @@ concepts to use PhpReport both for worker and manager profiles.
 #. `Projects management <projects-management.rst>`__
 
    * `Create, edit and delete projects <projects-management.rst#create-edit-and-delete-projects>`__
-   * `Assigning clients <projects-management.rst#assigning-clients>`__
    * `Assigning users <projects-management.rst#assigning-users>`__
 
 #. `Users management <users-management.rst>`__
