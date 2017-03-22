@@ -35,17 +35,27 @@ Password:
 
 Staff:
   Belonging to the staff group. Activating it the user will be able to login,
-  fill tasks in, check reports, etc.
+  fill tasks in and check some reports. In particular, they will have access to
+  *User tasks*, *User details*, *Accumulated hours* and *Project details*, only
+  of those projects they are assigned to.
+
+Manager:
+  Belonging to the manager group, users will have access to all kinds of
+  reports, as well as using the *User* filter in the *User tasks* report to
+  chose any other user.
 
 Admin:
   Belonging to the administrators group. Activating it the user will be able to
   use the screens under *Data management* section: manage projects, users, etc.
 
+Permission levels are meant to be stacked; e.g. it doesn't make sense to have
+a *Manager* user that doesn't belong to the staff group too.
+  
 .. TIP:: If LDAP authentication is set, you won't be able to edit these user
          data. Besides, columns *Staff* and *Admin* may not appear, and the
          names of the groups in the LDAP server would appear instead.
 
-To delete an user you must select it with a single click on the corresponding
+To delete a user you must select it with a single click on the corresponding
 row and use the *Delete* button located next to *Add* button.
 You will be asked for confirmation before actually
 trying to delete. Users who have been assigned to some project, or who have
