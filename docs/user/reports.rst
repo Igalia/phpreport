@@ -20,6 +20,11 @@ The top of the screen contains a box with all the available filters. In all
 cases, leaving a field empty means that the field won't be taken into account.
 This is the full list of available options:
 
+User
+  Filter tasks according to the user who input them. This is the only compulsory
+  field, and it defaults to the current user. User with manager permissions are
+  allowed to change it.
+
 Dates between ... and ...
   Filter tasks according to their date. You can use only the first field to get
   the tasks since a particular date or only the second field to get the tasks
@@ -31,13 +36,13 @@ Task description:
   **[not empty]** to search the tasks that contain some text or no text in that
   field.
 
-Customer:
-  You can filter the tasks assigned to a specific customer selecting one from
-  this list.
-
 Project:
   You can filter the tasks assigned to a specific project selecting one from
   this list.
+
+Customer:
+  You can filter the tasks belonging to projects assigned to a specific customer
+  selecting one from this list.
 
 Task type:
   You can filter the tasks tagged with a specific task type selecting one from
@@ -53,8 +58,11 @@ TaskStory:
   You can filter the tasks related with a specific category inside a XP tracker
   iteration selecting one from this list.
 
-Task type:
+Telework:
   You can filter the tasks tagged as telework or the opposite with this option.
+
+Onsite:
+  You can filter the tasks tagged as onsite or the opposite with this option.
 
 The results are shown in the grid in the central area of the screen; rows
 represent tasks and columns represent the different data stored in them.
@@ -71,7 +79,7 @@ User details
 .. figure:: i/user-details-screen.png
 
 This report details the work of the logged user between two dates. It shows the
-time spent in every project and customer.
+time spent in every project.
 
 In the top of the screen some basic data of the user is shown: its login and
 the groups it belongs to. Then there are two date inputs to insert the report
@@ -82,10 +90,9 @@ There are quick-access buttons for common combinations of dates at the bottom
 of the dates box.
 
 The results are shown in the grid in the central area of the screen; rows
-represent projects and columns represent workers. There are two extra columns,
-*Total* and *Percentage*; the former shows the total number of hours invested in
-a project, independently from the client (thus, it's the sum of all the client
-columns) and the latter shows the proportion of hours of one project regarding
+represent projects and columns represent *Total* and *Percentage* hours.
+The former shows the total number of hours invested in a project in the selected
+time period and the latter shows the proportion of hours of one project regarding
 all the work done by the user in the same time period.
 
 You can export the data contained in the grid to a CSV file for processing with
@@ -199,6 +206,9 @@ field. The options are:
 Project name:
   The name of the project must contain the words entered here.
 
+Customer name:
+  The customer of the project must contain the words entered here.
+
 Activation:
   Check whether the project is active or not.
 
@@ -282,7 +292,8 @@ You can export the data contained in the grid to a CSV file for processing with
 spreadsheet software, for example, using the **Download as CSV** button at the
 bottom of the grid.
 
-Finally, double-clicking on a row will open the project details page for the
+Finally, double-clicking on a row or selecting it and using the *Details* button
+above the grid will open the project details page for the
 corresponding project.
 
 Project details
@@ -292,6 +303,10 @@ Project details
 
 In this report we can see the details of a specific project, and the time devoted
 to this project split by worker and customer or story.
+
+The *Project details* menu entry is actually a landing page to select one
+project among those currently active. This report can also be reached through
+the results of the *Project evaluation* report.
 
 In the top of the screen there are different values and metrics for the project:
 
@@ -362,13 +377,22 @@ is the current date.
 There are quick-access buttons for common combinations of dates at the bottom
 of the dates box.
 
-The results are shown two grids in the bottom  area of the screen; rows
-represent users and columns represent clients in one of the grids, and stories
-in the other one. There are two extra columns,
-*Total* and *Percentage*; the former shows the total number of hours invested by
-the user in the report time period (thus, it's the sum of all the different
-client/story columns) and the latter shows the proportion of hours of one user
-regarding all the work done in the project inside the same time period.
+The results are shown in three grids at the bottom area of the screen:
+
+Worked hours report:
+  Total and percentage of hours devoted by every user to the project in the
+  selected time period.
+
+Story worked hours report:
+  Hours devoted by every user to the project in the selected time period,
+  classified by the *Story* field. It also has *Total* and *Percentage* columns
+  for every user, the former is the sum of all the different client/story
+  columns and the latter is the proportion of hours of one user regarding all
+  the work done in the project inside the same time period.
+
+Weekly worked hours report:
+  Hours devoted by every user to the project in the selected time period,
+  classified by calendar week.
 
 You can export the data contained in the grids to a CSV file for processing with
 spreadsheet software, for example, using the **Download as CSV** button at the
@@ -380,7 +404,7 @@ Projects summary
 .. figure:: i/project-summary-screen.png
 
 This report summarizes the work registered by the tool between two dates, split
-by projects and workers or clients.
+by projects and workers.
 
 In the top of the screen there are two date inputs to insert the report
 dates: if the start date is left empty, the default value is the date of the
@@ -389,16 +413,11 @@ is the current date.
 There are quick-access buttons for common combinations of dates at the bottom
 of the dates box.
 
-The report itself consists on two grids shown in two tabs.
-The first tab is the project/customer
-report, where all the hours are split by projects and customers; rows represent
-projects and columns represent customers.
-The second tab is the project/user report, where all the hours are split by
+The report itself consists on a grid where all the hours are split by
 projects and users; rows represent projects and columns represent users.
-
-In both grids there are two extra columns, *Total* and *Percentage*; the former
+There are two extra columns, *Total* and *Percentage*; the former
 shows the total number of hours devoted to the project (thus, it's the sum of
-all the different client/user columns) and the latter shows the proportion of
+all the different user columns) and the latter shows the proportion of
 hours of one project regarding the work done in all projects.
 
 You can export the data contained in the grid to a CSV file for processing with
