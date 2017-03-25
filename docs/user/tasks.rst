@@ -154,7 +154,9 @@ The *User work summary* panel on the left contains the following information:
   weekly schedule so you finish the year with zero accumulated hours.
 
   Managers can customize per-user weekly goals with other time periods and
-  amounts of hours different of zero.
+  amounts of hours different of zero. Read more about this in the
+  `Setting user custom goals <users-management.rst#setting-user-custom-goals>`__
+  section.
 
 Hotkeys
 =======

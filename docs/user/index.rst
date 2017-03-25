@@ -39,6 +39,7 @@ concepts to use PhpReport both for worker and manager profiles.
    * `Setting the journey for a user <users-management.rst#setting-the-journey-for-a-user>`__
    * `Setting the area for a user <users-management.rst#setting-the-area-for-a-user>`__
    * `Setting the city for a user <users-management.rst#setting-the-city-for-a-user>`__
+   * `Setting user custom goals <users-management.rst#setting-user-custom-goals>`__
 
 #. `Clients management <clients-management.rst>`__
 

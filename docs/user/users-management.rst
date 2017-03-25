@@ -139,7 +139,7 @@ use the *Delete* button.
 Setting the city for a user
 ================================
 
-Finally, users may be assigned to a city. The city has influence in the working
+Users may be assigned to a city. The city has influence in the working
 days of users, because they translate the public holidays of every city to user
 hours accountability. Public holidays work like weekends: users are not supposed
 to work in those days, and when they do, the hours are accounted as extra hours.
@@ -161,3 +161,28 @@ to save the changes. To delete a row you must select it with a single click and
 use the *Delete* button.
 
 .. WARNING:: Overlapping time periods among different rows are not allowed.
+
+Setting user custom goals
+=========================
+
+Goals are used to fulfil specific accumulated hour goals per user in a specific
+period of time. Every goal will have *Init date*, *End date* and *Extra hours*:
+dates actually refer to the week they belong, e.g. setting *Init date* to Monday
+or Thursday of the same week makes no difference; the *Extra hours* field is
+the number of accumulated hours that a user must have in the specified period
+to fulfill the goal, it should be equal to the value of worked hours minus
+workable hours between Monday of the init date week and Sunday of the end date
+week.
+
+The weekly goal value in the `User work summary <tasks.rst#user-work-summary>`__
+shows how many hours they should work every week to fulfil their goal when they
+reach the end date. The value will vary every week according to how far or close
+they are to fulfill their goal.
+
+When no custom goal is set, users will get a default goal. The default goal
+starts on the beginning of the year, on the user journey start date or on the
+end date of a previous custom goal, whatever is more recent; it ends at the end
+of the year, the end of the journey or the beginning of a future custom goal,
+whatever is closer in time. The extra hours value of the default goal is 0.
+For the most common cases, a default goals is equivalent to setting 1st Jan as
+init date, 31st Dec as end date and 0 as extra hours.
