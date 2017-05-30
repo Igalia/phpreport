@@ -182,3 +182,6 @@ TAB
 
 SHIFT + TAB
   Go back to the previous field.
+
+LEFT, RIGHT
+  Jump to the previous or next date, when keyboard focus is not inside a field.
