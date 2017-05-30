@@ -97,8 +97,14 @@ include(PHPREPORT_ROOT . 'web/include/header.php');
         newTemplate.set('story', t[3]);
         newTemplate.set('taskStoryId', t[4]);
         newTemplate.set('telework', t[5]);
-        newTemplate.set('onsite', t[6]);
-        newTemplate.set('name', t[7]);
+        if (t.length == 7) {
+            // it is a template from 2.0, without "onsite" field
+            newTemplate.set('name', t[6]);
+        }
+        else {
+            newTemplate.set('onsite', t[6]);
+            newTemplate.set('name', t[7]);
+        }
 
         store.add(newTemplate);
     });
