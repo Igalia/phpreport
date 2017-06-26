@@ -118,7 +118,7 @@ do {
         foreach((array) $totalHoursList as $year => $weeklyHours)  {
             foreach( $weeklyHours as $week => $hours ) {
                 $weeklyRecords[$year][$week] = true;
-                $record[$week] = round( $hours / 60, 2, PHP_ROUND_HALF_DOWN );
+                $record[$week."-".$year] = round( $hours / 60, 2, PHP_ROUND_HALF_DOWN );
             }
         }
 
@@ -162,11 +162,11 @@ do {
     foreach ($weeklyRecords as $year => $weeklyRecord ) {
         ksort( $weeklyRecord );
         foreach ( (array) $weeklyRecord as $week => $dumber ) {
-            $field['name'] = (string) $week;
+            $field['name'] = $week."-".$year;
             $metaData['fields'][] = $field;
 
             $column[header] = "Week " . $week . ", $year";
-            $column[dataIndex] = (string) $week;
+            $column[dataIndex] = $week."-".$year;
             $response[columns][] = $column;
         }
     }
