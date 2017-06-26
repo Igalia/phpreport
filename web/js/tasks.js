@@ -739,15 +739,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             },
             items:[
                 new Ext.Container({
-                    width: 186,
-                    layout: 'hbox',
-                    items:[
-                        this.deleteButton,
-                        this.cloneButton,
-                        this.createTemplateButton,
-                    ]
-                }),
-                new Ext.Container({
                     width: 460,
                     layout: 'hbox',
                     items:[
@@ -765,8 +756,19 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         this.onsiteCheckBox
                     ]
                 }),
+                new Ext.Container({
+                    layout: 'hbox',
+                    width: 186,
+                    style: 'float: right;',
+                    items: [
+                        this.deleteButton,
+                        this.cloneButton,
+                        this.createTemplateButton,
+                    ]
+                }),
             ]
         });
+
         this.items = [topBox, centerBox, bottomBox];
 
         /* call the superclass to preserve base class functionality */
