@@ -109,14 +109,25 @@
         {
         $report = UsersFacade::ExtraHoursReport($init, $end);
 
-        $string = $string . "<global><totalHours>{$report[0]["total_hours"]}</totalHours><workableHours>{$report[0]["workable_hours"]}</workableHours><extraHours>{$report[0]["extra_hours"]}</extraHours><totalExtraHours>{$report[0]["total_extra_hours"]}</totalExtraHours></global>";
+				$string = $string 
+					. "<global><totalHours>{$report[0]["total_hours"]}</totalHours>"
+					. "<workableHours>{$report[0]["workable_hours"]}</workableHours>"
+					. "<extraHours>{$report[0]["extra_hours"]}</extraHours>"
+					. "<totalExtraHours>{$report[0]["total_extra_hours"]}</totalExtraHours>"
+					. "</global>";
         }
 
         $string = $string . "<individual>";
 
         foreach((array) $report[1] as $login => $entry)
         {
-        $string = $string . "<report login='" . $login . "'><totalHours>{$entry["total_hours"]}</totalHours><workableHours>{$entry["workable_hours"]}</workableHours><extraHours>{$entry["extra_hours"]}</extraHours><totalExtraHours>{$entry["total_extra_hours"]}</totalExtraHours></report>";
+					$string = $string 
+						. "<report login='{$login}'>"
+						. "<totalHours>{$entry["total_hours"]}</totalHours>"
+						. "<workableHours>{$entry["workable_hours"]}</workableHours>"
+						. "<extraHours>{$entry["extra_hours"]}</extraHours>"
+						. "<totalExtraHours>{$entry["total_extra_hours"]}</totalExtraHours>"
+						. "</report>";
         }
 
         $string = $string . "</individual></reports>";
