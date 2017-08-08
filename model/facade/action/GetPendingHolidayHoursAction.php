@@ -137,26 +137,38 @@ class GetPendingHolidayHoursAction extends Action{
             {
 
                 // First of all, we clip the interval with the journey
-                $init = $journeyRow->getInitDate();
-                $end = $journeyRow->getEndDate();
+                $initJourney = $journeyRow->getInitDate();
+                $endJourney = $journeyRow->getEndDate();
 
-                if ($init<$this->init)
-                    $init = $this->init;
+                if ($initJourney < $this->init)
+                {
+                    $initYearDay = date_create($this->init->format("Y") . "-1-1");
+                    if ($initJourney < $initYearDay)
+                    {
+                        $initJourney = $initYearDay;
+                    }
+                }
 
-                if ($end>$this->end)
-                    $end = $this->end;
+                if ($endJourney > $this->end)
+                {
+                    $endYearDay = date_create($this->end->format("Y") . "-12-31");
+                    if ($endJourney > $endYearDay)
+                    {
+                        $endJourney = $endYearDay;
+                    }
+                }
 
                 // We get the difference in days...
-                $diffJourney = $init->diff($end);
+                $diffJourney = $initJourney->diff($endJourney);
                 // and with it and the journey, the worked hours (plus one day because it's a closed ending interval)
                 $workHours += ($diffJourney->days + 1)*($journeyRow->getJourney());
 
 
                 // We must check for leap years on the interval
-                $initYear = $init->format("Y");
+                $initYear = $initJourney->format("Y");
 
                 // Go from the init year to the end one
-                while ($initYear <= $end->format("Y"))
+                while ($initYear <= $endJourney->format("Y"))
                 {
 
                     // We check if the year is a leap one, and if february 29th is in the interval. There can be some useless checkings here
