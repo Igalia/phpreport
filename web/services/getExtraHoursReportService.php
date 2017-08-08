@@ -114,7 +114,7 @@
 					. "<workableHours>{$report[0]["workable_hours"]}</workableHours>"
 					. "<extraHours>{$report[0]["extra_hours"]}</extraHours>"
 					. "<totalExtraHours>{$report[0]["total_extra_hours"]}</totalExtraHours>"
-					. "<lastTaskDate>{$report[0]["last_task_date"]->format('Y-m-d')}</lastTaskDate>"
+					. "<lastTaskDate format=\"Y-m-d\">{$report[0]["last_task_date"]->format('Y-m-d')}</lastTaskDate>"
 					. "</global>";
         }
 
@@ -128,7 +128,7 @@
 						. "<workableHours>{$entry["workable_hours"]}</workableHours>"
 						. "<extraHours>{$entry["extra_hours"]}</extraHours>"
 						. "<totalExtraHours>{$entry["total_extra_hours"]}</totalExtraHours>"
-						. "<lastTaskDate>{$entry["last_task_date"]->format('Y-m-d')}</lastTaskDate>"
+						. "<lastTaskDate format=\"Y-m-d\">{$entry["last_task_date"]->format('Y-m-d')}</lastTaskDate>"
 						. "</report>";
         }
 
