@@ -219,7 +219,7 @@ Ext.onReady(function(){
                     if ($sid!="")
                         echo "&sid=" . $sid;
 
-                ?>&init=' + init.getFullYear() + "-01-01&end=" + end.getFullYear() + "-12-31";
+                ?>&init=' + init.getFullYear() + "-01-01&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
 
                 pendingHoliday.load();
 
