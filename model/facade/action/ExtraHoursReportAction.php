@@ -193,7 +193,7 @@ class ExtraHoursReportAction extends Action {
 
                 $userWork[$userVO->getLogin()]["workable_hours"] = 0;
 
-                $last_task_date = $taskDao->getLastTaskDate($userVO->getId(), $end);
+                $last_task_date = $taskDao->getLastTaskDate($userVO->getId(), $end, False);
                 if (is_null($last_task_date))
                     $last_task_date = date_create("1900-01-01");
 
