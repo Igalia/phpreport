@@ -345,6 +345,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             }),
             projectComboBox: new Ext.form.ComboBox({
                 parent: this,
+                allowBlank: false,
                 flex: 2,
                 store: new Ext.data.Store({
                     parent: this,
