@@ -979,7 +979,9 @@ Ext.onReady(function(){
     function validateTasks() {
         var panels = tasksScrollArea.items;
         for(var panel=0; panel<panels.getCount(); panel++) {
-            if (!panels.get(panel).initTimeField.isValid() || !panels.get(panel).endTimeField.isValid()) {
+            if (!panels.get(panel).initTimeField.isValid()
+                || !panels.get(panel).endTimeField.isValid()
+                || !panels.get(panel).projectComboBox.isValid()) {
                 return false;
             }
         }
