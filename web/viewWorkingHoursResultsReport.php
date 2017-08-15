@@ -67,7 +67,7 @@ Ext.onReady(function(){
         reader: new Ext.data.XmlReader({
             record: 'report',
             idPath : '@login',
-        }, [{name: 'login', mapping: '@login'},'extraHours', 'totalHours', 'workableHours', 'totalExtraHours'] )
+        }, [{name: 'login', mapping: '@login'},'extraHours', 'totalHours', 'workableHours', 'totalExtraHours', 'lastTaskDate'] )
 
     });
 
@@ -91,7 +91,8 @@ Ext.onReady(function(){
             {name: 'extraHours', type: 'float'},
             {name: 'workableHours', type: 'float'},
             {name: 'totalHours', type: 'float'},
-            {name: 'totalExtraHours', type: 'float'}]
+            {name: 'totalExtraHours', type: 'float'},
+            {name: 'lastTaskDate', type: 'date', dateFormat: 'Y-m-d'}]
 
     });
 
@@ -111,7 +112,8 @@ Ext.onReady(function(){
             extraHours: parseFloat(row.get('extraHours')),
             totalHours: parseFloat (row.get('totalHours')),
             totalExtraHours: parseFloat(row.get('totalExtraHours')),
-            workableHours: parseFloat(row.get('workableHours'))
+            workableHours: parseFloat(row.get('workableHours')),
+            lastTaskDate: row.get('lastTaskDate')
 
         };
 
@@ -176,7 +178,8 @@ Ext.onReady(function(){
             {id: 'extraHours', width: 130, header: 'Extra Hours', sortable: true, renderer: hours, dataIndex: 'extraHours'},
             {id: 'workableHours', width: 130, header: 'Workable Hours', sortable: true, renderer: hours, dataIndex: 'workableHours'},
             {id: 'totalHours', width: 130, header: 'Worked Hours', sortable: true, renderer: hours, dataIndex: 'totalHours'},
-            {id: 'totalExtraHours', width: 130, header: 'Total Extra Hours', sortable: true, renderer: hours, dataIndex: 'totalExtraHours'}
+            {id: 'totalExtraHours', width: 130, header: 'Total Extra Hours', sortable: true, renderer: hours, dataIndex: 'totalExtraHours'},
+            {id: 'lastTaskDate', width: 130, header: 'Last task date', sortable: true, xtype: 'datecolumn', format: 'd/m/Y', dataIndex: 'lastTaskDate'}
         ],
         stripeRows: true,
         height: window.innerHeight - contentElement.offsetTop - DATE_INTERVAL_FORM_HEIGHT - 5,

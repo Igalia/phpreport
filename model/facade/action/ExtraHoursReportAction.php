@@ -146,6 +146,7 @@ class ExtraHoursReportAction extends Action {
      * <li>'total_hours': number of total hours a User has worked in the specified interval.</li>
      * <li>'workable_hours': number of hours a User must work in the specified interval according to his/her journey.</li>
      * <li>'extra_hours': number of extra hours a User has worked, according to the previous data.</li></ul>
+     * <li>'last_task_date':  date of the last task between this two dates.</li></ul>
      *
      * @param DateTime $init the init date of the interval.
      * @param DateTime $end the ending date of the interval.
@@ -191,6 +192,12 @@ class ExtraHoursReportAction extends Action {
                             $hoursWorked[0]['add_hours'];
 
                 $userWork[$userVO->getLogin()]["workable_hours"] = 0;
+
+                $last_task_date = $taskDao->getLastTaskDate($userVO->getId(), $end, False);
+                if (is_null($last_task_date))
+                    $last_task_date = date_create("1900-01-01");
+
+                $userWork[$userVO->getLogin()]["last_task_date"] = $last_task_date;
 
                 $histories = array();
 
@@ -339,6 +346,7 @@ class ExtraHoursReportAction extends Action {
         $addResults["workable_hours"] = 0;
         $addResults["extra_hours"] = 0;
         $addResults["total_extra_hours"] = 0;
+        $addResults["last_task_date"] = date_create("1900-01-01");
 
 
         foreach ((array) $users as $user)
@@ -400,6 +408,10 @@ class ExtraHoursReportAction extends Action {
             $addResults["workable_hours"] += $work[$user->getLogin()]["workable_hours"];
             $addResults["extra_hours"] += $work[$user->getLogin()]["extra_hours"];
             $addResults["total_extra_hours"] += $totalExtraHours[$user->getLogin()];
+            if ($addResults["last_task_date"] < $work[$user->getLogin()]["last_task_date"])
+            {
+                $addResults["last_task_date"] = $work[$user->getLogin()]["last_task_date"];
+            }
             $work[$user->getLogin()]["total_extra_hours"] = $totalExtraHours[$user->getLogin()];
             // we don't want to take into account $previous in this column,
             // it will only affect to "total_extra_hours" column
