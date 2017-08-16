@@ -56,38 +56,72 @@
 
     Ext.onReady(function(){
 
+    //schema of the information about users
+    var userRecord = new Ext.data.Record.create([
+        {name: 'id', type: 'int'},
+        {name: "login", type: 'string'}
+    ]);
+
+
+    // store to load users
+    var usersStore = new Ext.data.Store({
+        id: 'usersStore',
+        autoLoad: true,  //initial data are loaded in the application init
+        autoSave: false, //if set true, changes will be sent instantly
+        baseParams: {
+        },
+        proxy: new Ext.data.HttpProxy({
+            method: 'GET',
+            api: {
+                read: {url: 'services/getAllUsersService.php'}
+            },
+        }),
+        storeId: 'users',
+        reader:new Ext.data.XmlReader({
+            record: 'user',
+            idProperty:'id'
+        }, userRecord),
+        remoteSort: false,
+        sortInfo: {
+            field: 'login',
+            direction: 'ASC',
+        },
+        listeners: {
+            'load': function () {
+                /* Set the default value of the combobox to the logged in user on load */
+                Ext.getCmp('userLogin').setValue(<?php echo $userToShow->getId() ?>);
+            }
+        },
+    });
+
 
     // Main Panel
     var mainPanel = new Ext.FormPanel({
-          width: 175,
-        labelWidth: 50,
-            frame:true,
+        width: 350,
+        labelWidth: 70,
+        frame:true,
         title: 'User Data',
-            bodyStyle: 'padding:5px 5px 0px 5px;',
+        bodyStyle: 'padding:5px 5px 0px 5px;',
         defaults: {
-                 width: 125,
-                 labelStyle: 'text-align: right; width: 50; font-weight:bold; padding: 0 0 0 0;',
+            width: 225,
+            labelStyle: 'text-align: right; width: 50; font-weight:bold; padding: 0 0 0 0;',
         },
         defaultType:'displayfield',
                 items: [{
-                        id:'login',
-                        name: 'login',
-                           fieldLabel:'Login',
-                        <?php
-                              echo "value:'" . $userToShow->getLogin() . "'";
-                        ?>
-                    },{
-                        id:'groups',
-                        name:'groups',
-                        fieldLabel: 'Groups',
-                        value: '-<?php
-
-                            foreach((array)$userToShow->getGroups() as $group)
-                                {
-                                    echo " " . $group->getName() . " -";
-                                }
-
-                        ?>'
+                        fieldLabel: 'User',
+                        name: 'user',
+                        xtype: 'combo',
+                        allowBlank: false,
+                        autoLoad: true,
+                        typeAhead: true,
+                        mode: 'local',
+                        store: usersStore,
+                        valueField: 'id',
+                        displayField: 'login',
+                        triggerAction: 'all',
+                        forceSelection: true,
+                        id: 'userLogin',
+                        disabled: <?php echo !LoginManager::hasExtraPermissions($sid) ? 'true' : 'false' ?>
                     }
                 ]
     });
@@ -151,6 +185,7 @@
                     echo "&sid=" . $sid;
 
                 echo "&uid=" . $uid;?>',
+
             rowNumberer: false,
             checkboxSelModel: false,
             width: 1000,
@@ -202,11 +237,9 @@
                 grid.store.proxy.conn.url= 'services/getUserProjectCustomerReportJsonService.php?<?php
 
                     if ($sid!="")
-                        echo "&sid=" . $sid;
+                        echo "&sid=" . $sid;?>' + '&uid=' + Ext.getCmp('userLogin').getValue()
 
-                                        echo "&uid=" . $uid;
-
-                ?>&init=' + init.getFullYear() + "-" + (init.getMonth()+1) + "-" + init.getDate()  + "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
+                + '&init=' + init.getFullYear() + "-" + (init.getMonth()+1) + "-" + init.getDate()  + "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
 
                 grid.store.removeAll();
                 grid.store.load();
