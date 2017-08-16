@@ -224,7 +224,7 @@
             }
 
         } while ($parser->read());
- 
+
 
         if (count($createTasks) >= 1)
             if (TasksFacade::CreateReports($createTasks) == -1)
