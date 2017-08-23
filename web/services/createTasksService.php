@@ -214,8 +214,13 @@
 
                 $taskVO->setUserId($user->getId());
 
-                $createTasks[] = $taskVO;
+                if (is_null($taskVO->getProjectId()))
+                {
+                    $string = "<return service='createTasks'><success>false</success><error id='4'>projectId is not valid</error></return>";
+                    break;
+                }
 
+                $createTasks[] = $taskVO;
             }
 
         } while ($parser->read());
