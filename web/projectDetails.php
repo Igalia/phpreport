@@ -29,6 +29,13 @@ include_once("include/header.php");
 include_once("include/sidebar.php");
 include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 $user = $_SESSION['user'];
+
+//output vars as JS code
+echo "<!-- Global variables extracted from the PHP side -->\n";
+echo "<script type='text/javascript'>\n";
+echo "var user = '" . $user->getLogin() . "';\n";
+echo "</script>\n";
+
 ?>
 <script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript" src="js/include/ExportableGridPanel.js"></script>

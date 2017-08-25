@@ -34,7 +34,8 @@ var projectComboBox = new Ext.form.ComboBox({
         autoSave: false, //if set true, changes will be sent instantly
         baseParams: {
             'order': 'description',
-            'active': 'false',
+            'active': '1',
+            'login': user,
         },
         filter: function(property, value, anyMatch, caseSensitive) {
             var fn;
@@ -51,6 +52,23 @@ var projectComboBox = new Ext.form.ComboBox({
         proxy: new Ext.data.HttpProxy({url: 'services/getProjectsService.php', method: 'GET'}),
         reader:new Ext.data.XmlReader({record: 'project', id:'id' }, projectRecord),
         remoteSort: false,
+        listeners: {
+            'load': function (store) {
+                var activeProjectsRecord = new projectRecord({
+                    id: -2,                  // some invalid id
+                    description: "Load all active projects",
+                    customerName: ""
+                });
+                var allProjectsRecord = new projectRecord({
+                    id: -1,                  // some invalid id
+                    description: "Load all projects",
+                    customerName: ""
+                });
+                store.add(activeProjectsRecord);
+                store.add(allProjectsRecord);
+                store.commitChanges();
+            }
+        }
     }),
     mode: 'local',
     valueField: 'id',
@@ -62,6 +80,20 @@ var projectComboBox = new Ext.form.ComboBox({
     '<tpl if="customerName">- {customerName}</tpl></div></tpl>',
     listeners: {
         'select': function (combo, record, index) {
+            if(record.data['id'] == -2) {
+                this.store.setBaseParam('active','1');
+                this.store.setBaseParam('login',null);
+                this.store.load();
+                this.clearValue();
+                return;
+            }
+            if(record.data['id'] == -1) {
+                this.store.setBaseParam('active',null);
+                this.store.setBaseParam('login',null);
+                this.store.load();
+                this.clearValue();
+                return;
+            }
             customerId = null;
             selectText = record.data['description'];
 
