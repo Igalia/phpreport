@@ -24,7 +24,7 @@
     /* We check authentication and authorization */
     require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
     if (!LoginManager::isLogged($sid))
-        header('Location: login.php');
+        header('Location: login.php?login_success_url=' . $_SERVER[REQUEST_URI]);
     if (!LoginManager::isAllowed($sid))
         require('forbidden.php');
 

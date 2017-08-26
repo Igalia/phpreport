@@ -27,10 +27,17 @@ include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 
+function set_location_header_on_login_success_url(){
+    if (isset($_REQUEST["login_success_url"]) and !empty($_REQUEST["login_success_url"]))
+        header("Location: " . $_REQUEST["login_success_url"]);
+    else
+        header("Location: tasks.php");
+}
+
 /* There are Http authentication data: we try to log in*/
 if (isset($_SERVER['PHP_AUTH_USER']))
     if(LoginManager::login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']))
-        header("Location: tasks.php");
+        set_location_header_on_login_success_url();
     else
         echo _("Incorrect login information");
 
@@ -39,7 +46,7 @@ if (isset($_SERVER['PHP_AUTH_USER']))
 /* There are POST data: we try to log in */
 if(isset($_POST["login"]) && isset($_POST["password"])) {
     if(LoginManager::login($_POST["login"], $_POST["password"]))
-        header("Location: tasks.php");
+        set_location_header_on_login_success_url();
     else
         echo _("Incorrect login information");
 }
@@ -77,6 +84,11 @@ Ext.onReady(function(){
                 fieldLabel: 'Password',
                 name: 'password',
                 allowBlank:false
+            },{
+                inputType: 'hidden',
+                name: 'login_success_url',
+                allowBlank:true,
+                value: '<?php echo $_REQUEST['login_success_url'] ?>'
             }
         ],
         buttons: [{
