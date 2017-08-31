@@ -25,7 +25,7 @@ function checkIfSessionExists() {
         failure: function (response) {
             Ext.MessageBox.confirm('Session Expired', 'Do you want to login again?', function(btn){
                 if(btn === 'yes'){
-                    window.location.href = "login.php";
+                    window.location.reload();
                 }
             });
         }
