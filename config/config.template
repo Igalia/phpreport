@@ -178,3 +178,9 @@ define('USER_GROUPS', serialize(array('staff', 'admin')));
  * @global string project used for identifying vacations tasks
  */
 define('VACATIONS_PROJECT', 'Holidays');
+
+/**
+ * @name MENU_COORDINATION
+ * @global boolean Active the Coordination menu in the sidebar
+ */
+define('MENU_COORDINATION', TRUE);

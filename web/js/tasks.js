@@ -699,6 +699,43 @@ var TaskPanel = Ext.extend(Ext.Panel, {
         this.teleworkCheckBox.setValue((this.taskRecord.data['telework']=='true'));
         this.onsiteCheckBox.setValue((this.taskRecord.data['onsite']=='true'));
 
+        bottomBoxTaskItems = [
+                        new Ext.form.Label({text: 'Task type', style: 'display:block; padding:5px 2px 5px 2px'}),
+                        this.taskTypeComboBox
+        ]
+
+        if (menuCoordination == true ) {
+            bottomBoxTaskItems.push(
+               new Ext.form.Label({text: 'TaskStory', style: 'display:block; padding:5px 2px 5px 2px'}),
+              this.taskStoryComboBox
+            )
+        }
+
+        bottomBoxItems = [
+            new Ext.Container({
+                width: 186,
+                layout: 'hbox',
+                items:[
+                    this.deleteButton,
+                    this.cloneButton,
+                    this.createTemplateButton,
+                ]
+            }),
+            new Ext.Container({
+                width: 145,
+                layout: 'hbox',
+                items:[
+                    this.teleworkCheckBox,
+                    this.onsiteCheckBox
+                ]
+            }),
+            new Ext.Container({
+                width: 460,
+                layout: 'hbox',
+                items: bottomBoxTaskItems
+            })
+        ]
+
         topBox = new Ext.Panel({
             layout: 'column',
             style:"padding-bottom:3px",
@@ -738,35 +775,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             defaults: {
                 layoutConfig: {defaultMargins: "5px 2px 0px 0px"}
             },
-            items:[
-                new Ext.Container({
-                    width: 186,
-                    layout: 'hbox',
-                    items:[
-                        this.deleteButton,
-                        this.cloneButton,
-                        this.createTemplateButton,
-                    ]
-                }),
-                new Ext.Container({
-                    width: 460,
-                    layout: 'hbox',
-                    items:[
-                        new Ext.form.Label({text: 'Task type', style: 'display:block; padding:5px 2px 5px 2px'}),
-                        this.taskTypeComboBox,
-                        new Ext.form.Label({text: 'TaskStory', style: 'display:block; padding:5px 2px 5px 2px'}),
-                        this.taskStoryComboBox,
-                    ]
-                }),
-                new Ext.Container({
-                    width: 145,
-                    layout: 'hbox',
-                    items:[
-                        this.teleworkCheckBox,
-                        this.onsiteCheckBox
-                    ]
-                }),
-            ]
+            items: bottomBoxItems
         });
         this.items = [topBox, centerBox, bottomBox];
 
