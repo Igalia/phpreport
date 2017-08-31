@@ -25,6 +25,10 @@ require_once(PHPREPORT_ROOT . '/web/auth.php');
 include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
 include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
 
+include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
+
+$MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINATION');
+
 $user = $_SESSION['user'];
 
 /* Include the generic header and sidebar*/
@@ -77,6 +81,9 @@ echo "var forbidden = " . ($forbidden? "true": "false") . ";\n";
 echo "var date = '" . $dateString . "';\n";
 echo "var user = '" . $user->getLogin() . "';\n";
 echo "var currentJourney = '$currentJourney';\n";
+echo "var menuCoordination = '$MENU_COORDINATION';\n";
+
+
 echo "</script>\n";
 
 ?>

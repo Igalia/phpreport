@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
+$MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINATION');
 ?>
 
 <script type="text/javascript">
@@ -25,21 +28,21 @@ var menuToolbar = new Ext.Toolbar({
         items: [{
             text: 'Tasks', handler: onItemClick,
             destination: "tasks.php?date=" + (new Date()).format('Y-m-d'),
-        },{
+        },<?php if ($MENU_COORDINATION) echo "{
             text: 'Coordination',
             menu: [
             {
                 text: 'XP Tracker',
                 handler: onItemClick,
-                destination: "xptracker-summary.php",
+                destination: 'xptracker-summary.php',
                 iconCls: 'silk-sitemap',
             },{
                 text: 'Analysis Tracker',
                 handler: onItemClick,
-                destination: "analysistracker-summary.php",
+                destination: 'analysistracker-summary.php',
                 iconCls: 'silk-sitemap-color',
             }],
-        },{
+        },"; ?>{
             text: 'Reports',
             menu: [
             {

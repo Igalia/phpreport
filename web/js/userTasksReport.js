@@ -196,14 +196,7 @@ Ext.onReady(function () {
         return value;
     };
 
-    /* Panel containing all the search parameters */
-    var filtersPanel = new Ext.FormPanel({
-        labelWidth: 100,
-        frame: true,
-        width: 350,
-        renderTo: 'content',
-        defaults: {width: 230},
-        items: [{
+    filtersPanelItems = [{
             fieldLabel: 'User',
             name: 'user',
             xtype: 'combo',
@@ -312,27 +305,6 @@ Ext.onReady(function () {
             triggerAction: 'all',
             forceSelection: true,
         },{
-            fieldLabel: 'Story',
-            name: 'filterStory',
-            xtype: 'combo',
-            id: 'filterStory',
-            store: ['[empty]', '[not empty]'],
-            triggerAction:'all',
-            forceSelection: false,
-            autoSelect: false,
-        },{
-            fieldLabel: 'TaskStory',
-            name: 'taskStory',
-            xtype: 'combo',
-            id: 'taskStory',
-            store: taskStoryStore,
-            mode: 'local',
-            valueField: 'id',
-            displayField: 'friendlyName',
-            typeAhead: true,
-            triggerAction: 'all',
-            forceSelection: true,
-        },{
             fieldLabel: 'Telework',
             name: 'telework',
             xtype: 'combo',
@@ -348,7 +320,40 @@ Ext.onReady(function () {
             mode: 'local',
             triggerAction:'all',
             store: ['yes', 'no'],
-        }],
+        },{
+            fieldLabel: 'Story',
+            name: 'filterStory',
+            xtype: 'combo',
+            id: 'filterStory',
+            store: ['[empty]', '[not empty]'],
+            triggerAction:'all',
+            forceSelection: false,
+            autoSelect: false,
+        }]
+    if ( menuCoordination == true ) {
+        filtersPanelItems.push({
+            fieldLabel: 'TaskStory',
+            name: 'taskStory',
+            xtype: 'combo',
+            id: 'taskStory',
+            store: taskStoryStore,
+            mode: 'local',
+            valueField: 'id',
+            displayField: 'friendlyName',
+            typeAhead: true,
+            triggerAction: 'all',
+            forceSelection: true,
+        })
+    }
+
+    /* Panel containing all the search parameters */
+    var filtersPanel = new Ext.FormPanel({
+        labelWidth: 100,
+        frame: true,
+        width: 350,
+        renderTo: 'content',
+        defaults: {width: 230},
+        items: filtersPanelItems,
 
         buttons: [{
             text: 'Find tasks',
@@ -425,9 +430,11 @@ Ext.onReady(function () {
                         baseParams.filterStory = value;
                     }
                 }
-                if (Ext.getCmp('taskStory').getRawValue() != "") {
-                    var value = Ext.getCmp('taskStory').getValue();
-                    baseParams.taskStoryId = value;
+                if ( menuCoordination == true ) {
+                    if (Ext.getCmp('taskStory').getRawValue() != "") {
+                        var value = Ext.getCmp('taskStory').getValue();
+                        baseParams.taskStoryId = value;
+                    }
                 }
                 if (Ext.getCmp('telework').getRawValue() != "") {
                     var value = Ext.getCmp('telework').getValue();
@@ -442,13 +449,12 @@ Ext.onReady(function () {
                 tasksStore.load();
     }
 
-    /* Schema of the information about tasks */
-    var taskRecord = new Ext.data.Record.create([
+    taskRecordColumns = [
         {name:'id'},
         {name:'date'},
         {name:'initTime'},
         {name:'endTime'},
-        {name: 'hours'},
+        {name:'hours'},
         {name:'story'},
         {name:'telework'},
         {name:'onsite'},
@@ -456,9 +462,14 @@ Ext.onReady(function () {
         {name:'text'},
         {name:'phase'},
         {name:'userId'},
-        {name:'projectId'},
-        {name:'taskStoryId'}
-    ]);
+        {name:'projectId'}
+    ]
+    if ( menuCoordination == true ) {
+        taskRecordColumns.push({name:'taskStoryId'})
+    }
+
+    /* Schema of the information about tasks */
+    var taskRecord = new Ext.data.Record.create(taskRecordColumns);
 
     /* Proxy to the services related with load/save Projects */
     var proxy = new Ext.data.HttpProxy({
@@ -483,7 +494,7 @@ Ext.onReady(function () {
         },
     });
 
-    var columnModel = new Ext.grid.ColumnModel([
+    columnModelItems = [
         {
             header: 'Date',
             xtype: 'datecolumn',
@@ -527,20 +538,26 @@ Ext.onReady(function () {
             trueText: "<span style='color:green;'>Yes</span>",
             falseText: "<span style='color:red;'>No</span>",
         },{
+            header: 'Description',
+            sortable: true,
+            dataIndex: 'text',
+        },{
             header: 'Story',
             sortable: true,
             dataIndex: 'story',
-        },{
+        }
+    ]
+
+    if ( menuCoordination == true ) {
+        columnModelItems.push({
             header: "Task story",
             sortable: true,
             dataIndex: 'taskStoryId',
             renderer: taskStoryRenderer,
-        },{
-            header: 'Description',
-            sortable: true,
-            dataIndex: 'text',
-        }
-    ]);
+        })
+    }
+
+    var columnModel = new Ext.grid.ColumnModel(columnModelItems);
 
     // setup the panel for the grid of tasks
     var tasksGrid = new Ext.ux.ExportableGridPanel({
@@ -578,18 +595,22 @@ Ext.onReady(function () {
         columnModel.setHidden(5, true); //task type
         columnModel.setHidden(6, true);   //telework
         columnModel.setHidden(7, true);   //onsite
-        columnModel.setHidden(8, false);   //story
-        columnModel.setHidden(9, false);  //taskStory
-        columnModel.setHidden(10, false);  //description
+        columnModel.setHidden(8, false);  //description
+        columnModel.setHidden(9, false);   //story
+        if ( menuCoordination == true ) {
+            columnModel.setHidden(10, false);  //taskStory
+        }
         columnModel.setColumnWidth(0, 80);
         columnModel.setColumnWidth(1, 55);
         columnModel.setColumnWidth(2, 55);
         columnModel.setColumnWidth(3, 55);
         columnModel.setColumnWidth(4, 200);
         columnModel.setColumnWidth(5, 120);
-        columnModel.setColumnWidth(8, 120);
+        columnModel.setColumnWidth(8, 435);
         columnModel.setColumnWidth(9, 120);
-        columnModel.setColumnWidth(10, 435);
+        if ( menuCoordination == true ) {
+            columnModel.setColumnWidth(10, 120);
+        }
     }
 
     //function to show all the columns
@@ -602,9 +623,11 @@ Ext.onReady(function () {
         columnModel.setHidden(5, false); //task type
         columnModel.setHidden(6, false);   //telework
         columnModel.setHidden(7, false);   //onsite
-        columnModel.setHidden(8, false);   //story
-        columnModel.setHidden(9, false);  //taskStory
-        columnModel.setHidden(10, false);  //description
+        columnModel.setHidden(8, false);  //description
+        columnModel.setHidden(9, false);   //story
+        if ( menuCoordination == true ) {
+            columnModel.setHidden(10, false);  //taskStory
+        }
         columnModel.setColumnWidth(0, 80);
         columnModel.setColumnWidth(1, 55);
         columnModel.setColumnWidth(2, 55);
@@ -613,9 +636,11 @@ Ext.onReady(function () {
         columnModel.setColumnWidth(5, 100);
         columnModel.setColumnWidth(6, 80);
         columnModel.setColumnWidth(7, 50);
-        columnModel.setColumnWidth(8, 100);
+        columnModel.setColumnWidth(8, 435);
         columnModel.setColumnWidth(9, 100);
-        columnModel.setColumnWidth(10, 435);
+        if ( menuCoordination == true ) {
+            columnModel.setColumnWidth(10, 100);
+        }
     }
 
     //hide the advanced columns
