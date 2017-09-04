@@ -1,8 +1,10 @@
 <?php
 /*
+ * Copyright (C) 2003-2009 by the WordPress contributors
  * Copyright (C) 2011 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
+ * Based on code from WordPress project <http://www.wordpress.org>
  *
  * PhpReport is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,9 +18,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * This file is based on code from WordPress project: www.wordpress.org
  */
 
 /** Web installation wizard: welcome screen.
@@ -28,7 +27,6 @@
  * @filesource
  * @package PhpReport
  * @subpackage install
- * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
 ?>
 

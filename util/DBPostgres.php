@@ -1,8 +1,10 @@
 <?php
 /*
+ * Copyright (C) 2005-2008 The Propel authors
  * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
+ * Based on code from the Propel project <http://propel.phpdb.org>
  *
  * PhpReport is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
