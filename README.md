@@ -52,6 +52,24 @@ contact directly with its [maintainer](https://github.com/jaragunde).
 The project is released under the
 [GNU General Public License, version 3](COPYING).
 
+This software includes code and assets from other open source projects:
+
+* The DatePickerPlus Addon by [Marco Wienkoop](http://www.lubber.de/),
+  licensed under the terms of the
+  [GNU General Public License, version 3](web/include/ext.ux.datepickerplus/license.txt).
+
+* Sources derived from the [Propel project](http://propelorm.org/),
+  originally licensed under the terms of the GNU Lesser General Public License,
+  version 3.
+
+* Sources derived from the [WordPress project](http://www.wordpress.org),
+  originally licensed under the terms of the GNU General Public License,
+  version 2 or later.
+
+* The [Silk icon set 1.3](http://www.famfamfam.com/lab/icons/silk/)
+  by Mark James, licensed under a
+  [Creative Commons Attribution 2.5 License](http://creativecommons.org/licenses/by/2.5/).
+
 ## Screenshots
 
 ![Tasks](docs/user/i/tasks-screen.png)
