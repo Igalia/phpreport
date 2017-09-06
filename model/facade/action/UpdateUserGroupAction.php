@@ -47,9 +47,9 @@ class UpdateUserGroupAction extends Action{
      *
      * This variable contains the User Group we want to update.
      *
-     * @var UserVO
+     * @var UserGroupVO
      */
-    private $extraHour;
+    private $userGroup;
 
     /** UpdateUserGroupAction constructor.
      *

@@ -49,7 +49,7 @@ class IsWriteAllowedForDateAction extends Action {
      *
      * @var DateTime
      */
-    private $task;
+    private $date;
 
     /** IsWriteAllowedForDateAction constructor.
      *
