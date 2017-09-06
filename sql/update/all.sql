@@ -161,3 +161,9 @@ ADD FOREIGN KEY(customerId) REFERENCES customer(id);
 --
 
 UPDATE config SET version='2.17';
+
+--
+-- projectid is not null in task table
+--
+
+alter table task alter column projectid  set not null;
