@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2014, 2017 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -19,21 +19,28 @@
 
 /**
  * Converts the data inside a store into a string in CSV format.
+ * Checks column data for visibility info; hidden columns will not be exported.
  * @param store with input data.
+ * @param columnModel with column data.
  * @return string in CSV format.
  */
-function fromStoreToCSV(store) {
+function fromStoreToCSV(store, columnModel) {
     var csv = "";
 
+    var columns = columnModel.getColumnsBy(function (c) {
+        return !c.hidden;
+    });
+
     // header with column names
-    Ext.each(store.fields.items, function(item) {
-        csv += item.name + ",";
+    Ext.each(columns, function(column) {
+        csv += column.header + ",";
     });
     csv += "\n";
 
     // data
     store.each(function (record) {
-        Ext.each(store.fields.items, function(item) {
+        Ext.each(columns, function(column) {
+            var item = store.fields.get(column.dataIndex);
             csv += record.data[item.name] + ",";
         });
         csv += "\n";
@@ -60,7 +67,7 @@ Ext.ux.ExportableGridPanel = Ext.extend(Ext.grid.GridPanel, {
                         //FIXME there must be a better way to get the grid
                         var gridComponent = this.ownerCt.ownerCt;
                         window.open("data:text/plain," + encodeURI(
-                                fromStoreToCSV(gridComponent.getStore())));
+                                fromStoreToCSV(gridComponent.getStore(), gridComponent.getColumnModel())));
                     }
                 },
             ],
