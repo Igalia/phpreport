@@ -58,8 +58,9 @@ class GetTaskBlockConfigurationAction extends Action {
      * This is the function that contains the code that checks the configuration
      * on the DB.
      *
-     * @return array "enabled" returns wether task block is enabled or not.
-     *         "numberOfDays" returns the number of days configured as time
+     * @return array "dayLimitEnabled" returns wether task block by day limit is
+     *         enabled or not.
+     *         "numberOfDays" returns the number of days configured as day
      *         limit.
      */
     protected function doExecute() {

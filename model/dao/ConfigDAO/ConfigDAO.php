@@ -72,8 +72,9 @@ abstract class ConfigDAO extends BaseDAO {
      * Return all the values implicated in the configuration of task block by
      * date.
      *
-     * @return array "enabled" returns wether task block is enabled or not.
-     *         "numberOfDays" returns the number of days configured as time
+     * @return array "dayLimitEnabled" returns wether task block by day limit is
+     *         enabled or not.
+     *         "numberOfDays" returns the number of days configured as day
      *         limit.
      */
     public abstract function getTaskBlockConfiguration();
@@ -83,12 +84,13 @@ abstract class ConfigDAO extends BaseDAO {
      * Change PhpReport configuration to allow or prevent writing tasks based on
      * the date of those tasks.
      *
-     * @param boolean $enabled Enable of disable the task block feature.
+     * @param boolean $dayLimitEnabled Enable of disable a day limit for tasks,
+     *        so tasks older than a certain number of days would be blocked.
      * @param int $numberOfDays Set the number of days in the past when tasks
      *        tasks cannot be altered.
      * @return boolean returns wether changes were saved or not.
      */
-    public abstract function setTaskBlockConfiguration($enabled, $numberOfDays);
+    public abstract function setTaskBlockConfiguration($dayLimitEnabled, $numberOfDays);
 
     /** User value object constructor for PostgreSQL.
      *

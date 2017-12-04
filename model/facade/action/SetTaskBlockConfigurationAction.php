@@ -43,13 +43,13 @@ include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
  */
 class SetTaskBlockConfigurationAction extends Action {
 
-    /** Enabled/disabled value
+    /** Day limit enabled/disabled
      *
-     * Enable of disable the task block feature.
+     * Enable of disable a day limit for tasks.
      *
      * @var boolean
      */
-    private $enabled;
+    private $dayLimitEnabled;
 
     /** Number of days
      *
@@ -63,12 +63,13 @@ class SetTaskBlockConfigurationAction extends Action {
      *
      * This is just the constructor of this action.
      *
-     * @param boolean $enabled Enable of disable the task block feature.
+     * @param boolean $dayLimitEnabled Enable of disable a day limit for tasks,
+     *        so tasks older than a certain number of days would be blocked.
      * @param int $numberOfDays Set the number of days in the past when tasks
      *        tasks cannot be altered.
      */
-    public function __construct($enabled, $numberOfDays) {
-        $this->enabled = $enabled;
+    public function __construct($dayLimitEnabled, $numberOfDays) {
+        $this->dayLimitEnabled = $dayLimitEnabled;
         $this->numberOfDays = $numberOfDays;
         $this->preActionParameter = "SET_TASK_BLOCK_CONFIGURATION_PREACTION";
         $this->postActionParameter = "SET_TASK_BLOCK_CONFIGURATION_POSTACTION";
@@ -83,7 +84,7 @@ class SetTaskBlockConfigurationAction extends Action {
      */
     protected function doExecute() {
         $configDao = DAOFactory::getConfigDAO();
-        return $configDao->setTaskBlockConfiguration($this->enabled,
+        return $configDao->setTaskBlockConfiguration($this->dayLimitEnabled,
                 $this->numberOfDays);
     }
 

@@ -74,14 +74,14 @@ class PostgreSQLConfigDAO extends ConfigDAO {
      *         written or not.
      */
     public function isWriteAllowedForDate(DateTime $date){
-        $sql = "SELECT block_tasks_by_time_enabled FROM config";
-        $enabled = $this->execute($sql);
-        $enabled = (strtolower($enabled[0]) == "t");
+        $sql = "SELECT block_tasks_by_day_limit_enabled FROM config";
+        $dayLimitEnabled = $this->execute($sql);
+        $dayLimitEnabled = (strtolower($dayLimitEnabled[0]) == "t");
 
-        $sql = "SELECT block_tasks_by_time_number_of_days FROM config";
+        $sql = "SELECT block_tasks_by_day_limit_number_of_days FROM config";
         $days = $this->execute($sql);
 
-        if(!$enabled || is_null($days[0]) || $days[0] == 0) {
+        if(!$dayLimitEnabled || is_null($days[0]) || $days[0] == 0) {
             return true;
         }
 
@@ -99,19 +99,20 @@ class PostgreSQLConfigDAO extends ConfigDAO {
      * Return all the values implicated in the configuration of task block by
      * date.
      *
-     * @return array "enabled" returns wether task block is enabled or not.
-     *         "numberOfDays" returns the number of days configured as time
+     * @return array "dayLimitEnabled" returns wether task block by day limit is
+     *         enabled or not.
+     *         "numberOfDays" returns the number of days configured as day
      *         limit.
      */
     public function getTaskBlockConfiguration() {
-        $sql = "SELECT block_tasks_by_time_enabled FROM config";
-        $enabled = $this->execute($sql);
+        $sql = "SELECT block_tasks_by_day_limit_enabled FROM config";
+        $dayLimitEnabled = $this->execute($sql);
 
-        $sql = "SELECT block_tasks_by_time_number_of_days FROM config";
+        $sql = "SELECT block_tasks_by_day_limit_number_of_days FROM config";
         $days = $this->execute($sql);
 
         return array(
-            "enabled" => (strtolower($enabled[0]) == "t"),
+            "dayLimitEnabled" => (strtolower($dayLimitEnabled[0]) == "t"),
             "numberOfDays" => $days[0]);
     }
 
@@ -120,17 +121,18 @@ class PostgreSQLConfigDAO extends ConfigDAO {
      * Change PhpReport configuration to allow or prevent writing tasks based on
      * the date of those tasks.
      *
-     * @param boolean $enabled Enable of disable the task block feature.
+     * @param boolean $dayLimitEnabled Enable of disable a day limit for tasks,
+     *        so tasks older than a certain number of days would be blocked.
      * @param int $numberOfDays Set the number of days in the past when tasks
      *        tasks cannot be altered.
      * @return boolean returns wether changes were saved or not.
      */
-    public function setTaskBlockConfiguration($enabled, $numberOfDays) {
+    public function setTaskBlockConfiguration($dayLimitEnabled, $numberOfDays) {
         $sql = "UPDATE config SET " .
-                "block_tasks_by_time_number_of_days =" .
+                "block_tasks_by_day_limit_number_of_days =" .
                 DBPostgres::checkNull($numberOfDays) . "," .
-                "block_tasks_by_time_enabled = " .
-                DBPostgres::boolToString($enabled);
+                "block_tasks_by_day_limit_enabled = " .
+                DBPostgres::boolToString($dayLimitEnabled);
 
         $res = pg_query($this->connect, $sql);
 

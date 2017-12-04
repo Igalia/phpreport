@@ -36,15 +36,15 @@ include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
 
 /* There are POST data: we try to save the settings */
 if(isset($_POST["numberOfDays"])) {
-    $enabled = false;
+    $dayLimitEnabled = false;
     $numberOfDays = null;
-    if(isset($_POST["enabled"])) {
-        $enabled = true;
+    if(isset($_POST["dayLimitEnabled"])) {
+        $dayLimitEnabled = true;
     }
     if(!empty($_POST["numberOfDays"])) {
         $numberOfDays = $_POST["numberOfDays"];
     }
-    $saved = TasksFacade::SetTaskBlockConfiguration($enabled, $numberOfDays);
+    $saved = TasksFacade::SetTaskBlockConfiguration($dayLimitEnabled, $numberOfDays);
 }
 
 /* Include the generic header and sidebar*/
@@ -56,8 +56,8 @@ include("include/sidebar.php");
 $config = TasksFacade::GetTaskBlockConfiguration();
 
 echo '<script type="text/javascript">';
-echo 'var enabled = ';
-echo $config['enabled']?'true; ':'false; ';
+echo 'var dayLimitEnabled = ';
+echo $config['dayLimitEnabled']?'true; ':'false; ';
 if($config['numberOfDays'] != null) {
     echo 'var numberOfDays = ' . $config['numberOfDays'] . ';';
 }
@@ -110,8 +110,8 @@ Ext.onReady(function () {
         items: [{
                 fieldLabel: 'Block enabled',
                 xtype: 'checkbox',
-                name: 'enabled',
-                checked: enabled,
+                name: 'dayLimitEnabled',
+                checked: dayLimitEnabled,
             },{
                 fieldLabel: 'Number of days',
                 xtype: 'numberfield',

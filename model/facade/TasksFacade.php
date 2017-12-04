@@ -550,14 +550,15 @@ abstract class TasksFacade {
      * Change PhpReport configuration to allow or prevent writing tasks based on
      * the date of those tasks.
      *
-     * @param boolean $enabled Enable of disable the task block feature.
+     * @param boolean $dayLimitEnabled Enable of disable a day limit for tasks,
+     *        so tasks older than a certain number of days would be blocked.
      * @param int $numberOfDays Set the number of days in the past when tasks
      *        tasks cannot be altered.
      * @return boolean returns wether changes were saved or not.
      */
-    static function SetTaskBlockConfiguration($enabled, $numberOfDays) {
+    static function SetTaskBlockConfiguration($dayLimitEnabled, $numberOfDays) {
 
-        $action = new SetTaskBlockConfigurationAction($enabled, $numberOfDays);
+        $action = new SetTaskBlockConfigurationAction($dayLimitEnabled, $numberOfDays);
         return $action->execute();
     }
 
@@ -566,8 +567,9 @@ abstract class TasksFacade {
      * Return all the values implicated in the configuration of task block by
      * date.
      *
-     * @return array "enabled" returns wether task block is enabled or not.
-     *         "numberOfDays" returns the number of days configured as time
+     * @return array "dayLimitEnabled" returns wether task block by day limit is
+     *         enabled or not.
+     *         "numberOfDays" returns the number of days configured as day
      *         limit.
      */
     static function GetTaskBlockConfiguration() {
