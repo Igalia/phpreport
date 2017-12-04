@@ -58,10 +58,14 @@ class GetTaskBlockConfigurationAction extends Action {
      * This is the function that contains the code that checks the configuration
      * on the DB.
      *
-     * @return array "dayLimitEnabled" returns wether task block by day limit is
+     * @return array "dayLimitEnabled" returns whether task block by day limit is
      *         enabled or not.
      *         "numberOfDays" returns the number of days configured as day
-     *         limit.
+     *         limit. May be null.
+     *         "dateLimitEnabled" returns whether task block by date is enabled
+     *         or not.
+     *         "date" returns the date before which tasks may not be edited. May
+     *         be null.
      */
     protected function doExecute() {
         $configDao = DAOFactory::getConfigDAO();

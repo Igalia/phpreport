@@ -74,24 +74,27 @@ class PostgreSQLConfigDAO extends ConfigDAO {
      *         written or not.
      */
     public function isWriteAllowedForDate(DateTime $date){
-        $sql = "SELECT block_tasks_by_day_limit_enabled FROM config";
-        $dayLimitEnabled = $this->execute($sql);
-        $dayLimitEnabled = (strtolower($dayLimitEnabled[0]) == "t");
+        $config = $this->getTaskBlockConfiguration();
 
-        $sql = "SELECT block_tasks_by_day_limit_number_of_days FROM config";
-        $days = $this->execute($sql);
-
-        if(!$dayLimitEnabled || is_null($days[0]) || $days[0] == 0) {
-            return true;
+        $dayLimitDate = NULL;
+        $dateBlockDate = NULL;
+        if($config["dayLimitEnabled"] && !is_null($config["numberOfDays"]) && $config["numberOfDays"] > 0) {
+            // Limit by number of dates is enabled
+            $dayLimitDate = new DateTime();
+            $dayLimitDate->setTime(0,0);
+            $dayLimitDate->sub(new DateInterval('P'.$config["numberOfDays"].'D'));
+        }
+        if($config["dateLimitEnabled"] && !is_null($config["date"])) {
+            // Limit by date is enabled
+            $dateBlockDate = $config["date"];
         }
 
         //times are reset to 0:00 because we don't need it
-        $dateNotWritable = new DateTime();
-        $dateNotWritable->setTime(0,0);
-        $dateNotWritable->sub(new DateInterval('P'.$days[0].'D'));
         $date->setTime(0,0);
 
-        return $date > $dateNotWritable;
+        // Any date is bigger than NULL, that's why this works in case some of
+        // the limits are disabled and their dates are NULL.
+        return $date > max($dayLimitDate, $dateBlockDate);
     }
 
     /** Get PhpReport task block configuration.
@@ -99,21 +102,37 @@ class PostgreSQLConfigDAO extends ConfigDAO {
      * Return all the values implicated in the configuration of task block by
      * date.
      *
-     * @return array "dayLimitEnabled" returns wether task block by day limit is
+     * @return array "dayLimitEnabled" returns whether task block by day limit is
      *         enabled or not.
      *         "numberOfDays" returns the number of days configured as day
-     *         limit.
+     *         limit. May be null.
+     *         "dateLimitEnabled" returns whether task block by date is enabled
+     *         or not.
+     *         "date" returns the date before which tasks may not be edited. May
+     *         be null.
      */
     public function getTaskBlockConfiguration() {
-        $sql = "SELECT block_tasks_by_day_limit_enabled FROM config";
-        $dayLimitEnabled = $this->execute($sql);
+        $sql = "SELECT block_tasks_by_day_limit_enabled,".
+                   "block_tasks_by_day_limit_number_of_days,".
+                   "block_tasks_by_date_enabled,".
+                   "block_tasks_by_date_date ".
+                   "FROM config";
+        $res = pg_query($this->connect, $sql);
+        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
 
-        $sql = "SELECT block_tasks_by_day_limit_number_of_days FROM config";
-        $days = $this->execute($sql);
+        $config = array();
+
+        if(pg_num_rows($res) > 0) {
+            $config = pg_fetch_array($res);
+        }
+
+        pg_freeresult($res);
 
         return array(
-            "dayLimitEnabled" => (strtolower($dayLimitEnabled[0]) == "t"),
-            "numberOfDays" => $days[0]);
+            "dayLimitEnabled" => (strtolower($config["block_tasks_by_day_limit_enabled"]) == "t"),
+            "dateLimitEnabled" => (strtolower($config["block_tasks_by_date_enabled"]) == "t"),
+            "numberOfDays" => $config["block_tasks_by_day_limit_number_of_days"],
+            "date" => is_null($config["block_tasks_by_date_date"])? NULL : date_create($config["block_tasks_by_date_date"]));
     }
 
     /** Store PhpReport task block configuration.
