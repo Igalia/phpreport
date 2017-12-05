@@ -59,6 +59,22 @@ class SetTaskBlockConfigurationAction extends Action {
      */
     private $numberOfDays;
 
+    /** Date limit enabled/disabled
+     *
+     * Enable of disable a date before which tasks cannot be written.
+     *
+     * @var boolean
+     */
+    private $dateLimitEnabled;
+
+    /** Limit date.
+     *
+     * Date before which tasks cannot be written.
+     *
+     * @var boolean
+     */
+    private $date;
+
     /** SetTaskBlockConfigurationAction constructor.
      *
      * This is just the constructor of this action.
@@ -67,10 +83,18 @@ class SetTaskBlockConfigurationAction extends Action {
      *        so tasks older than a certain number of days would be blocked.
      * @param int $numberOfDays Set the number of days in the past when tasks
      *        tasks cannot be altered.
+     * @param boolean $dateLimitEnabled Enable of disable a limit date for tasks,
+     *        so tasks before that date would be blocked.
+     * @param DateTime $date Tasks before this date would be blocked if
+     *        $dateLimitEnabled is set.
+     * @return boolean returns wether changes were saved or not.
      */
-    public function __construct($dayLimitEnabled, $numberOfDays) {
+    public function __construct($dayLimitEnabled, $numberOfDays,
+            $dateLimitEnabled, $date) {
         $this->dayLimitEnabled = $dayLimitEnabled;
         $this->numberOfDays = $numberOfDays;
+        $this->dateLimitEnabled = $dateLimitEnabled;
+        $this->date = $date;
         $this->preActionParameter = "SET_TASK_BLOCK_CONFIGURATION_PREACTION";
         $this->postActionParameter = "SET_TASK_BLOCK_CONFIGURATION_POSTACTION";
 
@@ -85,7 +109,7 @@ class SetTaskBlockConfigurationAction extends Action {
     protected function doExecute() {
         $configDao = DAOFactory::getConfigDAO();
         return $configDao->setTaskBlockConfiguration($this->dayLimitEnabled,
-                $this->numberOfDays);
+                $this->numberOfDays, $this->dateLimitEnabled, $this->date);
     }
 
 }

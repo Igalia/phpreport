@@ -144,14 +144,23 @@ class PostgreSQLConfigDAO extends ConfigDAO {
      *        so tasks older than a certain number of days would be blocked.
      * @param int $numberOfDays Set the number of days in the past when tasks
      *        tasks cannot be altered.
+     * @param boolean $dateLimitEnabled Enable of disable a limit date for tasks,
+     *        so tasks before that date would be blocked.
+     * @param DateTime $date Tasks before this date would be blocked if
+     *        $dateLimitEnabled is set.
      * @return boolean returns wether changes were saved or not.
      */
-    public function setTaskBlockConfiguration($dayLimitEnabled, $numberOfDays) {
+    public function setTaskBlockConfiguration($dayLimitEnabled, $numberOfDays,
+            $dateLimitEnabled, $date) {
         $sql = "UPDATE config SET " .
+                "block_tasks_by_day_limit_enabled = " .
+                DBPostgres::boolToString($dayLimitEnabled) . "," .
                 "block_tasks_by_day_limit_number_of_days =" .
                 DBPostgres::checkNull($numberOfDays) . "," .
-                "block_tasks_by_day_limit_enabled = " .
-                DBPostgres::boolToString($dayLimitEnabled);
+                "block_tasks_by_date_enabled = " .
+                DBPostgres::boolToString($dateLimitEnabled) . "," .
+                "block_tasks_by_date_date = " .
+                DBPostgres::formatDate($date);
 
         $res = pg_query($this->connect, $sql);
 

@@ -37,14 +37,23 @@ include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
 /* There are POST data: we try to save the settings */
 if(isset($_POST["numberOfDays"])) {
     $dayLimitEnabled = false;
+    $dateLimitEnabled = false;
     $numberOfDays = null;
+    $date = null;
     if(isset($_POST["dayLimitEnabled"])) {
         $dayLimitEnabled = true;
+    }
+    if(isset($_POST["dateLimitEnabled"])) {
+        $dateLimitEnabled = true;
     }
     if(!empty($_POST["numberOfDays"])) {
         $numberOfDays = $_POST["numberOfDays"];
     }
-    $saved = TasksFacade::SetTaskBlockConfiguration($dayLimitEnabled, $numberOfDays);
+    if(!empty($_POST["date"])) {
+        $date = date_create($_POST["date"]);
+    }
+    $saved = TasksFacade::SetTaskBlockConfiguration($dayLimitEnabled, $numberOfDays,
+            $dateLimitEnabled, $date);
 }
 
 /* Include the generic header and sidebar*/
@@ -58,11 +67,19 @@ $config = TasksFacade::GetTaskBlockConfiguration();
 echo '<script type="text/javascript">';
 echo 'var dayLimitEnabled = ';
 echo $config['dayLimitEnabled']?'true; ':'false; ';
+echo 'var dateLimitEnabled = ';
+echo $config['dateLimitEnabled']?'true; ':'false; ';
 if($config['numberOfDays'] != null) {
     echo 'var numberOfDays = ' . $config['numberOfDays'] . ';';
 }
 else {
     echo 'var numberOfDays;';
+}
+if(!is_null($config['date'])) {
+    echo "var date = Date.parseDate('" . $config['date']->format('Y-m-d') . "', 'Y-m-d');";
+}
+else {
+    echo "var date = '';";
 }
 if (isset($saved)) {
     echo 'var saved = true; ';
@@ -108,7 +125,7 @@ Ext.onReady(function () {
         width: 250,
         defaults: {width: 130},
         items: [{
-                fieldLabel: 'Block enabled',
+                fieldLabel: 'Day block enabled',
                 xtype: 'checkbox',
                 name: 'dayLimitEnabled',
                 checked: dayLimitEnabled,
@@ -117,6 +134,19 @@ Ext.onReady(function () {
                 xtype: 'numberfield',
                 name: 'numberOfDays',
                 value: numberOfDays,
+            },{
+                fieldLabel: 'Date block enabled',
+                xtype: 'checkbox',
+                name: 'dateLimitEnabled',
+                checked: dateLimitEnabled,
+            },{
+                fieldLabel: 'Date',
+                xtype: 'datefieldplus',
+                format: 'd/m/Y',
+                startDay: 1,
+                useQuickTips: false,
+                name: 'date',
+                value: date,
             }
         ],
         buttons: [{

@@ -92,9 +92,14 @@ abstract class ConfigDAO extends BaseDAO {
      *        so tasks older than a certain number of days would be blocked.
      * @param int $numberOfDays Set the number of days in the past when tasks
      *        tasks cannot be altered.
+     * @param boolean $dateLimitEnabled Enable of disable a limit date for tasks,
+     *        so tasks before that date would be blocked.
+     * @param DateTime $date Tasks before this date would be blocked if
+     *        $dateLimitEnabled is set.
      * @return boolean returns wether changes were saved or not.
      */
-    public abstract function setTaskBlockConfiguration($dayLimitEnabled, $numberOfDays);
+    public abstract function setTaskBlockConfiguration($dayLimitEnabled, $numberOfDays,
+            $dateLimitEnabled, $date);
 
     /** User value object constructor for PostgreSQL.
      *

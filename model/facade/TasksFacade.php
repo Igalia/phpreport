@@ -554,11 +554,17 @@ abstract class TasksFacade {
      *        so tasks older than a certain number of days would be blocked.
      * @param int $numberOfDays Set the number of days in the past when tasks
      *        tasks cannot be altered.
+     * @param boolean $dateLimitEnabled Enable of disable a limit date for tasks,
+     *        so tasks before that date would be blocked.
+     * @param DateTime $date Tasks before this date would be blocked if
+     *        $dateLimitEnabled is set.
      * @return boolean returns wether changes were saved or not.
      */
-    static function SetTaskBlockConfiguration($dayLimitEnabled, $numberOfDays) {
+    static function SetTaskBlockConfiguration($dayLimitEnabled, $numberOfDays,
+            $dateLimitEnabled, $date) {
 
-        $action = new SetTaskBlockConfigurationAction($dayLimitEnabled, $numberOfDays);
+        $action = new SetTaskBlockConfigurationAction($dayLimitEnabled,
+                $numberOfDays, $dateLimitEnabled, $date);
         return $action->execute();
     }
 
