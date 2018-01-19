@@ -10,6 +10,10 @@ ul#menubar {
     float: left;
 }
 
+#menubar li.right {
+    float: right;
+}
+
 #menubar li a,
 .dropdown-button {
     display: inline-block;

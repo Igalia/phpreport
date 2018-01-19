@@ -112,6 +112,7 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
             </a>
         </ul>
     </li>
-    <li><a href="../help/user" target="blank">Help</a></li>
-    <li><a href="logout.php">Logout</a></li>
+    <!-- Last items must be listed from right to left -->
+    <li class="right"><a href="logout.php">Logout</a></li>
+    <li class="right"><a href="../help/user" target="blank">Help</a></li>
 </ul>
