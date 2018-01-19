@@ -1216,7 +1216,6 @@ Ext.onReady(function(){
         store: projectsStore,
         frame: true,
         title: 'Projects',
-        style: 'margin-top: 10px',
         renderTo: 'content',
         loadMask: true,
         colModel: projectColModel,

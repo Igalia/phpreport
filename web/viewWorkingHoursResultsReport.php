@@ -182,7 +182,7 @@ Ext.onReady(function(){
             {id: 'lastTaskDate', width: 130, header: 'Last task date', sortable: true, xtype: 'datecolumn', format: 'd/m/Y', dataIndex: 'lastTaskDate'}
         ],
         stripeRows: true,
-        height: window.innerHeight - contentElement.offsetTop - DATE_INTERVAL_FORM_HEIGHT - 5,
+        height: window.innerHeight - contentElement.offsetTop - DATE_INTERVAL_FORM_HEIGHT - 10,
         width: '100%',
         title: 'Working Hours Results Report',
         // config options for stateful behavior
