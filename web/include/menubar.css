@@ -40,10 +40,17 @@ ul#menubar {
 
 #menubar .dropdown-content a {
     color: black;
-    padding: 12px 16px;
+    padding: 12px 32px 12px 16px;
     text-decoration: none;
     display: block;
     text-align: left;
+}
+
+#menubar .dropdown-content img {
+    height: 16px;
+    width: 16px;
+    padding-right: 16px;
+    vertical-align: text-bottom;
 }
 
 #menubar .show {

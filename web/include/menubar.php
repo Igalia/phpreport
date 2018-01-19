@@ -31,34 +31,85 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
     <li class="dropdown">
         <a href="#" class="dropdown-button" >Coordination</a>
         <ul class="dropdown-content">
-            <a href="xptracker-summary.php">XP Tracker</a>
-            <a href="analysistracker-summary.php">Analysis Tracker</a>
+            <a href="xptracker-summary.php">
+                <img class="silk-sitemap" src="include/icons/s.gif" />
+                XP Tracker
+            </a>
+            <a href="analysistracker-summary.php">
+                <img class="silk-sitemap-color" src="include/icons/s.gif" />
+                Analysis Tracker
+            </a>
         </ul>
     </li>
     <?php } // endif ($MENU_COORDINATION) ?>
     <li class="dropdown">
         <a href="#" class="dropdown-button" >Reports</a>
         <ul class="dropdown-content">
-            <a href="userTasksReport.php">User tasks</a>
-            <a href="viewUserDetails.php">User details</a>
-            <a href="usersEvaluation.php">Users evaluation</a>
-            <a href="viewWorkingHoursResultsReport.php">Accumulated hours</a>
-            <a href="projectDetails.php">Project details</a>
-            <a href="projectsEvaluation.php">Project evaluation</a>
-            <a href="projectsSummary.php">Projects summary</a>
+            <a href="userTasksReport.php">
+                <img class="silk-pencil" src="include/icons/s.gif" />
+                User tasks
+            </a>
+            <a href="viewUserDetails.php">
+                <img class="silk-user-green" src="include/icons/s.gif" />
+                User details
+            </a>
+            <a href="usersEvaluation.php">
+                <img class="silk-user" src="include/icons/s.gif" />
+                Users evaluation
+            </a>
+            <a href="viewWorkingHoursResultsReport.php">
+                <img class="silk-report-user" src="include/icons/s.gif" />
+                Accumulated hours
+            </a>
+            <a href="projectDetails.php">
+                <img class="silk-book-go" src="include/icons/s.gif" />
+                Project details
+            </a>
+            <a href="projectsEvaluation.php">
+                <img class="silk-book-open" src="include/icons/s.gif" />
+                Project evaluation
+            </a>
+            <a href="projectsSummary.php">
+                <img class="silk-book" src="include/icons/s.gif" />
+                Projects summary
+            </a>
         </ul>
     </li>
     <li class="dropdown">
         <a href="#" class="dropdown-button" >Data management</a>
         <ul class="dropdown-content">
-            <a href="viewUsers.php">Users</a>
-            <a href="viewProjects.php">Projects</a>
-            <a href="viewCustomers.php">Clients</a>
-            <a href="viewAreas.php">Areas</a>
-            <a href="cityManagement.php">Cities</a>
-            <a href="calendarManagement.php">Calendars</a>
-            <a href="hourCompensationManagement.php">Hour compensations</a>
-            <a href="settings.php">Application settings</a>
+            <a href="viewUsers.php">
+                <img class="silk-user-edit" src="include/icons/s.gif" />
+                Users
+            </a>
+            <a href="viewProjects.php">
+                <img class="silk-book-edit" src="include/icons/s.gif" />
+                Projects
+            </a>
+            <a href="viewCustomers.php">
+                <img class="silk-vcard-edit" src="include/icons/s.gif" />
+                Clients
+            </a>
+            <a href="viewAreas.php">
+                <img class="silk-brick-edit" src="include/icons/s.gif" />
+                Areas
+            </a>
+            <a href="cityManagement.php">
+                <img class="silk-building-edit" src="include/icons/s.gif" />
+                Cities
+            </a>
+            <a href="calendarManagement.php">
+                <img class="silk-calendar-edit" src="include/icons/s.gif" />
+                Calendars
+            </a>
+            <a href="hourCompensationManagement.php">
+                <img class="silk-script-edit" src="include/icons/s.gif" />
+                Hour compensations
+            </a>
+            <a href="settings.php">
+                <img class="silk-brick-edit" src="include/icons/s.gif" />
+                Application settings
+            </a>
         </ul>
     </li>
     <li><a href="../help/user" target="blank">Help</a></li>
