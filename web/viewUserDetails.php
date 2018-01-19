@@ -33,20 +33,7 @@
     include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
     include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 
-    $uid = $_GET['uid'];
-
-    // We are allowing only privelaged users to see details of other users
-    if(!LoginManager::hasExtraPermissions($sid)) {
-        $user = $_SESSION['user'];
-        $loggedInUserId = $user->getId();
-
-        if($uid != $loggedInUserId ) {
-            echo "You are not allowed to access this page";
-            return;
-        }
-    }
-
-    $userToShow = UsersFacade::GetUser($uid);
+    $userToShow = $_SESSION['user'];
 
 ?>
 <script src="js/include/sessionTracker.js"></script>
@@ -184,7 +171,7 @@
                 if ($sid!="")
                     echo "&sid=" . $sid;
 
-                echo "&uid=" . $uid;?>',
+                echo "&uid=" . $userToShow->getId(); ?>',
 
             rowNumberer: false,
             checkboxSelModel: false,
