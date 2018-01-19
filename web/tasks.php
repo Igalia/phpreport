@@ -92,14 +92,16 @@ echo "</script>\n";
 <script src="js/tasks.js"></script>
 <script src="js/include/closeConfirmation.js"></script>
 
-<div id="summarypanel" class="auxiliarpanel">
-</div>
-<div id="calendarpanel" class="auxiliarpanel">
-</div>
-<div id="actionspanel" class="auxiliarpanel">
+<div id="sidebar">
+    <div id="summarypanel" class="auxiliarpanel">
+    </div>
+    <div id="calendarpanel" class="auxiliarpanel">
+    </div>
+    <div id="actionspanel" class="auxiliarpanel">
+    </div>
 </div>
 
-<div id="content" style="margin-left: 215px;">
+<div id="content">
     <div id="tasks"></div>
     <div id="moreactions"></div>
 </div>

@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009-2018 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -64,8 +64,6 @@
 <body>
 
     <div id="header">
-        <img alt="PhpReport" src="include/images/phpreport-logo.png" />
-        <div id="menubar"></div>
     </div>
     <script type="text/javascript">
         var HEADER_HEIGHT = document.getElementById('header').scrollHeight;
