@@ -1,9 +1,8 @@
 body {
-    background: transparent url('images/phpreport-footer-background.png') repeat-x 0 bottom;
+    background: linear-gradient(#dadada, white) bottom no-repeat;
 }
 
 #sidebar {
-    background: transparent url('images/phpreport-header-background.png') repeat-x;
     float: left;
 }
 
@@ -14,7 +13,6 @@ body {
 }
 
 #content {
-    background: transparent url('images/phpreport-header-background.png') repeat-x;
     float: both;
     padding: 5px;
 }
