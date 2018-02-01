@@ -28,6 +28,9 @@ function checkIfSessionExists() {
                     window.location.reload();
                 }
             });
+        },
+        success: function (response) {
+            Ext.MessageBox.hide();
         }
     });
 
