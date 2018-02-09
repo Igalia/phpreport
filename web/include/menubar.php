@@ -19,6 +19,7 @@
  */
 
 include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
+$SHOW_MENU = LoginManager::isLogged();
 $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINATION');
 ?>
 
@@ -28,6 +29,7 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
 <ul id="menubar">
     <img id="header-icon" src="include/images/header-icon-32.png" />
 
+    <?php if ($SHOW_MENU) {?>
     <li><a href="tasks.php">Tasks</a></li>
     <?php if ($MENU_COORDINATION) {?>
     <li class="dropdown">
@@ -127,5 +129,6 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
     </li>
     <!-- Last items must be listed from right to left -->
     <li class="right"><a href="logout.php">Logout</a></li>
+    <?php } // endif ($SHOW_MENU) ?>
     <li class="right"><a href="../help/user" target="blank">Help</a></li>
 </ul>

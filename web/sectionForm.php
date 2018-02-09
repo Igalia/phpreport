@@ -51,7 +51,6 @@ $projectId = $module->getProjectId();
 
 /* Include the generic header and sidebar*/
 include_once("include/header.php");
-include_once("include/menubar.php");
 
 if ( (isset($_POST["name"])) && ($_POST["name"] != "") && ($_POST["hiddenReviewer"] != "") ) {
 

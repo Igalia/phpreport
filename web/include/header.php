@@ -72,8 +72,7 @@
 
 <body>
 
-    <div id="header">
-    </div>
+    <?php include("include/menubar.php"); ?>
     <script type="text/javascript">
         var HEADER_HEIGHT = document.getElementById('header').scrollHeight;
     </script>
