@@ -55,6 +55,7 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
                 <img class="silk-pencil" src="include/icons/s.gif" />
                 User tasks
             </a>
+            <li class="divider"></li>
             <a href="viewUserDetails.php">
                 <img class="silk-user-green" src="include/icons/s.gif" />
                 User details
@@ -67,6 +68,7 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
                 <img class="silk-report-user" src="include/icons/s.gif" />
                 Accumulated hours
             </a>
+            <li class="divider"></li>
             <a href="projectDetails.php">
                 <img class="silk-book-go" src="include/icons/s.gif" />
                 Project details

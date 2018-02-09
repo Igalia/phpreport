@@ -60,3 +60,10 @@ ul#menubar {
 #menubar .show {
     display:block;
 }
+
+#menubar .dropdown-content .divider {
+  height: 1px;
+  width: 206px; /* FIXME: do not hardcode this value */
+  overflow: hidden;
+  background-color: #e5e5e5;
+}
