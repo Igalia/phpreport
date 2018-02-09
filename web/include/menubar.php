@@ -29,7 +29,10 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
     <li><a href="tasks.php">Tasks</a></li>
     <?php if ($MENU_COORDINATION) {?>
     <li class="dropdown">
-        <a href="#" class="dropdown-button" >Coordination</a>
+        <a href="#" class="dropdown-button">
+            Coordination
+            <img src="ext/resources/images/default/button/arrow.gif" />
+        </a>
         <ul class="dropdown-content">
             <a href="xptracker-summary.php">
                 <img class="silk-sitemap" src="include/icons/s.gif" />
@@ -43,7 +46,10 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
     </li>
     <?php } // endif ($MENU_COORDINATION) ?>
     <li class="dropdown">
-        <a href="#" class="dropdown-button" >Reports</a>
+        <a href="#" class="dropdown-button">
+            Reports
+            <img src="ext/resources/images/default/button/arrow.gif" />
+        </a>
         <ul class="dropdown-content">
             <a href="userTasksReport.php">
                 <img class="silk-pencil" src="include/icons/s.gif" />
@@ -76,7 +82,10 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
         </ul>
     </li>
     <li class="dropdown">
-        <a href="#" class="dropdown-button" >Data management</a>
+        <a href="#" class="dropdown-button">
+            Data management
+            <img src="ext/resources/images/default/button/arrow.gif" />
+        </a>
         <ul class="dropdown-content">
             <a href="viewUsers.php">
                 <img class="silk-user-edit" src="include/icons/s.gif" />

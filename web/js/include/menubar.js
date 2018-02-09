@@ -27,6 +27,11 @@ window.addEventListener("click", function (event) {
         clickedDropdown = event.target.parentNode.getElementsByClassName("dropdown-content")[0];
         clickedDropdown.classList.toggle("show");
     }
+    if (event.target.matches('.dropdown-button img')) {
+        // toggle the clicked dropdown
+        clickedDropdown = event.target.parentNode.parentNode.getElementsByClassName("dropdown-content")[0];
+        clickedDropdown.classList.toggle("show");
+    }
     // hide any dropdowns excepting the clicked one
     for (var i = 0; i < dropdowns.length; i++) {
         if (dropdowns[i] != clickedDropdown) {
