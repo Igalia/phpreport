@@ -20,9 +20,21 @@ You will probably need to add the following lines::
 I can't start PostgreSQL server service in Fedora
 -------------------------------------------------
 
-Maybe you haven't set the storage files up. Type (as root)::
+Maybe you haven't set the storage files up. Check the actual reason of your problem with::
 
-  service postgresql initdb
+ # systemctl status postgresql.service
+ systemd[1]: Starting PostgreSQL database server...
+ postgresql-check-db-dir[10598]: Directory "/var/lib/pgsql/data" is missing or empty.
+ postgresql-check-db-dir[10598]: Use "/usr/bin/postgresql-setup --initdb"
+ postgresql-check-db-dir[10598]: to initialize the database cluster.
+ postgresql-check-db-dir[10598]: See /usr/share/doc/postgresql/README.rpm-dist for more informa
+ systemd[1]: postgresql.service: Control process exited, code=exited status=1
+
+Follow the instructions to fix it::
+
+ # /usr/bin/postgresql-setup --initdb
+ * Initializing database in '/var/lib/pgsql/data'
+ * Initialized, logs are in /var/lib/pgsql/initdb_postgresql.log
 
 There's an error message: 'It is not safe to rely on the system's timezone settings'
 ------------------------------------------------------------------------------------
