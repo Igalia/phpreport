@@ -1,24 +1,9 @@
 body {
-    background: transparent url('images/phpreport-footer-background.png') repeat-x 0 bottom;
+    background: linear-gradient(#dadada, white) bottom no-repeat;
 }
 
-#header {
-    background: transparent url('images/phpreport-header-background.png') repeat-x;
-    height: 70px;
-}
-
-#header img {
+#sidebar {
     float: left;
-}
-
-#menubar {
-    padding-top: 45px;
-}
-
-#menubar .x-toolbar {
-    background-color: transparent;
-    background-image: none;
-    border: 0px;
 }
 
 .auxiliarpanel {
@@ -29,7 +14,7 @@ body {
 
 #content {
     float: both;
-    margin: 5px;
+    padding: 5px;
 }
 
 #footer {

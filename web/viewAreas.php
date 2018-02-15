@@ -28,7 +28,7 @@ require_once(PHPREPORT_ROOT . '/web/auth.php');
 /* Include the generic header and sidebar*/
 define('PAGE_TITLE', "PhpReport - Areas Management");
 include_once("include/header.php");
-include_once("include/sidebar.php");
+include_once("include/menubar.php");
 include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
 include_once(PHPREPORT_ROOT . '/util/UnknownParameterException.php');
 include_once(PHPREPORT_ROOT . '/util/LoginManager.php');

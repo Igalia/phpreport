@@ -34,7 +34,7 @@ require_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
 /* Include the generic header and sidebar*/
 define("PAGE_TITLE", "PhpReport - Analysis tracker summary");
 include("include/header.php");
-include("include/sidebar.php");
+include("include/menubar.php");
 
 ?>
 

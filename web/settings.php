@@ -59,7 +59,7 @@ if(isset($_POST["numberOfDays"])) {
 /* Include the generic header and sidebar*/
 define('PAGE_TITLE', "PhpReport - Settings");
 include("include/header.php");
-include("include/sidebar.php");
+include("include/menubar.php");
 
 /* Read saved configuration */
 $config = TasksFacade::GetTaskBlockConfiguration();

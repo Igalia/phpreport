@@ -45,7 +45,7 @@ else
 
 /* Include the generic header and sidebar*/
 include_once("include/header.php");
-include_once("include/sidebar.php");
+include_once("include/menubar.php");
 
 
 if ( (isset($_POST["name"])) && ( ($_POST["start"] != "") && ($_POST["name"] != "")) )

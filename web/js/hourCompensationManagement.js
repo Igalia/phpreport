@@ -348,7 +348,6 @@ var extraHoursGridOptions = {
     store: extraHoursStore,
     frame: true,
     title: 'Extra hour compensations',
-    style: 'margin-top: 10px',
     loadMask: true,
     colModel: extraHoursColumnModel,
     delMsg: 'Are you sure you want to delete the selected compensation?',
