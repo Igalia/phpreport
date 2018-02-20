@@ -27,7 +27,9 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
 <script type="text/javascript" src="js/include/menubar.js"></script>
 
 <ul id="menubar">
-    <img id="header-icon" src="include/images/header-icon-32.png" />
+    <img id="header-icon"
+        srcset="include/images/header-icon-64.png 2x, include/images/header-icon-32.png 1x"
+        src="include/images/header-icon-32.png" />
 
     <?php if ($SHOW_MENU) {?>
     <li><a href="tasks.php">Tasks</a></li>
