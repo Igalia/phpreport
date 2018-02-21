@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009-2018 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -68,9 +68,9 @@ abstract class AdminFacade {
      */
     static function CreateCommonEvent(CommonEventVO $commonEvent) {
 
-    $action = new CreateCommonEventAction($commonEvent);
+        $action = new CreateCommonEventAction($commonEvent);
 
-    return $action->execute();
+        return $action->execute();
 
     }
 
@@ -84,9 +84,9 @@ abstract class AdminFacade {
      */
     static function DeleteCommonEvent(CommonEventVO $commonEvent) {
 
-    $action = new DeleteCommonEventAction($commonEvent);
+        $action = new DeleteCommonEventAction($commonEvent);
 
-    return $action->execute();
+        return $action->execute();
 
     }
 
@@ -100,9 +100,9 @@ abstract class AdminFacade {
      */
     static function UpdateCommonEvent(CommonEventVO $commonEvent) {
 
-    $action = new UpdateCommonEventAction($commonEvent);
+        $action = new UpdateCommonEventAction($commonEvent);
 
-    return $action->execute();
+        return $action->execute();
 
     }
 
@@ -130,9 +130,9 @@ abstract class AdminFacade {
      */
     static function GetAllCities() {
 
-    $action = new GetAllCitiesAction();
+        $action = new GetAllCitiesAction();
 
-    return $action->execute();
+        return $action->execute();
 
     }
 
@@ -146,9 +146,9 @@ abstract class AdminFacade {
      */
     static function CreateCity(CityVO $city) {
 
-    $action = new CreateCityAction($city);
+        $action = new CreateCityAction($city);
 
-    return $action->execute();
+        return $action->execute();
 
     }
 
@@ -162,9 +162,9 @@ abstract class AdminFacade {
      */
     static function DeleteCity(CityVO $city) {
 
-    $action = new DeleteCityAction($city);
+        $action = new DeleteCityAction($city);
 
-    return $action->execute();
+        return $action->execute();
 
     }
 
@@ -178,9 +178,9 @@ abstract class AdminFacade {
      */
     static function UpdateCity(CityVO $city) {
 
-    $action = new UpdateCityAction($city);
+        $action = new UpdateCityAction($city);
 
-    return $action->execute();
+        return $action->execute();
 
     }
 
@@ -194,9 +194,9 @@ abstract class AdminFacade {
      */
     static function CopyCityPreviousHolidays(CityVO $city, $year) {
 
-    $action = new CopyCityPreviousHolidaysAction($city, $year);
+        $action = new CopyCityPreviousHolidaysAction($city, $year);
 
-    return $action->execute();
+        return $action->execute();
 
     }
 
@@ -209,9 +209,9 @@ abstract class AdminFacade {
      */
     static function GetAllAreas() {
 
-    $action = new GetAllAreasAction();
+        $action = new GetAllAreasAction();
 
-    return $action->execute();
+        return $action->execute();
 
     }
 
@@ -225,9 +225,9 @@ abstract class AdminFacade {
      */
     static function CreateArea(AreaVO $area) {
 
-    $action = new CreateAreaAction($area);
+        $action = new CreateAreaAction($area);
 
-    return $action->execute();
+        return $action->execute();
 
     }
 
@@ -241,9 +241,9 @@ abstract class AdminFacade {
      */
     static function DeleteArea(AreaVO $area) {
 
-    $action = new DeleteAreaAction($area);
+        $action = new DeleteAreaAction($area);
 
-    return $action->execute();
+        return $action->execute();
 
     }
 
@@ -257,9 +257,9 @@ abstract class AdminFacade {
      */
     static function UpdateArea(AreaVO $area) {
 
-    $action = new UpdateAreaAction($area);
+        $action = new UpdateAreaAction($area);
 
-    return $action->execute();
+        return $action->execute();
 
     }
 
@@ -272,9 +272,9 @@ abstract class AdminFacade {
      */
     static function SynchronizeData(UserVO $user = NULL) {
 
-    $action = new SynchronizeDataAction($user);
+        $action = new SynchronizeDataAction($user);
 
-    return $action->execute();
+        return $action->execute();
 
     }
 
