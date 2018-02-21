@@ -184,3 +184,9 @@ define('VACATIONS_PROJECT', 'Holidays');
  * @global boolean Active the Coordination menu in the sidebar
  */
 define('MENU_COORDINATION', TRUE);
+
+/**
+ * @name EXTRA_HOURS_WARNING_TRIGGER
+ * @global int Value that acts as a warning trigger for extra hours values.
+ */
+define('EXTRA_HOURS_WARNING_TRIGGER', 50);

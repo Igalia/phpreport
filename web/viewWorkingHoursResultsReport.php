@@ -26,9 +26,13 @@
     /* Include the generic header and sidebar*/
     define('PAGE_TITLE', "PhpReport - Working Hours Results Report");
     include_once("include/header.php");
+
+include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
+$EXTRA_HOURS_WARNING_TRIGGER = ConfigurationParametersManager::getParameter('EXTRA_HOURS_WARNING_TRIGGER');
 ?>
 <script>
 var loggedInUser = '<?php echo $_SESSION['user']->getLogin(); ?>';
+var extraHoursTrigger = '<?php echo $EXTRA_HOURS_WARNING_TRIGGER; ?>';
 </script>
 <script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript" src="js/include/DateIntervalForm.js"></script>
@@ -70,7 +74,7 @@ Ext.onReady(function(){
      * @param {Object} val
      */
     function renderExtraHours(val) {
-        if (val > -50 && val < 50) {
+        if (val > -extraHoursTrigger && val < extraHoursTrigger) {
             return '<span style="color:green;">' + Ext.util.Format.number(val, '0,000.00') + '</span>';
         } else {
             return '<span style="color:red;">' + Ext.util.Format.number(val, '0,000.00') + '</span>';
