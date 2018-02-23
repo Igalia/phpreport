@@ -72,3 +72,8 @@ ul#menubar {
   overflow: hidden;
   background-color: #e5e5e5;
 }
+
+.menu-arrow {
+    width: 8px;
+    height: 8px;
+}
