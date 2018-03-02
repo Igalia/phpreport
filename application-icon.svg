@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="250"
+   height="250"
+   viewBox="0 0 250.00001 250"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   sodipodi:docname="application-icon.svg"
+   inkscape:export-filename="/home/jaragunde/projects/phpreport/devel/phpreport/web/include/images/clock.png"
+   inkscape:export-xdpi="12.671999"
+   inkscape:export-ydpi="12.671999">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.979899"
+     inkscape:cx="167.59963"
+     inkscape:cy="117.66533"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="1366"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     units="px" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(125,-927.36217)">
+    <circle
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:21.82044983;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path4136"
+       cx="7.6293945e-06"
+       cy="1052.3622"
+       r="114.08978" />
+    <path
+       style="fill:#bfd4f0;fill-opacity:1;stroke:none;stroke-width:25;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 5,979.75586 0,82.17774 -35.142578,0 0,22.5723 -27,0 0,13.0429 A 72.85714,72.85714 0 0 0 0,1125.2188 72.85714,72.85714 0 0 0 72.857422,1052.3613 72.85714,72.85714 0 0 0 5,979.75586 Z"
+       id="path4184"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/jaragunde/path4184.png"
+       inkscape:export-xdpi="98"
+       inkscape:export-ydpi="98" />
+    <path
+       id="path4146"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:24.16065407;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 0,1053.1992 0,-83.49636 m -0.3259196,83.37286 -53.3129544,42.7276"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>

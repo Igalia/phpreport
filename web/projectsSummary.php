@@ -26,7 +26,6 @@
     /* Include the generic header and sidebar*/
     define('PAGE_TITLE', "PhpReport - Projects Summary");
     include_once("include/header.php");
-    include_once("include/menubar.php");
     include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 
 ?>

@@ -26,7 +26,6 @@
     /* Include the generic header and sidebar*/
     define('PAGE_TITLE', "PhpReport - User Details");
     include_once("include/header.php");
-    include_once("include/menubar.php");
     include_once(PHPREPORT_ROOT . '/model/facade/CoordinationFacade.php');
     include_once(PHPREPORT_ROOT . '/model/vo/StoryVO.php');
     include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');

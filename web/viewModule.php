@@ -29,7 +29,6 @@ require_once(PHPREPORT_ROOT . '/web/auth.php');
 /* Include the generic header and sidebar*/
 define('PAGE_TITLE', "PhpReport - Module Data");
 include_once("include/header.php");
-include_once("include/menubar.php");
 include_once(PHPREPORT_ROOT . '/model/facade/CoordinationFacade.php');
 include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
 include_once(PHPREPORT_ROOT . '/model/vo/ModuleVO.php');
