@@ -24,10 +24,19 @@ define('PHPREPORT_ROOT', __DIR__ . '/../');
 require_once(PHPREPORT_ROOT . '/web/auth.php');
 include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
 include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
+include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
 
 include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
 
 $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINATION');
+$VACATIONS_PROJECT = ConfigurationParametersManager::getParameter('VACATIONS_PROJECT');
+
+$projects = ProjectsFacade::GetAllProjects();
+foreach((array) $projects as $project) {
+	if($project->getDescription() == $VACATIONS_PROJECT) {
+		$VACATIONS_PROJECT_ID = $project->getId();
+	}
+}
 
 $user = $_SESSION['user'];
 
@@ -81,6 +90,7 @@ echo "var date = '" . $dateString . "';\n";
 echo "var user = '" . $user->getLogin() . "';\n";
 echo "var currentJourney = '$currentJourney';\n";
 echo "var menuCoordination = '$MENU_COORDINATION';\n";
+echo "var vacationsProjectId = '$VACATIONS_PROJECT_ID';\n";
 
 
 echo "</script>\n";
