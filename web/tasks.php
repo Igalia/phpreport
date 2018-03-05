@@ -33,9 +33,9 @@ $VACATIONS_PROJECT = ConfigurationParametersManager::getParameter('VACATIONS_PRO
 
 $projects = ProjectsFacade::GetAllProjects();
 foreach((array) $projects as $project) {
-	if($project->getDescription() == $VACATIONS_PROJECT) {
-		$VACATIONS_PROJECT_ID = $project->getId();
-	}
+    if($project->getDescription() == $VACATIONS_PROJECT) {
+        $VACATIONS_PROJECT_ID = $project->getId();
+    }
 }
 
 $user = $_SESSION['user'];
