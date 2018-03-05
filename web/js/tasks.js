@@ -1227,9 +1227,12 @@ Ext.onReady(function(){
 
                     // Add record to store and show in a panel
                     var taskPanel = addTask(newTask);
-
-                    // Put the focus on the project field
-                    taskPanel.projectComboBox.focus();
+                    // Autosave
+                    window.setInterval(function () {
+                        if(isUnsaved()) {
+                            saveTasks(true);
+                        }
+                    }, 100);
                 }
             })
         ],
