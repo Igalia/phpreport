@@ -916,7 +916,7 @@ Ext.onReady(function(){
             'save': function () {
                 if (!myStore.error) {
                     Ext.getCmp('status_display').setText("Status: saved at "+ new Date());
-                    if(!myStore.autoSaved) {
+                    if(myStore.showConfirmation) {
                         App.setAlert(true, "Task Records Changes Saved");
                     }
                     summaryStore.load();
@@ -998,36 +998,34 @@ Ext.onReady(function(){
     }
 
     // Add the new task to the taskstore
-    function addToMyStore() {
+    function encodeXMLText() {
         myStore.each(function(r) {
             if (r.data['story'] != undefined)
                 r.data['story'] = xmlencode(r.data['story']);
             if (r.data['text'] != undefined)
                 r.data['text'] = xmlencode(r.data['text']);
         });
-        if (myStore.save()) {
-            return true;
-        }
-        return false;
     }
 
     /* Add a callback to save tasks */
-    function saveTasks() {
+    function saveTasks(showConfirmation) {
         // First we check if the time fields of all records are valid, and then save
         if (validateTasks()) {
-            myStore.autoSaved = false;
-            addToMyStore();
+            myStore.showConfirmation = showConfirmation;
+            encodeXMLText();
+            myStore.save()
         } else  // Otherwise, we print the error message
           App.setAlert(false, "Check For Invalid Field Values");
+    }
+
+    function saveButtonClicked() {
+        saveTasks(true);
     }
 
     // Implement autosave of data, when valid contents are typed in to the task fields
     window.setInterval(function () {
         if(isUnsaved()) {
-            if(validateTasks()) {
-                myStore.autoSaved = true;
-                addToMyStore();
-            }
+            saveTasks(false);
         }
     }, 10000);
 
@@ -1325,7 +1323,7 @@ Ext.onReady(function(){
             }),
             new Ext.Button({
                 text:'Save',
-                handler: saveTasks,
+                handler: saveButtonClicked,
                 disabled: forbidden,
             }),
             new Ext.menu.Separator(),
@@ -1351,7 +1349,7 @@ Ext.onReady(function(){
             '-',
             new Ext.Button({
                 text:'Save changes',
-                handler: saveTasks,
+                handler: saveButtonClicked,
                 disabled: forbidden,
             }), '-',
             {
@@ -1374,14 +1372,14 @@ Ext.onReady(function(){
         key: 's',
         ctrl: true,
         stopEvent: true,
-        handler: saveTasks,
+        handler: saveButtonClicked,
     });
     new Ext.KeyMap(document, {
         //alternate shortcut for Epiphany
         key: 's',
         alt: true,
         stopEvent: true,
-        handler: saveTasks,
+        handler: saveButtonClicked,
     });
     new Ext.KeyMap(document, {
         key: 'un',
