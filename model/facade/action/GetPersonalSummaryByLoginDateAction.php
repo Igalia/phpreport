@@ -89,16 +89,33 @@ class GetPersonalSummaryByLoginDateAction extends Action{
         $this->userVO = $userVO;
         $this->date = $date;
         $this->currentJourney = $dao->getByIntervals( $this->date, $this->date, $this->userVO->getId())[0];
-        $this->currentUserGoal = $userGoaldao->getUserGoalsForCurrentDate( $this->userVO->getId(), $this->date );
+        $storedUserGoal = $userGoaldao->getUserGoalsForCurrentDate( $this->userVO->getId(), $this->date );
 
-        if( !$this->currentUserGoal && $this->currentJourney ) {
+        if( $storedUserGoal ) {
+            // Force the first day of the user goal period to be Monday, last to be Sunday.
+            // This is required to make accurate week-based calculations.
+            $userGoalVO = new UserGoalVO();
+            $userGoalVO->setUserId( $userVO->getId() );
+            $userGoalVO->setExtraHours( $storedUserGoal->getExtraHours() );
+            $goalInitDate = $storedUserGoal->getInitDate();
+            $goalInitDate->modify('last monday');
+            $userGoalVO->setInitDate($goalInitDate);
+            $goalEndDate = $storedUserGoal->getEndDate();
+            $goalEndDate->modify('next sunday');
+            $userGoalVO->setEndDate($goalEndDate);
+            $this->currentUserGoal = $userGoalVO;
+        }
+        else if( !$storedUserGoal && $this->currentJourney ) {
+            // Create a ficticious goal that starts in the first Monday of the year
+            // and ends on the last Sunday. If the user journey is shorter, it will
+            // be used instead.
             $userGoalVO = new UserGoalVO();
             $userGoalVO->setUserId( $userVO->getId() );
             $userGoalVO->setExtraHours( 0 );
             $userGoalVO->setInitDate( max( $this->currentJourney->getInitDate(),
                 DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('first Monday of January', $this->date->getTimestamp())))));
             $userGoalVO->setEndDate( min( $this->currentJourney->getEndDate(),
-                DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('last day of December', $this->date->getTimestamp())))));
+                DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('last Sunday of December', $this->date->getTimestamp())))));
             $this->currentUserGoal = $userGoalVO;
         }
         $this->preActionParameter="GET_PERSONAL_SUMMARY_BY_USER_LOGIN_DATE_PREACTION";
