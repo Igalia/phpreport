@@ -113,9 +113,9 @@ class GetPersonalSummaryByLoginDateAction extends Action{
             $userGoalVO->setUserId( $userVO->getId() );
             $userGoalVO->setExtraHours( 0 );
             $userGoalVO->setInitDate( max( $this->currentJourney->getInitDate(),
-                DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('first Monday of January', $this->date->getTimestamp())))));
+                DateTime::createFromFormat( 'U', strtotime('first Monday of January', $this->date->getTimestamp()))));
             $userGoalVO->setEndDate( min( $this->currentJourney->getEndDate(),
-                DateTime::createFromFormat( 'Y-m-d', date('Y-m-d', strtotime('last Sunday of December', $this->date->getTimestamp())))));
+                DateTime::createFromFormat( 'U', strtotime('last Sunday of December', $this->date->getTimestamp()))));
             $this->currentUserGoal = $userGoalVO;
         }
         $this->preActionParameter="GET_PERSONAL_SUMMARY_BY_USER_LOGIN_DATE_PREACTION";
