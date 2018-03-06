@@ -1228,7 +1228,7 @@ Ext.onReady(function(){
                     // Add record to store and show in a panel
                     var taskPanel = addTask(newTask);
                     // Autosave
-                    window.setInterval(function () {
+                    window.setTimeout(function () {
                         if(isUnsaved()) {
                             saveTasks(true);
                         }
