@@ -1200,6 +1200,40 @@ Ext.onReady(function(){
                     // Put the focus on the project field
                     taskPanel.projectComboBox.focus();
                 }
+            }),
+        // Default button for full-holiday task
+            new Ext.Button({
+		id: 'fullHolidayTaskButton',
+                text: 'Full-Holiday task',
+                disabled: forbidden,
+                handler: function () {
+                    // Delay task creation until store gets loaded or it won't be properly added
+                    if (!isLoaded()) {
+                        window.setTimeout(Ext.getCmp('fullHolidayTaskButton').handler, 100);
+                        return;
+                    }
+
+                    removeFreshEmptyTask();
+
+                    // Create task and fill init and end times
+                    var newTask = new taskRecord();
+                    var init = new Date();
+                    init.setHours(0, 0, 0, 0);
+                    var end = new Date();
+                    end.setHours(0, currentJourney*60, 0, 0);
+                    newTask.set('initTime', init.format('H:i'));
+                    newTask.set('endTime', end.format('H:i'));
+                    newTask.set('projectId', vacationsProjectId);
+
+                    // Add record to store and show in a panel
+                    var taskPanel = addTask(newTask);
+                    // Autosave
+                    window.setTimeout(function () {
+                        if(isUnsaved()) {
+                            saveTasks(true);
+                        }
+                    }, 500);
+                }
             })
         ],
         addButtonForTemplate: function (templateValues) {
