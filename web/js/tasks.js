@@ -1232,7 +1232,7 @@ Ext.onReady(function(){
                         if(isUnsaved()) {
                             saveTasks(true);
                         }
-                    }, 100);
+                    }, 500);
                 }
             })
         ],
