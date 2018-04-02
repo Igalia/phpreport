@@ -54,6 +54,10 @@ The project is released under the
 
 This software includes code and assets from other open source projects:
 
+* The [ExtJS](https://sencha.com/products/extjs/) library,
+  licensed under the terms of the
+  [GNU General Public License, version 3](web/ext/gpl-3.0.txt).
+
 * The DatePickerPlus Addon by [Marco Wienkoop](http://www.lubber.de/),
   licensed under the terms of the
   [GNU General Public License, version 3](web/include/ext.ux.datepickerplus/license.txt).
