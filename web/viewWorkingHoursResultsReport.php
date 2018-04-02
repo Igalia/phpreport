@@ -26,9 +26,13 @@
     /* Include the generic header and sidebar*/
     define('PAGE_TITLE', "PhpReport - Working Hours Results Report");
     include_once("include/header.php");
+
+include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
+$EXTRA_HOURS_WARNING_TRIGGER = ConfigurationParametersManager::getParameter('EXTRA_HOURS_WARNING_TRIGGER');
 ?>
 <script>
 var loggedInUser = '<?php echo $_SESSION['user']->getLogin(); ?>';
+var extraHoursTrigger = '<?php echo $EXTRA_HOURS_WARNING_TRIGGER; ?>';
 </script>
 <script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript" src="js/include/DateIntervalForm.js"></script>
@@ -50,13 +54,31 @@ Ext.onReady(function(){
      * Custom function used for column renderer
      * @param {Object} val
      */
-    function hours(val){
-        if(val > 0){
-            return '<span style="color:green;">' + Ext.util.Format.number(val, '0,000.00') + '</span>';
-        }else if(val < 0){
+    function renderHours(val) {
+        return Ext.util.Format.number(val, '0,000.00');
+    }
+
+    /**
+     * Custom function used for column renderer
+     * @param {Object} val
+     */
+    function renderHolidayHours(val) {
+        if (val < 0) {
             return '<span style="color:red;">' + Ext.util.Format.number(val, '0,000.00') + '</span>';
         }
-        return val;
+        return Ext.util.Format.number(val, '0,000.00');
+    }
+
+    /**
+     * Custom function used for column renderer
+     * @param {Object} val
+     */
+    function renderExtraHours(val) {
+        if (val > -extraHoursTrigger && val < extraHoursTrigger) {
+            return '<span style="color:green;">' + Ext.util.Format.number(val, '0,000.00') + '</span>';
+        } else {
+            return '<span style="color:red;">' + Ext.util.Format.number(val, '0,000.00') + '</span>';
+        }
     }
 
 
@@ -173,11 +195,11 @@ Ext.onReady(function(){
         store: store,
         columns: [
             {id: 'login', width: 130, header: 'Login', sortable: true, dataIndex: 'login'},
-            {id: 'pendingHoliday', width: 130, header: 'Pending Holiday Hours', sortable: true, renderer: hours, dataIndex: 'pendingHoliday'},
-            {id: 'extraHours', width: 130, header: 'Extra Hours', sortable: true, renderer: hours, dataIndex: 'extraHours'},
-            {id: 'workableHours', width: 130, header: 'Workable Hours', sortable: true, renderer: hours, dataIndex: 'workableHours'},
-            {id: 'totalHours', width: 130, header: 'Worked Hours', sortable: true, renderer: hours, dataIndex: 'totalHours'},
-            {id: 'totalExtraHours', width: 130, header: 'Total Extra Hours', sortable: true, renderer: hours, dataIndex: 'totalExtraHours'},
+            {id: 'pendingHoliday', width: 130, header: 'Pending Holiday Hours', sortable: true, renderer: renderHolidayHours, dataIndex: 'pendingHoliday'},
+            {id: 'extraHours', width: 130, header: 'Extra Hours', sortable: true, renderer: renderExtraHours, dataIndex: 'extraHours'},
+            {id: 'workableHours', width: 130, header: 'Workable Hours', sortable: true, renderer: renderHours, dataIndex: 'workableHours'},
+            {id: 'totalHours', width: 130, header: 'Worked Hours', sortable: true, renderer: renderHours, dataIndex: 'totalHours'},
+            {id: 'totalExtraHours', width: 130, header: 'Total Extra Hours', sortable: true, renderer: renderExtraHours, dataIndex: 'totalExtraHours'},
             {id: 'lastTaskDate', width: 130, header: 'Last task date', sortable: true, xtype: 'datecolumn', format: 'd/m/Y', dataIndex: 'lastTaskDate'}
         ],
         stripeRows: true,
