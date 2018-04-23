@@ -76,7 +76,6 @@ var taskStoryRecord = new Ext.data.Record.create([
 /* Schema of the information of the personal summary */
 var summaryRecord = new Ext.data.Record.create([
     {name:'day'},
-    {name:'month'},
     {name:'week'},
     {name:'weekly_goal'},
 
@@ -955,7 +954,6 @@ Ext.onReady(function(){
         remoteSort: false,
         listeners: {
             'load': function () {
-                Ext.getCmp('month').setValue(summaryStore.getAt(0).get('month') + " h");
                 Ext.getCmp('day').setValue(summaryStore.getAt(0).get('day') + " h");
                 Ext.getCmp('week').setValue(summaryStore.getAt(0).get('week') + " h");
                 Ext.getCmp('weekly_goal').setValue(summaryStore.getAt(0).get('weekly_goal') + " h");
@@ -1120,10 +1118,6 @@ Ext.onReady(function(){
             id:'week',
             name: 'week',
             fieldLabel:'This week',
-        },{
-            id:'month',
-            name: 'month',
-            fieldLabel:'This month',
         },{
             id:'weekly_goal',
             name: 'weekly_goal',

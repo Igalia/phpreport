@@ -84,12 +84,6 @@
              $weekMinutes = "0" . $weekMinutes;
         $week = $weekHours . ":" . $weekMinutes;
 
-        $monthHours = floor($summary['month']/60);
-        $monthMinutes = $summary['month']-($monthHours*60);
-        if ($monthMinutes < 10)
-            $monthMinutes = "0" . $monthMinutes;
-        $month = $monthHours . ":" . $monthMinutes;
-
         $weeklyGoalHours = floor($summary['weekly_goal']/60);
         $weeklyGoalMinutes = $summary['weekly_goal']-($weeklyGoalHours*60);
         if ($weeklyGoalMinutes < 10)
