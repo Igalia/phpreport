@@ -78,6 +78,9 @@ var summaryRecord = new Ext.data.Record.create([
     {name:'day'},
     {name:'week'},
     {name:'weekly_goal'},
+    {name:'extra_hours'},
+    {name:'pending_holidays'},
+    {name:'acc_extra_hours'},
 
 ]);
 /* Schema of the information about task templates */
@@ -957,6 +960,9 @@ Ext.onReady(function(){
                 Ext.getCmp('day').setValue(summaryStore.getAt(0).get('day') + " h");
                 Ext.getCmp('week').setValue(summaryStore.getAt(0).get('week') + " h");
                 Ext.getCmp('weekly_goal').setValue(summaryStore.getAt(0).get('weekly_goal') + " h");
+                Ext.getCmp('extra_hours').setValue(summaryStore.getAt(0).get('extra_hours') + " h");
+                Ext.getCmp('pending_holidays').setValue(summaryStore.getAt(0).get('pending_holidays') + " h");
+                Ext.getCmp('acc_extra_hours').setValue(summaryStore.getAt(0).get('acc_extra_hours') + " h");
             },
         }
     });
@@ -1122,6 +1128,18 @@ Ext.onReady(function(){
             id:'weekly_goal',
             name: 'weekly_goal',
             fieldLabel:'Week goal',
+        },{
+            id:'extra_hours',
+            name:'extra_hours',
+            fieldLabel: 'Extra hours',
+        },{
+            id:'pending_holidays',
+            name:'pending_holidays',
+            fieldLabel:'Pending holidays',
+        },{
+            id:'acc_extra_hours',
+            name:'acc_extra_hours',
+            fieldLabel:'Acc Extra hours',
         }
 
         ]
