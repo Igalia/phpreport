@@ -320,7 +320,7 @@ Ext.onReady(function(){
                 allowBlank: false,
                 listeners: {
                     'change': function() {
-                        this.setValue(Trim(this.getValue()));
+                        this.setValue(this.getValue().trim());
                     }
                 },
             }
@@ -334,11 +334,6 @@ Ext.onReady(function(){
                 xtype: 'textfield',
                 inputType: 'password',
                 allowBlank: true,
-                listeners: {
-                    'change': function() {
-                        this.setValue(Trim(this.getValue()));
-                    }
-                },
             }
         }<?php
 

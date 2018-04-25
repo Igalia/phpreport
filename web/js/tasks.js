@@ -495,13 +495,13 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 enableKeyEvents: true,
                 listeners: {
                     'change': function () {
-                        this.parent.taskRecord.set('story',Trim(this.getValue()));
+                        this.parent.taskRecord.set('story',this.getValue().trim());
                     },
                     'keyup': function () {
-                        this.parent.taskRecord.set('story',Trim(this.getValue()));
+                        this.parent.taskRecord.set('story',this.getValue().trim());
                     },
                     'blur': function () {
-                        this.setValue(Trim(this.getValue()));
+                        this.setValue(this.getValue().trim());
                     }
                 }
             }),
@@ -515,13 +515,13 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 enableKeyEvents: true,
                 listeners: {
                     'keyup': function () {
-                        this.parent.taskRecord.set('text',Trim(this.getValue()));
+                        this.parent.taskRecord.set('text',this.getValue().trim());
                     },
                     'change': function () {
-                        this.parent.taskRecord.set('text',Trim(this.getValue()));
+                        this.parent.taskRecord.set('text',this.getValue().trim());
                     },
                     'blur': function () {
-                        this.setValue(Trim(this.getValue()));
+                        this.setValue(this.getValue().trim());
                     }
                 }
             }),

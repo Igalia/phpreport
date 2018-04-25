@@ -162,7 +162,7 @@ Ext.onReady(function(){
             allowBlank:false,
             listeners: {
                 'change': function() {
-                    this.setValue(Trim(this.getValue()));
+                    this.setValue(this.getValue().trim());
                 }
             },
         },{
@@ -172,7 +172,7 @@ Ext.onReady(function(){
             xtype: 'textarea',
             listeners: {
                 'change': function() {
-                    this.setValue(Trim(this.getValue()));
+                    this.setValue(this.getValue().trim());
                 }
             },
         },{
