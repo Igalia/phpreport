@@ -1106,40 +1106,40 @@ Ext.onReady(function(){
     // Summary Panel
     var summaryPanel = new Ext.FormPanel({
         width: 204,
-        labelWidth: 70,
+        labelWidth: 140,
         renderTo: Ext.get('summarypanel'),
         frame:true,
         title: 'User Work Summary',
         bodyStyle: 'padding:5px 5px 0px 5px;',
         defaults: {
-            width: 100,
-            labelStyle: 'text-align: right; width: 70; font-weight:bold; padding: 0 0 0 0;',
+            width: 140,
+            labelStyle: 'text-align: left; width: 140; font-weight:bold; padding: 0 0 0 0;',
         },
         defaultType:'displayfield',
         items: [{
             id:'day',
             name: 'day',
-            fieldLabel:'Today',
+            fieldLabel:'Worked hours (today)',
         },{
             id:'week',
             name: 'week',
-            fieldLabel:'This week',
+            fieldLabel:'Worked hours (week)',
         },{
             id:'weekly_goal',
             name: 'weekly_goal',
-            fieldLabel:'Week goal',
+            fieldLabel:'Goal (week)',
         },{
             id:'extra_hours',
             name:'extra_hours',
-            fieldLabel: 'Extra hours',
+            fieldLabel: 'Extra hours (year)',
         },{
             id:'pending_holidays',
             name:'pending_holidays',
-            fieldLabel:'Pending holidays',
+            fieldLabel:'Pending holiday hours (year)',
         },{
             id:'acc_extra_hours',
             name:'acc_extra_hours',
-            fieldLabel:'Acc Extra hours',
+            fieldLabel:'Extra hours (total)',
         }
 
         ]

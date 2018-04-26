@@ -97,8 +97,26 @@
         $extraHours = $extraHoursSummary[1][$userVO->getLogin()]["extra_hours"];
         $accExtraHours = $extraHoursSummary[1][$userVO->getLogin()]["total_extra_hours"];
 
+        $hours = floor($extraHours/60);
+        $minutes = round($extraHours - ($hours*60));
+        if ($minutes < 10)
+            $minutes = "0" . $minutes;
+        $extraHours = $hours . ":" . $minutes;
+
+        $hours = floor($accExtraHours/60);
+        $minutes = round($accExtraHours - ($hours*60));
+        if ($minutes < 10)
+            $minutes = "0" . $minutes;
+        $accExtraHours = $hours . ":" . $minutes;
+
         $holidays = UsersFacade::GetPendingHolidayHours($initDate, $date, $userVO);
         $pendingHolidays = $holidays[$userVO->getLogin()];
+
+        $hours = floor($pendingHolidays/60);
+        $minutes = round($pendingHolidays - ($hours*60));
+        if ($minutes < 10)
+            $minutes = "0" . $minutes;
+        $pendingHolidays = $hours . ":" . $minutes;
 
         $string = "<personalSummary login='" . $userVO->getLogin() . "' date='" . $date->format($dateFormat) . "'><hours><day>" . $day  . "</day><week>" . $week  . "</week><weekly_goal>" . $weekGoal . "</weekly_goal><extra_hours>" . $extraHours . "</extra_hours><pending_holidays>" . $pendingHolidays . "</pending_holidays><acc_extra_hours>" . $accExtraHours . "</acc_extra_hours></hours></personalSummary>";
 
