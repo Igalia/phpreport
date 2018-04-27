@@ -39,7 +39,7 @@
 
 		<!-- Include Ext library -->
     <script type="text/javascript" src="ext/adapter/ext/ext-base.js"></script>
-    <script type="text/javascript" src="ext/ext-all.js"></script>
+    <script type="text/javascript" src="ext/ext.min.js"></script>
     <script type="text/javascript" src="include/App.js"></script>
     <script type="text/javascript" src="include/RowEditor.js"></script>
     <script type="text/javascript" src="include/DatePickerLinks.js"></script>
