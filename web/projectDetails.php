@@ -36,7 +36,6 @@ echo "var user = '" . $user->getLogin() . "';\n";
 echo "</script>\n";
 
 ?>
-<script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript" src="js/include/ExportableGridPanel.js"></script>
 <script src="js/projectDetails.js"></script>
 

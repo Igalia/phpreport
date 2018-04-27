@@ -40,7 +40,6 @@ $module = CoordinationFacade::GetModule($moduleId);
 ?><link rel="stylesheet" type="text/css" href="include/ColumnNodeUI.css" />
 <script type="text/javascript" src="include/ColumnNodeUI.js"></script>
 <script type="text/javascript" src="include/AnalysisTrackerSummaryTree.js"></script>
-<script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript">
 
 Ext.onReady(function(){

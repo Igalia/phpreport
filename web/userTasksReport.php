@@ -48,7 +48,6 @@ if(LoginManager::hasExtraPermissions()) {
 echo "var menuCoordination = '$MENU_COORDINATION';\n";
 echo "</script>\n";
 ?>
-<script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript" src="js/include/ExportableGridPanel.js"></script>
 <script type="text/javascript" src="js/userTasksReport.js"></script>
 

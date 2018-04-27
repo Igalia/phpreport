@@ -97,7 +97,6 @@ echo "</script>\n";
 
 ?>
 <script src="js/include/TasksStore.js"></script>
-<script src="js/include/sessionTracker.js"></script>
 <script src="js/tasks.js"></script>
 <script src="js/include/closeConfirmation.js"></script>
 

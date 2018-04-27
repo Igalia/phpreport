@@ -38,7 +38,6 @@ define('PAGE_TITLE', "PhpReport - Cities Management");
 include_once("include/header.php");
 
 ?>
-<script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript" src="js/cityManagement.js"></script>
 
 <div id="content">

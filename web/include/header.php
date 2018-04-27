@@ -59,6 +59,9 @@
     <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus.js"></script>
     <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus-holidays.js"></script>
 
+    <!-- Periodical check for open sessions -->
+    <script src="js/include/sessionTracker.js"></script>
+
     <!-- Favicon / shortcut icon configuration -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">

@@ -42,7 +42,6 @@ $areas = AdminFacade::GetAllAreas();
 $customers = CustomersFacade::GetAllCustomers();
 
 ?>
-<script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript">
 
 Ext.onReady(function(){

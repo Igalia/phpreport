@@ -40,7 +40,6 @@ echo '];';
 echo '</script>';
 
 ?>
-<script src="js/include/sessionTracker.js"></script>
 <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus.js"></script>
 <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus-holidays.js"></script>
 <script type="text/javascript" src='js/calendarManagement.js'></script>

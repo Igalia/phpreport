@@ -46,7 +46,6 @@ $users = ProjectsFacade::GetProjectUsers($iteration->getProjectId());
 $taskSections = CoordinationFacade::GetStoryTaskSections($storyId);
 
 ?>
-<script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript">
 Ext.apply(Ext.form.VTypes, {
     <?php

@@ -119,7 +119,6 @@ $users = UsersFacade::GetStoryIterationProjectAreaTodayUsers($storyId);
 $taskSections = CoordinationFacade::GetStoryTaskSections($storyId);
 
 ?>
-<script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript">
 // Add the additional VType to validate date inputs
 Ext.apply(Ext.form.VTypes, {

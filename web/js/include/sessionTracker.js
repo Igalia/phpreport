@@ -33,10 +33,10 @@ function checkIfSessionExists() {
             Ext.MessageBox.hide();
         }
     });
-
-    window.setTimeout(checkIfSessionExists, 300000);
 }
 
 window.onload = function () {
-    checkIfSessionExists();
+    if (!window.location.pathname.endsWith("login.php")) { //do not run this check in the login screen!
+        window.setInterval(checkIfSessionExists, 300000);
+    }
 };

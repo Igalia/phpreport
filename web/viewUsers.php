@@ -45,7 +45,6 @@ $areas = AdminFacade::GetAllAreas();
 $groups = UsersFacade::GetAllUserGroups();
 
 ?>
-<script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript">
 
 Ext.onReady(function(){

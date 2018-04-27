@@ -54,7 +54,6 @@
         }
     }
 ?>
-<script src="js/include/sessionTracker.js"></script>
 <script type="text/javascript" src="js/include/DateIntervalForm.js"></script>
 <script type="text/javascript" src="js/include/ExportableGridPanel.js"></script>
 <script type="text/javascript">
