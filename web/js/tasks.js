@@ -1114,6 +1114,13 @@ Ext.onReady(function(){
             labelStyle: 'font-weight: bold; padding: 0',
             style: 'text-align: right;',
         },
+        tools: [{
+            id: 'help',
+            qtip: 'User work summary documentation',
+            handler: function(){
+                window.open('../help/user/tasks.html#user-work-summary');
+            }
+        }],
         defaultType:'displayfield',
         items: [{
             id:'day',
