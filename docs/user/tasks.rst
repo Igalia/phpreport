@@ -144,19 +144,33 @@ User work summary
 
 The *User work summary* panel on the left contains the following information:
 
-* Number of hours worked in the selected day, week and month.
+* **Worked (today):** Number of hours worked today.
 
-* Week goal for the selected week. This value is calculated taking into account
-  the users' journey values and the amount of worked hours so far. By default,
-  it represents the number of hours users must work per week to finish the year
-  with zero accumulated hours in that period: for example, if you have worked
-  some extra hours in the last weeks the weekly goal will become lower than your
-  weekly schedule so you finish the year with zero accumulated hours.
+* **Worked (week):** Number of hours worked this week.
+
+* **Goal (week):** Goal for the selected week.
+
+  This value is calculated taking into account the users' journey values and
+  the amount of worked hours so far.
+
+  By default, it represents **the number of hours users must work per week
+  to finish the year with zero accumulated hours in that period.**
+
+  For example, if you have worked some extra hours in the last weeks the
+  weekly goal will become lower than your weekly schedule. This way you will
+  have a way to know how to handle your time and finish the year with zero
+  accumulated hours.
 
   Managers can customize per-user weekly goals with other time periods and
   amounts of hours different of zero. Read more about this in the
   `Setting user custom goals <users-management.rst#setting-user-custom-goals>`__
   section.
+
+* **Extra (year):** Number of extra hours corresponding to the current year.
+
+* **Pending holidays (year):** Number of hours of holidays pending to be enjoyed this year.
+
+* **Extra (total):** Number of historically accumulated extra hours.
 
 Hotkeys
 =======
