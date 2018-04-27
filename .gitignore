@@ -14,3 +14,7 @@ phpreport*.zip
 
 #default config file
 config/config.defaults
+
+#minified JS and source maps
+*.min.js
+*.min.js.map
