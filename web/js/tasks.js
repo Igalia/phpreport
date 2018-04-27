@@ -76,9 +76,11 @@ var taskStoryRecord = new Ext.data.Record.create([
 /* Schema of the information of the personal summary */
 var summaryRecord = new Ext.data.Record.create([
     {name:'day'},
-    {name:'month'},
     {name:'week'},
     {name:'weekly_goal'},
+    {name:'extra_hours'},
+    {name:'pending_holidays'},
+    {name:'acc_extra_hours'},
 
 ]);
 /* Schema of the information about task templates */
@@ -955,10 +957,12 @@ Ext.onReady(function(){
         remoteSort: false,
         listeners: {
             'load': function () {
-                Ext.getCmp('month').setValue(summaryStore.getAt(0).get('month') + " h");
                 Ext.getCmp('day').setValue(summaryStore.getAt(0).get('day') + " h");
                 Ext.getCmp('week').setValue(summaryStore.getAt(0).get('week') + " h");
                 Ext.getCmp('weekly_goal').setValue(summaryStore.getAt(0).get('weekly_goal') + " h");
+                Ext.getCmp('extra_hours').setValue(summaryStore.getAt(0).get('extra_hours') + " h");
+                Ext.getCmp('pending_holidays').setValue(summaryStore.getAt(0).get('pending_holidays') + " h");
+                Ext.getCmp('acc_extra_hours').setValue(summaryStore.getAt(0).get('acc_extra_hours') + " h");
             },
         }
     });
@@ -1102,32 +1106,46 @@ Ext.onReady(function(){
     // Summary Panel
     var summaryPanel = new Ext.FormPanel({
         width: 204,
-        labelWidth: 70,
+        labelWidth: 140,
         renderTo: Ext.get('summarypanel'),
         frame:true,
         title: 'User Work Summary',
-        bodyStyle: 'padding:5px 5px 0px 5px;',
         defaults: {
-            width: 100,
-            labelStyle: 'text-align: right; width: 70; font-weight:bold; padding: 0 0 0 0;',
+            labelStyle: 'font-weight: bold; padding: 0',
+            style: 'text-align: right;',
         },
+        tools: [{
+            id: 'help',
+            qtip: 'User work summary documentation',
+            handler: function(){
+                window.open('../help/user/tasks.html#user-work-summary');
+            }
+        }],
         defaultType:'displayfield',
         items: [{
             id:'day',
             name: 'day',
-            fieldLabel:'Today',
+            fieldLabel:'Worked (today)',
         },{
             id:'week',
             name: 'week',
-            fieldLabel:'This week',
-        },{
-            id:'month',
-            name: 'month',
-            fieldLabel:'This month',
+            fieldLabel:'Worked (week)',
         },{
             id:'weekly_goal',
             name: 'weekly_goal',
-            fieldLabel:'Week goal',
+            fieldLabel:'Goal (week)',
+        },{
+            id:'extra_hours',
+            name:'extra_hours',
+            fieldLabel: 'Extra (year)',
+        },{
+            id:'pending_holidays',
+            name:'pending_holidays',
+            fieldLabel:'Pending holidays (year)',
+        },{
+            id:'acc_extra_hours',
+            name:'acc_extra_hours',
+            fieldLabel:'Extra (total)',
         }
 
         ]

@@ -28,6 +28,7 @@
 
     define('PHPREPORT_ROOT', __DIR__ . '/../../');
     include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
+    include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
     include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
     include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
@@ -84,19 +85,40 @@
              $weekMinutes = "0" . $weekMinutes;
         $week = $weekHours . ":" . $weekMinutes;
 
-        $monthHours = floor($summary['month']/60);
-        $monthMinutes = $summary['month']-($monthHours*60);
-        if ($monthMinutes < 10)
-            $monthMinutes = "0" . $monthMinutes;
-        $month = $monthHours . ":" . $monthMinutes;
-
         $weeklyGoalHours = floor($summary['weekly_goal']/60);
         $weeklyGoalMinutes = $summary['weekly_goal']-($weeklyGoalHours*60);
         if ($weeklyGoalMinutes < 10)
             $weeklyGoalMinutes = "0" . $weeklyGoalMinutes;
         $weekGoal = $weeklyGoalHours. ":" . $weeklyGoalMinutes;
 
-        $string = "<personalSummary login='" . $userVO->getLogin() . "' date='" . $date->format($dateFormat) . "'><hours><day>" . $day  . "</day><week>" . $week  . "</week><month>" . $month  . "</month><weekly_goal>" . $weekGoal . "</weekly_goal></hours></personalSummary>";
+        $initDate = new DateTime($date->format('Y').'-01-01');
+        $extraHoursSummary = UsersFacade::ExtraHoursReport($initDate, $date, $userVO);
+
+        $extraHours = $extraHoursSummary[1][$userVO->getLogin()]["extra_hours"];
+        $accExtraHours = $extraHoursSummary[1][$userVO->getLogin()]["total_extra_hours"];
+
+        $hours = floor($extraHours/60);
+        $minutes = round($extraHours - ($hours*60));
+        if ($minutes < 10)
+            $minutes = "0" . $minutes;
+        $extraHours = $hours . ":" . $minutes;
+
+        $hours = floor($accExtraHours/60);
+        $minutes = round($accExtraHours - ($hours*60));
+        if ($minutes < 10)
+            $minutes = "0" . $minutes;
+        $accExtraHours = $hours . ":" . $minutes;
+
+        $holidays = UsersFacade::GetPendingHolidayHours($initDate, $date, $userVO);
+        $pendingHolidays = $holidays[$userVO->getLogin()];
+
+        $hours = floor($pendingHolidays/60);
+        $minutes = round($pendingHolidays - ($hours*60));
+        if ($minutes < 10)
+            $minutes = "0" . $minutes;
+        $pendingHolidays = $hours . ":" . $minutes;
+
+        $string = "<personalSummary login='" . $userVO->getLogin() . "' date='" . $date->format($dateFormat) . "'><hours><day>" . $day  . "</day><week>" . $week  . "</week><weekly_goal>" . $weekGoal . "</weekly_goal><extra_hours>" . $extraHours . "</extra_hours><pending_holidays>" . $pendingHolidays . "</pending_holidays><acc_extra_hours>" . $accExtraHours . "</acc_extra_hours></hours></personalSummary>";
 
     } while(false);
 
