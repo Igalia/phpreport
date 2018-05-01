@@ -38,7 +38,7 @@
     <link rel="stylesheet" type="text/css" href="include/ext.ux.datepickerplus/datepickerplus.css"/>
 
 		<!-- Include Ext library -->
-    <script type="text/javascript" src="ext/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="ext/adapter/ext/base.min.js"></script>
     <script type="text/javascript" src="ext/ext.min.js"></script>
     <script type="text/javascript" src="include/App.js"></script>
     <script type="text/javascript" src="include/RowEditor.js"></script>
