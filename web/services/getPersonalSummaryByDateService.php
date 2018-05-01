@@ -95,16 +95,25 @@
         $extraHoursSummary = UsersFacade::ExtraHoursReport($initDate, $date, $userVO);
 
         $extraHours = $extraHoursSummary[1][$userVO->getLogin()]["extra_hours"];
-        $accExtraHours = $extraHoursSummary[1][$userVO->getLogin()]["total_extra_hours"];
 
-        $hours = floor($extraHours/60);
-        $minutes = round($extraHours - ($hours*60));
+        $hours = intval($extraHours);
+        $minutes = round(((abs($extraHours) - abs($hours))*60),2);
+        if ($minutes == 60) {
+            $minutes = 0;
+            $hours = $hours + 1 ;
+        }
         if ($minutes < 10)
             $minutes = "0" . $minutes;
         $extraHours = $hours . ":" . $minutes;
 
-        $hours = floor($accExtraHours/60);
-        $minutes = round($accExtraHours - ($hours*60));
+        $accExtraHours = $extraHoursSummary[1][$userVO->getLogin()]["total_extra_hours"];
+
+        $hours = intval($accExtraHours);
+        $minutes = round(((abs($accExtraHours) - abs($hours))*60),2);
+        if ($minutes == 60) {
+            $minutes = 0;
+            $hours = $hours + 1 ;
+        }
         if ($minutes < 10)
             $minutes = "0" . $minutes;
         $accExtraHours = $hours . ":" . $minutes;
@@ -112,8 +121,12 @@
         $holidays = UsersFacade::GetPendingHolidayHours($initDate, $date, $userVO);
         $pendingHolidays = $holidays[$userVO->getLogin()];
 
-        $hours = floor($pendingHolidays/60);
-        $minutes = round($pendingHolidays - ($hours*60));
+        $hours = intval($pendingHolidays);
+        $minutes = round(((abs($pendingHolidays) - abs($hours))*60),2);
+        if ($minutes == 60) {
+            $minutes = 0;
+            $hours = $hours + 1 ;
+        }
         if ($minutes < 10)
             $minutes = "0" . $minutes;
         $pendingHolidays = $hours . ":" . $minutes;

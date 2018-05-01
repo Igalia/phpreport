@@ -1111,7 +1111,7 @@ Ext.onReady(function(){
         frame:true,
         title: 'User Work Summary',
         defaults: {
-            labelStyle: 'font-weight: bold; padding: 0',
+            labelStyle: 'font-weight: bold; padding: 2px 0 0',
             style: 'text-align: right;',
         },
         tools: [{
