@@ -37,30 +37,30 @@
     <!-- Include DatePickerPlus stylesheet -->
     <link rel="stylesheet" type="text/css" href="include/ext.ux.datepickerplus/datepickerplus.css"/>
 
-		<!-- Include Ext library -->
+    <!-- Include Ext library -->
     <script type="text/javascript" src="ext/adapter/ext/base.min.js"></script>
     <script type="text/javascript" src="ext/ext.min.js"></script>
-    <script type="text/javascript" src="include/App.js"></script>
-    <script type="text/javascript" src="include/RowEditor.js"></script>
-    <script type="text/javascript" src="include/DatePickerLinks.js"></script>
+    <script type="text/javascript" src="include/App.min.js"></script>
+    <script type="text/javascript" src="include/RowEditor.min.js"></script>
+    <script type="text/javascript" src="include/DatePickerLinks.min.js"></script>
 
         <!-- Configure prototypes -->
     <script type="text/javascript">
       Ext.DatePicker.prototype.startDay = 1;
     </script>
 
-        <!-- Include other common validations -->
-    <script type="text/javascript" src="include/validations.js"></script>
+    <!-- Include other common validations -->
+    <script type="text/javascript" src="include/validations.min.js"></script>
 
-        <!-- Include other common functions -->
-    <script type="text/javascript" src="include/functions.js"></script>
+    <!-- Include other common functions -->
+    <script type="text/javascript" src="include/functions.min.js"></script>
 
     <!-- Include improved calendar widget -->
-    <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus.js"></script>
-    <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus-holidays.js"></script>
+    <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus.min.js"></script>
+    <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus-holidays.min.js"></script>
 
     <!-- Periodical check for open sessions -->
-    <script src="js/include/sessionTracker.js"></script>
+    <script src="js/include/sessionTracker.min.js"></script>
 
     <!-- Favicon / shortcut icon configuration -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">

@@ -39,8 +39,8 @@ if(isset($_GET["projectId"])) {
 ?>
 
 <link rel="stylesheet" type="text/css" href="include/ColumnNodeUI.css" />
-<script type="text/javascript" src="include/ColumnNodeUI.js"></script>
-<script type="text/javascript" src="include/TrackerSummaryTree.js"></script>
+<script type="text/javascript" src="include/ColumnNodeUI.min.js"></script>
+<script type="text/javascript" src="include/TrackerSummaryTree.min.js"></script>
 
 <script type="text/javascript">
 Ext.onReady(function(){

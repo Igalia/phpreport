@@ -24,7 +24,7 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
 ?>
 
 <link rel="stylesheet" type="text/css" href="include/menubar.css"/>
-<script type="text/javascript" src="js/include/menubar.js"></script>
+<script type="text/javascript" src="js/include/menubar.min.js"></script>
 
 <ul id="menubar">
     <img id="header-icon"

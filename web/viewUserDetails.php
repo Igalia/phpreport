@@ -35,8 +35,8 @@
     $userToShow = $_SESSION['user'];
 
 ?>
-<script type="text/javascript" src="js/include/DateIntervalForm.js"></script>
-<script type="text/javascript" src="js/include/ExportableGridPanel.js"></script>
+<script type="text/javascript" src="js/include/DateIntervalForm.min.js"></script>
+<script type="text/javascript" src="js/include/ExportableGridPanel.min.js"></script>
 <script type="text/javascript">
 
     Ext.onReady(function(){
