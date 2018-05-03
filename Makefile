@@ -17,10 +17,10 @@ help:
 	#copy images
 	cp -r docs/user/i help/user
 	cp -r docs/developer/i help/developer
-	#generate footer \
-	echo -e '\n.. class:: credits\n\n  This file is part of PhpReport $(VERSION) documentation.' > footer; \
-	echo -ne '  Generated on ' >> footer; \
-	date >> footer; \
+	#generate footer
+	echo -e '\n.. class:: credits\n\n  This file is part of PhpReport $(VERSION) documentation.' > footer
+	echo -ne '  Generated on ' >> footer
+	date >> footer
 	#parse rst
 	for i in `find -name *.rst` ; do \
 	  #rename .rst for .html in links to other doc pages \
@@ -31,9 +31,9 @@ help:
 	  FILE=`echo $$i | awk '{firstpart=substr($$i, 8);x=index(firstpart,".rst");print substr(firstpart, 1,x)}'`; \
 	  #generate html file \
 	  rst2html tmp help/$${FILE}html; \
-	  done; \
-	rm tmp; \
-	rm footer;
+	  done
+	rm tmp
+	rm footer
 
 #prevent makefile docs are up-to-date
 .PHONY: help
