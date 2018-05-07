@@ -129,7 +129,27 @@
         }
         if ($minutes < 10)
             $minutes = "0" . $minutes;
-        $pendingHolidays = $hours . ":" . $minutes;
+
+        $currentJourney = 8;
+        $journeys = UsersFacade::GetUserJourneyHistoriesByIntervals($initDate, $date, $userVO->getId());
+        if(count($journeys)==1) {
+                $currentJourney = $journeys[0]->getJourney();
+        }
+
+        if ($hours > $currentJourney*7) {
+            $days = intval($hours/$currentJourney);
+            $hours = round($hours - ($days*$currentJourney),2);
+            if ($hours == $currentJourney) {
+                $hours = 0;
+                $days = $days + 1;
+            }
+            if ($hours < 10) {
+                $hours = "0" . $hours;
+            }
+        $pendingHolidays = intval($days) . " days " . intval($hours) . ":" . intval($minutes);
+        } else {
+            $pendingHolidays = intval($hours) . ":" . intval($minutes);
+        }
 
         $string = "<personalSummary login='" . $userVO->getLogin() . "' date='" . $date->format($dateFormat) . "'><hours><day>" . $day  . "</day><week>" . $week  . "</week><weekly_goal>" . $weekGoal . "</weekly_goal><extra_hours>" . $extraHours . "</extra_hours><pending_holidays>" . $pendingHolidays . "</pending_holidays><acc_extra_hours>" . $accExtraHours . "</acc_extra_hours></hours></personalSummary>";
 
