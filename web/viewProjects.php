@@ -41,6 +41,21 @@ include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 $areas = AdminFacade::GetAllAreas();
 $customers = CustomersFacade::GetAllCustomers();
 
+//output vars as JS code
+echo "<!-- Global variables extracted from the PHP side -->\n";
+echo "<script>\n";
+echo "var areasArray = [";
+foreach((array)$areas as $area) {
+    echo "[{$area->getId()}, '{$area->getName()}'],";
+}
+echo "];\n";
+echo "var customersArray = [";
+foreach((array)$customers as $customer) {
+    $customerName = addslashes($customer->getName());
+    echo "[{$customer->getId()}, '{$customerName}'],";
+}
+echo "];\n";
+echo "</script>\n";
 ?>
 <script type="text/javascript">
 
@@ -66,13 +81,8 @@ Ext.onReady(function(){
         id: 0,
         fields: ['id', 'name'],
         sortInfo: { field: 'name', direction: 'ASC' },
-        data : [
-        <?php
-
-        foreach((array)$areas as $area)
-            echo "[{$area->getId()}, '{$area->getName()}'],";
-        ?>
-    ]});
+        data: areasArray,
+    });
 
     function areas(val){
 
@@ -89,15 +99,8 @@ Ext.onReady(function(){
         id: 0,
         fields: ['id', 'name'],
         sortInfo: { field: 'name', direction: 'ASC' },
-        data : [
-            <?php
-
-            foreach((array)$customers as $customer) {
-                $customerName = addslashes($customer->getName());
-                echo "[{$customer->getId()}, '{$customerName}'],";
-            }
-            ?>
-        ]});
+        data: customersArray,
+    });
 
     function customers(val){
 
