@@ -34,6 +34,7 @@ include_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 
 ?>
+<script src="include/RowEditor.min.js"></script>
 <script type="text/javascript">
 
 Ext.onReady(function(){
