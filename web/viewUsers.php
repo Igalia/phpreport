@@ -50,12 +50,6 @@ $groups = UsersFacade::GetAllUserGroups();
 
 Ext.onReady(function(){
 
-    <?php if ($sid) {?>
-
-    var sessionId = <?php echo $sid;?>;
-
-    <?php } ?>
-
     var App = new Ext.App({});
 
     Ext.QuickTips.init();
@@ -260,9 +254,6 @@ Ext.onReady(function(){
         id: 'usersStore',
         autoLoad: true,  //initial data are loaded in the application init
         autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {<?php if ($sid) {?>
-            'sid': sessionId <?php } ?>
-        },
         storeId: 'users',
         proxy: userProxy,
         reader:new Ext.data.XmlReader({record: 'user', idProperty:'id' }, userRecord),
@@ -443,9 +434,6 @@ Ext.onReady(function(){
     var hourCostStore = new Ext.data.Store({
         id: 'hourCostStore',
         autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {<?php if ($sid) {?>
-            'sid': sessionId, <?php } ?>
-        },
         storeId: 'hourCost',
         proxy: hourCostProxy,
         reader: new Ext.data.XmlReader({record: 'hourCostHistory', idProperty:'id' }, hourCostRecord),
@@ -594,9 +582,6 @@ Ext.onReady(function(){
     var journeyStore = new Ext.data.Store({
         id: 'journeyStore',
         autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {<?php if ($sid) {?>
-            'sid': sessionId, <?php } ?>
-        },
         storeId: 'journeyCost',
         proxy: journeyProxy,
         reader: new Ext.data.XmlReader({record: 'journeyHistory', idProperty:'id' }, journeyRecord),
@@ -742,9 +727,6 @@ Ext.onReady(function(){
     var areaStore = new Ext.data.Store({
         id: 'areaStore',
         autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {<?php if ($sid) {?>
-            'sid': sessionId, <?php } ?>
-        },
         storeId: 'areaCost',
         proxy: areaProxy,
         reader: new Ext.data.XmlReader({record: 'areaHistory', idProperty:'id' }, areaRecord),
@@ -897,9 +879,6 @@ Ext.onReady(function(){
     var cityStore = new Ext.data.Store({
         id: 'cityStore',
         autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {<?php if ($sid) {?>
-            'sid': sessionId, <?php } ?>
-        },
         storeId: 'cityCost',
         proxy: cityProxy,
         reader: new Ext.data.XmlReader({record: 'cityHistory', idProperty:'id' }, cityRecord),
@@ -1053,9 +1032,6 @@ Ext.onReady(function(){
     var goalStore = new Ext.data.Store({
         id: 'goalStore',
         autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {<?php if ($sid) {?>
-            'sid': sessionId, <?php } ?>
-        },
         storeId: 'goalCost',
         proxy: goalProxy,
         reader: new Ext.data.XmlReader({record: 'userGoal', idProperty:'id' }, goalRecord),

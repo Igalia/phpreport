@@ -39,12 +39,6 @@ include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 
 Ext.onReady(function(){
 
-    <?php if ($sid) {?>
-
-    var sessionId = <?php echo $sid;?>;
-
-    <?php } ?>
-
     var App = new Ext.App({});
 
     Ext.QuickTips.init();
@@ -81,9 +75,6 @@ Ext.onReady(function(){
         id: 'areasStore',
         autoLoad: true,  //initial data are loaded in the application init
         autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {<?php if ($sid) {?>
-            'sid': sessionId <?php } ?>
-        },
         storeId: 'areas',
         proxy: areaProxy,
         reader:new Ext.data.XmlReader({record: 'area', idProperty:'id' }, areaRecord),

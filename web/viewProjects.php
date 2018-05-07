@@ -61,12 +61,6 @@ echo "</script>\n";
 
 Ext.onReady(function(){
 
-    <?php if ($sid) {?>
-
-    var sessionId = <?php echo $sid;?>;
-
-    <?php } ?>
-
     var App = new Ext.App({});
 
     // Flags to coordinate the widget setup with the stores
@@ -148,10 +142,6 @@ Ext.onReady(function(){
         id: 'assignedUsersStore',
         autoLoad: false,  //initial data are loaded in the application init
         autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {
-            <?php if ($sid) {?>
-            'sid': sessionId <?php } ?>
-        },
         storeId: 'assignedUsers',
         proxy: assignedUsersProxy,
         reader:new Ext.data.XmlReader({record: 'user', idProperty:'id' }, userRecord),
@@ -204,10 +194,6 @@ Ext.onReady(function(){
         id: 'availableUsersStore',
         autoLoad: false,  //initial data are loaded in the application init
         autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {
-            <?php if ($sid) {?>
-            'sid': sessionId <?php } ?>
-        },
         storeId: 'availableUsers',
         proxy: availableUsersProxy,
         reader:new Ext.data.XmlReader({record: 'user', idProperty:'id' }, userRecord),
@@ -1088,9 +1074,6 @@ Ext.onReady(function(){
         id: 'projectsStore',
         autoLoad: true,  //initial data are loaded in the application init
         autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {<?php if ($sid) {?>
-            'sid': sessionId <?php } ?>
-        },
         storeId: 'projects',
         proxy: projectProxy,
         reader:new Ext.data.XmlReader({record: 'project', idProperty:'id' }, projectRecord),

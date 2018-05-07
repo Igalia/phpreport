@@ -43,12 +43,6 @@ $sectors = CustomersFacade::GetAllSectors();
 
 Ext.onReady(function(){
 
-    <?php if ($sid) {?>
-
-    var sessionId = <?php echo $sid;?>;
-
-    <?php } ?>
-
     var App = new Ext.App({});
 
     Ext.QuickTips.init();
@@ -102,9 +96,6 @@ Ext.onReady(function(){
         id: 'sectorsStore',
         autoLoad: true,  //initial data are loaded in the application init
         autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {<?php if ($sid) {?>
-            'sid': sessionId <?php } ?>
-        },
         storeId: 'sectors',
         proxy: sectorProxy,
         reader:new Ext.data.XmlReader({record: 'sector', idProperty:'id' }, sectorRecord),
@@ -297,9 +288,6 @@ Ext.onReady(function(){
         id: 'customersStore',
         autoLoad: false,
         autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {<?php if ($sid) {?>
-            'sid': sessionId <?php } ?>
-        },
         storeId: 'customers',
         proxy: customerProxy,
         reader:new Ext.data.XmlReader({record: 'customer', idProperty:'id' }, customerRecord),
