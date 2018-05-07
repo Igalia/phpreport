@@ -55,7 +55,6 @@
 
     <!-- Include improved calendar widget -->
     <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus.min.js"></script>
-    <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus-holidays.min.js"></script>
 
     <!-- Periodical check for open sessions -->
     <script src="js/include/sessionTracker.min.js"></script>
