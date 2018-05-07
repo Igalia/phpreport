@@ -41,7 +41,6 @@
     <script type="text/javascript" src="ext/adapter/ext/base.min.js"></script>
     <script type="text/javascript" src="ext/ext.min.js"></script>
     <script type="text/javascript" src="include/App.min.js"></script>
-    <script type="text/javascript" src="include/DatePickerLinks.min.js"></script>
 
         <!-- Configure prototypes -->
     <script type="text/javascript">
