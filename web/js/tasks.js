@@ -1139,15 +1139,14 @@ Ext.onReady(function(){
             name:'extra_hours',
             fieldLabel: 'Extra (year)',
         },{
-            id:'pending_holidays',
-            name:'pending_holidays',
-            fieldLabel:'Pending holidays (year)',
-        },{
             id:'acc_extra_hours',
             name:'acc_extra_hours',
             fieldLabel:'Extra (total)',
+        },{
+            id:'pending_holidays',
+            name:'pending_holidays',
+            fieldLabel:'Pending holidays (year)',
         }
-
         ]
     });
 
