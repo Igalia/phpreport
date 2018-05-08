@@ -34,7 +34,7 @@
 
     /**
      * Function used to pretty print time. From hours to Days d hours:minutes
-     * @param float $time: Time in minutes to be converted
+     * @param float $time: Time in hours to be converted
      * @param float $journey: Number of hours that represents a day in our life
      * @param int $limit: Number of days to change representation from hours to days
      * @return string formatedHours: String representing hours in human format
@@ -49,6 +49,8 @@
 
         if ($time > $limit*$journey ) {
             $work_days = intval($hours / $journey);
+            $more_minutes = intval(((abs(($work_days*$journey) - $hours)) - intval(abs(($work_days*$journey) - $hours)))*60);
+            $minutes = $minutes + $more_minutes;
             $hours = intval(abs(($work_days*$journey) - $hours));
         }
 
