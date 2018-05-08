@@ -54,6 +54,19 @@
             $hours = intval(abs(($work_days*$journey) - $hours));
         }
 
+        if ($minutes == 60) {
+            $minutes = 0;
+            $hours = $hours + 1;
+        }
+        if ($minutes > 60) {
+            $minutes = $minutes - 60;
+            $hours = $hours + 1;
+        }
+        if ($hours == $journey) {
+            $hours = 0;
+            $days = $days + 1;
+        }
+
         if ($hours < 10) {
             $hours = "0" . $hours;
         }
