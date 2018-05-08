@@ -190,3 +190,51 @@ define('MENU_COORDINATION', TRUE);
  * @global int Value that acts as a warning trigger for extra hours values.
  */
 define('EXTRA_HOURS_WARNING_TRIGGER', 50);
+
+/**
+ * @name NO_FILL_CC_WARNING
+ * @global string Comma separated list of mailboxes that will receive warning emails.
+ */
+define('NO_FILL_CC_WARNING', 'manager1@domain.com');
+
+/**
+ * @name NO_FILL_CC_CRITICAL
+ * @global string Comma separated list of mailboxes that will receive critical emails.
+ */
+define('NO_FILL_CC_CRITICAL', 'manager1@domain.com, project-management@domain.com');
+
+/**
+ * @name NO_FILL_TEMPLATE_WARNING
+ * @global string File containing warning email.
+ */
+define('NO_FILL_TEMPLATE_WARNING', 'templates/no_fill_warning.txt');
+
+/**
+ * @name NO_FILL_TEMPLATE_CRITICAL
+ * @global string File containing critical email.
+ */
+define('NO_FILL_TEMPLATE_CRITICAL', 'templates/no_fill_critical.txt');
+
+/**
+ * @name NO_FILL_SUBJECT_WARNING
+ * @global string Subject containing warning email subject.
+ */
+define('NO_FILL_SUBJECT_WARNING', 'Please log your hours in PHPReport');
+
+/**
+ * @name NO_FILL_SUBJECT_CRITICAL
+ * @global string Subject containing critical email subject.
+ */
+define('NO_FILL_SUBJECT_CRITICAL', '[URGENT] Log your hours in PHPReport');
+
+ /**
+ * @name NO_FILL_DAYS_TRIGGER_WARNING
+ * @global int Value in days to consider sending a warning message.
+ */
+define('NO_FILL_DAYS_TRIGGER_WARNING', 8);
+
+ /**
+ * @name NO_FILL_DAYS_TRIGGER_CRITICAL
+ * @global int Value in days to consider sending a critical message.
+ */
+define('NO_FILL_DAYS_TRIGGER_CRITICAL', 20);
