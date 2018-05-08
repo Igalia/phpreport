@@ -32,6 +32,43 @@
     include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
     include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
+    /**
+     * Function used to pretty print time. From hours to Days d hours:minutes
+     * @param float $time: Time in minutes to be converted
+     * @param float $journey: Number of hours that represents a day in our life
+     * @param int $limit: Number of days to change representation from hours to days
+     * @return string formatedHours: String representing hours in human format
+     */
+    function formatHours ($time, $journey, $limit) {
+        $negative = ($time < 0);
+        $work_days = false;
+        $time = abs($time);
+        $minutes = intval($time * 60);
+        $hours = intval($minutes / 60);
+        $minutes = $minutes % 60;
+
+        if ($time > $limit*$journey ) {
+            $work_days = intval($hours / $journey);
+            $hours = intval(abs(($work_days*$journey) - $hours));
+        }
+
+        if ($hours < 10) {
+            $hours = "0" . $hours;
+        }
+        if ($minutes < 10) {
+            $minutes = "0" . $minutes;
+        }
+
+        if ($work_days)
+            $formatedHours = $work_days . " d " . $hours . ":" . $minutes;
+        else
+            $formatedHours = $hours . ":" . $minutes;
+
+        if ($negative)
+            $formatedHours = "-" . $formatedHours;
+
+        return $formatedHours;
+    }
 
     $date = $_GET['date'];
 
@@ -94,62 +131,21 @@
         $initDate = new DateTime($date->format('Y').'-01-01');
         $extraHoursSummary = UsersFacade::ExtraHoursReport($initDate, $date, $userVO);
 
-        $extraHours = $extraHoursSummary[1][$userVO->getLogin()]["extra_hours"];
-
-        $hours = intval($extraHours);
-        $minutes = round(((abs($extraHours) - abs($hours))*60),2);
-        if ($minutes == 60) {
-            $minutes = 0;
-            $hours = $hours + 1 ;
-        }
-        if ($minutes < 10)
-            $minutes = "0" . $minutes;
-        $extraHours = $hours . ":" . $minutes;
-
-        $accExtraHours = $extraHoursSummary[1][$userVO->getLogin()]["total_extra_hours"];
-
-        $hours = intval($accExtraHours);
-        $minutes = round(((abs($accExtraHours) - abs($hours))*60),2);
-        if ($minutes == 60) {
-            $minutes = 0;
-            $hours = $hours + 1 ;
-        }
-        if ($minutes < 10)
-            $minutes = "0" . $minutes;
-        $accExtraHours = $hours . ":" . $minutes;
-
-        $holidays = UsersFacade::GetPendingHolidayHours($initDate, $date, $userVO);
-        $pendingHolidays = $holidays[$userVO->getLogin()];
-
-        $hours = intval($pendingHolidays);
-        $minutes = round(((abs($pendingHolidays) - abs($hours))*60),2);
-        if ($minutes == 60) {
-            $minutes = 0;
-            $hours = $hours + 1 ;
-        }
-        if ($minutes < 10)
-            $minutes = "0" . $minutes;
-
         $currentJourney = 8;
         $journeys = UsersFacade::GetUserJourneyHistoriesByIntervals($initDate, $date, $userVO->getId());
         if(count($journeys)==1) {
                 $currentJourney = $journeys[0]->getJourney();
         }
 
-        if ($hours > $currentJourney*7) {
-            $days = intval($hours/$currentJourney);
-            $hours = round($hours - ($days*$currentJourney),2);
-            if ($hours == $currentJourney) {
-                $hours = 0;
-                $days = $days + 1;
-            }
-            if ($hours < 10) {
-                $hours = "0" . $hours;
-            }
-        $pendingHolidays = intval($days) . " days " . intval($hours) . ":" . intval($minutes);
-        } else {
-            $pendingHolidays = intval($hours) . ":" . intval($minutes);
-        }
+        $extraHours = $extraHoursSummary[1][$userVO->getLogin()]["extra_hours"];
+        $extraHours = formatHours($extraHours, $currentJourney, 5);
+
+        $accExtraHours = $extraHoursSummary[1][$userVO->getLogin()]["total_extra_hours"];
+        $accExtraHours = formatHours($accExtraHours, $currentJourney, 5);
+
+        $holidays = UsersFacade::GetPendingHolidayHours($initDate, $date, $userVO);
+        $pendingHolidays = $holidays[$userVO->getLogin()];
+        $pendingHolidays = formatHours($pendingHolidays, $currentJourney, 5);
 
         $string = "<personalSummary login='" . $userVO->getLogin() . "' date='" . $date->format($dateFormat) . "'><hours><day>" . $day  . "</day><week>" . $week  . "</week><weekly_goal>" . $weekGoal . "</weekly_goal><extra_hours>" . $extraHours . "</extra_hours><pending_holidays>" . $pendingHolidays . "</pending_holidays><acc_extra_hours>" . $accExtraHours . "</acc_extra_hours></hours></personalSummary>";
 
