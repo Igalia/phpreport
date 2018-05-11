@@ -103,7 +103,7 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
                 <img class="silk-book-edit" src="include/icons/s.gif" />
                 Projects
             </a>
-            <a href="viewCustomers.php">
+            <a href="customerManagement.php">
                 <img class="silk-vcard-edit" src="include/icons/s.gif" />
                 Clients
             </a>

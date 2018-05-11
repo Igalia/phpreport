@@ -99,7 +99,7 @@ $permissions = array(
         '/services/deleteJourneyHistoriesService.php', '/services/deleteHourCostHistoriesService.php',
         '/services/deleteAreaHistoriesService.php', '/services/deleteCityHistoriesService.php',
         //customers management
-        '/viewCustomers.php', '/services/createCustomersService.php',
+        '/customerManagement.php', '/services/createCustomersService.php',
         '/services/updateCustomersService.php', '/services/deleteCustomersService.php',
         //customer attributes management
         '/services/updateSectorsService.php',
