@@ -85,7 +85,7 @@ $permissions = array(
     'admin' => array(
         //projects management
         '/services/createProjectsService.php', '/services/deleteProjectsService.php',
-        '/services/updateProjectsService.php', '/viewProjects.php',
+        '/services/updateProjectsService.php', '/projectManagement.php',
         //project attributes management
         '/services/assignUsersToProjectService.php', '/services/deassignUsersFromProjectService.php',
         //users management

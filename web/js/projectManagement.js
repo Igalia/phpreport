@@ -1,6 +1,5 @@
-<?php
 /*
- * Copyright (C) 2009-2014 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009-2018 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -17,47 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-define('PHPREPORT_ROOT', __DIR__ . '/../');
-
-$sid = $_GET["sid"];
-
-/* We check authentication and authorization */
-require_once(PHPREPORT_ROOT . '/web/auth.php');
-
-/* Include the generic header and sidebar*/
-define('PAGE_TITLE', "PhpReport - Projects Management");
-include_once("include/header.php");
-include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
-include_once(PHPREPORT_ROOT . '/util/UnknownParameterException.php');
-include_once(PHPREPORT_ROOT . '/util/LoginManager.php');
-include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
-include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
-include_once(PHPREPORT_ROOT . '/model/facade/AdminFacade.php');
-include_once(PHPREPORT_ROOT . '/model/facade/CustomersFacade.php');
-include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
-
-// We retrieve the Areas
-$areas = AdminFacade::GetAllAreas();
-$customers = CustomersFacade::GetAllCustomers();
-
-//output vars as JS code
-echo "<!-- Global variables extracted from the PHP side -->\n";
-echo "<script>\n";
-echo "var areasArray = [";
-foreach((array)$areas as $area) {
-    echo "[{$area->getId()}, '{$area->getName()}'],";
-}
-echo "];\n";
-echo "var customersArray = [";
-foreach((array)$customers as $customer) {
-    $customerName = addslashes($customer->getName());
-    echo "[{$customer->getId()}, '{$customerName}'],";
-}
-echo "];\n";
-echo "</script>\n";
-?>
-<script type="text/javascript">
 
 Ext.onReady(function(){
 
@@ -1215,13 +1173,3 @@ Ext.onReady(function(){
     });
 
 });
-
-</script>
-
-<div id="content">
-</div>
-<div id="variables"/>
-<?php
-/* Include the footer to close the header */
-include("include/footer.php");
-?>
