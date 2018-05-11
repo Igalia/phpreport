@@ -40,9 +40,7 @@ echo '];';
 echo '</script>';
 
 ?>
-<script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus.js"></script>
-<script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus-holidays.js"></script>
-<script type="text/javascript" src='js/calendarManagement.js'></script>
+<script type="text/javascript" src='js/calendarManagement.min.js'></script>
 
 <div id="sidebar-panel" class="auxiliarpanel"></div>
 <div id="content" style="margin-left: 215px;"></div>

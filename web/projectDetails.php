@@ -36,8 +36,8 @@ echo "var user = '" . $user->getLogin() . "';\n";
 echo "</script>\n";
 
 ?>
-<script type="text/javascript" src="js/include/ExportableGridPanel.js"></script>
-<script src="js/projectDetails.js"></script>
+<script type="text/javascript" src="js/include/ExportableGridPanel.min.js"></script>
+<script src="js/projectDetails.min.js"></script>
 
 <div id="content">
 </div>

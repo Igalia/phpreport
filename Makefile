@@ -35,5 +35,16 @@ help:
 	rm tmp
 	rm footer
 
+minify:
+	for i in `find -name *.min.js`; do rm $$i; done
+	for i in `find -name *.js` ; do \
+	  #extract file name to be used in the uglify output \
+	  FILE=`basename -s .js $$i`; \
+	  DIR=`dirname $$i`; \
+	  cd $$DIR; \
+	  uglifyjs $${FILE}.js -o $${FILE}.min.js --source-map $${FILE}.min.js.map -c -m; \
+	  cd -; \
+	  done
+
 #prevent makefile docs are up-to-date
 .PHONY: help
