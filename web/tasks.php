@@ -46,19 +46,24 @@ include("include/header.php");
 
 /* If no date is specified, get client date via JS and reload */
 if(!isset($_GET["date"])) {
+    $date = new DateTime();
+    $dateString = $date->format("Y-m-d");
+
+    echo "<!-- Check if server and browser are in a different day due to timezones -->\n";
     echo "<script type='text/javascript'>\n";
-    echo "var date = new Date();\n";
-    echo "window.location = \"tasks.php?date=\" + date.format('Y-m-d');\n";
+    echo "var serverDate = new Date(\"" . $dateString . "T00:00:00\");\n";
+    echo "var browserDate = new Date();\n";
+    echo "if (browserDate.getDate() != serverDate.getDate()) {\n";
+    echo "   window.location = \"tasks.php?date=\" + browserDate.format('Y-m-d');\n";
+    echo "}\n";
     echo "</script>\n";
-    include("include/footer.php");
-    exit();
+}
+else {
+    $dateString = $_GET["date"];
+    $date = new DateTime($dateString);
 }
 
 /* Get the needed variables to be passed to the Javascript code */
-
-//selected date
-$dateString = $_GET["date"];
-$date = new DateTime($dateString);
 
 //last task date
 $lastTaskDate = TasksFacade::getLastTaskDate($user, $date);
