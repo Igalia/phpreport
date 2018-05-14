@@ -1,6 +1,5 @@
-<?php
 /*
- * Copyright (C) 2009-2014 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009-2018 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -17,26 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-    define('PHPREPORT_ROOT', __DIR__ . '/../');
-
-    /* We check authentication and authorization */
-    require_once(PHPREPORT_ROOT . '/web/auth.php');
-
-    /* Include the generic header and sidebar*/
-    define('PAGE_TITLE', "PhpReport - Working Hours Results Report");
-    include_once("include/header.php");
-
-include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
-$EXTRA_HOURS_WARNING_TRIGGER = ConfigurationParametersManager::getParameter('EXTRA_HOURS_WARNING_TRIGGER');
-?>
-<script>
-var loggedInUser = '<?php echo $_SESSION['user']->getLogin(); ?>';
-var extraHoursTrigger = '<?php echo $EXTRA_HOURS_WARNING_TRIGGER; ?>';
-</script>
-<script type="text/javascript" src="js/include/DateIntervalForm.min.js"></script>
-<script type="text/javascript" src="js/include/ExportableGridPanel.min.js"></script>
-<script type="text/javascript">
 
 Ext.onReady(function(){
 
@@ -260,12 +239,3 @@ Ext.onReady(function(){
     workingResultsForm.focus(true);
 
 });
-
-</script>
-
-<div id="content">
-</div>
-<?php
-/* Include the footer to close the header */
-include("include/footer.php");
-?>
