@@ -234,24 +234,18 @@ Ext.onReady(function(){
                 pendingHoliday.removeAll();
 
                 // change web services URLs with those values and load data
-                pendingHoliday.proxy.conn.url= 'services/getPendingHolidayHoursService.php?<?php
-
-                    if ($sid!="")
-                        echo "&sid=" . $sid;
-
-                ?>&init=' + init.getFullYear() + "-01-01&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
+                pendingHoliday.proxy.conn.url= 'services/getPendingHolidayHoursService.php?init=' +
+                    init.getFullYear() + "-01-01&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) +
+                    "-" + end.getDate();
 
                 pendingHoliday.load();
 
 
                 extraHours.removeAll();
 
-                extraHours.proxy.conn.url= 'services/getExtraHoursReportService.php?<?php
-
-                    if ($sid!="")
-                        echo "&sid=" . $sid;
-
-                ?>&init=' + init.getFullYear() + "-" + (init.getMonth()+1) + "-" + init.getDate()  + "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
+                extraHours.proxy.conn.url= 'services/getExtraHoursReportService.php?init=' +
+                    init.getFullYear() + "-" + (init.getMonth()+1) + "-" + init.getDate()  +
+                    "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
 
                 extraHours.load();
 
