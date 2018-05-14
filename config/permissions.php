@@ -106,7 +106,7 @@ $permissions = array(
         '/services/createSectorsService.php', '/services/deleteSectorsService.php',
         //areas management
         '/services/createAreasService.php', '/services/deleteAreasService.php',
-        '/services/updateAreasService.php', '/viewAreas.php',
+        '/services/updateAreasService.php', '/areaManagement.php',
         //calendar management
         '/calendarManagement.php', '/services/getCommonEventsByCityIdJsonService.php',
         '/services/getCommonEventsByCityIdService.php', '/services/createCommonEventsService.php',

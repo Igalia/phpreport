@@ -107,7 +107,7 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
                 <img class="silk-vcard-edit" src="include/icons/s.gif" />
                 Clients
             </a>
-            <a href="viewAreas.php">
+            <a href="areaManagement.php">
                 <img class="silk-brick-edit" src="include/icons/s.gif" />
                 Areas
             </a>
