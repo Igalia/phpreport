@@ -43,28 +43,21 @@
         $negative = ($time < 0);
         $work_days = false;
         $time = abs($time);
-        $minutes = intval($time * 60);
-        $hours = intval($minutes / 60);
-        $minutes = $minutes % 60;
+        $time = round($time,2);
+        $time = $time*60;
 
-        if ($time > $limit*$journey ) {
-            $work_days = intval($hours / $journey);
-            $more_minutes = intval(((abs(($work_days*$journey) - $hours)) - intval(abs(($work_days*$journey) - $hours)))*60);
-            $minutes = $minutes + $more_minutes;
-            $hours = intval(abs(($work_days*$journey) - $hours));
+        if ($time > $limit*$journey*60 ) {
+            $work_days = intval($time / ($journey*60));
+            $hours = intval(($time - ($work_days*$journey*60))/60);
+            $minutes = intval($time - $hours*60 - $work_days*$journey*60);
+        } else {
+            $hours = intval($time / 60);
+            $minutes = intval($time - ($hours*60));
         }
 
-        if ($minutes == 60) {
-            $minutes = 0;
-            $hours = $hours + 1;
-        }
-        if ($minutes > 60) {
+        if ($minutes >= 60) {
             $minutes = $minutes - 60;
             $hours = $hours + 1;
-        }
-        if ($hours == $journey) {
-            $hours = 0;
-            $days = $days + 1;
         }
 
         if ($hours < 10) {
