@@ -1001,7 +1001,6 @@ Ext.onReady(function(){
         return true;
     }
 
-    // Add the new task to the taskstore
     function encodeXMLText() {
         myStore.each(function(r) {
             if (r.data['story'] != undefined)
@@ -1011,17 +1010,17 @@ Ext.onReady(function(){
         });
     }
 
-    /* Add a callback to save tasks */
     function saveTasks(showConfirmation) {
-        // First we check if the time fields of all records are valid, and then save
         if (validateTasks()) {
             myStore.showConfirmation = showConfirmation;
             encodeXMLText();
             myStore.save()
-        } else  // Otherwise, we print the error message
-          App.setAlert(false, "Check For Invalid Field Values");
+        } else if (showConfirmation)
+            // Print error message only if save action was explicit
+            App.setAlert(false, "Check For Invalid Field Values");
     }
 
+    // Callback for save buttons in the UI
     function saveButtonClicked() {
         saveTasks(true);
     }
