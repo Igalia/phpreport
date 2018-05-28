@@ -499,9 +499,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     'change': function () {
                         this.parent.taskRecord.set('story',this.getValue().trim());
                     },
-                    'keyup': function () {
-                        this.parent.taskRecord.set('story',this.getValue().trim());
-                    },
                     'blur': function () {
                         this.setValue(this.getValue().trim());
                     }
@@ -516,9 +513,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 value: this.taskRecord.data['text'],
                 enableKeyEvents: true,
                 listeners: {
-                    'keyup': function () {
-                        this.parent.taskRecord.set('text',this.getValue().trim());
-                    },
                     'change': function () {
                         this.parent.taskRecord.set('text',this.getValue().trim());
                     },

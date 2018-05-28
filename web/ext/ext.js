@@ -61030,7 +61030,8 @@ var form = new Ext.form.FormPanel({
             'specialkey',
             /**
              * @event change
-             * Fires just before the field blurs if the field value has changed.
+             * Fires as soon as it detects changes in the field value, or just
+             * before the field blurs if changes weren't detected earlier.
              * @param {Ext.form.Field} this
              * @param {Mixed} newValue The new value
              * @param {Mixed} oldValue The original value
@@ -61198,6 +61199,21 @@ var form = new Ext.form.FormPanel({
              */
             this.startValue = this.getValue();
             this.fireEvent('focus', this);
+            var field = this;
+            // periodical check for changes
+            this.checkChangesTask = {
+                run: function () {
+                    var v = field.getValue();
+                    if(String(v) !== String(field.startValue)){
+                        field.fireEvent('change', field, v, field.startValue);
+                        // reset startValue to prevent triggering repeated change events
+                        field.startValue = v;
+                    }
+                },
+                interval: 1000
+            }
+            this.taskRunner = new Ext.util.TaskRunner();
+            this.taskRunner.start(this.checkChangesTask);
         }
     },
 
@@ -61206,6 +61222,7 @@ var form = new Ext.form.FormPanel({
 
     // private
     onBlur : function(){
+        this.taskRunner.stop(this.checkChangesTask);
         this.beforeBlur();
         if(this.focusClass){
             this.el.removeClass(this.focusClass);
