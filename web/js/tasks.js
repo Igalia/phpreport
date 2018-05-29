@@ -1145,7 +1145,6 @@ Ext.onReady(function(){
 
     // Expand/collapse all Panel
     var expandCollapseAllPanel = new Ext.Panel({
-        width: 204,
         defaults: {
             width: '100%',
         },
@@ -1176,7 +1175,6 @@ Ext.onReady(function(){
     // Templates Panel
     var templatesPanel = new Ext.Panel({
         id: 'templatesPanel',
-        width: 204,
         defaults: {
             width: '100%',
         },
@@ -1211,9 +1209,9 @@ Ext.onReady(function(){
                     taskPanel.projectComboBox.focus();
                 }
             }),
-        // Default button for full-holiday task
+            // Default button for full-holiday task
             new Ext.Button({
-		id: 'fullHolidayTaskButton',
+                id: 'fullHolidayTaskButton',
                 text: 'Full-Holiday task',
                 disabled: forbidden,
                 handler: function () {
@@ -1347,14 +1345,13 @@ Ext.onReady(function(){
         }
     });
 
-    // Actions panels
-    var expandCollapseAllPanel = new Ext.Panel({
+    var actionsPanel = new Ext.Panel({
         width: 204,
         renderTo: Ext.get('actionspanel'),
         frame:true,
         title: 'Actions',
         defaults: {
-            width: '100%',
+            width: 190,
         },
         items: [
             new Ext.form.Label({
@@ -1382,7 +1379,8 @@ Ext.onReady(function(){
             templatesPanel
         ],
     });
-    var expandCollapseAllPanel = new Ext.Toolbar({
+
+    var bottomPanel = new Ext.Toolbar({
         renderTo: Ext.get('moreactions'),
         items: [
             new Ext.Button({
@@ -1411,6 +1409,7 @@ Ext.onReady(function(){
             }),
         ],
     });
+
     //hotkeys
     new Ext.KeyMap(document, {
         key: 's',
