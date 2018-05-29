@@ -74,5 +74,5 @@
 
     <?php include("include/menubar.php"); ?>
     <script type="text/javascript">
-        var HEADER_HEIGHT = document.getElementById('header').scrollHeight;
+        var HEADER_HEIGHT = document.getElementById('menubar').scrollHeight;
     </script>
