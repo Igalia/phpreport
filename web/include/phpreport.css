@@ -9,12 +9,16 @@ body {
 .auxiliarpanel {
     float: left;
     clear: left;
-    padding: 5px;
+    padding: 5px 5px 0px;
 }
 
 #content {
     float: both;
     padding: 5px;
+}
+
+#tasks .x-panel {
+    padding-bottom: 5px;
 }
 
 #footer {
