@@ -1,6 +1,5 @@
-<?php
 /*
- * Copyright (C) 2009-2014 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009-2018 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -18,39 +17,7 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define('PHPREPORT_ROOT', __DIR__ . '/../');
-
-$sid = $_GET["sid"];
-
-/* We check authentication and authorization */
-require_once(PHPREPORT_ROOT . '/web/auth.php');
-
-/* Include the generic header and sidebar*/
-define('PAGE_TITLE', "PhpReport - Projects Management");
-include_once("include/header.php");
-include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
-include_once(PHPREPORT_ROOT . '/util/UnknownParameterException.php');
-include_once(PHPREPORT_ROOT . '/util/LoginManager.php');
-include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
-include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
-include_once(PHPREPORT_ROOT . '/model/facade/AdminFacade.php');
-include_once(PHPREPORT_ROOT . '/model/facade/CustomersFacade.php');
-include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
-
-// We retrieve the Areas
-$areas = AdminFacade::GetAllAreas();
-$customers = CustomersFacade::GetAllCustomers();
-
-?>
-<script type="text/javascript">
-
 Ext.onReady(function(){
-
-    <?php if ($sid) {?>
-
-    var sessionId = <?php echo $sid;?>;
-
-    <?php } ?>
 
     var App = new Ext.App({});
 
@@ -66,13 +33,8 @@ Ext.onReady(function(){
         id: 0,
         fields: ['id', 'name'],
         sortInfo: { field: 'name', direction: 'ASC' },
-        data : [
-        <?php
-
-        foreach((array)$areas as $area)
-            echo "[{$area->getId()}, '{$area->getName()}'],";
-        ?>
-    ]});
+        data: areasArray,
+    });
 
     function areas(val){
 
@@ -89,15 +51,8 @@ Ext.onReady(function(){
         id: 0,
         fields: ['id', 'name'],
         sortInfo: { field: 'name', direction: 'ASC' },
-        data : [
-            <?php
-
-            foreach((array)$customers as $customer) {
-                $customerName = addslashes($customer->getName());
-                echo "[{$customer->getId()}, '{$customerName}'],";
-            }
-            ?>
-        ]});
+        data: customersArray,
+    });
 
     function customers(val){
 
@@ -145,10 +100,6 @@ Ext.onReady(function(){
         id: 'assignedUsersStore',
         autoLoad: false,  //initial data are loaded in the application init
         autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {
-            <?php if ($sid) {?>
-            'sid': sessionId <?php } ?>
-        },
         storeId: 'assignedUsers',
         proxy: assignedUsersProxy,
         reader:new Ext.data.XmlReader({record: 'user', idProperty:'id' }, userRecord),
@@ -201,10 +152,6 @@ Ext.onReady(function(){
         id: 'availableUsersStore',
         autoLoad: false,  //initial data are loaded in the application init
         autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {
-            <?php if ($sid) {?>
-            'sid': sessionId <?php } ?>
-        },
         storeId: 'availableUsers',
         proxy: availableUsersProxy,
         reader:new Ext.data.XmlReader({record: 'user', idProperty:'id' }, userRecord),
@@ -1085,9 +1032,6 @@ Ext.onReady(function(){
         id: 'projectsStore',
         autoLoad: true,  //initial data are loaded in the application init
         autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {<?php if ($sid) {?>
-            'sid': sessionId <?php } ?>
-        },
         storeId: 'projects',
         proxy: projectProxy,
         reader:new Ext.data.XmlReader({record: 'project', idProperty:'id' }, projectRecord),
@@ -1229,13 +1173,3 @@ Ext.onReady(function(){
     });
 
 });
-
-</script>
-
-<div id="content">
-</div>
-<div id="variables"/>
-<?php
-/* Include the footer to close the header */
-include("include/footer.php");
-?>

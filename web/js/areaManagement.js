@@ -1,6 +1,5 @@
-<?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009-2018 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -18,32 +17,7 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define('PHPREPORT_ROOT', __DIR__ . '/../');
-
-$sid = $_GET["sid"];
-
-/* We check authentication and authorization */
-require_once(PHPREPORT_ROOT . '/web/auth.php');
-
-/* Include the generic header and sidebar*/
-define('PAGE_TITLE', "PhpReport - Areas Management");
-include_once("include/header.php");
-include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
-include_once(PHPREPORT_ROOT . '/util/UnknownParameterException.php');
-include_once(PHPREPORT_ROOT . '/util/LoginManager.php');
-include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
-
-?>
-<script src="include/RowEditor.min.js"></script>
-<script type="text/javascript">
-
 Ext.onReady(function(){
-
-    <?php if ($sid) {?>
-
-    var sessionId = <?php echo $sid;?>;
-
-    <?php } ?>
 
     var App = new Ext.App({});
 
@@ -81,9 +55,6 @@ Ext.onReady(function(){
         id: 'areasStore',
         autoLoad: true,  //initial data are loaded in the application init
         autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {<?php if ($sid) {?>
-            'sid': sessionId <?php } ?>
-        },
         storeId: 'areas',
         proxy: areaProxy,
         reader:new Ext.data.XmlReader({record: 'area', idProperty:'id' }, areaRecord),
@@ -289,12 +260,3 @@ Ext.onReady(function(){
     });
 
 });
-</script>
-
-<div id="content">
-</div>
-<div id="variables"/>
-<?php
-/* Include the footer to close the header */
-include("include/footer.php");
-?>

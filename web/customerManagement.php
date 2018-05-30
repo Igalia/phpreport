@@ -18,28 +18,30 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-    define('PHPREPORT_ROOT', __DIR__ . '/../');
+define('PHPREPORT_ROOT', __DIR__ . '/../');
 
-    /* We check authentication and authorization */
-    require_once(PHPREPORT_ROOT . '/web/auth.php');
+/* We check authentication and authorization */
+require_once(PHPREPORT_ROOT . '/web/auth.php');
 
-    /* Include the generic header and sidebar*/
-    define('PAGE_TITLE', "PhpReport - Working Hours Results Report");
-    include_once("include/header.php");
-
+/* Include the generic header and sidebar*/
+define('PAGE_TITLE', "PhpReport - Clients Management");
+include_once("include/header.php");
 include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
-$EXTRA_HOURS_WARNING_TRIGGER = ConfigurationParametersManager::getParameter('EXTRA_HOURS_WARNING_TRIGGER');
+include_once(PHPREPORT_ROOT . '/util/UnknownParameterException.php');
+include_once(PHPREPORT_ROOT . '/util/LoginManager.php');
+include_once(PHPREPORT_ROOT . '/model/vo/CustomerVO.php');
+include_once(PHPREPORT_ROOT . '/model/facade/CustomersFacade.php');
+include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
+
+$sectors = CustomersFacade::GetAllSectors();
+
 ?>
-<script>
-var loggedInUser = '<?php echo $_SESSION['user']->getLogin(); ?>';
-var extraHoursTrigger = '<?php echo $EXTRA_HOURS_WARNING_TRIGGER; ?>';
-</script>
-<script type="text/javascript" src="js/include/DateIntervalForm.min.js"></script>
-<script type="text/javascript" src="js/include/ExportableGridPanel.min.js"></script>
-<script src="js/viewWorkingHoursResultsReport.min.js"></script>
+<script src="include/RowEditor.min.js"></script>
+<script src="js/customerManagement.min.js"></script>
 
 <div id="content">
 </div>
+<div id="variables"/>
 <?php
 /* Include the footer to close the header */
 include("include/footer.php");

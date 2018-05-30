@@ -55,12 +55,6 @@ Ext.onReady(function(){
 
     var sectionId = <?php echo $sectionId;?>;
 
-    <?php if ($sid) {?>
-
-    var sessionId = <?php echo $sid;?>;
-
-    <?php } ?>
-
     var App = new Ext.App({});
 
     Ext.QuickTips.init();
@@ -627,8 +621,7 @@ Ext.onReady(function(){
         autoLoad: true,  //initial data are loaded in the application init
         autoSave: false, //if set true, changes will be sent instantly
         baseParams: {
-            'scid': sectionId, <?php if ($sid) {?>
-            'sid': sessionId <?php } ?>
+            'scid': sectionId,
         },
         storeId: 'id',
         proxy: myProxy,

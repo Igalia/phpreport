@@ -85,7 +85,7 @@ $permissions = array(
     'admin' => array(
         //projects management
         '/services/createProjectsService.php', '/services/deleteProjectsService.php',
-        '/services/updateProjectsService.php', '/viewProjects.php',
+        '/services/updateProjectsService.php', '/projectManagement.php',
         //project attributes management
         '/services/assignUsersToProjectService.php', '/services/deassignUsersFromProjectService.php',
         //users management
@@ -99,14 +99,14 @@ $permissions = array(
         '/services/deleteJourneyHistoriesService.php', '/services/deleteHourCostHistoriesService.php',
         '/services/deleteAreaHistoriesService.php', '/services/deleteCityHistoriesService.php',
         //customers management
-        '/viewCustomers.php', '/services/createCustomersService.php',
+        '/customerManagement.php', '/services/createCustomersService.php',
         '/services/updateCustomersService.php', '/services/deleteCustomersService.php',
         //customer attributes management
         '/services/updateSectorsService.php',
         '/services/createSectorsService.php', '/services/deleteSectorsService.php',
         //areas management
         '/services/createAreasService.php', '/services/deleteAreasService.php',
-        '/services/updateAreasService.php', '/viewAreas.php',
+        '/services/updateAreasService.php', '/areaManagement.php',
         //calendar management
         '/calendarManagement.php', '/services/getCommonEventsByCityIdJsonService.php',
         '/services/getCommonEventsByCityIdService.php', '/services/createCommonEventsService.php',
