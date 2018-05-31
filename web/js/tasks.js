@@ -1097,14 +1097,15 @@ Ext.onReady(function(){
 
 
     // Summary Panel
+    var userWorkSummaryTitleStyle = 'font-weight: bold; width:190px;';
     var summaryPanel = new Ext.FormPanel({
         width: 204,
-        labelWidth: 140,
+        labelWidth: 100,
         renderTo: Ext.get('summarypanel'),
         frame:true,
         title: 'User Work Summary',
         defaults: {
-            labelStyle: 'font-weight: bold; padding: 2px 0 0',
+            labelStyle: 'padding: 2px 0 0',
             style: 'text-align: right;',
         },
         tools: [{
@@ -1116,29 +1117,47 @@ Ext.onReady(function(){
         }],
         defaultType:'displayfield',
         items: [{
+            id:'worked_title',
+            name: 'worked_title',
+            labelSeparator: '',
+            labelStyle: userWorkSummaryTitleStyle,
+            fieldLabel:'Worked hours',
+        },{
             id:'day',
             name: 'day',
-            fieldLabel:'Worked (today)',
+            fieldLabel:'Today',
         },{
             id:'week',
             name: 'week',
-            fieldLabel:'Worked (week)',
+            fieldLabel:'Week',
         },{
             id:'weekly_goal',
             name: 'weekly_goal',
-            fieldLabel:'Goal (week)',
+            fieldLabel:'Week goal',
+        },{
+            id:'extra_title',
+            name: 'extra_title',
+            labelSeparator: '',
+            labelStyle: userWorkSummaryTitleStyle,
+            fieldLabel:'Extra hours',
         },{
             id:'extra_hours',
             name:'extra_hours',
-            fieldLabel: 'Extra (year)',
+            fieldLabel: 'Year',
         },{
             id:'acc_extra_hours',
             name:'acc_extra_hours',
-            fieldLabel:'Extra (total)',
+            fieldLabel:'Total',
+        },{
+            id:'holidays_title',
+            name: 'holidays_title',
+            labelSeparator: '',
+            labelStyle: userWorkSummaryTitleStyle,
+            fieldLabel:'Holidays',
         },{
             id:'pending_holidays',
             name:'pending_holidays',
-            fieldLabel:'Pending holidays (year)',
+            fieldLabel:'Pending',
         }
         ]
     });
