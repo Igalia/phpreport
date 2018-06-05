@@ -1,0 +1,18 @@
+Hello Project Managers,
+
+People ###NO_FILL_DAYS_TRIGGER_WARNING### days late filling in PHPReport:
+
+###WARNED_PEOPLE###
+
+People being ###NO_FILL_DAYS_TRIGGER_CRITICAL### days late filling in PHPReport:
+
+###CRITICAL_PEOPLE###
+
+People who are going to be hit by PHPReport last month blockage:
+
+###LAST_PEOPLE###
+
+With our best regards,
+
+--
+Sysgroup

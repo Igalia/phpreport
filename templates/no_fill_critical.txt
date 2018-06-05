@@ -1,0 +1,20 @@
+Hello ###LOGIN###,
+
+The last task you recorded in PHPReport was on ###LAST_TASK_DATE###.
+
+This was a very long time ago, so please fill in your hours.
+
+Recall that you should record your hours on a more timely maner.
+As time passes, the accuracy of the recorded hours will suffer and some
+information may be lost.
+
+This situation should be fixed as soon as posible. Keep in mind that,
+in a couple of days, the past month will be closed and you will not
+be able to fill in hours but under special request to us.
+
+If you are having issues filling hours, please let us know right away.
+
+Best regards,
+
+--
+Project Management
