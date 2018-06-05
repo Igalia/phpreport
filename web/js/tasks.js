@@ -1098,7 +1098,7 @@ Ext.onReady(function(){
 
 
     // Summary Panel
-    var userWorkSummaryTitleStyle = 'font-weight: bold; width:190px;';
+    var userWorkSummaryTitleStyle = 'font-weight: bold; width:190px; padding: 0px;';
     var summaryPanel = new Ext.FormPanel({
         width: 204,
         labelWidth: 100,
@@ -1106,8 +1106,8 @@ Ext.onReady(function(){
         frame:true,
         title: 'User Work Summary',
         defaults: {
-            labelStyle: 'padding: 2px 0 0',
-            style: 'text-align: right;',
+            labelStyle: 'padding: 1px 0 0',
+            style: 'text-align: right; padding: 1px 0 0',
         },
         tools: [{
             id: 'help',
@@ -1164,32 +1164,32 @@ Ext.onReady(function(){
     });
 
     // Expand/collapse all Panel
+    var expandButton = new Ext.Button({
+        text:'Expand all',
+        flex: 2,
+        handler: function() {
+            var panels = tasksScrollArea.items;
+            for(var i=0; i<panels.getCount(); i++) {
+                panels.get(i).expand();
+            }
+            cookieProvider.set('tasksCollapsed', false);
+        }
+    });
+    var collapseButton = new Ext.Button({
+        text:'Collapse all',
+        flex: 2,
+        handler: function() {
+            var panels = tasksScrollArea.items;
+            for(var i=0; i<panels.getCount(); i++) {
+                panels.get(i).collapse();
+            }
+            cookieProvider.set('tasksCollapsed', true);
+        }
+    });
+
     var expandCollapseAllPanel = new Ext.Panel({
-        defaults: {
-            width: '100%',
-        },
-        items: [
-            new Ext.Button({
-                text:'Expand all',
-                handler: function() {
-                    var panels = tasksScrollArea.items;
-                    for(var i=0; i<panels.getCount(); i++) {
-                        panels.get(i).expand();
-                    }
-                    cookieProvider.set('tasksCollapsed', false);
-                }
-            }),
-            new Ext.Button({
-                text:'Collapse all',
-                handler: function() {
-                    var panels = tasksScrollArea.items;
-                    for(var i=0; i<panels.getCount(); i++) {
-                        panels.get(i).collapse();
-                    }
-                    cookieProvider.set('tasksCollapsed', true);
-                }
-            })
-        ]
+        layout: 'hbox',
+        items: [collapseButton, expandButton],
     });
 
     // Templates Panel
@@ -1365,6 +1365,19 @@ Ext.onReady(function(){
         }
     });
 
+    var newTaskButton = new Ext.Button({
+        text:'New',
+        flex: 2,
+        handler: newTask,
+        disabled: forbidden,
+    });
+    var saveButton = new Ext.Button({
+        text:'Save',
+        flex: 2,
+        handler: saveButtonClicked,
+        disabled: forbidden,
+    });
+
     var actionsPanel = new Ext.Panel({
         width: 204,
         renderTo: Ext.get('actionspanel'),
@@ -1377,15 +1390,9 @@ Ext.onReady(function(){
             new Ext.form.Label({
                 text: 'Tasks'
             }),
-            new Ext.Button({
-                text:'New',
-                handler: newTask,
-                disabled: forbidden,
-            }),
-            new Ext.Button({
-                text:'Save',
-                handler: saveButtonClicked,
-                disabled: forbidden,
+            new Ext.Panel({
+                layout: 'hbox',
+                items: [newTaskButton, saveButton],
             }),
             new Ext.menu.Separator(),
             new Ext.form.Label({
