@@ -114,7 +114,7 @@ echo "</script>\n";
     </div>
 </div>
 
-<div id="content">
+<div id="content" class="tasks-content">
     <div id="tasks"></div>
     <div id="moreactions"></div>
 </div>
