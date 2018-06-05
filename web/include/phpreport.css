@@ -14,7 +14,8 @@ body {
 
 #content {
     float: both;
-    padding: 5px;
+    padding: 5px 5px 5px 0px;
+    margin-left: 214px;
 }
 
 #tasks .task-panel {
