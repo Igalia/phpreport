@@ -292,6 +292,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
             title: 'Task',
             monitorResize: true,
             collapsible: true,
+            cls: 'task-panel',
 
             /* Inputs of the task form */
             initTimeField: new Ext.form.TimeField({
