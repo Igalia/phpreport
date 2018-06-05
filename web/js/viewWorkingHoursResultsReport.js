@@ -102,12 +102,10 @@ Ext.onReady(function(){
 
         var index = pendingHoliday.findExact('login', row.get('login'));
 
-        var row2 = pendingHoliday.getAt(index);
-
         var data = {
 
             login: row.get('login'),
-            pendingHoliday: parseFloat(row2.get('hours')),
+            pendingHoliday: '',
             extraHours: parseFloat(row.get('extraHours')),
             totalHours: parseFloat (row.get('totalHours')),
             totalExtraHours: parseFloat(row.get('totalExtraHours')),
@@ -115,6 +113,11 @@ Ext.onReady(function(){
             lastTaskDate: row.get('lastTaskDate')
 
         };
+
+        var row2 = pendingHoliday.getAt(index);
+        if (row2 !== undefined) {
+            data.pendingHoliday = parseFloat(row2.get('hours'));
+        }
 
         var row = new store.recordType(data, dataId);
 
