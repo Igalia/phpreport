@@ -1048,30 +1048,23 @@ Ext.onReady(function(){
 
     // Cloning Panel
     var cloningPanel = new Ext.FormPanel({
-        width: 204,
-        height: 65,
-        renderTo: Ext.get('calendarpanel'),
-        frame:true,
-        layout: {
-            type: 'vbox',
-            align: 'center',
-        },
+        layout: 'hbox',
         header: false,
         items: [
             {
                 name: 'cloneDate',
                 id: 'cloneDate',
                 hideLabel: true,
-                width: 160,
+                flex: 3,
                 xtype: 'datefieldplus',
                 format: 'd/m/Y',
                 value: lastTaskDate,
                 allowBlank: false,
                 startDay: 1,
             }, new Ext.Button({
-                text:'Copy tasks from selected date',
-                width: 60,
-                margins: "7px 0 0 0px",
+                text:'Copy',
+                margins: "0px 0 0 0px",
+                flex: 1,
                 handler: function() {
                     if (Ext.getCmp('cloneDate').isValid())
                     {
@@ -1399,6 +1392,11 @@ Ext.onReady(function(){
                 text: 'Panels'
             }),
             expandCollapseAllPanel,
+            new Ext.menu.Separator(),
+            new Ext.form.Label({
+                text: 'Copy tasks from date'
+            }),
+            cloningPanel,
             new Ext.menu.Separator(),
             new Ext.form.Label({
                 text: 'Templates'
