@@ -1377,7 +1377,7 @@ Ext.onReady(function(){
         frame:true,
         title: 'Actions',
         defaults: {
-            width: 190,
+            style: 'padding-bottom: 6px',
         },
         items: [
             new Ext.form.Label({
@@ -1387,17 +1387,17 @@ Ext.onReady(function(){
                 layout: 'hbox',
                 items: [newTaskButton, saveButton],
             }),
-            new Ext.menu.Separator(),
+
             new Ext.form.Label({
                 text: 'Panels'
             }),
             expandCollapseAllPanel,
-            new Ext.menu.Separator(),
+
             new Ext.form.Label({
                 text: 'Copy tasks from date'
             }),
             cloningPanel,
-            new Ext.menu.Separator(),
+
             new Ext.form.Label({
                 text: 'Templates'
             }),
