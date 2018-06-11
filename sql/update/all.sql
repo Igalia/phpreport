@@ -185,3 +185,9 @@ ALTER TABLE config RENAME COLUMN block_tasks_by_time_number_of_days TO block_tas
 ALTER TABLE config ADD COLUMN block_tasks_by_date_enabled BOOLEAN
     NOT NULL DEFAULT false;
 ALTER TABLE config ADD COLUMN block_tasks_by_date_date DATE;
+
+--
+-- Set database version to 2.18
+--
+
+UPDATE config SET version='2.18';
