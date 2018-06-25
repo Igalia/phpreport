@@ -41209,24 +41209,28 @@ Ext.extend(Ext.data.XmlWriter, Ext.data.DataWriter, {
     },
 
     /**
-     * createRecord
+     * This implementation encodes data records so they can be sent through XML.
      * @protected
      * @param {Ext.data.Record} rec
      * @return {Array} Array of <tt>name:value</tt> pairs for attributes of the {@link Ext.data.Record}.  See {@link Ext.data.DataWriter#toHash}.
      */
     createRecord : function(rec) {
-        return this.toArray(this.toHash(rec));
+        return this.updateRecord(rec);
     },
 
     /**
-     * updateRecord
+     * This implementation encodes data records so then can be sent through XML.
      * @protected
      * @param {Ext.data.Record} rec
      * @return {Array} Array of {name:value} pairs for attributes of the {@link Ext.data.Record}.  See {@link Ext.data.DataWriter#toHash}.
      */
     updateRecord : function(rec) {
-        return this.toArray(this.toHash(rec));
-
+        var record = this.toArray(this.toHash(rec));
+        record.forEach(function (element) {
+            if(typeof element.value === 'string')
+                element.value = Ext.util.Format.htmlEncode(element.value);
+        });
+        return record;
     },
     /**
      * destroyRecord
