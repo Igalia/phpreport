@@ -14209,6 +14209,14 @@ Ext.util.Format = function() {
         stripScriptsRe = /(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)/ig,
         nl2brRe        = /\r?\n/g;
 
+    var htmlEncodeMap = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+
     return {
         /**
          * Truncate a string and add an ellipsis ('...') to the end if it exceeds the specified length
@@ -14262,7 +14270,7 @@ Ext.util.Format = function() {
          * @return {String} The encoded text
          */
         htmlEncode : function(value) {
-            return !value ? value : String(value).replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+            return !value ? value : String(value).replace(/[&<>"']/g, function(m) { return htmlEncodeMap[m]; });
         },
 
         /**
