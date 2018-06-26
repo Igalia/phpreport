@@ -8,6 +8,29 @@ Upgrade instructions
   Please backup your database before running an upgrade, in case things go
   wrong during the process.
 
+From version 2.17 to 2.18
+=========================
+
+Unpack the files of PhpReport 2.18 at the same location of the original files,
+overwriting the existing contents. After that run the upgrade script located at
+the directory ``update/``::
+
+  cd update
+  php -f update-from-2.17-to-2.18.php
+
+Alternatively, you can open the following URL in your browser to run the
+script::
+
+  http://your-web-server/phpreport/update/update-from-2.17-to-2.18.php
+
+This upgrade adds several new values to ``config/config.php``. Open the file
+``config/config.template`` and look for the message "New from PhpReport 2.18".
+Copy the configuration parameters below that point to your own ``config.php``
+and customize them if necessary.
+
+Once the process is complete, remove the directories ``update/`` and ``install/``
+inside your PhpReport, to prevent other users from altering your DB.
+
 From version 2.16 to 2.17
 =========================
 
