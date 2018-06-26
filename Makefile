@@ -1,10 +1,10 @@
 VERSION=2.17
 
-tgz: help
+tgz: help minify
 	cp config/config.php config/config.defaults
 	tar zcf phpreport_$(VERSION).tar.gz --exclude=Makefile --exclude=*~ \
-		--exclude=docs --exclude=web/ext/ext-all-debug* \
-		--exclude=config/config.php --exclude=*.tar.gz --exclude=*.zip *
+		--exclude=docs --exclude=config/config.php \
+		--exclude=*.tar.gz --exclude=*.zip *
 
 zip: tgz
 	tar tf phpreport_$(VERSION).tar.gz | zip -@ phpreport_$(VERSION).zip
