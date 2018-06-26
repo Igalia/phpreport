@@ -179,6 +179,8 @@ define('USER_GROUPS', serialize(array('staff', 'admin', 'manager')));
  */
 define('VACATIONS_PROJECT', 'Holidays');
 
+/* New from PhpReport 2.18 */
+
 /**
  * @name MENU_COORDINATION
  * @global boolean Active the Coordination menu in the sidebar
