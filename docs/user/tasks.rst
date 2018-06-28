@@ -104,10 +104,13 @@ have to fill the start and end times in because they won't be saved in the templ
 To delete a template, you only have to press the *Delete* button right to the
 button with template name in the list.
 
-There is one default template named *Full day task*, it will create a task and
-set its start and end times so it fills one full day of work. The values will be
-set according to the users' journey values. It's useful to fill in holidays, for
-example. This template cannot be deleted.
+There are two default templates that cannot be deleted:
+
+* *Full day task* will create a task and set its start and end times so it
+  fills one full day of work. The values will be set according to the users'
+  journey values.
+* *Full-holiday task* works like the previous one, but will also set the
+  project field to 'Holidays'.
 
 Copying tasks from another date
 ===============================
