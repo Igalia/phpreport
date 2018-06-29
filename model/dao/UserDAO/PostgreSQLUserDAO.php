@@ -97,23 +97,23 @@ class PostgreSQLUserDAO extends UserDAO{
      */
     public function login($userLogin, $userPassword) {
 
-    $sql = "SELECT * FROM usr WHERE login=" . DBPostgres::checkStringNull($userLogin) . " AND password";
+        $sql = "SELECT * FROM usr WHERE login=" . DBPostgres::checkStringNull($userLogin) . " AND password";
 
-    if (DBPostgres::checkStringNull($userPassword) == "NULL")
-        $sql = $sql  . " is NULL";
-    else
-        $sql = $sql . "=md5(" . DBPostgres::checkStringNull($userPassword) . ")";
+        if (DBPostgres::checkStringNull($userPassword) == "NULL")
+            $sql = $sql  . " is NULL";
+        else
+            $sql = $sql . "=md5(" . DBPostgres::checkStringNull($userPassword) . ")";
 
-    $result = $this->execute($sql);
+        $result = $this->execute($sql);
 
-    if (!is_null($result[0]))
-    {
-        //     We normally won't want to retrieve md5 password
-        $result[0]->setPassword($userPassword);
-        return $result[0];
-    }
+        if (!is_null($result[0]))
+        {
+            // We normally won't want to retrieve md5 password
+            $result[0]->setPassword($userPassword);
+            return $result[0];
+        }
 
-    throw new IncorrectLoginException("login - " . $userLogin . " | password - " . $userPassword);
+        throw new IncorrectLoginException();
 
     }
 
