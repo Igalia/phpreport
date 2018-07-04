@@ -1060,11 +1060,12 @@ Ext.onReady(function(){
                 format: 'd/m/Y',
                 value: lastTaskDate,
                 allowBlank: false,
-                startDay: 1,
+                disabled: forbidden,
             }, new Ext.Button({
                 text:'Copy',
                 margins: "0px 0 0 0px",
                 flex: 1,
+                disabled: forbidden,
                 handler: function() {
                     if (Ext.getCmp('cloneDate').isValid())
                     {
