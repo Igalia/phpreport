@@ -27,7 +27,7 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
 <script type="text/javascript" src="js/include/menubar.min.js"></script>
 
 <ul id="menubar">
-    <img id="header-icon"
+    <img id="header-icon" alt="Header icon"
         srcset="include/images/header-icon-64.png 2x, include/images/header-icon-32.png 1x"
         src="include/images/header-icon-32.png" />
 
@@ -37,7 +37,7 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
     <li class="dropdown">
         <a href="#" class="dropdown-button">
             Coordination
-            <img class="menu-arrow" src="include/images/menu-arrow.svg"/>
+            <img class="menu-arrow" alt="Dropdown menu" src="include/images/menu-arrow.svg"/>
         </a>
         <ul class="dropdown-content">
             <a href="xptracker-summary.php">
@@ -54,7 +54,7 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
     <li class="dropdown">
         <a href="#" class="dropdown-button">
             Reports
-            <img class="menu-arrow" src="include/images/menu-arrow.svg"/>
+            <img class="menu-arrow" alt="Dropdown menu" src="include/images/menu-arrow.svg"/>
         </a>
         <ul class="dropdown-content">
             <a href="userTasksReport.php">
@@ -92,7 +92,7 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
     <li class="dropdown">
         <a href="#" class="dropdown-button">
             Data management
-            <img class="menu-arrow" src="include/images/menu-arrow.svg"/>
+            <img class="menu-arrow" alt="Dropdown menu" src="include/images/menu-arrow.svg"/>
         </a>
         <ul class="dropdown-content">
             <a href="viewUsers.php">
