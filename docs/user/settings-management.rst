@@ -15,23 +15,33 @@ This is how the *Settings management* screen looks like:
 Task report block settings
 ==========================
 
-The ability for users to report their work can be blocked depending on the
-date. If this feature is enabled, a number of days can be fixed so the task
-reports for dates older than those days cannot be modified. It means that those
-tasks cannot be modified or deleted, nor new tasks can be saved.
+Task reporting can be blocked depending on the selected date. There are two ways
+to configure how far in the past users are allowed to enter new tasks or to edit
+existing ones. They work independently, and the most restrictive of them will
+always apply.
 
-An example: having this feature enabled and a deadline of seven days set, we
-will not be able to modify tasks reports older than one week. If it were Monday,
-we wouldn't be able to add new tasks or modify those already saved on the
-previous Monday or before it.
+There are four settings to configure this feature:
 
-There are two settings to configure this feature:
-
-Block enabled:
-  If checked, the feature is enabled. If unchecked, it is disabled and users
-  would be able to modify tasks on any date in the past.
+Day block enabled:
+  If checked, task reports for dates older than a certain number of days cannot
+  be modified.
+  You will have to set the following value for this setting to work.
 
 Number of days:
   The number of days in the past to activate the block. The minimum value is 1,
   which would block the day before the current date. Setting it to 0 or leaving
   it empty would disable the feature.
+
+  For example, setting this value to seven will prevent users from entering
+  tasks older than a week.
+
+Date block enabled:
+  If checked, dates before the selected date are locked.
+  You will have to set the following value for this setting to work.
+
+Date:
+  If date block is enabled, tasks on this date or older than that cannot be
+  edited.
+
+  For example, setting this value to 31/12/2017 will prevent users from
+  modifying tasks in 2017 or earlier.

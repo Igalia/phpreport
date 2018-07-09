@@ -137,8 +137,7 @@ create new ones on certain dates. It can happen because of two reasons:
 * Managers have closed a project. In that case, tasks assigned to that project
   cannot be altered.
 
-* Managers have blocked tasks reports older than a certain date: a number of
-  days can be set so any tasks older than that cannot be changed. In this case,
+* Managers have blocked task reports for the selected date. In this case,
   even the *New task* and *Save changes* buttons would be blocked.
 
 User work summary
