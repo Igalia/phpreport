@@ -37,7 +37,7 @@ $user = $_SESSION['user'];
 
 //output vars as JS code
 echo "<!-- Global variables extracted from the PHP side -->\n";
-echo "<script type='text/javascript'>\n";
+echo "<script>\n";
 echo "var userId = '" . $user->getId() . "';\n";
 echo "var user = '" . $user->getLogin() . "';\n";
 if(LoginManager::hasExtraPermissions()) {
@@ -48,8 +48,8 @@ if(LoginManager::hasExtraPermissions()) {
 echo "var menuCoordination = '$MENU_COORDINATION';\n";
 echo "</script>\n";
 ?>
-<script type="text/javascript" src="js/include/ExportableGridPanel.min.js"></script>
-<script type="text/javascript" src="js/userTasksReport.min.js"></script>
+<script src="js/include/ExportableGridPanel.min.js"></script>
+<script src="js/userTasksReport.min.js"></script>
 
 <div id="content">
 </div>

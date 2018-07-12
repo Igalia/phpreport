@@ -40,20 +40,20 @@
     <link rel="stylesheet" type="text/css" href="include/ext.ux.datepickerplus/datepickerplus.css"/>
 
     <!-- Include Ext library -->
-    <script type="text/javascript" src="ext/adapter/ext/base.min.js"></script>
-    <script type="text/javascript" src="ext/ext.min.js"></script>
-    <script type="text/javascript" src="include/App.min.js"></script>
+    <script src="ext/adapter/ext/base.min.js"></script>
+    <script src="ext/ext.min.js"></script>
+    <script src="include/App.min.js"></script>
 
-        <!-- Configure prototypes -->
-    <script type="text/javascript">
+    <!-- Configure prototypes -->
+    <script>
       Ext.DatePicker.prototype.startDay = 1;
     </script>
 
     <!-- Include other common validations -->
-    <script type="text/javascript" src="include/validations.min.js"></script>
+    <script src="include/validations.min.js"></script>
 
     <!-- Include other common functions -->
-    <script type="text/javascript" src="include/functions.min.js"></script>
+    <script src="include/functions.min.js"></script>
 
     <!-- Include improved calendar widget -->
     <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus.min.js"></script>
@@ -75,6 +75,6 @@
 <body>
 
     <?php include("include/menubar.php"); ?>
-    <script type="text/javascript">
+    <script>
         var HEADER_HEIGHT = document.getElementById('menubar').scrollHeight;
     </script>

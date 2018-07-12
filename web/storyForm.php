@@ -98,7 +98,7 @@ $users = ProjectsFacade::GetProjectUsers($projectId);
 $stories = CoordinationFacade::GetIterationStories($iterationId);
 
 ?>
-<script type="text/javascript">
+<script>
 // Add the additional VType to validate date inputs
 Ext.apply(Ext.form.VTypes, {
 

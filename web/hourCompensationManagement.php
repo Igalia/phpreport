@@ -39,7 +39,7 @@ include_once("include/header.php");
 
 ?>
 <script src="include/RowEditor.min.js"></script>
-<script type="text/javascript" src="js/hourCompensationManagement.min.js"></script>
+<script src="js/hourCompensationManagement.min.js"></script>
 
 <div id="content">
 </div>

@@ -94,7 +94,7 @@ if ( (isset($_POST["name"])) && ($_POST["name"] != "") && ($_POST["hiddenReviewe
 $users = ProjectsFacade::GetProjectUsers($projectId);
 
 ?>
-<script type="text/javascript">
+<script>
 // Add the additional VType to validate date inputs
 Ext.apply(Ext.form.VTypes, {
 

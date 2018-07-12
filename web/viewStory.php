@@ -46,7 +46,7 @@ $users = ProjectsFacade::GetProjectUsers($iteration->getProjectId());
 $taskSections = CoordinationFacade::GetStoryTaskSections($storyId);
 
 ?>
-<script type="text/javascript">
+<script>
 Ext.apply(Ext.form.VTypes, {
     <?php
 

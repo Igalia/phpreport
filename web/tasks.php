@@ -50,7 +50,7 @@ if(!isset($_GET["date"])) {
     $dateString = $date->format("Y-m-d");
 
     echo "<!-- Check if server and browser are in a different day due to timezones -->\n";
-    echo "<script type='text/javascript'>\n";
+    echo "<script>\n";
     echo "var serverDate = new Date(\"" . $dateString . "T00:00:00\");\n";
     echo "var browserDate = new Date();\n";
     echo "if (browserDate.getDate() != serverDate.getDate()) {\n";
@@ -88,7 +88,7 @@ if(count($journeys)==1) {
 
 //output vars as JS code
 echo "<!-- Global variables extracted from the PHP side -->\n";
-echo "<script type='text/javascript'>\n";
+echo "<script>\n";
 echo "var lastTaskDate = Date.parseDate('" . $lastTaskDate . "', 'Y-m-d');\n";
 echo "var forbidden = " . ($forbidden? "true": "false") . ";\n";
 echo "var date = '" . $dateString . "';\n";

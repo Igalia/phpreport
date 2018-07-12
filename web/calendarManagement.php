@@ -32,7 +32,7 @@ include_once("include/header.php");
 include_once(PHPREPORT_ROOT . '/model/facade/AdminFacade.php');
 $cities = AdminFacade::GetAllCities();
 
-echo '<script type="text/javascript">';
+echo '<script>';
 echo 'var citiesArray = [';
 foreach((array)$cities as $city)
     echo "[{$city->getId()}, '" . ucwords($city->getName()) . "'],";
@@ -40,7 +40,7 @@ echo '];';
 echo '</script>';
 
 ?>
-<script type="text/javascript" src='js/calendarManagement.min.js'></script>
+<script src='js/calendarManagement.min.js'></script>
 
 <div id="sidebar-panel" class="auxiliarpanel"></div>
 <div id="content" style="margin-left: 215px;"></div>
