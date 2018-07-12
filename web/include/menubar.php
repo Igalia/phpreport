@@ -27,9 +27,10 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
 <script src="js/include/menubar.min.js"></script>
 
 <ul id="menubar">
-    <img id="header-icon" alt="Header icon"
-        srcset="include/images/header-icon-64.png 2x, include/images/header-icon-32.png 1x"
-        src="include/images/header-icon-32.png" />
+    <li id="icon">
+        <img id="header-icon" alt="Header icon" src="include/images/header-icon-32.png"
+            srcset="include/images/header-icon-64.png 2x, include/images/header-icon-32.png 1x"/>
+    </li>
 
     <?php if ($SHOW_MENU) {?>
     <li><a href="tasks.php">Tasks</a></li>
@@ -40,14 +41,12 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
             <img class="menu-arrow" alt="Dropdown menu" src="include/images/menu-arrow.svg"/>
         </a>
         <ul class="dropdown-content">
-            <a href="xptracker-summary.php">
-                <img class="silk-sitemap" src="include/icons/s.gif" />
-                XP Tracker
-            </a>
-            <a href="analysistracker-summary.php">
-                <img class="silk-sitemap-color" src="include/icons/s.gif" />
-                Analysis Tracker
-            </a>
+            <li class="silk-sitemap">
+                <a href="xptracker-summary.php">XP Tracker</a>
+            </li>
+            <li class="silk-sitemap-color">
+                <a href="analysistracker-summary.php">Analysis Tracker</a>
+            </li>
         </ul>
     </li>
     <?php } // endif ($MENU_COORDINATION) ?>
@@ -57,36 +56,29 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
             <img class="menu-arrow" alt="Dropdown menu" src="include/images/menu-arrow.svg"/>
         </a>
         <ul class="dropdown-content">
-            <a href="userTasksReport.php">
-                <img class="silk-pencil" src="include/icons/s.gif" />
-                User tasks
-            </a>
+            <li class='silk-pencil'>
+                <a href="userTasksReport.php">User tasks</a>
+            </li>
             <li class="divider"></li>
-            <a href="viewUserDetails.php">
-                <img class="silk-user-green" src="include/icons/s.gif" />
-                User details
-            </a>
-            <a href="usersEvaluation.php">
-                <img class="silk-user" src="include/icons/s.gif" />
-                Users evaluation
-            </a>
-            <a href="viewWorkingHoursResultsReport.php">
-                <img class="silk-report-user" src="include/icons/s.gif" />
-                Accumulated hours
-            </a>
+            <li class="silk-user-green">
+                <a href="viewUserDetails.php">User details</a>
+            </li>
+            <li class="silk-user">
+                <a href="usersEvaluation.php">Users evaluation</a>
+            </li>
+            <li class="silk-report-user">
+                <a href="viewWorkingHoursResultsReport.php">Accumulated hours</a>
+            </li>
             <li class="divider"></li>
-            <a href="projectDetails.php">
-                <img class="silk-book-go" src="include/icons/s.gif" />
-                Project details
-            </a>
-            <a href="projectsEvaluation.php">
-                <img class="silk-book-open" src="include/icons/s.gif" />
-                Project evaluation
-            </a>
-            <a href="projectsSummary.php">
-                <img class="silk-book" src="include/icons/s.gif" />
-                Projects summary
-            </a>
+            <li class="silk-book-go">
+                <a href="projectDetails.php">Project details</a>
+            </li>
+            <li class="silk-book-open">
+                <a href="projectsEvaluation.php">Project evaluation</a>
+            </li>
+            <li class="silk-book">
+                <a href="projectsSummary.php">Projects summary</a>
+            </li>
         </ul>
     </li>
     <li class="dropdown">
@@ -95,38 +87,30 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
             <img class="menu-arrow" alt="Dropdown menu" src="include/images/menu-arrow.svg"/>
         </a>
         <ul class="dropdown-content">
-            <a href="viewUsers.php">
-                <img class="silk-user-edit" src="include/icons/s.gif" />
-                Users
-            </a>
-            <a href="projectManagement.php">
-                <img class="silk-book-edit" src="include/icons/s.gif" />
-                Projects
-            </a>
-            <a href="customerManagement.php">
-                <img class="silk-vcard-edit" src="include/icons/s.gif" />
-                Clients
-            </a>
-            <a href="areaManagement.php">
-                <img class="silk-brick-edit" src="include/icons/s.gif" />
-                Areas
-            </a>
-            <a href="cityManagement.php">
-                <img class="silk-building-edit" src="include/icons/s.gif" />
-                Cities
-            </a>
-            <a href="calendarManagement.php">
-                <img class="silk-calendar-edit" src="include/icons/s.gif" />
-                Calendars
-            </a>
-            <a href="hourCompensationManagement.php">
-                <img class="silk-script-edit" src="include/icons/s.gif" />
-                Hour compensations
-            </a>
-            <a href="settings.php">
-                <img class="silk-brick-edit" src="include/icons/s.gif" />
-                Application settings
-            </a>
+            <li class="silk-user-edit">
+                <a href="viewUsers.php">Users</a>
+            </li>
+            <li class="silk-book-edit">
+                <a href="projectManagement.php">Projects</a>
+            </li>
+            <li class="silk-vcard-edit">
+                <a href="customerManagement.php">Clients</a>
+            </li>
+            <li class="silk-brick-edit">
+                <a href="areaManagement.php">Areas</a>
+            </li>
+            <li class="silk-building-edit">
+                <a href="cityManagement.php">Cities</a>
+            </li>
+            <li class="silk-calendar-edit">
+                <a href="calendarManagement.php">Calendars</a>
+            </li>
+            <li class="silk-script-edit">
+                <a href="hourCompensationManagement.php">Hour compensations</a>
+            </li>
+            <li class="silk-brick-edit">
+                <a href="settings.php">Application settings</a>
+            </li>
         </ul>
     </li>
     <!-- Last items must be listed from right to left -->
