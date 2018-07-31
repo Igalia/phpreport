@@ -20,10 +20,8 @@ In the left column, you can find:
 * Calendar: indicates the selected date and you can click on it to go to a
   different date.
 
-* Copy tasks: copies the tasks from one date to the currently selected date.
-
 * Actions: create new task and save changes, expand and collapse all the panels,
-  and use templates.
+  copy tasks from another date and use templates.
 
 In the central area, you will see the tasks stored in the currently selected
 date, one panel per task. All panels have the same components, some are used to
@@ -117,14 +115,15 @@ Copying tasks from another date
 A common scenario is having a person working in the same tasks for some days,
 usually with the same timetable. The copy feature is useful in this case.
 
-In the left column, right below the calendar, there's a panel with a date and
-the button 'Copy tasks from selected date'. When you press that button, the
+In the actions box from the left column, there is a section named 'Copy tasks
+from date' containing a date selector and a 'Copy' button.
+When you press that button, the
 tasks saved in the indicated date will be copied to the current date. Take into
 account that copied tasks aren't saved until you press the save button.
 
-Notice that the default date to copy from is the day before the current date;
-that's the most common use case. Finally, mention that copied tasks can be
-modified without affecting to the original ones.
+The default date to copy from is the last date containing any recorded tasks,
+that's the most common use case. Finally, we must clarify that copied tasks can
+be modified without affecting the original ones.
 
 Blocked tasks
 =============
