@@ -81,13 +81,21 @@ User details
 This report details the work of the logged user between two dates. It shows the
 time spent in every project.
 
-In the top of the screen some basic data of the user is shown: its login and
-the groups it belongs to. Then there are two date inputs to insert the report
-dates: if the start date is left empty, the default value is the date of the
-first task inserted by the user; if the end date is empty, the default value is
-the current date.
-There are quick-access buttons for common combinations of dates at the bottom
-of the dates box.
+The top of the screen contains two boxes with the available filters. This is
+the full list of available options:
+
+User
+  Filter hours according to the user who input them. This is the only compulsory
+  field, and it defaults to the current user. Users with manager permissions are
+  allowed to change it.
+
+Start and end dates
+  Filter hours according to their date. If the start date is left empty, the
+  default value is the date of the first task inserted by the user; if the end
+  date is empty, the default value is the current date.
+
+  There are quick-access buttons for common combinations of dates at the bottom
+  of the dates box.
 
 The results are shown in the grid in the central area of the screen; rows
 represent projects and columns represent *Total* and *Percentage* hours.
