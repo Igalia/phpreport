@@ -1203,6 +1203,8 @@ Ext.onReady(function(){
                         window.setTimeout(Ext.getCmp('fullDayTaskButton').handler, 100);
                         return;
                     }
+                    if (currentJourney == 0)
+                        return;
 
                     removeFreshEmptyTask();
 
@@ -1233,6 +1235,8 @@ Ext.onReady(function(){
                         window.setTimeout(Ext.getCmp('fullHolidayTaskButton').handler, 100);
                         return;
                     }
+                    if (currentJourney == 0)
+                        return;
 
                     removeFreshEmptyTask();
 
