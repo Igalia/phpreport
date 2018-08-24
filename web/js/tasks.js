@@ -1037,9 +1037,14 @@ Ext.onReady(function(){
                 selectedDates: [currentDate],
                 value: currentDate,
                 startDay: 1,
-                listeners: {'select': function (item, date) {
-                window.location = "tasks.php?date=" + date.format('Y-m-d');
-        }}
+                listeners: {'select': function (item, selectedDate) {
+                    var url = "tasks.php";
+                    var today = new Date();
+                    if (today.getDate() != selectedDate.getDate()) {
+                        url += "?date=" + selectedDate.format('Y-m-d');
+                    }
+                    window.location = url;
+                }}
             }),
         ],
     });
