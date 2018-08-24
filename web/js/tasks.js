@@ -127,7 +127,6 @@ function isUnTouched(taskRecord) {
 
 // Navigate to Next day
 function navigateToNextDay() {
-    currentDate = new Date(date);
     nextDate = new Date();
     nextDate.setTime(currentDate.getTime() + 86400000);
     window.location = "tasks.php?date=" + nextDate.format('Y-m-d');
@@ -135,7 +134,6 @@ function navigateToNextDay() {
 
 // Navigate to Prev day
 function navigateToPrevDay() {
-    currentDate = new Date(date);
     previousDate = new Date();
     previousDate.setTime(currentDate.getTime() - 86400000);
     window.location = "tasks.php?date=" + previousDate.format('Y-m-d');
@@ -806,7 +804,7 @@ Ext.onReady(function(){
         autoSave: false, //if set true, changes will be sent instantly
         baseParams: {
             'login': user,
-            'date': date,
+            'date': dateString,
             'dateFormat': 'Y-m-d',
         },
         storeId: 'id',
@@ -821,7 +819,7 @@ Ext.onReady(function(){
                         '<tasks>' +
                             '<tpl for="records">' +
                                 '<task>' +
-                                    '<date>' + date  + '</date>' +
+                                    '<date>' + dateString + '</date>' +
                                     '<tpl for=".">' +
                                         '<{name}>{value}</{name}>' +
                                     '</tpl>' +
@@ -844,7 +842,7 @@ Ext.onReady(function(){
                             records[i].markDirty();
                             records[i].id = null;
                             records[i].phantom = true;
-                            records[i].data['date'] = date;
+                            records[i].data['date'] = dateString;
                             store.remove(records[i]);
                             store.add(records[i]);
                             var r = records[i];
@@ -943,7 +941,7 @@ Ext.onReady(function(){
     /* Store to load the personal summary */
     var summaryStore = new Ext.data.Store({
         baseParams: {
-            'date': date,
+            'date': dateString,
             'dateFormat': 'Y-m-d',
         },
         storeId: 'summaryStore',
@@ -1036,8 +1034,8 @@ Ext.onReady(function(){
                 showWeekNumber: true,
                 multiselection: false,
                 customLinkUrl: 'tasks.php?date=',
-                selectedDates: [Date.parseDate(date, 'Y-m-d')],
-                value: Date.parseDate(date, 'Y-m-d'),
+                selectedDates: [currentDate],
+                value: currentDate,
                 startDay: 1,
                 listeners: {'select': function (item, date) {
                 window.location = "tasks.php?date=" + date.format('Y-m-d');
