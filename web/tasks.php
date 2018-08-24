@@ -69,7 +69,8 @@ else {
 $lastTaskDate = TasksFacade::getLastTaskDate($user, $date);
 if($lastTaskDate == NULL) {
     //defaults to the day before $date
-    $lastTaskDate = $date->sub(new DateInterval('P1D'));
+    $lastTaskDate = clone $date;
+    $lastTaskDate->sub(new DateInterval('P1D'));
 }
 $lastTaskDate = $lastTaskDate->format('Y-m-d');
 
