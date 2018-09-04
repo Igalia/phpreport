@@ -342,8 +342,6 @@
             stateId: 'projectUserCustomerGrid',
             storeUrl: 'services/getProjectUserCustomerReportJsonService.php?<?php
 
-                echo "login=" . $login;
-
                 if ($sid!="")
                     echo "&sid=" . $sid;
 
@@ -408,8 +406,6 @@
             stateId: 'projectUserStoryGrid',
             storeUrl: 'services/getProjectUserStoryReportJsonService.php?<?php
 
-                echo "login=" . $login;
-
                 if ($sid!="")
                     echo "&sid=" . $sid;
 
@@ -473,8 +469,6 @@
             id: 'projectUserWeeklyHoursGrid',
             stateId: 'projectUserWeeklyHoursGrid',
             storeUrl: 'services/getProjectUserWeeklyHoursReportJsonService.php?<?php
-
-                echo "login=" . $login;
                 echo "&pid=" . $pid;?>',
             rowNumberer: false,
             columnLines: true,
@@ -543,8 +537,6 @@
 
                 grid.store.proxy.conn.url= 'services/getProjectUserCustomerReportJsonService.php?<?php
 
-                    echo "login=" . $login;
-
                     if ($sid!="")
                         echo "&sid=" . $sid;
 
@@ -560,8 +552,6 @@
 
                 grid2.store.proxy.conn.url= 'services/getProjectUserStoryReportJsonService.php?<?php
 
-                    echo "login=" . $login;
-
                     if ($sid!="")
                         echo "&sid=" . $sid;
 
@@ -575,7 +565,6 @@
 
                 grid3.store.proxy.conn.url= 'services/getProjectUserWeeklyHoursReportJsonService.php?<?php
 
-                        echo "login=" . $login;
                         echo "&pid=" . $pid;
 
                         ?>&init=' + init.getFullYear() + "-" + (init.getMonth()+1) + "-" + init.getDate()  + "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
