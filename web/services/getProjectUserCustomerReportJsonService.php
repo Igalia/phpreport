@@ -35,15 +35,13 @@
 
     $projectId = $_GET['pid'];
 
-    $init = $_GET['init'];
+    $init = $_GET['init'] ?? "";
 
-    $end = $_GET['end'];
+    $end = $_GET['end'] ?? "";
 
-    $dateFormat = $_GET['dateFormat'];
+    $dateFormat = $_GET['dateFormat'] ?? "Y-m-d";
 
-    $login = $_GET['login'];
-
-    $sid = $_GET['sid'];
+    $sid = $_GET['sid'] ?? NULL;
 
     do {
 
@@ -96,9 +94,6 @@
                 break;
             }
         }
-
-        if ($dateFormat=="")
-            $dateFormat = "Y-m-d";
 
         if ($init!="")
         {

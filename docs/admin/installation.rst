@@ -10,7 +10,7 @@ To install PhpReport in your system, you will need the following software:
 
 * PostgreSQL database server (tested with PostgreSQL 9)
 
-* PHP 5.4 or higher
+* PHP 7.0 or higher
 
   * Support for PostgreSQL
 
