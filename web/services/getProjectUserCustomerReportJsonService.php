@@ -126,14 +126,12 @@
 
         $report = TasksFacade::GetProjectUserCustomerReport($projectVO, $init, $end);
 
-        $count = 0;
+        $count = count($report);
 
         $totalHours['total'] = 0;
 
         foreach((array) $report as $login => $hours)
         {
-            $count += count($report2);
-
             $record = array();
 
             $totalHours[$login] = 0;
