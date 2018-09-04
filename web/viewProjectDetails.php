@@ -38,9 +38,7 @@
 
     // We are not allowing staff users to view all project details
     $projectAssignedUsers = ProjectsFacade::GetProjectUsers($pid);
-    $sid = $_GET['sid'];
-
-    if(!LoginManager::hasExtraPermissions($sid)) {
+    if(!LoginManager::hasExtraPermissions()) {
         $userCanViewProject = false;
         foreach ( $projectAssignedUsers as $userVO ) {
             if ( $userVO->getLogin() == $_SESSION['user']->getLogin() ) {
@@ -341,10 +339,6 @@
             id: 'projectUserCustomerGrid',
             stateId: 'projectUserCustomerGrid',
             storeUrl: 'services/getProjectUserCustomerReportJsonService.php?<?php
-
-                if ($sid!="")
-                    echo "&sid=" . $sid;
-
                 echo "&pid=" . $pid;?>',
             rowNumberer: false,
             checkboxSelModel: false,
@@ -405,10 +399,6 @@
             id: 'projectUserStoryGrid',
             stateId: 'projectUserStoryGrid',
             storeUrl: 'services/getProjectUserStoryReportJsonService.php?<?php
-
-                if ($sid!="")
-                    echo "&sid=" . $sid;
-
                 echo "&pid=" . $pid;?>',
             rowNumberer: false,
             columnLines: true,
@@ -537,10 +527,7 @@
 
                 grid.store.proxy.conn.url= 'services/getProjectUserCustomerReportJsonService.php?<?php
 
-                    if ($sid!="")
-                        echo "&sid=" . $sid;
-
-                                        echo "&pid=" . $pid;
+                    echo "&pid=" . $pid;
 
                 ?>&init=' + init.getFullYear() + "-" + (init.getMonth()+1) + "-" + init.getDate()  + "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
 
@@ -552,10 +539,7 @@
 
                 grid2.store.proxy.conn.url= 'services/getProjectUserStoryReportJsonService.php?<?php
 
-                    if ($sid!="")
-                        echo "&sid=" . $sid;
-
-                                        echo "&pid=" . $pid;
+                    echo "&pid=" . $pid;
 
                 ?>&init=' + init.getFullYear() + "-" + (init.getMonth()+1) + "-" + init.getDate()  + "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
 
