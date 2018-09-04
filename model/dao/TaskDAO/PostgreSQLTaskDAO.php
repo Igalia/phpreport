@@ -403,10 +403,10 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
     $sql = "SELECT ";
 
-    if (!is_null($this->groupFields[$groupField1]))
+    if (isset($this->groupFields[$groupField1]))
     {
         $sql = $sql . $this->groupFields[$groupField1] . ", ";
-        if (!is_null($this->groupFields[$groupField2]))
+        if (isset($this->groupFields[$groupField2]))
             $sql = $sql . $this->groupFields[$groupField2] . ", ";
         elseif (!is_null($groupField2))
             throw new TaskReportInvalidParameterException($groupField2);
@@ -435,14 +435,14 @@ class PostgreSQLTaskDAO extends TaskDAO{
         $sql = $sql . "AND _date >= " . DBPostgres::formatDate($initDate) . " AND _date <= " . DBPostgres::formatDate($endDate) . " ";
     }
 
-    if (!is_null($this->groupFields[$groupField1]))
+    if (isset($this->groupFields[$groupField1]))
     {
         $sql = $sql . "GROUP BY " . $this->groupFields[$groupField1];
-        if (!is_null($this->groupFields[$groupField2]))
+        if (isset($this->groupFields[$groupField2]))
             $sql = $sql . ", " . $this->groupFields[$groupField2];
 
         $sql = $sql . " ORDER BY " . $this->groupFields[$groupField1];
-        if (!is_null($this->groupFields[$groupField2]))
+        if (isset($this->groupFields[$groupField2]))
             $sql = $sql . ", " . $this->groupFields[$groupField2];
 
     }
@@ -486,17 +486,17 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
     if (!is_null($groupField1))
     {
-        if (!is_null($this->groupFields[$groupField1]))
+        if (isset($this->groupFields[$groupField1]))
         {
             $sql = $sql . $this->groupFields[$groupField1] . ", ";
             if (!is_null($groupField2))
             {
-                if (!is_null($this->groupFields[$groupField2]))
+                if (isset($this->groupFields[$groupField2]))
                 {
                     $sql = $sql . $this->groupFields[$groupField2] . ", ";
                     if (!is_null($groupField3))
                     {
-                        if(!is_null($this->groupFields[$groupField3]))
+                        if(isset($this->groupFields[$groupField3]))
                             $sql = $sql . $this->groupFields[$groupField3] . ", ";
                         elseif (!is_null($groupField3))
                             throw new TaskReportInvalidParameterException($groupField3);
