@@ -38,14 +38,8 @@ ul#menubar {
     z-index: 99
 }
 
-#menubar .dropdown-content li {
-    background-position-x: left;
-    background-position-y: center;
-    border-left: 16px solid #f9f9f9;
-}
-
 #menubar .dropdown-content a {
-    padding: 12px 32px;
+    padding: 12px 32px 12px 48px;
 }
 
 #menubar .show {
@@ -63,10 +57,84 @@ ul#menubar {
 
 #menubar li:not(#icon):hover {
     background-color: #bfd4f0;
-    border-color: #bfd4f0;
 }
 
 .menu-arrow {
     width: 8px;
     height: 8px;
+}
+
+/* icons for menu items from spritesheet */
+
+#menubar .dropdown-content li a:before {
+    content: "";
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    left: 16px;
+    background-image: url(images/menu-spritesheet.png);
+}
+
+.sprite-book a:before {
+    background-position: -1px -1px;
+}
+
+.sprite-book-edit a:before {
+    background-position: -19px -1px;
+}
+
+.sprite-book-go a:before {
+    background-position: -37px -1px;
+}
+
+.sprite-book-open a:before {
+    background-position: -55px -1px;
+}
+
+.sprite-brick-edit a:before {
+    background-position: -73px -1px;
+}
+
+.sprite-building-edit a:before {
+    background-position: -91px -1px;
+}
+
+.sprite-calendar-edit a:before {
+    background-position: -109px -1px;
+}
+
+.sprite-pencil a:before {
+    background-position: -127px -1px;
+}
+
+.sprite-report-user a:before {
+    background-position: -145px -1px;
+}
+
+.sprite-script-edit a:before {
+    background-position: -163px -1px;
+}
+
+.sprite-sitemap a:before {
+    background-position: -181px -1px;
+}
+
+.sprite-sitemap-color a:before {
+    background-position: -199px -1px;
+}
+
+.sprite-user a:before {
+    background-position: -217px -1px;
+}
+
+.sprite-user-edit a:before {
+    background-position: -235px -1px;
+}
+
+.sprite-user-green a:before {
+    background-position: -253px -1px;
+}
+
+.sprite-vcard-edit a:before {
+    background-position: -271px -1px;
 }
