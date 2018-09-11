@@ -41,10 +41,10 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
             <img class="menu-arrow" alt="Dropdown menu" src="include/images/menu-arrow.svg"/>
         </a>
         <ul class="dropdown-content">
-            <li class="silk-sitemap">
+            <li class="sprite-sitemap">
                 <a href="xptracker-summary.php">XP Tracker</a>
             </li>
-            <li class="silk-sitemap-color">
+            <li class="sprite-sitemap-color">
                 <a href="analysistracker-summary.php">Analysis Tracker</a>
             </li>
         </ul>
@@ -56,27 +56,27 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
             <img class="menu-arrow" alt="Dropdown menu" src="include/images/menu-arrow.svg"/>
         </a>
         <ul class="dropdown-content">
-            <li class='silk-pencil'>
+            <li class='sprite-pencil'>
                 <a href="userTasksReport.php">User tasks</a>
             </li>
             <li class="divider"></li>
-            <li class="silk-user-green">
+            <li class="sprite-user-green">
                 <a href="viewUserDetails.php">User details</a>
             </li>
-            <li class="silk-user">
+            <li class="sprite-user">
                 <a href="usersEvaluation.php">Users evaluation</a>
             </li>
-            <li class="silk-report-user">
+            <li class="sprite-report-user">
                 <a href="viewWorkingHoursResultsReport.php">Accumulated hours</a>
             </li>
             <li class="divider"></li>
-            <li class="silk-book-go">
+            <li class="sprite-book-go">
                 <a href="projectDetails.php">Project details</a>
             </li>
-            <li class="silk-book-open">
+            <li class="sprite-book-open">
                 <a href="projectsEvaluation.php">Project evaluation</a>
             </li>
-            <li class="silk-book">
+            <li class="sprite-book">
                 <a href="projectsSummary.php">Projects summary</a>
             </li>
         </ul>
@@ -87,28 +87,28 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
             <img class="menu-arrow" alt="Dropdown menu" src="include/images/menu-arrow.svg"/>
         </a>
         <ul class="dropdown-content">
-            <li class="silk-user-edit">
+            <li class="sprite-user-edit">
                 <a href="viewUsers.php">Users</a>
             </li>
-            <li class="silk-book-edit">
+            <li class="sprite-book-edit">
                 <a href="projectManagement.php">Projects</a>
             </li>
-            <li class="silk-vcard-edit">
+            <li class="sprite-vcard-edit">
                 <a href="customerManagement.php">Clients</a>
             </li>
-            <li class="silk-brick-edit">
+            <li class="sprite-brick-edit">
                 <a href="areaManagement.php">Areas</a>
             </li>
-            <li class="silk-building-edit">
+            <li class="sprite-building-edit">
                 <a href="cityManagement.php">Cities</a>
             </li>
-            <li class="silk-calendar-edit">
+            <li class="sprite-calendar-edit">
                 <a href="calendarManagement.php">Calendars</a>
             </li>
-            <li class="silk-script-edit">
+            <li class="sprite-script-edit">
                 <a href="hourCompensationManagement.php">Hour compensations</a>
             </li>
-            <li class="silk-brick-edit">
+            <li class="sprite-brick-edit">
                 <a href="settings.php">Application settings</a>
             </li>
         </ul>
