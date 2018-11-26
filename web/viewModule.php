@@ -38,9 +38,9 @@ include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 $module = CoordinationFacade::GetModule($moduleId);
 
 ?><link rel="stylesheet" type="text/css" href="include/ColumnNodeUI.css" />
-<script type="text/javascript" src="include/ColumnNodeUI.min.js"></script>
-<script type="text/javascript" src="include/AnalysisTrackerSummaryTree.min.js"></script>
-<script type="text/javascript">
+<script src="include/ColumnNodeUI.min.js"></script>
+<script src="include/AnalysisTrackerSummaryTree.min.js"></script>
+<script>
 
 Ext.onReady(function(){
 

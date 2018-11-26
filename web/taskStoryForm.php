@@ -119,7 +119,7 @@ $users = UsersFacade::GetStoryIterationProjectAreaTodayUsers($storyId);
 $taskSections = CoordinationFacade::GetStoryTaskSections($storyId);
 
 ?>
-<script type="text/javascript">
+<script>
 // Add the additional VType to validate date inputs
 Ext.apply(Ext.form.VTypes, {
 

@@ -63,7 +63,7 @@ include("include/header.php");
 /* Read saved configuration */
 $config = TasksFacade::GetTaskBlockConfiguration();
 
-echo '<script type="text/javascript">';
+echo '<script>';
 echo 'var dayLimitEnabled = ';
 echo $config['dayLimitEnabled']?'true; ':'false; ';
 echo 'var dateLimitEnabled = ';

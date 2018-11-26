@@ -10,32 +10,23 @@ ul#menubar {
     float: left;
 }
 
-#menubar li {
+#menubar > li {
     float: left;
-    font: normal 14px arial,tahoma,verdana,helvetica;
 }
 
 #menubar li.right {
     float: right;
 }
 
-#menubar li a,
-.dropdown-button {
-    display: inline-block;
+#menubar a {
+    font: normal 14px arial,tahoma,verdana,helvetica;
+    display: block;
     color: black;
-    text-align: center;
-    padding: 14px 16px;
     text-decoration: none;
 }
 
-#menubar li a:hover,
-.dropdown:hover .dropdown-button,
-.dropdown-content a:hover {
-    background-color: #bfd4f0;
-}
-
-#menubar li.dropdown {
-    display: inline-block;
+#menubar > li > a {
+    padding: 14px 16px;
 }
 
 #menubar .dropdown-content {
@@ -47,19 +38,14 @@ ul#menubar {
     z-index: 99
 }
 
-#menubar .dropdown-content a {
-    color: black;
-    padding: 12px 32px 12px 16px;
-    text-decoration: none;
-    display: block;
-    text-align: left;
+#menubar .dropdown-content li {
+    background-position-x: left;
+    background-position-y: center;
+    border-left: 16px solid #f9f9f9;
 }
 
-#menubar .dropdown-content img {
-    height: 16px;
-    width: 16px;
-    padding-right: 16px;
-    vertical-align: text-bottom;
+#menubar .dropdown-content a {
+    padding: 12px 32px;
 }
 
 #menubar .show {
@@ -68,9 +54,16 @@ ul#menubar {
 
 #menubar .dropdown-content .divider {
   height: 1px;
-  width: 206px; /* FIXME: do not hardcode this value */
   overflow: hidden;
   background-color: #e5e5e5;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+#menubar li:not(#icon):hover {
+    background-color: #bfd4f0;
+    border-color: #bfd4f0;
 }
 
 .menu-arrow {

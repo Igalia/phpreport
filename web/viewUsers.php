@@ -46,7 +46,7 @@ $groups = UsersFacade::GetAllUserGroups();
 
 ?>
 <script src="include/RowEditor.min.js"></script>
-<script type="text/javascript">
+<script>
 
 Ext.onReady(function(){
 

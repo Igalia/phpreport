@@ -49,7 +49,7 @@ $module = CoordinationFacade::GetModule($section->getModuleId());
 $users = ProjectsFacade::GetProjectUsers($module->getProjectId());
 
 ?>
-<script type="text/javascript">
+<script>
 
 Ext.onReady(function(){
 
