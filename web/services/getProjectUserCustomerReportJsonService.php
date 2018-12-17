@@ -35,19 +35,17 @@
 
     $projectId = $_GET['pid'];
 
-    $init = $_GET['init'];
+    $init = $_GET['init'] ?? "";
 
-    $end = $_GET['end'];
+    $end = $_GET['end'] ?? "";
 
-    $dateFormat = $_GET['dateFormat'];
+    $dateFormat = $_GET['dateFormat'] ?? "Y-m-d";
 
-    $login = $_GET['login'];
-
-    $sid = $_GET['sid'];
+    $sid = $_GET['sid'] ?? NULL;
 
     do {
 
-        $response[pid] = $projectId;
+        $response['pid'] = $projectId;
 
 
         /* We check authentication and authorization */
@@ -56,26 +54,26 @@
         if (!LoginManager::isLogged($sid))
         {
             if ($init!="")
-                $response[init] = $init;
+                $response['init'] = $init;
             if ($end!="")
-                $response[end] = $end;
-            $response[success] = false;
-            $error[id] = 2;
-            $error[message] = "You must be logged in";
-            $response[error] = $error;
+                $response['end'] = $end;
+            $response['success'] = false;
+            $error['id'] = 2;
+            $error['message'] = "You must be logged in";
+            $response['error'] = $error;
             break;
         }
 
         if (!LoginManager::isAllowed($sid))
         {
             if ($init!="")
-                $response[init] = $init;
+                $response['init'] = $init;
             if ($end!="")
-                $response[end] = $end;
-            $response[success] = false;
-            $error[id] = 3;
-            $error[message] = "Forbidden service for this User";
-            $response[error] = $error;
+                $response['end'] = $end;
+            $response['success'] = false;
+            $error['id'] = 3;
+            $error['message'] = "Forbidden service for this User";
+            $response['error'] = $error;
             break;
         }
 
@@ -89,20 +87,17 @@
                 }
             }
             if(!$userCanViewProject) {
-                $response[success] = false;
-                $error[id] = 3;
-                $error[message] = "Forbidden service for this User";
-                $response[error] = $error;
+                $response['success'] = false;
+                $error['id'] = 3;
+                $error['message'] = "Forbidden service for this User";
+                $response['error'] = $error;
                 break;
             }
         }
 
-        if ($dateFormat=="")
-            $dateFormat = "Y-m-d";
-
         if ($init!="")
         {
-            $response[init] = $init;
+            $response['init'] = $init;
 
             $initParse = date_parse_from_format($dateFormat, $init);
 
@@ -115,7 +110,7 @@
 
         if ($end!="")
         {
-            $response[end] = $end;
+            $response['end'] = $end;
 
             $endParse = date_parse_from_format($dateFormat, $end);
 
@@ -131,80 +126,79 @@
 
         $report = TasksFacade::GetProjectUserCustomerReport($projectVO, $init, $end);
 
-        $count = 0;
+        $count = count($report);
 
-        $totalHours[total] = 0;
+        $totalHours['total'] = 0;
 
         foreach((array) $report as $login => $hours)
         {
-            $count += count($report2);
-
             $record = array();
 
             $totalHours[$login] = 0;
-            $record[login] = $login;
+            $record['login'] = $login;
 
             $totalHours[$login] += round($hours, 2, PHP_ROUND_HALF_DOWN);
-            $totalHours[total] += round($hours, 2, PHP_ROUND_HALF_DOWN);
+            $totalHours['total'] += round($hours, 2, PHP_ROUND_HALF_DOWN);
 
-            $record[total] = $totalHours[$login];
+            $record['total'] = $totalHours[$login];
 
             $records[] = $record;
         }
 
       foreach($records as $record) {
-          $record[percentage] = round(100 * $totalHours[$record[login]]/$totalHours[total], 2, PHP_ROUND_HALF_DOWN);
-          $response[records][] = $record;
+          $record['percentage'] = round(100 * $totalHours[$record['login']]/$totalHours['total'],
+              2, PHP_ROUND_HALF_DOWN);
+          $response['records'][] = $record;
       }
 
-        $response[total] = $count;
+        $response['total'] = $count;
 
-        $metaData[totalProperty] = "total";
-        $metaData[root] = "records";
-        $metaData[id] = "login";
+        $metaData['totalProperty'] = "total";
+        $metaData['root'] = "records";
+        $metaData['id'] = "login";
 
-        $metaData[sortInfo][field] = 'login';
-        $metaData[sortInfo][direction] = 'ASC';
+        $metaData['sortInfo']['field'] = 'login';
+        $metaData['sortInfo']['direction'] = 'ASC';
 
-        $field[name] = "login";
-                $field[type] = "string";
+        $field['name'] = "login";
+                $field['type'] = "string";
 
-        $metaData[fields][] = $field;
+        $metaData['fields'][] = $field;
 
-        $field[name] = "total";
-                $field[type] = "float";
+        $field['name'] = "total";
+                $field['type'] = "float";
 
-        $metaData[fields][] = $field;
+        $metaData['fields'][] = $field;
 
-        $field[name] = "percentage";
-                $field[type] = "float";
+        $field['name'] = "percentage";
+                $field['type'] = "float";
 
-        $metaData[fields][] = $field;
+        $metaData['fields'][] = $field;
 
-        $column[header] = "Login";
-        $column[dataIndex] = "login";
-        $column[sortable] = true;
+        $column['header'] = "Login";
+        $column['dataIndex'] = "login";
+        $column['sortable'] = true;
         $column['width'] = 100;
 
-        $response[columns][] = $column;
+        $response['columns'][] = $column;
 
-        $field[type] = "float";
+        $field['type'] = "float";
 
-        $column[header] = "Total";
-        $column[dataIndex] = "total";
-        $column[sortable] = true;
+        $column['header'] = "Total";
+        $column['dataIndex'] = "total";
+        $column['sortable'] = true;
 
-                $response[columns][] = $column;
+                $response['columns'][] = $column;
 
-        $column[header] = "%";
-        $column[dataIndex] = "percentage";
-        $column[sortable] = true;
+        $column['header'] = "%";
+        $column['dataIndex'] = "percentage";
+        $column['sortable'] = true;
 
-                $response[columns][] = $column;
+                $response['columns'][] = $column;
 
-                $response[metaData] = $metaData;
+                $response['metaData'] = $metaData;
 
-        $response[success] = true;
+        $response['success'] = true;
 
     } while (False);
 

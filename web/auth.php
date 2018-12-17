@@ -19,7 +19,7 @@
  */
 
 
-    $sid = $_GET['sid'];
+    $sid = $_GET['sid'] ?? NULL;
 
     /* We check authentication and authorization */
     require_once(PHPREPORT_ROOT . '/util/LoginManager.php');

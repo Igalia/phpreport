@@ -34,17 +34,17 @@ include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
 
 $projectId = $_GET['pid'];
 
-$init = $_GET['init'];
+$init = $_GET['init'] ?? "";
 
-$end = $_GET['end'];
+$end = $_GET['end'] ?? "";
 
-$dateFormat = $_GET['dateFormat'];
+$dateFormat = $_GET['dateFormat'] ?? "Y-m-d";
 
-$login = $_GET['login'];
+$sid = $_GET['sid'] ?? NULL;
 
 do {
 
-    $response[pid] = $projectId;
+    $response['pid'] = $projectId;
 
     /* We check authentication and authorization */
     require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
@@ -52,13 +52,13 @@ do {
     if (!LoginManager::isLogged($sid))
     {
         if ($init!="")
-            $response[init] = $init;
+            $response['init'] = $init;
         if ($end!="")
-            $response[end] = $end;
-        $response[success] = false;
-        $error[id] = 2;
-        $error[message] = "You must be logged in";
-        $response[error] = $error;
+            $response['end'] = $end;
+        $response['success'] = false;
+        $error['id'] = 2;
+        $error['message'] = "You must be logged in";
+        $response['error'] = $error;
         break;
     }
     if (!LoginManager::isAllowed($sid))
@@ -74,12 +74,9 @@ do {
         break;
     }
 
-    if ($dateFormat=="")
-        $dateFormat = "Y-m-d";
-
     if ($init!="")
     {
-        $response[init] = $init;
+        $response['init'] = $init;
 
         $initParse = date_parse_from_format($dateFormat, $init);
 
@@ -92,7 +89,7 @@ do {
 
     if ($end!="")
     {
-        $response[end] = $end;
+        $response['end'] = $end;
 
         $endParse = date_parse_from_format($dateFormat, $end);
 
@@ -127,35 +124,35 @@ do {
 
     foreach($records as $record)
     {
-        $response[records][] = $record;
+        $response['records'][] = $record;
     }
 
-    $metaData[totalProperty] = "total";
-    $metaData[root] = "records";
-    $metaData[id] = "login";
+    $metaData['totalProperty'] = "total";
+    $metaData['root'] = "records";
+    $metaData['id'] = "login";
 
-    $metaData[sortInfo][field] = 'login';
-    $metaData[sortInfo][direction] = 'ASC';
+    $metaData['sortInfo']['field'] = 'login';
+    $metaData['sortInfo']['direction'] = 'ASC';
 
-    $field[name] = "login";
-    $field[type] = "string";
+    $field['name'] = "login";
+    $field['type'] = "string";
 
-    $metaData[fields][] = $field;
+    $metaData['fields'][] = $field;
 
-    $field[name] = "week";
-    $field[type] = "string";
+    $field['name'] = "week";
+    $field['type'] = "string";
 
-    $metaData[fields][] = $field;
+    $metaData['fields'][] = $field;
 
 
-    $column[header] = "Login";
-    $column[dataIndex] = "login";
-    $column[sortable] = true;
+    $column['header'] = "Login";
+    $column['dataIndex'] = "login";
+    $column['sortable'] = true;
     $column['width'] = 100;
 
 
-    $response[columns][] = $column;
-    $field[type] = "float";
+    $response['columns'][] = $column;
+    $field['type'] = "float";
 
     // The weeks should show up in ascending order, sorted by week number
     ksort($weeklyRecords);
@@ -165,15 +162,15 @@ do {
             $field['name'] = $week."-".$year;
             $metaData['fields'][] = $field;
 
-            $column[header] = "Week " . $week . ", $year";
-            $column[dataIndex] = $week."-".$year;
-            $response[columns][] = $column;
+            $column['header'] = "Week " . $week . ", $year";
+            $column['dataIndex'] = $week."-".$year;
+            $response['columns'][] = $column;
         }
     }
 
-    $response[metaData] = $metaData;
+    $response['metaData'] = $metaData;
 
-    $response[success] = true;
+    $response['success'] = true;
 
 } while (false);
 
