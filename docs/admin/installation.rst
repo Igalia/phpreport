@@ -23,9 +23,7 @@ Installing dependencies on selected GNU/Linux distros
 
 Run the following command with root privileges:
 
-* Debian: ``apt-get install postgresql apache2 php5 php5-pgsql``
-
-* Ubuntu: ``apt-get install postgresql apache2 php php-pgsql php-xml``
+* Debian, Ubuntu: ``apt-get install postgresql apache2 php php-pgsql php-xml``
 
 * Fedora: ``dnf install postgresql-server httpd php php-pgsql php-xml``
 
