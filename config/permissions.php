@@ -58,7 +58,7 @@ $permissions = array(
         '/services/deleteTaskStoriesService.php', '/services/updateTaskSectionsService.php',
         '/services/createTaskSectionsService.php', '/services/deleteTaskSectionsService.php',
         //reports
-        '/viewProjectDetails.php', '/viewUserDetails.php', '/projectDetails.php', '/viewWorkingHoursResultsReport.php',
+        '/projectDetailsReport.php', '/viewUserDetails.php', '/projectDetails.php', '/viewWorkingHoursResultsReport.php',
         '/services/getExtraHoursReportService.php','/services/getPendingHolidayHoursService.php',
         '/services/getProjectTtypeReportService.php', '/services/getProjectUserCustomerReportJsonService.php',
         '/services/getProjectUserCustomerReportService.php', '/services/getProjectUserStoryReportService.php',
@@ -140,7 +140,7 @@ $extraPermissions = array(
         //user tasks report: enable user field to check any user
         "/userTasksReport.php", "/services/getTasksFiltered.php",
         //project details reports: check any project
-        '/viewProjectDetails.php', '/projectDetails.php',
+        '/projectDetailsReport.php', '/projectDetails.php',
         '/services/getProjectUserCustomerReportJsonService.php',
         //user details report: check any user
         '/viewUserDetails.php',

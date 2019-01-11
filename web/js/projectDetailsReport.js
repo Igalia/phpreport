@@ -1,4 +1,3 @@
-<?php
 /*
  * Copyright (C) 2009-2019 Igalia, S.L. <info@igalia.com>
  *
@@ -18,88 +17,7 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-    define('PHPREPORT_ROOT', __DIR__ . '/../');
-
-    $pid = $_GET['pid'];
-
-    /* We check authentication and authorization */
-    require_once(PHPREPORT_ROOT . '/web/auth.php');
-
-    /* Include the generic header and sidebar*/
-    define('PAGE_TITLE', "PhpReport - Project Details");
-    include_once("include/header.php");
-    include_once(PHPREPORT_ROOT . '/model/facade/CoordinationFacade.php');
-    include_once(PHPREPORT_ROOT . '/model/vo/StoryVO.php');
-    include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
-    include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
-    include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
-
-    $project = ProjectsFacade::GetCustomProject($pid);
-
-    // We are not allowing staff users to view all project details
-    $projectAssignedUsers = ProjectsFacade::GetProjectUsers($pid);
-    if(!LoginManager::hasExtraPermissions()) {
-        $userCanViewProject = false;
-        foreach ( $projectAssignedUsers as $userVO ) {
-            if ( $userVO->getLogin() == $_SESSION['user']->getLogin() ) {
-                $userCanViewProject = true;
-                break;
-            }
-        }
-        if(!$userCanViewProject) {
-            echo "You are not allowed to access this page";
-            return;
-        }
-    }
-?>
-<script src="js/include/DateIntervalForm.min.js"></script>
-<script src="js/include/ExportableGridPanel.min.js"></script>
-<?php
-//output vars as JS code
-echo "<!-- Global variables extracted from the PHP side -->\n";
-echo "<script>\n";
-echo "var projectData = {\n";
-echo "    description: '" . $project->getDescription() . "',\n";
-echo "    id: " . $project->getId() . ",\n";
-echo "    customerName: '" . $project->getCustomerName() . "',\n";
-echo "    estimatedHours: '" . $project->getEstHours() . "',\n";
-echo "    active: " . ($project->getActivation()? "true":"false") . ",\n";
-echo "    movedHours: '" . $project->getMovedHours() . "',\n";
-echo "    invoice: '" . $project->getInvoice() . "',\n";
-echo "    type: '" . $project->getType() . "',\n";
-
-echo "    finalEstimatedHours: '" . $project->getFinalEstHours() . "',\n";
-echo "    workedHours: '" . $project->getWorkedHours() . "',\n";
-echo "    workDeviation: '" . round($project->getAbsDev(), 2, PHP_ROUND_HALF_DOWN) . "',\n";
-echo "    workDeviationPercent: '" . round($project->getPercDev(), 2, PHP_ROUND_HALF_DOWN) . "',\n";
-
-echo "    estInvoice: '" . round($project->getEstHourInvoice(), 2, PHP_ROUND_HALF_DOWN) . "',\n";
-echo "    currentInvoice: '" . round($project->getWorkedHourInvoice(), 2, PHP_ROUND_HALF_DOWN) . "',\n";
-echo "    invoiceDeviation: '" . round($project->getWorkedHourInvoiceAbsoluteDeviation(), 2, PHP_ROUND_HALF_DOWN) . "',\n";
-echo "    invoiceDeviationPercent: '" . round($project->getWorkedHourInvoiceRelativeDeviation(), 2, PHP_ROUND_HALF_DOWN) . "',\n";
-
-if (is_null($project->getInit())) {
-    echo "    initDate: '',\n";
-}
-else {
-    echo "    initDate: Date.parseDate('" .
-        $project->getInit()->format('Y-m-d') . "', 'Y-m-d'),\n";
-}
-
-if (is_null($project->getEnd())) {
-    echo "    endDate: '',\n";
-}
-else {
-    echo "    endDate: Date.parseDate('" .
-        $project->getEnd()->format('Y-m-d') . "', 'Y-m-d'),\n";
-}
-echo "};\n";
-echo "</script>\n";
-?>
-<script>
-
-    Ext.onReady(function(){
-
+Ext.onReady(function(){
 
     // Main Panel
     var mainPanel = new Ext.FormPanel({
@@ -521,14 +439,4 @@ echo "</script>\n";
     grid2.store.load();
     grid3.store.load();
 
-    })
-
-</script>
-
-<div id="content">
-</div>
-<div id="variables"/>
-<?php
-/* Include the footer to close the header */
-include("include/footer.php");
-?>
+});

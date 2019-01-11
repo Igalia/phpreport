@@ -420,7 +420,7 @@ Ext.onReady(function(){
 
     // event handler for double-click on a project
     projectGrid.on('rowdblclick', function(grid, n, e) {
-        window.open('viewProjectDetails.php?pid=' + grid.store.getAt(n).get('id'));
+        window.open('projectDetailsReport.php?pid=' + grid.store.getAt(n).get('id'));
     });
 
     projectGrid.getSelectionModel().on('selectionchange', function(sm){
@@ -433,7 +433,7 @@ Ext.onReady(function(){
     function onDetails() {
         if (projectGrid.getSelectionModel().getCount() > 0) {
             var selected = projectGrid.getSelectionModel().getSelected();
-            window.open('viewProjectDetails.php?pid=' + selected.id);
+            window.open('projectDetailsReport.php?pid=' + selected.id);
         }
     }
 
