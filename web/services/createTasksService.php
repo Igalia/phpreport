@@ -231,7 +231,7 @@
                 $string = "<return service='createTasks'><success>false</success><error id='1'>There was some error while creating the tasks</error></return>";
 
 
-        if (!$string)
+        if (!isset($string))
         {
 
             $string = "<return service='createTasks'><success>true</success><ok>Operation Success!</ok><tasks>";
