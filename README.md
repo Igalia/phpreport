@@ -70,6 +70,10 @@ This software includes code and assets from other open source projects:
   originally licensed under the terms of the GNU General Public License,
   version 2 or later.
 
+* Sources derived from the [Tinyproxy project](https://tinyproxy.github.io/),
+  originally licensed under the terms of the GNU General Public License,
+  version 2 or later.
+
 * The [Silk icon set 1.3](http://www.famfamfam.com/lab/icons/silk/)
   by Mark James, licensed under a
   [Creative Commons Attribution 2.5 License](http://creativecommons.org/licenses/by/2.5/).
