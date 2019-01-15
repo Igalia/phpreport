@@ -1,13 +1,13 @@
-VERSION=2.18
-
 tgz: help minify
 	cp config/config.php config/config.defaults
-	tar zcf phpreport_$(VERSION).tar.gz --exclude=Makefile --exclude=*~ \
-		--exclude=docs --exclude=config/config.php \
+	VERSION=`./version.sh`;	\
+	tar zcf phpreport_$${VERSION}.tar.gz --exclude=Makefile --exclude=*~ \
+		--exclude=version.sh --exclude=docs --exclude=config/config.php \
 		--exclude=*.tar.gz --exclude=*.zip *
 
 zip: tgz
-	tar tf phpreport_$(VERSION).tar.gz | zip -@ phpreport_$(VERSION).zip
+	VERSION=`./version.sh`;	\
+	tar tf phpreport_$${VERSION}.tar.gz | zip -@ phpreport_$${VERSION}.zip
 
 help:
 	#create dirs
@@ -18,7 +18,9 @@ help:
 	cp -r docs/user/i help/user
 	cp -r docs/developer/i help/developer
 	#generate footer
-	echo -e '\n.. class:: credits\n\n  This file is part of PhpReport $(VERSION) documentation.' > footer
+	echo -ne '\n.. class:: credits\n\n  This file is part of PhpReport ' > footer
+	VERSION=`./version.sh`;	echo -ne $${VERSION} >> footer
+	echo -e ' documentation.' >> footer
 	echo -ne '  Generated on ' >> footer
 	date >> footer
 	#parse rst
