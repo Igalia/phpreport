@@ -1,6 +1,5 @@
-<?php
 /*
- * Copyright (C) 2009-2014 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009-2019 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -18,46 +17,7 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-    define('PHPREPORT_ROOT', __DIR__ . '/../');
-
-    $pid = $_GET['pid'];
-
-    /* We check authentication and authorization */
-    require_once(PHPREPORT_ROOT . '/web/auth.php');
-
-    /* Include the generic header and sidebar*/
-    define('PAGE_TITLE', "PhpReport - Project Details");
-    include_once("include/header.php");
-    include_once(PHPREPORT_ROOT . '/model/facade/CoordinationFacade.php');
-    include_once(PHPREPORT_ROOT . '/model/vo/StoryVO.php');
-    include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
-    include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
-    include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
-
-    $project = ProjectsFacade::GetCustomProject($pid);
-
-    // We are not allowing staff users to view all project details
-    $projectAssignedUsers = ProjectsFacade::GetProjectUsers($pid);
-    if(!LoginManager::hasExtraPermissions()) {
-        $userCanViewProject = false;
-        foreach ( $projectAssignedUsers as $userVO ) {
-            if ( $userVO->getLogin() == $_SESSION['user']->getLogin() ) {
-                $userCanViewProject = true;
-                break;
-            }
-        }
-        if(!$userCanViewProject) {
-            echo "You are not allowed to access this page";
-            return;
-        }
-    }
-?>
-<script src="js/include/DateIntervalForm.min.js"></script>
-<script src="js/include/ExportableGridPanel.min.js"></script>
-<script>
-
-    Ext.onReady(function(){
-
+Ext.onReady(function(){
 
     // Main Panel
     var mainPanel = new Ext.FormPanel({
@@ -95,94 +55,55 @@
                         id:'name',
                         name: 'name',
                         fieldLabel:'Name',
-                        <?php
-                              echo "value:'" . $project->getDescription() . "'";
-                        ?>
+                        value: projectData.description,
                     },{
                         id:'id',
                         name: 'id',
                         fieldLabel:'Id',
-                        <?php
-                              echo "value:'" . $project->getId() . "'";
-                        ?>
+                        value: projectData.id,
                     },{
-                    id:'customer',
-                    name: 'customer',
-                    fieldLabel:'Customer',
-                    <?php
-                    echo "value:'" . $project->getCustomerName() . "'";
-                    ?>
+                        id:'customer',
+                        name: 'customer',
+                        fieldLabel:'Customer',
+                        value: projectData.customerName,
                     },{
                         id:'init',
                         name: 'init',
                         fieldLabel:'Init Date',
-                        <?php
-                              echo "value:'" . ((is_null($project->getInit()))?(' --- '):($project->getInit()->format('d/m/Y'))) . "'";
-                        ?>
+                        value: (projectData.initDate)? projectData.initDate.format('d/m/Y') : "---",
                     },{
                         id:'end',
                         name: 'end',
                         fieldLabel:'End Date',
-                        <?php
-                              echo "value:'" . ((is_null($project->getEnd()))?(' --- '):($project->getEnd()->format('d/m/Y'))) . "'";
-                        ?>
+                        value: (projectData.endDate)? projectData.endDate.format('d/m/Y') : "---",
                     },{
                         id:'active',
                         name:'active',
                         fieldLabel: 'Active',
-                        <?php
-
-                            $active = $project->getActivation();
-                            if (isset($active))
-                            {
-                                if ($active == False)
-                                    echo "value:'No'";
-                                else {
-                                    echo "value:'Yes'";
-                                    if(!is_null($project->getEnd()) &&
-                                            time() > $project->getEnd()->getTimestamp())
-                                        //project is open but finish date has passed
-                                        echo ',style: {color:"red"}';
-                                }
-                            }
-
-                        ?>
+                        value: projectData.active? "Yes":"No",
+                        //check if project is active but finish date has passed
+                        style: (projectData.active && projectData.endDate && new Date() > projectData.endDate)?
+                               {color:"red"} : {},
                     },{
                         id: 'estHours',
                         name:'estHours',
                         fieldLabel: 'Estimated Hours',
-                        <?php
-
-                            echo "value:'" . $project->getEstHours() . "'";
-
-                        ?>
+                        value: projectData.estimatedHours,
                     },{
                         id: 'movedHours',
                         name:'movedHours',
                         fieldLabel: 'Moved Hours',
-                        <?php
-
-                            echo "value:'" . $project->getMovedHours() . "'";
-
-                        ?>
+                        value: projectData.movedHours,
                     },{
                         id: 'invoice',
                         name:'invoice',
                         fieldLabel: 'Invoice',
-                        <?php
-
-                            echo "value:'" . $project->getInvoice() . "'";
-
-                        ?>
+                        value: projectData.invoice,
                     },{
                         id: 'Type',
                         name:'Type',
                         fieldLabel: 'Type',
-                        <?php
-
-                            echo "value:'" . $project->getType() . "'";
-
-                        ?>
+                        value: projectData.type,
                     }
                 ]
             },{
@@ -199,41 +120,25 @@
                 },
                 defaultType:'displayfield',
                 items: [{
-                      id: 'estimatedHoursWithMoved',
+                        id: 'estimatedHoursWithMoved',
                         name:'estimatedHoursWithMoved',
                         fieldLabel: 'Estimated Hours',
-                        <?php
-
-                            echo "value:'" . $project->getFinalEstHours() . "'";
-
-                        ?>
+                        value: projectData.finalEstimatedHours,
                     },{
-                      id: 'workedHours',
+                        id: 'workedHours',
                         name:'workedHours',
                         fieldLabel: 'Worked Hours',
-                        <?php
-
-                            echo "value:'" . $project->getWorkedHours() . "'";
-
-                        ?>
+                        value: projectData.workedHours,
                     },{
                         id: 'workDeviation',
                         name:'workDeviation',
                         fieldLabel: 'Deviation',
-                        <?php
-
-                            echo "value:'" . round($project->getAbsDev(), 2, PHP_ROUND_HALF_DOWN) . "'";
-
-                        ?>
+                        value: projectData.workDeviation,
                     },{
                         id: 'workDeviationPercent',
                         name:'workDeviationPercent',
                         fieldLabel: 'Deviation %',
-                        <?php
-
-                            echo "value:'" . round($project->getPercDev(), 2, PHP_ROUND_HALF_DOWN) . "'";
-
-                        ?>
+                        value: projectData.workDeviationPercent,
                     }
                 ]
             },{
@@ -253,38 +158,22 @@
                         id: 'estInvoice',
                         name:'estInvoice',
                         fieldLabel: 'Estimated Price',
-                        <?php
-
-                            echo "value:'" . round($project->getEstHourInvoice(), 2, PHP_ROUND_HALF_DOWN) . "'";
-
-                        ?>
+                        value: projectData.estInvoice,
                     },{
                         id: 'currentInvoice',
                         name:'currentInvoice',
                         fieldLabel: 'Current Price',
-                        <?php
-
-                            echo "value:'" . round($project->getWorkedHourInvoice(), 2, PHP_ROUND_HALF_DOWN) . "'";
-
-                        ?>
+                        value: projectData.currentInvoice,
                     },{
                         id: 'invoiceDeviation',
                         name:'invoiceDeviation',
                         fieldLabel: 'Deviation',
-                        <?php
-
-                            echo "value:'" . round($project->getWorkedHourInvoiceAbsoluteDeviation(), 2, PHP_ROUND_HALF_DOWN) . "'";
-
-                        ?>
+                        value: projectData.invoiceDeviation,
                     },{
                         id: 'invoiceDeviationPercent',
                         name:'invoiceDeviationPercent',
                         fieldLabel: 'Deviation %',
-                        <?php
-
-                            echo "value:'" . round($project->getWorkedHourInvoiceRelativeDeviation(), 2, PHP_ROUND_HALF_DOWN) . "'";
-
-                        ?>
+                        value: projectData.invoiceDeviationPercent,
                     }
                 ]
             }]
@@ -338,8 +227,7 @@
         var grid = new Ext.ux.DynamicGridPanel({
             id: 'projectUserCustomerGrid',
             stateId: 'projectUserCustomerGrid',
-            storeUrl: 'services/getProjectUserCustomerReportJsonService.php?<?php
-                echo "&pid=" . $pid;?>',
+            storeUrl: 'services/getProjectUserCustomerReportJsonService.php?pid=' + projectData.id,
             rowNumberer: false,
             checkboxSelModel: false,
             width: 400,
@@ -398,8 +286,7 @@
         var grid2 = new Ext.ux.DynamicGridPanel({
             id: 'projectUserStoryGrid',
             stateId: 'projectUserStoryGrid',
-            storeUrl: 'services/getProjectUserStoryReportJsonService.php?<?php
-                echo "&pid=" . $pid;?>',
+            storeUrl: 'services/getProjectUserStoryReportJsonService.php?pid=' + projectData.id,
             rowNumberer: false,
             columnLines: true,
             checkboxSelModel: false,
@@ -458,8 +345,7 @@
         var grid3 = new Ext.ux.DynamicGridPanel({
             id: 'projectUserWeeklyHoursGrid',
             stateId: 'projectUserWeeklyHoursGrid',
-            storeUrl: 'services/getProjectUserWeeklyHoursReportJsonService.php?<?php
-                echo "&pid=" . $pid;?>',
+            storeUrl: 'services/getProjectUserWeeklyHoursReportJsonService.php?pid=' + projectData.id,
             rowNumberer: false,
             columnLines: true,
             checkboxSelModel: false,
@@ -524,35 +410,24 @@
             'view': function (element, init, end) {
 
                 grid.store.removeAll();
-
-                grid.store.proxy.conn.url= 'services/getProjectUserCustomerReportJsonService.php?<?php
-
-                    echo "&pid=" . $pid;
-
-                ?>&init=' + init.getFullYear() + "-" + (init.getMonth()+1) + "-" + init.getDate()  + "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
-
-
+                grid.store.proxy.conn.url= 'services/getProjectUserCustomerReportJsonService.php' +
+                    '?pid=' + projectData.id +
+                    '&init=' + init.getFullYear() + "-" + (init.getMonth()+1) + "-" + init.getDate() +
+                    "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
                 grid.store.load();
 
-
                 grid2.store.removeAll();
-
-                grid2.store.proxy.conn.url= 'services/getProjectUserStoryReportJsonService.php?<?php
-
-                    echo "&pid=" . $pid;
-
-                ?>&init=' + init.getFullYear() + "-" + (init.getMonth()+1) + "-" + init.getDate()  + "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
-
+                grid2.store.proxy.conn.url= 'services/getProjectUserStoryReportJsonService.php' +
+                    '?pid=' + projectData.id +
+                    '&init=' + init.getFullYear() + "-" + (init.getMonth()+1) + "-" + init.getDate() +
+                    "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
                 grid2.store.load();
 
                 grid3.store.removeAll();
-
-                grid3.store.proxy.conn.url= 'services/getProjectUserWeeklyHoursReportJsonService.php?<?php
-
-                        echo "&pid=" . $pid;
-
-                        ?>&init=' + init.getFullYear() + "-" + (init.getMonth()+1) + "-" + init.getDate()  + "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
-
+                grid3.store.proxy.conn.url= 'services/getProjectUserWeeklyHoursReportJsonService.php' +
+                    '?pid=' + projectData.id +
+                    '&init=' + init.getFullYear() + "-" + (init.getMonth()+1) + "-" + init.getDate() +
+                    "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
                 grid3.store.load();
 
             }
@@ -564,14 +439,4 @@
     grid2.store.load();
     grid3.store.load();
 
-    })
-
-</script>
-
-<div id="content">
-</div>
-<div id="variables"/>
-<?php
-/* Include the footer to close the header */
-include("include/footer.php");
-?>
+});

@@ -91,7 +91,7 @@ var projectComboBox = new Ext.form.ComboBox({
             this.setValue(selectText);
             combo.value = record.id;
 
-            window.open('viewProjectDetails.php?pid=' + this.getValue() ,"_self")
+            window.open('projectDetailsReport.php?pid=' + this.getValue() ,"_self")
         }
     }
 });

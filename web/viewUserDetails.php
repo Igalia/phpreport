@@ -147,7 +147,7 @@
 
             // listener for double click to open the project details page
             this.on('rowdblclick', function(g, n) {
-                window.open('viewProjectDetails.php?pid=' +
+                window.open('projectDetailsReport.php?pid=' +
                         g.getStore().getAt(n).get('id'));
             });
 

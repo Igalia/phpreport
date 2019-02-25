@@ -796,7 +796,7 @@ Ext.onReady(function(){
 
             if (this.getSelectionModel().getCount() > 0) {
                 var selected = this.getSelectionModel().getSelected();
-                window.location = 'viewProjectDetails.php?pid=' + selected.id;
+                window.location = 'projectDetailsReport.php?pid=' + selected.id;
             }
         },
 
