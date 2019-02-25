@@ -48,12 +48,13 @@ include("include/header.php");
 if(!isset($_GET["date"])) {
     $date = new DateTime();
     $dateString = $date->format("Y-m-d");
+    $serverDayOfMonth = $date->format("d");
 
     echo "<!-- Check if server and browser are in a different day due to timezones -->\n";
     echo "<script>\n";
-    echo "var serverDate = new Date(\"" . $dateString . "T00:00:00\");\n";
+    echo "var serverDayOfMonth = " . $serverDayOfMonth . ";\n";
     echo "var browserDate = new Date();\n";
-    echo "if (browserDate.getDate() != serverDate.getDate()) {\n";
+    echo "if (browserDate.getDate() != serverDayOfMonth) {\n";
     echo "   window.location = \"tasks.php?date=\" + browserDate.format('Y-m-d');\n";
     echo "}\n";
     echo "</script>\n";
