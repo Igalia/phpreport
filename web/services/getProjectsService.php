@@ -31,55 +31,28 @@ include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
 include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
 
-$sid = $_GET['sid'];
-$login = $_GET['login'];
-$order = 'id';
+$sid = $_GET['sid'] ?? NULL;
+$login = $_GET['login'] ?? NULL;
+$order = $_GET['order'] ?? 'id';
 
 
 // In case some filtering args are set, retrieve them
-$description = NULL;
+$description = $_GET['description'] ?? NULL;
 $filterStartDate = NULL;
 $filterEndDate = NULL;
-$activation = NULL;
-$areaId = NULL;
-$type = NULL;
-$customerId = NULL;
-$cname = NULL;
-$active = false;
-$returnExtendedInfo = False;
+$activation = $_GET['activation'] ?? NULL;
+$areaId = $_GET['areaId'] ?? NULL;
+$type = $_GET['type'] ?? NULL;
+$customerId = $_GET['customerId'] ?? NULL;
+$cname = $_GET['cname'] ?? NULL;
+$active = $_GET['active'] ?? false;
+$returnExtendedInfo = $_GET['returnExtendedInfo'] ?? false;
 
-if (isset($_GET['description'])) {
-    $description = $_GET['description'];
-}
 if (isset($_GET['filterStartDate'])) {
     $filterStartDate = DateTime::createFromFormat("Y-m-d", $_GET['filterStartDate']);
 }
 if (isset($_GET['filterEndDate'])) {
     $filterEndDate = DateTime::createFromFormat("Y-m-d", $_GET['filterEndDate']);
-}
-if (isset($_GET['activation'])) {
-    $activation = $_GET['activation'];
-}
-if (isset($_GET['areaId'])) {
-    $areaId = $_GET['areaId'];
-}
-if (isset($_GET['type'])) {
-    $type = $_GET['type'];
-}
-if (isset($_GET['order'])) {
-    $order = $_GET['order'];
-}
-if (isset($_GET['customerId'])) {
-    $customerId = $_GET['customerId'];
-}
-if (isset($_GET['cname'])) {
-    $cname = $_GET['cname'];
-}
-if (isset($_GET['returnExtendedInfo'])) {
-    $returnExtendedInfo = $_GET['returnExtendedInfo'];
-}
-if (isset($_GET['active'])) {
-    $active = $_GET['active'];
 }
 
 do {

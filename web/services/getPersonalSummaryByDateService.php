@@ -78,25 +78,15 @@
         return $formatedHours;
     }
 
-    $date = $_GET['date'];
+    $dateString = $_GET['date'] ?? NULL;
 
-    $dateFormat = $_GET['dateFormat'];
+    $dateFormat = $_GET['dateFormat'] ?? "Y-m-d";
 
-    $sid = $_GET['sid'];
+    $sid = $_GET['sid'] ?? NULL;
 
-    if ($dateFormat=="")
-        $dateFormat = "Y-m-d";
-
-    if ($date == "")
-        $date = new DateTime();
-    else
-    {
-        $dateParse = date_parse_from_format($dateFormat, $date);
-
-        $date = "{$dateParse['year']}-{$dateParse['month']}-{$dateParse['day']}";
-
-        $date = date_create($date);
-    }
+    $date = new DateTime();
+    if ($dateString)
+        $date = DateTime::createFromFormat($dateFormat, $dateString);
 
     do {
         /* We check authentication and authorization */

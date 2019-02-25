@@ -30,7 +30,7 @@
     include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
     include_once(PHPREPORT_ROOT . '/model/facade/CoordinationFacade.php');
 
-    $sid = $_GET['sid'];
+    $sid = $_GET['sid'] ?? NULL;
 
     $projectId = $_GET['pid'];
 

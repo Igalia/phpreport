@@ -106,10 +106,13 @@ class PostgreSQLTaskDAO extends TaskDAO{
      */
     public function getById($taskId) {
         if (!is_numeric($taskId))
-        throw new SQLIncorrectTypeException($taskId);
+            throw new SQLIncorrectTypeException($taskId);
         $sql = "SELECT * FROM task WHERE id=".$taskId;
-    $result = $this->execute($sql);
-    return $result[0];
+        $result = $this->execute($sql);
+
+        if (empty($result))
+            return NULL;
+        return $result[0];
     }
 
     /** Tasks retriever by User id for PostgreSQL.
@@ -383,7 +386,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
     /** Tasks report generator for PostgreSQL.
      *
      * This function generates a report of the hours users have worked in Tasks related to an element <var>$reportObject</var>,
-     * which may be a {@link UserVO}, {@link TaskVO} or {@link CustomerVO}. Two optional dates can also be passed, <var>$initDate</var>
+     * which may be a {@link UserVO}, {@link ProjectVO} or {@link CustomerVO}. Two optional dates can also be passed, <var>$initDate</var>
      * and <var>$endDate</var>, to limit the dates of the tasks retrieved (if they are not passed, it returns the result for tasks of any date),
      * and two group fields, <var>$groupField1</var> and <var>$groupField2</var>, that only are used for making groups with the
      * results if they are passed.
@@ -451,12 +454,14 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
     if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
 
-        if(pg_num_rows($res) > 0) {
-            for($i = 0; $i < pg_num_rows($res); $i++)
-        {
-                $rows[$i] = @pg_fetch_array($res);
+    $rows = array();
+    if(pg_num_rows($res) > 0) {
+        for($i = 0; $i < pg_num_rows($res); $i++) {
+            $rows[$i] = @pg_fetch_array($res);
         }
-        }
+    }
+    else
+        return NULL;
 
     return $rows;
 
@@ -637,11 +642,13 @@ class PostgreSQLTaskDAO extends TaskDAO{
     $res = pg_query($this->connect, $sql);
     if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
 
-    for($i = 0; $i < pg_num_rows($res); $i++)
-        {
+    $result = array();
+    for($i = 0; $i < pg_num_rows($res); $i++) {
         $result[$i] = @pg_fetch_array($res);
-        }
+    }
 
+    if (empty($result))
+        return NULL;
     return $result[0];
 
     }
@@ -666,7 +673,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
         }
 
         // If the query returned a row then update
-        if(sizeof($currTaskVO) > 0) {
+        if(isset($currTaskVO)) {
 
         $sql = "UPDATE task SET ";
 
