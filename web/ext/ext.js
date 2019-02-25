@@ -9562,12 +9562,8 @@ Ext.apply(Ext.EventManager, function(){
        unload = Ext.EventManager._unload,
        curWidth = 0,
        curHeight = 0,
-       // note 1: IE fires ONLY the keydown event on specialkey autorepeat
-       // note 2: Safari < 3.1, Gecko (Mac/Linux) & Opera fire only the keypress event on specialkey autorepeat
-       // (research done by @Jan Wolter at http://unixpapa.com/js/key.html)
-       useKeydown = Ext.isWebKit ?
-                   Ext.num(navigator.userAgent.match(/AppleWebKit\/(\d+)/)[1]) >= 525 :
-                   !((Ext.isGecko && !Ext.isWindows) || Ext.isOpera);
+       // phpreport #448: next line may break *very* old browsers, but we don't care.
+       useKeydown = true;
 
    return {
        _unload: function(){
