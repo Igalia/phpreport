@@ -1040,7 +1040,9 @@ Ext.onReady(function(){
                 listeners: {'select': function (item, selectedDate) {
                     var url = "tasks.php";
                     var today = new Date();
-                    if (today.getDate() != selectedDate.getDate()) {
+                    today.setHours(0,0,0,0);
+                    selectedDate.setHours(0,0,0,0);
+                    if (today.getTime() !== selectedDate.getTime()) {
                         url += "?date=" + selectedDate.format('Y-m-d');
                     }
                     window.location = url;
