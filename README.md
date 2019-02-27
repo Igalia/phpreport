@@ -24,6 +24,11 @@ Download PhpReport from our
 Then follow the instructions in the [administrator manual](docs/admin/index.rst)
 to install it or to upgrade from an earlier release.
 
+If you are looking for a way to quickly test the tool, there are [dockerfiles
+available](https://github.com/jasuarez/dockerfiles/tree/master/phpreport)
+for this purpose. In this setup, a fresh database will be created every time you 
+`docker run` the container, so use it only for testing.
+
 ## Documentation
 
 There is documentation for users and system administrators, it comes packaged
