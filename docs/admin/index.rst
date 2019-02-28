@@ -7,6 +7,7 @@ statistics about users, projects, and more. These documents provide the basic
 concepts to install and configure PhpReport for system administrators.
 
 #. `Installation instructions <installation.rst>`__
+#. `Installing in docker <docker.rst>`__
 #. `Upgrade instructions <upgrade.rst>`__
 #. `How to set up LDAP authentication <ldap.rst>`__
 #. `Common problems <common-problems.rst>`__
