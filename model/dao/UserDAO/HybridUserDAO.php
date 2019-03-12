@@ -102,12 +102,12 @@ class HybridUserDAO extends UserDAO{
     public function login($login, $password) {
 
         if (!$bn=@ldap_bind($this->ldapConnect,"uid=$login,ou=People," . ConfigurationParametersManager::getParameter('LDAP_BASE'),$password))
-            throw new IncorrectLoginException("login - " . $login . " | password - " . $password);
+            throw new IncorrectLoginException();
 
         $sql = "SELECT * FROM usr WHERE login='". $login . "'";
         $result = $this->execute($sql);
         if(!isset($result[0])) {
-            throw new IncorrectLoginException("login - " . $login . " | password - " . $password);
+            throw new IncorrectLoginException("Login data were correct, but user doesn't exist in DB");
         }
 
         return $this->getByUserLogin($login);

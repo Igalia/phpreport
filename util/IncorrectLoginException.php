@@ -43,11 +43,9 @@ class IncorrectLoginException extends Exception {
      *  @ignore
      */
 
-  public function __construct($message = "", $code = 0) {
+  public function __construct($message = "Incorrect login data", $code = 0) {
 
     parent::__construct($message, $code);
-
-    $this->message = "User and password " . $message . " don't match.";
   }
 
     /**#@-*/
