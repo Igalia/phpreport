@@ -288,3 +288,12 @@ define('NO_FILL_DAYS_TRIGGER_CRITICAL', 21);
  * @global int Value in days to consider sending the last message.
  */
 define('NO_FILL_DAYS_TRIGGER_LAST', 27);
+
+/* New from PhpReport 2.19 */
+
+/**
+ * Enable usage of an external service for authentication.
+ * WARNING: this will bypass internal password check! Make sure your external
+ * authentication service is correctly configured before enabling this flag.
+ */
+define('USE_EXTERNAL_AUTHENTICATION', false);

@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009-2019 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -32,6 +32,7 @@
 require_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
 require_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 require_once(PHPREPORT_ROOT . '/model/vo/UserGroupVO.php');
+require_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
 
 /** Login Manager
  *
@@ -63,16 +64,23 @@ class LoginManager {
       return true;
 
     // if we receive the user and password, we try to log in
-    try{
-      $user = UsersFacade::Login($login, $password);
+    try {
+        if (ConfigurationParametersManager::getParameter('USE_EXTERNAL_AUTHENTICATION')) {
+            // bypass password check. We assume that the external authenticator did that.
+            $user = UsersFacade::GetUserByLogin($login);
+            if (!$user) throw new IncorrectLoginException("User not found");
+        }
+        else {
+            $user = UsersFacade::Login($login, $password);
+        }
 
-      unset($_SESSION['user']);
-      $_SESSION['user'] = $user;
+        unset($_SESSION['user']);
+        $_SESSION['user'] = $user;
 
-      return true;
+        return true;
     }
-    catch(IncorrectLoginException $exc){
-      return false;
+    catch (IncorrectLoginException $exc) {
+        return false;
     }
   }
 
