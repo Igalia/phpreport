@@ -297,3 +297,10 @@ define('NO_FILL_DAYS_TRIGGER_LAST', 27);
  * authentication service is correctly configured before enabling this flag.
  */
 define('USE_EXTERNAL_AUTHENTICATION', false);
+
+/**
+ * HTTP header that will be provided by the external authentication service, in
+ * case it is different from the default PHP_AUTH_USER. To be used in
+ * combination with USE_EXTERNAL_AUTHENTICATION.
+ */
+define('EXTERNAL_AUTHENTICATION_USER_HEADER', '');
