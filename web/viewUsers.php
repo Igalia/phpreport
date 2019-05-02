@@ -45,7 +45,7 @@ $areas = AdminFacade::GetAllAreas();
 $groups = UsersFacade::GetAllUserGroups();
 
 ?>
-<script src="include/RowEditor.min.js"></script>
+<script src="include/RowEditor.js"></script>
 <script>
 
 Ext.onReady(function(){

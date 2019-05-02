@@ -38,8 +38,8 @@ include("include/header.php");
 ?>
 
 <link rel="stylesheet" type="text/css" href="include/ColumnNodeUI.css" />
-<script src="include/ColumnNodeUI.min.js"></script>
-<script src="include/AnalysisTrackerSummaryTree.min.js"></script>
+<script src="include/ColumnNodeUI.js"></script>
+<script src="include/AnalysisTrackerSummaryTree.js"></script>
 
 <script>
 Ext.onReady(function(){

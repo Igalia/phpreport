@@ -34,9 +34,9 @@ $EXTRA_HOURS_WARNING_TRIGGER = ConfigurationParametersManager::getParameter('EXT
 var loggedInUser = '<?php echo $_SESSION['user']->getLogin(); ?>';
 var extraHoursTrigger = '<?php echo $EXTRA_HOURS_WARNING_TRIGGER; ?>';
 </script>
-<script src="js/include/DateIntervalForm.min.js"></script>
-<script src="js/include/ExportableGridPanel.min.js"></script>
-<script src="js/viewWorkingHoursResultsReport.min.js"></script>
+<script src="js/include/DateIntervalForm.js"></script>
+<script src="js/include/ExportableGridPanel.js"></script>
+<script src="js/viewWorkingHoursResultsReport.js"></script>
 
 <div id="content">
 </div>

@@ -48,8 +48,8 @@ if(LoginManager::hasExtraPermissions()) {
 echo "var menuCoordination = '$MENU_COORDINATION';\n";
 echo "</script>\n";
 ?>
-<script src="js/include/ExportableGridPanel.min.js"></script>
-<script src="js/userTasksReport.min.js"></script>
+<script src="js/include/ExportableGridPanel.js"></script>
+<script src="js/userTasksReport.js"></script>
 
 <div id="content">
 </div>

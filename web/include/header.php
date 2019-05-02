@@ -40,9 +40,9 @@
     <link rel="stylesheet" type="text/css" href="include/ext.ux.datepickerplus/datepickerplus.css"/>
 
     <!-- Include Ext library -->
-    <script src="ext/adapter/ext/base.min.js"></script>
-    <script src="ext/ext.min.js"></script>
-    <script src="include/App.min.js"></script>
+    <script src="ext/adapter/ext/base.js"></script>
+    <script src="ext/ext.js"></script>
+    <script src="include/App.js"></script>
 
     <!-- Configure prototypes -->
     <script>
@@ -50,16 +50,16 @@
     </script>
 
     <!-- Include other common validations -->
-    <script src="include/validations.min.js"></script>
+    <script src="include/validations.js"></script>
 
     <!-- Include other common functions -->
-    <script src="include/functions.min.js"></script>
+    <script src="include/functions.js"></script>
 
     <!-- Include improved calendar widget -->
-    <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus.min.js"></script>
+    <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus.js"></script>
 
     <!-- Periodical check for open sessions -->
-    <script src="js/include/sessionTracker.min.js"></script>
+    <script src="js/include/sessionTracker.js"></script>
 
     <!-- Favicon / shortcut icon configuration -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">

@@ -36,8 +36,8 @@ include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 $sectors = CustomersFacade::GetAllSectors();
 
 ?>
-<script src="include/RowEditor.min.js"></script>
-<script src="js/customerManagement.min.js"></script>
+<script src="include/RowEditor.js"></script>
+<script src="js/customerManagement.js"></script>
 
 <div id="content">
 </div>

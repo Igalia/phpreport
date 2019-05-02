@@ -104,9 +104,9 @@ echo "var vacationsProjectId = '$VACATIONS_PROJECT_ID';\n";
 echo "</script>\n";
 
 ?>
-<script src="js/include/TasksStore.min.js"></script>
-<script src="js/tasks.min.js"></script>
-<script src="js/include/closeConfirmation.min.js"></script>
+<script src="js/include/TasksStore.js"></script>
+<script src="js/tasks.js"></script>
+<script src="js/include/closeConfirmation.js"></script>
 
 <div id="sidebar">
     <div id="summarypanel" class="auxiliarpanel">
