@@ -55,7 +55,7 @@ foreach((array)$customers as $customer) {
 echo "];\n";
 echo "</script>\n";
 ?>
-<script src="js/projectManagement.min.js"></script>
+<script src="js/projectManagement.js"></script>
 
 <div id="content">
 </div>

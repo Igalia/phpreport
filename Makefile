@@ -45,6 +45,12 @@ minify:
 	  uglifyjs $${FILE}.js -o $${FILE}.min.js --source-map $${FILE}.min.js.map -c -m; \
 	  cd -; \
 	  done
+	for i in `find web -name *.php`; do \
+	  #revert any previous minification changes \
+	  sed 's/<script src="\(.*\).min.js">/<script src="\1.js">/' $$i > tmp; \
+	  #modify script tags to link the minified file \
+	  sed 's/<script src="\(.*\).js">/<script src="\1.min.js">/' tmp > $$i; \
+	  done
 
 #prevent makefile docs are up-to-date
 .PHONY: help

@@ -37,8 +37,8 @@ $iteration = CoordinationFacade::GetIteration($iterationId);
 
 
 ?><link rel="stylesheet" type="text/css" href="include/ColumnNodeUI.css" />
-<script src="include/ColumnNodeUI.min.js"></script>
-<script src="include/TrackerSummaryTree.min.js"></script>
+<script src="include/ColumnNodeUI.js"></script>
+<script src="include/TrackerSummaryTree.js"></script>
 <script>
 
 Ext.onReady(function(){

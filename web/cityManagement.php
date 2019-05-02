@@ -38,8 +38,8 @@ define('PAGE_TITLE', "PhpReport - Cities Management");
 include_once("include/header.php");
 
 ?>
-<script src="include/RowEditor.min.js"></script>
-<script src="js/cityManagement.min.js"></script>
+<script src="include/RowEditor.js"></script>
+<script src="js/cityManagement.js"></script>
 
 <div id="content">
 </div>

@@ -28,8 +28,8 @@ define('PAGE_TITLE', "PhpReport - Areas Management");
 include_once("include/header.php");
 
 ?>
-<script src="include/RowEditor.min.js"></script>
-<script src="js/areaManagement.min.js"></script>
+<script src="include/RowEditor.js"></script>
+<script src="js/areaManagement.js"></script>
 
 <div id="content">
 </div>

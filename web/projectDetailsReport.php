@@ -50,8 +50,8 @@ if(!LoginManager::hasExtraPermissions()) {
     }
 }
 ?>
-<script src="js/include/DateIntervalForm.min.js"></script>
-<script src="js/include/ExportableGridPanel.min.js"></script>
+<script src="js/include/DateIntervalForm.js"></script>
+<script src="js/include/ExportableGridPanel.js"></script>
 <?php
 //output vars as JS code
 echo "<!-- Global variables extracted from the PHP side -->\n";
@@ -94,7 +94,7 @@ else {
 echo "};\n";
 echo "</script>\n";
 ?>
-<script src="js/projectDetailsReport.min.js"></script>
+<script src="js/projectDetailsReport.js"></script>
 
 <div id="content">
 </div>
