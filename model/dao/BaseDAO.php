@@ -67,8 +67,9 @@ abstract class BaseDAO {
         $parameters[] = ConfigurationParametersManager::getParameter('DB_USER');
         $parameters[] = ConfigurationParametersManager::getParameter('DB_NAME');
         $parameters[] = ConfigurationParametersManager::getParameter('DB_PASSWORD');
+        $parameters[] = ConfigurationParametersManager::getParameter('EXTRA_DB_CONNECTION_PARAMETERS');
 
-        $connectionString = "host=$parameters[0] port=$parameters[1] user=$parameters[2] dbname=$parameters[3] password=$parameters[4]";
+        $connectionString = "host=$parameters[0] port=$parameters[1] user=$parameters[2] dbname=$parameters[3] password=$parameters[4] $parameters[5]";
 
         $this->connect = pg_connect($connectionString);
         if ($this->connect == NULL) throw new DBConnectionErrorException($connectionString);

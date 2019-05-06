@@ -62,21 +62,19 @@ abstract class BaseRelationshipDAO {
      * @todo create the connection pool and remove the connection and its creation from {@link BaseRelationshipDAO}.
      */
     function __construct() {
+        $parameters[] = ConfigurationParametersManager::getParameter('DB_HOST');
+        $parameters[] = ConfigurationParametersManager::getParameter('DB_PORT');
+        $parameters[] = ConfigurationParametersManager::getParameter('DB_USER');
+        $parameters[] = ConfigurationParametersManager::getParameter('DB_NAME');
+        $parameters[] = ConfigurationParametersManager::getParameter('DB_PASSWORD');
+        $parameters[] = ConfigurationParametersManager::getParameter('EXTRA_DB_CONNECTION_PARAMETERS');
 
-    $parameters[] = ConfigurationParametersManager::getParameter('DB_HOST');
-    $parameters[] = ConfigurationParametersManager::getParameter('DB_PORT');
-    $parameters[] = ConfigurationParametersManager::getParameter('DB_USER');
-    $parameters[] = ConfigurationParametersManager::getParameter('DB_NAME');
-    $parameters[] = ConfigurationParametersManager::getParameter('DB_PASSWORD');
+        $connectionString = "host=$parameters[0] port=$parameters[1] user=$parameters[2] dbname=$parameters[3] password=$parameters[4] $parameters[5]";
 
-    $connectionString = "host=$parameters[0] port=$parameters[1] user=$parameters[2] dbname=$parameters[3] password=$parameters[4]";
+        $this->connect = pg_connect($connectionString);
+        if ($this->connect == NULL) throw new DBConnectionErrorException($connectionString);
 
-    $this->connect = pg_connect($connectionString);
-     if ($this->connect == NULL) throw new DBConnectionErrorException($connectionString);
-
-    pg_set_error_verbosity($this->connect, PGSQL_ERRORS_VERBOSE);
-
-
+        pg_set_error_verbosity($this->connect, PGSQL_ERRORS_VERBOSE);
     }
 
     /** Value object constructor from edge A.

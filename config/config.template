@@ -304,3 +304,8 @@ define('USE_EXTERNAL_AUTHENTICATION', false);
  * combination with USE_EXTERNAL_AUTHENTICATION.
  */
 define('EXTERNAL_AUTHENTICATION_USER_HEADER', '');
+
+/**
+ * Additional PostgreSQL connection parameters to be passed to pg_connect.
+ */
+define('EXTRA_DB_CONNECTION_PARAMETERS', '');
