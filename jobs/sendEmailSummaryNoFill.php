@@ -29,6 +29,7 @@
     error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
     define('PHPREPORT_ROOT', __DIR__ . '/../');
+    include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
     include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
     include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
@@ -50,12 +51,21 @@
 
     foreach ($users as $user) {
         if (! in_array($user->getLogin(), $excludedUsers)) {
+            $period = UsersFacade::GetUserJourneyHistoriesByIntervals($today, $today, $user->getId());
+            if (empty($period)) {
+                // User is not currently hired, skip it.
+                continue;
+            }
             $groups = $user->getGroups();
             foreach ($groups as $group) {
                 if ($group->getName() == $ALL_USERS_GROUP) {
                     $report = UsersFacade::ExtraHoursReport($initDate, $today, $user);
+                    $lastTaskDate = TasksFacade::getLastTaskDate($user, $today);
+                    if (is_null($lastTaskDate)) {
+                        // User never saved tasks, use their contract start date as reference
+                        $lastTaskDate = $period[0]->getInitDate();
+                    }
                     $login = $user->getLogin();
-                    $lastTaskDate = $report[1][$user->getLogin()]["last_task_date"];
                     $difference = $lastTaskDate->diff($today);
                     $difference = $difference->format('%a');
                     if ($difference >= $NO_FILL_DAYS_TRIGGER_LAST) {
