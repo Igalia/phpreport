@@ -88,7 +88,7 @@ class PostgreSQLJourneyHistoryDAO extends JourneyHistoryDAO{
      */
     public function getById($journeyHistoryId) {
     if (!is_numeric($journeyHistoryId))
-        throw new SQLIncorrectTypeException($journeyHistoryId);
+        throw new SQLIncorrectTypeException("journeyHistoryId");
         $sql = "SELECT * FROM journey_history WHERE id=" . $journeyHistoryId;
     $result = $this->execute($sql);
     return $result[0];
@@ -106,7 +106,7 @@ class PostgreSQLJourneyHistoryDAO extends JourneyHistoryDAO{
      */
     public function getByUserId($userId) {
     if (!is_numeric($userId))
-        throw new SQLIncorrectTypeException($userId);
+        throw new SQLIncorrectTypeException("userId");
         $sql = "SELECT * FROM journey_history WHERE usrid=" . $userId . " ORDER BY id ASC";
     $result = $this->execute($sql);
     return $result;
@@ -123,7 +123,7 @@ class PostgreSQLJourneyHistoryDAO extends JourneyHistoryDAO{
      */
     public function getCurrentByUserId($userId) {
     if (!is_numeric($userId))
-        throw new SQLIncorrectTypeException($userId);
+        throw new SQLIncorrectTypeException("userId");
         $sql = "SELECT * FROM journey_history WHERE usrid=" . $userId . " AND end_date IS NULL";
     $result = $this->execute($sql);
     return $result[0];
@@ -149,7 +149,7 @@ class PostgreSQLJourneyHistoryDAO extends JourneyHistoryDAO{
         WHERE ((init_date <= " . DBPostgres::formatDate($end) . " OR init_date IS NULL) AND (end_date >= " . DBPostgres::formatDate($init) . " OR end_date IS NULL))
         ORDER BY usrid ASC, init_date ASC";
     elseif (!is_numeric($userId))
-        throw new SQLIncorrectTypeException($userId);
+        throw new SQLIncorrectTypeException("userId");
         else
         $sql = "SELECT * FROM journey_history
         WHERE ((init_date <= " . DBPostgres::formatDate($end) . " OR init_date IS NULL) AND (end_date >= " . DBPostgres::formatDate($init) . " OR end_date IS NULL) AND (usrId = $userId))
