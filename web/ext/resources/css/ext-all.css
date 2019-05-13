@@ -5953,6 +5953,7 @@ ul.x-tab-strip-bottom {
 .x-form-text,
 textarea.x-form-field {
     background-color: #fff;
+    color: #000;
     background-image: url(../images/default/form/text-bg.gif);
     border-color: #b5b8c8
 }
@@ -7249,7 +7250,8 @@ a.x-menu-item {
 
 .x-panel-mc {
     font: normal 11px tahoma, arial, helvetica, sans-serif;
-    background-color: #dfe8f6
+    background-color: #dfe8f6;
+    color: #000;
 }
 
 .x-panel-ml {
