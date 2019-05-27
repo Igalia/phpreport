@@ -31,7 +31,7 @@
     <link rel="stylesheet" type="text/css" href="include/phpreport.css">
 
     <!-- Include Ext stylesheet -->
-    <link rel="stylesheet" type="text/css" href="ext/resources/css/ext-all.css">
+    <link rel="stylesheet" type="text/css" href="ext/resources/css/ext-all.min.css">
     <link rel="stylesheet" type="text/css" href="include/silk.css" />
     <link rel="stylesheet" type="text/css" href="include/tools.css" />
     <link rel="stylesheet" type="text/css" href="ext/examples/ux/css/ux-all.css"/>
