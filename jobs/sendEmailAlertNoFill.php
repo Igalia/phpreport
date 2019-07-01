@@ -30,6 +30,7 @@
 
     define('PHPREPORT_ROOT', __DIR__ . '/../');
     include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
+    include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
     include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
     include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
@@ -79,15 +80,23 @@
     $excludedUsers = [];
 
     foreach ($users as $user) {
-        $groups = $user->getGroups();
         if (!in_array($user->getLogin(), $excludedUsers)) {
+            $period = UsersFacade::GetUserJourneyHistoriesByIntervals($today, $today, $user->getId());
+            if (empty($period)) {
+                // User is not currently hired, skip it.
+                continue;
+            }
+            $groups = $user->getGroups();
             foreach ($groups as $group) {
                 if ($group->getName() == $ALL_USERS_GROUP) {
-                    $report = UsersFacade::ExtraHoursReport($initDate, $today, $user);
                     $login = $user->getLogin();
                     $email = $login . "@" . $NO_FILL_EMAIL_DOMAIN;
                     $from = $NO_FILL_EMAIL_FROM;
-                    $lastTaskDate = $report[1][$user->getLogin()]["last_task_date"];
+                    $lastTaskDate = TasksFacade::getLastTaskDate($user, $today);
+                    if (is_null($lastTaskDate)) {
+                        // User never saved tasks, use their contract start date as reference
+                        $lastTaskDate = $period[0]->getInitDate();
+                    }
                     $difference = $lastTaskDate->diff($today);
                     $difference = $difference->format('%a');
                     if ($difference == $NO_FILL_DAYS_TRIGGER_LAST) {
