@@ -8,6 +8,21 @@ Upgrade instructions
   Please backup your database before running an upgrade, in case things go
   wrong during the process.
 
+From version 2.18 to 2.19
+=========================
+
+Unpack the files of PhpReport 2.19 at the same location of the original files,
+overwriting the existing contents.
+
+There are no scripts to be run in this upgrade, but several new values were
+added to ``config/config.php``. Open the file
+``config/config.template`` and look for the message "New from PhpReport 2.19".
+Copy the configuration parameters below that point to your own ``config.php``
+and customize them if necessary.
+
+Once the process is complete, remove the directories ``update/`` and ``install/``
+inside your PhpReport, to prevent other users from altering your DB.
+
 From version 2.17 to 2.18
 =========================
 
