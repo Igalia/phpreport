@@ -377,18 +377,19 @@ Ext.onReady(function () {
                     return;
                 }
                 var baseParams = {
-                    userId: Ext.getCmp('userLogin').getValue()
+                    userId: Ext.getCmp('userLogin').getValue(),
+                    dateFormat: "m/d/Y",
                 };
 
                 if (Ext.getCmp('startDate').getRawValue() != "") {
                     var date = Ext.getCmp('startDate').getValue();
-                    baseParams.filterStartDate = date.getFullYear() + "-"
-                        + (date.getMonth()+1) + "-" + date.getDate();
+                    baseParams.filterStartDate = (date.getMonth()+1) + "/" +
+                        date.getDate() + "/" + date.getFullYear();
                 }
                 if (Ext.getCmp('endDate').getRawValue() != "") {
                     var date = Ext.getCmp('endDate').getValue();
-                    baseParams.filterEndDate = date.getFullYear() + "-"
-                        + (date.getMonth()+1) + "-" + date.getDate();
+                    baseParams.filterEndDate = (date.getMonth()+1) + "/" +
+                        date.getDate() + "/" + date.getFullYear();
                 }
                 if (Ext.getCmp('filterText').getRawValue() != "") {
                     //this field is the selector for two different, incompatible
