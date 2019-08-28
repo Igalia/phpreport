@@ -1,6 +1,42 @@
 NEWS
 ====
 
+Version 2.19 (4 Oct 2019)
+-------------------------------
+
+List of changes
+~~~~~~~~~~~~~~~
+
+* Tasks
+  * #232,#392: Fix default date based on local timezone for all browsers. [Jacobo Aragunde Pérez]
+  * #259: Disable "copy tasks from date" feature in blocked dates. [Jacobo Aragunde Pérez]
+  * #353: Fix wrong length of "full day task" on new users' first day. [Jacobo Aragunde Pérez]
+  * #411: Load tasks page with no GET params when "today" is selected. [Jacobo Aragunde Pérez]
+  * #431: Address some PHP warnings in tasks page. [Jacobo Aragunde Pérez]
+  * Use better names for date-related vars in tasks.js. [Jacobo Aragunde Pérez]
+
+* Reports
+  * #401: Extract JS code from viewProjectDetails.php. [Jacobo Aragunde Pérez]
+  * #431: Address some PHP warnings in project details report. [Jacobo Aragunde Pérez]
+  * #459: Fix wrong dates in user tasks report due to timezone conversion. [Jacobo Aragunde Pérez]
+
+* Other
+  * #343: Fix a number of HTML validation errors and warnings. [Jacobo Aragunde Pérez]
+  * #423: Use CSS sprites for top menu icons. [Jacobo Aragunde Pérez]
+  * #435,#455: Take into account contract info in unfilled task reminders. [Jacobo Aragunde Pérez]
+  * #440: Calculate version number from Git tag + hash. [Jacobo Aragunde Pérez]
+  * #444: Only use minified sources after they are created. [Jacobo Aragunde Pérez]
+  * #448: Fix regression in blur event on input fields in FF 65. [Jacobo Aragunde Pérez]
+  * Docs: how to setup a development environment. [Jacobo Aragunde Pérez]
+  * Add docker support. [Juan A. Suárez Romero]
+  * Never return failed credentials in an error message. [Jacobo Aragunde Pérez]
+  * Integrate with external authentication: allow using a custom authentication header and disabling password check. [Jacobo Aragunde Pérez]
+  * Allow setting custom PostgreSQL connection parameters. [Jacobo Aragunde Pérez]
+  * Fix wrong use of SQLIncorrectTypeException constructor. [Jacobo Aragunde Pérez]
+  * Beautify ExtJS CSS. [Jacobo Aragunde Pérez]
+  * Explicitly set text color in text areas to black to prevent problems with dark themes. [Jacobo Aragunde Pérez]
+
+
 Version 2.18 (15 Aug 2018)
 -------------------------------
 
