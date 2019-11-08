@@ -22,8 +22,8 @@ Follow the corresponding section from the
 Step 2: Setting up the files
 ============================
 
-Clone the PhpReport repository ``https://github.com/Igalia/phpreport`` on a
-location available for the web server. Usual default locations for web servers
+Clone the PhpReport repository ``https://github.com/Igalia/phpreport`` in a
+location available to the web server. Usual default locations for web servers
 are:
 
 * On Debian, Ubuntu: ``/var/www/``
@@ -36,7 +36,7 @@ Step 3: Creating the schema and initial data of the database
 ============================================================
 
 The configuration file with the default values already exists in the repository,
-so you don't have to touch it unless you changed any data on the first step.
+so you don't have to touch it unless you changed any data in the first step.
 
 Then, you can follow the step three in the
 `installation instructions <../admin/installation.rst>`__ (either the manual or
@@ -58,7 +58,7 @@ Step 5: Try the application
 
 Use a browser to open the correct URL of your web server (very likely,
 ``http://localhost/phpreport``), then use the user name ``admin`` and the
-password ``admin`` to try a user with full privileges, or ``user``` with
+password ``admin`` to try a user with full privileges, or ``user`` with
 password ``user`` to try a login with restricted permissions. You will also be
 able to create users with any permission level once you are logged in as
 ``admin``.
