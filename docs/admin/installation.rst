@@ -50,7 +50,7 @@ names and passwords if you feel like to, but remember it in the next steps)::
 Step 2: Setting up the files
 ============================
 
-Just move the program files to a location available for the web server, inside
+Move the program files to a location available for the web server, inside
 a directory called phpreport. Usual default locations for web servers are:
 
 * On Debian, Ubuntu: ``/var/www/``
@@ -70,8 +70,8 @@ As a precondition, your web server has to have write permissions on the config
 directory of PhpReport to write the configuration file. Once that is done, open
 the url ``http://your-web-server/phpreport/install/index.php``, and follow the
 on-screen
-instructions. If you didn't change the names and passwords specified on step 1,
-defaults will just work fine.
+instructions. If you didn't change the names and passwords specified in step 1,
+you won't need to modify the default values.
 
 Manual setup of schema and initial data
 ---------------------------------------

@@ -41,13 +41,13 @@ Plugin system
 =============
 
 The diagram below shows in detail the implementation of an *Action* class. In
-our design, they do not simply implement the business logic, but they also
+our design, they do not only implement the business logic, but they also
 provide the support for plugins, code blocks which are added before or after the
 execution of a task in the business logic.
 
 .. figure:: i/Action.png
 
-The *Action* class only has one public method called *execute()*, which is the
+The *Action* class has one public method called *execute()*, which is the
 only entry point to the code of the operation. Its children classes, one per
 operation in the business logic, redefine the template method *doExecute()*,
 where they actually implement the task. The reason for the existence of these

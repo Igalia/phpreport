@@ -14,7 +14,7 @@ areas. It can be accessed from the *Data management* menu, section *Areas*.
 
 .. figure:: i/menu-data-mgmt-areas.png
 
-This is a very simple interface in which you will see a grid containing the list
+This interface consists of a grid containing the list
 of areas stored in the system, sorted by *name*.
 
 .. figure:: i/areas-mgmt-screen.png
@@ -39,7 +39,7 @@ It can be accessed from the *Data management* menu, section *Hour compensations*
 
 .. figure:: i/menu-data-mgmt-compensations.png
 
-This is a very simple interface in which you will see a grid containing the list
+This interface consists of a grid containing the list
 of areas stored in the system, sorted by *date*.
 
 .. figure:: i/compensations-mgmt-screen.png

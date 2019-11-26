@@ -92,7 +92,7 @@ Using templates
 
 Templates are useful when you create tasks with very similar data very often.
 They are listed in the *Templates* section, in the bottom of the left column.
-Creating a new task from a template is as easy as clicking in the button with
+To create a new task from a template, click on the button with
 the name of the template.
 
 To add new templates to this list, first you have to create a task; fill it in

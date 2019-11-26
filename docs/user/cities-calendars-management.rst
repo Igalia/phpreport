@@ -14,7 +14,7 @@ cities. It can be accessed from the *Data management* menu, section *Cities*.
 
 .. figure:: i/menu-data-mgmt-cities.png
 
-This is a very simple interface in which you will see a grid containing the list
+This interface consists of a grid containing the list
 of cities stored in the system, sorted by *name*.
 
 .. figure:: i/cities-mgmt-screen.png

@@ -65,7 +65,7 @@ Relation with other application layers
 It has already been commented, the user web interface is related both with the
 layer below, the business logic layer, and with the web service layer. It may
 use the former for synchronous operation and the latter for asynchronous
-operations. That is clearly visible in the next sequence diagram, which
+operations. The next sequence diagram
 illustrates the access control implementation as we have just explained:
 
 .. figure:: i/web-login-sequence.png
@@ -76,7 +76,7 @@ login screen: the user has to fill up all the data,
 send them and wait for an answer, which may be an error message or a redirect
 to inside the application. This has been developed with an HTML form and
 a small block of PHP code that calls the *login* function of the business logic
-layer. In the sequence diagram it can be clearly seen how the process of the
+layer. In the sequence diagram it can be seen how the process of the
 login operation bypasses the web services layer.
 
 On the other hand, in the majority of the cases the interaction happens using
