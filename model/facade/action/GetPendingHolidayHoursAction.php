@@ -175,7 +175,7 @@ class GetPendingHolidayHoursAction extends Action{
                     // (february 29th can be prior to the init only in the first year, and later than the end on the last one), but it's no
                     // much computation anyway, and the code is clear (and it's already hard to understand at first)
                     if (checkdate(02,29,$initYear))
-                        if ( ($init < date_create($initYear . "-02-29")) && ($end >= date_create($initYear . "-02-29")))
+                        if ( ($initJourney < date_create($initYear . "-02-29")) && ($endJourney >= date_create($initYear . "-02-29")))
                             $workHours -= $journeyRow->getJourney();        // It's a leap year, so we subtract one journey for february 29th
 
                     $initYear++;
