@@ -53,6 +53,7 @@ minify:
 	  #modify script tags to link the minified file \
 	  sed 's/<script src="\(.*\).js">/<script src="\1.min.js">/' tmp > $$i; \
 	  done
+	rm tmp
 
 #prevent makefile docs are up-to-date
 .PHONY: help
