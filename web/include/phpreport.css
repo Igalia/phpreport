@@ -52,3 +52,7 @@ body {
 .x-btn BUTTON:focus {
     text-decoration: underline;
 }
+
+div#tasks textarea {
+    resize: vertical;
+}
