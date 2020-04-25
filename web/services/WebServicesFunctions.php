@@ -21,29 +21,13 @@
 
 function escape_string($string)
 {
-
-    $newString = str_replace("&", "&amp;", $string);
-    $newString = str_replace("<", "&lt;", $newString);
-    $newString = str_replace(">", "&gt;", $newString);
-    $newString = str_replace("'", "&apos;", $newString);
-    $newString = str_replace("\"", "&quot;", $newString);
-
-    return $newString;
-
+    return htmlentities($string, ENT_XML1);
 }
 
 
 function unescape_string($string)
 {
-
-    $newString = str_replace("&amp;", "&", $string);
-    $newString = str_replace("&lt;", "<", $newString);
-    $newString = str_replace("&gt;", ">", $newString);
-    $newString = str_replace("&apos;", "'", $newString);
-    $newString = str_replace("&quot;", "\"", $newString);
-
-    return $newString;
-
+    return html_entity_decode($string, ENT_XML1);
 }
 
 

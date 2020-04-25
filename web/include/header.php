@@ -52,9 +52,6 @@
     <!-- Include other common validations -->
     <script src="include/validations.js"></script>
 
-    <!-- Include other common functions -->
-    <script src="include/functions.js"></script>
-
     <!-- Include improved calendar widget -->
     <script src="include/ext.ux.datepickerplus/ext.ux.datepickerplus.js"></script>
 

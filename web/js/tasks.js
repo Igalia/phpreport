@@ -994,19 +994,9 @@ Ext.onReady(function(){
         return true;
     }
 
-    function encodeXMLText() {
-        myStore.each(function(r) {
-            if (r.data['story'] != undefined)
-                r.data['story'] = xmlencode(r.data['story']);
-            if (r.data['text'] != undefined)
-                r.data['text'] = xmlencode(r.data['text']);
-        });
-    }
-
     function saveTasks(showConfirmation) {
         if (validateTasks()) {
             myStore.showConfirmation = showConfirmation;
-            encodeXMLText();
             myStore.save()
         } else if (showConfirmation)
             // Print error message only if save action was explicit
