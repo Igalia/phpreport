@@ -46,7 +46,7 @@
         $time = round($time,2);
         $time = $time*60;
 
-        if ($time > $limit*$journey*60 ) {
+        if ($journey > 0 && $time > $limit*$journey*60) {
             $work_days = intval($time / ($journey*60));
             $hours = intval(($time - ($work_days*$journey*60))/60);
             $minutes = intval($time - $hours*60 - $work_days*$journey*60);
@@ -129,10 +129,10 @@
         $initYearDate = new DateTime($date->format('Y').'-01-01');
         $extraHoursSummary = UsersFacade::ExtraHoursReport($initYearDate, $date, $userVO);
 
-        $currentJourney = 8;
-        $journeys = UsersFacade::GetUserJourneyHistoriesByIntervals($initDate, $date, $userVO->getId());
+        $currentJourney = 0;
+        $journeys = UsersFacade::GetUserJourneyHistoriesByIntervals($date, $date, $userVO->getId());
         if(count($journeys)==1) {
-                $currentJourney = $journeys[0]->getJourney();
+            $currentJourney = $journeys[0]->getJourney();
         }
 
         $extraHours = $extraHoursSummary[1][$userVO->getLogin()]["extra_hours"];
