@@ -38,6 +38,8 @@ var extraHoursTrigger = '<?php echo $EXTRA_HOURS_WARNING_TRIGGER; ?>';
 <script src="js/include/ExportableGridPanel.js"></script>
 <script src="js/viewWorkingHoursResultsReport.js"></script>
 
+<div id="sidebar" class="auxiliarpanel">
+</div>
 <div id="content">
 </div>
 <?php
