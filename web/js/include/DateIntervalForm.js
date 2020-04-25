@@ -150,8 +150,8 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
     },
 
     initComponent: function () {
-
-        Ext.apply(this, {
+        if(!this.dateFieldWidth) this.dateFieldWidth = 230;
+        Ext.applyIf(this, {
             //default visual configuration
             frame: true,
             header: false,
@@ -162,7 +162,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
                 bodyStyle: 'padding:5px 5px 0',
                 labelWidth: 75,
                 defaults: {
-                    width: 230
+                    width: this.dateFieldWidth
                 },
 
                 //items: start and end date fields

@@ -175,16 +175,16 @@ Ext.onReady(function(){
         id: 'grid',
         store: store,
         columns: [
-            {id: 'login', width: 130, header: 'Login', sortable: true, dataIndex: 'login'},
-            {id: 'pendingHoliday', width: 130, header: 'Pending Holiday Hours', sortable: true, renderer: renderHolidayHours, dataIndex: 'pendingHoliday'},
-            {id: 'extraHours', width: 130, header: 'Extra Hours', sortable: true, renderer: renderExtraHours, dataIndex: 'extraHours'},
-            {id: 'workableHours', width: 130, header: 'Workable Hours', sortable: true, renderer: renderHours, dataIndex: 'workableHours'},
-            {id: 'totalHours', width: 130, header: 'Worked Hours', sortable: true, renderer: renderHours, dataIndex: 'totalHours'},
-            {id: 'totalExtraHours', width: 130, header: 'Total Extra Hours', sortable: true, renderer: renderExtraHours, dataIndex: 'totalExtraHours'},
-            {id: 'lastTaskDate', width: 130, header: 'Last task date', sortable: true, xtype: 'datecolumn', format: 'd/m/Y', dataIndex: 'lastTaskDate'}
+            {id: 'login', width: 100, header: 'Login', sortable: true, dataIndex: 'login'},
+            {id: 'pendingHoliday', width: 125, header: 'Pending Holiday Hours', sortable: true, renderer: renderHolidayHours, dataIndex: 'pendingHoliday'},
+            {id: 'extraHours', width: 100, header: 'Extra Hours', sortable: true, renderer: renderExtraHours, dataIndex: 'extraHours'},
+            {id: 'workableHours', width: 100, header: 'Workable Hours', sortable: true, renderer: renderHours, dataIndex: 'workableHours'},
+            {id: 'totalHours', width: 100, header: 'Worked Hours', sortable: true, renderer: renderHours, dataIndex: 'totalHours'},
+            {id: 'totalExtraHours', width: 100, header: 'Total Extra Hours', sortable: true, renderer: renderExtraHours, dataIndex: 'totalExtraHours'},
+            {id: 'lastTaskDate', width: 100, header: 'Last task date', sortable: true, xtype: 'datecolumn', format: 'd/m/Y', dataIndex: 'lastTaskDate'}
         ],
         stripeRows: true,
-        height: window.innerHeight - contentElement.offsetTop - DATE_INTERVAL_FORM_HEIGHT - 10,
+        height: window.innerHeight - contentElement.offsetTop - 10,
         width: '100%',
         title: 'Working Hours Results Report',
         // config options for stateful behavior
@@ -202,7 +202,9 @@ Ext.onReady(function(){
 
     // dates filter form
     var workingResultsForm = new Ext.ux.DateIntervalForm({
-        renderTo: 'content',
+        renderTo: 'sidebar',
+        width: 204,
+        dateFieldWidth: 102,
         listeners: {
             'view': function (element, init, end) {
 
