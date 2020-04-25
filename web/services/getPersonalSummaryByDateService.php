@@ -126,8 +126,8 @@
             $weeklyGoalMinutes = "0" . $weeklyGoalMinutes;
         $weekGoal = $weeklyGoalHours. ":" . $weeklyGoalMinutes;
 
-        $initDate = new DateTime($date->format('Y').'-01-01');
-        $extraHoursSummary = UsersFacade::ExtraHoursReport($initDate, $date, $userVO);
+        $initYearDate = new DateTime($date->format('Y').'-01-01');
+        $extraHoursSummary = UsersFacade::ExtraHoursReport($initYearDate, $date, $userVO);
 
         $currentJourney = 8;
         $journeys = UsersFacade::GetUserJourneyHistoriesByIntervals($initDate, $date, $userVO->getId());
@@ -141,7 +141,9 @@
         $accExtraHours = $extraHoursSummary[1][$userVO->getLogin()]["total_extra_hours"];
         $accExtraHours = formatHours($accExtraHours, $currentJourney, 5);
 
-        $holidays = UsersFacade::GetPendingHolidayHours($initDate, $date, $userVO);
+        // Report holidays from the entire year, including those later than $date
+        $endYearDate = new DateTime($date->format('Y').'-12-31');
+        $holidays = UsersFacade::GetPendingHolidayHours($initYearDate, $endYearDate, $userVO);
         $pendingHolidays = $holidays[$userVO->getLogin()];
         $pendingHolidays = formatHours($pendingHolidays, $currentJourney, 5);
 
