@@ -82,14 +82,14 @@
 
     // Main Panel
     var mainPanel = new Ext.FormPanel({
-        width: 350,
-        labelWidth: 70,
+        renderTo: 'sidebar',
+        width: 204,
         frame:true,
         title: 'User Data',
-        bodyStyle: 'padding:5px 5px 0px 5px;',
+        bodyStyle: 'padding:5px 5px 0',
+        labelWidth: 75,
         defaults: {
-            width: 225,
-            labelStyle: 'text-align: right; width: 50; font-weight:bold; padding: 0 0 0 0;',
+            width: 102,
         },
         defaultType:'displayfield',
                 items: [{
@@ -111,7 +111,6 @@
                 ]
     });
 
-    mainPanel.render(Ext.get("content"));
         Ext.ux.DynamicGridPanel = Ext.extend(Ext.ux.ExportableGridPanel, {
 
           initComponent: function(){
@@ -162,6 +161,7 @@
           }
         });
 
+        var contentElement = document.getElementById('content');
         var grid = new Ext.ux.DynamicGridPanel({
             id: 'my-grid',
             storeUrl: 'services/getUserProjectCustomerReportJsonService.php?<?php
@@ -173,8 +173,8 @@
 
             rowNumberer: false,
             checkboxSelModel: false,
-            width: 1000,
-            height: 250,
+            height: window.innerHeight - contentElement.offsetTop - 10,
+            width: '100%',
             frame: false,
             title: 'User Project Worked Hours Report',
             iconCls: 'icon-grid',
@@ -215,7 +215,9 @@
 
     // dates filter form
     var dates = new Ext.ux.DateIntervalForm({
-        renderTo: 'content',
+        renderTo: 'sidebar',
+        width: 204,
+        dateFieldWidth: 102,
         listeners: {
             'view': function (element, init, end) {
 
@@ -241,6 +243,8 @@
 
 </script>
 
+<div id="sidebar" class="auxiliarpanel">
+</div>
 <div id="content">
 </div>
 <div id="variables"/>
