@@ -51,6 +51,8 @@ echo "</script>\n";
 <script src="js/include/ExportableGridPanel.js"></script>
 <script src="js/userTasksReport.js"></script>
 
+<div id="sidebar" class="auxiliarpanel">
+</div>
 <div id="content">
 </div>
 <?php
