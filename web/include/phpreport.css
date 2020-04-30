@@ -56,3 +56,7 @@ body {
 div#tasks textarea {
     resize: vertical;
 }
+
+.x-panel-tl {
+    overflow: hidden;
+}

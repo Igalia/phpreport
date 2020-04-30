@@ -348,11 +348,11 @@ Ext.onReady(function () {
 
     /* Panel containing all the search parameters */
     var filtersPanel = new Ext.FormPanel({
-        labelWidth: 100,
+        labelWidth: 75,
         frame: true,
-        width: 350,
-        renderTo: 'content',
-        defaults: {width: 230},
+        width: 204,
+        renderTo: 'sidebar',
+        defaults: {width: 102},
         items: filtersPanelItems,
 
         buttons: [{
@@ -559,19 +559,19 @@ Ext.onReady(function () {
     }
 
     var columnModel = new Ext.grid.ColumnModel(columnModelItems);
+    var contentElement = document.getElementById('content');
 
     // setup the panel for the grid of tasks
     var tasksGrid = new Ext.ux.ExportableGridPanel({
         id: 'tasksGrid',
         renderTo: 'content',
         frame: true,
-        height: 500,
+        height: window.innerHeight - contentElement.offsetTop - 10,
         width: '100%',
         iconCls: 'silk-book',
         store: tasksStore,
         frame: true,
         title: 'Tasks',
-        style: 'margin-top: 10px',
         renderTo: 'content',
         loadMask: true,
         stripeRows: true,
