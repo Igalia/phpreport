@@ -109,17 +109,48 @@ do {
 
     $weeklyRecords = array();
 
+    $weekKeys = array();
+
     foreach((array) $report as $login => $totalHoursList ) {
         $record = array();
         $record['login'] = $login;
         foreach((array) $totalHoursList as $year => $weeklyHours)  {
             foreach( $weeklyHours as $week => $hours ) {
                 $weeklyRecords[$year][$week] = true;
-                $record[$week."-".$year] = round( $hours / 60, 2, PHP_ROUND_HALF_DOWN );
+                $key = sprintf("%d-%02d", $year, $week); //e.g. 2020-01
+                $record[$key] = round( $hours / 60, 2, PHP_ROUND_HALF_DOWN );
+                if(!in_array($key, $weekKeys))
+                    $weekKeys[] = $key;
             }
         }
 
-        $records[] = $record;
+        $records[$login] = $record;
+    }
+
+    // CSV formatter
+    if($_GET["format"] && $_GET["format"] == "csv")
+    {
+        // output headers so that the file is downloaded rather than displayed
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="weekly.csv"');
+
+        // do not cache the file
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        $file = fopen('php://output', 'w');
+
+        sort($weekKeys);
+        array_unshift($weekKeys, "login");
+        fputcsv($file, $weekKeys);
+
+        $emptyRow = array_fill_keys($weekKeys, 0);
+        ksort($records);
+        foreach ($records as $row)
+            fputcsv($file, array_replace($emptyRow, $row));
+
+        // break execution here
+        exit();
     }
 
     foreach($records as $record)
@@ -159,11 +190,11 @@ do {
     foreach ($weeklyRecords as $year => $weeklyRecord ) {
         ksort( $weeklyRecord );
         foreach ( (array) $weeklyRecord as $week => $dumber ) {
-            $field['name'] = $week."-".$year;
+            $field['name'] = sprintf("%d-%02d", $year, $week);
             $metaData['fields'][] = $field;
 
-            $column['header'] = "Week " . $week . ", $year";
-            $column['dataIndex'] = $week."-".$year;
+            $column['header'] = "Week $week, $year";
+            $column['dataIndex'] = $field['name'];
             $response['columns'][] = $column;
         }
     }
