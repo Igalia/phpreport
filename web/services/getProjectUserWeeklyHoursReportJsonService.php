@@ -140,12 +140,16 @@ do {
 
         $file = fopen('php://output', 'w');
 
+        // header contains column names, first is "login"
         sort($weekKeys);
         array_unshift($weekKeys, "login");
         fputcsv($file, $weekKeys);
 
+        // generate an empty row with all columns to zero
         $emptyRow = array_fill_keys($weekKeys, 0);
+        // ensure rows are ordered by login
         ksort($records);
+        // merge every data row with the empty row and output them
         foreach ($records as $row)
             fputcsv($file, array_replace($emptyRow, $row));
 
