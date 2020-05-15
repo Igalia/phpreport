@@ -205,6 +205,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
             }],
             bbar: {
                 xtype: 'toolbar',
+                enableOverflow: true,
                 items:[{
                     text: 'Last week',
                     xtype: 'button',
@@ -225,6 +226,40 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
                         var now = new Date();
                         this._getStartDateField().setValue(getPreviousMonday(now));
                         this._getEndDateField().setValue(now);
+
+                        this._fireViewEvent();
+                    }
+                }, '-', {
+                    text: '< Previous week',
+                    xtype: 'button',
+                    scope: this, //scope inside the handler will be the Form object
+                    handler: function () {
+                        var pivot = this._getStartDateField().getValue();
+                        if (!pivot)
+                            pivot = new Date();
+                        pivot.setDate(pivot.getDate() - 7);
+
+                        this._getStartDateField().setValue(
+                            getPreviousMonday(pivot));
+                        this._getEndDateField().setValue(
+                            getNextSunday(pivot));
+
+                        this._fireViewEvent();
+                    }
+                }, {
+                    text: 'Next week >',
+                    xtype: 'button',
+                    scope: this, //scope inside the handler will be the Form object
+                    handler: function () {
+                        var pivot = this._getEndDateField().getValue();
+                        if (!pivot)
+                            pivot = new Date();
+                        pivot.setDate(pivot.getDate() + 7);
+
+                        this._getStartDateField().setValue(
+                            getPreviousMonday(pivot));
+                        this._getEndDateField().setValue(
+                            getNextSunday(pivot));
 
                         this._fireViewEvent();
                     }
