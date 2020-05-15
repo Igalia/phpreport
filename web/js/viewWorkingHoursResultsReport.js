@@ -234,11 +234,12 @@ Ext.onReady(function(){
             }
         }
     });
-    //explicitly set start date so it becomes visible
+    //explicitly set report dates to make them visible
     var defaultStartDate = new Date();
     defaultStartDate.setMonth(0);
     defaultStartDate.setDate(1); //defaultStartDate is 1st Jan of current year
     workingResultsForm.setStartDate(defaultStartDate);
+    workingResultsForm.setEndDate(new Date()); //default end date is today
     workingResultsForm.focus(true);
 
 });

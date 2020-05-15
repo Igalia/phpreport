@@ -119,39 +119,44 @@ class GetPendingHolidayHoursAction extends Action{
         $users[] = $this->user;
     }
 
+    $reportInit = $this->init;
+    $reportEnd = $this->end;
+
     // We compute the holiday hours for each User
     foreach((array)$users as $userVO)
     {
-
         // We only compute it for workers, so they must be in a group
         if (!is_null($userVO->getGroups()))
         {
-
-            // We get his/her journeys in the date interval
-            $journeyHistory = $journeyHistoryDao->getByIntervals($this->init, $this->end, $userVO->getId());
+            // We retrieve the user's journey data until the end of the year,
+            // to include the holidays produced by journey periods that might
+            // start later than the end date in the report but are still part
+            // of the year in course (see #462).
+            $endYearDate = new DateTime($reportEnd->format('Y').'-12-31');
+            $journeyHistory = $journeyHistoryDao->getByIntervals(
+                $reportInit, $endYearDate, $userVO->getId());
 
             // He/she starts with no worked hours
             $workHours = 0;
 
             foreach((array) $journeyHistory as $journeyRow)
             {
-
                 // First of all, we clip the interval with the journey
                 $initJourney = $journeyRow->getInitDate();
                 $endJourney = $journeyRow->getEndDate();
 
-                if ($initJourney < $this->init)
+                if ($initJourney < $reportInit)
                 {
-                    $initYearDay = date_create($this->init->format("Y") . "-1-1");
+                    $initYearDay = date_create($reportInit->format("Y") . "-1-1");
                     if ($initJourney < $initYearDay)
                     {
                         $initJourney = $initYearDay;
                     }
                 }
 
-                if ($endJourney > $this->end)
+                if ($endJourney > $reportEnd)
                 {
-                    $endYearDay = date_create($this->end->format("Y") . "-12-31");
+                    $endYearDay = date_create($reportEnd->format("Y") . "-12-31");
                     if ($endJourney > $endYearDay)
                     {
                         $endJourney = $endYearDay;
@@ -170,7 +175,6 @@ class GetPendingHolidayHoursAction extends Action{
                 // Go from the init year to the end one
                 while ($initYear <= $endJourney->format("Y"))
                 {
-
                     // We check if the year is a leap one, and if february 29th is in the interval. There can be some useless checkings here
                     // (february 29th can be prior to the init only in the first year, and later than the end on the last one), but it's no
                     // much computation anyway, and the code is clear (and it's already hard to understand at first)
@@ -183,8 +187,9 @@ class GetPendingHolidayHoursAction extends Action{
 
             }
 
-            // We get the vacations he/she has spent in the interval
-            $vacations = $taskDao->getVacations($userVO, $this->init, $this->end);
+            // We strictly get the holidays spent between the dates specified in
+            // the report, not until the end of the year (see #352).
+            $vacations = $taskDao->getVacations($userVO, $reportInit, $reportEnd);
 
             // Yearly holiday hours is the standard for an 8-hour journey over a year, so the result is proportional
             $holidayHours = ($workHours/(365*8))*ConfigurationParametersManager::getParameter('YEARLY_HOLIDAY_HOURS');
