@@ -264,6 +264,21 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
                         this._fireViewEvent();
                     }
                 }, '-', {
+                    text: 'Last month',
+                    xtype: 'button',
+                    scope: this, //scope inside the handler will be the Form object
+                    handler: function () {
+                        var pivot = new Date();
+                        pivot.setDate(1); // 1st day of current month
+                        pivot.setDate(pivot.getDate() -1); // previous month
+                        this._getEndDateField().setValue(pivot);
+
+                        pivot.setDate(1); // 1st day of previous month
+                        this._getStartDateField().setValue(pivot);
+
+                        this._fireViewEvent();
+                    }
+                }, {
                     text: 'This month',
                     xtype: 'button',
                     scope: this, //scope inside the handler will be the Form object
