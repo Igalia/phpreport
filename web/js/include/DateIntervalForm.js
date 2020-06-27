@@ -50,7 +50,7 @@ function getNextSunday(date) {
  * It should be the same value that form.getOuterSize().height would return when
  * the form has been rendered.
  */
-var DATE_INTERVAL_FORM_HEIGHT = 135;
+var DATE_INTERVAL_FORM_HEIGHT = 225;
 
 /**
  * @class Ext.ux.DateIntervalForm
@@ -161,11 +161,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
                 layout: 'form',
                 bodyStyle: 'padding:5px 5px 0',
                 labelWidth: 75,
-                defaults: {
-                    width: this.dateFieldWidth
-                },
 
-                //items: start and end date fields
                 items: [{
                     fieldLabel: 'Start Date',
                     name: 'start',
@@ -173,6 +169,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
                     format: 'd/m/Y',
                     startDay: 1,
                     id: 'startDate',
+                    width: this.dateFieldWidth,
                     listeners: {
                         'change': function (field, newValue, oldValue) {
                             if(!field.isValid()) return;
@@ -187,6 +184,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
                     format: 'd/m/Y',
                     startDay: 1,
                     id: 'endDate',
+                    width: this.dateFieldWidth,
                     listeners: {
                         'change': function (field, newValue, oldValue) {
                             if(!field.isValid()) return;
@@ -194,6 +192,134 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
                             Ext.getCmp('startDate').setMaxValue(date);
                         }
                     }
+                },{
+                    xtype: 'label',
+                    text: 'Week shortcuts',
+                    style: 'padding-top: 6px'
+                },{
+                    xtype: 'panel',
+                    layout: 'hbox',
+                    style: 'padding-bottom: 6px',
+                    defaults: { flex: 1 },
+                    items:[{
+                        text: 'Last week',
+                        xtype: 'button',
+                        flex: 2,
+                        scope: this, //scope inside the handler will be the Form object
+                        handler: function () {
+                            var lastWeek = new Date();
+                            lastWeek.setDate(lastWeek.getDate() - 7);
+                            this._getStartDateField().setValue(getPreviousMonday(lastWeek));
+                            this._getEndDateField().setValue(getNextSunday(lastWeek));
+
+                            this._fireViewEvent();
+                        }
+                    },{
+                        text: 'This week',
+                        xtype: 'button',
+                        flex: 2,
+                        scope: this, //scope inside the handler will be the Form object
+                        handler: function () {
+                            var now = new Date();
+                            this._getStartDateField().setValue(getPreviousMonday(now));
+                            this._getEndDateField().setValue(now);
+
+                            this._fireViewEvent();
+                        }
+                    }, {
+                        text: '<',
+                        xtype: 'button',
+                        flex: 1,
+                        scope: this, //scope inside the handler will be the Form object
+                        handler: function () {
+                            var pivot = this._getStartDateField().getValue();
+                            if (!pivot)
+                                pivot = new Date();
+                            pivot.setDate(pivot.getDate() - 7);
+
+                            this._getStartDateField().setValue(
+                                getPreviousMonday(pivot));
+                            this._getEndDateField().setValue(
+                                getNextSunday(pivot));
+
+                            this._fireViewEvent();
+                        }
+                    }, {
+                        text: '>',
+                        xtype: 'button',
+                        flex: 1,
+                        scope: this, //scope inside the handler will be the Form object
+                        handler: function () {
+                            var pivot = this._getEndDateField().getValue();
+                            if (!pivot)
+                                pivot = new Date();
+                            pivot.setDate(pivot.getDate() + 7);
+
+                            this._getStartDateField().setValue(
+                                getPreviousMonday(pivot));
+                            this._getEndDateField().setValue(
+                                getNextSunday(pivot));
+
+                            this._fireViewEvent();
+                        }
+                    }]
+                },{
+                    xtype: 'label',
+                    text: 'Month shortcuts'
+                },{
+                    xtype: 'panel',
+                    layout: 'hbox',
+                    style: 'padding-bottom: 6px',
+                    defaults: { flex: 1 },
+                    items: [{
+                        text: 'Last month',
+                        xtype: 'button',
+                        scope: this, //scope inside the handler will be the Form object
+                        handler: function () {
+                            var pivot = new Date();
+                            pivot.setDate(1); // 1st day of current month
+                            pivot.setDate(pivot.getDate() -1); // previous month
+                            this._getEndDateField().setValue(pivot);
+
+                            pivot.setDate(1); // 1st day of previous month
+                            this._getStartDateField().setValue(pivot);
+
+                            this._fireViewEvent();
+                        }
+                    },{
+                        text: 'This month',
+                        xtype: 'button',
+                        scope: this, //scope inside the handler will be the Form object
+                        handler: function () {
+                            var date = new Date();
+                            this._getEndDateField().setValue(date);
+                            date.setDate(1);
+                            this._getStartDateField().setValue(date);
+
+                            this._fireViewEvent();
+                        }
+                    }]
+                },{
+                    xtype: 'label',
+                    text: 'Year shortcuts',
+                },{
+                    xtype: 'panel',
+                    layout: 'hbox',
+                    defaults: { flex: 1 },
+                    items:[{
+                        text: 'This year',
+                        xtype: 'button',
+                        scope: this, //scope inside the handler will be the Form object
+                        handler: function () {
+                            var date = new Date();
+                            this._getEndDateField().setValue(date);
+                            date.setDate(1);
+                            date.setMonth(0);
+                            this._getStartDateField().setValue(date);
+
+                            this._fireViewEvent();
+                        }
+                    }],
                 }],
 
                 //button: send form
@@ -203,108 +329,6 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
                     handler: this._fireViewEvent,
                 }],
             }],
-            bbar: {
-                xtype: 'toolbar',
-                enableOverflow: true,
-                items:[{
-                    text: 'Last week',
-                    xtype: 'button',
-                    scope: this, //scope inside the handler will be the Form object
-                    handler: function () {
-                        var lastWeek = new Date();
-                        lastWeek.setDate(lastWeek.getDate() - 7);
-                        this._getStartDateField().setValue(getPreviousMonday(lastWeek));
-                        this._getEndDateField().setValue(getNextSunday(lastWeek));
-
-                        this._fireViewEvent();
-                    }
-                }, {
-                    text: 'This week',
-                    xtype: 'button',
-                    scope: this, //scope inside the handler will be the Form object
-                    handler: function () {
-                        var now = new Date();
-                        this._getStartDateField().setValue(getPreviousMonday(now));
-                        this._getEndDateField().setValue(now);
-
-                        this._fireViewEvent();
-                    }
-                }, '-', {
-                    text: '< Previous week',
-                    xtype: 'button',
-                    scope: this, //scope inside the handler will be the Form object
-                    handler: function () {
-                        var pivot = this._getStartDateField().getValue();
-                        if (!pivot)
-                            pivot = new Date();
-                        pivot.setDate(pivot.getDate() - 7);
-
-                        this._getStartDateField().setValue(
-                            getPreviousMonday(pivot));
-                        this._getEndDateField().setValue(
-                            getNextSunday(pivot));
-
-                        this._fireViewEvent();
-                    }
-                }, {
-                    text: 'Next week >',
-                    xtype: 'button',
-                    scope: this, //scope inside the handler will be the Form object
-                    handler: function () {
-                        var pivot = this._getEndDateField().getValue();
-                        if (!pivot)
-                            pivot = new Date();
-                        pivot.setDate(pivot.getDate() + 7);
-
-                        this._getStartDateField().setValue(
-                            getPreviousMonday(pivot));
-                        this._getEndDateField().setValue(
-                            getNextSunday(pivot));
-
-                        this._fireViewEvent();
-                    }
-                }, '-', {
-                    text: 'Last month',
-                    xtype: 'button',
-                    scope: this, //scope inside the handler will be the Form object
-                    handler: function () {
-                        var pivot = new Date();
-                        pivot.setDate(1); // 1st day of current month
-                        pivot.setDate(pivot.getDate() -1); // previous month
-                        this._getEndDateField().setValue(pivot);
-
-                        pivot.setDate(1); // 1st day of previous month
-                        this._getStartDateField().setValue(pivot);
-
-                        this._fireViewEvent();
-                    }
-                }, {
-                    text: 'This month',
-                    xtype: 'button',
-                    scope: this, //scope inside the handler will be the Form object
-                    handler: function () {
-                        var date = new Date();
-                        this._getEndDateField().setValue(date);
-                        date.setDate(1);
-                        this._getStartDateField().setValue(date);
-
-                        this._fireViewEvent();
-                    }
-                }, '-', {
-                    text: 'This year',
-                    xtype: 'button',
-                    scope: this, //scope inside the handler will be the Form object
-                    handler: function () {
-                        var date = new Date();
-                        this._getEndDateField().setValue(date);
-                        date.setDate(1);
-                        date.setMonth(0);
-                        this._getStartDateField().setValue(date);
-
-                        this._fireViewEvent();
-                    }
-                }],
-            },
             keys: [{
                 key: [Ext.EventObject.ENTER],
                 scope: this, //scope inside the handler will be the Form object
