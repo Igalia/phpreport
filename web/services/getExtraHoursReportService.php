@@ -41,6 +41,29 @@
 
     $sid = $_GET['sid'];
 
+    $csvExport = ($_GET["format"] && $_GET["format"] == "csv");
+    $csvFile = null;
+    if($csvExport)
+    {
+        // output headers so that the file is downloaded rather than displayed
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="weekly.csv"');
+
+        // do not cache the file
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        $csvFile = fopen('php://output', 'w');
+
+        // output header row
+        fputcsv($csvFile, array("Login","Extra Hours","Workable Hours",
+                "Worked Hours","Total Extra Hours","Last task date"));
+
+        // template with all values set to zero and the keys in the expected column order
+        $templateRow = array_fill_keys(array("login","extra_hours","workable_hours",
+                "total_hours","total_extra_hours","last_task_date"), 0);
+    }
+
     do {
         /* We check authentication and authorization */
         require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
@@ -117,19 +140,31 @@
 
         foreach((array) $report[1] as $login => $entry)
         {
-            $string = $string
-                . "<report login='{$login}'>"
-                . "<totalHours>{$entry["total_hours"]}</totalHours>"
-                . "<workableHours>{$entry["workable_hours"]}</workableHours>"
-                . "<extraHours>{$entry["extra_hours"]}</extraHours>"
-                . "<totalExtraHours>{$entry["total_extra_hours"]}</totalExtraHours>"
-                . "<lastTaskDate format=\"Y-m-d\">{$entry["last_task_date"]->format('Y-m-d')}</lastTaskDate>"
-                . "</report>";
+            $entry["last_task_date"] = $entry["last_task_date"]->format('Y-m-d');
+            if($csvExport) {
+                $entry["login"] = $login;
+                fputcsv($csvFile, array_replace($templateRow, $entry));
+            }
+            else {
+                $string = $string
+                    . "<report login='{$login}'>"
+                    . "<totalHours>{$entry["total_hours"]}</totalHours>"
+                    . "<workableHours>{$entry["workable_hours"]}</workableHours>"
+                    . "<extraHours>{$entry["extra_hours"]}</extraHours>"
+                    . "<totalExtraHours>{$entry["total_extra_hours"]}</totalExtraHours>"
+                    . "<lastTaskDate format=\"Y-m-d\">{$entry["last_task_date"]}</lastTaskDate>"
+                    . "</report>";
+            }
         }
 
         $string = $string . "</individual></reports>";
 
     } while (False);
+
+    if($csvExport) {
+        // break execution here, do not output XML
+        exit();
+    }
 
    // make it into a proper XML document with header etc
     $xml = simplexml_load_string($string);
