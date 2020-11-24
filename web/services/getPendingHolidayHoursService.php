@@ -49,7 +49,7 @@
         {
             $string = "<report";
             if ($userLogin!="")
-            $string = $string . " login='" . $userLogin . "'";
+                $string = $string . " login='" . $userLogin . "'";
             if ($init!="")
                 $string = $string . " init='" . $init . "'";
             if ($end!="")
@@ -62,7 +62,7 @@
         {
             $string = "<report";
             if ($userLogin!="")
-            $string = $string . " login='" . $userLogin . "'";
+                $string = $string . " login='" . $userLogin . "'";
             if ($init!="")
                 $string = $string . " init='" . $init . "'";
             if ($end!="")
@@ -72,12 +72,11 @@
         }
 
         if ($dateFormat=="")
-        $dateFormat = "Y-m-d";
+            $dateFormat = "Y-m-d";
 
         if ($init!="")
         {
-        $initParse = date_parse_from_format($dateFormat, $init);
-
+            $initParse = date_parse_from_format($dateFormat, $init);
             $init = "{$initParse['year']}-{$initParse['month']}-{$initParse['day']}";
         } else
             $init = "1900-01-01";
@@ -86,39 +85,35 @@
 
         if ($end!="")
         {
-        $endParse = date_parse_from_format($dateFormat, $end);
-
+            $endParse = date_parse_from_format($dateFormat, $end);
             $end = "{$endParse['year']}-{$endParse['month']}-{$endParse['day']}";
-
             $end = date_create($end);
         } else
-        $end = new DateTime();
+            $end = new DateTime();
 
         if ($userId != "")
         {
+            $userVO = new UserVO();
+            $userVO->setLogin($userLogin);
 
-        $userVO = new UserVO();
-
-        $userVO->setLogin($userLogin);
-
-        $report = UsersFacade::GetPendingHolidayHours($init, $end, $userVO);
+            $report = UsersFacade::GetPendingHolidayHours($init, $end, $userVO);
 
         } else
-        $report = UsersFacade::GetPendingHolidayHours($init, $end);
+            $report = UsersFacade::GetPendingHolidayHours($init, $end);
 
 
         $string = "<report";
         if ($userLogin!="")
-        $string = $string . " login='" . $userLogin . "'";
+            $string = $string . " login='" . $userLogin . "'";
         if ($init!="")
-        $string = $string . " init='" . $init->format($dateFormat) . "'";
+            $string = $string . " init='" . $init->format($dateFormat) . "'";
         if ($end!="")
-        $string = $string . " end='" . $end->format($dateFormat) . "'";
+            $string = $string . " end='" . $end->format($dateFormat) . "'";
         $string = $string . ">";
 
         foreach((array) $report as $key => $entry)
         {
-        $string = $string . "<pendingHolidayHours login='{$key}'><hours>{$entry}</hours></pendingHolidayHours>";
+            $string = $string . "<pendingHolidayHours login='{$key}'><hours>{$entry}</hours></pendingHolidayHours>";
         }
 
         $string = $string . "</report>";
