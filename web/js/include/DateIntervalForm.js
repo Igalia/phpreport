@@ -155,14 +155,14 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
             //default visual configuration
             frame: true,
             header: false,
-            width: 350,
+            width: 530,
             items:[{
                 id: 'form',
                 layout: 'form',
                 bodyStyle: 'padding:5px 5px 0',
-                labelWidth: 75,
+                labelWidth: 105,
                 defaults: {
-                    width: 230
+                    width: 380
                 },
 
                 //items: start and end date fields
