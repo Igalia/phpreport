@@ -155,14 +155,14 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
             //default visual configuration
             frame: true,
             header: false,
-            width: 350,
+            width: 530,
             items:[{
                 id: 'form',
                 layout: 'form',
                 bodyStyle: 'padding:5px 5px 0',
-                labelWidth: 75,
+                labelWidth: 105,
                 defaults: {
-                    width: 230
+                    width: 380
                 },
 
                 //items: start and end date fields
@@ -205,6 +205,7 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
             }],
             bbar: {
                 xtype: 'toolbar',
+                enableOverflow: true,
                 items:[{
                     text: 'Last week',
                     xtype: 'button',
@@ -229,6 +230,55 @@ Ext.ux.DateIntervalForm = Ext.extend(Ext.Panel, {
                         this._fireViewEvent();
                     }
                 }, '-', {
+                    text: '< Previous week',
+                    xtype: 'button',
+                    scope: this, //scope inside the handler will be the Form object
+                    handler: function () {
+                        var pivot = this._getStartDateField().getValue();
+                        if (!pivot)
+                            pivot = new Date();
+                        pivot.setDate(pivot.getDate() - 7);
+
+                        this._getStartDateField().setValue(
+                            getPreviousMonday(pivot));
+                        this._getEndDateField().setValue(
+                            getNextSunday(pivot));
+
+                        this._fireViewEvent();
+                    }
+                }, {
+                    text: 'Next week >',
+                    xtype: 'button',
+                    scope: this, //scope inside the handler will be the Form object
+                    handler: function () {
+                        var pivot = this._getEndDateField().getValue();
+                        if (!pivot)
+                            pivot = new Date();
+                        pivot.setDate(pivot.getDate() + 7);
+
+                        this._getStartDateField().setValue(
+                            getPreviousMonday(pivot));
+                        this._getEndDateField().setValue(
+                            getNextSunday(pivot));
+
+                        this._fireViewEvent();
+                    }
+                }, '-', {
+                    text: 'Last month',
+                    xtype: 'button',
+                    scope: this, //scope inside the handler will be the Form object
+                    handler: function () {
+                        var pivot = new Date();
+                        pivot.setDate(1); // 1st day of current month
+                        pivot.setDate(pivot.getDate() -1); // previous month
+                        this._getEndDateField().setValue(pivot);
+
+                        pivot.setDate(1); // 1st day of previous month
+                        this._getStartDateField().setValue(pivot);
+
+                        this._fireViewEvent();
+                    }
+                }, {
                     text: 'This month',
                     xtype: 'button',
                     scope: this, //scope inside the handler will be the Form object
