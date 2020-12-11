@@ -1,6 +1,35 @@
 NEWS
 ====
 
+Version 2.20 (11 Dec 2020)
+-------------------------------
+
+The "Year of Doom" release.
+
+List of changes
+~~~~~~~~~~~~~~~
+
+* Tasks
+  * #436: Include future holidays in user tasks summary. [Jacobo Aragunde Pérez]
+  * #468: Allow to resize the task textarea. [Jacobo Aragunde Pérez]
+  * #472: Fix wrong "pending holidays" count por users with part-time periods. [Jacobo Aragunde Pérez]
+
+* Reports
+  * #462: Fix imprecise pending holidays reported regarding future contract data. [Jacobo Aragunde Pérez]
+  * #464: Fix holiday count in leap years. [Jacobo Aragunde Pérez]
+  * #477: Add previous and next week buttons to date filter. [Jacobo Aragunde Pérez]
+  * #478: Add last month button to date filter. [Jacobo Aragunde Pérez]
+  * Display default dates in acc hours report. [Jacobo Aragunde Pérez]
+
+* Other
+  * Make the XMLWriter escape data before sending. [Jacobo Aragunde Pérez]
+    * #85: Fix problem with special characters when cloning tasks.
+    * #146: Fix cannot save a project name containing '&'.
+  * Documentation fixes. [Jacobo Aragunde Pérez]
+  * Remove tmp file after minification. [Jacobo Aragunde Pérez]
+  * Code clean-up, performance. [Jacobo Aragunde Pérez]
+
+
 Version 2.19 (4 Oct 2019)
 -------------------------------
 
