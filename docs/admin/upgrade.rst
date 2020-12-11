@@ -8,6 +8,16 @@ Upgrade instructions
   Please backup your database before running an upgrade, in case things go
   wrong during the process.
 
+From version 2.19 to 2.20
+=========================
+
+Unpack the files of PhpReport 2.20 at the same location as the original files,
+overwriting the existing contents.
+
+There are no scripts to run or additional steps to be done in this upgrade. Just
+make sure to remove the directories ``update/`` and ``install/`` inside your
+PhpReport, to prevent other users from altering your DB.
+
 From version 2.18 to 2.19
 =========================
 
