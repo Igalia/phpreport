@@ -586,6 +586,19 @@ Ext.onReady(function () {
         }],
     });
 
+    //Add temporary links to enhanced CSV export
+    tasksGrid.getBottomToolbar().add({
+        xtype: 'button',
+        text: 'Enhanced CSV export',
+        handler: function () {
+            urlParams = "format=csv";
+            for (var parameter in tasksStore.baseParams) {
+                urlParams += "&" + parameter + "=" + tasksStore.baseParams[parameter];
+            }
+            window.open("services/getTasksFiltered.php?" + urlParams);
+        }
+    });
+
     //function to show only a subset of columns and hide the others
     function showStandardView() {
         columnModel.setHidden(0, false);  //date
