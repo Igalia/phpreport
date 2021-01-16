@@ -118,6 +118,10 @@
    include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
    include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
+    function maybeEscapeString($string, $csvExport) {
+        return $csvExport? $string : escape_string($string);
+    }
+
     $sid = $_GET['sid'];
 
     $csvExport = ($_GET["format"] && $_GET["format"] == "csv");
@@ -261,12 +265,12 @@
                     ":" . str_pad($task->getEnd()%60, 2, "0", STR_PAD_LEFT),
                 "hours" => str_pad(floor(($task->getEnd() - $task->getInit())/60)%24, 2, "0", STR_PAD_LEFT) .
                     ":" . str_pad(($task->getEnd() - $task->getInit())%60, 2, "0", STR_PAD_LEFT),
-                "story" => escape_string($task->getStory()),
+                "story" => maybeEscapeString($task->getStory(), $csvExport),
                 "telework" => $task->getTelework()? "true" : "false",
                 "onsite" => $task->getOnsite()? "true" : "false",
-                "ttype" => escape_string($task->getTtype()),
-                "text" => escape_string($task->getText()),
-                "phase" => escape_string($task->getPhase()),
+                "ttype" => maybeEscapeString($task->getTtype(), $csvExport),
+                "text" => maybeEscapeString($task->getText(), $csvExport),
+                "phase" => maybeEscapeString($task->getPhase(), $csvExport),
                 "userId" => $task->getUserId(),
                 "projectId" => $task->getProjectId(),
                 "taskStoryId" => $task->getTaskStoryId()
