@@ -234,20 +234,12 @@
             $filterStory = $_GET['filterStory'];
         }
         if (isset($_GET['emptyText'])) {
-            if ($_GET['emptyText'] == 'true') {
-                $emptyText = true;
-            }
-            else if ($_GET['emptyText'] == 'false') {
-                $emptyText = false;
-            }
+            $emptyText = filter_var($_GET['emptyText'],
+                FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         }
         if (isset($_GET['emptyStory'])) {
-            if ($_GET['emptyStory'] == 'true') {
-                $emptyStory = true;
-            }
-            else if ($_GET['emptyStory'] == 'false') {
-                $emptyStory = false;
-            }
+            $emptyStory = filter_var($_GET['emptyStory'],
+                FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         }
         if (isset($_GET['showProjectNames'])) {
             $showProjectNames = filter_var($_GET['showProjectNames'], FILTER_VALIDATE_BOOLEAN);
