@@ -591,7 +591,7 @@ Ext.onReady(function () {
         xtype: 'button',
         text: 'Enhanced CSV export',
         handler: function () {
-            urlParams = "format=csv";
+            urlParams = "format=csv&showProjectNames=true";
             for (var parameter in tasksStore.baseParams) {
                 urlParams += "&" + parameter + "=" + tasksStore.baseParams[parameter];
             }

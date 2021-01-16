@@ -115,6 +115,7 @@
 
    define('PHPREPORT_ROOT', __DIR__ . '/../../');
    include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
+   include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
    include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
    include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
@@ -141,7 +142,7 @@
         // output header row
         fputcsv($csvFile, array("id", "date", "initTime", "endTime", "hours",
             "story", "telework", "onsite", "ttype", "text", "phase", "userId",
-            "projectId", "taskStoryId"));
+            "projectId", "taskStoryId", "projectName"));
     }
 
     do {
@@ -175,6 +176,7 @@
         $filterStory = NULL;
         $emptyText = NULL;
         $emptyStory = NULL;
+        $showProjectNames = false;
         if (isset($_GET['dateFormat'])) {
             $dateFormat = $_GET['dateFormat'];
         }
@@ -247,6 +249,9 @@
                 $emptyStory = false;
             }
         }
+        if (isset($_GET['showProjectNames'])) {
+            $showProjectNames = filter_var($_GET['showProjectNames'], FILTER_VALIDATE_BOOLEAN);
+        }
 
         $tasks = TasksFacade::GetTasksFiltered($filterStartDate, $filterEndDate,
                 $telework, $onsite, $filterText, $type, $userId, $projectId, $customerId,
@@ -275,6 +280,10 @@
                 "projectId" => $task->getProjectId(),
                 "taskStoryId" => $task->getTaskStoryId()
             );
+            if ($showProjectNames) {
+                $project = ProjectsFacade::GetProject($taskArray["projectId"]);
+                $taskArray["projectName"] = $project->getDescription();
+            }
 
             if ($csvExport)
                 fputcsv($csvFile, $taskArray);
