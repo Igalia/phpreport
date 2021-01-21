@@ -202,29 +202,15 @@ Ext.onReady(function(){
     //Add temporary links to enhanced CSV export
     grid.getBottomToolbar().add({
         xtype: 'button',
-        text: 'Enhanced CSV export: extra hours',
+        text: 'Enhanced CSV export',
         handler: function () {
             var init = workingResultsForm.getStartDate();
             var end = workingResultsForm.getEndDate();
             window.open(
                 "services/getExtraHoursReportService.php" +
-                "?format=csv" +
+                "?format=csv&calculatePendingHolidays=true" +
                 "&init=" + init.getFullYear() + "-" + (init.getMonth()+1)
                     + "-" + init.getDate() +
-                "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1)
-                    + "-" + end.getDate());
-        }
-    });
-    grid.getBottomToolbar().add({
-        xtype: 'button',
-        text: 'Enhanced CSV export: holidays',
-        handler: function () {
-            var init = workingResultsForm.getStartDate();
-            var end = workingResultsForm.getEndDate();
-            window.open(
-                "services/getPendingHolidayHoursService.php" +
-                "?format=csv" +
-                "&init=" + init.getFullYear() + "-01-01" +
                 "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1)
                     + "-" + end.getDate());
         }

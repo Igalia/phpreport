@@ -41,6 +41,8 @@
 
     $sid = $_GET['sid'];
 
+    $calculatePendingHolidays = false;
+
     $csvExport = ($_GET["format"] && $_GET["format"] == "csv");
     $csvFile = null;
     if($csvExport)
@@ -57,11 +59,11 @@
 
         // output header row
         fputcsv($csvFile, array("Login","Extra Hours","Workable Hours",
-                "Worked Hours","Total Extra Hours","Last task date"));
+                "Worked Hours","Total Extra Hours","Last task date", "Pending holiday hours"));
 
         // template with all values set to zero and the keys in the expected column order
         $templateRow = array_fill_keys(array("login","extra_hours","workable_hours",
-                "total_hours","total_extra_hours","last_task_date"), 0);
+                "total_hours","total_extra_hours","last_task_date", "pendingHolidayHours"), 0);
     }
 
     do {
@@ -114,6 +116,13 @@
         } else
             $end = new DateTime();
 
+        if (isset($_GET['calculatePendingHolidays'])) {
+            $calculatePendingHolidays = filter_var($_GET['calculatePendingHolidays'], FILTER_VALIDATE_BOOLEAN);
+            // Pending holidays must be calculated from the beginning of the year,
+            // otherwise the figure is not useful for users
+            $initYearDate = new DateTime($init->format('Y').'-01-01');
+        }
+
         $string = "<reports>";
 
         if ($userLogin != "")
@@ -122,10 +131,14 @@
             $userVO->setLogin($userLogin);
 
             $report = UsersFacade::ExtraHoursReport($init, $end, $userVO);
+            if ($calculatePendingHolidays)
+                $pendingHolidaysReport = UsersFacade::GetPendingHolidayHours($initYearDate, $end, $userVO);
 
         } else
         {
             $report = UsersFacade::ExtraHoursReport($init, $end);
+            if ($calculatePendingHolidays)
+                $pendingHolidaysReport = UsersFacade::GetPendingHolidayHours($initYearDate, $end);
 
             $string = $string
                 . "<global><totalHours>{$report[0]["total_hours"]}</totalHours>"
@@ -141,6 +154,9 @@
         foreach((array) $report[1] as $login => $entry)
         {
             $entry["last_task_date"] = $entry["last_task_date"]->format('Y-m-d');
+            if ($calculatePendingHolidays)
+                $entry["pendingHolidayHours"] = $pendingHolidaysReport[$login];
+
             if($csvExport) {
                 $entry["login"] = $login;
                 fputcsv($csvFile, array_replace($templateRow, $entry));
@@ -152,8 +168,10 @@
                     . "<workableHours>{$entry["workable_hours"]}</workableHours>"
                     . "<extraHours>{$entry["extra_hours"]}</extraHours>"
                     . "<totalExtraHours>{$entry["total_extra_hours"]}</totalExtraHours>"
-                    . "<lastTaskDate format=\"Y-m-d\">{$entry["last_task_date"]}</lastTaskDate>"
-                    . "</report>";
+                    . "<lastTaskDate format=\"Y-m-d\">{$entry["last_task_date"]}</lastTaskDate>";
+                if ($calculatePendingHolidays)
+                    $string .= "<pendingHolidayHours>{$entry["pendingHolidayHours"]}</pendingHolidayHours>";
+                $string .= "</report>";
             }
         }
 
