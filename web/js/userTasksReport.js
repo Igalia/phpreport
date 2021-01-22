@@ -561,7 +561,7 @@ Ext.onReady(function () {
     var columnModel = new Ext.grid.ColumnModel(columnModelItems);
 
     // setup the panel for the grid of tasks
-    var tasksGrid = new Ext.ux.ExportableGridPanel({
+    var tasksGrid = new Ext.grid.GridPanel({
         id: 'tasksGrid',
         renderTo: 'content',
         frame: true,
@@ -584,19 +584,18 @@ Ext.onReady(function () {
             text: 'Extended view',
             handler: showExtendedView,
         }],
-    });
-
-    //Add temporary links to enhanced CSV export
-    tasksGrid.getBottomToolbar().add({
-        xtype: 'button',
-        text: 'Enhanced CSV export',
-        handler: function () {
-            urlParams = "format=csv&showProjectNames=true";
-            for (var parameter in tasksStore.baseParams) {
-                urlParams += "&" + parameter + "=" + tasksStore.baseParams[parameter];
+        bbar: [{
+            xtype: 'button',
+            text: 'Download as CSV',
+            handler: function () {
+                urlParams = "format=csv&showProjectNames=true";
+                for (var parameter in tasksStore.baseParams) {
+                    urlParams += "&" + parameter + "=" +
+                        tasksStore.baseParams[parameter];
+                }
+                window.open("services/getTasksFiltered.php?" + urlParams);
             }
-            window.open("services/getTasksFiltered.php?" + urlParams);
-        }
+        }],
     });
 
     //function to show only a subset of columns and hide the others

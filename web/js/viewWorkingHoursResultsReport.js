@@ -171,7 +171,7 @@ Ext.onReady(function(){
 
     // create the Grid
     var contentElement = document.getElementById('content');
-    var grid = new Ext.ux.ExportableGridPanel({
+    var grid = new Ext.grid.GridPanel({
         id: 'grid',
         store: store,
         columns: [
@@ -191,29 +191,25 @@ Ext.onReady(function(){
         stateful: true,
         stateId: 'grid',
         listeners: {
-            render: function(){
-
-              grid.customMask =  new Ext.LoadMask(grid.getGridEl(), {msg:"Loading...", removeMask: false});
-
+            render: function () {
+                grid.customMask =  new Ext.LoadMask(grid.getGridEl(), {msg:"Loading...", removeMask: false});
             }
-        }
-    });
-
-    //Add temporary links to enhanced CSV export
-    grid.getBottomToolbar().add({
-        xtype: 'button',
-        text: 'Enhanced CSV export',
-        handler: function () {
-            var init = workingResultsForm.getStartDate();
-            var end = workingResultsForm.getEndDate();
-            window.open(
-                "services/getExtraHoursReportService.php" +
-                "?format=csv&calculatePendingHolidays=true" +
-                "&init=" + init.getFullYear() + "-" + (init.getMonth()+1)
-                    + "-" + init.getDate() +
-                "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1)
-                    + "-" + end.getDate());
-        }
+        },
+        bbar: [{
+            xtype: 'button',
+            text: 'Download as CSV',
+            handler: function () {
+                var init = workingResultsForm.getStartDate();
+                var end = workingResultsForm.getEndDate();
+                window.open(
+                    "services/getExtraHoursReportService.php" +
+                    "?format=csv&calculatePendingHolidays=true" +
+                    "&init=" + init.getFullYear() + "-" + (init.getMonth()+1)
+                        + "-" + init.getDate() +
+                    "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1)
+                        + "-" + end.getDate());
+            }
+        }]
     });
 
     // dates filter form

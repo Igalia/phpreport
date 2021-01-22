@@ -356,10 +356,11 @@ Ext.onReady(function(){
             iconCls: 'silk-table',
         });
 
-        //Add temporary link to enhanced CSV export
+        //Add link to server-side CSV export
+        grid3.getBottomToolbar().removeAll();
         grid3.getBottomToolbar().add({
             xtype: 'button',
-            text: 'Enhanced CSV export',
+            text: 'Download as CSV',
             handler: function () {
                 var init = workingResultsForm.getStartDate();
                 var end = workingResultsForm.getEndDate();
