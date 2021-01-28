@@ -38,5 +38,6 @@ function checkIfSessionExists() {
 window.onload = function () {
     if (!window.location.pathname.endsWith("login.php")) { //do not run this check in the login screen!
         window.setInterval(checkIfSessionExists, 300000);
+        document.addEventListener("visibilitychange", checkIfSessionExists);
     }
 };
