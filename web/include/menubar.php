@@ -21,6 +21,10 @@
 include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
 $SHOW_MENU = LoginManager::isLogged();
 $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINATION');
+$ISSUE_TRACKER_LINKS_TEXT = unserialize(
+    ConfigurationParametersManager::getParameter('ISSUE_TRACKER_LINKS_TEXT'));
+$ISSUE_TRACKER_LINKS_URL = unserialize(
+    ConfigurationParametersManager::getParameter('ISSUE_TRACKER_LINKS_URL'));
 ?>
 
 <link rel="stylesheet" type="text/css" href="include/menubar.css"/>
@@ -117,4 +121,11 @@ $MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINA
     <li class="right"><a href="logout.php">Logout</a></li>
     <?php } // endif ($SHOW_MENU) ?>
     <li class="right"><a href="../help/user" target="blank">Help</a></li>
+    <?php foreach ($ISSUE_TRACKER_LINKS_TEXT as $key => $text) { ?>
+    <li class="right">
+        <a href="<?php echo $ISSUE_TRACKER_LINKS_URL[$key] ?>" target="blank">
+            <?php echo $text ?>
+        </a>
+    </li>
+    <?php } // end foreach ($ISSUE_TRACKER_LINKS_TEXT) ?>
 </ul>
