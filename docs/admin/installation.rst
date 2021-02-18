@@ -51,10 +51,8 @@ Step 2: Setting up the files
 ============================
 
 Move the program files to a location available for the web server, inside
-a directory called phpreport. Usual default locations for web servers are:
-
-* On Debian, Ubuntu: ``/var/www/``
-* On Fedora, RHEL: ``/var/www/html/``
+a directory called phpreport. The usual default location for the Apache web
+server is: ``/var/www/html/``
 
 Step 3: Creating the schema and initial data of the database
 ============================================================
