@@ -3,6 +3,7 @@ tgz: help minify
 	VERSION=`./version.sh`;	\
 	tar zcf phpreport_$${VERSION}.tar.gz --exclude=Makefile --exclude=*~ \
 		--exclude=version.sh --exclude=docs --exclude=config/config.php \
+		--exclude=web/APITest.php --exclude=web/js/APITest.js \
 		--exclude=*.tar.gz --exclude=*.zip *
 
 zip: tgz
