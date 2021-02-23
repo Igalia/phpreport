@@ -52,7 +52,7 @@ Session management
 `PHP session management <http://php.net/manual/en/book.session.php>`__
 has to be considered in the implementation of web services. This is usually
 handled by the web browser transparently for both users and programmers. It may
-user cookies or GET parameters in case the former are not available.
+use cookies or GET parameters in case the former are not available.
 However, when the client is not a browser, programmers have to take session
 management into account explicitly.
 
@@ -154,3 +154,14 @@ Notice that this service returns a list with the tasks that have been saved,
 in case of success, but including an additional piece of data: the internal
 identifier of the task. In successive calls, the client has to use this
 identifier to update the data of the task.
+
+Testing the services
+--------------------
+
+The page ``web/APITest.php`` can be used to test the services. It provides a
+field to set the service URL, and another field to set the content of the POST
+request. After the "Send" button is hit, the response will be printed on-screen.
+
+Please, notice that PhpReport releases do not include this test page, developers
+must have created a development environment. Besides, they must be logged in as
+an admin to be able to access it.
