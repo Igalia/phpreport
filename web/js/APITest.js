@@ -20,11 +20,13 @@
 function sendRequest() {
   let url = document.getElementById('urlInput').value;
   let request = document.getElementById('requestInput').value;
+  let responseInput = document.getElementById('responseInput');
+  responseInput.value = '';
   let xhr = new XMLHttpRequest();
   xhr.open("POST", url, true);
   xhr.onreadystatechange = function () {
     if(xhr.readyState === XMLHttpRequest.DONE) {
-      document.getElementById('responseInput').value = xhr.responseText;
+      responseInput.value = xhr.responseText;
     }
   }
   xhr.send(request);
