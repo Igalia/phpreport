@@ -372,82 +372,82 @@ Ext.onReady(function () {
 
     /* Handler to invoke the search service */
     function findTasks () {
-                if (Ext.getCmp('userLogin').getRawValue() == ""){
-                    App.setAlert(false, "Check For Invalid Field Values");
-                    return;
-                }
-                var baseParams = {
-                    userId: Ext.getCmp('userLogin').getValue(),
-                    dateFormat: "m/d/Y",
-                };
+        if (Ext.getCmp('userLogin').getRawValue() == ""){
+            App.setAlert(false, "Check For Invalid Field Values");
+            return;
+        }
+        var baseParams = {
+            userId: Ext.getCmp('userLogin').getValue(),
+            dateFormat: "m/d/Y",
+        };
 
-                if (Ext.getCmp('startDate').getRawValue() != "") {
-                    var date = Ext.getCmp('startDate').getValue();
-                    baseParams.filterStartDate = (date.getMonth()+1) + "/" +
-                        date.getDate() + "/" + date.getFullYear();
-                }
-                if (Ext.getCmp('endDate').getRawValue() != "") {
-                    var date = Ext.getCmp('endDate').getValue();
-                    baseParams.filterEndDate = (date.getMonth()+1) + "/" +
-                        date.getDate() + "/" + date.getFullYear();
-                }
-                if (Ext.getCmp('filterText').getRawValue() != "") {
-                    //this field is the selector for two different, incompatible
-                    //parameters in the service
-                    var value = Ext.getCmp('filterText').getValue();
-                    if (value == '[empty]') {
-                        baseParams.emptyText = true;
-                    }
-                    else if (value == '[not empty]') {
-                        baseParams.emptyText = false;
-                    }
-                    else {
-                        baseParams.filterText = value;
-                    }
-                }
-                if (Ext.getCmp('project').getRawValue() != "") {
-                    var value = Ext.getCmp('project').getValue();
-                    baseParams.projectId = value;
-                }
-                if (Ext.getCmp('customer').getRawValue() != "") {
-                    var value = Ext.getCmp('customer').getValue();
-                    baseParams.customerId = value;
-                }
-                if (Ext.getCmp('type').getRawValue() != "") {
-                    var value = Ext.getCmp('type').getValue();
-                    baseParams.type = value;
-                }
-                if (Ext.getCmp('filterStory').getRawValue() != "") {
-                    //this field is the selector for two different, incompatible
-                    //parameters in the service
-                    var value = Ext.getCmp('filterStory').getValue();
-                    if (value == '[empty]') {
-                        baseParams.emptyStory = true;
-                    }
-                    else if (value == '[not empty]') {
-                        baseParams.emptyStory = false;
-                    }
-                    else {
-                        baseParams.filterStory = value;
-                    }
-                }
-                if ( menuCoordination == true ) {
-                    if (Ext.getCmp('taskStory').getRawValue() != "") {
-                        var value = Ext.getCmp('taskStory').getValue();
-                        baseParams.taskStoryId = value;
-                    }
-                }
-                if (Ext.getCmp('telework').getRawValue() != "") {
-                    var value = Ext.getCmp('telework').getValue();
-                    baseParams.telework = (value == 'yes')? true : false;
-                }
-                if (Ext.getCmp('onsite').getRawValue() != "") {
-                    var value = Ext.getCmp('onsite').getValue();
-                    baseParams.onsite = (value == 'yes')? true : false;
-                }
+        if (Ext.getCmp('startDate').getRawValue() != "") {
+            var date = Ext.getCmp('startDate').getValue();
+            baseParams.filterStartDate = (date.getMonth()+1) + "/" +
+                date.getDate() + "/" + date.getFullYear();
+        }
+        if (Ext.getCmp('endDate').getRawValue() != "") {
+            var date = Ext.getCmp('endDate').getValue();
+            baseParams.filterEndDate = (date.getMonth()+1) + "/" +
+                date.getDate() + "/" + date.getFullYear();
+        }
+        if (Ext.getCmp('filterText').getRawValue() != "") {
+            //this field is the selector for two different, incompatible
+            //parameters in the service
+            var value = Ext.getCmp('filterText').getValue();
+            if (value == '[empty]') {
+                baseParams.emptyText = true;
+            }
+            else if (value == '[not empty]') {
+                baseParams.emptyText = false;
+            }
+            else {
+                baseParams.filterText = value;
+            }
+        }
+        if (Ext.getCmp('project').getRawValue() != "") {
+            var value = Ext.getCmp('project').getValue();
+            baseParams.projectId = value;
+        }
+        if (Ext.getCmp('customer').getRawValue() != "") {
+            var value = Ext.getCmp('customer').getValue();
+            baseParams.customerId = value;
+        }
+        if (Ext.getCmp('type').getRawValue() != "") {
+            var value = Ext.getCmp('type').getValue();
+            baseParams.type = value;
+        }
+        if (Ext.getCmp('filterStory').getRawValue() != "") {
+            //this field is the selector for two different, incompatible
+            //parameters in the service
+            var value = Ext.getCmp('filterStory').getValue();
+            if (value == '[empty]') {
+                baseParams.emptyStory = true;
+            }
+            else if (value == '[not empty]') {
+                baseParams.emptyStory = false;
+            }
+            else {
+                baseParams.filterStory = value;
+            }
+        }
+        if ( menuCoordination == true ) {
+            if (Ext.getCmp('taskStory').getRawValue() != "") {
+                var value = Ext.getCmp('taskStory').getValue();
+                baseParams.taskStoryId = value;
+            }
+        }
+        if (Ext.getCmp('telework').getRawValue() != "") {
+            var value = Ext.getCmp('telework').getValue();
+            baseParams.telework = (value == 'yes')? true : false;
+        }
+        if (Ext.getCmp('onsite').getRawValue() != "") {
+            var value = Ext.getCmp('onsite').getValue();
+            baseParams.onsite = (value == 'yes')? true : false;
+        }
 
-                tasksStore.baseParams = baseParams;
-                tasksStore.load();
+        tasksStore.baseParams = baseParams;
+        tasksStore.load();
     }
 
     taskRecordColumns = [
@@ -561,7 +561,7 @@ Ext.onReady(function () {
     var columnModel = new Ext.grid.ColumnModel(columnModelItems);
 
     // setup the panel for the grid of tasks
-    var tasksGrid = new Ext.ux.ExportableGridPanel({
+    var tasksGrid = new Ext.grid.GridPanel({
         id: 'tasksGrid',
         renderTo: 'content',
         frame: true,
@@ -583,6 +583,18 @@ Ext.onReady(function () {
         },{
             text: 'Extended view',
             handler: showExtendedView,
+        }],
+        bbar: [{
+            xtype: 'button',
+            text: 'Download as CSV',
+            handler: function () {
+                urlParams = "format=csv&showProjectNames=true";
+                for (var parameter in tasksStore.baseParams) {
+                    urlParams += "&" + parameter + "=" +
+                        tasksStore.baseParams[parameter];
+                }
+                window.open("services/getTasksFiltered.php?" + urlParams);
+            }
         }],
     });
 

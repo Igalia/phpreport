@@ -41,6 +41,31 @@
 
     $sid = $_GET['sid'];
 
+    $calculatePendingHolidays = false;
+
+    $csvExport = ($_GET["format"] && $_GET["format"] == "csv");
+    $csvFile = null;
+    if($csvExport)
+    {
+        // output headers so that the file is downloaded rather than displayed
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="weekly.csv"');
+
+        // do not cache the file
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        $csvFile = fopen('php://output', 'w');
+
+        // output header row
+        fputcsv($csvFile, array("Login","Extra Hours","Workable Hours",
+                "Worked Hours","Total Extra Hours","Last task date", "Pending holiday hours"));
+
+        // template with all values set to zero and the keys in the expected column order
+        $templateRow = array_fill_keys(array("login","extra_hours","workable_hours",
+                "total_hours","total_extra_hours","last_task_date", "pendingHolidayHours"), 0);
+    }
+
     do {
         /* We check authentication and authorization */
         require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
@@ -49,7 +74,7 @@
         {
             $string = "<report";
             if ($userLogin!="")
-            $string = $string . " login='" . $userLogin . "'";
+                $string = $string . " login='" . $userLogin . "'";
             if ($init!="")
                 $string = $string . " init='" . $init . "'";
             if ($end!="")
@@ -62,7 +87,7 @@
         {
             $string = "<report";
             if ($userLogin!="")
-            $string = $string . " login='" . $userLogin . "'";
+                $string = $string . " login='" . $userLogin . "'";
             if ($init!="")
                 $string = $string . " init='" . $init . "'";
             if ($end!="")
@@ -72,12 +97,11 @@
         }
 
         if ($dateFormat=="")
-        $dateFormat = "Y-m-d";
+            $dateFormat = "Y-m-d";
 
         if ($init!="")
         {
-        $initParse = date_parse_from_format($dateFormat, $init);
-
+            $initParse = date_parse_from_format($dateFormat, $init);
             $init = "{$initParse['year']}-{$initParse['month']}-{$initParse['day']}";
         } else
             $init = "1900-01-01";
@@ -86,55 +110,79 @@
 
         if ($end!="")
         {
-        $endParse = date_parse_from_format($dateFormat, $end);
-
+            $endParse = date_parse_from_format($dateFormat, $end);
             $end = "{$endParse['year']}-{$endParse['month']}-{$endParse['day']}";
-
             $end = date_create($end);
         } else
-        $end = new DateTime();
+            $end = new DateTime();
+
+        if (isset($_GET['calculatePendingHolidays'])) {
+            $calculatePendingHolidays = filter_var($_GET['calculatePendingHolidays'], FILTER_VALIDATE_BOOLEAN);
+            // Pending holidays must be calculated from the beginning of the year,
+            // otherwise the figure is not useful for users
+            $initYearDate = new DateTime($init->format('Y').'-01-01');
+        }
 
         $string = "<reports>";
 
         if ($userLogin != "")
         {
+            $userVO = new UserVO();
+            $userVO->setLogin($userLogin);
 
-        $userVO = new UserVO();
-
-        $userVO->setLogin($userLogin);
-
-        $report = UsersFacade::ExtraHoursReport($init, $end, $userVO);
+            $report = UsersFacade::ExtraHoursReport($init, $end, $userVO);
+            if ($calculatePendingHolidays)
+                $pendingHolidaysReport = UsersFacade::GetPendingHolidayHours($initYearDate, $end, $userVO);
 
         } else
         {
-        $report = UsersFacade::ExtraHoursReport($init, $end);
+            $report = UsersFacade::ExtraHoursReport($init, $end);
+            if ($calculatePendingHolidays)
+                $pendingHolidaysReport = UsersFacade::GetPendingHolidayHours($initYearDate, $end);
 
-				$string = $string 
-					. "<global><totalHours>{$report[0]["total_hours"]}</totalHours>"
-					. "<workableHours>{$report[0]["workable_hours"]}</workableHours>"
-					. "<extraHours>{$report[0]["extra_hours"]}</extraHours>"
-					. "<totalExtraHours>{$report[0]["total_extra_hours"]}</totalExtraHours>"
-					. "<lastTaskDate format=\"Y-m-d\">{$report[0]["last_task_date"]->format('Y-m-d')}</lastTaskDate>"
-					. "</global>";
+            $string = $string
+                . "<global><totalHours>{$report[0]["total_hours"]}</totalHours>"
+                . "<workableHours>{$report[0]["workable_hours"]}</workableHours>"
+                . "<extraHours>{$report[0]["extra_hours"]}</extraHours>"
+                . "<totalExtraHours>{$report[0]["total_extra_hours"]}</totalExtraHours>"
+                . "<lastTaskDate format=\"Y-m-d\">{$report[0]["last_task_date"]->format('Y-m-d')}</lastTaskDate>"
+                . "</global>";
         }
 
         $string = $string . "<individual>";
 
         foreach((array) $report[1] as $login => $entry)
         {
-					$string = $string 
-						. "<report login='{$login}'>"
-						. "<totalHours>{$entry["total_hours"]}</totalHours>"
-						. "<workableHours>{$entry["workable_hours"]}</workableHours>"
-						. "<extraHours>{$entry["extra_hours"]}</extraHours>"
-						. "<totalExtraHours>{$entry["total_extra_hours"]}</totalExtraHours>"
-						. "<lastTaskDate format=\"Y-m-d\">{$entry["last_task_date"]->format('Y-m-d')}</lastTaskDate>"
-						. "</report>";
+            $entry["last_task_date"] = $entry["last_task_date"]->format('Y-m-d');
+            if ($calculatePendingHolidays)
+                $entry["pendingHolidayHours"] = $pendingHolidaysReport[$login];
+
+            if($csvExport) {
+                $entry["login"] = $login;
+                fputcsv($csvFile, array_replace($templateRow, $entry));
+            }
+            else {
+                $string = $string
+                    . "<report login='{$login}'>"
+                    . "<totalHours>{$entry["total_hours"]}</totalHours>"
+                    . "<workableHours>{$entry["workable_hours"]}</workableHours>"
+                    . "<extraHours>{$entry["extra_hours"]}</extraHours>"
+                    . "<totalExtraHours>{$entry["total_extra_hours"]}</totalExtraHours>"
+                    . "<lastTaskDate format=\"Y-m-d\">{$entry["last_task_date"]}</lastTaskDate>";
+                if ($calculatePendingHolidays)
+                    $string .= "<pendingHolidayHours>{$entry["pendingHolidayHours"]}</pendingHolidayHours>";
+                $string .= "</report>";
+            }
         }
 
         $string = $string . "</individual></reports>";
 
     } while (False);
+
+    if($csvExport) {
+        // break execution here, do not output XML
+        exit();
+    }
 
    // make it into a proper XML document with header etc
     $xml = simplexml_load_string($string);

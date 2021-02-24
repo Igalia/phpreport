@@ -356,6 +356,25 @@ Ext.onReady(function(){
             iconCls: 'silk-table',
         });
 
+        //Add link to server-side CSV export
+        grid3.getBottomToolbar().removeAll();
+        grid3.getBottomToolbar().add({
+            xtype: 'button',
+            text: 'Download as CSV',
+            handler: function () {
+                var init = workingResultsForm.getStartDate();
+                var end = workingResultsForm.getEndDate();
+                window.open(
+                    "services/getProjectUserWeeklyHoursReportJsonService.php" +
+                    "?pid=" + projectData.id +
+                    "&format=csv" +
+                    "&init=" + init.getFullYear() + "-" + (init.getMonth()+1)
+                        + "-" + init.getDate() +
+                    "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1)
+                        + "-" + end.getDate());
+            }
+        });
+
 
         grid3.store.on('load', function(){
 

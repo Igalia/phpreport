@@ -115,10 +115,35 @@
 
    define('PHPREPORT_ROOT', __DIR__ . '/../../');
    include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
+   include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
    include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
    include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
+    function maybeEscapeString($string, $csvExport) {
+        return $csvExport? $string : escape_string($string);
+    }
+
     $sid = $_GET['sid'];
+
+    $csvExport = ($_GET["format"] && $_GET["format"] == "csv");
+    $csvFile = null;
+    if ($csvExport)
+    {
+        // output headers so that the file is downloaded rather than displayed
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="user-tasks.csv"');
+
+        // do not cache the file
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        $csvFile = fopen('php://output', 'w');
+
+        // output header row
+        fputcsv($csvFile, array("id", "date", "initTime", "endTime", "hours",
+            "story", "telework", "onsite", "ttype", "text", "phase", "userId",
+            "projectId", "taskStoryId", "projectName"));
+    }
 
     do {
         /* We check authentication and authorization */
@@ -151,6 +176,7 @@
         $filterStory = NULL;
         $emptyText = NULL;
         $emptyStory = NULL;
+        $showProjectNames = false;
         if (isset($_GET['dateFormat'])) {
             $dateFormat = $_GET['dateFormat'];
         }
@@ -208,20 +234,15 @@
             $filterStory = $_GET['filterStory'];
         }
         if (isset($_GET['emptyText'])) {
-            if ($_GET['emptyText'] == 'true') {
-                $emptyText = true;
-            }
-            else if ($_GET['emptyText'] == 'false') {
-                $emptyText = false;
-            }
+            $emptyText = filter_var($_GET['emptyText'],
+                FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         }
         if (isset($_GET['emptyStory'])) {
-            if ($_GET['emptyStory'] == 'true') {
-                $emptyStory = true;
-            }
-            else if ($_GET['emptyStory'] == 'false') {
-                $emptyStory = false;
-            }
+            $emptyStory = filter_var($_GET['emptyStory'],
+                FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        }
+        if (isset($_GET['showProjectNames'])) {
+            $showProjectNames = filter_var($_GET['showProjectNames'], FILTER_VALIDATE_BOOLEAN);
         }
 
         $tasks = TasksFacade::GetTasksFiltered($filterStartDate, $filterEndDate,
@@ -231,32 +252,53 @@
         $string = "<tasks>";
 
         foreach((array) $tasks as $task) {
-            $string = $string . "<task><id>{$task->getId()}</id>" .
-                    "<date format='$dateFormat'>{$task->getDate()->format($dateFormat)}</date>" .
-                    "<initTime>" . str_pad(floor($task->getInit()/60), 2, "0", STR_PAD_LEFT) .
-                    ":" . str_pad($task->getInit()%60, 2, "0", STR_PAD_LEFT)  . "</initTime>" .
-                    "<endTime>" . str_pad(floor($task->getEnd()/60)%24, 2, "0", STR_PAD_LEFT) .
-                    ":" . str_pad($task->getEnd()%60, 2, "0", STR_PAD_LEFT)  . "</endTime>" .
-                    "<hours>" . str_pad(floor(($task->getEnd() - $task->getInit())/60)%24, 2, "0", STR_PAD_LEFT) .
-                    ":" . str_pad(($task->getEnd() - $task->getInit())%60, 2, "0", STR_PAD_LEFT)  . "</hours>" .
-                    "<story>" . escape_string($task->getStory()) . "</story>" .
-                    "<telework>";
 
-            if ($task->getTelework())
-                $string .=  "true";
-            else $string .= "false";
-            $string .= "</telework><onsite>";
-            if ($task->getOnsite())
-                $string .=  "true";
-            else $string .= "false";
+            $taskArray = array(
+                "id" => $task->getId(),
+                "date" => $task->getDate()->format($dateFormat),
+                "initTime" => str_pad(floor($task->getInit()/60), 2, "0", STR_PAD_LEFT) .
+                    ":" . str_pad($task->getInit()%60, 2, "0", STR_PAD_LEFT),
+                "endTime" => str_pad(floor($task->getEnd()/60)%24, 2, "0", STR_PAD_LEFT) .
+                    ":" . str_pad($task->getEnd()%60, 2, "0", STR_PAD_LEFT),
+                "hours" => str_pad(floor(($task->getEnd() - $task->getInit())/60)%24, 2, "0", STR_PAD_LEFT) .
+                    ":" . str_pad(($task->getEnd() - $task->getInit())%60, 2, "0", STR_PAD_LEFT),
+                "story" => maybeEscapeString($task->getStory(), $csvExport),
+                "telework" => $task->getTelework()? "true" : "false",
+                "onsite" => $task->getOnsite()? "true" : "false",
+                "ttype" => maybeEscapeString($task->getTtype(), $csvExport),
+                "text" => maybeEscapeString($task->getText(), $csvExport),
+                "phase" => maybeEscapeString($task->getPhase(), $csvExport),
+                "userId" => $task->getUserId(),
+                "projectId" => $task->getProjectId(),
+                "taskStoryId" => $task->getTaskStoryId()
+            );
+            if ($showProjectNames) {
+                $project = ProjectsFacade::GetProject($taskArray["projectId"]);
+                $taskArray["projectName"] = $project->getDescription();
+            }
 
-            $string .= "</onsite><ttype>" . escape_string($task->getTtype()) . "</ttype><text>" . escape_string($task->getText()) . "</text><phase>" . escape_string($task->getPhase()) . "</phase><userId>{$task->getUserId()}</userId><projectId>{$task->getProjectId()}</projectId><taskStoryId>{$task->getTaskStoryId()}</taskStoryId></task>";
-
+            if ($csvExport)
+                fputcsv($csvFile, $taskArray);
+            else {
+                $string .= "<task>";
+                foreach ($taskArray as $key => $value) {
+                    if ($key == "date")
+                        $string .= "<{$key} format='{$dateFormat}'>{$value}</{$key}>";
+                    else
+                        $string .= "<{$key}>{$value}</{$key}>";
+                }
+                $string .= "</task>";
+            }
         }
 
-        $string = $string . "</tasks>";
+        $string .= "</tasks>";
 
     } while(false);
+
+    if ($csvExport) {
+        // break execution here, do not output XML
+        exit();
+    }
 
    // make it into a proper XML document with header etc
     $xml = simplexml_load_string($string);

@@ -41,6 +41,24 @@
 
     $sid = $_GET['sid'];
 
+    $csvExport = ($_GET["format"] && $_GET["format"] == "csv");
+    $csvFile = null;
+    if($csvExport)
+    {
+        // output headers so that the file is downloaded rather than displayed
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="weekly.csv"');
+
+        // do not cache the file
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        $csvFile = fopen('php://output', 'w');
+
+        // output header row
+        fputcsv($csvFile, array("Login","Pending Holiday Hours"));
+    }
+
     do {
         /* We check authentication and authorization */
         require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
@@ -49,7 +67,7 @@
         {
             $string = "<report";
             if ($userLogin!="")
-            $string = $string . " login='" . $userLogin . "'";
+                $string = $string . " login='" . $userLogin . "'";
             if ($init!="")
                 $string = $string . " init='" . $init . "'";
             if ($end!="")
@@ -62,7 +80,7 @@
         {
             $string = "<report";
             if ($userLogin!="")
-            $string = $string . " login='" . $userLogin . "'";
+                $string = $string . " login='" . $userLogin . "'";
             if ($init!="")
                 $string = $string . " init='" . $init . "'";
             if ($end!="")
@@ -72,12 +90,11 @@
         }
 
         if ($dateFormat=="")
-        $dateFormat = "Y-m-d";
+            $dateFormat = "Y-m-d";
 
         if ($init!="")
         {
-        $initParse = date_parse_from_format($dateFormat, $init);
-
+            $initParse = date_parse_from_format($dateFormat, $init);
             $init = "{$initParse['year']}-{$initParse['month']}-{$initParse['day']}";
         } else
             $init = "1900-01-01";
@@ -86,44 +103,48 @@
 
         if ($end!="")
         {
-        $endParse = date_parse_from_format($dateFormat, $end);
-
+            $endParse = date_parse_from_format($dateFormat, $end);
             $end = "{$endParse['year']}-{$endParse['month']}-{$endParse['day']}";
-
             $end = date_create($end);
         } else
-        $end = new DateTime();
+            $end = new DateTime();
 
         if ($userId != "")
         {
+            $userVO = new UserVO();
+            $userVO->setLogin($userLogin);
 
-        $userVO = new UserVO();
-
-        $userVO->setLogin($userLogin);
-
-        $report = UsersFacade::GetPendingHolidayHours($init, $end, $userVO);
+            $report = UsersFacade::GetPendingHolidayHours($init, $end, $userVO);
 
         } else
-        $report = UsersFacade::GetPendingHolidayHours($init, $end);
+            $report = UsersFacade::GetPendingHolidayHours($init, $end);
 
 
         $string = "<report";
         if ($userLogin!="")
-        $string = $string . " login='" . $userLogin . "'";
+            $string = $string . " login='" . $userLogin . "'";
         if ($init!="")
-        $string = $string . " init='" . $init->format($dateFormat) . "'";
+            $string = $string . " init='" . $init->format($dateFormat) . "'";
         if ($end!="")
-        $string = $string . " end='" . $end->format($dateFormat) . "'";
+            $string = $string . " end='" . $end->format($dateFormat) . "'";
         $string = $string . ">";
 
         foreach((array) $report as $key => $entry)
         {
-        $string = $string . "<pendingHolidayHours login='{$key}'><hours>{$entry}</hours></pendingHolidayHours>";
+            if($csvExport)
+                fputcsv($csvFile, array($key, $entry));
+            else
+                $string = $string . "<pendingHolidayHours login='{$key}'><hours>{$entry}</hours></pendingHolidayHours>";
         }
 
         $string = $string . "</report>";
 
     } while (False);
+
+    if($csvExport) {
+        // break execution here, do not output XML
+        exit();
+    }
 
    // make it into a proper XML document with header etc
     $xml = simplexml_load_string($string);
