@@ -120,7 +120,9 @@ $permissions = array(
         '/services/updateExtraHourVOsService.php', '/services/deleteExtraHourVOsService.php',
         '/hourCompensationManagement.php',
         //system settings
-        '/settings.php')
+        '/settings.php',
+        //API test
+        '/APITest.php')
 );
 
 /** Extra permissions array
