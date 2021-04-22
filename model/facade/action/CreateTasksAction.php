@@ -74,11 +74,18 @@ class CreateTasksAction extends Action {
     protected function doExecute() {
         $configDao = DAOFactory::getConfigDAO();
         $taskDao = DAOFactory::getTaskDAO();
+        $projectDAO = DAOFactory::getProjectDAO();
         $discardedTasks = array();
 
         //first check permission on task write
         foreach ($this->tasks as $i => $task) {
-            if(!$configDao->isWriteAllowedForDate($task->getDate())) {
+            if (!$configDao->isWriteAllowedForDate($task->getDate())) {
+                $discardedTasks[] = $task;
+                unset($this->tasks[$i]);
+                continue;
+            }
+            $projectVO = $projectDAO->getById($task->getProjectId());
+            if (!$projectVO || !$projectVO->getActivation()) {
                 $discardedTasks[] = $task;
                 unset($this->tasks[$i]);
             }
