@@ -30,7 +30,6 @@
  * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
 
-include_once(PHPREPORT_ROOT . '/model/facade/action/CreateReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateTasksAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateReportAction.php');
@@ -80,11 +79,7 @@ abstract class TasksFacade {
      * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
      */
     static function CreateReport(TaskVO $task) {
-
-    $action = new CreateReportAction($task);
-
-    return $action->execute();
-
+        return TasksFacade::CreateReports(array($task));
     }
 
     /** Create Tasks Function
@@ -97,11 +92,8 @@ abstract class TasksFacade {
      * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
      */
     static function CreateReports($tasks) {
-
         $action = new CreateTasksAction($tasks);
-
         return $action->execute();
-
     }
 
     /** Delete Task Function

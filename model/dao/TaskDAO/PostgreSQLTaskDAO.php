@@ -902,6 +902,10 @@ class PostgreSQLTaskDAO extends TaskDAO{
      *
      * This function creates a new row for a Task by its {@link TaskVO}.
      * The internal id of <var>$taskVO</var> will be set after its creation.
+     * WARNING: it doesn't check if task overlaps with other tasks, because that
+     * would be very expensive to do for every task. TaskDAO::batchCreate should
+     * be used for that purpose.
+     * TODO: consider making private.
      *
      * @param TaskVO $taskVO the {@link TaskVO} with the data we want to insert on database.
      * @return int the number of rows that have been affected (it should be 1).
