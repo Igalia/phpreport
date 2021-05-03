@@ -873,6 +873,10 @@ class PostgreSQLTaskDAO extends TaskDAO{
     /** Task updater for PostgreSQL.
      *
      * This function updates the data of a Task by its {@link TaskVO}.
+     * WARNING: it doesn't check if task overlaps with other tasks, because that
+     * would be very expensive to do for every task. TaskDAO::batchCreate should
+     * be used for that purpose.
+     * TODO: consider making private or even removing.
      *
      * @param TaskVO $taskVO the {@link TaskVO} with the data we want to update on database.
      * @return int the number of rows that have been affected (it should be 1).

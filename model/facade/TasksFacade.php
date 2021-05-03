@@ -32,7 +32,6 @@
 
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateTasksAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteReportAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/PartialUpdateTasksAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserTasksAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetPersonalSummaryByLoginDateAction.php');
@@ -131,22 +130,6 @@ abstract class TasksFacade {
 
     }
 
-    /** Update Task Function
-     *
-     *  This function is used for updating a Task.
-     *
-     * @param TaskVO $task the Task value object we want to update.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
-     */
-    static function UpdateReport(TaskVO $task) {
-
-    $action = new UpdateReportAction($task);
-
-    return $action->execute();
-
-    }
-
     /** Partial Update Task Function
      *
      *  This function is used for partially updating a Task.
@@ -159,25 +142,6 @@ abstract class TasksFacade {
      */
     static function PartialUpdateReport(DirtyTaskVO $task) {
         return TasksFacade::PartialUpdateReports(array($task));
-    }
-
-    /** Update Tasks Function
-     *
-     *  This function is used for updating an array of Tasks.
-     *  If an error occurs, it stops updating.
-     *
-     * @param array $tasks the Task value objects we want to update.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
-     */
-    static function UpdateReports($tasks) {
-
-    foreach((array)$tasks as $task)
-        if ((TasksFacade::UpdateReport($task)) == -1)
-            return -1;
-
-    return 0;
-
     }
 
     /** Partial Update Tasks Function
