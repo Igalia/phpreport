@@ -33,7 +33,6 @@
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateTasksAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateReportAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/PartialUpdateReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/PartialUpdateTasksAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserTasksAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetPersonalSummaryByLoginDateAction.php');
@@ -159,11 +158,7 @@ abstract class TasksFacade {
      * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
      */
     static function PartialUpdateReport(DirtyTaskVO $task) {
-
-        $action = new PartialUpdateReportAction($task);
-
-        return $action->execute();
-
+        return TasksFacade::PartialUpdateReports(array($task));
     }
 
     /** Update Tasks Function
@@ -197,11 +192,8 @@ abstract class TasksFacade {
      * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
      */
     static function PartialUpdateReports($tasks) {
-
         $action = new PartialUpdateTasksAction($tasks);
-
         return $action->execute();
-
     }
 
     /** Get Personal Work Summary by Login and Date Function
