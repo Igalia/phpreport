@@ -95,7 +95,7 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update[activation] = true;
+                        $update["activation"] = true;
                         break;
 
                 case "init":    $dateFormat = $parser->getAttribute("format");
@@ -111,7 +111,7 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update[init] = true;
+                        $update["init"] = true;
                         break;
 
                 case "end":    $dateFormat = $parser->getAttribute("format");
@@ -127,7 +127,7 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update[end] = true;
+                        $update["end"] = true;
                         break;
 
                 case "invoice":$parser->read();
@@ -137,7 +137,7 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update[invoice] = true;
+                        $update["invoice"] = true;
                         break;
 
                 case "estHours":$parser->read();
@@ -147,7 +147,7 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update[estHours] = true;
+                        $update["estHours"] = true;
                         break;
 
                 case "description":$parser->read();
@@ -157,7 +157,7 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update[description] = true;
+                        $update["description"] = true;
                         break;
 
                 case "areaId":$parser->read();
@@ -167,7 +167,7 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update[areaId] = true;
+                        $update["areaId"] = true;
                         break;
 
                 case "customerId":$parser->read();
@@ -177,7 +177,7 @@
                         $parser->next();
                         $parser->next();
                     }
-                    $update[customerId] = true;
+                    $update["customerId"] = true;
                     break;
 
                 case "type":    $parser->read();
@@ -187,7 +187,7 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update[type] = true;
+                        $update["type"] = true;
                         break;
 
                 case "movedHours":    $parser->read();
@@ -197,7 +197,7 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update[movHours] = true;
+                        $update["movHours"] = true;
                         break;
 
                 case "schedType":    $parser->read();
@@ -207,7 +207,7 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update[schedType] = true;
+                        $update["schedType"] = true;
                         break;
 
                 default:    $parser->next();
@@ -232,8 +232,8 @@
             $string = "<return service='updateProjects'><error id='1'>There was some error while updating the projects</error></return>";
 
 
-    if (!$string)
-    $string = "<return service='updateProjects'><ok>Operation Success!</ok></return>";
+    if (!isset($string))
+        string = "<return service='updateProjects'><ok>Operation Success!</ok></return>";
 
 
     // make it into a proper XML document with header etc
