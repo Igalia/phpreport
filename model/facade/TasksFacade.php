@@ -104,11 +104,8 @@ abstract class TasksFacade {
      * @throws {@link SQLQueryErrorException}
      */
     static function DeleteReport(TaskVO $task) {
-
-    $action = new DeleteReportAction($task);
-
-    return $action->execute();
-
+        $action = new DeleteReportAction($task);
+        return $action->execute();
     }
 
     /** Delete Reports Function
@@ -121,13 +118,11 @@ abstract class TasksFacade {
      * @throws {@link SQLQueryErrorException}
      */
     static function DeleteReports($tasks) {
+        foreach((array)$tasks as $task)
+            if ((TasksFacade::DeleteReport($task)) == -1)
+                return -1;
 
-    foreach((array)$tasks as $task)
-        if ((TasksFacade::DeleteReport($task)) == -1)
-            return -1;
-
-    return 0;
-
+        return 0;
     }
 
     /** Partial Update Task Function
