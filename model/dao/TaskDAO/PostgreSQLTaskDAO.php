@@ -97,10 +97,12 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
     /** Task retriever by id for PostgreSQL.
      *
-     * This function retrieves the row from Task table with the id <var>$taskId</var> and creates a {@link TaskVO} with its data.
+     * This function retrieves the row from Task table with the id
+     * <var>$taskId</var> and creates a {@link TaskVO} with its data.
      *
      * @param int $taskId the id of the row we want to retrieve.
-     * @return TaskVO a value object {@link TaskVO} with its properties set to the values from the row.
+     * @return TaskVO a value object {@link TaskVO} with its properties set to
+     * the values from the row, or NULL if no task was found.
      * @throws {@link SQLIncorrectTypeException}
      * @throws {@link SQLQueryErrorException}
      */
@@ -970,13 +972,13 @@ class PostgreSQLTaskDAO extends TaskDAO{
         }
 
         // Otherwise delete a task.
-        if(sizeof($currTaskVO) > 0) {
+        if(!is_null($currTaskVO)) {
             $sql = "DELETE FROM task WHERE id=".$taskVO->getId();
 
             $res = pg_query($this->connect, $sql);
-        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-            $affectedRows = pg_affected_rows($res);
-    }
+            if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
+                $affectedRows = pg_affected_rows($res);
+        }
 
         return $affectedRows;
     }
