@@ -792,22 +792,23 @@ class PostgreSQLTaskDAO extends TaskDAO{
         $tasksByDate = array();
         $updatedTaskIds = array();
         foreach ($tasks as $task) {
-            $date = $task->getDate()->format('Y-m-d');
             //add normal task
             if ($task->isNew()) {
+                $date = $task->getDate()->format('Y-m-d');
                 $tasksByDate[$date][] = $task;
             }
             //update dirty task
             else if ($task->isDirty()) {
                 $originalTask = $this->getById($task->getId());
                 $originalTask->updateFrom($task);
+                $date = $originalTask->getDate()->format('Y-m-d');
                 $tasksByDate[$date][] = $originalTask;
                 $updatedTaskIds[] = $task->getId();
             }
         }
 
         //evaluate every date independently
-        $userId = $tasks[0]->getUserId();
+        $userId = $tasks[array_key_first($tasks)]->getUserId();
         foreach (array_keys($tasksByDate) as $index) {
             $date = $tasksByDate[$index][0]->getDate();
 
