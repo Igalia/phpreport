@@ -7,7 +7,7 @@ edit the file `config/config.php` as explained below.
 
 As a precondition, you will need an extra dependency in your system:
 
-* Debian: php5-ldap
+* Debian: php-ldap
 * Ubuntu/Fedora/RHEL: php-ldap
 
 First, locate the following block of lines and edit them according to your LDAP
