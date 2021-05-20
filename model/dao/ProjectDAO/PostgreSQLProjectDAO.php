@@ -586,56 +586,56 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         }
 
         // If the query returned a row then update
-        if(sizeof($currProjectVO) > 0) {
+        if (!is_null($currProjectVO)) {
 
-        $sql = "UPDATE project SET ";
+            $sql = "UPDATE project SET ";
 
-        if ($update['activation'])
-        $sql = $sql . "activation=" . DBPostgres::boolToString($projectVO->getActivation()) . ", ";
+            if ($update['activation'])
+                $sql .= "activation=" . DBPostgres::boolToString($projectVO->getActivation()) . ", ";
 
-        if ($update['init'])
-        $sql = $sql . "init=" . DBPostgres::formatDate($projectVO->getInit()) . ", ";
+            if ($update['init'])
+                $sql .= "init=" . DBPostgres::formatDate($projectVO->getInit()) . ", ";
 
-        if ($update['end'])
-        $sql = $sql . "_end=" . DBPostgres::formatDate($projectVO->getEnd()) . ", ";
+            if ($update['end'])
+                $sql .= "_end=" . DBPostgres::formatDate($projectVO->getEnd()) . ", ";
 
-        if ($update['invoice'])
-        $sql = $sql . "invoice=" . DBPostgres::checkNull($projectVO->getInvoice()) . ", ";
+            if ($update['invoice'])
+                $sql .= "invoice=" . DBPostgres::checkNull($projectVO->getInvoice()) . ", ";
 
-        if ($update['estHours'])
-        $sql = $sql . "est_hours=" . DBPostgres::checkNull($projectVO->getEstHours()) . ", ";
+            if ($update['estHours'])
+                $sql .= "est_hours=" . DBPostgres::checkNull($projectVO->getEstHours()) . ", ";
 
-        if ($update['areaId'])
-        $sql = $sql . "areaid=" . DBPostgres::checkNull($projectVO->getAreaId()) . ", ";
+            if ($update['areaId'])
+                $sql .= "areaid=" . DBPostgres::checkNull($projectVO->getAreaId()) . ", ";
 
-        if ($update['customerId'])
-        $sql = $sql . "customerid=" . DBPostgres::checkNull($projectVO->getCustomerId()) . ", ";
+            if ($update['customerId'])
+                $sql .= "customerid=" . DBPostgres::checkNull($projectVO->getCustomerId()) . ", ";
 
-        if ($update['description'])
-        $sql = $sql . "description=" . DBPostgres::checkStringNull($projectVO->getDescription()) . ", ";
+            if ($update['description'])
+                $sql .= "description=" . DBPostgres::checkStringNull($projectVO->getDescription()) . ", ";
 
-        if ($update['type'])
-        $sql = $sql . "type=" . DBPostgres::checkStringNull($projectVO->getType()) . ", ";
+            if ($update['type'])
+                $sql .= "type=" . DBPostgres::checkStringNull($projectVO->getType()) . ", ";
 
-        if ($update['movHours'])
-        $sql = $sql . "moved_hours=" . DBPostgres::checkNull($projectVO->getMovedHours()) . ", ";
+            if ($update['movHours'])
+                $sql .= "moved_hours=" . DBPostgres::checkNull($projectVO->getMovedHours()) . ", ";
 
-        if ($update['schedType'])
-        $sql = $sql . "sched_type=" . DBPostgres::checkStringNull($projectVO->getSchedType());
+            if ($update['schedType'])
+                $sql .= "sched_type=" . DBPostgres::checkStringNull($projectVO->getSchedType());
 
-        if (strlen($sql) == strlen("UPDATE project SET "))
-        return NULL;
+            if (strlen($sql) == strlen("UPDATE project SET "))
+                return NULL;
 
-        $last = strrpos($sql, ",");
+            $last = strrpos($sql, ",");
 
-        if ($last == (strlen($sql) - 2))
-        $sql = substr($sql, 0, -2);
+            if ($last == (strlen($sql) - 2))
+                $sql = substr($sql, 0, -2);
 
-        $sql = $sql . " WHERE id=".$projectVO->getId();
+            $sql .= " WHERE id=".$projectVO->getId();
 
             $res = pg_query($this->connect, $sql);
-        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-            $affectedRows = pg_affected_rows($res);
+            if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
+                $affectedRows = pg_affected_rows($res);
         }
 
         return $affectedRows;

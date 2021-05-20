@@ -131,7 +131,7 @@
             if (TasksFacade::DeleteReports($deleteTasks) == -1)
                 $string = "<return service='deleteTasks'><success>false</success><error id='1'>There was some error while deleting the tasks</error></return>";
 
-        if (!$string)
+        if (!isset($string))
             $string = "<return service='deleteTasks'><success>true</success><ok>Operation Success!</ok></return>";
 
 
