@@ -658,6 +658,10 @@ class PostgreSQLTaskDAO extends TaskDAO{
      * This function updates only some fields of the data of a Task using a
      * {@link DirtyTaskVO} to know the data and the information of which fields
      * should be updated.
+     * WARNING: it doesn't check if task overlaps with other tasks, because that
+     * would be very expensive to do for every task. TaskDAO::batchPartialUpdate
+     * should be used for that purpose.
+     * TODO: consider making private.
      *
      * @param DirtyTaskVO $taskVO the {@link TaskVO} with the data we want to
      *        update on database and the information about which fields must be
@@ -742,6 +746,20 @@ class PostgreSQLTaskDAO extends TaskDAO{
         return $affectedRows;
     }
 
+    /** Update a batch of DirtyTaskVO objects.
+     *
+     * This function is used for partially updating an array of Tasks. It will
+     * check there is no overlapping between existing tasks and updated ones.
+     * It uses {@link DirtyTaskVO} to know the data and the information of which
+     * fields should be updated.
+     *
+     * @param array $tasks the Task value objects we want to update. Must be
+     *        DirtyTaskVO objects which contain also the information about
+     *        which fields must be updated.
+     * @return int the number of rows that have been affected. It should match
+     *         the length of $tasks, otherwise there was an error.
+     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
+     */
     public function batchPartialUpdate($tasks) {
         if (!$this->checkOverlappingWithDBTasks($tasks)) {
             return 0;
@@ -855,6 +873,10 @@ class PostgreSQLTaskDAO extends TaskDAO{
     /** Task updater for PostgreSQL.
      *
      * This function updates the data of a Task by its {@link TaskVO}.
+     * WARNING: it doesn't check if task overlaps with other tasks, because that
+     * would be very expensive to do for every task. TaskDAO::batchCreate should
+     * be used for that purpose.
+     * TODO: consider making private or even removing.
      *
      * @param TaskVO $taskVO the {@link TaskVO} with the data we want to update on database.
      * @return int the number of rows that have been affected (it should be 1).
@@ -902,6 +924,10 @@ class PostgreSQLTaskDAO extends TaskDAO{
      *
      * This function creates a new row for a Task by its {@link TaskVO}.
      * The internal id of <var>$taskVO</var> will be set after its creation.
+     * WARNING: it doesn't check if task overlaps with other tasks, because that
+     * would be very expensive to do for every task. TaskDAO::batchCreate should
+     * be used for that purpose.
+     * TODO: consider making private.
      *
      * @param TaskVO $taskVO the {@link TaskVO} with the data we want to insert on database.
      * @return int the number of rows that have been affected (it should be 1).

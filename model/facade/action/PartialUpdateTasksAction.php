@@ -78,6 +78,7 @@ class PartialUpdateTasksAction extends Action{
     protected function doExecute() {
         $configDao = DAOFactory::getConfigDAO();
         $taskDao = DAOFactory::getTaskDAO();
+        $projectDAO = DAOFactory::getProjectDAO();
         $discardedTasks = array();
 
         //first check permission on task write
@@ -85,6 +86,27 @@ class PartialUpdateTasksAction extends Action{
             if(!$configDao->isWriteAllowedForDate($task->getDate()) ||
                     (!$taskDao->checkTaskUserId(
                         $task->getId(), $task->getUserId()))) {
+                $discardedTasks[] = $task;
+                unset($this->tasks[$i]);
+                continue;
+            }
+
+            // Do not allow assigning a task to an inactive project
+            if ($task->isProjectIdDirty()) {
+                $projectId = $task->getProjectId();
+                $projectVO = $projectDAO->getById($projectId);
+                if (!$projectVO || !$projectVO->getActivation()) {
+                    $discardedTasks[] = $task;
+                    unset($this->tasks[$i]);
+                    continue;
+                }
+            }
+
+            // Do not allow updating tasks which belong to inactive projects
+            $oldTask = $taskDao->getById($task->getId());
+            $projectId = $oldTask->getProjectId();
+            $projectVO = $projectDAO->getById($projectId);
+            if (!$projectVO || !$projectVO->getActivation()) {
                 $discardedTasks[] = $task;
                 unset($this->tasks[$i]);
             }

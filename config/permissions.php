@@ -41,7 +41,7 @@ $permissions = array(
         '/services/getPersonalSummaryByDateService.php',
         '/services/getUserCustomersService.php', '/services/getOpenTaskStoriesService.php',
         '/services/createTasksService.php', '/services/deleteTasksService.php',
-        '/services/updateTasksService.php', '/services/setTasksJsonService.php',
+        '/services/updateTasksService.php',
         '/services/getTasksFiltered.php', '/userTasksReport.php',
         //templates
         '/services/createTemplatesService.php', '/services/getUserTemplatesService.php',

@@ -82,6 +82,13 @@ class DeleteReportAction extends Action{
         if (!$dao->checkTaskUserId($this->task->getId(), $this->task->getUserId()))
             return -1;
 
+        // Do not allow deleting tasks which belong to inactive projects
+        $oldTask = $dao->getById($this->task->getId());
+        $projectId = $oldTask->getProjectId();
+        $projectVO = DAOFactory::getProjectDAO()->getById($projectId);
+        if (!$projectVO || !$projectVO->getActivation())
+            return -1;
+
         if ($dao->delete($this->task)!=1) {
             return -1;
         }
