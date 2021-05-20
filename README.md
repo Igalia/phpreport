@@ -37,15 +37,9 @@ documents:
 
 ## More information 
 
-* News: Take a look at the
-[project blog](http://blogs.igalia.com/jaragunde/category/web/phpreport/).
-
-* Development: Project sources, documentation and issue tracker are
-available at [GitHub](https://github.com/Igalia/phpreport).
-
-* Contact: For questions about the project, you can join the IRC channel
-[#phpreport at FreeNode](http://webchat.freenode.net/?channels=#phpreport), or
-contact directly with its [maintainer](https://github.com/jaragunde).
+Check out the PhpReport project in [GitHub](https://github.com/Igalia/phpreport)
+to learn about new releases, browse the documentation, report issues or fetch
+the latest source code.
 
 ## License
 
