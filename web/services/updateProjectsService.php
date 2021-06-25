@@ -233,7 +233,7 @@
 
 
     if (!isset($string))
-        string = "<return service='updateProjects'><ok>Operation Success!</ok></return>";
+        $string = "<return service='updateProjects'><ok>Operation Success!</ok></return>";
 
 
     // make it into a proper XML document with header etc
