@@ -83,7 +83,19 @@ class PartialUpdateTasksAction extends Action{
 
         //first check permission on task write
         foreach ($this->tasks as $i => $task) {
-            if(!$configDao->isWriteAllowedForDate($task->getDate()) ||
+            // Do not allow assigning a task to a locked date
+            if ($task->isDateDirty()) {
+                if(!$configDao->isWriteAllowedForDate($task->getDate())) {
+                    $discardedTasks[] = $task;
+                    unset($this->tasks[$i]);
+                    continue;
+                }
+            }
+
+            // Do not allow updating tasks saved in locked dates or belonging
+            // to a different user
+            $oldTask = $taskDao->getById($task->getId());
+            if(!$configDao->isWriteAllowedForDate($oldTask->getDate()) ||
                     (!$taskDao->checkTaskUserId(
                         $task->getId(), $task->getUserId()))) {
                 $discardedTasks[] = $task;
@@ -103,7 +115,6 @@ class PartialUpdateTasksAction extends Action{
             }
 
             // Do not allow updating tasks which belong to inactive projects
-            $oldTask = $taskDao->getById($task->getId());
             $projectId = $oldTask->getProjectId();
             $projectVO = $projectDAO->getById($projectId);
             if (!$projectVO || !$projectVO->getActivation()) {
