@@ -125,18 +125,31 @@ function isUnTouched(taskRecord) {
     }
 }
 
-// Navigate to Next day
+// Load the tasks page for a certain date.
+// Makes sure no GET parameters are added when we load "today" tasks.
+function navigateToDate(newDate) {
+    var url = "tasks.php";
+    var today = new Date();
+    today.setHours(0,0,0,0);
+    newDate.setHours(0,0,0,0);
+    // we compare getTime() to be able to load the same day on a different
+    // month or year.
+    if (today.getTime() !== newDate.getTime()) {
+        url += "?date=" + newDate.format('Y-m-d');
+    }
+    window.location = url;
+}
+
 function navigateToNextDay() {
     nextDate = new Date();
     nextDate.setTime(currentDate.getTime() + 86400000);
-    window.location = "tasks.php?date=" + nextDate.format('Y-m-d');
+    navigateToDate(nextDate);
 }
 
-// Navigate to Prev day
 function navigateToPrevDay() {
     previousDate = new Date();
     previousDate.setTime(currentDate.getTime() - 86400000);
-    window.location = "tasks.php?date=" + previousDate.format('Y-m-d');
+    navigateToDate(previousDate);
 }
 
 function updateTasksLength(taskPanel) {
@@ -1027,16 +1040,11 @@ Ext.onReady(function(){
                 selectedDates: [currentDate],
                 value: currentDate,
                 startDay: 1,
-                listeners: {'select': function (item, selectedDate) {
-                    var url = "tasks.php";
-                    var today = new Date();
-                    today.setHours(0,0,0,0);
-                    selectedDate.setHours(0,0,0,0);
-                    if (today.getTime() !== selectedDate.getTime()) {
-                        url += "?date=" + selectedDate.format('Y-m-d');
+                listeners: {
+                    'select': function (item, selectedDate) {
+                        navigateToDate(selectedDate);
                     }
-                    window.location = url;
-                }}
+                }
             }),
         ],
     });
