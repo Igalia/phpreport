@@ -52,7 +52,10 @@ $link = pg_connect("host=".DB_HOST.
         " user=".DB_USER.
         " dbname=".DB_NAME.
         " password=".DB_PASSWORD);
-if (!$link) error_log("ERROR: Could not connect to DB");
+if (!$link) {
+    error_log("ERROR: Could not connect to DB");
+    exit();
+}
 
 // Anonymize projects:
 // * reset name
