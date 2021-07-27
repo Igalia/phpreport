@@ -125,7 +125,8 @@ class LoginManager {
     if ($sid)
       session_id($sid);
 
-    session_start();
+    if (!isset($_SESSION))
+      session_start();
 
     if (empty($_SESSION['user']))
         return NULL;
@@ -154,7 +155,8 @@ class LoginManager {
     if ($sid!=NULL)
       session_id($sid);
 
-    session_start();
+    if (!isset($_SESSION))
+      session_start();
 
     if (isset($_SESSION['user'])) {
       $user=$_SESSION['user'];
@@ -191,7 +193,8 @@ class LoginManager {
     if ($sid!=NULL)
       session_id($sid);
 
-    session_start();
+    if (!isset($_SESSION))
+      session_start();
 
     if (isset($_SESSION['user'])) {
       $user=$_SESSION['user'];
