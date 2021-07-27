@@ -185,7 +185,7 @@ class ExtraHoursReportAction extends Action {
                 $cityHistory = $cityHistoryDao->
                         getByIntervals($init, $end, $userVO->getId());
 
-                if (is_null($hoursWorked[0]['add_hours']))
+                if (!$hoursWorked || is_null($hoursWorked[0]['add_hours']))
                     $userWork[$userVO->getLogin()]["total_hours"] = 0;
                 else
                     $userWork[$userVO->getLogin()]["total_hours"] =

@@ -88,7 +88,7 @@ class GetPersonalSummaryByLoginDateAction extends Action{
 
         $this->userVO = $userVO;
         $this->date = $date;
-        $this->currentJourney = $dao->getByIntervals( $this->date, $this->date, $this->userVO->getId())[0];
+        $this->currentJourney = $dao->getByIntervals($this->date, $this->date, $this->userVO->getId())[0] ?? NULL;
         $storedUserGoal = $userGoaldao->getUserGoalsForCurrentDate( $this->userVO->getId(), $this->date );
 
         if( $storedUserGoal ) {

@@ -95,7 +95,7 @@ Ext.onReady(function(){
                 inputType: 'hidden',
                 name: 'login_success_url',
                 allowBlank:true,
-                value: '<?php echo $_REQUEST['login_success_url'] ?>'
+                value: '<?php echo $_REQUEST['login_success_url'] ?? '' ?>'
             }
         ],
         buttons: [{
