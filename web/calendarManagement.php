@@ -40,7 +40,7 @@ echo '];';
 echo '</script>';
 
 ?>
-<script src='js/calendarManagement.min.js'></script>
+<script src='js/calendarManagement.js'></script>
 
 <div id="sidebar-panel" class="auxiliarpanel"></div>
 <div id="content" style="margin-left: 215px;"></div>
