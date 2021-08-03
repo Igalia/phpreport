@@ -191,3 +191,16 @@ ALTER TABLE config ADD COLUMN block_tasks_by_date_date DATE;
 --
 
 UPDATE config SET version='2.18';
+
+
+--
+-- Add init_time to template table to copy the task init value
+--
+ALTER TABLE template
+ADD COLUMN init_time integer;
+
+--
+-- Add end_time to template table to copy the task _end value
+--
+ALTER TABLE template
+ADD COLUMN end_time integer;
