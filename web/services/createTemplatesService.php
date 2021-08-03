@@ -30,6 +30,7 @@ $request = trim(file_get_contents('php://input'));
 /*$request = '<?xml version="1.0" encoding="UTF-8"?><templates><template><customerId></customerId><projectId>1</projectId><ttype>community</ttype><story>wofff</story><taskStoryId></taskStoryId><telework>true</telework><onsite></onsite><text>wofff</text></template><template><customerId></customerId><projectId>1</projectId><ttype></ttype><story>asdf</story><taskStoryId></taskStoryId><telework>false</telework><onsite>true</onsite><text>woaowa</text></template><template><customerId></customerId><projectId>1</projectId><ttype></ttype><story>waowao</story><taskStoryId></taskStoryId><telework>true</telework><onsite></onsite><text>asdf</text></template></templates>';
 */
 $parser->XML($request);
+$sid = NULL;
 
 do {
 
@@ -166,8 +167,8 @@ do {
         }
     } while ($parser->read());
 
+    $string = "";
     if (count($createTemplates) >= 1) {
-        $string = "";
         if (TemplatesFacade::CreateTemplates($createTemplates) == -1)
             $string = "<return service='createTemplates'><success>false</success><error id='1'>There was some error while creating the tasks</error></return>";
 
