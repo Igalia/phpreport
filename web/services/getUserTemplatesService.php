@@ -57,7 +57,10 @@ do {
             $string .= "<userId>{$templateVO->getUserId()}</userId>";
             $string .= "<projectId>{$templateVO->getProjectId()}</projectId>";
             $string .= "<taskStoryId>{$templateVO->getTaskStoryId()}</taskStoryId>";
-
+            if ($templateVO->getInitTime())
+                $string .= "<initTime>" . str_pad(floor($templateVO->getInitTime()/60), 2, "0", STR_PAD_LEFT) . ":" . str_pad($templateVO->getInitTime()%60, 2, "0", STR_PAD_LEFT)  . "</initTime>";
+            if ($templateVO->getEndTime())
+                $string .= "<endTime>" . str_pad(floor($templateVO->getEndTime()/60)%24, 2, "0", STR_PAD_LEFT) . ":" . str_pad($templateVO->getEndTime()%60, 2, "0", STR_PAD_LEFT)  . "</endTime>";
             $string .= "<telework>";
             if ( strtolower( $templateVO->isTelework() ) == 1 ) {
                 $string .= "true";

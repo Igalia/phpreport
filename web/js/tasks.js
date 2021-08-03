@@ -93,7 +93,9 @@ var templateRecord = new Ext.data.Record.create([
     {name:'telework'},
     {name:'onsite'},
     {name:'text'},
-    {name:'name'}
+    {name:'name'},
+    {name:'initTime'},
+    {name:'endTime'}
 ]);
 /* Variable to store if all tasks has loaded completely for a day */
 var loaded = false;
@@ -683,6 +685,8 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                             newTemplate.set('taskStoryId', task.get('taskStoryId'));
                             newTemplate.set('telework', task.get('telework'));
                             newTemplate.set('onsite', task.get('onsite'));
+                            newTemplate.set('initTime', task.get('initTime'));
+                            newTemplate.set('endTime', task.get('endTime'));
                             //add the record to the store, it will trigger a save operation
                             Ext.StoreMgr.get('templatesStore').add(newTemplate);
                         }
@@ -1281,6 +1285,8 @@ Ext.onReady(function(){
                     newTask.set('story', templateValues['story']);
                     newTask.set('taskStoryId', templateValues['taskStoryId']);
                     newTask.set('text', templateValues['text']);
+                    newTask.set('initTime', templateValues['initTime']);
+                    newTask.set('endTime', templateValues['endTime']);
                     // For a fresh template, the templateValue of bool fields return '1'
                     if( templateValues['telework'] == '1' || templateValues['telework'] == 'true' ) {
                         newTask.set('telework', 'true');
