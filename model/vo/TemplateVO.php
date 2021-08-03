@@ -42,7 +42,6 @@
  *  @property string $ttype type of this Task.
  *  @property int $userId database internal identifier of the associated User.
  *  @property int $projectId database internal identifier of the associated Project.
- *  @property int $customerId database internal identifier of the associated Customer.
  *  @property int $taskStoryId database internal identifier of the associated Task Story.
  */
 class TemplateVO {
@@ -190,20 +189,6 @@ class TemplateVO {
     /**
      * @return int
      */
-    public function getCustomerId() {
-        return $this->customerId;
-    }
-
-    /**
-     * @param int $customerId
-     */
-    public function setCustomerId($customerId) {
-        $this->customerId = $customerId;
-    }
-
-    /**
-     * @return int
-     */
     public function getTaskStoryId() {
         return $this->taskStoryId;
     }
@@ -230,7 +215,6 @@ class TemplateVO {
         $string .= "<ttype>{$this->ttype}</ttype>";
         $string .= "<userId>{$this->userId}</userId>";
         $string .= "<projectId>{$this->projectId}</projectId>";
-        $string .= "<customerId>{$this->customerId}</customerId>";
         $string .= "<taskStoryId>{$this->taskStoryId}</taskStoryId>";
         $string .= "</template>";
 
