@@ -99,7 +99,7 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
             throw new SQLIncorrectTypeException($templateId);
         $sql = "SELECT * FROM template WHERE id=".$templateId;
         $result = $this->execute($sql);
-        return $result[0];
+        return $result[0] ?? NULL;
     }
 
     /** Templates retriever by User id for PostgreSQL.
@@ -192,7 +192,7 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
         }
 
         // Otherwise delete a task.
-        if(sizeof($currTaskVO) > 0) {
+        if($currTaskVO) {
             $sql = "DELETE FROM template WHERE id=".$currTaskVO->getId();
 
             $res = pg_query($this->connect, $sql);
