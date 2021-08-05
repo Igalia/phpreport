@@ -30,6 +30,7 @@ $request = trim(file_get_contents('php://input'));
  /*$request = '<?xml version="1.0" encoding="ISO-8859-15"?><tasks><task><date>2009-12-01</date><id>124303</id></task></tasks>';*/
 
 $parser->XML($request);
+$sid = NULL;
 
 do {
 
@@ -98,6 +99,7 @@ do {
 
     } while ($parser->read());
 
+    $string = "";
     if (count($deleteTemplates) >= 1) {
         if (TemplatesFacade::DeleteTemplates($deleteTemplates) == -1)
             $string = "<return service='deleteTemplates'><success>false</success><error id='1'>There was some error while deleting the tasks</error></return>";

@@ -31,7 +31,7 @@
     include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
     include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
-    $sid = $_GET['sid'];
+    $sid = $_GET['sid'] ?? NULL;
 
     do {
         /* We check authentication and authorization */

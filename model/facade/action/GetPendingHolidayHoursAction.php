@@ -195,8 +195,7 @@ class GetPendingHolidayHoursAction extends Action{
             $holidayHours = ($workHours/(365*8))*ConfigurationParametersManager::getParameter('YEARLY_HOLIDAY_HOURS');
 
             // The difference is the number of pending holiday hours
-            $userPendingHolidayHours[$userVO->getLogin()]=$holidayHours-$vacations["add_hours"];
-
+            $userPendingHolidayHours[$userVO->getLogin()] = $holidayHours - ($vacations["add_hours"] ?? 0);
         }
 
     }
