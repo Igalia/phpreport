@@ -79,6 +79,8 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
         $templateVO->setUserId($row['usrid']);
         $templateVO->setProjectId($row['projectid']);
         $templateVO->setTaskStoryId($row['task_storyid']);
+        $templateVO->setInitTime($row['init_time']);
+        $templateVO->setEndTime($row['end_time']);
 
         return $templateVO;
     }
@@ -97,7 +99,7 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
             throw new SQLIncorrectTypeException($templateId);
         $sql = "SELECT * FROM template WHERE id=".$templateId;
         $result = $this->execute($sql);
-        return $result[0];
+        return $result[0] ?? NULL;
     }
 
     /** Templates retriever by User id for PostgreSQL.
@@ -130,7 +132,7 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
     public function create(TemplateVO $templateVO) {
         $affectedRows = 0;
 
-        $sql = "INSERT INTO template (name, story, telework, onsite, text, ttype, usrid, projectid, task_storyid) VALUES(" .
+        $sql = "INSERT INTO template (name, story, telework, onsite, text, ttype, usrid, projectid, init_time, end_time, task_storyid) VALUES(" .
             DBPostgres::checkStringNull($templateVO->getName()) . ", " .
             DBPostgres::checkStringNull($templateVO->getStory()) . ", " .
             DBPostgres::boolToString($templateVO->isTelework()) . ", " .
@@ -139,6 +141,8 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
             DBPostgres::checkStringNull($templateVO->getTtype()) . ", " .
             DBPostgres::checkNull($templateVO->getUserId()) . ", " .
             DBPostgres::checkNull($templateVO->getProjectId()) . ", " .
+            DBPostgres::checkNull($templateVO->getInitTime()) . ", " .
+            DBPostgres::checkNull($templateVO->getEndTime()) . ", " .
             DBPostgres::checkNull($templateVO->getTaskStoryId()) .")";
 
         $res = pg_query($this->connect, $sql);
@@ -188,7 +192,7 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
         }
 
         // Otherwise delete a task.
-        if(sizeof($currTaskVO) > 0) {
+        if($currTaskVO) {
             $sql = "DELETE FROM template WHERE id=".$currTaskVO->getId();
 
             $res = pg_query($this->connect, $sql);

@@ -59,6 +59,10 @@ class TemplateVO {
     protected $userId = NULL;
     protected $projectId = NULL;
     protected $taskStoryId = NULL;
+    protected $initTime = NULL;
+    protected $endTime = NULL;
+    protected $initTimeRaw = NULL;
+    protected $endTimeRaw = NULL;
 
     public function setId($id) {
         if (is_null($id))
@@ -200,6 +204,30 @@ class TemplateVO {
         $this->taskStoryId = $taskStoryId;
     }
 
+    public function getInitTime(): ?int {
+        return $this->initTime;
+    }
+
+    public function setInitTime(?int $initTime) {
+        $this->initTime = $initTime;
+    }
+
+    public function setInitTimeRaw(?string $initTime) {
+        $this->initTimeRaw = $initTime;
+    }
+
+    public function getEndTime(): ?int {
+        return $this->endTime;
+    }
+
+    public function setEndTime(?int $endTime) {
+        $this->endTime = $endTime;
+    }
+
+    public function setEndTimeRaw(?string $endTime) {
+        $this->endTimeRaw = $endTime;
+    }
+
     /** Covert the TemplateVO object to XML string
      *
      * @return string
@@ -216,6 +244,8 @@ class TemplateVO {
         $string .= "<userId>{$this->userId}</userId>";
         $string .= "<projectId>{$this->projectId}</projectId>";
         $string .= "<taskStoryId>{$this->taskStoryId}</taskStoryId>";
+        $string .= "<initTime>{$this->initTimeRaw}</initTime>";
+        $string .= "<endTime>{$this->endTimeRaw}</endTime>";
         $string .= "</template>";
 
         return $string;

@@ -158,6 +158,47 @@ do {
                             $parser->next();
                         }
                         break;
+
+                    case "initTime":
+                        $initTimeFormat = $parser->getAttribute("format");
+                        if (is_null($initTimeFormat))
+                            $initTimeFormat = "H:i";
+                        $parser->read();
+                        if ($parser->hasValue)
+                        {
+                            $initTimeRaw = $parser->value;
+                            $initTimeParse = date_parse_from_format($initTimeFormat, $initTimeRaw);
+                            $initTime = $initTimeParse['hour']*60 + $initTimeParse['minute'];
+                            $templatesVO->setInitTime($initTime);
+                            $templatesVO->setInitTimeRaw($initTimeRaw);
+                            $parser->next();
+                            $parser->next();
+                        }
+                        else {
+                            $templatesVO->setInitTime(NULL);
+                        }
+                        break;
+
+                    case "endTime":
+                        $endTimeFormat = $parser->getAttribute("format");
+                        if (is_null($endTimeFormat))
+                            $endTimeFormat = "H:i";
+                        $parser->read();
+                        if ($parser->hasValue)
+                        {
+                            $endTimeRaw = $parser->value;
+                            $endTimeParse = date_parse_from_format($endTimeFormat, $endTimeRaw);
+                            if (($endTimeParse['hour']==0) && ($endTimeParse['minute']==0)) $endTimeParse['hour'] = 24;
+                            $endTime = $endTimeParse['hour']*60 + $endTimeParse['minute'];
+                            $templatesVO->setEndTime($endTime);
+                            $templatesVO->setEndTimeRaw($endTimeRaw);
+                            $parser->next();
+                            $parser->next();
+                        }
+                        else {
+                            $templatesVO->setEndTime(NULL);
+                        }
+                        break;
                     default:
                         $parser->next();
                         break;
