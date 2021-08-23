@@ -1,0 +1,21 @@
+{
+    "name": "igalia/phpreport",
+    "description": "phpreport",
+    "type": "project",
+    "license": "GNU GPLv3",
+    "autoload": {
+        "psr-4": {
+            "Phpreport\\Model\\": "model/",
+            "Phpreport\\Web\\": "web/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Phpreport\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require-dev": {
+        "phpunit/phpunit": "9.5.x-dev"
+    }
+}

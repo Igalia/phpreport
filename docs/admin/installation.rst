@@ -10,7 +10,7 @@ To install PhpReport in your system, you will need the following software:
 
 * PostgreSQL database server (tested with PostgreSQL 9)
 
-* PHP 7.0 or higher
+* PHP 7.3 or higher
 
   * Support for PostgreSQL
 
@@ -28,6 +28,14 @@ Run the following command with root privileges:
 * Fedora: ``dnf install postgresql-server httpd php php-pgsql php-xml``
 
 * RHEL: ``yum install postgresql-server httpd php php-pgsql php-xml``
+
+Install composer to manage the project dependencies. Follow the official
+docs for the instructions: https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos
+
+After installing composer, run ``composer dump-autoload -o`` inside PhpReport root
+directory, so it can generate the autoload files.
+
+Run ``composer install`` to install the project dependencies.
 
 Step 1: Setting up the database
 ===============================
