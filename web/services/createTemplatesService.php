@@ -20,12 +20,13 @@
 if (!defined('PHPREPORT_ROOT')) define('PHPREPORT_ROOT', __DIR__ . '/../../');
 
 require PHPREPORT_ROOT . "vendor/autoload.php";
+require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 
 use Phpreport\Web\services\TemplateService as TemplateService;
 
 $request = trim(file_get_contents('php://input'));
-
-$service = new TemplateService();
+$loginManager = new \LoginManager();
+$service = new TemplateService($loginManager);
 
 // send an XML mime header
 header("Content-type: text/xml");

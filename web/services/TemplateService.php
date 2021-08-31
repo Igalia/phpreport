@@ -25,10 +25,17 @@ if (!defined('PHPREPORT_ROOT')) define('PHPREPORT_ROOT', __DIR__ . '/../../');
 include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 include_once(PHPREPORT_ROOT . '/model/facade/TemplatesFacade.php');
 include_once(PHPREPORT_ROOT . '/model/vo/TemplateVO.php');
-require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 
 class TemplateService
 {
+    private \LoginManager $loginManager;
+
+    public function __construct(
+        \LoginManager $loginManager
+    ) {
+        $this->loginManager = $loginManager;
+    }
+
     public function parseTemplates(\XMLReader $parser, string $userId): array
     {
         $createTemplates = [];
@@ -185,14 +192,14 @@ class TemplateService
             }
 
             /* We check authentication and authorization */
-            $user = \LoginManager::isLogged($sid);
+            $user = $this->loginManager::isLogged($sid);
 
             if (!$user) {
                 $string = "<return service='createTemplates'><success>false</success><error id='2'>You must be logged in</error></return>";
                 break;
             }
 
-            if (!\LoginManager::isAllowed($sid)) {
+            if (!$this->loginManager::isAllowed($sid)) {
                 $string = "<return service='createTemplates'><success>false</success><error id='3'>Forbidden service for this User</error></return>";
                 break;
             }
