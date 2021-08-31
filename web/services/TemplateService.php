@@ -29,6 +29,143 @@ require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 
 class TemplateService
 {
+    public function parseTemplates(\XMLReader $parser, string $userId): array
+    {
+        $createTemplates = [];
+        do {
+            if ($parser->name == "template") {
+                $templatesVO = new \TemplateVO();
+
+                $templatesVO->setTelework(false);
+                $templatesVO->setOnsite(false);
+                $templatesVO->setUserId($userId);
+
+                $parser->read();
+
+                while ($parser->name != "template") {
+
+                    switch ($parser->name) {
+                        case "story":
+                            $parser->read();
+                            if ($parser->hasValue) {
+                                $templatesVO->setStory(unescape_string($parser->value));
+                                $parser->next();
+                                $parser->next();
+                            }
+                            break;
+
+                        case "telework":
+                            $parser->read();
+                            if ($parser->hasValue) {
+                                if (strtolower($parser->value) == "true")
+                                    $templatesVO->setTelework(true);
+                                $parser->next();
+                                $parser->next();
+                            }
+                            break;
+
+                        case "onsite":
+                            $parser->read();
+                            if ($parser->hasValue) {
+                                if (strtolower($parser->value) == "true")
+                                    $templatesVO->setOnsite(true);
+                                $parser->next();
+                                $parser->next();
+                            }
+                            break;
+
+                        case "ttype":
+                            $parser->read();
+                            if ($parser->hasValue) {
+                                $templatesVO->setTtype(unescape_string($parser->value));
+                                $parser->next();
+                                $parser->next();
+                            }
+                            break;
+
+                        case "text":
+                            $parser->read();
+                            if ($parser->hasValue) {
+                                $templatesVO->setText(unescape_string($parser->value));
+                                $parser->next();
+                                $parser->next();
+                            }
+                            break;
+
+                        case "name":
+                            $parser->read();
+                            if ($parser->hasValue) {
+                                $templatesVO->setName(substr(unescape_string($parser->value), 0, 75));
+                                $parser->next();
+                                $parser->next();
+                            }
+                            break;
+
+                        case "taskStoryId":
+                            $parser->read();
+                            if ($parser->hasValue) {
+                                $templatesVO->setTaskStoryId($parser->value);
+                                $parser->next();
+                                $parser->next();
+                            }
+                            break;
+
+                        case "projectId":
+                            $parser->read();
+                            if ($parser->hasValue) {
+                                $templatesVO->setProjectId($parser->value);
+                                $parser->next();
+                                $parser->next();
+                            }
+                            break;
+
+                        case "initTime":
+                            $initTimeFormat = $parser->getAttribute("format");
+                            if (is_null($initTimeFormat))
+                                $initTimeFormat = "H:i";
+                            $parser->read();
+                            if ($parser->hasValue) {
+                                $initTimeRaw = $parser->value;
+                                $initTimeParse = date_parse_from_format($initTimeFormat, $initTimeRaw);
+                                $initTime = $initTimeParse['hour'] * 60 + $initTimeParse['minute'];
+                                $templatesVO->setInitTime($initTime);
+                                $templatesVO->setInitTimeRaw($initTimeRaw);
+                                $parser->next();
+                                $parser->next();
+                            } else {
+                                $templatesVO->setInitTime(NULL);
+                            }
+                            break;
+
+                        case "endTime":
+                            $endTimeFormat = $parser->getAttribute("format");
+                            if (is_null($endTimeFormat))
+                                $endTimeFormat = "H:i";
+                            $parser->read();
+                            if ($parser->hasValue) {
+                                $endTimeRaw = $parser->value;
+                                $endTimeParse = date_parse_from_format($endTimeFormat, $endTimeRaw);
+                                if (($endTimeParse['hour'] == 0) && ($endTimeParse['minute'] == 0)) $endTimeParse['hour'] = 24;
+                                $endTime = $endTimeParse['hour'] * 60 + $endTimeParse['minute'];
+                                $templatesVO->setEndTime($endTime);
+                                $templatesVO->setEndTimeRaw($endTimeRaw);
+                                $parser->next();
+                                $parser->next();
+                            } else {
+                                $templatesVO->setEndTime(NULL);
+                            }
+                            break;
+                        default:
+                            $parser->next();
+                            break;
+                    }
+                }
+                $createTemplates[] = $templatesVO;
+            }
+        } while ($parser->read());
+        return $createTemplates;
+    }
+
     public function createTemplate(string $request): string
     {
         $parser = new \XMLReader();
@@ -60,138 +197,7 @@ class TemplateService
                 break;
             }
 
-            $createTemplates = [];
-            do {
-                if ($parser->name == "template") {
-                    $templatesVO = new \TemplateVO();
-
-                    $templatesVO->setTelework(false);
-                    $templatesVO->setOnsite(false);
-                    $templatesVO->setUserId($user->getId());
-
-                    $parser->read();
-
-                    while ($parser->name != "template") {
-
-                        switch ($parser->name) {
-                            case "story":
-                                $parser->read();
-                                if ($parser->hasValue) {
-                                    $templatesVO->setStory(unescape_string($parser->value));
-                                    $parser->next();
-                                    $parser->next();
-                                }
-                                break;
-
-                            case "telework":
-                                $parser->read();
-                                if ($parser->hasValue) {
-                                    if (strtolower($parser->value) == "true")
-                                        $templatesVO->setTelework(true);
-                                    $parser->next();
-                                    $parser->next();
-                                }
-                                break;
-
-                            case "onsite":
-                                $parser->read();
-                                if ($parser->hasValue) {
-                                    if (strtolower($parser->value) == "true")
-                                        $templatesVO->setOnsite(true);
-                                    $parser->next();
-                                    $parser->next();
-                                }
-                                break;
-
-                            case "ttype":
-                                $parser->read();
-                                if ($parser->hasValue) {
-                                    $templatesVO->setTtype(unescape_string($parser->value));
-                                    $parser->next();
-                                    $parser->next();
-                                }
-                                break;
-
-                            case "text":
-                                $parser->read();
-                                if ($parser->hasValue) {
-                                    $templatesVO->setText(unescape_string($parser->value));
-                                    $parser->next();
-                                    $parser->next();
-                                }
-                                break;
-
-                            case "name":
-                                $parser->read();
-                                if ($parser->hasValue) {
-                                    $templatesVO->setName(substr(unescape_string($parser->value), 0, 75));
-                                    $parser->next();
-                                    $parser->next();
-                                }
-                                break;
-
-                            case "taskStoryId":
-                                $parser->read();
-                                if ($parser->hasValue) {
-                                    $templatesVO->setTaskStoryId($parser->value);
-                                    $parser->next();
-                                    $parser->next();
-                                }
-                                break;
-
-                            case "projectId":
-                                $parser->read();
-                                if ($parser->hasValue) {
-                                    $templatesVO->setProjectId($parser->value);
-                                    $parser->next();
-                                    $parser->next();
-                                }
-                                break;
-
-                            case "initTime":
-                                $initTimeFormat = $parser->getAttribute("format");
-                                if (is_null($initTimeFormat))
-                                    $initTimeFormat = "H:i";
-                                $parser->read();
-                                if ($parser->hasValue) {
-                                    $initTimeRaw = $parser->value;
-                                    $initTimeParse = date_parse_from_format($initTimeFormat, $initTimeRaw);
-                                    $initTime = $initTimeParse['hour'] * 60 + $initTimeParse['minute'];
-                                    $templatesVO->setInitTime($initTime);
-                                    $templatesVO->setInitTimeRaw($initTimeRaw);
-                                    $parser->next();
-                                    $parser->next();
-                                } else {
-                                    $templatesVO->setInitTime(NULL);
-                                }
-                                break;
-
-                            case "endTime":
-                                $endTimeFormat = $parser->getAttribute("format");
-                                if (is_null($endTimeFormat))
-                                    $endTimeFormat = "H:i";
-                                $parser->read();
-                                if ($parser->hasValue) {
-                                    $endTimeRaw = $parser->value;
-                                    $endTimeParse = date_parse_from_format($endTimeFormat, $endTimeRaw);
-                                    if (($endTimeParse['hour'] == 0) && ($endTimeParse['minute'] == 0)) $endTimeParse['hour'] = 24;
-                                    $endTime = $endTimeParse['hour'] * 60 + $endTimeParse['minute'];
-                                    $templatesVO->setEndTime($endTime);
-                                    $templatesVO->setEndTimeRaw($endTimeRaw);
-                                    $parser->next();
-                                    $parser->next();
-                                } else {
-                                    $templatesVO->setEndTime(NULL);
-                                }
-                                break;
-                            default:
-                                $parser->next();
-                                break;
-                        }
-                    }
-                    $createTemplates[] = $templatesVO;
-                }
-            } while ($parser->read());
+            $createTemplates = $this->parseTemplates($parser, $user->getId());
 
             $string = "";
             if (count($createTemplates) >= 1) {
