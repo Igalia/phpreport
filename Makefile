@@ -45,7 +45,8 @@ minify:
 	  FILE=`basename -s .js $$i`; \
 	  DIR=`dirname $$i`; \
 	  cd $$DIR; \
-	  uglifyjs $${FILE}.js -o $${FILE}.min.js --source-map $${FILE}.min.js.map -c -m; \
+	  uglifyjs $${FILE}.js --output $${FILE}.min.js \
+	      --source-map "filename=$${FILE}.min.js.map" -c -m; \
 	  cd -; \
 	  done
 	for i in `find web -name *.php`; do \
