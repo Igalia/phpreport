@@ -23,11 +23,8 @@ Step 2: Setting up the files
 ============================
 
 Clone the PhpReport repository ``https://github.com/Igalia/phpreport`` in a
-location available to the web server. Usual default locations for web servers
-are:
-
-* On Debian, Ubuntu: ``/var/www/``
-* On Fedora, RHEL: ``/var/www/html/``
+location available to the web server. The usual default location for the 
+Apache web server is: ``/var/www/html/``
 
 Alternatively, clone it elsewhere and create a link from the web server
 directory.
