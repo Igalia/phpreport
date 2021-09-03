@@ -13,6 +13,12 @@ Step 0: Dependencies
 Follow the corresponding section from the
 `installation instructions <../admin/installation.rst>`__.
 
+Additionally, a development environment may need the following dependencies to
+generate minified versions of the JS code and the documentation pages:
+
+* Fedora: packages ``uglify-js`` and ``python3-docutils``.
+* Debian/Ubuntu: packages ``uglifyjs`` and ``python3-docutils``.
+
 Step 1: Setting up the database
 ===============================
 
