@@ -258,6 +258,8 @@ abstract class ProjectDAO extends BaseDAO{
      */
     public abstract function getAllCustom($active = False, $orderField = 'id');
 
+    public abstract function getByDescription(string $description): ?int;
+
     /** Project partial updater.
      *
      * This function updates only some fields of the data of a Project by its {@link ProjectVO}, reading

@@ -264,6 +264,14 @@ abstract class ProjectsFacade {
 
     }
 
+    static function GetProjectByDescription(string $description) {
+
+        $action = new GetProjectByDescriptionAction($description);
+
+        return $action->execute();
+
+    }
+
     /** Update Project Function
      *
      *  This function is used for updating a Project.
