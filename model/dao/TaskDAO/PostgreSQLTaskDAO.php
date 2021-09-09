@@ -655,6 +655,35 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
     }
 
+    public function getVacationsDates(UserVO $userVO, int $projectId = NULL, DateTime $initDate = NULL, DateTime $endDate = NULL): array
+    {
+        if (is_null($projectId)) {
+            return [];
+        }
+
+        $sql = "SELECT _date FROM task WHERE projectid=" . $projectId . " AND usrid=" . $userVO->getId();
+
+        if (!is_null($initDate)) {
+            $sql .= " AND _date >=" . DBPostgres::formatDate($initDate);
+            if (!is_null($endDate))
+                $sql .= " AND _date <=" . DBPostgres::formatDate($endDate);
+        }
+
+        $sql .= " ORDER BY _date";
+
+        $res = pg_query($this->connect, $sql);
+        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
+
+        $result = array();
+        for ($i = 0; $i < pg_num_rows($res); $i++) {
+            $result[] = @pg_fetch_array($res)['_date'];
+        }
+
+        if (empty($result))
+            return [];
+        return $result;
+    }
+
     /** Task partial updater for PostgreSQL.
      *
      * This function updates only some fields of the data of a Task using a
