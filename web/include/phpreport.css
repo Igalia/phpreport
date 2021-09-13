@@ -56,3 +56,13 @@ body {
 div#tasks textarea {
     resize: vertical;
 }
+
+.new-badge {
+    position: relative;
+    top: -5px;
+    font-size: 0.8em;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 2px 5px;
+    margin-left: 5px;
+}
