@@ -43,6 +43,8 @@ $permissions = array(
         '/services/createTasksService.php', '/services/deleteTasksService.php',
         '/services/updateTasksService.php',
         '/services/getTasksFiltered.php', '/userTasksReport.php',
+        //holidays management
+        '/services/getHolidays.php',
         //templates
         '/services/createTemplatesService.php', '/services/getUserTemplatesService.php',
         '/services/deleteTemplatesService.php',
@@ -59,7 +61,7 @@ $permissions = array(
         '/services/createTaskSectionsService.php', '/services/deleteTaskSectionsService.php',
         //reports
         '/projectDetailsReport.php', '/viewUserDetails.php', '/projectDetails.php', '/viewWorkingHoursResultsReport.php',
-        '/services/getExtraHoursReportService.php','/services/getPendingHolidayHoursService.php',
+        '/services/getExtraHoursReportService.php', '/services/getPendingHolidayHoursService.php',
         '/services/getProjectTtypeReportService.php', '/services/getProjectUserCustomerReportJsonService.php',
         '/services/getProjectUserCustomerReportService.php', '/services/getProjectUserStoryReportService.php',
         '/services/getUserProjectCustomerReportJsonService.php', '/services/getUsersProjectsReportService.php',
@@ -70,8 +72,8 @@ $permissions = array(
         '/services/getAllCitiesService.php', '/services/getProjectService.php', '/services/getProjectsService.php',
         '/services/getAllSectorsService.php', '/services/getAllAreasService.php',
         '/services/getAllExtraHourVOsService.php', '/services/getAllCitiesService.php',
-	    '/services/getUserGoalsService.php', '/services/createUserGoalsService.php', '/services/updateUserGoalsService.php',
-	    '/services/deleteUserGoalsService.php',
+        '/services/getUserGoalsService.php', '/services/createUserGoalsService.php', '/services/updateUserGoalsService.php',
+        '/services/deleteUserGoalsService.php',
         //user management screen (read only)
         '/viewUsers.php',
         '/services/getUserHourCostHistoriesService.php', '/services/getUserAreaHistoriesService.php',
@@ -122,7 +124,8 @@ $permissions = array(
         //system settings
         '/settings.php',
         //API test
-        '/APITest.php')
+        '/APITest.php'
+    )
 );
 
 /** Extra permissions array
