@@ -309,3 +309,20 @@ define('EXTERNAL_AUTHENTICATION_USER_HEADER', '');
  * Additional PostgreSQL connection parameters to be passed to pg_connect.
  */
 define('EXTRA_DB_CONNECTION_PARAMETERS', '');
+
+/* New from PhpReport 2.21 */
+
+/**
+ * Add links to external sites, like issue trackers, from the application menu.
+ * URLs in this list will be added as links to the PhpReport menu bar, at the
+ * top-right. They will appear from right to left. The corresponding entries in
+ * ISSUE_TRACKER_LINKS_TEXT will be used as text for the links.
+ */
+define('ISSUE_TRACKER_LINKS_URL',
+    serialize(array('https://github.com/Igalia/phpreport/issues')));
+
+/**
+ * Add links to external sites from the application menu.
+ * To be used in combination with ISSUE_TRACKER_LINKS_URL, see its entry above.
+ */
+define('ISSUE_TRACKER_LINKS_TEXT', serialize(array('Report an issue')));
