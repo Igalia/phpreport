@@ -204,3 +204,9 @@ ADD COLUMN init_time integer;
 --
 ALTER TABLE template
 ADD COLUMN end_time integer;
+
+--
+-- Set database version to 2.21
+--
+
+UPDATE config SET version='2.21';
