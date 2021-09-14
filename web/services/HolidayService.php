@@ -37,6 +37,35 @@ class HolidayService
         $this->loginManager = $loginManager;
     }
 
+    /** Group dates into date ranges
+     *
+     * It receives an array of dates in the ISO format YYYY-MM-DD
+     * and group them into date ranges if they are close by 1 day.
+     * 
+     * Single dates are converted into a range with the same start
+     * and end.
+     * 
+     * Examples:
+     * 
+     * 1. the array ['2021-01-01', '2021-01-02'] should return a
+     * single range of dates that starts in 2021-01-01 and ends in
+     * 2021-01-02: 
+     * [
+     *    [
+     *        'start' => '2021-01-01',
+     *        'end' => '2021-01-02'
+     *    ]
+     * ]
+     * 
+     * 2. ['2021-01-01'] will be converted in a range with the same
+     * start and end date:
+     * [
+     *    [
+     *        'start' => '2021-01-01',
+     *        'end' => '2021-01-01'
+     *    ]
+     * ]
+     */
     public function datesToRanges(array $vacations): array
     {
         if (count($vacations) == 0) {
