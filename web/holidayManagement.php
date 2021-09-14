@@ -41,14 +41,14 @@ include_once("include/header.php");
             <h2 class="sidebarTitle"><?php echo date("Y"); ?> Holidays</h2>
             <p>Total booked: {{ totalHolidays }}</p>
             <ul>
-                <li v-for="date in dates" :key="date.start">
-                    {{ date.start }}<span v-if="date.start !== date.end"> to {{ date.end }}</span>
+                <li v-for="date in dates" :key="date">
+                    {{ date }}
                 </li>
             </ul>
         </div>
     </div>
     <div class="calendar">
-        <v-calendar
+        <v-date-picker
             :from-page="{ month: 1, year: 2021 }"
             is-range
             v-model="range"
@@ -58,6 +58,7 @@ include_once("include/header.php");
             :columns="$screens({ default: 2, lg: 4 })"
             show-iso-weeknumbers
             :select-attribute="selectAttribute"
+            @dayclick="onDayClick"
         />
     </div>
 </div>
