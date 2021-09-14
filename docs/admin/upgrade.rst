@@ -8,6 +8,30 @@ Upgrade instructions
   Please backup your database before running an upgrade, in case things go
   wrong during the process.
 
+From version 2.20 to 2.21
+=========================
+
+Unpack the files of PhpReport 2.21 at the same location as the original files,
+overwriting the existing contents. After that, run the upgrade script located at
+the directory ``update/``::
+
+  cd update
+  php -f update-from-2.20-to-2.21.php
+
+Alternatively, you can open the following URL in your browser to run the
+script::
+
+  http://your-web-server/phpreport/update/update-from-2.20-to-2.21.php
+
+This upgrade also adds several new values to ``config/config.php``. Open the
+file ``config/config.template`` and look for the message "New from PhpReport
+2.21". Copy the configuration parameters below that point to your own
+``config.php`` and customize them if necessary.
+
+Once the process is complete, remove the directories ``update/`` and
+``install/`` inside your PhpReport, to prevent other users from altering your
+DB.
+
 From version 2.19 to 2.20
 =========================
 
@@ -154,7 +178,8 @@ are migrating from 2.1 to 2.17::
   php -f update-from-2.16-to-2.17.php
 
 Please, also read carefully the documentation about every individual step in the
-sections above.
+sections above. You may also have to update your  ``config/config.php`` file as
+explained there.
 
 Remember to remove the directories ``update/`` and ``install/`` inside your
 PhpReport when the migration is done.
