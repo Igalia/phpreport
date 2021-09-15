@@ -53,7 +53,7 @@ var app = new Vue({
     created() {
         const fetchData = async () => {
             const currentYear = new Date().getFullYear();
-            const url = `services/getHolidays.php?initi=${currentYear}-01-31&end=${currentYear}-12-31`;
+            const url = `services/getHolidays.php?init=${currentYear}-01-01&end=${currentYear}-12-31`;
             const res = await fetch(url, {
                 method: 'GET',
                 mode: 'same-origin',
