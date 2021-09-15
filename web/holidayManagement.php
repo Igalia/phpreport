@@ -45,6 +45,7 @@ include_once("include/header.php");
                     {{ date }}
                 </li>
             </ul>
+            <p class="warning info"><strong>TIP:</strong> Double click on single dates if you want to delete existing holidays</p>
         </div>
     </div>
     <div class="calendar">

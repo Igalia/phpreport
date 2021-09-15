@@ -66,3 +66,16 @@ div#tasks textarea {
     padding: 2px 5px;
     margin-left: 5px;
 }
+
+.warning {
+    font-size: 0.8em;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.warning.info {
+    background-color: #edf5ff;
+    border-color: #7da6db;
+}
