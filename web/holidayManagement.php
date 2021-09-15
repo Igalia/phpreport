@@ -46,6 +46,7 @@ include_once("include/header.php");
                 </li>
             </ul>
             <p class="warning info"><strong>TIP:</strong> Double click on single dates if you want to delete existing holidays</p>
+            <button v-on:click="onSaveClick">Save Holidays</button>
         </div>
     </div>
     <div class="calendar">

@@ -132,4 +132,17 @@ class HolidayService
 
         return ['dates' => $vacations, 'ranges' => $this->datesToRanges($vacations)];
     }
+
+    public function updateUserVacations(array $vacations, string $init = NULL, string $end = NULL): array
+    {
+        if (!$this->loginManager::isLogged()) {
+            return ['error' => 'User not logged in'];
+        }
+
+        if (!$this->loginManager::isAllowed()) {
+            return ['error' => 'Forbidden service for this User'];
+        }
+
+        return [];
+    }
 }

@@ -185,6 +185,23 @@ var app = new Vue({
 
             // Next click will be the opposite of the current state
             this.isEndOfRange = !this.isEndOfRange;
+        },
+        onSaveClick: async function () {
+            const currentYear = new Date().getFullYear();
+            const url = ` services/updateHolidays.php?init=${currentYear}-01-01&end=${currentYear}-12-31`;
+
+            const res = await fetch(url, {
+                method: 'POST',
+                mode: 'same-origin',
+                cache: 'no-cache',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                referrerPolicy: 'no-referrer',
+                body: JSON.stringify(this.days)
+            });
+            const datesAndRanges = await res.json();
         }
     },
 })
