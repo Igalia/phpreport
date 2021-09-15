@@ -65,3 +65,14 @@ password ``admin`` to try a user with full privileges, or ``user`` with
 password ``user`` to try a login with restricted permissions. You will also be
 able to create users with any permission level once you are logged in as
 ``admin``.
+
+Step 6: Running automated tests
+===========================
+
+Make sure you have composer and the projects dependencies installed.
+To install the dependencies run ``composer install`` in the project
+root directory.
+
+All the automated tests should be placed inside the `tests`
+From the project root, run `./vendor/bin/phpunit --testdox tests`
+to execute the automated tests.

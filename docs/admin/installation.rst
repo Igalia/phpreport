@@ -29,6 +29,14 @@ Run the following command with root privileges:
 
 * RHEL: ``yum install postgresql-server httpd php php-pgsql php-xml``
 
+Install composer to manage the project dependencies. Follow the official
+docs for the instructions: https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos
+
+After installing composer, run ``composer dump-autoload -o`` inside PhpReport root
+directory, so it can generate the autoload files.
+
+Run ``composer install`` to install the project dependencies.
+
 Step 1: Setting up the database
 ===============================
 
