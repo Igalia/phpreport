@@ -1,6 +1,40 @@
 NEWS
 ====
 
+Version 2.21 (15 Sep 2021)
+-------------------------------
+
+The "Year of 💉" release.
+
+List of changes
+~~~~~~~~~~~~~~~
+
+* Tasks
+  * #346: Save init and end times in the task template [Ana Rute Mendes]
+  * #411: Prevent redundant GET params when using prev/next date hotkeys. [Jacobo Aragunde Pérez]
+  * #487: Do not require the date field in the update task service. [Jacobo Aragunde Pérez]
+  * #489: Prevent the update of tasks belonging to inactive projects via API. [Jacobo Aragunde Pérez]
+  * #491: Prevent the update of tasks in locked dates via API. [Jacobo Aragunde Pérez]
+  * #495: Fix error 500 when creating task with invalid project ID. [Jacobo Aragunde Pérez]
+
+* Reports
+  * #475: Implement server-side CSV export for reports: weekly project hours, accumulated hours and user tasks. [Jacobo Aragunde Pérez]
+
+* Other
+  * #431: Fix more PHP warnings. [Ana Rute Mendes] [Jacobo Aragunde Pérez]
+  * #480: Check session status on tab visibility change. [Jacobo Aragunde Pérez]
+  * #482: Add configuration to link an issue tracker from the menu. [Jacobo Aragunde Pérez]
+  * Change `make minify` to use the UglifyJS 3 sytax. [Jacobo Aragunde Pérez]
+  * Update documentation for developers and administrators. [Jacobo Aragunde Pérez]
+  * Code clean-up. [Ana Rute Mendes] [Jacobo Aragunde Pérez]
+  * Rename INSTALL file to avoid git conflict. [Ana Rute Mendes]
+  * Link non-minified calendarManagement.js. [Jacobo Aragunde Pérez]
+  * Exit on connect error in anonymize script. [Jacobo Aragunde Pérez]
+  * Fix syntax error when updating project details. [Jordi Mallach]
+  * Add API test page (not included in releases). [Jacobo Aragunde Pérez]
+  * Add service getSessionUser.php. [Jacobo Aragunde Pérez]
+
+
 Version 2.20 (11 Dec 2020)
 -------------------------------
 
