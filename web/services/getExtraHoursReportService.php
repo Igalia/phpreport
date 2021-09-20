@@ -31,19 +31,19 @@
     include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
     include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
-    $userLogin = $_GET['uid'];
+    $userLogin = $_GET['uid'] ?? "";
 
-    $init = $_GET['init'];
+    $init = $_GET['init'] ?? "";
 
-    $end = $_GET['end'];
+    $end = $_GET['end'] ?? "";
 
-    $dateFormat = $_GET['dateFormat'];
+    $dateFormat = $_GET['dateFormat'] ?? "Y-m-d";
 
-    $sid = $_GET['sid'];
+    $sid = $_GET['sid'] ?? NULL;
 
     $calculatePendingHolidays = false;
 
-    $csvExport = ($_GET["format"] && $_GET["format"] == "csv");
+    $csvExport = (isset($_GET["format"]) && $_GET["format"] == "csv");
     $csvFile = null;
     if($csvExport)
     {
