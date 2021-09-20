@@ -96,9 +96,6 @@
             break;
         }
 
-        if ($dateFormat=="")
-            $dateFormat = "Y-m-d";
-
         if ($init!="")
         {
             $initParse = date_parse_from_format($dateFormat, $init);
