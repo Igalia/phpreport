@@ -379,7 +379,7 @@ class ExtraHoursReportAction extends Action {
                 if ($previousInit != $auxDate)
                     $auxOtherExtraHours = $this->netExtraHours($previousInit, $auxDate, $user);
                 else
-                    $auxOtherExtraHours = 0;
+                    $auxOtherExtraHours = [$user->getLogin() => ["extra_hours" => 0]];
 
             $otherExtraHours[$user->getLogin()] = $auxOtherExtraHours[$user->getLogin()];
 
