@@ -31,17 +31,17 @@
     include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
     include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
-    $userLogin = $_GET['uid'];
+    $userLogin = $_GET['uid'] ?? "";
 
-    $init = $_GET['init'];
+    $init = $_GET['init'] ?? "";
 
-    $end = $_GET['end'];
+    $end = $_GET['end'] ?? "";
 
-    $dateFormat = $_GET['dateFormat'];
+    $dateFormat = $_GET['dateFormat'] ?? "Y-m-d";
 
-    $sid = $_GET['sid'];
+    $sid = $_GET['sid'] ?? NULL;
 
-    $csvExport = ($_GET["format"] && $_GET["format"] == "csv");
+    $csvExport = (isset($_GET["format"]) && $_GET["format"] == "csv");
     $csvFile = null;
     if($csvExport)
     {
@@ -89,9 +89,6 @@
             break;
         }
 
-        if ($dateFormat=="")
-            $dateFormat = "Y-m-d";
-
         if ($init!="")
         {
             $initParse = date_parse_from_format($dateFormat, $init);
@@ -109,7 +106,7 @@
         } else
             $end = new DateTime();
 
-        if ($userId != "")
+        if ($userLogin != "")
         {
             $userVO = new UserVO();
             $userVO->setLogin($userLogin);
