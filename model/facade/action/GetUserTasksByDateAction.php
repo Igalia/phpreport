@@ -68,10 +68,9 @@ class GetUserTasksByDateAction extends Action{
      */
     public function __construct(UserVO $userVO, DateTime $date) {
         $this->userVO = $userVO;
-    $this->date = $date;
+        $this->date = $date;
         $this->preActionParameter="CREATE_USER_PREACTION";
         $this->postActionParameter="CREATE_USER_POSTACTION";
-
     }
 
     /** Specific code execute.
@@ -81,10 +80,8 @@ class GetUserTasksByDateAction extends Action{
      * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
      */
     protected function doExecute() {
-
-    $dao = DAOFactory::getTaskDAO();
+        $dao = DAOFactory::getTaskDAO();
         return $dao->getByUserIdDate($this->userVO->getId(), $this->date);
-
     }
 
 }
