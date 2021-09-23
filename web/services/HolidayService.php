@@ -23,6 +23,7 @@ namespace Phpreport\Web\services;
 if (!defined('PHPREPORT_ROOT')) define('PHPREPORT_ROOT', __DIR__ . '/../../');
 
 include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
+include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
 include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
@@ -119,7 +120,23 @@ class HolidayService
         return ['dates' => $vacations, 'ranges' => $this->datesToRanges($vacations)];
     }
 
-    public function updateUserVacations(array $vacations, string $init = NULL, string $end = NULL): array
+    public function deleteVacations(array $daysToDelete, \UserVO $userVO, int $holidayProjectId): array
+    {
+        $failed = [];
+        foreach ($daysToDelete as &$day) {
+            $tasks = \TasksFacade::GetUserTasksByLoginDate($userVO, new \DateTime($day));
+            $holidayTasks = array_filter($tasks, fn ($task) => $task->getProjectId() == $holidayProjectId);
+            if (\TasksFacade::DeleteReports($holidayTasks) == -1)
+                $failed[] = $day;
+        }
+        unset($day);
+        return [
+            'deleted' => array_diff($daysToDelete, $failed),
+            'failed' => $failed
+        ];
+    }
+
+    public function updateUserVacations(array $vacations, string $init, string $end): array
     {
         if (!$this->loginManager::isLogged()) {
             return ['error' => 'User not logged in'];
