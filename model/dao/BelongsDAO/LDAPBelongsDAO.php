@@ -75,11 +75,13 @@ class LDAPBelongsDAO extends BelongsDAO{
      */
     protected function setAValues($row)
     {
+
         $userVO = new UserVO();
 
+        $userVO->setId($row['id']);
         $userVO->setLogin($row['login']);
+        $userVO->setPassword($row['password']);
         $userVO->setGroups((array) $this->getByUserLogin($userVO->getLogin()));
-        // User data retrieved from LDAP does not contain ID or password
 
         return $userVO;
     }
@@ -194,7 +196,9 @@ class LDAPBelongsDAO extends BelongsDAO{
 
         for ($i=0;$i<$info[0]["uniquemember"]["count"];$i++) {
             strtok($info[0]["uniquemember"][$i],"=,");
-            $user["login"]=strtok("=,");
+            $user["login"] = strtok("=,");
+            $user["id"] = null;
+            $user["password"] = null;
             $usersLDAP[]=$this->setAValues($user);
         }
 
