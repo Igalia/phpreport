@@ -38,6 +38,11 @@ class HolidayService
         $this->loginManager = $loginManager;
     }
 
+    function isWeekend(string $date): bool
+    {
+        return (date('N', strtotime($date)) >= 6);
+    }
+
     /** Group dates into date ranges
      *
      * It receives an array of dates in the ISO format YYYY-MM-DD

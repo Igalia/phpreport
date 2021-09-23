@@ -100,4 +100,31 @@ class HolidayServiceTest extends TestCase
             $this->instance->datesToRanges($dates)
         );
     }
+
+    public function testReturnTrueIfDateIsSaturday(): void
+    {
+        $date = '2021-09-25';
+        $this->assertEquals(
+            true,
+            $this->instance->isWeekend($date)
+        );
+    }
+
+    public function testReturnTrueIfDateIsSunday(): void
+    {
+        $date = '2021-09-26';
+        $this->assertEquals(
+            true,
+            $this->instance->isWeekend($date)
+        );
+    }
+
+    public function testReturnFalseIfDateIsNotOnWeekend(): void
+    {
+        $date = '2021-09-24';
+        $this->assertEquals(
+            false,
+            $this->instance->isWeekend($date)
+        );
+    }
 }
