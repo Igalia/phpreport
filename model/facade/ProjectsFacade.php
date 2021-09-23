@@ -34,6 +34,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllProjectsAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserProjectsAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectUsersAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectByDescriptionAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetCustomProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/AssignUserToProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeassignUserFromProjectAction.php');
