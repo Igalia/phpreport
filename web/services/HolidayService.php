@@ -108,22 +108,8 @@ class HolidayService
             return ['error' => 'Forbidden service for this User'];
         }
 
-        $dateFormat = "Y-m-d";
-
-        if ($init != "") {
-            $initParse = date_parse_from_format($dateFormat, $init);
-            $init = "{$initParse['year']}-{$initParse['month']}-{$initParse['day']}";
-        } else
-            $init = "1900-01-01";
-
-        $init = date_create($init);
-
-        if ($end != "") {
-            $endParse = date_parse_from_format($dateFormat, $end);
-            $end = "{$endParse['year']}-{$endParse['month']}-{$endParse['day']}";
-            $end = date_create($end);
-        } else
-            $end = date_create(date('Y') . "-12-31");
+        $init = date_create($init ?? "1900-01-01");
+        $end = date_create($end ?? date('Y') . "-12-31");
 
         $userVO = new \UserVO();
         $userVO->setLogin($_SESSION['user']->getLogin());
