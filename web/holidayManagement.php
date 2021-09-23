@@ -61,6 +61,8 @@ include_once("include/header.php");
             show-iso-weeknumbers
             :select-attribute="selectAttribute"
             @dayclick="onDayClick"
+            :min-date="initDate"
+            :max-date="endDate"
         />
     </div>
 </div>

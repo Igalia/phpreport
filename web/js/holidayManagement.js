@@ -58,6 +58,8 @@ var app = new Vue({
             total: null,
             latestDelete: null,
             isEndOfRange: false,
+            init: new Date(new Date().getFullYear(), 0, 1),
+            end: new Date(new Date().getFullYear(), 11, 31),
 
             // Clean selected range styles to avoid confusion when
             // removing dates
@@ -84,8 +86,7 @@ var app = new Vue({
     },
     created() {
         const fetchData = async () => {
-            const currentYear = new Date().getFullYear();
-            const url = `services/getHolidays.php?init=${currentYear}-01-01&end=${currentYear}-12-31`;
+            const url = `services/getHolidays.php?init=${formatDate(this.init)}&end=${formatDate(this.end)}`;
             const res = await fetch(url, {
                 method: 'GET',
                 mode: 'same-origin',
@@ -124,6 +125,12 @@ var app = new Vue({
         },
         totalHolidays() {
             return this.total;
+        },
+        initDate() {
+            return this.init;
+        },
+        endDate() {
+            return this.end;
         }
     },
     methods: {
@@ -187,8 +194,7 @@ var app = new Vue({
             this.isEndOfRange = !this.isEndOfRange;
         },
         onSaveClick: async function () {
-            const currentYear = new Date().getFullYear();
-            const url = ` services/updateHolidays.php?init=${currentYear}-01-01&end=${currentYear}-12-31`;
+            const url = `services/updateHolidays.php?init=${formatDate(this.init)}&end=${formatDate(this.end)}`;
 
             const res = await fetch(url, {
                 method: 'POST',
