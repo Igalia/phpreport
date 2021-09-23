@@ -51,8 +51,8 @@ class JourneyHistoryVO extends BaseHistoryVO
 
     public function setJourney($journey) {
         if (is_null($journey))
-        $this->journey = $journey;
-    else
+            $this->journey = $journey;
+        else
             $this->journey = (double) $journey;
     }
 
