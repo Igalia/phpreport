@@ -21,3 +21,6 @@ config/config.defaults
 
 # Composer dependencies
 vendor
+
+# do not ignore vue.js and v-calendar files
+!web/vuejs/*.min.js

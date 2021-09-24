@@ -38,6 +38,7 @@ $ISSUE_TRACKER_LINKS_URL = unserialize(
 
     <?php if ($SHOW_MENU) {?>
     <li><a href="tasks.php">Tasks</a></li>
+    <li><a href="holidayManagement.php">Holidays <span class="new-badge">new</span></a></li>
     <?php if ($MENU_COORDINATION) {?>
     <li class="dropdown">
         <a href="#" class="dropdown-button">

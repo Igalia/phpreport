@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2009-2021 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -38,6 +38,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserByLoginAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateUserAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/ExtraHoursReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetPendingHolidayHoursAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetScheduledHolidaysAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateCustomEventAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteCustomEventAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateCustomEventAction.php');
@@ -257,6 +258,15 @@ abstract class UsersFacade {
     $action = new GetPendingHolidayHoursAction($init, $end, $user);
 
     return $action->execute();
+
+    }
+
+
+    static function GetScheduledHolidays(DateTime $init, DateTime $end, UserVO $user = NULL) {
+
+        $action = new GetScheduledHolidaysAction($init, $end, $user);
+
+        return $action->execute();
 
     }
 

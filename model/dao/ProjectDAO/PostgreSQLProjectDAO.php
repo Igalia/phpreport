@@ -568,6 +568,18 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         return $this->customExecute($sql);
     }
 
+    public function getByDescription(string $desc): ?int
+    {
+        $sql = "SELECT * FROM project WHERE description='" . $desc . "'";
+
+        $res = pg_query($this->connect, $sql);
+        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
+
+        $resultAux = @pg_fetch_array($res);
+
+        return $resultAux['id'] ?? NULL;
+    }
+
     /** Project partial updater for PostgreSQL.
      *
      * This function updates only some fields of the data of a Project by its {@link ProjectVO}, reading

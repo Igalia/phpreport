@@ -39,8 +39,8 @@ help:
 	rm footer
 
 minify:
-	for i in `find -name *.min.js`; do rm $$i; done
-	for i in `find -name *.js` ; do \
+	for i in `find -name "*.min.js" -not -path "*web/vuejs/*"`; do rm $$i; done
+	for i in `find -name "*.js" -not -path "*web/vuejs/*"` ; do \
 	  #extract file name to be used in the uglify output \
 	  FILE=`basename -s .js $$i`; \
 	  DIR=`dirname $$i`; \
@@ -49,7 +49,7 @@ minify:
 	      --source-map "filename=$${FILE}.min.js.map" -c -m; \
 	  cd -; \
 	  done
-	for i in `find web -name *.php`; do \
+	for i in `find web -name "*.php" -not -path "*web/holidayManagement.php"`; do \
 	  #revert any previous minification changes \
 	  sed 's/<script src="\(.*\).min.js">/<script src="\1.js">/' $$i > tmp; \
 	  #modify script tags to link the minified file \
