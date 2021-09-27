@@ -40,11 +40,7 @@ include_once("include/header.php");
         <div class="holidaysList">
             <h2 class="sidebarTitle"><?php echo date("Y"); ?> Holidays</h2>
             <p>Total booked: {{ totalHolidays }}</p>
-            <ul>
-                <li v-for="date in dates" :key="date">
-                    {{ date }}
-                </li>
-            </ul>
+
             <p class="warning info"><strong>TIP:</strong> Double click on single dates if you want to delete existing holidays</p>
             <button v-on:click="onSaveClick">Save Holidays</button>
         </div>
