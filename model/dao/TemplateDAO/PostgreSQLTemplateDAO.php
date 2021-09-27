@@ -40,15 +40,49 @@ include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
  */
 class PostgreSQLTemplateDAO extends TemplateDAO{
 
+    /** The connection to DB.
+     *
+     * PDO object with an open connection to the database, initialized in the
+     * class constructor.
+     *
+     * @var resource
+     * @see __construct()
+     */
+    protected PDO $pdo;
+
     /** Template DAO for PostgreSQL constructor.
      *
-     * This is the constructor of the implementation for PostgreSQL of {@link TemplateDAO}, and it just calls its parent's constructor.
+     * This is the constructor of the implementation for PostgreSQL of
+     * {@link TemplateDAO}. It sets up everything for database connection, using
+     * the parameters read from <i>{@link config.php}</i> and saving the open
+     * connection in <var>{@link $pdo}</var>.
+     * Notice this DAO connects to the DB through PDO, unlike the rest of the
+     * application.
      *
      * @throws {@link DBConnectionErrorException}
-     * @see TemplateDAO::__construct()
      */
     function __construct() {
+        // Call parent to initialize non-PDO database access, while we don't
+        // migrate all the methods here.
         parent::__construct();
+
+        // TODO: EXTRA_DB_CONNECTION_PARAMETERS used to expect pg_connect
+        // parameters, which were space-separated, but PDO requires semicolons
+        $connectionString = sprintf("pgsql:host=%s;port=%d;user=%s;dbname=%s;password=%s;%s",
+            ConfigurationParametersManager::getParameter('DB_HOST'),
+            ConfigurationParametersManager::getParameter('DB_PORT'),
+            ConfigurationParametersManager::getParameter('DB_USER'),
+            ConfigurationParametersManager::getParameter('DB_NAME'),
+            ConfigurationParametersManager::getParameter('DB_PASSWORD'),
+            ConfigurationParametersManager::getParameter('EXTRA_DB_CONNECTION_PARAMETERS'));
+
+        try {
+            $this->pdo = new PDO($connectionString);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            error_log('Connection failed: ' . $e->getMessage());
+            throw new DBConnectionErrorException($connectionString);
+        }
     }
 
     /** Template value object constructor for PostgreSQL.
@@ -65,15 +99,8 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
         $templateVO->setId($row['id']);
         $templateVO->setName($row['name']);
         $templateVO->setStory($row['story']);
-        $templateVO->setStory($row['story']);
-        if (strtolower($row['telework']) == "t")
-            $templateVO->setTelework(True);
-        elseif (strtolower($row['telework']) == "f")
-            $templateVO->setTelework(False);
-        if (strtolower($row['onsite']) == "t")
-            $templateVO->setOnsite(True);
-        elseif (strtolower($row['onsite']) == "f")
-            $templateVO->setOnsite(False);
+        $templateVO->setTelework($row['telework']);
+        $templateVO->setOnsite($row['onsite']);
         $templateVO->setText($row['text']);
         $templateVO->setTtype($row['ttype']);
         $templateVO->setUserId($row['usrid']);
@@ -97,9 +124,19 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
     public function getById($templateId) {
         if (!is_numeric($templateId))
             throw new SQLIncorrectTypeException($templateId);
-        $sql = "SELECT * FROM template WHERE id=".$templateId;
-        $result = $this->execute($sql);
-        return $result[0] ?? NULL;
+        try {
+            $statement = $this->pdo->prepare(
+                "SELECT * FROM template WHERE id=:id");
+            $statement->execute([
+                ':id' => $templateId
+            ]);
+            $row = $statement->fetch(PDO::FETCH_ASSOC);
+            return $row ? $this->setValues($row) : NULL;
+
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
+        }
     }
 
     /** Templates retriever by User id for PostgreSQL.
@@ -115,9 +152,23 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
     public function getByUserId($userId) {
         if (!is_numeric($userId))
             throw new SQLIncorrectTypeException($userId);
-        $sql = "SELECT * FROM template WHERE usrid=$userId";
-        $result = $this->execute($sql);
-        return $result;
+        try {
+            $statement = $this->pdo->prepare(
+                "SELECT * FROM template WHERE usrid=:usrid");
+            $statement->execute([
+                ':usrid' => $userId
+            ]);
+
+            $VO = array();
+            foreach($statement->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                $VO[] = $this->setValues($row);
+            }
+            return $VO;
+
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
+        }
     }
 
     /** Template creator for PostgreSQL.
@@ -226,8 +277,6 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
      * @throws SQLQueryErrorException
      */
     public function getUserTemplates($userId) {
-        $sql = "SELECT * FROM template where usrid=$userId";
-
-        return $this->execute($sql);
+        return $this->getByUserId($userId);
     }
 }
