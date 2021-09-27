@@ -98,20 +98,7 @@ var app = new Vue({
                 referrerPolicy: 'no-referrer',
             });
             const datesAndRanges = await res.json();
-
-            const attributes = datesAndRanges.ranges.map(dt => ({
-                highlight: {
-                    start: { fillMode: 'outline' },
-                    base: { fillMode: 'light' },
-                    end: { fillMode: 'outline' },
-                },
-                dates: { start: new Date(dt.start + 'T00:00:00'), end: new Date(dt.end + 'T00:00:00') },
-                coveredDates: datesAndRanges.dates.filter(d => d >= dt.start && d <= dt.end)
-            }));
-
-            this.ranges = attributes;
-            this.days = datesAndRanges.dates;
-            this.total = datesAndRanges.dates.length;
+            this.updateDates(datesAndRanges);
         };
 
         fetchData();
@@ -134,6 +121,20 @@ var app = new Vue({
         }
     },
     methods: {
+        updateDates(datesAndRanges) {
+            const attributes = datesAndRanges.ranges.map(dt => ({
+                highlight: {
+                    start: { fillMode: 'outline' },
+                    base: { fillMode: 'light' },
+                    end: { fillMode: 'outline' },
+                },
+                dates: { start: new Date(dt.start + 'T00:00:00'), end: new Date(dt.end + 'T00:00:00') },
+                coveredDates: datesAndRanges.dates.filter(d => d >= dt.start && d <= dt.end)
+            }));
+            this.ranges = attributes;
+            this.days = datesAndRanges.dates;
+            this.total = datesAndRanges.dates.length;
+        },
         onDayClick(day) {
             let endDay = day.date;
 
