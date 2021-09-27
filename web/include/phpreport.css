@@ -79,3 +79,22 @@ div#tasks textarea {
     background-color: #edf5ff;
     border-color: #7da6db;
 }
+
+.text-right {
+    text-align: right;
+}
+
+.btn {
+    padding: 10px 15px;
+    background-color: #fff;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    box-shadow: 2px 2px 2px #eee;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.btn:hover {
+    color: #0f60ca;
+}

@@ -42,7 +42,9 @@ include_once("include/header.php");
             <p>Total booked: {{ totalHolidays }}</p>
 
             <p class="warning info"><strong>TIP:</strong> Double click on single dates if you want to delete existing holidays</p>
-            <button v-on:click="onSaveClick">Save Holidays</button>
+            <p class="text-right">
+                <button class="btn" v-on:click="onSaveClick">Save Holidays</button>
+            </p>
         </div>
     </div>
     <div class="calendar">
