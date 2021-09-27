@@ -23,6 +23,7 @@ namespace Phpreport\Web\services;
 if (!defined('PHPREPORT_ROOT')) define('PHPREPORT_ROOT', __DIR__ . '/../../');
 
 include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
+include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
 include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
 include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
@@ -178,6 +179,27 @@ class HolidayService
             return ['error' => 'Forbidden service for this User'];
         }
 
-        return [];
+        if (!$init || !$end) {
+            return ['error' => 'Init and end dates are mandatory'];
+        }
+
+        $userVO = new \UserVO();
+        $userVO->setLogin($_SESSION['user']->getLogin());
+        $userVO->setId($_SESSION['user']->getId());
+
+        $existingVacations = \UsersFacade::GetScheduledHolidays(
+            date_create($init),
+            date_create($end),
+            $userVO
+        );
+        $holidayProjectId = \ProjectsFacade::GetProjectByDescription(\ConfigurationParametersManager::getParameter('VACATIONS_PROJECT'));
+
+        $daysToDelete = array_diff($existingVacations, $vacations);
+        $resultDeleted = $this->deleteVacations($daysToDelete, $userVO, $holidayProjectId);
+
+        $daysToCreate = array_diff($vacations, $existingVacations);
+        $resultCreation = $this->createVacations($daysToCreate, $userVO, $holidayProjectId);
+
+        return $this->getUserVacationsRanges($init, $end);
     }
 }

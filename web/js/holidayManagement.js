@@ -209,6 +209,7 @@ var app = new Vue({
                 body: JSON.stringify(this.days)
             });
             const datesAndRanges = await res.json();
+            this.updateDates(datesAndRanges);
         }
     },
 })
