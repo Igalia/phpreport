@@ -141,6 +141,33 @@ class HolidayService
         ];
     }
 
+    public function createVacations(array $daysToCreate, \UserVO $userVO, int $holidayProjectId): array
+    {
+        $journeyHistories = \UsersFacade::GetUserJourneyHistories($userVO->getLogin());
+        $failed = [];
+        foreach ($daysToCreate as &$day) {
+            if ($this->isWeekend($day)) continue;
+
+            $currentDay = date_create($day);
+            $validJourney = array_filter($journeyHistories, fn ($history) => $history->dateBelongsToJourney($currentDay));
+            if (count($validJourney) == 0) continue;
+
+            $taskVO = new \TaskVO();
+            $taskVO->setDate($currentDay);
+            $taskVO->setInit(0);
+            $taskVO->setEnd($validJourney[0]->getJourney() * 60);
+            $taskVO->setProjectId($holidayProjectId);
+            $taskVO->setUserId($userVO->getId());
+            if (\TasksFacade::CreateReport($taskVO) == -1)
+                $failed[] = $day;
+        }
+        unset($day);
+        return [
+            'created' => array_diff($daysToCreate, $failed),
+            'failed' => $failed
+        ];
+    }
+
     public function updateUserVacations(array $vacations, string $init, string $end): array
     {
         if (!$this->loginManager::isLogged()) {
