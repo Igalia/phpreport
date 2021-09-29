@@ -158,9 +158,6 @@
 
         } while ($parser->read());
 
-        //var_dump($updateUsers);
-
-
         if (count($updateJourneyHistories) >= 1)
             foreach((array)$updateJourneyHistories as $journeyHistory)
             {
@@ -171,9 +168,7 @@
                 }
             }
 
-
-
-        if (!$string)
+        if (!isset($string))
         {
 
             $string = "<return service='updateJourneyHistories'><ok>Operation Success!</ok><journeyHistories>";

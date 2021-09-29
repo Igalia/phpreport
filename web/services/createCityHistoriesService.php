@@ -149,9 +149,6 @@
 
         } while ($parser->read());
 
-        //var_dump($createUsers);
-
-
         if (count($createCityHistories) >= 1)
             foreach((array)$createCityHistories as $cityHistory)
             {
@@ -162,9 +159,7 @@
                 }
             }
 
-
-
-        if (!$string)
+        if (!isset($string))
         {
 
             $string = "<return service='createCityHistories'><ok>Operation Success!</ok><cityHistories>";

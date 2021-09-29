@@ -110,9 +110,6 @@
 
         } while ($parser->read());
 
-        //var_dump($deleteUsers);
-
-
         if (count($deleteCityHistories) >= 1)
             foreach((array)$deleteCityHistories as $cityHistory)
             {
@@ -123,9 +120,7 @@
                 }
             }
 
-
-
-        if (!$string)
+        if (!isset($string))
             $string = "<return service='deleteCityHistories'><ok>Operation Success!</ok></return>";
 
     } while (false);

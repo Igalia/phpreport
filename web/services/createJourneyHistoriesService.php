@@ -149,9 +149,6 @@
 
         } while ($parser->read());
 
-        //var_dump($createUsers);
-
-
         if (count($createJourneyHistories) >= 1)
             foreach((array)$createJourneyHistories as $journeyHistory)
             {
@@ -162,9 +159,7 @@
                 }
             }
 
-
-
-        if (!$string)
+        if (!isset($string))
         {
 
             $string = "<return service='createJourneyHistories'><ok>Operation Success!</ok><journeyHistories>";

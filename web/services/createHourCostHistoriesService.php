@@ -149,9 +149,6 @@
 
         } while ($parser->read());
 
-        //var_dump($createUsers);
-
-
         if (count($createHourCostHistories) >= 1)
             foreach((array)$createHourCostHistories as $hourCostHistory)
             {
@@ -162,9 +159,7 @@
                 }
             }
 
-
-
-        if (!$string)
+        if (!isset($string))
         {
 
             $string = "<return service='createHourCostHistories'><ok>Operation Success!</ok><hourCostHistories>";

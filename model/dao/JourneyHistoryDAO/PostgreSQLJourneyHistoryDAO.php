@@ -87,11 +87,11 @@ class PostgreSQLJourneyHistoryDAO extends JourneyHistoryDAO{
      * @throws {@link SQLQueryErrorException}
      */
     public function getById($journeyHistoryId) {
-    if (!is_numeric($journeyHistoryId))
-        throw new SQLIncorrectTypeException("journeyHistoryId");
+        if (!is_numeric($journeyHistoryId))
+            throw new SQLIncorrectTypeException("journeyHistoryId");
         $sql = "SELECT * FROM journey_history WHERE id=" . $journeyHistoryId;
-    $result = $this->execute($sql);
-    return $result[0];
+        $result = $this->execute($sql);
+        return $result[0] ?? NULL;
     }
 
     /** Journey History retriever by User id for PostgreSQL.
@@ -187,7 +187,7 @@ class PostgreSQLJourneyHistoryDAO extends JourneyHistoryDAO{
         }
 
         // If the query returned a row then update
-        if(sizeof($currJourneyHistoryVO) > 0) {
+        if(isset($currJourneyHistoryVO)) {
 
             $sql = "UPDATE journey_history SET init_date=" . DBPostgres::formatDate($journeyHistoryVO->getInitDate()) . ", usrid=" . DBPostgres::checkNull($journeyHistoryVO->getUserId()) . ", journey=" . DBPostgres::checkNull($journeyHistoryVO->getJourney()) . ", end_date=" . DBPostgres::formatDate($journeyHistoryVO->getEndDate()) . " WHERE id=".$journeyHistoryVO->getId();
 
@@ -249,7 +249,7 @@ class PostgreSQLJourneyHistoryDAO extends JourneyHistoryDAO{
         }
 
         // If it exists, then delete.
-        if(sizeof($currJourneyHistoryVO) > 0) {
+        if(isset($currJourneyHistoryVO)) {
             $sql = "DELETE FROM journey_history WHERE id=".$journeyHistoryVO->getId();
 
             $res = pg_query($this->connect, $sql);

@@ -92,7 +92,7 @@ class PostgreSQLUserGoalDAO extends UserGoalDAO{
         } else {
             $sql = "SELECT * FROM user_goals WHERE id=" . $userGoalId;
             $result = $this->execute($sql);
-            return $result[0];
+            return $result[0] ?? NULL;
         }
     }
 
@@ -132,7 +132,7 @@ class PostgreSQLUserGoalDAO extends UserGoalDAO{
 
 
         // If the query returned a row then update
-        if(sizeof($currUserGoalVO) > 0) {
+        if(isset($currUserGoalVO)) {
             $sql = "UPDATE user_goals SET init_date=" . DBPostgres::formatDate($userGoalVO->getInitDate()) . ", usrid=" . DBPostgres::checkNull($userGoalVO->getUserId()) . ", extra_hours=" . DBPostgres::checkNull($userGoalVO->getExtraHours()) . ", end_date=" . DBPostgres::formatDate($userGoalVO->getEndDate()) . " WHERE id=".$userGoalVO->getId();
             $res = pg_query($this->connect, $sql);
 
@@ -191,7 +191,7 @@ class PostgreSQLUserGoalDAO extends UserGoalDAO{
         }
 
         // If it exists, then delete.
-        if(sizeof($currentUserGoalVO) > 0) {
+        if(isset($currUserGoalVO)) {
             $sql = "DELETE FROM user_goals WHERE id=".$userGoalVO->getId();
 
             $res = pg_query($this->connect, $sql);
@@ -216,7 +216,7 @@ class PostgreSQLUserGoalDAO extends UserGoalDAO{
             throw new SQLIncorrectTypeException( $userId );
         }
 
-        $sql = "SELECT * FROM user_goals WHERE usrid = " . $userId . " 
+        $sql = "SELECT * FROM user_goals WHERE usrid = " . $userId . "
                 AND init_date <= " . DBPostgres::formatDate($date) . "
                 AND end_date >= " . DBPostgres::formatDate($date) . ";";
 
