@@ -195,15 +195,15 @@ class GetPersonalSummaryByLoginDateAction extends Action{
         }
         $totalResults = $dao->getPersonalSummary($user->getId(), $this->date);
 
+        $totalResults['weekly_goal'] = 0;
         if( $this->currentJourney ) {
             $extraGoalHoursSet = 0;
             $weeksTillEndOfJourneyPeriod = $this->getWeeksTillEndOfJourneyPeriod();
-            $extraGoalHoursSet += $this->currentUserGoal->getExtraHours() / $weeksTillEndOfJourneyPeriod;
-
-            $originalHoursToBeWorked = ($this->getWorkableHoursInThisPeriod() - $this->getWorkedHoursInThisPeriod())/ $weeksTillEndOfJourneyPeriod;
-            $totalResults['weekly_goal'] = round( ( $originalHoursToBeWorked + $extraGoalHoursSet ) * 60);
-        } else {
-            $totalResults['weekly_goal'] = 0;
+            if ($weeksTillEndOfJourneyPeriod > 0) {
+                $extraGoalHoursSet += $this->currentUserGoal->getExtraHours() / $weeksTillEndOfJourneyPeriod;
+                $originalHoursToBeWorked = ($this->getWorkableHoursInThisPeriod() - $this->getWorkedHoursInThisPeriod())/ $weeksTillEndOfJourneyPeriod;
+                $totalResults['weekly_goal'] = round( ( $originalHoursToBeWorked + $extraGoalHoursSet ) * 60);
+            }
         }
         return $totalResults;
 
