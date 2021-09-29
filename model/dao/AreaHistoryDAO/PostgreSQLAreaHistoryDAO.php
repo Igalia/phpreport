@@ -87,11 +87,11 @@ class PostgreSQLAreaHistoryDAO extends AreaHistoryDAO{
      * @throws {@link SQLQueryErrorException}
      */
     public function getById($areaHistoryId) {
-    if (!is_numeric($areaHistoryId))
-        throw new SQLIncorrectTypeException($areaHistoryId);
+        if (!is_numeric($areaHistoryId))
+            throw new SQLIncorrectTypeException($areaHistoryId);
         $sql = "SELECT * FROM area_history WHERE id=" . $areaHistoryId;
-    $result = $this->execute($sql);
-    return $result[0];
+        $result = $this->execute($sql);
+        return $result[0] ?? NULL;
     }
 
     /** Area History retriever by User id for PostgreSQL.
@@ -203,7 +203,7 @@ class PostgreSQLAreaHistoryDAO extends AreaHistoryDAO{
         }
 
         // If the query returned a row then update
-        if(sizeof($currAreaHistoryVO) > 0) {
+        if(isset($currAreaHistoryVO)) {
 
             $sql = "UPDATE area_history SET init_date=" . DBPostgres::formatDate($areaHistoryVO->getInitDate()) . ", usrid=" . DBPostgres::checkNull($areaHistoryVO->getUserId()) . ", areaid=" . DBPostgres::checkNull($areaHistoryVO->getAreaId()) . ", end_date=" . DBPostgres::formatDate($areaHistoryVO->getEndDate()) . " WHERE id=".$areaHistoryVO->getId();
 
@@ -265,7 +265,7 @@ class PostgreSQLAreaHistoryDAO extends AreaHistoryDAO{
         }
 
         // If it exists, then delete.
-        if(sizeof($currAreaHistoryVO) > 0) {
+        if(isset($currAreaHistoryVO)) {
             $sql = "DELETE FROM area_history WHERE id=".$areaHistoryVO->getId();
 
             $res = pg_query($this->connect, $sql);

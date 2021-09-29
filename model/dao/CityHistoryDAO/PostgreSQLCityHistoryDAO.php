@@ -87,11 +87,11 @@ class PostgreSQLCityHistoryDAO extends CityHistoryDAO{
      * @throws {@link SQLQueryErrorException}
      */
     public function getById($cityHistoryId) {
-    if (!is_numeric($cityHistoryId))
-        throw new SQLIncorrectTypeException($cityHistoryId);
+        if (!is_numeric($cityHistoryId))
+            throw new SQLIncorrectTypeException($cityHistoryId);
         $sql = "SELECT * FROM city_history WHERE id=" . $cityHistoryId;
-    $result = $this->execute($sql);
-    return $result[0];
+        $result = $this->execute($sql);
+        return $result[0] ?? NULL;
     }
 
     /** City History retriever by User id for PostgreSQL.
@@ -204,7 +204,7 @@ class PostgreSQLCityHistoryDAO extends CityHistoryDAO{
         }
 
         // If the query returned a row then update
-        if(sizeof($currCityHistoryVO) > 0) {
+        if(isset($currCityHistoryVO)) {
 
         $sql = "UPDATE city_history SET init_date=" . DBPostgres::formatDate($cityHistoryVO->getInitDate()) . ", usrid=" . DBPostgres::checkNull($cityHistoryVO->getUserId()) . ", cityid=" . DBPostgres::checkNull($cityHistoryVO->getCityId()) . ", end_date=" . DBPostgres::formatDate($cityHistoryVO->getEndDate()) . " WHERE id=".$cityHistoryVO->getId();
 
@@ -268,7 +268,7 @@ class PostgreSQLCityHistoryDAO extends CityHistoryDAO{
         }
 
         // If it exists, then delete.
-        if(sizeof($currCityHistoryVO) > 0) {
+        if(isset($currCityHistoryVO)) {
             $sql = "DELETE FROM city_history WHERE id=".$cityHistoryVO->getId();
 
             $res = pg_query($this->connect, $sql);

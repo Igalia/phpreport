@@ -158,9 +158,6 @@
 
         } while ($parser->read());
 
-        //var_dump($updateUsers);
-
-
         if (count($updateHourCostHistories) >= 1)
             foreach((array)$updateHourCostHistories as $hourCostHistory)
             {
@@ -171,9 +168,7 @@
                 }
             }
 
-
-
-        if (!$string)
+        if (!isset($string))
         {
 
             $string = "<return service='updateHourCostHistories'><ok>Operation Success!</ok><hourCostHistories>";

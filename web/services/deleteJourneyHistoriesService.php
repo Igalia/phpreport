@@ -110,9 +110,6 @@
 
         } while ($parser->read());
 
-        //var_dump($deleteUsers);
-
-
         if (count($deleteJourneyHistories) >= 1)
             foreach((array)$deleteJourneyHistories as $journeyHistory)
             {
@@ -123,9 +120,7 @@
                 }
             }
 
-
-
-        if (!$string)
+        if (!isset($string))
             $string = "<return service='deleteJourneyHistories'><ok>Operation Success!</ok></return>";
 
     } while (false);

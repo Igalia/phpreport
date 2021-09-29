@@ -87,11 +87,11 @@ class PostgreSQLHourCostHistoryDAO extends HourCostHistoryDAO{
      * @throws {@link SQLQueryErrorException}
      */
     public function getById($hourCostHistoryId) {
-    if (!is_numeric($hourCostHistoryId))
-        throw new SQLIncorrectTypeException($hourCostHistoryId);
+        if (!is_numeric($hourCostHistoryId))
+            throw new SQLIncorrectTypeException($hourCostHistoryId);
         $sql = "SELECT * FROM hour_cost_history WHERE id=" . $hourCostHistoryId;
-    $result = $this->execute($sql);
-    return $result[0];
+        $result = $this->execute($sql);
+        return $result[0] ?? NULL;
     }
 
     /** Hour Cost History retriever by User id for PostgreSQL.
@@ -187,7 +187,7 @@ class PostgreSQLHourCostHistoryDAO extends HourCostHistoryDAO{
         }
 
         // If the query returned a row then update
-        if(sizeof($currHourCostHistoryVO) > 0) {
+        if(isset($currHourCostHistoryVO)) {
 
             $sql = "UPDATE hour_cost_history SET init_date=" . DBPostgres::formatDate($hourCostHistoryVO->getInitDate()) . ", usrid=" . DBPostgres::checkNull($hourCostHistoryVO->getUserId()) . ", hour_cost=" . DBPostgres::checkNull($hourCostHistoryVO->getHourCost()) . ", end_date=" . DBPostgres::formatDate($hourCostHistoryVO->getEndDate()) . " WHERE id=".$hourCostHistoryVO->getId();
 
@@ -249,7 +249,7 @@ class PostgreSQLHourCostHistoryDAO extends HourCostHistoryDAO{
         }
 
         // If it exists, then delete.
-        if(sizeof($currHourCostHistoryVO) > 0) {
+        if(isset($currHourCostHistoryVO)) {
             $sql = "DELETE FROM hour_cost_history WHERE id=".$hourCostHistoryVO->getId();
 
             $res = pg_query($this->connect, $sql);

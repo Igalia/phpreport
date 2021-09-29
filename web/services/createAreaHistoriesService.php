@@ -149,9 +149,6 @@
 
         } while ($parser->read());
 
-        //var_dump($createUsers);
-
-
         if (count($createAreaHistories) >= 1)
             foreach((array)$createAreaHistories as $areaHistory)
             {
@@ -162,9 +159,7 @@
                 }
             }
 
-
-
-        if (!$string)
+        if (!isset($string))
         {
 
             $string = "<return service='createAreaHistories'><ok>Operation Success!</ok><areaHistories>";

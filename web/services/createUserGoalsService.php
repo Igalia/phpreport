@@ -145,7 +145,6 @@ do {
 
     } while ($parser->read());
 
-
     if (count($createUserGoals) >= 1)
         foreach((array)$createUserGoals as $createUserGoal)
         {
@@ -156,9 +155,7 @@ do {
             }
         }
 
-
-
-    if (!$string)
+    if (!isset($string))
     {
 
         $string = "<return service='createUserGoal'><ok>Operation Success!</ok><userGoals>";

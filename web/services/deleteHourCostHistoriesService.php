@@ -110,9 +110,6 @@
 
         } while ($parser->read());
 
-        //var_dump($deleteUsers);
-
-
         if (count($deleteHourCostHistories) >= 1)
             foreach((array)$deleteHourCostHistories as $hourCostHistory)
             {
@@ -123,9 +120,7 @@
                 }
             }
 
-
-
-        if (!$string)
+        if (!isset($string))
             $string = "<return service='deleteHourCostHistories'><ok>Operation Success!</ok></return>";
 
     } while (false);

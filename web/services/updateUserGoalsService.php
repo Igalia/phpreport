@@ -40,7 +40,7 @@ do {
 
     $parser->read();
 
-    if ($parser->name == 'updateUserGoals')
+    if ($parser->name == 'userGoals')
     {
 
         $sid = $parser->getAttribute("sid");
@@ -149,7 +149,6 @@ do {
 
     } while ($parser->read());
 
-
     if (count($updateUserGoals) >= 1) {
         foreach ( (array) $updateUserGoals as $userGoal ) {
             if ( UsersFacade::UpdateUserGoal( $userGoal ) == -1 ) {
@@ -159,7 +158,7 @@ do {
         }
     }
 
-    if (!$string)
+    if (!isset($string))
     {
 
         $string = "<return service='updateUserGoals'><ok>Operation Success!</ok><userGoals>";
