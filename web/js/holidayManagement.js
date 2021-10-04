@@ -55,11 +55,12 @@ var app = new Vue({
             days: [],
             range: {},
             ranges: [],
-            total: null,
+            totalHolidays: null,
             latestDelete: null,
             isEndOfRange: false,
             init: new Date(new Date().getFullYear(), 0, 1),
             end: new Date(new Date().getFullYear(), 11, 31),
+            pendingHolidays: null,
 
             // Clean selected range styles to avoid confusion when
             // removing dates
@@ -85,7 +86,7 @@ var app = new Vue({
         };
     },
     created() {
-        const fetchData = async () => {
+        const fetchHolidays = async () => {
             const url = `services/getHolidays.php?init=${formatDate(this.init)}&end=${formatDate(this.end)}`;
             const res = await fetch(url, {
                 method: 'GET',
@@ -99,26 +100,31 @@ var app = new Vue({
             });
             const datesAndRanges = await res.json();
             this.updateDates(datesAndRanges);
+        }
+        const fetchSummary = async () => {
+            const url2 = `services/getPersonalSummaryByDateService.php?date=${formatDate(this.end)}`;
+            const res2 = await fetch(url2, {
+                method: 'GET',
+                mode: 'same-origin',
+                cache: 'no-cache',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'text/xml'
+                },
+                referrerPolicy: 'no-referrer',
+            });
+            const test = await res2.text();
+            parser = new DOMParser();
+            xmlDoc = parser.parseFromString(test, "text/xml");
+            this.pendingHolidays = xmlDoc.getElementsByTagName("pending_holidays")[0].childNodes[0].nodeValue;
         };
-
-        fetchData();
+        fetchHolidays();
+        fetchSummary();
     },
     computed: {
-        dates() {
-            return this.days;
-        },
         attributes() {
             return this.ranges;
         },
-        totalHolidays() {
-            return this.total;
-        },
-        initDate() {
-            return this.init;
-        },
-        endDate() {
-            return this.end;
-        }
     },
     methods: {
         updateDates(datesAndRanges) {
@@ -133,7 +139,7 @@ var app = new Vue({
             }));
             this.ranges = attributes;
             this.days = datesAndRanges.dates;
-            this.total = datesAndRanges.dates.length;
+            this.totalHolidays = datesAndRanges.dates.length;
         },
         onDayClick(day) {
             let endDay = day.date;
@@ -196,7 +202,6 @@ var app = new Vue({
         },
         onSaveClick: async function () {
             const url = `services/updateHolidays.php?init=${formatDate(this.init)}&end=${formatDate(this.end)}`;
-
             const res = await fetch(url, {
                 method: 'POST',
                 mode: 'same-origin',

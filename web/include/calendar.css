@@ -13,9 +13,28 @@
     padding: 20px;
 }
 
-.holidaysList ul{
-    margin-top: 10px;
-    padding-left: 20px;
-    list-style: disc;
+.sidebarTitle {
     line-height: 1.5em;
+    margin-bottom: 1em;
+}
+
+.summary {
+    border-collapse: collapse;
+    font-size: 0.8em;
+    margin-top: 10px;
+    line-height: 1.5em;
+    width: 100%;
+}
+
+.summary tr {
+    border-bottom: 1px solid #ccc;
+    list-style: none;
+}
+
+.summary td {
+    padding: 5px;
+}
+
+.summary td:first-child {
+    font-weight: bold;
 }

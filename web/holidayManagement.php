@@ -39,9 +39,19 @@ include_once("include/header.php");
     <div class="sidebar">
         <div class="holidaysList">
             <h2 class="sidebarTitle"><?php echo date("Y"); ?> Holidays</h2>
-            <p>Total booked: {{ totalHolidays }}</p>
-
-            <p class="warning info"><strong>TIP:</strong> Double click on single dates if you want to delete existing holidays</p>
+            <table class="summary">
+                <tr>
+                    <td>Total booked</td>
+                    <td class="text-right">{{ totalHolidays }}</td>
+                </tr>
+                <tr>
+                    <td>Pending</td>
+                    <td class="text-right">{{ pendingHolidays }}h</td>
+                </tr>
+            </table>
+            <p class="warning info">
+                <strong>TIP:</strong> Double click on single dates if you want to delete existing holidays.
+            </p>
             <p class="text-right">
                 <button class="btn" v-on:click="onSaveClick">Save Holidays</button>
             </p>
@@ -59,8 +69,8 @@ include_once("include/header.php");
             show-iso-weeknumbers
             :select-attribute="selectAttribute"
             @dayclick="onDayClick"
-            :min-date="initDate"
-            :max-date="endDate"
+            :min-date="init"
+            :max-date="end"
         />
     </div>
 </div>
