@@ -73,6 +73,9 @@ include_once("include/header.php");
             :max-date="end"
         />
     </div>
+    <div class="snackbarWrapper">
+        <div id="snackBar" v-for="message in serverMessages" :class="message.classes" :key="message">{{ message.text }}</div>
+    </div>
 </div>
 
 <script src='js/holidayManagement.js'></script>

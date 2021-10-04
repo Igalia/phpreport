@@ -151,7 +151,10 @@ class HolidayService
 
             $currentDay = date_create($day);
             $validJourney = array_filter($journeyHistories, fn ($history) => $history->dateBelongsToJourney($currentDay));
-            if (count($validJourney) == 0) continue;
+            if (count($validJourney) == 0) {
+                $failed[] = $day;
+                continue;
+            }
 
             $taskVO = new \TaskVO();
             $taskVO->setDate($currentDay);
@@ -200,6 +203,10 @@ class HolidayService
         $daysToCreate = array_diff($vacations, $existingVacations);
         $resultCreation = $this->createVacations($daysToCreate, $userVO, $holidayProjectId);
 
-        return $this->getUserVacationsRanges($init, $end);
+        return [
+            "datesAndRanges" => $this->getUserVacationsRanges($init, $end),
+            "resultCreation" => $resultCreation,
+            "resultDeleted" => $resultDeleted
+        ];
     }
 }

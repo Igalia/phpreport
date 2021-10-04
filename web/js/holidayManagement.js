@@ -61,6 +61,7 @@ var app = new Vue({
             init: new Date(new Date().getFullYear(), 0, 1),
             end: new Date(new Date().getFullYear(), 11, 31),
             pendingHolidays: null,
+            serverMessages: [],
 
             // Clean selected range styles to avoid confusion when
             // removing dates
@@ -213,8 +214,37 @@ var app = new Vue({
                 referrerPolicy: 'no-referrer',
                 body: JSON.stringify(this.days)
             });
-            const datesAndRanges = await res.json();
-            this.updateDates(datesAndRanges);
+            const body = await res.json();
+            if ("error" in body) {
+                this.serverMessages.push({ classes: "message error", text: `Error: ${body["error"]}` });
+            } else {
+                this.updateDates(body["datesAndRanges"]);
+                if (body["resultCreation"] && body["resultCreation"]["failed"] && body["resultCreation"]["failed"].length > 0) {
+                    this.serverMessages.push({
+                        classes: "message error",
+                        text: `These dates couldn't be created: ${body["resultCreation"]["failed"].join(", ")}`
+                    });
+                }
+                if (body["resultDeletion"] && body["resultDeletion"]["failed"] && body["resultDeletion"]["failed"].length > 0) {
+                    this.serverMessages.push({
+                        classes: "message error",
+                        text: `These dates couldn't be removed: ${body["resultDeletion"]["failed"].join(", ")}`
+                    });
+                }
+                if (this.serverMessages.length === 0) {
+                    this.serverMessages.push({ classes: "message success", text: "Holidays were updated." });
+                }
+            }
+            this.$emit('flush-message')
         }
     },
+    mounted() {
+        let timer
+        this.$on('flush-message', message => {
+            clearTimeout(timer)
+            timer = setTimeout(() => {
+                this.serverMessages = []
+            }, 5000)
+        })
+    }
 })
