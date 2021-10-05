@@ -40,15 +40,15 @@ include_once("include/header.php");
         <div class="holidaysList">
             <h2 class="sidebarTitle"><?php echo date("Y"); ?> Holidays</h2>
             <p>Total booked: {{ totalHolidays }}</p>
-            <ul>
-                <li v-for="date in dates" :key="date.start">
-                    {{ date.start }}<span v-if="date.start !== date.end"> to {{ date.end }}</span>
-                </li>
-            </ul>
+
+            <p class="warning info"><strong>TIP:</strong> Double click on single dates if you want to delete existing holidays</p>
+            <p class="text-right">
+                <button class="btn" v-on:click="onSaveClick">Save Holidays</button>
+            </p>
         </div>
     </div>
     <div class="calendar">
-        <v-calendar
+        <v-date-picker
             :from-page="{ month: 1, year: 2021 }"
             is-range
             v-model="range"
@@ -58,6 +58,9 @@ include_once("include/header.php");
             :columns="$screens({ default: 2, lg: 4 })"
             show-iso-weeknumbers
             :select-attribute="selectAttribute"
+            @dayclick="onDayClick"
+            :min-date="initDate"
+            :max-date="endDate"
         />
     </div>
 </div>

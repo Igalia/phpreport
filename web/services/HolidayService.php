@@ -23,6 +23,8 @@ namespace Phpreport\Web\services;
 if (!defined('PHPREPORT_ROOT')) define('PHPREPORT_ROOT', __DIR__ . '/../../');
 
 include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
+include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
+include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
 include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
@@ -35,6 +37,11 @@ class HolidayService
         \LoginManager $loginManager
     ) {
         $this->loginManager = $loginManager;
+    }
+
+    function isWeekend(string $date): bool
+    {
+        return (date('N', strtotime($date)) >= 6);
     }
 
     /** Group dates into date ranges
@@ -108,22 +115,8 @@ class HolidayService
             return ['error' => 'Forbidden service for this User'];
         }
 
-        $dateFormat = "Y-m-d";
-
-        if ($init != "") {
-            $initParse = date_parse_from_format($dateFormat, $init);
-            $init = "{$initParse['year']}-{$initParse['month']}-{$initParse['day']}";
-        } else
-            $init = "1900-01-01";
-
-        $init = date_create($init);
-
-        if ($end != "") {
-            $endParse = date_parse_from_format($dateFormat, $end);
-            $end = "{$endParse['year']}-{$endParse['month']}-{$endParse['day']}";
-            $end = date_create($end);
-        } else
-            $end = date_create(date('Y') . "-12-31");
+        $init = date_create($init ?? "1900-01-01");
+        $end = date_create($end ?? date('Y') . "-12-31");
 
         $userVO = new \UserVO();
         $userVO->setLogin($_SESSION['user']->getLogin());
@@ -131,5 +124,82 @@ class HolidayService
         $vacations = \UsersFacade::GetScheduledHolidays($init, $end, $userVO);
 
         return ['dates' => $vacations, 'ranges' => $this->datesToRanges($vacations)];
+    }
+
+    public function deleteVacations(array $daysToDelete, \UserVO $userVO, int $holidayProjectId): array
+    {
+        $failed = [];
+        foreach ($daysToDelete as &$day) {
+            $tasks = \TasksFacade::GetUserTasksByLoginDate($userVO, new \DateTime($day));
+            $holidayTasks = array_filter($tasks, fn ($task) => $task->getProjectId() == $holidayProjectId);
+            if (\TasksFacade::DeleteReports($holidayTasks) == -1)
+                $failed[] = $day;
+        }
+        unset($day);
+        return [
+            'deleted' => array_diff($daysToDelete, $failed),
+            'failed' => $failed
+        ];
+    }
+
+    public function createVacations(array $daysToCreate, \UserVO $userVO, int $holidayProjectId): array
+    {
+        $journeyHistories = \UsersFacade::GetUserJourneyHistories($userVO->getLogin());
+        $failed = [];
+        foreach ($daysToCreate as &$day) {
+            if ($this->isWeekend($day)) continue;
+
+            $currentDay = date_create($day);
+            $validJourney = array_filter($journeyHistories, fn ($history) => $history->dateBelongsToJourney($currentDay));
+            if (count($validJourney) == 0) continue;
+
+            $taskVO = new \TaskVO();
+            $taskVO->setDate($currentDay);
+            $taskVO->setInit(0);
+            $taskVO->setEnd($validJourney[0]->getJourney() * 60);
+            $taskVO->setProjectId($holidayProjectId);
+            $taskVO->setUserId($userVO->getId());
+            if (\TasksFacade::CreateReport($taskVO) == -1)
+                $failed[] = $day;
+        }
+        unset($day);
+        return [
+            'created' => array_diff($daysToCreate, $failed),
+            'failed' => $failed
+        ];
+    }
+
+    public function updateUserVacations(array $vacations, string $init, string $end): array
+    {
+        if (!$this->loginManager::isLogged()) {
+            return ['error' => 'User not logged in'];
+        }
+
+        if (!$this->loginManager::isAllowed()) {
+            return ['error' => 'Forbidden service for this User'];
+        }
+
+        if (!$init || !$end) {
+            return ['error' => 'Init and end dates are mandatory'];
+        }
+
+        $userVO = new \UserVO();
+        $userVO->setLogin($_SESSION['user']->getLogin());
+        $userVO->setId($_SESSION['user']->getId());
+
+        $existingVacations = \UsersFacade::GetScheduledHolidays(
+            date_create($init),
+            date_create($end),
+            $userVO
+        );
+        $holidayProjectId = \ProjectsFacade::GetProjectByDescription(\ConfigurationParametersManager::getParameter('VACATIONS_PROJECT'));
+
+        $daysToDelete = array_diff($existingVacations, $vacations);
+        $resultDeleted = $this->deleteVacations($daysToDelete, $userVO, $holidayProjectId);
+
+        $daysToCreate = array_diff($vacations, $existingVacations);
+        $resultCreation = $this->createVacations($daysToCreate, $userVO, $holidayProjectId);
+
+        return $this->getUserVacationsRanges($init, $end);
     }
 }

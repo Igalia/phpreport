@@ -45,6 +45,7 @@ $permissions = array(
         '/services/getTasksFiltered.php', '/userTasksReport.php',
         //holidays management
         '/services/getHolidays.php',
+        '/services/updateHolidays.php',
         '/holidayManagement.php',
         //templates
         '/services/createTemplatesService.php', '/services/getUserTemplatesService.php',
