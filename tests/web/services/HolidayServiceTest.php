@@ -127,4 +127,31 @@ class HolidayServiceTest extends TestCase
             $this->instance->isWeekend($date)
         );
     }
+
+    public function testFormatHoursSplitDaysCorrectly(): void
+    {
+        $result = '7 d 05:00';
+        $this->assertEquals(
+            $result,
+            $this->instance::formatHours(54, 7, 5)
+        );
+    }
+
+    public function testFormatHoursWithRoundNumberOfDays(): void
+    {
+        $result = '14:00';
+        $this->assertEquals(
+            $result,
+            $this->instance::formatHours(14, 7, 5)
+        );
+    }
+
+    public function testFormatHoursWithRoundNumberOfDaysSmallLimit(): void
+    {
+        $result = '2 d 00:00';
+        $this->assertEquals(
+            $result,
+            $this->instance::formatHours(14, 7, 1)
+        );
+    }
 }
