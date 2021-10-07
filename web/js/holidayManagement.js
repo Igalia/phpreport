@@ -57,6 +57,7 @@ var app = new Vue({
             ranges: [],
             totalHolidays: null,
             availableHolidays: null,
+            daysByWeek: null,
             latestDelete: null,
             isEndOfRange: false,
             init: new Date(new Date().getFullYear(), 0, 1),
@@ -143,6 +144,7 @@ var app = new Vue({
             }));
             this.ranges = attributes;
             this.days = datesAndRanges.dates;
+            this.daysByWeek = Object.keys(datesAndRanges.weeks).map((week, idx) => ({ weekNumber: week, total: datesAndRanges.weeks[week] }));
         },
         onDayClick(day) {
             let endDay = day.date;

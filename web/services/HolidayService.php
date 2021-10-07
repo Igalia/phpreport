@@ -148,6 +148,23 @@ class HolidayService
         return $formatedHours;
     }
 
+    static function groupByWeeks(array $dates): array
+    {
+        if (count($dates) == 0) return [];
+        $previous_week = date("W", strtotime($dates[0]));
+        $weeks[$previous_week] = 1;
+        for ($i = 1; $i < count($dates); $i++) {
+            $current_week = date("W", strtotime($dates[$i]));
+            if ($current_week == $previous_week) {
+                $weeks[$current_week]++;
+            } else {
+                $weeks[$current_week] = 1;
+                $previous_week = $current_week;
+            }
+        }
+        return $weeks;
+    }
+
     public function getUserVacationsRanges(string $init = NULL, string $end = NULL, $sid = NULL): array
     {
         if (!$this->loginManager::isLogged($sid)) {
@@ -166,7 +183,11 @@ class HolidayService
 
         $vacations = \UsersFacade::GetScheduledHolidays($init, $end, $userVO);
 
-        return ['dates' => $vacations, 'ranges' => $this->datesToRanges($vacations)];
+        return [
+            'dates' => $vacations,
+            'ranges' => $this->datesToRanges($vacations),
+            'weeks' => $this->groupByWeeks($vacations)
+        ];
     }
 
     public function deleteVacations(array $daysToDelete, \UserVO $userVO, int $holidayProjectId): array
