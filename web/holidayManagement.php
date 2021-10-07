@@ -63,7 +63,6 @@ include_once("include/header.php");
     </div>
     <div class="calendar">
         <v-date-picker
-            :from-page="{ month: 1, year: 2021 }"
             is-range
             v-model="range"
             :attributes="attributes"
