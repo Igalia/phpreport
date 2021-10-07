@@ -41,8 +41,12 @@ include_once("include/header.php");
             <h2 class="sidebarTitle"><?php echo date("Y"); ?> Holidays</h2>
             <table class="summary">
                 <tr>
+                    <td>Available for the year</td>
+                    <td class="text-right">{{ availableHolidays }}h</td>
+                </tr>
+                <tr>
                     <td>Total booked</td>
-                    <td class="text-right">{{ totalHolidays }}</td>
+                    <td class="text-right">{{ totalHolidays }}h</td>
                 </tr>
                 <tr>
                     <td>Pending</td>

@@ -56,6 +56,7 @@ var app = new Vue({
             range: {},
             ranges: [],
             totalHolidays: null,
+            availableHolidays: null,
             latestDelete: null,
             isEndOfRange: false,
             init: new Date(new Date().getFullYear(), 0, 1),
@@ -102,7 +103,16 @@ var app = new Vue({
             const datesAndRanges = await res.json();
             this.updateDates(datesAndRanges);
         }
-        const fetchSummary = async () => {
+        fetchHolidays();
+        this.fetchSummary();
+    },
+    computed: {
+        attributes() {
+            return this.ranges;
+        },
+    },
+    methods: {
+        async fetchSummary() {
             const url2 = `services/getPersonalSummaryByDateService.php?date=${formatDate(this.end)}`;
             const res2 = await fetch(url2, {
                 method: 'GET',
@@ -118,16 +128,9 @@ var app = new Vue({
             parser = new DOMParser();
             xmlDoc = parser.parseFromString(test, "text/xml");
             this.pendingHolidays = xmlDoc.getElementsByTagName("pending_holidays")[0].childNodes[0].nodeValue;
-        };
-        fetchHolidays();
-        fetchSummary();
-    },
-    computed: {
-        attributes() {
-            return this.ranges;
+            this.totalHolidays = xmlDoc.getElementsByTagName("scheduled_holidays")[0].childNodes[0].nodeValue;
+            this.availableHolidays = xmlDoc.getElementsByTagName("available_holidays")[0].childNodes[0].nodeValue;
         },
-    },
-    methods: {
         updateDates(datesAndRanges) {
             const attributes = datesAndRanges.ranges.map(dt => ({
                 highlight: {
@@ -140,7 +143,6 @@ var app = new Vue({
             }));
             this.ranges = attributes;
             this.days = datesAndRanges.dates;
-            this.totalHolidays = datesAndRanges.dates.length;
         },
         onDayClick(day) {
             let endDay = day.date;
@@ -234,7 +236,8 @@ var app = new Vue({
                 if (this.serverMessages.length === 0) {
                     this.serverMessages.push({ classes: "message success", text: "Holidays were updated." });
                 }
-            }
+            };
+            this.fetchSummary();
             this.$emit('flush-message')
         }
     },
