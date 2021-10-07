@@ -105,6 +105,49 @@ class HolidayService
         return $ranges;
     }
 
+    /**
+     * Function used to pretty print time. From hours to Days d hours:minutes
+     */
+    static function formatHours(float $time, float $journey, int $limit): string
+    {
+        $negative = ($time < 0);
+        $work_days = false;
+        $time = abs($time);
+        $time = round($time, 2);
+        $time = $time * 60;
+
+        if ($journey > 0 && $time > $limit * $journey * 60) {
+            $work_days = intval($time / ($journey * 60));
+            $hours = intval(($time - ($work_days * $journey * 60)) / 60);
+            $minutes = intval($time - $hours * 60 - $work_days * $journey * 60);
+        } else {
+            $hours = intval($time / 60);
+            $minutes = intval($time - ($hours * 60));
+        }
+
+        if ($minutes >= 60) {
+            $minutes = $minutes - 60;
+            $hours = $hours + 1;
+        }
+
+        if ($hours < 10) {
+            $hours = "0" . $hours;
+        }
+        if ($minutes < 10) {
+            $minutes = "0" . $minutes;
+        }
+
+        if ($work_days)
+            $formatedHours = $work_days . " d " . $hours . ":" . $minutes;
+        else
+            $formatedHours = $hours . ":" . $minutes;
+
+        if ($negative)
+            $formatedHours = "-" . $formatedHours;
+
+        return $formatedHours;
+    }
+
     public function getUserVacationsRanges(string $init = NULL, string $end = NULL, $sid = NULL): array
     {
         if (!$this->loginManager::isLogged($sid)) {

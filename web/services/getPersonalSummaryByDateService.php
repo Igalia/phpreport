@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2021 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -18,66 +18,14 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** getPersonalSummaryByDate web service.
- *
- * @filesource
- * @package PhpReport
- * @subpackage services
- * @author Jorge López Fernández
- */
+use Phpreport\Web\services\HolidayService;
 
 define('PHPREPORT_ROOT', __DIR__ . '/../../');
+require_once(PHPREPORT_ROOT . '/vendor/autoload.php');
 include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
 include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
-
-/**
- * Function used to pretty print time. From hours to Days d hours:minutes
- * @param float $time: Time in hours to be converted
- * @param float $journey: Number of hours that represents a day in our life
- * @param int $limit: Number of days to change representation from hours to days
- * @return string formatedHours: String representing hours in human format
- */
-function formatHours($time, $journey, $limit)
-{
-    $negative = ($time < 0);
-    $work_days = false;
-    $time = abs($time);
-    $time = round($time, 2);
-    $time = $time * 60;
-
-    if ($journey > 0 && $time > $limit * $journey * 60) {
-        $work_days = intval($time / ($journey * 60));
-        $hours = intval(($time - ($work_days * $journey * 60)) / 60);
-        $minutes = intval($time - $hours * 60 - $work_days * $journey * 60);
-    } else {
-        $hours = intval($time / 60);
-        $minutes = intval($time - ($hours * 60));
-    }
-
-    if ($minutes >= 60) {
-        $minutes = $minutes - 60;
-        $hours = $hours + 1;
-    }
-
-    if ($hours < 10) {
-        $hours = "0" . $hours;
-    }
-    if ($minutes < 10) {
-        $minutes = "0" . $minutes;
-    }
-
-    if ($work_days)
-        $formatedHours = $work_days . " d " . $hours . ":" . $minutes;
-    else
-        $formatedHours = $hours . ":" . $minutes;
-
-    if ($negative)
-        $formatedHours = "-" . $formatedHours;
-
-    return $formatedHours;
-}
 
 $dateString = $_GET['date'] ?? NULL;
 
@@ -135,16 +83,16 @@ do {
     }
 
     $extraHours = $extraHoursSummary[1][$userVO->getLogin()]["extra_hours"];
-    $extraHours = formatHours($extraHours, $currentJourney, 5);
+    $extraHours = HolidayService::formatHours($extraHours, $currentJourney, 5);
 
     $accExtraHours = $extraHoursSummary[1][$userVO->getLogin()]["total_extra_hours"];
-    $accExtraHours = formatHours($accExtraHours, $currentJourney, 5);
+    $accExtraHours = HolidayService::formatHours($accExtraHours, $currentJourney, 5);
 
     // Report holidays from the entire year, including those later than $date
     $endYearDate = new DateTime($date->format('Y') . '-12-31');
     $holidays = UsersFacade::GetPendingHolidayHours($initYearDate, $endYearDate, $userVO);
     $pendingHolidays = $holidays[$userVO->getLogin()];
-    $pendingHolidays = formatHours($pendingHolidays, $currentJourney, 5);
+    $pendingHolidays = HolidayService::formatHours($pendingHolidays, $currentJourney, 5);
 
     $string = "<personalSummary login='" . $userVO->getLogin() . "' date='" . $date->format($dateFormat) . "'><hours><day>" . $day  . "</day><week>" . $week  . "</week><weekly_goal>" . $weekGoal . "</weekly_goal><extra_hours>" . $extraHours . "</extra_hours><pending_holidays>" . $pendingHolidays . "</pending_holidays><acc_extra_hours>" . $accExtraHours . "</acc_extra_hours></hours></personalSummary>";
 } while (false);
