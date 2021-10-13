@@ -144,7 +144,7 @@ var app = new Vue({
             }));
             this.ranges = attributes;
             this.days = datesAndRanges.dates;
-            this.daysByWeek = Object.keys(datesAndRanges.weeks).map((week, idx) => ({ weekNumber: week, total: datesAndRanges.weeks[week] }));
+            this.daysByWeek = Object.keys(datesAndRanges.weeks).sort().map((week, idx) => ({ weekNumber: week, total: datesAndRanges.weeks[week] }));
         },
         onDayClick(day) {
             let endDay = day.date;
