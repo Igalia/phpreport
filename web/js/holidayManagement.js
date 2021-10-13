@@ -144,6 +144,12 @@ var app = new Vue({
                 dates: { start: new Date(dt.start + 'T00:00:00'), end: new Date(dt.end + 'T00:00:00') },
                 coveredDates: datesAndRanges.dates.filter(d => d >= dt.start && d <= dt.end)
             }));
+            // Add today
+            attributes.push({
+                bar: 'orange',
+                dates: { start: new Date(), end: new Date() },
+            });
+
             this.ranges = attributes;
             this.days = datesAndRanges.dates;
             this.daysByWeek = Object.keys(datesAndRanges.weeks).sort().map((week, idx) => ({ weekNumber: week, total: datesAndRanges.weeks[week] }));
