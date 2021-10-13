@@ -100,16 +100,16 @@ do {
     $availableHolidays = $holidays["availableHours"][$userVO->getLogin()];
     $availableHolidays = HolidayService::formatHours($availableHolidays, $currentJourney, 5);
 
-    $string = "<personalSummary login='" . $userVO->getLogin() . "' date='" . $date->format($dateFormat) . "'>'
-                .'<hours><day>" . $day  . "</day>'
-                .'<week>" . $week  . "</week>'
-                .'<weekly_goal>" . $weekGoal . "</weekly_goal>'
-                .'<extra_hours>" . $extraHours . "</extra_hours>'
-                .'<pending_holidays>" . $pendingHolidays . "</pending_holidays>'
-                .'<scheduled_holidays>" . $scheduledHolidays . "</scheduled_holidays>'
-                .'<available_holidays>" . $availableHolidays . "</available_holidays>'
-                .'<acc_extra_hours>" . $accExtraHours . "</acc_extra_hours>'
-                .'</hours></personalSummary>";
+    $string = "<personalSummary login='" . $userVO->getLogin() . "' date='" . $date->format($dateFormat) . "'>"
+        . "<hours><day>" . $day  . "</day>"
+        . "<week>" . $week  . "</week>"
+        . "<weekly_goal>" . $weekGoal . "</weekly_goal>"
+        . "<extra_hours>" . $extraHours . "</extra_hours>"
+        . "<pending_holidays>" . $pendingHolidays . "</pending_holidays>"
+        . "<scheduled_holidays>" . $scheduledHolidays . "</scheduled_holidays>"
+        . "<available_holidays>" . $availableHolidays . "</available_holidays>"
+        . "<acc_extra_hours>" . $accExtraHours . "</acc_extra_hours>"
+        . "</hours></personalSummary>";
 } while (false);
 
 // make it into a proper XML document with header etc
