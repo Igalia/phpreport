@@ -55,8 +55,9 @@ var app = new Vue({
             days: [],
             range: {},
             ranges: [],
-            totalHolidays: null,
+            scheduledHolidays: null,
             availableHolidays: null,
+            enjoyedHolidays: null,
             daysByWeek: null,
             latestDelete: null,
             isEndOfRange: false,
@@ -129,7 +130,8 @@ var app = new Vue({
             parser = new DOMParser();
             xmlDoc = parser.parseFromString(test, "text/xml");
             this.pendingHolidays = xmlDoc.getElementsByTagName("pending_holidays")[0].childNodes[0].nodeValue;
-            this.totalHolidays = xmlDoc.getElementsByTagName("scheduled_holidays")[0].childNodes[0].nodeValue;
+            this.scheduledHolidays = xmlDoc.getElementsByTagName("scheduled_holidays")[0].childNodes[0].nodeValue;
+            this.enjoyedHolidays = xmlDoc.getElementsByTagName("enjoyed_holidays")[0].childNodes[0].nodeValue;
             this.availableHolidays = xmlDoc.getElementsByTagName("available_holidays")[0].childNodes[0].nodeValue;
         },
         updateDates(datesAndRanges) {
