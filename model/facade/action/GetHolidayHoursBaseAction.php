@@ -34,8 +34,6 @@ abstract class GetHolidayHoursBaseAction extends Action
         $this->init = $init;
         $this->end = $end;
         $this->user = $user;
-        $this->preActionParameter = "GET_PENDING_HOLIDAY_HOURS_PREACTION";
-        $this->postActionParameter = "GET_PENDING_HOLIDAY_HOURS_POSTACTION";
     }
 
     protected function getHoursSummary(): array

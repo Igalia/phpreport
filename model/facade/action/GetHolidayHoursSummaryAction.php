@@ -22,6 +22,13 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/GetHolidayHoursBaseAction.ph
 
 class GetHolidayHoursSummaryAction extends GetHolidayHoursBaseAction
 {
+    public function __construct(DateTime $init, DateTime $end, UserVO $user = NULL)
+    {
+        parent::__construct($init, $end, $user);
+        $this->preActionParameter = "GET_HOLIDAY_HOURS_SUMMARY_PREACTION";
+        $this->postActionParameter = "GET_HOLIDAY_HOURS_SUMMARY_POSTACTION";
+    }
+
     protected function doExecute()
     {
         return $this->getHoursSummary();

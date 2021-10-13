@@ -39,8 +39,17 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/GetHolidayHoursBaseAction.ph
  * @subpackage facade
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
-class GetPendingHolidayHoursAction extends GetHolidayHoursBaseAction {
-    protected function doExecute() {
+class GetPendingHolidayHoursAction extends GetHolidayHoursBaseAction
+{
+    public function __construct(DateTime $init, DateTime $end, UserVO $user = NULL)
+    {
+        parent::__construct($init, $end, $user);
+        $this->preActionParameter = "GET_PENDING_HOLIDAY_HOURS_PREACTION";
+        $this->postActionParameter = "GET_PENDING_HOLIDAY_HOURS_POSTACTION";
+    }
+
+    protected function doExecute()
+    {
         return $this->getHoursSummary()['pendingHours'];
     }
 }
