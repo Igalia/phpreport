@@ -151,10 +151,10 @@ class HolidayService
     static function groupByWeeks(array $dates): array
     {
         if (count($dates) == 0) return [];
-        $previous_week = date("W", strtotime($dates[0]));
+        $previous_week = date("o\WW", strtotime($dates[0]));
         $weeks[$previous_week] = 1;
         for ($i = 1; $i < count($dates); $i++) {
-            $current_week = date("W", strtotime($dates[$i]));
+            $current_week = date("o\WW", strtotime($dates[$i]));
             if ($current_week == $previous_week) {
                 $weeks[$current_week]++;
             } else {
