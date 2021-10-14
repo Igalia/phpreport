@@ -215,15 +215,17 @@ class HolidayService
 
             $currentDay = date_create($day);
             $validJourney = array_filter($journeyHistories, fn ($history) => $history->dateBelongsToJourney($currentDay));
-            if (count($validJourney) == 0) {
+            if (count($validJourney) != 1) {
                 $failed[] = $day;
                 continue;
             }
+            // There must be only one journey, so get the first element
+            $validJourney = array_pop($validJourney);
 
             $taskVO = new \TaskVO();
             $taskVO->setDate($currentDay);
             $taskVO->setInit(0);
-            $taskVO->setEnd($validJourney[0]->getJourney() * 60);
+            $taskVO->setEnd($validJourney->getJourney() * 60);
             $taskVO->setProjectId($holidayProjectId);
             $taskVO->setUserId($userVO->getId());
             if (\TasksFacade::CreateReport($taskVO) == -1)
