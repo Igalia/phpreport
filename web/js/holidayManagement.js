@@ -148,6 +148,9 @@ var app = new Vue({
             attributes.push({
                 bar: 'orange',
                 dates: { start: new Date(), end: new Date() },
+                popover: {
+                    label: "Today"
+                },
             });
             // Add half-leaves
             Object.keys(datesAndRanges.dates).forEach(d => {
