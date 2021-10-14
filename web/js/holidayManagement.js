@@ -55,11 +55,16 @@ var app = new Vue({
             days: [],
             range: {},
             ranges: [],
-            total: null,
+            scheduledHolidays: null,
+            availableHolidays: null,
+            enjoyedHolidays: null,
+            daysByWeek: null,
             latestDelete: null,
             isEndOfRange: false,
             init: new Date(new Date().getFullYear(), 0, 1),
             end: new Date(new Date().getFullYear(), 11, 31),
+            pendingHolidays: null,
+            serverMessages: [],
 
             // Clean selected range styles to avoid confusion when
             // removing dates
@@ -85,7 +90,7 @@ var app = new Vue({
         };
     },
     created() {
-        const fetchData = async () => {
+        const fetchHolidays = async () => {
             const url = `services/getHolidays.php?init=${formatDate(this.init)}&end=${formatDate(this.end)}`;
             const res = await fetch(url, {
                 method: 'GET',
@@ -99,28 +104,36 @@ var app = new Vue({
             });
             const datesAndRanges = await res.json();
             this.updateDates(datesAndRanges);
-        };
-
-        fetchData();
+        }
+        fetchHolidays();
+        this.fetchSummary();
     },
     computed: {
-        dates() {
-            return this.days;
-        },
         attributes() {
             return this.ranges;
         },
-        totalHolidays() {
-            return this.total;
-        },
-        initDate() {
-            return this.init;
-        },
-        endDate() {
-            return this.end;
-        }
     },
     methods: {
+        async fetchSummary() {
+            const url2 = `services/getPersonalSummaryByDateService.php?date=${formatDate(this.end)}`;
+            const res2 = await fetch(url2, {
+                method: 'GET',
+                mode: 'same-origin',
+                cache: 'no-cache',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'text/xml'
+                },
+                referrerPolicy: 'no-referrer',
+            });
+            const test = await res2.text();
+            parser = new DOMParser();
+            xmlDoc = parser.parseFromString(test, "text/xml");
+            this.pendingHolidays = xmlDoc.getElementsByTagName("pending_holidays")[0].childNodes[0].nodeValue;
+            this.scheduledHolidays = xmlDoc.getElementsByTagName("scheduled_holidays")[0].childNodes[0].nodeValue;
+            this.enjoyedHolidays = xmlDoc.getElementsByTagName("enjoyed_holidays")[0].childNodes[0].nodeValue;
+            this.availableHolidays = xmlDoc.getElementsByTagName("available_holidays")[0].childNodes[0].nodeValue;
+        },
         updateDates(datesAndRanges) {
             const attributes = datesAndRanges.ranges.map(dt => ({
                 highlight: {
@@ -133,7 +146,7 @@ var app = new Vue({
             }));
             this.ranges = attributes;
             this.days = datesAndRanges.dates;
-            this.total = datesAndRanges.dates.length;
+            this.daysByWeek = Object.keys(datesAndRanges.weeks).sort().map((week, idx) => ({ weekNumber: week, total: datesAndRanges.weeks[week] }));
         },
         onDayClick(day) {
             let endDay = day.date;
@@ -196,7 +209,6 @@ var app = new Vue({
         },
         onSaveClick: async function () {
             const url = `services/updateHolidays.php?init=${formatDate(this.init)}&end=${formatDate(this.end)}`;
-
             const res = await fetch(url, {
                 method: 'POST',
                 mode: 'same-origin',
@@ -208,8 +220,38 @@ var app = new Vue({
                 referrerPolicy: 'no-referrer',
                 body: JSON.stringify(this.days)
             });
-            const datesAndRanges = await res.json();
-            this.updateDates(datesAndRanges);
+            const body = await res.json();
+            if ("error" in body) {
+                this.serverMessages.push({ classes: "message error", text: `Error: ${body["error"]}` });
+            } else {
+                this.updateDates(body["datesAndRanges"]);
+                if (body["resultCreation"] && body["resultCreation"]["failed"] && body["resultCreation"]["failed"].length > 0) {
+                    this.serverMessages.push({
+                        classes: "message error",
+                        text: `These dates couldn't be created: ${body["resultCreation"]["failed"].join(", ")}`
+                    });
+                }
+                if (body["resultDeletion"] && body["resultDeletion"]["failed"] && body["resultDeletion"]["failed"].length > 0) {
+                    this.serverMessages.push({
+                        classes: "message error",
+                        text: `These dates couldn't be removed: ${body["resultDeletion"]["failed"].join(", ")}`
+                    });
+                }
+                if (this.serverMessages.length === 0) {
+                    this.serverMessages.push({ classes: "message success", text: "Holidays were updated." });
+                }
+            };
+            this.fetchSummary();
+            this.$emit('flush-message')
         }
     },
+    mounted() {
+        let timer
+        this.$on('flush-message', message => {
+            clearTimeout(timer)
+            timer = setTimeout(() => {
+                this.serverMessages = []
+            }, 5000)
+        })
+    }
 })

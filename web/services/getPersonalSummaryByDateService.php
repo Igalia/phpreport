@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2021 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -18,144 +18,109 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** getPersonalSummaryByDate web service.
- *
- * @filesource
- * @package PhpReport
- * @subpackage services
- * @author Jorge López Fernández
- */
+use Phpreport\Web\services\HolidayService;
 
-    define('PHPREPORT_ROOT', __DIR__ . '/../../');
-    include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
-    include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
-    include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
-    include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
+define('PHPREPORT_ROOT', __DIR__ . '/../../');
+require_once(PHPREPORT_ROOT . '/vendor/autoload.php');
+include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
+include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
+include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
+include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
-    /**
-     * Function used to pretty print time. From hours to Days d hours:minutes
-     * @param float $time: Time in hours to be converted
-     * @param float $journey: Number of hours that represents a day in our life
-     * @param int $limit: Number of days to change representation from hours to days
-     * @return string formatedHours: String representing hours in human format
-     */
-    function formatHours ($time, $journey, $limit) {
-        $negative = ($time < 0);
-        $work_days = false;
-        $time = abs($time);
-        $time = round($time,2);
-        $time = $time*60;
+$dateString = $_GET['date'] ?? NULL;
 
-        if ($journey > 0 && $time > $limit*$journey*60) {
-            $work_days = intval($time / ($journey*60));
-            $hours = intval(($time - ($work_days*$journey*60))/60);
-            $minutes = intval($time - $hours*60 - $work_days*$journey*60);
-        } else {
-            $hours = intval($time / 60);
-            $minutes = intval($time - ($hours*60));
-        }
+$dateFormat = $_GET['dateFormat'] ?? "Y-m-d";
 
-        if ($minutes >= 60) {
-            $minutes = $minutes - 60;
-            $hours = $hours + 1;
-        }
+$sid = $_GET['sid'] ?? NULL;
 
-        if ($hours < 10) {
-            $hours = "0" . $hours;
-        }
-        if ($minutes < 10) {
-            $minutes = "0" . $minutes;
-        }
+$date = new DateTime();
+if ($dateString)
+    $date = DateTime::createFromFormat($dateFormat, $dateString);
 
-        if ($work_days)
-            $formatedHours = $work_days . " d " . $hours . ":" . $minutes;
-        else
-            $formatedHours = $hours . ":" . $minutes;
+do {
+    /* We check authentication and authorization */
+    require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 
-        if ($negative)
-            $formatedHours = "-" . $formatedHours;
-
-        return $formatedHours;
+    if (!LoginManager::isLogged($sid)) {
+        $string = "<personalSummary uid='" . $userLogin . "' date='" . $date->format($dateFormat) . "'><error id='2'>You must be logged in</error></personalSummary>";
+        break;
     }
 
-    $dateString = $_GET['date'] ?? NULL;
+    if (!LoginManager::isAllowed($sid)) {
+        $string = "<personalSummary uid='" . $userLogin . "' date='" . $date->format($dateFormat) . "'><error id='3'>Forbidden service for this User</error></personalSummary>";
+        break;
+    }
 
-    $dateFormat = $_GET['dateFormat'] ?? "Y-m-d";
+    $userVO = $_SESSION['user'];
 
-    $sid = $_GET['sid'] ?? NULL;
+    $summary = TasksFacade::GetPersonalSummaryByLoginDate($userVO, $date);
 
-    $date = new DateTime();
-    if ($dateString)
-        $date = DateTime::createFromFormat($dateFormat, $dateString);
+    $dayHours = floor($summary['day'] / 60);
+    $dayMinutes = $summary['day'] - ($dayHours * 60);
+    if ($dayMinutes < 10)
+        $dayMinutes = "0" . $dayMinutes;
+    $day = $dayHours . ":" . $dayMinutes;
 
-    do {
-        /* We check authentication and authorization */
-        require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
+    $weekHours = floor($summary['week'] / 60);
+    $weekMinutes = $summary['week'] - ($weekHours * 60);
+    if ($weekMinutes < 10)
+        $weekMinutes = "0" . $weekMinutes;
+    $week = $weekHours . ":" . $weekMinutes;
 
-        if (!LoginManager::isLogged($sid))
-        {
-            $string = "<personalSummary uid='" . $userLogin . "' date='" . $date->format($dateFormat) . "'><error id='2'>You must be logged in</error></personalSummary>";
-            break;
-        }
+    $weeklyGoalHours = floor($summary['weekly_goal'] / 60);
+    $weeklyGoalMinutes = $summary['weekly_goal'] - ($weeklyGoalHours * 60);
+    if ($weeklyGoalMinutes < 10)
+        $weeklyGoalMinutes = "0" . $weeklyGoalMinutes;
+    $weekGoal = $weeklyGoalHours . ":" . $weeklyGoalMinutes;
 
-        if (!LoginManager::isAllowed($sid))
-        {
-            $string = "<personalSummary uid='" . $userLogin . "' date='" . $date->format($dateFormat) . "'><error id='3'>Forbidden service for this User</error></personalSummary>";
-            break;
-        }
+    $initYearDate = new DateTime($date->format('Y') . '-01-01');
+    $extraHoursSummary = UsersFacade::ExtraHoursReport($initYearDate, $date, $userVO);
 
-        $userVO = $_SESSION['user'];
+    $currentJourney = 0;
+    $journeys = UsersFacade::GetUserJourneyHistoriesByIntervals($date, $date, $userVO->getId());
+    if (count($journeys) == 1) {
+        $currentJourney = $journeys[0]->getJourney();
+    }
 
-        $summary = TasksFacade::GetPersonalSummaryByLoginDate($userVO, $date);
+    $extraHours = $extraHoursSummary[1][$userVO->getLogin()]["extra_hours"];
+    $extraHours = HolidayService::formatHours($extraHours, $currentJourney, 5);
 
-        $dayHours = floor($summary['day']/60);
-        $dayMinutes = $summary['day']-($dayHours*60);
-        if ($dayMinutes < 10)
-            $dayMinutes = "0" . $dayMinutes;
-        $day = $dayHours . ":" . $dayMinutes;
+    $accExtraHours = $extraHoursSummary[1][$userVO->getLogin()]["total_extra_hours"];
+    $accExtraHours = HolidayService::formatHours($accExtraHours, $currentJourney, 5);
 
-        $weekHours = floor($summary['week']/60);
-        $weekMinutes = $summary['week']-($weekHours*60);
-        if ($weekMinutes < 10)
-             $weekMinutes = "0" . $weekMinutes;
-        $week = $weekHours . ":" . $weekMinutes;
+    // Report holidays from the entire year, including those later than $date
+    $endYearDate = new DateTime($date->format('Y') . '-12-31');
+    $holidays = UsersFacade::GetHolidayHoursSummary($initYearDate, $endYearDate, $userVO);
+    $pendingHolidays = $holidays["pendingHours"][$userVO->getLogin()];
+    $pendingHolidays = HolidayService::formatHours($pendingHolidays, $currentJourney, 5);
 
-        $weeklyGoalHours = floor($summary['weekly_goal']/60);
-        $weeklyGoalMinutes = $summary['weekly_goal']-($weeklyGoalHours*60);
-        if ($weeklyGoalMinutes < 10)
-            $weeklyGoalMinutes = "0" . $weeklyGoalMinutes;
-        $weekGoal = $weeklyGoalHours. ":" . $weeklyGoalMinutes;
+    $scheduledHolidays = $holidays["scheduledHours"][$userVO->getLogin()];
+    $scheduledHolidays = HolidayService::formatHours($scheduledHolidays, $currentJourney, 5);
 
-        $initYearDate = new DateTime($date->format('Y').'-01-01');
-        $extraHoursSummary = UsersFacade::ExtraHoursReport($initYearDate, $date, $userVO);
+    $availableHolidays = $holidays["availableHours"][$userVO->getLogin()];
+    $availableHolidays = HolidayService::formatHours($availableHolidays, $currentJourney, 5);
 
-        $currentJourney = 0;
-        $journeys = UsersFacade::GetUserJourneyHistoriesByIntervals($date, $date, $userVO->getId());
-        if(count($journeys)==1) {
-            $currentJourney = $journeys[0]->getJourney();
-        }
+    $enjoyedHolidays = $holidays["enjoyedHours"][$userVO->getLogin()];
+    $enjoyedHolidays = HolidayService::formatHours($enjoyedHolidays, $currentJourney, 5);
 
-        $extraHours = $extraHoursSummary[1][$userVO->getLogin()]["extra_hours"];
-        $extraHours = formatHours($extraHours, $currentJourney, 5);
+    $string = "<personalSummary login='" . $userVO->getLogin() . "' date='" . $date->format($dateFormat) . "'>"
+        . "<hours><day>" . $day  . "</day>"
+        . "<week>" . $week  . "</week>"
+        . "<weekly_goal>" . $weekGoal . "</weekly_goal>"
+        . "<extra_hours>" . $extraHours . "</extra_hours>"
+        . "<pending_holidays>" . $pendingHolidays . "</pending_holidays>"
+        . "<scheduled_holidays>" . $scheduledHolidays . "</scheduled_holidays>"
+        . "<available_holidays>" . $availableHolidays . "</available_holidays>"
+        . "<enjoyed_holidays>" . $enjoyedHolidays . "</enjoyed_holidays>"
+        . "<acc_extra_hours>" . $accExtraHours . "</acc_extra_hours>"
+        . "</hours></personalSummary>";
+} while (false);
 
-        $accExtraHours = $extraHoursSummary[1][$userVO->getLogin()]["total_extra_hours"];
-        $accExtraHours = formatHours($accExtraHours, $currentJourney, 5);
+// make it into a proper XML document with header etc
+$xml = simplexml_load_string($string);
 
-        // Report holidays from the entire year, including those later than $date
-        $endYearDate = new DateTime($date->format('Y').'-12-31');
-        $holidays = UsersFacade::GetPendingHolidayHours($initYearDate, $endYearDate, $userVO);
-        $pendingHolidays = $holidays[$userVO->getLogin()];
-        $pendingHolidays = formatHours($pendingHolidays, $currentJourney, 5);
+// send an XML mime header
+header("Content-type: text/xml");
 
-        $string = "<personalSummary login='" . $userVO->getLogin() . "' date='" . $date->format($dateFormat) . "'><hours><day>" . $day  . "</day><week>" . $week  . "</week><weekly_goal>" . $weekGoal . "</weekly_goal><extra_hours>" . $extraHours . "</extra_hours><pending_holidays>" . $pendingHolidays . "</pending_holidays><acc_extra_hours>" . $accExtraHours . "</acc_extra_hours></hours></personalSummary>";
-
-    } while(false);
-
-   // make it into a proper XML document with header etc
-    $xml = simplexml_load_string($string);
-
-   // send an XML mime header
-    header("Content-type: text/xml");
-
-   // output correctly formatted XML
-    echo $xml->asXML();
+// output correctly formatted XML
+echo $xml->asXML();

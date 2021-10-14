@@ -39,17 +39,43 @@ include_once("include/header.php");
     <div class="sidebar">
         <div class="holidaysList">
             <h2 class="sidebarTitle"><?php echo date("Y"); ?> Holidays</h2>
-            <p>Total booked: {{ totalHolidays }}</p>
-
-            <p class="warning info"><strong>TIP:</strong> Double click on single dates if you want to delete existing holidays</p>
+            <table class="summary">
+                <tr>
+                    <td>Available for the year</td>
+                    <td class="text-right">{{ availableHolidays }}h</td>
+                </tr>
+                <tr>
+                    <td>Enjoyed</td>
+                    <td class="text-right">{{ enjoyedHolidays }}h</td>
+                </tr>
+                <tr>
+                    <td>Scheduled</td>
+                    <td class="text-right">{{ scheduledHolidays }}h</td>
+                </tr>
+                <tr>
+                    <td>Pending</td>
+                    <td class="text-right">{{ pendingHolidays }}h</td>
+                </tr>
+            </table>
+            <p class="warning info">
+                <strong>TIP:</strong> Double click on single dates if you want to delete existing holidays.
+            </p>
             <p class="text-right">
                 <button class="btn" v-on:click="onSaveClick">Save Holidays</button>
             </p>
         </div>
+        <div class="holidaysList">
+            <h2 class="sidebarTitle">Days booked per week</h2>
+            <table class="summary">
+                <tr v-for="week in daysByWeek" :key="week.weekNumber">
+                    <td>W{{ week.weekNumber }}</td>
+                    <td class="text-right">{{ week.total }} {{ week.total > 1 ? 'days' : 'day' }}</td>
+                </tr>
+            </table>
+        </div>
     </div>
     <div class="calendar">
         <v-date-picker
-            :from-page="{ month: 1, year: 2021 }"
             is-range
             v-model="range"
             :attributes="attributes"
@@ -59,9 +85,12 @@ include_once("include/header.php");
             show-iso-weeknumbers
             :select-attribute="selectAttribute"
             @dayclick="onDayClick"
-            :min-date="initDate"
-            :max-date="endDate"
+            :min-date="init"
+            :max-date="end"
         />
+    </div>
+    <div class="snackbarWrapper">
+        <div id="snackBar" v-for="message in serverMessages" :class="message.classes" :key="message">{{ message.text }}</div>
     </div>
 </div>
 

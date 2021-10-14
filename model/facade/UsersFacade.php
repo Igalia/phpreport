@@ -39,6 +39,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateUserAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/ExtraHoursReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetPendingHolidayHoursAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetScheduledHolidaysAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetHolidayHoursSummaryAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateCustomEventAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteCustomEventAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateCustomEventAction.php');
@@ -254,20 +255,19 @@ abstract class UsersFacade {
      * @return array an associative array with the number of pending holiday hours related to each User's login.
      */
     static function GetPendingHolidayHours(DateTime $init, DateTime $end, UserVO $user = NULL) {
+        $action = new GetPendingHolidayHoursAction($init, $end, $user);
+        return $action->execute();
+    }
 
-    $action = new GetPendingHolidayHoursAction($init, $end, $user);
-
-    return $action->execute();
-
+    static function GetHolidayHoursSummary(DateTime $init, DateTime $end, UserVO $user = NULL) {
+        $action = new GetHolidayHoursSummaryAction($init, $end, $user);
+        return $action->execute();
     }
 
 
     static function GetScheduledHolidays(DateTime $init, DateTime $end, UserVO $user = NULL) {
-
         $action = new GetScheduledHolidaysAction($init, $end, $user);
-
         return $action->execute();
-
     }
 
     /** User retriever by Project Iteration Function

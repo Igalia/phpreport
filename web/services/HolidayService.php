@@ -105,6 +105,66 @@ class HolidayService
         return $ranges;
     }
 
+    /**
+     * Function used to pretty print time. From hours to Days d hours:minutes
+     */
+    static function formatHours(float $time, float $journey, int $limit): string
+    {
+        $negative = ($time < 0);
+        $work_days = false;
+        $time = abs($time);
+        $time = round($time, 2);
+        $time = $time * 60;
+
+        if ($journey > 0 && $time > $limit * $journey * 60) {
+            $work_days = intval($time / ($journey * 60));
+            $hours = intval(($time - ($work_days * $journey * 60)) / 60);
+            $minutes = intval($time - $hours * 60 - $work_days * $journey * 60);
+        } else {
+            $hours = intval($time / 60);
+            $minutes = intval($time - ($hours * 60));
+        }
+
+        if ($minutes >= 60) {
+            $minutes = $minutes - 60;
+            $hours = $hours + 1;
+        }
+
+        if ($hours < 10) {
+            $hours = "0" . $hours;
+        }
+        if ($minutes < 10) {
+            $minutes = "0" . $minutes;
+        }
+
+        if ($work_days)
+            $formatedHours = $work_days . " d " . $hours . ":" . $minutes;
+        else
+            $formatedHours = $hours . ":" . $minutes;
+
+        if ($negative)
+            $formatedHours = "-" . $formatedHours;
+
+        return $formatedHours;
+    }
+
+    static function groupByWeeks(array $dates): array
+    {
+        if (count($dates) == 0) return [];
+        $previous_week = date("W", strtotime($dates[0]));
+        $weeks[$previous_week] = 1;
+        for ($i = 1; $i < count($dates); $i++) {
+            $current_week = date("W", strtotime($dates[$i]));
+            if ($current_week == $previous_week) {
+                $weeks[$current_week]++;
+            } else {
+                $weeks[$current_week] = 1;
+                $previous_week = $current_week;
+            }
+        }
+        return $weeks;
+    }
+
     public function getUserVacationsRanges(string $init = NULL, string $end = NULL, $sid = NULL): array
     {
         if (!$this->loginManager::isLogged($sid)) {
@@ -123,7 +183,11 @@ class HolidayService
 
         $vacations = \UsersFacade::GetScheduledHolidays($init, $end, $userVO);
 
-        return ['dates' => $vacations, 'ranges' => $this->datesToRanges($vacations)];
+        return [
+            'dates' => $vacations,
+            'ranges' => $this->datesToRanges($vacations),
+            'weeks' => $this->groupByWeeks($vacations)
+        ];
     }
 
     public function deleteVacations(array $daysToDelete, \UserVO $userVO, int $holidayProjectId): array
@@ -151,7 +215,10 @@ class HolidayService
 
             $currentDay = date_create($day);
             $validJourney = array_filter($journeyHistories, fn ($history) => $history->dateBelongsToJourney($currentDay));
-            if (count($validJourney) == 0) continue;
+            if (count($validJourney) == 0) {
+                $failed[] = $day;
+                continue;
+            }
 
             $taskVO = new \TaskVO();
             $taskVO->setDate($currentDay);
@@ -200,6 +267,10 @@ class HolidayService
         $daysToCreate = array_diff($vacations, $existingVacations);
         $resultCreation = $this->createVacations($daysToCreate, $userVO, $holidayProjectId);
 
-        return $this->getUserVacationsRanges($init, $end);
+        return [
+            "datesAndRanges" => $this->getUserVacationsRanges($init, $end),
+            "resultCreation" => $resultCreation,
+            "resultDeleted" => $resultDeleted
+        ];
     }
 }

@@ -1,9 +1,15 @@
 .holidayContainer {
     display: grid;
-    grid-template-columns: 20% 80%;
+    grid-template-columns: 35% 65%;
     padding: 20px;
     grid-gap: 10px;
     font-family: tahoma,arial,helvetica,sans-serif;
+}
+
+@media (min-width: 960px) {
+    .holidayContainer {
+        grid-template-columns: 20% 80%;
+    }
 }
 
 .holidaysList {
@@ -11,11 +17,31 @@
     border-radius: 5px;
     border: 1px solid #ccc;
     padding: 20px;
+    margin-bottom: 1em;
 }
 
-.holidaysList ul{
-    margin-top: 10px;
-    padding-left: 20px;
-    list-style: disc;
+.sidebarTitle {
     line-height: 1.5em;
+    margin-bottom: 1em;
+}
+
+.summary {
+    border-collapse: collapse;
+    font-size: 0.8em;
+    margin-top: 10px;
+    line-height: 1.5em;
+    width: 100%;
+}
+
+.summary tr {
+    border-bottom: 1px solid #ccc;
+    list-style: none;
+}
+
+.summary td {
+    padding: 5px;
+}
+
+.summary td:first-child {
+    font-weight: bold;
 }
