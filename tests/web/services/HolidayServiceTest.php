@@ -154,4 +154,40 @@ class HolidayServiceTest extends TestCase
             $this->instance::formatHours(14, 7, 1)
         );
     }
+
+    public function testGroupByWeeksSameYear(): void
+    {
+        $dates = [
+            "2021-10-14",
+            "2021-10-15",
+            "2021-11-01"
+        ];
+        $result = [
+            '2021W41' => 2,
+            '2021W44' => 1
+        ];
+        $this->assertEquals(
+            $result,
+            $this->instance::groupByWeeks($dates)
+        );
+    }
+
+    public function testGroupByWeeksWithDateInPastYearISOWeek(): void
+    {
+        // The first week of 2021 doesn't belong to the ISO week one of 2021,
+        // instead it belongs to the last week (53) of 2020
+        $dates = [
+            "2021-01-01",
+            "2021-01-02",
+            "2021-11-01"
+        ];
+        $result = [
+            '2020W53' => 2,
+            '2021W44' => 1
+        ];
+        $this->assertEquals(
+            $result,
+            $this->instance::groupByWeeks($dates)
+        );
+    }
 }
