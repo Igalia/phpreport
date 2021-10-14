@@ -68,7 +68,7 @@ include_once("include/header.php");
             <h2 class="sidebarTitle">Days booked per week</h2>
             <table class="summary">
                 <tr v-for="week in daysByWeek" :key="week.weekNumber">
-                    <td>W{{ week.weekNumber }}</td>
+                    <td>{{ week.weekNumber }}</td>
                     <td class="text-right">{{ week.total }} {{ week.total > 1 ? 'days' : 'day' }}</td>
                 </tr>
             </table>
