@@ -142,16 +142,31 @@ var app = new Vue({
                     end: { fillMode: 'outline' },
                 },
                 dates: { start: new Date(dt.start + 'T00:00:00'), end: new Date(dt.end + 'T00:00:00') },
-                coveredDates: datesAndRanges.dates.filter(d => d >= dt.start && d <= dt.end)
+                coveredDates: Object.keys(datesAndRanges.dates).filter(d => d >= dt.start && d <= dt.end)
             }));
             // Add today
             attributes.push({
                 bar: 'orange',
                 dates: { start: new Date(), end: new Date() },
             });
+            // Add half-leaves
+            Object.keys(datesAndRanges.dates).forEach(d => {
+                if (datesAndRanges.dates[d].isHalfLeave) {
+                    attributes.push({
+                        highlight: {
+                            color: 'orange',
+                            fillMode: 'light',
+                        },
+                        dates: new Date(d + 'T00:00:00'),
+                        popover: {
+                            label: "Contains half leave"
+                        },
+                    })
+                }
+            });
 
             this.ranges = attributes;
-            this.days = datesAndRanges.dates;
+            this.days = Object.keys(datesAndRanges.dates);
             this.daysByWeek = Object.keys(datesAndRanges.weeks).sort().map((week, idx) => ({ weekNumber: week, total: datesAndRanges.weeks[week] }));
         },
         onDayClick(day) {

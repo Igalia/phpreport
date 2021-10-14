@@ -661,7 +661,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
             return [];
         }
 
-        $sql = "SELECT _date FROM task WHERE projectid=" . $projectId . " AND usrid=" . $userVO->getId();
+        $sql = "SELECT _date, init, _end FROM task WHERE projectid=" . $projectId . " AND usrid=" . $userVO->getId();
 
         if (!is_null($initDate)) {
             $sql .= " AND _date >=" . DBPostgres::formatDate($initDate);
@@ -676,7 +676,11 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
         $result = array();
         for ($i = 0; $i < pg_num_rows($res); $i++) {
-            $result[] = @pg_fetch_array($res)['_date'];
+            $row = @pg_fetch_array($res);
+            $result[$row['_date']] = [
+                'init' => $row['init'],
+                'end' => $row['_end']
+            ];
         }
 
         if (empty($result))

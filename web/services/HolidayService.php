@@ -165,6 +165,19 @@ class HolidayService
         return $weeks;
     }
 
+    static function mapHalfLeaves($dates, array $journeyHistories): array
+    {
+        foreach ($dates as $day => $duration) {
+            $validJourney = array_filter($journeyHistories, fn ($history) => $history->dateBelongsToJourney(date_create($day)));
+            if (count($validJourney) == 0) continue;
+            $validJourney = array_pop($validJourney);
+            if (($validJourney->getJourney() * 60) > ($duration['end'] - $duration['init'])) {
+                $dates[$day]['isHalfLeave'] = True;
+            }
+        }
+        return $dates;
+    }
+
     public function getUserVacationsRanges(string $init = NULL, string $end = NULL, $sid = NULL): array
     {
         if (!$this->loginManager::isLogged($sid)) {
@@ -181,12 +194,15 @@ class HolidayService
         $userVO = new \UserVO();
         $userVO->setLogin($_SESSION['user']->getLogin());
 
+        $journeyHistories = \UsersFacade::GetUserJourneyHistories($userVO->getLogin());
+
         $vacations = \UsersFacade::GetScheduledHolidays($init, $end, $userVO);
+        $vacations = $this::mapHalfLeaves($vacations, $journeyHistories);
 
         return [
             'dates' => $vacations,
-            'ranges' => $this->datesToRanges($vacations),
-            'weeks' => $this->groupByWeeks($vacations)
+            'ranges' => $this->datesToRanges(array_keys($vacations)),
+            'weeks' => $this->groupByWeeks(array_keys($vacations))
         ];
     }
 
@@ -256,11 +272,11 @@ class HolidayService
         $userVO->setLogin($_SESSION['user']->getLogin());
         $userVO->setId($_SESSION['user']->getId());
 
-        $existingVacations = \UsersFacade::GetScheduledHolidays(
+        $existingVacations = array_keys(\UsersFacade::GetScheduledHolidays(
             date_create($init),
             date_create($end),
             $userVO
-        );
+        ));
         $holidayProjectId = \ProjectsFacade::GetProjectByDescription(\ConfigurationParametersManager::getParameter('VACATIONS_PROJECT'));
 
         $daysToDelete = array_diff($existingVacations, $vacations);
