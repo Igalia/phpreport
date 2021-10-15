@@ -26,7 +26,7 @@ function formatDate(date) {
 }
 
 function deleteRangeAndDays(ranges, day, days) {
-    rangeIdx = ranges.findIndex(range => range.coveredDates.includes(day));
+    rangeIdx = ranges.findIndex(range => range.coveredDates?.includes(day));
     let daysToDelete = [];
     // Remove the overlaping range
     if (rangeIdx > -1) {
