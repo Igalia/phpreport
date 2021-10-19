@@ -105,7 +105,17 @@ var app = new Vue({
         };
     },
     created() {
-        const fetchHolidays = async () => {
+        this.fetchHolidays();
+        this.fetchSummary();
+        this.fetchUsers();
+    },
+    computed: {
+        attributes() {
+            return this.ranges;
+        },
+    },
+    methods: {
+        async fetchHolidays() {
             const url = `services/getHolidays.php?init=${formatDate(this.init)}&end=${formatDate(this.end)}`;
             const res = await fetch(url, {
                 method: 'GET',
@@ -119,16 +129,7 @@ var app = new Vue({
             });
             const datesAndRanges = await res.json();
             this.updateDates(datesAndRanges);
-        }
-        fetchHolidays();
-        this.fetchSummary();
-    },
-    computed: {
-        attributes() {
-            return this.ranges;
         },
-    },
-    methods: {
         async fetchSummary() {
             const url = `services/getPersonalSummaryByDateService.php?date=${formatDate(this.end)}`;
             const res = await fetch(url, {
