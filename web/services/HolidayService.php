@@ -172,7 +172,7 @@ class HolidayService
             if (count($validJourney) == 0) continue;
             $validJourney = array_pop($validJourney);
             if (($validJourney->getJourney() * 60) > ($duration['end'] - $duration['init'])) {
-                $dates[$day]['isHalfLeave'] = True;
+                $dates[$day]['isPartialLeave'] = True;
             }
         }
         return $dates;

@@ -152,9 +152,9 @@ var app = new Vue({
                     label: "Today"
                 },
             });
-            // Add half-leaves
+            // Add partial leaves
             Object.keys(datesAndRanges.dates).forEach(d => {
-                if (datesAndRanges.dates[d].isHalfLeave) {
+                if (datesAndRanges.dates[d].isPartialLeave) {
                     attributes.push({
                         highlight: {
                             color: 'orange',
@@ -162,7 +162,7 @@ var app = new Vue({
                         },
                         dates: new Date(d + 'T00:00:00'),
                         popover: {
-                            label: "Contains half leave"
+                            label: "Contains partial leave"
                         },
                     })
                 }
