@@ -26,16 +26,25 @@ function formatDate(date) {
 }
 
 function deleteRangeAndDays(ranges, day, days) {
+    if (ranges.length == 0 || days.length == 0)
+        return { ranges, days };
+    let updatedRanges = ranges;
+    let updatedDays = days;
     rangeIdx = ranges.findIndex(range => range.coveredDates?.includes(day));
     let daysToDelete = [];
     // Remove the overlaping range
     if (rangeIdx > -1) {
-        daysToDelete = ranges[rangeIdx].coveredDates;
-        ranges.splice(rangeIdx, 1);
-        // Remove all days covered in that range
-        days = days.filter(d => !daysToDelete.includes(d));
+        daysToDelete = updatedRanges[rangeIdx].coveredDates;
+        updatedRanges.splice(rangeIdx, 1);
+        // Remove all days covered in that range, including partial leaves
+        updatedDays = updatedDays.filter(d => !daysToDelete.includes(d));
+        for (let index = 0; index < daysToDelete.length; index++) {
+            let res = this.deleteRangeAndDays(updatedRanges, daysToDelete[index], updatedDays);
+            updatedRanges = res.ranges;
+            updatedDays = res.days;
+        }
     };
-    return { ranges, days };
+    return { ranges: updatedRanges, days: updatedDays };
 }
 
 function indexOfRange(attrs, date) {
@@ -164,6 +173,7 @@ var app = new Vue({
                         popover: {
                             label: "Contains partial leave"
                         },
+                        coveredDates: [d],
                     })
                 }
             });
