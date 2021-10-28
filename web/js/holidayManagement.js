@@ -51,6 +51,12 @@ function indexOfRange(attrs, date) {
     return attrs.findIndex(attr => attr.dates.findIndex(dt => formatDate(dt.end) == formatDate(date)) >= 0);
 }
 
+function formatMinutesToHours(minutes) {
+    let hours = Math.floor(minutes / 60) + "h";
+    let minutesLeft = minutes % 60;
+    return minutesLeft > 0 ? hours + minutesLeft + "m" : hours;
+}
+
 function addDays(date, days) {
     var result = new Date(date);
     result.setDate(result.getDate() + days);
@@ -164,6 +170,7 @@ var app = new Vue({
             // Add partial leaves
             Object.keys(datesAndRanges.dates).forEach(d => {
                 if (datesAndRanges.dates[d].isPartialLeave) {
+                    const duration = formatMinutesToHours(datesAndRanges.dates[d].end - datesAndRanges.dates[d].init);
                     attributes.push({
                         highlight: {
                             color: 'orange',
@@ -171,7 +178,7 @@ var app = new Vue({
                         },
                         dates: new Date(d + 'T00:00:00'),
                         popover: {
-                            label: "Contains partial leave"
+                            label: `Partial leave of ${duration}`
                         },
                         coveredDates: [d],
                     })
