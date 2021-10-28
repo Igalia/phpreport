@@ -124,8 +124,8 @@ var app = new Vue({
     },
     methods: {
         async fetchSummary() {
-            const url2 = `services/getPersonalSummaryByDateService.php?date=${formatDate(this.end)}`;
-            const res2 = await fetch(url2, {
+            const url = `services/getPersonalSummaryByDateService.php?date=${formatDate(this.end)}`;
+            const res = await fetch(url, {
                 method: 'GET',
                 mode: 'same-origin',
                 cache: 'no-cache',
@@ -135,9 +135,9 @@ var app = new Vue({
                 },
                 referrerPolicy: 'no-referrer',
             });
-            const test = await res2.text();
+            const body = await res.text();
             parser = new DOMParser();
-            xmlDoc = parser.parseFromString(test, "text/xml");
+            xmlDoc = parser.parseFromString(body, "text/xml");
             this.pendingHolidays = xmlDoc.getElementsByTagName("pending_holidays")[0].childNodes[0].nodeValue;
             this.scheduledHolidays = xmlDoc.getElementsByTagName("scheduled_holidays")[0].childNodes[0].nodeValue;
             this.enjoyedHolidays = xmlDoc.getElementsByTagName("enjoyed_holidays")[0].childNodes[0].nodeValue;
