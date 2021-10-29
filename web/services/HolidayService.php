@@ -178,7 +178,7 @@ class HolidayService
         return $dates;
     }
 
-    public function getUserVacationsRanges(string $init = NULL, string $end = NULL, $sid = NULL): array
+    public function getUserVacationsRanges(string $init = NULL, string $end = NULL, $sid = NULL, $userLogin = NULL): array
     {
         if (!$this->loginManager::isLogged($sid)) {
             return ['error' => 'User not logged in'];
@@ -192,7 +192,7 @@ class HolidayService
         $end = date_create($end ?? date('Y') . "-12-31");
 
         $userVO = new \UserVO();
-        $userVO->setLogin($_SESSION['user']->getLogin());
+        $userVO->setLogin($userLogin ?? $_SESSION['user']->getLogin());
 
         $journeyHistories = \UsersFacade::GetUserJourneyHistories($userVO->getLogin());
 

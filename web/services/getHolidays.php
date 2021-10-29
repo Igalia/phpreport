@@ -28,6 +28,7 @@ require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 $init = $_GET['init'] ?? NULL;
 $end = $_GET['end'] ?? NULL;
 $sid = $_GET['sid'] ?? NULL;
+$userLogin = $_GET['userLogin'] ?? NULL;
 
 $loginManager = new \LoginManager();
 
@@ -35,7 +36,7 @@ $holidayService = new HolidayService($loginManager);
 
 header('Content-Type: application/json; charset=utf-8');
 
-$holidays = $holidayService->getUserVacationsRanges($init, $end, $sid);
+$holidays = $holidayService->getUserVacationsRanges($init, $end, $sid, $userLogin);
 
 if (array_key_exists('error', $holidays)) {
     // user is logged out or doesn't have permission
