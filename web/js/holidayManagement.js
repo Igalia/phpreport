@@ -26,20 +26,35 @@ function formatDate(date) {
 }
 
 function deleteRangeAndDays(ranges, day, days) {
-    rangeIdx = ranges.findIndex(range => range.coveredDates.includes(day));
+    if (ranges.length == 0 || days.length == 0)
+        return { ranges, days };
+    let updatedRanges = ranges;
+    let updatedDays = days;
+    rangeIdx = ranges.findIndex(range => range.coveredDates?.includes(day));
     let daysToDelete = [];
     // Remove the overlaping range
     if (rangeIdx > -1) {
-        daysToDelete = ranges[rangeIdx].coveredDates;
-        ranges.splice(rangeIdx, 1);
-        // Remove all days covered in that range
-        days = days.filter(d => !daysToDelete.includes(d));
+        daysToDelete = updatedRanges[rangeIdx].coveredDates;
+        updatedRanges.splice(rangeIdx, 1);
+        // Remove all days covered in that range, including partial leaves
+        updatedDays = updatedDays.filter(d => !daysToDelete.includes(d));
+        for (let index = 0; index < daysToDelete.length; index++) {
+            let res = this.deleteRangeAndDays(updatedRanges, daysToDelete[index], updatedDays);
+            updatedRanges = res.ranges;
+            updatedDays = res.days;
+        }
     };
-    return { ranges, days };
+    return { ranges: updatedRanges, days: updatedDays };
 }
 
 function indexOfRange(attrs, date) {
     return attrs.findIndex(attr => attr.dates.findIndex(dt => formatDate(dt.end) == formatDate(date)) >= 0);
+}
+
+function formatMinutesToHours(minutes) {
+    let hours = Math.floor(minutes / 60) + "h";
+    let minutesLeft = minutes % 60;
+    return minutesLeft > 0 ? hours + minutesLeft + "m" : hours;
 }
 
 function addDays(date, days) {
@@ -115,8 +130,8 @@ var app = new Vue({
     },
     methods: {
         async fetchSummary() {
-            const url2 = `services/getPersonalSummaryByDateService.php?date=${formatDate(this.end)}`;
-            const res2 = await fetch(url2, {
+            const url = `services/getPersonalSummaryByDateService.php?date=${formatDate(this.end)}`;
+            const res = await fetch(url, {
                 method: 'GET',
                 mode: 'same-origin',
                 cache: 'no-cache',
@@ -126,9 +141,9 @@ var app = new Vue({
                 },
                 referrerPolicy: 'no-referrer',
             });
-            const test = await res2.text();
+            const body = await res.text();
             parser = new DOMParser();
-            xmlDoc = parser.parseFromString(test, "text/xml");
+            xmlDoc = parser.parseFromString(body, "text/xml");
             this.pendingHolidays = xmlDoc.getElementsByTagName("pending_holidays")[0].childNodes[0].nodeValue;
             this.scheduledHolidays = xmlDoc.getElementsByTagName("scheduled_holidays")[0].childNodes[0].nodeValue;
             this.enjoyedHolidays = xmlDoc.getElementsByTagName("enjoyed_holidays")[0].childNodes[0].nodeValue;
@@ -142,16 +157,36 @@ var app = new Vue({
                     end: { fillMode: 'outline' },
                 },
                 dates: { start: new Date(dt.start + 'T00:00:00'), end: new Date(dt.end + 'T00:00:00') },
-                coveredDates: datesAndRanges.dates.filter(d => d >= dt.start && d <= dt.end)
+                coveredDates: Object.keys(datesAndRanges.dates).filter(d => d >= dt.start && d <= dt.end)
             }));
             // Add today
             attributes.push({
                 bar: 'orange',
                 dates: { start: new Date(), end: new Date() },
+                popover: {
+                    label: "Today"
+                },
+            });
+            // Add partial leaves
+            Object.keys(datesAndRanges.dates).forEach(d => {
+                if (datesAndRanges.dates[d].isPartialLeave) {
+                    const duration = formatMinutesToHours(datesAndRanges.dates[d].end - datesAndRanges.dates[d].init);
+                    attributes.push({
+                        highlight: {
+                            color: 'orange',
+                            fillMode: 'light',
+                        },
+                        dates: new Date(d + 'T00:00:00'),
+                        popover: {
+                            label: `Partial leave of ${duration}`
+                        },
+                        coveredDates: [d],
+                    })
+                }
             });
 
             this.ranges = attributes;
-            this.days = datesAndRanges.dates;
+            this.days = Object.keys(datesAndRanges.dates);
             this.daysByWeek = Object.keys(datesAndRanges.weeks).sort().map((week, idx) => ({ weekNumber: week, total: datesAndRanges.weeks[week] }));
         },
         onDayClick(day) {
