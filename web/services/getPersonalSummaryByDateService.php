@@ -33,6 +33,8 @@ $dateFormat = $_GET['dateFormat'] ?? "Y-m-d";
 
 $sid = $_GET['sid'] ?? NULL;
 
+$userLogin = $_GET['userLogin'] ?? NULL;
+
 $date = new DateTime();
 if ($dateString)
     $date = DateTime::createFromFormat($dateFormat, $dateString);
@@ -52,6 +54,9 @@ do {
     }
 
     $userVO = $_SESSION['user'];
+    if ($userLogin) {
+        $userVO = UsersFacade::GetUserByLogin($userLogin);;
+    }
 
     $summary = TasksFacade::GetPersonalSummaryByLoginDate($userVO, $date);
 
