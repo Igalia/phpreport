@@ -127,3 +127,60 @@ div#tasks textarea {
     background-color: #effaf5;
     border: 1px solid #257953;
 }
+
+.autocompleteContainer {
+    position: relative;
+}
+
+.autocompleteSearchInput {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px #ccc;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.autocompleteSearchInput:focus {
+    outline: none;
+    border-radius: 5px 5px 0 0;
+}
+
+.autocomplete {
+    box-sizing: border-box;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 2px 2px 2px #ccc;
+    padding: 0;
+    overflow: auto;
+    max-height: 200px;
+    width: 100%;
+    z-index: 1;
+}
+
+.autocomplete.hidden {
+    display: none;
+}
+
+.autocompleteItemBtn:hover, .autocompleteItemBtn:focus {
+    background-color: #f0f0f0;
+}
+
+.autocompleteItemBtn {
+    background-color: #fff;
+    border: none;
+    display: inline-block;
+    color: #000;
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    text-align: left;
+}
+
+.autocompleteItemBtn.active { 
+    background-color: #f0f0f0;
+}

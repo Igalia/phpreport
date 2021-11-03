@@ -35,62 +35,80 @@ include_once("include/header.php");
 <script src="vuejs/vue.min.js"></script>
 <script src="vuejs/v-calendar.2.3.2.min.js"></script>
 
-<div id="holidaysApp" class="holidayContainer">
-    <div class="sidebar">
-        <div class="holidaysList">
-            <h2 class="sidebarTitle"><?php echo date("Y"); ?> Holidays</h2>
-            <table class="summary">
-                <tr>
-                    <td>Available for the year</td>
-                    <td class="text-right">{{ availableHolidays }}h</td>
-                </tr>
-                <tr>
-                    <td>Enjoyed</td>
-                    <td class="text-right">{{ enjoyedHolidays }}h</td>
-                </tr>
-                <tr>
-                    <td>Scheduled</td>
-                    <td class="text-right">{{ scheduledHolidays }}h</td>
-                </tr>
-                <tr>
-                    <td>Pending</td>
-                    <td class="text-right">{{ pendingHolidays }}h</td>
-                </tr>
-            </table>
-            <p class="warning info">
-                <strong>TIP:</strong> Double click on single dates if you want to delete existing holidays.
-            </p>
-            <p class="text-right">
-                <button class="btn" v-on:click="onSaveClick">Save Holidays</button>
-            </p>
+<div id="holidaysApp">
+    <nav class="submenu">
+        <li><a href="#my_holidays" id="personalCalendar" v-on:click="switchMode">My holidays</a></li>
+        <li><a href="#team_calendar" id="teamCalendar" v-on:click="switchMode">Team calendar</a></li>
+    </nav>
+    <div class="holidayContainer">
+        <div class="sidebar">
+            <div class="holidaysList">
+                <h2 class="sidebarTitle"><?php echo date("Y"); ?> Holidays</h2>
+                <div v-if="!isEditing" class="autocompleteContainer">
+                    <input
+                        class="autocompleteSearchInput"
+                        type="text"
+                        v-model="searchUser"
+                        placeholder="Select a user"
+                        @focus="showOptions"
+                        @keyup="filterUser"
+                        @focusout="hideOptions"
+                        @keyup.13="onSelectUser(activeUser)"
+                    />
+                    <ul :class="{ 'hidden': !autocompleteIsActive, 'autocomplete': true}" id="usersDropdown">
+                        <li v-for="(user, index) in usersList" class="autocompleteItem" v-on:click="onSelectUser(index)">
+                            <button :class="{ 'active': index == activeUser, 'autocompleteItemBtn': true}">{{ user.name }}</button>
+                        </li>
+                    </ul>
+                </div>
+                <table class="summary">
+                    <tr>
+                        <td>Available for the year</td>
+                        <td class="text-right">{{ summary.availableHolidays }}</td>
+                    </tr>
+                    <tr>
+                        <td>Enjoyed</td>
+                        <td class="text-right">{{ summary.enjoyedHolidays }}</td>
+                    </tr>
+                    <tr>
+                        <td>Scheduled</td>
+                        <td class="text-right">{{ summary.scheduledHolidays }}</td>
+                    </tr>
+                    <tr>
+                        <td>Pending</td>
+                        <td class="text-right">{{ summary.pendingHolidays }}</td>
+                    </tr>
+                </table>
+                <div v-if="isEditing">
+                    <p class="warning info">
+                        <strong>TIP:</strong> Double click on single dates if you want to delete existing holidays.
+                    </p>
+                    <p class="text-right">
+                        <button class="btn" v-on:click="onSaveClick">Save Holidays</button>
+                    </p>
+                </div>
+            </div>
+            <div class="holidaysList">
+                <h2 class="sidebarTitle">Days booked per week</h2>
+                <table class="summary">
+                    <tr v-for="week in weeksList" :key="week.weekNumber">
+                        <td>{{ week.weekNumber }}</td>
+                        <td class="text-right">{{ week.total }} {{ week.total > 1 ? 'days' : 'day' }}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
-        <div class="holidaysList">
-            <h2 class="sidebarTitle">Days booked per week</h2>
-            <table class="summary">
-                <tr v-for="week in daysByWeek" :key="week.weekNumber">
-                    <td>{{ week.weekNumber }}</td>
-                    <td class="text-right">{{ week.total }} {{ week.total > 1 ? 'days' : 'day' }}</td>
-                </tr>
-            </table>
+        <div class="calendar">
+            <div v-if="isEditing">
+                <v-date-picker is-range v-model="range" :attributes="ranges" :first-day-of-week="2" :rows="3" :columns="$screens({ default: 2, lg: 4 })" show-iso-weeknumbers :select-attribute="selectAttribute" @dayclick="onDayClick" :min-date="init" :max-date="end" />
+            </div>
+            <div v-show="!isEditing">
+                <v-calendar is-range v-model="teamRange" :attributes="teamAttributes" :first-day-of-week="2" :rows="3" :columns="$screens({ default: 2, lg: 4 })" show-iso-weeknumbers :min-date="init" :max-date="end" />
+            </div>
         </div>
-    </div>
-    <div class="calendar">
-        <v-date-picker
-            is-range
-            v-model="range"
-            :attributes="attributes"
-            :first-day-of-week="2"
-            :rows="3"
-            :columns="$screens({ default: 2, lg: 4 })"
-            show-iso-weeknumbers
-            :select-attribute="selectAttribute"
-            @dayclick="onDayClick"
-            :min-date="init"
-            :max-date="end"
-        />
-    </div>
-    <div class="snackbarWrapper">
-        <div id="snackBar" v-for="message in serverMessages" :class="message.classes" :key="message">{{ message.text }}</div>
+        <div class="snackbarWrapper">
+            <div id="snackBar" v-for="message in serverMessages" :class="message.classes" :key="message">{{ message.text }}</div>
+        </div>
     </div>
 </div>
 
