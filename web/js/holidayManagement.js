@@ -80,8 +80,8 @@ var app = new Vue({
             daysByWeek: null,
             latestDelete: null,
             isEndOfRange: false,
-            init: new Date(new Date().getFullYear(), 0, 1),
-            end: new Date(new Date().getFullYear(), 11, 31),
+            init: new Date(new Date().getFullYear() - 1, 6, 1),
+            end: new Date(new Date().getFullYear() + 1, 2, 31),
             serverMessages: [],
             // Clean selected range styles to avoid confusion when
             // removing dates
@@ -157,7 +157,7 @@ var app = new Vue({
             }
         },
         async fetchSummary(user = null) {
-            let url = `services/getPersonalSummaryByDateService.php?date=${formatDate(this.end)}`;
+            let url = `services/getPersonalSummaryByDateService.php?date=${formatDate(new Date(new Date().getFullYear(), 11, 31))}`;
             if (user) {
                 url += `&userLogin=${user}`
             }

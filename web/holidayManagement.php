@@ -43,7 +43,7 @@ include_once("include/header.php");
     <div class="holidayContainer">
         <div class="sidebar">
             <div class="holidaysList">
-                <h2 class="sidebarTitle"><?php echo date("Y"); ?> Holidays</h2>
+                <h2 class="sidebarTitle">Holidays Summary for <?php echo date("Y"); ?></h2>
                 <div v-if="!isEditing" class="autocompleteContainer">
                     <input
                         class="autocompleteSearchInput"
