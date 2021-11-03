@@ -377,6 +377,28 @@ var app = new Vue({
             }
             this.activeUser = 0;
         },
+        prevUser() {
+            if (this.activeUser > 0) {
+                this.activeUser--;
+            } else {
+                this.activeUser = this.usersList.length - 1;
+            }
+            this.scrollAutocomplete();
+        },
+        nextUser() {
+            if (this.activeUser < this.usersList.length - 1) {
+                this.activeUser++;
+            } else {
+                this.activeUser = 0;
+            }
+            this.scrollAutocomplete();
+        },
+        scrollAutocomplete() {
+            const elementHeight = document.getElementsByClassName('autocompleteItemBtn')[this.activeUser].offsetHeight;
+            const offSet = document.getElementsByClassName('autocompleteItemBtn')[this.activeUser].offsetTop + elementHeight;
+            const clientHeight = document.getElementById('usersDropdown').clientHeight;
+            document.getElementById('usersDropdown').scrollTop = offSet - clientHeight;
+        },
         filterUser(event) {
             this.autocompleteIsActive = true;
             this.usersList = this.users.filter(user => user.name.toLowerCase().includes(event.target.value.toLowerCase()));

@@ -54,6 +54,8 @@ include_once("include/header.php");
                         @keyup="filterUser"
                         @focusout="hideOptions"
                         @keyup.13="onSelectUser(activeUser)"
+                        @keyup.38="prevUser"
+                        @keyup.40="nextUser"
                     />
                     <ul :class="{ 'hidden': !autocompleteIsActive, 'autocomplete': true}" id="usersDropdown">
                         <li v-for="(user, index) in usersList" class="autocompleteItem" v-on:click="onSelectUser(index)">
