@@ -80,6 +80,9 @@ var summaryRecord = new Ext.data.Record.create([
     {name:'weekly_goal'},
     {name:'extra_hours'},
     {name:'pending_holidays'},
+    {name:'scheduled_holidays'},
+    {name:'available_holidays'},
+    {name:'enjoyed_holidays'},
     {name:'acc_extra_hours'},
 
 ]);
@@ -971,6 +974,9 @@ Ext.onReady(function(){
                 Ext.getCmp('week').setValue(summaryStore.getAt(0).get('week') + " h");
                 Ext.getCmp('weekly_goal').setValue(summaryStore.getAt(0).get('weekly_goal') + " h");
                 Ext.getCmp('extra_hours').setValue(summaryStore.getAt(0).get('extra_hours') + " h");
+                Ext.getCmp('available_holidays').setValue(summaryStore.getAt(0).get('available_holidays') + " h");
+                Ext.getCmp('enjoyed_holidays').setValue(summaryStore.getAt(0).get('enjoyed_holidays') + " h");
+                Ext.getCmp('scheduled_holidays').setValue(summaryStore.getAt(0).get('scheduled_holidays') + " h");
                 Ext.getCmp('pending_holidays').setValue(summaryStore.getAt(0).get('pending_holidays') + " h");
                 Ext.getCmp('acc_extra_hours').setValue(summaryStore.getAt(0).get('acc_extra_hours') + " h");
             },
@@ -1156,6 +1162,21 @@ Ext.onReady(function(){
             labelSeparator: '',
             labelStyle: userWorkSummaryTitleStyle,
             fieldLabel:'Holidays',
+        },
+        {
+            id:'available_holidays',
+            name:'available_holidays',
+            fieldLabel:`Available for ${new Date().getFullYear()}`,
+        },
+        {
+            id:'enjoyed_holidays',
+            name:'enjoyed_holidays',
+            fieldLabel:'Enjoyed',
+        },
+        {
+            id:'scheduled_holidays',
+            name:'scheduled_holidays',
+            fieldLabel:'Scheduled',
         },{
             id:'pending_holidays',
             name:'pending_holidays',
