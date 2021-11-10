@@ -69,18 +69,20 @@ var app = new Vue({
         return {
             days: [],
             range: {},
+            teamRange: {},
+            teamAttributes: {},
+            teamDaysByWeek: {},
+            teamDays: [],
             ranges: [],
-            scheduledHolidays: null,
-            availableHolidays: null,
-            enjoyedHolidays: null,
+            isEditing: true,
+            userSummary: {},
+            personalSummary: {},
             daysByWeek: null,
             latestDelete: null,
             isEndOfRange: false,
             init: new Date(new Date().getFullYear(), 0, 1),
             end: new Date(new Date().getFullYear(), 11, 31),
-            pendingHolidays: null,
             serverMessages: [],
-
             // Clean selected range styles to avoid confusion when
             // removing dates
             selectAttribute: {
@@ -102,11 +104,36 @@ var app = new Vue({
                     },
                 },
             },
+            // Users list data
+            usersList: [],
+            users: [],
+            autocompleteIsActive: false,
+            searchUser: "",
+            activeUser: 0,
         };
     },
     created() {
-        const fetchHolidays = async () => {
-            const url = `services/getHolidays.php?init=${formatDate(this.init)}&end=${formatDate(this.end)}`;
+        this.fetchHolidays();
+        this.fetchSummary();
+        this.fetchUsers();
+    },
+    computed: {
+        attributes() {
+            return this.ranges;
+        },
+        weeksList() {
+            return this.isEditing ? this.daysByWeek : this.teamDaysByWeek;
+        },
+        summary() {
+            return this.isEditing ? this.personalSummary : this.userSummary;
+        }
+    },
+    methods: {
+        async fetchHolidays(user = null) {
+            let url = `services/getHolidays.php?init=${formatDate(this.init)}&end=${formatDate(this.end)}`;
+            if (user) {
+                url += `&userLogin=${user}`
+            }
             const res = await fetch(url, {
                 method: 'GET',
                 mode: 'same-origin',
@@ -118,19 +145,22 @@ var app = new Vue({
                 referrerPolicy: 'no-referrer',
             });
             const datesAndRanges = await res.json();
-            this.updateDates(datesAndRanges);
-        }
-        fetchHolidays();
-        this.fetchSummary();
-    },
-    computed: {
-        attributes() {
-            return this.ranges;
+            const { ranges, days, daysByWeek } = this.updateDates(datesAndRanges);
+            if (user) {
+                this.teamAttributes = ranges;
+                this.teamDays = days;
+                this.teamDaysByWeek = daysByWeek;
+            } else {
+                this.ranges = ranges;
+                this.days = days;
+                this.daysByWeek = daysByWeek;
+            }
         },
-    },
-    methods: {
-        async fetchSummary() {
-            const url = `services/getPersonalSummaryByDateService.php?date=${formatDate(this.end)}`;
+        async fetchSummary(user = null) {
+            let url = `services/getPersonalSummaryByDateService.php?date=${formatDate(this.end)}`;
+            if (user) {
+                url += `&userLogin=${user}`
+            }
             const res = await fetch(url, {
                 method: 'GET',
                 mode: 'same-origin',
@@ -144,10 +174,43 @@ var app = new Vue({
             const body = await res.text();
             parser = new DOMParser();
             xmlDoc = parser.parseFromString(body, "text/xml");
-            this.pendingHolidays = xmlDoc.getElementsByTagName("pending_holidays")[0].childNodes[0].nodeValue;
-            this.scheduledHolidays = xmlDoc.getElementsByTagName("scheduled_holidays")[0].childNodes[0].nodeValue;
-            this.enjoyedHolidays = xmlDoc.getElementsByTagName("enjoyed_holidays")[0].childNodes[0].nodeValue;
-            this.availableHolidays = xmlDoc.getElementsByTagName("available_holidays")[0].childNodes[0].nodeValue;
+            const summary = {
+                pendingHolidays: xmlDoc.getElementsByTagName("pending_holidays")[0].childNodes[0].nodeValue + "h",
+                scheduledHolidays: xmlDoc.getElementsByTagName("scheduled_holidays")[0].childNodes[0].nodeValue + "h",
+                enjoyedHolidays: xmlDoc.getElementsByTagName("enjoyed_holidays")[0].childNodes[0].nodeValue + "h",
+                availableHolidays: xmlDoc.getElementsByTagName("available_holidays")[0].childNodes[0].nodeValue + "h"
+            }
+            if (user) {
+                this.userSummary = summary;
+            } else {
+                this.personalSummary = summary;
+            }
+        },
+        async fetchUsers() {
+            const url = `services/getAllUsersService.php`;
+            const res = await fetch(url, {
+                method: 'GET',
+                mode: 'same-origin',
+                cache: 'no-cache',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'text/xml'
+                },
+                referrerPolicy: 'no-referrer',
+            });
+            const body = await res.text();
+            parser = new DOMParser();
+            xmlDoc = parser.parseFromString(body, "text/xml");
+            let users = xmlDoc.getElementsByTagName("user");
+            let parsedUsers = [];
+            for (var i = 0; i < users.length; i++) {
+                parsedUsers.push({
+                    id: users[i].children[0].innerHTML,
+                    name: users[i].children[1].innerHTML,
+                });
+            }
+            this.usersList = parsedUsers;
+            this.users = parsedUsers;
         },
         updateDates(datesAndRanges) {
             const attributes = datesAndRanges.ranges.map(dt => ({
@@ -184,10 +247,11 @@ var app = new Vue({
                     })
                 }
             });
-
-            this.ranges = attributes;
-            this.days = Object.keys(datesAndRanges.dates);
-            this.daysByWeek = Object.keys(datesAndRanges.weeks).sort().map((week, idx) => ({ weekNumber: week, total: datesAndRanges.weeks[week] }));
+            return {
+                ranges: attributes,
+                days: Object.keys(datesAndRanges.dates),
+                daysByWeek: Object.keys(datesAndRanges.weeks).sort().map((week, idx) => ({ weekNumber: week, total: datesAndRanges.weeks[week] }))
+            }
         },
         onDayClick(day) {
             let endDay = day.date;
@@ -265,7 +329,10 @@ var app = new Vue({
             if ("error" in body) {
                 this.serverMessages.push({ classes: "message error", text: `Error: ${body["error"]}` });
             } else {
-                this.updateDates(body["datesAndRanges"]);
+                const { ranges, days, daysByWeek } = this.updateDates(body["datesAndRanges"]);
+                this.ranges = ranges;
+                this.days = days;
+                this.daysByWeek = daysByWeek;
                 if (body["resultCreation"] && body["resultCreation"]["failed"] && body["resultCreation"]["failed"].length > 0) {
                     this.serverMessages.push({
                         classes: "message error",
@@ -284,6 +351,57 @@ var app = new Vue({
             };
             this.fetchSummary();
             this.$emit('flush-message')
+        },
+        onSelectUser(userIndex) {
+            if (!this.usersList[userIndex]) return;
+            const user = this.usersList[userIndex].name;
+            this.searchUser = user;
+            this.fetchHolidays(user);
+            this.fetchSummary(user);
+            this.autocompleteIsActive = false;
+            this.usersList = this.users;
+        },
+        switchMode(event) {
+            if (event.target.id == 'teamCalendar') {
+                this.isEditing = false
+            } else {
+                this.isEditing = true
+            }
+        },
+        showOptions() {
+            this.autocompleteIsActive = true;
+        },
+        hideOptions(event) {
+            if (!event.relatedTarget?.classList.contains('autocompleteItemBtn')) {
+                this.autocompleteIsActive = false;
+            }
+            this.activeUser = 0;
+        },
+        prevUser() {
+            if (this.activeUser > 0) {
+                this.activeUser--;
+            } else {
+                this.activeUser = this.usersList.length - 1;
+            }
+            this.scrollAutocomplete();
+        },
+        nextUser() {
+            if (this.activeUser < this.usersList.length - 1) {
+                this.activeUser++;
+            } else {
+                this.activeUser = 0;
+            }
+            this.scrollAutocomplete();
+        },
+        scrollAutocomplete() {
+            const elementHeight = document.getElementsByClassName('autocompleteItemBtn')[this.activeUser].offsetHeight;
+            const offSet = document.getElementsByClassName('autocompleteItemBtn')[this.activeUser].offsetTop + elementHeight;
+            const clientHeight = document.getElementById('usersDropdown').clientHeight;
+            document.getElementById('usersDropdown').scrollTop = offSet - clientHeight;
+        },
+        filterUser(event) {
+            this.autocompleteIsActive = true;
+            this.usersList = this.users.filter(user => user.name.toLowerCase().includes(event.target.value.toLowerCase()));
         }
     },
     mounted() {
