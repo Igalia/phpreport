@@ -112,6 +112,21 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
         return $templateVO;
     }
 
+    protected function runSelectQuery(string $statement, array $data) {
+        try {
+            $statement = $this->pdo->prepare($statement);
+            $statement->execute($data);
+            $VOs = array();
+            foreach($statement->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                $VOs[] = $this->setValues($row);
+            }
+            return $VOs;
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
+        }
+    }
+
     /** Template retriever by id for PostgreSQL.
      *
      * This function retrieves the row from Template table with the id <var>$templateId</var> and creates a {@link TemplateVO} with its data.
@@ -124,19 +139,10 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
     public function getById($templateId) {
         if (!is_numeric($templateId))
             throw new SQLIncorrectTypeException($templateId);
-        try {
-            $statement = $this->pdo->prepare(
-                "SELECT * FROM template WHERE id=:id");
-            $statement->execute([
-                ':id' => $templateId
-            ]);
-            $row = $statement->fetch(PDO::FETCH_ASSOC);
-            return $row ? $this->setValues($row) : NULL;
-
-        } catch (PDOException $e) {
-            error_log('Query failed: ' . $e->getMessage());
-            throw new SQLQueryErrorException($e->getMessage());
-        }
+        $result = $this->runSelectQuery(
+            "SELECT * FROM template WHERE id=:id",
+            [':id' => $templateId]);
+        return $result[0] ?? NULL;
     }
 
     /** Templates retriever by User id for PostgreSQL.
@@ -152,23 +158,10 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
     public function getByUserId($userId) {
         if (!is_numeric($userId))
             throw new SQLIncorrectTypeException($userId);
-        try {
-            $statement = $this->pdo->prepare(
-                "SELECT * FROM template WHERE usrid=:usrid");
-            $statement->execute([
-                ':usrid' => $userId
-            ]);
-
-            $VO = array();
-            foreach($statement->fetchAll(PDO::FETCH_ASSOC) as $row) {
-                $VO[] = $this->setValues($row);
-            }
-            return $VO;
-
-        } catch (PDOException $e) {
-            error_log('Query failed: ' . $e->getMessage());
-            throw new SQLQueryErrorException($e->getMessage());
-        }
+        $result = $this->runSelectQuery(
+            "SELECT * FROM template WHERE usrid=:usrid",
+            [':usrid' => $userId]);
+        return $result;
     }
 
     /** Template creator for PostgreSQL.
