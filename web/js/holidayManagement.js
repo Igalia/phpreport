@@ -71,17 +71,19 @@ var app = new Vue({
             range: {},
             teamRange: {},
             teamAttributes: {},
-            teamDaysByWeek: {},
+            teamDaysByWeek: [],
             teamDays: [],
             ranges: [],
             isEditing: true,
             userSummary: {},
             personalSummary: {},
-            daysByWeek: null,
+            daysByWeek: [],
             latestDelete: null,
             isEndOfRange: false,
-            init: new Date(new Date().getFullYear() - 1, 6, 1),
-            end: new Date(new Date().getFullYear() + 1, 2, 31),
+            init: new Date(new Date().getFullYear() - 1, 0, 1),
+            end: new Date(new Date().getFullYear() + 1, 11, 31),
+            fromPage: { month: 1, year: new Date().getFullYear() },
+            currentYear: new Date().getFullYear(),
             serverMessages: [],
             // Clean selected range styles to avoid confusion when
             // removing dates
@@ -122,7 +124,8 @@ var app = new Vue({
             return this.ranges;
         },
         weeksList() {
-            return this.isEditing ? this.daysByWeek : this.teamDaysByWeek;
+            const weeks = this.isEditing ? this.daysByWeek : this.teamDaysByWeek;
+            return weeks?.filter(week => week.weekNumber.startsWith(this.currentYear));
         },
         summary() {
             return this.isEditing ? this.personalSummary : this.userSummary;
@@ -157,7 +160,13 @@ var app = new Vue({
             }
         },
         async fetchSummary(user = null) {
-            let url = `services/getPersonalSummaryByDateService.php?date=${formatDate(new Date(new Date().getFullYear(), 11, 31))}`;
+            let referenceDate = new Date();
+            if (this.currentYear < referenceDate.getFullYear()) {
+                referenceDate = new Date(this.currentYear, 11, 31);
+            } else if (this.currentYear > referenceDate.getFullYear()) {
+                referenceDate = new Date(this.currentYear, 0, 1);
+            }
+            let url = `services/getPersonalSummaryByDateService.php?date=${formatDate(referenceDate)}`;
             if (user) {
                 url += `&userLogin=${user}`
             }
@@ -256,6 +265,13 @@ var app = new Vue({
         onDayClick(day) {
             let endDay = day.date;
 
+            // Make sure the montha that are being displayed are not changed
+            // after clicking on a day
+            this.fromPage = {
+                month: this.$refs.calendar.$refs.calendar.pages[0].month,
+                year: this.$refs.calendar.$refs.calendar.pages[0].year
+            };
+
             // Check if the selected day is already in the list, if it is, it means the user
             // is edditing or removing some range, so delete respective range and dates
             if (this.days.findIndex(d => d === day.id) >= 0) {
@@ -311,6 +327,14 @@ var app = new Vue({
 
             // Next click will be the opposite of the current state
             this.isEndOfRange = !this.isEndOfRange;
+        },
+        updateCurrentYear(fromPage) {
+            this.currentYear = fromPage.year;
+            if (this.isEditing) {
+                this.fetchSummary();
+            } else {
+                this.fetchSummary(this.searchUser);
+            }
         },
         onSaveClick: async function () {
             const url = `services/updateHolidays.php?init=${formatDate(this.init)}&end=${formatDate(this.end)}`;
