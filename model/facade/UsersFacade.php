@@ -259,8 +259,8 @@ abstract class UsersFacade {
         return $action->execute();
     }
 
-    static function GetHolidayHoursSummary(DateTime $init, DateTime $end, UserVO $user = NULL) {
-        $action = new GetHolidayHoursSummaryAction($init, $end, $user);
+    static function GetHolidayHoursSummary(DateTime $init, DateTime $end, UserVO $user = NULL, Datetime $referenceDate = NULL) {
+        $action = new GetHolidayHoursSummaryAction($init, $end, $user, $referenceDate);
         return $action->execute();
     }
 
