@@ -82,7 +82,8 @@ var app = new Vue({
             isEndOfRange: false,
             init: new Date(new Date().getFullYear() - 1, 0, 1),
             end: new Date(new Date().getFullYear() + 1, 11, 31),
-            fromPage: { month: 1, year: new Date().getFullYear() },
+            personalFromPage: { month: 1, year: new Date().getFullYear() },
+            teamFromPage: { month: 1, year: new Date().getFullYear() },
             currentYear: new Date().getFullYear(),
             serverMessages: [],
             // Clean selected range styles to avoid confusion when
@@ -129,6 +130,9 @@ var app = new Vue({
         },
         summary() {
             return this.isEditing ? this.personalSummary : this.userSummary;
+        },
+        fromPage() {
+            return this.isEditing ? this.personalFromPage : this.teamFromPage;
         }
     },
     methods: {
@@ -267,7 +271,7 @@ var app = new Vue({
 
             // Make sure the montha that are being displayed are not changed
             // after clicking on a day
-            this.fromPage = {
+            this.personalFromPage = {
                 month: this.$refs.calendar.$refs.calendar.pages[0].month,
                 year: this.$refs.calendar.$refs.calendar.pages[0].year
             };

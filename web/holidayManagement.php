@@ -105,7 +105,7 @@ include_once("include/header.php");
                 <v-date-picker ref="calendar" :from-page="fromPage" is-range v-model="range" :attributes="ranges" :first-day-of-week="2" :rows="3" :columns="$screens({ default: 2, lg: 4 })" show-iso-weeknumbers :select-attribute="selectAttribute" @dayclick="onDayClick" @update:from-page="updateCurrentYear" :min-date="init" :max-date="end" />
             </div>
             <div v-show="!isEditing">
-                <v-calendar is-range :from-page="{month: 1, year: currentYear}" v-model="teamRange" :attributes="teamAttributes" :first-day-of-week="2" :rows="3" :columns="$screens({ default: 2, lg: 4 })" show-iso-weeknumbers @update:from-page="updateCurrentYear" :min-date="init" :max-date="end" />
+                <v-calendar is-range :from-page="fromPage" v-model="teamRange" :attributes="teamAttributes" :first-day-of-week="2" :rows="3" :columns="$screens({ default: 2, lg: 4 })" show-iso-weeknumbers @update:from-page="updateCurrentYear" :min-date="init" :max-date="end" />
             </div>
         </div>
         <div class="snackbarWrapper">
