@@ -95,7 +95,7 @@ do {
 
     // Report holidays from the entire year, including those later than $date
     $endYearDate = new DateTime($date->format('Y') . '-12-31');
-    $holidays = UsersFacade::GetHolidayHoursSummary($initYearDate, $endYearDate, $userVO);
+    $holidays = UsersFacade::GetHolidayHoursSummary($initYearDate, $endYearDate, $userVO, $date);
     $pendingHolidays = $holidays["pendingHours"][$userVO->getLogin()];
     $pendingHolidays = HolidayService::formatHours($pendingHolidays, $currentJourney, 5);
 

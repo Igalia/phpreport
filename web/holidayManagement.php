@@ -43,7 +43,7 @@ include_once("include/header.php");
     <div class="holidayContainer">
         <div class="sidebar">
             <div class="holidaysList">
-                <h2 class="sidebarTitle"><?php echo date("Y"); ?> Holidays</h2>
+                <h2 class="sidebarTitle">Holidays Summary for {{ currentYear }}</h2>
                 <div v-if="!isEditing" class="autocompleteContainer">
                     <input
                         class="autocompleteSearchInput"
@@ -102,10 +102,10 @@ include_once("include/header.php");
         </div>
         <div class="calendar">
             <div v-if="isEditing">
-                <v-date-picker is-range v-model="range" :attributes="ranges" :first-day-of-week="2" :rows="3" :columns="$screens({ default: 2, lg: 4 })" show-iso-weeknumbers :select-attribute="selectAttribute" @dayclick="onDayClick" :min-date="init" :max-date="end" />
+                <v-date-picker ref="calendar" :from-page="fromPage" is-range v-model="range" :attributes="ranges" :first-day-of-week="2" :rows="3" :columns="$screens({ default: 2, lg: 4 })" show-iso-weeknumbers :select-attribute="selectAttribute" @dayclick="onDayClick" @update:from-page="updateCurrentYear" :min-date="init" :max-date="end" />
             </div>
             <div v-show="!isEditing">
-                <v-calendar is-range v-model="teamRange" :attributes="teamAttributes" :first-day-of-week="2" :rows="3" :columns="$screens({ default: 2, lg: 4 })" show-iso-weeknumbers :min-date="init" :max-date="end" />
+                <v-calendar is-range :from-page="fromPage" v-model="teamRange" :attributes="teamAttributes" :first-day-of-week="2" :rows="3" :columns="$screens({ default: 2, lg: 4 })" show-iso-weeknumbers @update:from-page="updateCurrentYear" :min-date="init" :max-date="end" />
             </div>
         </div>
         <div class="snackbarWrapper">

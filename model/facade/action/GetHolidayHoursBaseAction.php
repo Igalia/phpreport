@@ -36,7 +36,7 @@ abstract class GetHolidayHoursBaseAction extends Action
         $this->user = $user;
     }
 
-    protected function getHoursSummary(DateTime $today = NULL): array
+    protected function getHoursSummary(DateTime $referenceDate = NULL): array
     {
         $taskDao = DAOFactory::getTaskDAO();
         $journeyHistoryDao = DAOFactory::getJourneyHistoryDAO();
@@ -130,8 +130,8 @@ abstract class GetHolidayHoursBaseAction extends Action
                 $holidayHours = ($workHours / (365 * 8)) * ConfigurationParametersManager::getParameter('YEARLY_HOLIDAY_HOURS');
                 $userAvailableHours[$userVO->getLogin()] = $holidayHours;
 
-                $today = $today ?? new DateTime();
-                $userEnjoyedHours[$userVO->getLogin()] = $taskDao->getVacations($userVO, $reportInit, $today)["add_hours"] ?? 0;
+                $referenceDate = $referenceDate ?? new DateTime();
+                $userEnjoyedHours[$userVO->getLogin()] = $taskDao->getVacations($userVO, $reportInit, $referenceDate)["add_hours"] ?? 0;
                 $userScheduledHours[$userVO->getLogin()] = $vacations - $userEnjoyedHours[$userVO->getLogin()];
 
                 // The difference is the number of pending holiday hours
