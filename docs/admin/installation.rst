@@ -12,7 +12,7 @@ To install PhpReport in your system, you will need the following software:
 
 * PHP 7.3 or higher
 
-  * Support for PostgreSQL
+  * Support for PDO and PostgreSQL
 
 * Web server (tested with Apache 2.x)
 
@@ -23,11 +23,11 @@ Installing dependencies on selected GNU/Linux distros
 
 Run the following command with root privileges:
 
-* Debian, Ubuntu: ``apt-get install postgresql apache2 php php-pgsql php-xml``
+* Ubuntu: ``apt install postgresql apache2 php php-pgsql php-xml php-pdo``
 
-* Fedora: ``dnf install postgresql-server httpd php php-pgsql php-xml``
+* Debian: ``apt install postgresql apache2 php php-pgsql php-xml``
 
-* RHEL: ``yum install postgresql-server httpd php php-pgsql php-xml``
+* Fedora: ``dnf install postgresql-server httpd php php-pgsql php-xml php-pdo``
 
 Install composer to manage the project dependencies. Follow the official
 docs for the instructions: https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos
