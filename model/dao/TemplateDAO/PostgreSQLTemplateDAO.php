@@ -234,20 +234,16 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
     public function delete(TemplateVO $templateVO) {
         $affectedRows = 0;
 
-        // Check for a task ID.
-        if($templateVO->getId() >= 0) {
-            $currTaskVO = $this->getById($templateVO->getId());
+        $sql = "DELETE FROM template WHERE id=:id";
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->execute([':id' => $templateVO->getId()]);
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
         }
-
-        // Otherwise delete a task.
-        if($currTaskVO) {
-            $sql = "DELETE FROM template WHERE id=".$currTaskVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-            if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-            $affectedRows = pg_affected_rows($res);
-        }
-
         return $affectedRows;
     }
 
