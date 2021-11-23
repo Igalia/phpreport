@@ -176,30 +176,34 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
     public function create(TemplateVO $templateVO) {
         $affectedRows = 0;
 
-        $sql = "INSERT INTO template (name, story, telework, onsite, text, ttype, usrid, projectid, init_time, end_time, task_storyid) VALUES(" .
-            DBPostgres::checkStringNull($templateVO->getName()) . ", " .
-            DBPostgres::checkStringNull($templateVO->getStory()) . ", " .
-            DBPostgres::boolToString($templateVO->isTelework()) . ", " .
-            DBPostgres::boolToString($templateVO->isOnsite()) . ", " .
-            DBPostgres::checkStringNull($templateVO->getText()) . ", " .
-            DBPostgres::checkStringNull($templateVO->getTtype()) . ", " .
-            DBPostgres::checkNull($templateVO->getUserId()) . ", " .
-            DBPostgres::checkNull($templateVO->getProjectId()) . ", " .
-            DBPostgres::checkNull($templateVO->getInitTime()) . ", " .
-            DBPostgres::checkNull($templateVO->getEndTime()) . ", " .
-            DBPostgres::checkNull($templateVO->getTaskStoryId()) .")";
+        $sql = "INSERT INTO template (name, story, telework, onsite, text, " .
+                   "ttype, usrid, projectid, init_time, end_time, task_storyid) " .
+               "VALUES(:name, :story, :telework, :onsite, :text, :ttype, " .
+                   ":usrid, :projectid, :init_time, :end_time, :task_storyid)";
 
-        $res = pg_query($this->connect, $sql);
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":name", $templateVO->getName(), PDO::PARAM_STR);
+            $statement->bindValue(":story", $templateVO->getStory(), PDO::PARAM_STR);
+            $statement->bindValue(":telework", $templateVO->isTelework(), PDO::PARAM_BOOL);
+            $statement->bindValue(":onsite", $templateVO->isOnsite(), PDO::PARAM_BOOL);
+            $statement->bindValue(":text", $templateVO->getText(), PDO::PARAM_STR);
+            $statement->bindValue(":ttype", $templateVO->getTtype(), PDO::PARAM_STR);
+            $statement->bindValue(":usrid", $templateVO->getUserId(), PDO::PARAM_INT);
+            $statement->bindValue(":projectid", $templateVO->getProjectId(), PDO::PARAM_INT);
+            $statement->bindValue(":init_time", $templateVO->getInitTime(), PDO::PARAM_INT);
+            $statement->bindValue(":end_time", $templateVO->getEndTime(), PDO::PARAM_INT);
+            $statement->bindValue(":task_storyid", $templateVO->getTaskStoryId(), PDO::PARAM_INT);
+            $statement->execute();
 
-        if ($res == NULL)
-            throw new SQLQueryErrorException(pg_last_error());
+            $templateVO->setId($this->pdo->lastInsertId('template_id_seq'));
 
-        $templateVO->setId(DBPostgres::getId($this->connect, "template_id_seq"));
-
-        $affectedRows = pg_affected_rows($res);
-
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
+        }
         return $affectedRows;
-
     }
 
     /**
