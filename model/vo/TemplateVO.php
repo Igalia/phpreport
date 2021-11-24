@@ -33,6 +33,9 @@
  *
  *  This class just stores Templates data.
  *
+ *  NOTICE: properties must match column names in the DB, for PDO::FETCH_CLASS
+ *  to work properly.
+ *
  *  @property int $id database internal identifier.
  *  @property string $name name of the template
  *  @property string $story story of this Task.
@@ -40,9 +43,9 @@
  *  @property boolean $onsite says if this Task was made onsite.
  *  @property string $text text describing this Task.
  *  @property string $ttype type of this Task.
- *  @property int $userId database internal identifier of the associated User.
- *  @property int $projectId database internal identifier of the associated Project.
- *  @property int $taskStoryId database internal identifier of the associated Task Story.
+ *  @property int $usrid database internal identifier of the associated User.
+ *  @property int $projectid database internal identifier of the associated Project.
+ *  @property int $task_storyid database internal identifier of the associated Task Story.
  */
 class TemplateVO {
 
@@ -56,11 +59,11 @@ class TemplateVO {
     protected $onsite = NULL;
     protected $text = NULL;
     protected $ttype = NULL;
-    protected $userId = NULL;
-    protected $projectId = NULL;
-    protected $taskStoryId = NULL;
-    protected $initTime = NULL;
-    protected $endTime = NULL;
+    protected $usrid = NULL;
+    protected $projectid = NULL;
+    protected $task_storyid = NULL;
+    protected $init_time = NULL;
+    protected $end_time = NULL;
     protected $initTimeRaw = NULL;
     protected $endTimeRaw = NULL;
 
@@ -166,50 +169,50 @@ class TemplateVO {
      * @return int
      */
     public function getUserId() {
-        return $this->userId;
+        return $this->usrid;
     }
 
     /**
      * @param int $userId
      */
     public function setUserId($userId) {
-        $this->userId = $userId;
+        $this->usrid = $userId;
     }
 
     /**
      * @return int
      */
     public function getProjectId() {
-        return $this->projectId;
+        return $this->projectid;
     }
 
     /**
      * @param int $projectId
      */
     public function setProjectId($projectId) {
-        $this->projectId = $projectId;
+        $this->projectid = $projectId;
     }
 
     /**
      * @return int
      */
     public function getTaskStoryId() {
-        return $this->taskStoryId;
+        return $this->task_storyid;
     }
 
     /**
      * @param int $taskStoryId
      */
     public function setTaskStoryId($taskStoryId) {
-        $this->taskStoryId = $taskStoryId;
+        $this->task_storyid = $taskStoryId;
     }
 
     public function getInitTime(): ?int {
-        return $this->initTime;
+        return $this->init_time;
     }
 
     public function setInitTime(?int $initTime) {
-        $this->initTime = $initTime;
+        $this->init_time = $initTime;
     }
 
     public function setInitTimeRaw(?string $initTime) {
@@ -217,11 +220,11 @@ class TemplateVO {
     }
 
     public function getEndTime(): ?int {
-        return $this->endTime;
+        return $this->end_time;
     }
 
     public function setEndTime(?int $endTime) {
-        $this->endTime = $endTime;
+        $this->end_time = $endTime;
     }
 
     public function setEndTimeRaw(?string $endTime) {
@@ -241,9 +244,9 @@ class TemplateVO {
         $string .= "<onsite>{$this->onsite}</onsite>";
         $string .= "<text>{$this->text}</text>";
         $string .= "<ttype>{$this->ttype}</ttype>";
-        $string .= "<userId>{$this->userId}</userId>";
-        $string .= "<projectId>{$this->projectId}</projectId>";
-        $string .= "<taskStoryId>{$this->taskStoryId}</taskStoryId>";
+        $string .= "<userId>{$this->usrid}</userId>";
+        $string .= "<projectId>{$this->projectid}</projectId>";
+        $string .= "<taskStoryId>{$this->task_storyid}</taskStoryId>";
         $string .= "<initTime>{$this->initTimeRaw}</initTime>";
         $string .= "<endTime>{$this->endTimeRaw}</endTime>";
         $string .= "</template>";

@@ -85,42 +85,19 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
         }
     }
 
-    /** Template value object constructor for PostgreSQL.
-     *
-     * This function creates a new {@link TemplateVO} with data retrieved from database.
-     *
-     * @param array $row an array with the Task values from a row.
-     * @return TemplateVO a {@link TemplateVO} with its properties set to the values from <var>$row</var>.
-     * @see TemplateVO
+    /**
+     * This method is declared to fulfill TemplateVO as non-abstract, but it should not be used.
+     * PDO::FETCH_CLASS now takes care of transforming DB rows into VO objects.
      */
     protected function setValues($row) {
-        $templateVO = new TemplateVO();
-
-        $templateVO->setId($row['id']);
-        $templateVO->setName($row['name']);
-        $templateVO->setStory($row['story']);
-        $templateVO->setTelework($row['telework']);
-        $templateVO->setOnsite($row['onsite']);
-        $templateVO->setText($row['text']);
-        $templateVO->setTtype($row['ttype']);
-        $templateVO->setUserId($row['usrid']);
-        $templateVO->setProjectId($row['projectid']);
-        $templateVO->setTaskStoryId($row['task_storyid']);
-        $templateVO->setInitTime($row['init_time']);
-        $templateVO->setEndTime($row['end_time']);
-
-        return $templateVO;
+        error_log("Unused TemplateVO::setValues() called");
     }
 
     protected function runSelectQuery(string $statement, array $data) {
         try {
             $statement = $this->pdo->prepare($statement);
             $statement->execute($data);
-            $VOs = array();
-            foreach($statement->fetchAll(PDO::FETCH_ASSOC) as $row) {
-                $VOs[] = $this->setValues($row);
-            }
-            return $VOs;
+            return $statement->fetchAll(PDO::FETCH_CLASS, 'TemplateVO');
         } catch (PDOException $e) {
             error_log('Query failed: ' . $e->getMessage());
             throw new SQLQueryErrorException($e->getMessage());
