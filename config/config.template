@@ -326,3 +326,10 @@ define('ISSUE_TRACKER_LINKS_URL',
  * To be used in combination with ISSUE_TRACKER_LINKS_URL, see its entry above.
  */
 define('ISSUE_TRACKER_LINKS_TEXT', serialize(array('Report an issue')));
+
+/* CalDav integration */
+define('CALENDAR_URL', '');
+define('CALENDAR_ID', '');
+define('CALENDAR_USERNAME', '');
+define('CALENDAR_PASSWORD', '');
+define('COMPANY_DOMAIN', '');
