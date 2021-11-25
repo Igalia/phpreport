@@ -46,6 +46,7 @@ $permissions = array(
         //holidays management
         '/services/getHolidays.php',
         '/services/updateHolidays.php',
+        '/services/syncCalendar.php',
         '/holidayManagement.php',
         //templates
         '/services/createTemplatesService.php', '/services/getUserTemplatesService.php',
