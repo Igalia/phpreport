@@ -40,49 +40,68 @@ include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
  */
 class PostgreSQLTemplateDAO extends TemplateDAO{
 
+    /** The connection to DB.
+     *
+     * PDO object with an open connection to the database, initialized in the
+     * class constructor.
+     *
+     * @var resource
+     * @see __construct()
+     */
+    protected PDO $pdo;
+
     /** Template DAO for PostgreSQL constructor.
      *
-     * This is the constructor of the implementation for PostgreSQL of {@link TemplateDAO}, and it just calls its parent's constructor.
+     * This is the constructor of the implementation for PostgreSQL of
+     * {@link TemplateDAO}. It sets up everything for database connection, using
+     * the parameters read from <i>{@link config.php}</i> and saving the open
+     * connection in <var>{@link $pdo}</var>.
+     * Notice this DAO connects to the DB through PDO, unlike the rest of the
+     * application.
      *
      * @throws {@link DBConnectionErrorException}
-     * @see TemplateDAO::__construct()
      */
     function __construct() {
+        // Call parent to initialize non-PDO database access, while we don't
+        // migrate all the methods here.
         parent::__construct();
+
+        // TODO: EXTRA_DB_CONNECTION_PARAMETERS used to expect pg_connect
+        // parameters, which were space-separated, but PDO requires semicolons
+        $connectionString = sprintf("pgsql:host=%s;port=%d;user=%s;dbname=%s;password=%s;%s",
+            ConfigurationParametersManager::getParameter('DB_HOST'),
+            ConfigurationParametersManager::getParameter('DB_PORT'),
+            ConfigurationParametersManager::getParameter('DB_USER'),
+            ConfigurationParametersManager::getParameter('DB_NAME'),
+            ConfigurationParametersManager::getParameter('DB_PASSWORD'),
+            ConfigurationParametersManager::getParameter('EXTRA_DB_CONNECTION_PARAMETERS'));
+
+        try {
+            $this->pdo = new PDO($connectionString);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            error_log('Connection failed: ' . $e->getMessage());
+            throw new DBConnectionErrorException($connectionString);
+        }
     }
 
-    /** Template value object constructor for PostgreSQL.
-     *
-     * This function creates a new {@link TemplateVO} with data retrieved from database.
-     *
-     * @param array $row an array with the Task values from a row.
-     * @return TemplateVO a {@link TemplateVO} with its properties set to the values from <var>$row</var>.
-     * @see TemplateVO
+    /**
+     * This method is declared to fulfill TemplateVO as non-abstract, but it should not be used.
+     * PDO::FETCH_CLASS now takes care of transforming DB rows into VO objects.
      */
     protected function setValues($row) {
-        $templateVO = new TemplateVO();
+        error_log("Unused TemplateVO::setValues() called");
+    }
 
-        $templateVO->setId($row['id']);
-        $templateVO->setName($row['name']);
-        $templateVO->setStory($row['story']);
-        $templateVO->setStory($row['story']);
-        if (strtolower($row['telework']) == "t")
-            $templateVO->setTelework(True);
-        elseif (strtolower($row['telework']) == "f")
-            $templateVO->setTelework(False);
-        if (strtolower($row['onsite']) == "t")
-            $templateVO->setOnsite(True);
-        elseif (strtolower($row['onsite']) == "f")
-            $templateVO->setOnsite(False);
-        $templateVO->setText($row['text']);
-        $templateVO->setTtype($row['ttype']);
-        $templateVO->setUserId($row['usrid']);
-        $templateVO->setProjectId($row['projectid']);
-        $templateVO->setTaskStoryId($row['task_storyid']);
-        $templateVO->setInitTime($row['init_time']);
-        $templateVO->setEndTime($row['end_time']);
-
-        return $templateVO;
+    protected function runSelectQuery(string $statement, array $data) {
+        try {
+            $statement = $this->pdo->prepare($statement);
+            $statement->execute($data);
+            return $statement->fetchAll(PDO::FETCH_CLASS, 'TemplateVO');
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
+        }
     }
 
     /** Template retriever by id for PostgreSQL.
@@ -97,8 +116,9 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
     public function getById($templateId) {
         if (!is_numeric($templateId))
             throw new SQLIncorrectTypeException($templateId);
-        $sql = "SELECT * FROM template WHERE id=".$templateId;
-        $result = $this->execute($sql);
+        $result = $this->runSelectQuery(
+            "SELECT * FROM template WHERE id=:id",
+            [':id' => $templateId]);
         return $result[0] ?? NULL;
     }
 
@@ -115,8 +135,9 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
     public function getByUserId($userId) {
         if (!is_numeric($userId))
             throw new SQLIncorrectTypeException($userId);
-        $sql = "SELECT * FROM template WHERE usrid=$userId";
-        $result = $this->execute($sql);
+        $result = $this->runSelectQuery(
+            "SELECT * FROM template WHERE usrid=:usrid",
+            [':usrid' => $userId]);
         return $result;
     }
 
@@ -132,30 +153,34 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
     public function create(TemplateVO $templateVO) {
         $affectedRows = 0;
 
-        $sql = "INSERT INTO template (name, story, telework, onsite, text, ttype, usrid, projectid, init_time, end_time, task_storyid) VALUES(" .
-            DBPostgres::checkStringNull($templateVO->getName()) . ", " .
-            DBPostgres::checkStringNull($templateVO->getStory()) . ", " .
-            DBPostgres::boolToString($templateVO->isTelework()) . ", " .
-            DBPostgres::boolToString($templateVO->isOnsite()) . ", " .
-            DBPostgres::checkStringNull($templateVO->getText()) . ", " .
-            DBPostgres::checkStringNull($templateVO->getTtype()) . ", " .
-            DBPostgres::checkNull($templateVO->getUserId()) . ", " .
-            DBPostgres::checkNull($templateVO->getProjectId()) . ", " .
-            DBPostgres::checkNull($templateVO->getInitTime()) . ", " .
-            DBPostgres::checkNull($templateVO->getEndTime()) . ", " .
-            DBPostgres::checkNull($templateVO->getTaskStoryId()) .")";
+        $sql = "INSERT INTO template (name, story, telework, onsite, text, " .
+                   "ttype, usrid, projectid, init_time, end_time, task_storyid) " .
+               "VALUES(:name, :story, :telework, :onsite, :text, :ttype, " .
+                   ":usrid, :projectid, :init_time, :end_time, :task_storyid)";
 
-        $res = pg_query($this->connect, $sql);
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":name", $templateVO->getName(), PDO::PARAM_STR);
+            $statement->bindValue(":story", $templateVO->getStory(), PDO::PARAM_STR);
+            $statement->bindValue(":telework", $templateVO->isTelework(), PDO::PARAM_BOOL);
+            $statement->bindValue(":onsite", $templateVO->isOnsite(), PDO::PARAM_BOOL);
+            $statement->bindValue(":text", $templateVO->getText(), PDO::PARAM_STR);
+            $statement->bindValue(":ttype", $templateVO->getTtype(), PDO::PARAM_STR);
+            $statement->bindValue(":usrid", $templateVO->getUserId(), PDO::PARAM_INT);
+            $statement->bindValue(":projectid", $templateVO->getProjectId(), PDO::PARAM_INT);
+            $statement->bindValue(":init_time", $templateVO->getInitTime(), PDO::PARAM_INT);
+            $statement->bindValue(":end_time", $templateVO->getEndTime(), PDO::PARAM_INT);
+            $statement->bindValue(":task_storyid", $templateVO->getTaskStoryId(), PDO::PARAM_INT);
+            $statement->execute();
 
-        if ($res == NULL)
-            throw new SQLQueryErrorException(pg_last_error());
+            $templateVO->setId($this->pdo->lastInsertId('template_id_seq'));
 
-        $templateVO->setId(DBPostgres::getId($this->connect, "template_id_seq"));
-
-        $affectedRows = pg_affected_rows($res);
-
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
+        }
         return $affectedRows;
-
     }
 
     /**
@@ -186,20 +211,16 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
     public function delete(TemplateVO $templateVO) {
         $affectedRows = 0;
 
-        // Check for a task ID.
-        if($templateVO->getId() >= 0) {
-            $currTaskVO = $this->getById($templateVO->getId());
+        $sql = "DELETE FROM template WHERE id=:id";
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->execute([':id' => $templateVO->getId()]);
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
         }
-
-        // Otherwise delete a task.
-        if($currTaskVO) {
-            $sql = "DELETE FROM template WHERE id=".$currTaskVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-            if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-            $affectedRows = pg_affected_rows($res);
-        }
-
         return $affectedRows;
     }
 
@@ -226,8 +247,6 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
      * @throws SQLQueryErrorException
      */
     public function getUserTemplates($userId) {
-        $sql = "SELECT * FROM template where usrid=$userId";
-
-        return $this->execute($sql);
+        return $this->getByUserId($userId);
     }
 }
