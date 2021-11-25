@@ -84,8 +84,12 @@ div#tasks textarea {
     text-align: right;
 }
 
+.text-center {
+    text-align: center;
+}
+
 .btn {
-    padding: 10px 15px;
+    padding: 10px;
     background-color: #fff;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -93,6 +97,7 @@ div#tasks textarea {
     box-shadow: 2px 2px 2px #eee;
     text-transform: uppercase;
     font-weight: bold;
+    margin: 2px;
 }
 
 .btn:hover {

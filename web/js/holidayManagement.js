@@ -430,6 +430,52 @@ var app = new Vue({
         filterUser(event) {
             this.autocompleteIsActive = true;
             this.usersList = this.users.filter(user => user.name.toLowerCase().includes(event.target.value.toLowerCase()));
+        },
+        toggleDisableButtons() {
+            this.$refs.syncBtn.disabled = !this.$refs.syncBtn.disabled;
+            this.$refs.saveBtn.disabled = !this.$refs.saveBtn.disabled;
+        },
+        syncCalendar: async function () {
+            const url = `services/syncCalendar.php?init=${formatDate(this.init)}&end=${formatDate(this.end)}`;
+            const ranges = this.ranges.map(range => {
+                if (range.coveredDates) {
+                    const end = addDays(range.dates.end, 1);
+                    return {
+                        start: formatDate(range.dates.start),
+                        end: formatDate(end)
+                    }
+                }
+            });
+            this.toggleDisableButtons();
+
+            // Save holidays to make sure we keep everything on sync
+            await this.onSaveClick();
+
+            const res = await fetch(url, {
+                method: 'POST',
+                mode: 'same-origin',
+                cache: 'no-cache',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                referrerPolicy: 'no-referrer',
+                body: JSON.stringify(ranges)
+            });
+
+            this.toggleDisableButtons();
+            const body = await res.json();
+            if ("error" in body) {
+                this.serverMessages.push({
+                    classes: 'message error',
+                    text: body.error
+                });
+            } else {
+                this.serverMessages.push({
+                    classes: 'message success',
+                    text: body.message
+                });
+            }
         }
     },
     mounted() {

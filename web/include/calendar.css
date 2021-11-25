@@ -8,7 +8,7 @@
 
 @media (min-width: 960px) {
     .holidayContainer {
-        grid-template-columns: 22% 78%;
+        grid-template-columns: 25% 75%;
     }
 }
 
