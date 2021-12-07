@@ -35,7 +35,7 @@
 
     include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
     $ALL_USERS_GROUP = ConfigurationParametersManager::getParameter('ALL_USERS_GROUP');
-    $NO_FILL_EMAIL_DOMAIN = ConfigurationParametersManager::getParameter('NO_FILL_EMAIL_DOMAIN');
+    $COMPANY_DOMAIN = ConfigurationParametersManager::getParameter('COMPANY_DOMAIN');
     $NO_FILL_EMAIL_FROM = ConfigurationParametersManager::getParameter('NO_FILL_EMAIL_FROM');
     $NO_FILL_CC_CRITICAL = ConfigurationParametersManager::getParameter('NO_FILL_CC_CRITICAL');
     $NO_FILL_TEMPLATE_CRITICAL = ConfigurationParametersManager::getParameter('NO_FILL_TEMPLATE_CRITICAL');
@@ -90,7 +90,7 @@
             foreach ($groups as $group) {
                 if ($group->getName() == $ALL_USERS_GROUP) {
                     $login = $user->getLogin();
-                    $email = $login . "@" . $NO_FILL_EMAIL_DOMAIN;
+                    $email = $login . "@" . $COMPANY_DOMAIN;
                     $from = $NO_FILL_EMAIL_FROM;
                     $lastTaskDate = TasksFacade::getLastTaskDate($user, $today);
                     if (is_null($lastTaskDate)) {
