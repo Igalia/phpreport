@@ -105,8 +105,8 @@ do {
     $availableHolidays = $holidays["availableHours"][$userVO->getLogin()];
     $availableHolidays = HolidayService::formatHours($availableHolidays, $currentJourney, 5);
 
-    $enjoyedHolidays = $holidays["enjoyedHours"][$userVO->getLogin()];
-    $enjoyedHolidays = HolidayService::formatHours($enjoyedHolidays, $currentJourney, 5);
+    $usedHolidays = $holidays["usedHours"][$userVO->getLogin()];
+    $usedHolidays = HolidayService::formatHours($usedHolidays, $currentJourney, 5);
 
     $string = "<personalSummary login='" . $userVO->getLogin() . "' date='" . $date->format($dateFormat) . "'>"
         . "<hours><day>" . $day  . "</day>"
@@ -116,7 +116,7 @@ do {
         . "<pending_holidays>" . $pendingHolidays . "</pending_holidays>"
         . "<scheduled_holidays>" . $scheduledHolidays . "</scheduled_holidays>"
         . "<available_holidays>" . $availableHolidays . "</available_holidays>"
-        . "<enjoyed_holidays>" . $enjoyedHolidays . "</enjoyed_holidays>"
+        . "<used_holidays>" . $usedHolidays . "</used_holidays>"
         . "<acc_extra_hours>" . $accExtraHours . "</acc_extra_hours>"
         . "</hours></personalSummary>";
 } while (false);

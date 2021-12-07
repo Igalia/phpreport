@@ -169,7 +169,7 @@ The *User work summary* panel on the left contains the following information:
 
 * **Extra (year):** Number of extra hours corresponding to the current year.
 
-* **Pending holidays (year):** Number of hours of holidays pending to be enjoyed this year.
+* **Pending holidays (year):** Number of hours of holidays pending to be used this year.
 
 * **Extra (total):** Number of historically accumulated extra hours.
 

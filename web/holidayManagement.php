@@ -69,8 +69,8 @@ include_once("include/header.php");
                         <td class="text-right">{{ summary.availableHolidays }}</td>
                     </tr>
                     <tr>
-                        <td>Enjoyed</td>
-                        <td class="text-right">{{ summary.enjoyedHolidays }}</td>
+                        <td>Used</td>
+                        <td class="text-right">{{ summary.usedHolidays }}</td>
                     </tr>
                     <tr>
                         <td>Scheduled</td>
