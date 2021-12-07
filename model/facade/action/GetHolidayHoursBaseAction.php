@@ -131,8 +131,8 @@ abstract class GetHolidayHoursBaseAction extends Action
                 $userAvailableHours[$userVO->getLogin()] = $holidayHours;
 
                 $referenceDate = $referenceDate ?? new DateTime();
-                $userEnjoyedHours[$userVO->getLogin()] = $taskDao->getVacations($userVO, $reportInit, $referenceDate)["add_hours"] ?? 0;
-                $userScheduledHours[$userVO->getLogin()] = $vacations - $userEnjoyedHours[$userVO->getLogin()];
+                $userUsedHours[$userVO->getLogin()] = $taskDao->getVacations($userVO, $reportInit, $referenceDate)["add_hours"] ?? 0;
+                $userScheduledHours[$userVO->getLogin()] = $vacations - $userUsedHours[$userVO->getLogin()];
 
                 // The difference is the number of pending holiday hours
                 $userPendingHolidayHours[$userVO->getLogin()] = $holidayHours - $vacations;
@@ -142,7 +142,7 @@ abstract class GetHolidayHoursBaseAction extends Action
         return [
             'pendingHours' => $userPendingHolidayHours,
             'scheduledHours' => $userScheduledHours,
-            'enjoyedHours' => $userEnjoyedHours,
+            'usedHours' => $userUsedHours,
             'availableHours' => $userAvailableHours
         ];
     }

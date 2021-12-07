@@ -190,7 +190,7 @@ var app = new Vue({
             const summary = {
                 pendingHolidays: xmlDoc.getElementsByTagName("pending_holidays")[0].childNodes[0].nodeValue + "h",
                 scheduledHolidays: xmlDoc.getElementsByTagName("scheduled_holidays")[0].childNodes[0].nodeValue + "h",
-                enjoyedHolidays: xmlDoc.getElementsByTagName("enjoyed_holidays")[0].childNodes[0].nodeValue + "h",
+                usedHolidays: xmlDoc.getElementsByTagName("used_holidays")[0].childNodes[0].nodeValue + "h",
                 availableHolidays: xmlDoc.getElementsByTagName("available_holidays")[0].childNodes[0].nodeValue + "h"
             }
             if (user) {
