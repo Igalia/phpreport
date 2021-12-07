@@ -78,7 +78,7 @@ CLASS:PUBLIC
 DTSTAMP:" . $start . "
 DTSTART;VALUE=DATE:" . $start . "
 DTEND;VALUE=DATE:" . $end . "
-SUMMARY:" . $this->user->getLogin() . " on leave
+SUMMARY:" . $this->user->getLogin() . " holiday
 ORGANIZER:" . $this->user->getLogin() . "@" . $companyDomain . "
 ATTENDEE:" . $this->user->getLogin() . "@" . $companyDomain . "
 DESCRIPTION:Event created automatically from PhpReport
