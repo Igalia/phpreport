@@ -438,7 +438,7 @@ var app = new Vue({
         syncCalendar: async function () {
             const url = `services/syncCalendar.php?init=${formatDate(this.init)}&end=${formatDate(this.end)}`;
             const ranges = this.ranges.map(range => {
-                if (range.coveredDates) {
+                if (range.coveredDates && range.dates.start) {
                     const end = addDays(range.dates.end, 1);
                     return {
                         start: formatDate(range.dates.start),
