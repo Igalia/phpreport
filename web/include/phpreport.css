@@ -104,6 +104,11 @@ div#tasks textarea {
     color: #0f60ca;
 }
 
+.btn:disabled {
+    color: #ccc;
+    cursor: default;
+}
+
 .snackbarWrapper {
     position: fixed;
     bottom: 1em;

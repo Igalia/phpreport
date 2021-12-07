@@ -86,7 +86,6 @@ include_once("include/header.php");
                         <strong>TIP:</strong> Double click on single dates if you want to delete existing holidays.
                     </p>
                     <p class="text-center">
-                        <button class="btn" ref="syncBtn" v-on:click="syncCalendar">Sync with Sogo</button>
                         <button class="btn" ref="saveBtn" v-on:click="onSaveClick">Save Holidays</button>
                     </p>
                 </div>

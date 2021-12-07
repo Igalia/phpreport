@@ -341,6 +341,8 @@ var app = new Vue({
             }
         },
         onSaveClick: async function () {
+            this.toggleDisableButtons();
+
             const url = `services/updateHolidays.php?init=${formatDate(this.init)}&end=${formatDate(this.end)}`;
             const res = await fetch(url, {
                 method: 'POST',
@@ -377,8 +379,10 @@ var app = new Vue({
                     this.serverMessages.push({ classes: "message success", text: "Holidays were updated." });
                 }
             };
-            this.fetchSummary();
-            this.$emit('flush-message')
+            await this.fetchSummary();
+            this.syncCalendar();
+            this.toggleDisableButtons();
+            this.$emit('flush-message');
         },
         onSelectUser(userIndex) {
             if (!this.usersList[userIndex]) return;
@@ -432,7 +436,6 @@ var app = new Vue({
             this.usersList = this.users.filter(user => user.name.toLowerCase().includes(event.target.value.toLowerCase()));
         },
         toggleDisableButtons() {
-            this.$refs.syncBtn.disabled = !this.$refs.syncBtn.disabled;
             this.$refs.saveBtn.disabled = !this.$refs.saveBtn.disabled;
         },
         syncCalendar: async function () {
@@ -446,10 +449,6 @@ var app = new Vue({
                     }
                 }
             });
-            this.toggleDisableButtons();
-
-            // Save holidays to make sure we keep everything on sync
-            await this.onSaveClick();
 
             const res = await fetch(url, {
                 method: 'POST',
@@ -463,17 +462,11 @@ var app = new Vue({
                 body: JSON.stringify(ranges)
             });
 
-            this.toggleDisableButtons();
             const body = await res.json();
             if ("error" in body) {
                 this.serverMessages.push({
                     classes: 'message error',
                     text: body.error
-                });
-            } else {
-                this.serverMessages.push({
-                    classes: 'message success',
-                    text: body.message
                 });
             }
         }
