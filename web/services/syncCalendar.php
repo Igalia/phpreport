@@ -41,7 +41,9 @@ try {
     }
 } catch (Exception $e) {
     http_response_code(500);
-    $result = ['error' => "An error happened while syncing the calendar"];
+    $msg = $e->getMessage() == "CalDAV calendar not configured correctly" ?
+        $e->getMessage() : "An error happened while syncing the calendar";
+    $result = ['error' => $msg];
 }
 
 echo json_encode($result);

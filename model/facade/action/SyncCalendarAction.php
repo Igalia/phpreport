@@ -46,6 +46,9 @@ class SyncCalendarAction extends Action
         $password = ConfigurationParametersManager::getParameter('CALENDAR_PASSWORD');
         $companyDomain = ConfigurationParametersManager::getParameter('COMPANY_DOMAIN');
 
+        if (!$url || !$calendarUser || !$password || !$companyDomain)
+            throw new Exception("CalDAV calendar not configured correctly");
+
         $client = new SimpleCalDAVClient();
 
         $client->connect($url, $calendarUser, $password);
