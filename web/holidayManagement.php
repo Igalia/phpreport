@@ -85,8 +85,8 @@ include_once("include/header.php");
                     <p class="warning info">
                         <strong>TIP:</strong> Double click on single dates if you want to delete existing holidays.
                     </p>
-                    <p class="text-right">
-                        <button class="btn" v-on:click="onSaveClick">Save Holidays</button>
+                    <p class="text-center">
+                        <button class="btn" ref="saveBtn" v-on:click="onSaveClick">Save Holidays</button>
                     </p>
                 </div>
             </div>
@@ -102,10 +102,10 @@ include_once("include/header.php");
         </div>
         <div class="calendar">
             <div v-if="isEditing">
-                <v-date-picker ref="calendar" :from-page="fromPage" is-range v-model="range" :attributes="ranges" :first-day-of-week="2" :rows="3" :columns="$screens({ default: 2, lg: 4 })" show-iso-weeknumbers :select-attribute="selectAttribute" @dayclick="onDayClick" @update:from-page="updateCurrentYear" :min-date="init" :max-date="end" />
+                <v-date-picker ref="calendar" is-expanded :from-page="fromPage" is-range v-model="range" :attributes="ranges" :first-day-of-week="2" :rows="3" :columns="$screens({ default: 2, lg: 4 })" show-iso-weeknumbers :select-attribute="selectAttribute" @dayclick="onDayClick" @update:from-page="updateCurrentYear" :min-date="init" :max-date="end" />
             </div>
             <div v-show="!isEditing">
-                <v-calendar is-range :from-page="fromPage" v-model="teamRange" :attributes="teamAttributes" :first-day-of-week="2" :rows="3" :columns="$screens({ default: 2, lg: 4 })" show-iso-weeknumbers @update:from-page="updateCurrentYear" :min-date="init" :max-date="end" />
+                <v-calendar is-range is-expanded :from-page="fromPage" v-model="teamRange" :attributes="teamAttributes" :first-day-of-week="2" :rows="3" :columns="$screens({ default: 2, lg: 4 })" show-iso-weeknumbers @update:from-page="updateCurrentYear" :min-date="init" :max-date="end" />
             </div>
         </div>
         <div class="snackbarWrapper">

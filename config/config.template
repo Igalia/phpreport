@@ -194,10 +194,10 @@ define('MENU_COORDINATION', TRUE);
 define('EXTRA_HOURS_WARNING_TRIGGER', 50);
 
 /**
- * @name NO_FILL_EMAIL_DOMAIN
+ * @name COMPANY_DOMAIN
  * @global string Domain of the users pinged on the NO_FILL emails
  */
-define('NO_FILL_EMAIL_DOMAIN', "domain.com");
+define('COMPANY_DOMAIN', "domain.com");
 
 /**
  * @name NO_FILL_EMAIL_FROM
@@ -326,3 +326,9 @@ define('ISSUE_TRACKER_LINKS_URL',
  * To be used in combination with ISSUE_TRACKER_LINKS_URL, see its entry above.
  */
 define('ISSUE_TRACKER_LINKS_TEXT', serialize(array('Report an issue')));
+
+/* CalDav integration */
+define('CALENDAR_URL', '');
+define('CALENDAR_ID', '');
+define('CALENDAR_USERNAME', '');
+define('CALENDAR_PASSWORD', '');

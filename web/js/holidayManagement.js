@@ -341,6 +341,8 @@ var app = new Vue({
             }
         },
         onSaveClick: async function () {
+            this.toggleDisableButtons();
+
             const url = `services/updateHolidays.php?init=${formatDate(this.init)}&end=${formatDate(this.end)}`;
             const res = await fetch(url, {
                 method: 'POST',
@@ -377,8 +379,10 @@ var app = new Vue({
                     this.serverMessages.push({ classes: "message success", text: "Holidays were updated." });
                 }
             };
-            this.fetchSummary();
-            this.$emit('flush-message')
+            await this.fetchSummary();
+            this.syncCalendar();
+            this.toggleDisableButtons();
+            this.$emit('flush-message');
         },
         onSelectUser(userIndex) {
             if (!this.usersList[userIndex]) return;
@@ -430,6 +434,41 @@ var app = new Vue({
         filterUser(event) {
             this.autocompleteIsActive = true;
             this.usersList = this.users.filter(user => user.name.toLowerCase().includes(event.target.value.toLowerCase()));
+        },
+        toggleDisableButtons() {
+            this.$refs.saveBtn.disabled = !this.$refs.saveBtn.disabled;
+        },
+        syncCalendar: async function () {
+            const url = `services/syncCalendar.php?init=${formatDate(this.init)}&end=${formatDate(this.end)}`;
+            const ranges = this.ranges.map(range => {
+                if (range.coveredDates && range.dates.start) {
+                    const end = addDays(range.dates.end, 1);
+                    return {
+                        start: formatDate(range.dates.start),
+                        end: formatDate(end)
+                    }
+                }
+            });
+
+            const res = await fetch(url, {
+                method: 'POST',
+                mode: 'same-origin',
+                cache: 'no-cache',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                referrerPolicy: 'no-referrer',
+                body: JSON.stringify(ranges)
+            });
+
+            const body = await res.json();
+            if ("error" in body) {
+                this.serverMessages.push({
+                    classes: 'message error',
+                    text: body.error
+                });
+            }
         }
     },
     mounted() {

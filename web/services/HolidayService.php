@@ -20,6 +20,8 @@
 
 namespace Phpreport\Web\services;
 
+use Phpreport\Model\facade;
+
 if (!defined('PHPREPORT_ROOT')) define('PHPREPORT_ROOT', __DIR__ . '/../../');
 
 include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
@@ -290,5 +292,23 @@ class HolidayService
             "resultCreation" => $resultCreation,
             "resultDeleted" => $resultDeleted
         ];
+    }
+
+    public function syncCalDAVCalendar(array $datesRanges = [])
+    {
+        if (!$this->loginManager::isLogged()) {
+            return ['error' => 'User not logged in'];
+        }
+
+        if (!$this->loginManager::isAllowed()) {
+            return ['error' => 'Forbidden service for this User'];
+        }
+
+        $userVO = new \UserVO();
+        $userVO->setLogin($_SESSION['user']->getLogin());
+        $userVO->setId($_SESSION['user']->getId());
+
+        facade\CalDAVCalendarFacade::SyncCalendar($userVO, $datesRanges);
+        return ['message' => 'Calendar synced'];
     }
 }
