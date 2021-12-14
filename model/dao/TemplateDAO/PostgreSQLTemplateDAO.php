@@ -29,7 +29,6 @@
  */
 include_once(PHPREPORT_ROOT . '/model/vo/TemplateVO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/TemplateDAO/TemplateDAO.php');
-include_once(PHPREPORT_ROOT . '/util/DatabaseConnectionManager.php');
 
 /** DAO for Templates in PostgreSQL
  *
@@ -39,27 +38,14 @@ include_once(PHPREPORT_ROOT . '/util/DatabaseConnectionManager.php');
  */
 class PostgreSQLTemplateDAO extends TemplateDAO{
 
-    /** The connection to DB.
+    /** Template DAO constructor.
      *
-     * PDO object with an open connection to the database, initialized in the
-     * class constructor.
+     * Default constructor of TemplateDAO, it just calls parent constructor.
      *
-     * @var resource
-     * @see __construct()
-     */
-    protected PDO $pdo;
-
-    /** Template DAO for PostgreSQL constructor.
-     *
-     * This is the constructor of the implementation for PostgreSQL of
-     * {@link TemplateDAO}. It sets up the database connection via
-     * DatabaseConnectionManager.
-     * Notice this DAO connects to the DB through PDO, unlike the rest of the
-     * application.
-     *
+     * @see BaseDAO::__construct()
      */
     function __construct() {
-        $this->pdo = DatabaseConnectionManager::getPDO();
+        parent::__construct();
     }
 
     /**
