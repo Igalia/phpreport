@@ -27,10 +27,9 @@
  * @package PhpReport
  * @subpackage DAO
  */
-include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
 include_once(PHPREPORT_ROOT . '/model/vo/TemplateVO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/TemplateDAO/TemplateDAO.php');
-include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
+include_once(PHPREPORT_ROOT . '/util/DatabaseConnectionManager.php');
 
 /** DAO for Templates in PostgreSQL
  *
@@ -53,36 +52,14 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
     /** Template DAO for PostgreSQL constructor.
      *
      * This is the constructor of the implementation for PostgreSQL of
-     * {@link TemplateDAO}. It sets up everything for database connection, using
-     * the parameters read from <i>{@link config.php}</i> and saving the open
-     * connection in <var>{@link $pdo}</var>.
+     * {@link TemplateDAO}. It sets up the database connection via
+     * DatabaseConnectionManager.
      * Notice this DAO connects to the DB through PDO, unlike the rest of the
      * application.
      *
-     * @throws {@link DBConnectionErrorException}
      */
     function __construct() {
-        // Call parent to initialize non-PDO database access, while we don't
-        // migrate all the methods here.
-        parent::__construct();
-
-        // TODO: EXTRA_DB_CONNECTION_PARAMETERS used to expect pg_connect
-        // parameters, which were space-separated, but PDO requires semicolons
-        $connectionString = sprintf("pgsql:host=%s;port=%d;user=%s;dbname=%s;password=%s;%s",
-            ConfigurationParametersManager::getParameter('DB_HOST'),
-            ConfigurationParametersManager::getParameter('DB_PORT'),
-            ConfigurationParametersManager::getParameter('DB_USER'),
-            ConfigurationParametersManager::getParameter('DB_NAME'),
-            ConfigurationParametersManager::getParameter('DB_PASSWORD'),
-            ConfigurationParametersManager::getParameter('EXTRA_DB_CONNECTION_PARAMETERS'));
-
-        try {
-            $this->pdo = new PDO($connectionString);
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            error_log('Connection failed: ' . $e->getMessage());
-            throw new DBConnectionErrorException($connectionString);
-        }
+        $this->pdo = DatabaseConnectionManager::getPDO();
     }
 
     /**
