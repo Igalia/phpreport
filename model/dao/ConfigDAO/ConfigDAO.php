@@ -49,14 +49,6 @@ abstract class ConfigDAO extends BaseDAO {
         parent::__construct();
     }
 
-    /** Get version number.
-     *
-     * Get database version number.
-     *
-     * @return String a string containing the version number
-     */
-    public abstract function getVersionNumber();
-
     /** Query PhpReport task block configuration.
      *
      * Check if PhpReport configuration allows writing tasks on the specified

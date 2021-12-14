@@ -49,22 +49,6 @@ class PostgreSQLConfigDAO extends ConfigDAO {
         parent::__construct();
     }
 
-    /** Get version number.
-     *
-     * Get database version number.
-     *
-     * @return String a string containing the version number
-     */
-    public function getVersionNumber() {
-        $sql = "SELECT version FROM config";
-
-        $result = $this->execute($sql);
-
-        if (!is_null($result[0])) {
-            return $result[0];
-        }
-    }
-
     /** Query PhpReport task block configuration.
      *
      * Check if PhpReport configuration allows writing tasks on the specified
