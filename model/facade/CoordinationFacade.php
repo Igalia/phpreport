@@ -29,9 +29,6 @@
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 
-include_once(PHPREPORT_ROOT . '/model/facade/action/CreateProjectScheduleAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteProjectScheduleAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateProjectScheduleAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateIterationAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteIterationAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateIterationAction.php');
@@ -78,7 +75,6 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/GetOpenTaskSectionsAction.ph
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetSectionTaskStoriesAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetTaskSectionTaskStoriesAction.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
-include_once(PHPREPORT_ROOT . '/model/vo/ProjectScheduleVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/IterationVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/StoryVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/TaskStoryVO.php');
@@ -95,54 +91,6 @@ include_once(PHPREPORT_ROOT . '/model/vo/CustomStoryVO.php');
  * @author Jorge López Fernández <jlopez@igalia.com>
  */
 abstract class CoordinationFacade {
-
-    /** Create Project Schedule Function
-     *
-     *  This function is used for creating a new Project Schedule.
-     *
-     * @param ProjectScheduleVO $projectSchedule the Project Schedule value object we want to create.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
-     */
-    static function CreateProjectSchedule(ProjectScheduleVO $projectSchedule) {
-
-    $action = new CreateProjectScheduleAction($projectSchedule);
-
-    return $action->execute();
-
-    }
-
-    /** Delete Project Schedule Function
-     *
-     *  This function is used for deleting a Project Schedule.
-     *
-     * @param ProjectScheduleVO $projectSchedule the Project Schedule value object we want to delete.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}
-     */
-    static function DeleteProjectSchedule(ProjectScheduleVO $projectSchedule) {
-
-    $action = new DeleteProjectScheduleAction($projectSchedule);
-
-    return $action->execute();
-
-    }
-
-    /** Update Project Schedule Function
-     *
-     *  This function is used for updating a Project Schedule.
-     *
-     * @param ProjectScheduleVO $projectSchedule the Project Schedule value object we want to update.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
-     */
-    static function UpdateProjectSchedule(ProjectScheduleVO $projectSchedule) {
-
-    $action = new UpdateProjectScheduleAction($projectSchedule);
-
-    return $action->execute();
-
-    }
 
     /** Get Iteration Function
      *

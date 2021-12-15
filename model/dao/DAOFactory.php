@@ -360,26 +360,6 @@ class DAOFactory {
     return new $className;
   }
 
-    /** Project Schedule DAO creator
-     *
-     * This function returns a new instance of {@link ProjectScheduleDAO}.
-     *
-     * @return ProjectScheduleDAO a new instance of {@link ProjectScheduleDAO}.
-     * @throws {@link UnknownParameterException}
-     */
-  public static function getProjectScheduleDAO() {
-    try {
-      $className = ConfigurationParametersManager::getParameter('PROJECT_SCHEDULE_DAO');
-    }
-    catch(UnknownParameterException $e) {
-      $backend = ConfigurationParametersManager::getParameter('DAO_BACKEND');
-      $className = $backend . 'ProjectScheduleDAO';
-    }
-
-    include_once(PHPREPORT_ROOT . '/model/dao/ProjectScheduleDAO/' . $className . ".php");
-    return new $className;
-  }
-
     /** Project User DAO creator
      *
      * This function returns a new instance of {@link ProjectUserDAO}.
