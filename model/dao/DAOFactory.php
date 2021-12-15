@@ -561,31 +561,3 @@ class DAOFactory {
   }
 
 }
-
-
-/*// Test code
-var_dump(DAOFactory::getUserDAO());
-var_dump(DAOFactory::getUserGroupDAO());
-var_dump(DAOFactory::getBelongsDAO());
-var_dump(DAOFactory::getAreaDAO());
-var_dump(DAOFactory::getAreaHistoryDAO());
-var_dump(DAOFactory::getWorksDAO());
-var_dump(DAOFactory::getCustomerDAO());
-var_dump(DAOFactory::getTaskDAO());
-var_dump(DAOFactory::getProjectDAO());
-var_dump(DAOFactory::getSectorDAO());
-var_dump(DAOFactory::getJourneyHistoryDAO());
-var_dump(DAOFactory::getCityHistoryDAO());
-var_dump(DAOFactory::getHourCostHistoryDAO());
-var_dump(DAOFactory::getExtraHourDAO());
-var_dump(DAOFactory::getCityDAO());
-var_dump(DAOFactory::getCommonEventDAO());
-var_dump(DAOFactory::getCustomEventDAO());
-var_dump(DAOFactory::getProjectUserDAO());
-var_dump(DAOFactory::getProjectScheduleDAO());
-var_dump(DAOFactory::getIterationDAO());
-var_dump(DAOFactory::getStoryDAO());
-var_dump(DAOFactory::getTaskStoryDAO());
-var_dump(DAOFactory::getModuleDAO());
-var_dump(DAOFactory::getSectionDAO());
-var_dump(DAOFactory::getTaskSectionDAO());*/
