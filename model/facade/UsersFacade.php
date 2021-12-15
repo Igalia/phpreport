@@ -40,9 +40,6 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/ExtraHoursReportAction.php')
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetPendingHolidayHoursAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetScheduledHolidaysAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetHolidayHoursSummaryAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/CreateCustomEventAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteCustomEventAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateCustomEventAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateExtraHourAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteExtraHourAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllExtraHoursAction.php');
@@ -81,7 +78,6 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteUserGoalAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetWeeklyGoalSummaryAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/LoginAction.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
-include_once(PHPREPORT_ROOT . '/model/vo/CustomEventVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/ExtraHourVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserGroupVO.php');
@@ -353,54 +349,6 @@ abstract class UsersFacade {
     static function GetSectionModuleProjectAreaTodayUsers($sectionid) {
 
     $action = new GetSectionModuleProjectAreaTodayUsersAction($sectionid);
-
-    return $action->execute();
-
-    }
-
-    /** Create Custom Event Function
-     *
-     *  This function is used for creating a new Custom Event.
-     *
-     * @param CustomEventVO $customEvent the Custom Event value object we want to create.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
-     */
-    static function CreateCustomEvent(CustomEventVO $customEvent) {
-
-    $action = new CreateCustomEventAction($customEvent);
-
-    return $action->execute();
-
-    }
-
-    /** Delete Custom Event Function
-     *
-     *  This function is used for deleting a Custom Event.
-     *
-     * @param CustomEventVO $customEvent the Custom Event value object we want to delete.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}
-     */
-    static function DeleteCustomEvent(CustomEventVO $customEvent) {
-
-    $action = new DeleteCustomEventAction($customEvent);
-
-    return $action->execute();
-
-    }
-
-    /** Update Custom Event Function
-     *
-     *  This function is used for updating a Custom Event.
-     *
-     * @param CustomEventVO $customEvent the Custom Event value object we want to update.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
-     */
-    static function UpdateCustomEvent(CustomEventVO $customEvent) {
-
-    $action = new UpdateCustomEventAction($customEvent);
 
     return $action->execute();
 

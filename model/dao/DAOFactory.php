@@ -260,26 +260,6 @@ class DAOFactory {
     return new $className;
   }
 
-    /** Custom Event DAO creator
-     *
-     * This function returns a new instance of {@link CustomEventDAO}.
-     *
-     * @return CustomEventDAO a new instance of {@link CustomEventDAO}.
-     * @throws {@link UnknownParameterException}
-     */
-  public static function getCustomEventDAO() {
-    try {
-      $className = ConfigurationParametersManager::getParameter('CUSTOM_EVENT_DAO');
-    }
-    catch(UnknownParameterException $e) {
-      $backend = ConfigurationParametersManager::getParameter('DAO_BACKEND');
-      $className = $backend . 'CustomEventDAO';
-    }
-
-    include_once(PHPREPORT_ROOT . '/model/dao/CustomEventDAO/' . $className . ".php");
-    return new $className;
-  }
-
     /** Extra Hour DAO creator
      *
      * This function returns a new instance of {@link ExtraHourDAO}.

@@ -39,7 +39,6 @@ include_once(PHPREPORT_ROOT . '/model/dao/BelongsDAO/PostgreSQLBelongsDAO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/WorksDAO/PostgreSQLWorksDAO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/TaskDAO/PostgreSQLTaskDAO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/ExtraHourDAO/PostgreSQLExtraHourDAO.php');
-include_once(PHPREPORT_ROOT . '/model/dao/CustomEventDAO/PostgreSQLCustomEventDAO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/AreaHistoryDAO/PostgreSQLAreaHistoryDAO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/CityHistoryDAO/PostgreSQLCityHistoryDAO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/JourneyHistoryDAO/PostgreSQLJourneyHistoryDAO.php');
@@ -375,24 +374,6 @@ class PostgreSQLUserDAO extends UserDAO{
     public function getExtraHours($userId) {
 
     $dao = DAOFactory::getExtraHourDAO();
-    return $dao->getByUserId($userId);
-
-    }
-
-    /** Custom Events retriever by id for PostgreSQL.
-     *
-     * This function retrieves the rows from Custom Event table that are associated with the User with
-     * the id <var>$userId</var> and creates a {@link CustomEventVO} with data from each row.
-     *
-     * @param int $userId the id of the User whose Custom Events we want to retrieve.
-     * @return array an array with value objects {@link CustomEventVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see CustomEventDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getCustomEvents($userId) {
-
-    $dao = DAOFactory::getCustomEventDAO();
     return $dao->getByUserId($userId);
 
     }
