@@ -305,19 +305,6 @@ abstract class UserDAO extends BaseDAO{
      */
     public abstract function getExtraHours($userId);
 
-    /** Custom Events retriever by id.
-     *
-     * This function retrieves the rows from Custom Event table that are associated with the User with
-     * the id <var>$userId</var> and creates a {@link CustomEventVO} with data from each row.
-     *
-     * @param int $userId the id of the User whose Custom Events we want to retrieve.
-     * @return array an array with value objects {@link CustomEventVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see CustomEventDAO
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function getCustomEvents($userId);
-
     /** Area History retriever by id.
      *
      * This function retrieves the rows from Area History table that are associated with the User with
