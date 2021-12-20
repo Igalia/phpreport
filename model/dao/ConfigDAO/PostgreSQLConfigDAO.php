@@ -49,22 +49,6 @@ class PostgreSQLConfigDAO extends ConfigDAO {
         parent::__construct();
     }
 
-    /** Get version number.
-     *
-     * Get database version number.
-     *
-     * @return String a string containing the version number
-     */
-    public function getVersionNumber() {
-        $sql = "SELECT version FROM config";
-
-        $result = $this->execute($sql);
-
-        if (!is_null($result[0])) {
-            return $result[0];
-        }
-    }
-
     /** Query PhpReport task block configuration.
      *
      * Check if PhpReport configuration allows writing tasks on the specified
@@ -117,20 +101,19 @@ class PostgreSQLConfigDAO extends ConfigDAO {
                    "block_tasks_by_date_enabled,".
                    "block_tasks_by_date_date ".
                    "FROM config";
-        $res = pg_query($this->connect, $sql);
-        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-
         $config = array();
 
-        if(pg_num_rows($res) > 0) {
-            $config = pg_fetch_array($res);
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->execute();
+            $config = $statement->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
         }
-
-        pg_freeresult($res);
-
         return array(
-            "dayLimitEnabled" => (strtolower($config["block_tasks_by_day_limit_enabled"]) == "t"),
-            "dateLimitEnabled" => (strtolower($config["block_tasks_by_date_enabled"]) == "t"),
+            "dayLimitEnabled" => $config["block_tasks_by_day_limit_enabled"],
+            "dateLimitEnabled" => $config["block_tasks_by_date_enabled"],
             "numberOfDays" => $config["block_tasks_by_day_limit_number_of_days"],
             "date" => is_null($config["block_tasks_by_date_date"])? NULL : date_create($config["block_tasks_by_date_date"]));
     }
@@ -152,19 +135,28 @@ class PostgreSQLConfigDAO extends ConfigDAO {
      */
     public function setTaskBlockConfiguration($dayLimitEnabled, $numberOfDays,
             $dateLimitEnabled, $date) {
+        $affectedRows = 0;
+
         $sql = "UPDATE config SET " .
-                "block_tasks_by_day_limit_enabled = " .
-                DBPostgres::boolToString($dayLimitEnabled) . "," .
-                "block_tasks_by_day_limit_number_of_days =" .
-                DBPostgres::checkNull($numberOfDays) . "," .
-                "block_tasks_by_date_enabled = " .
-                DBPostgres::boolToString($dateLimitEnabled) . "," .
-                "block_tasks_by_date_date = " .
-                DBPostgres::formatDate($date);
+                "block_tasks_by_day_limit_enabled = :dayLimitEnabled, " .
+                "block_tasks_by_day_limit_number_of_days = :numberOfDays, " .
+                "block_tasks_by_date_enabled = :dateLimitEnabled, " .
+                "block_tasks_by_date_date = :date";
 
-        $res = pg_query($this->connect, $sql);
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":dayLimitEnabled", $dayLimitEnabled, PDO::PARAM_BOOL);
+            $statement->bindValue(":numberOfDays", $numberOfDays, PDO::PARAM_INT);
+            $statement->bindValue(":dateLimitEnabled", $dateLimitEnabled, PDO::PARAM_BOOL);
+            $statement->bindValue(":date", DBPostgres::formatDate($date), PDO::PARAM_STR);
+            $statement->execute();
 
-        return ($res != NULL);
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
+        }
+        return $affectedRows != 0;
     }
 
 }

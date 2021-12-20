@@ -27,10 +27,8 @@
  * @package PhpReport
  * @subpackage DAO
  */
-include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
 include_once(PHPREPORT_ROOT . '/model/vo/TemplateVO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/TemplateDAO/TemplateDAO.php');
-include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
 
 /** DAO for Templates in PostgreSQL
  *
@@ -40,49 +38,14 @@ include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
  */
 class PostgreSQLTemplateDAO extends TemplateDAO{
 
-    /** The connection to DB.
+    /** Template DAO constructor.
      *
-     * PDO object with an open connection to the database, initialized in the
-     * class constructor.
+     * Default constructor of TemplateDAO, it just calls parent constructor.
      *
-     * @var resource
-     * @see __construct()
-     */
-    protected PDO $pdo;
-
-    /** Template DAO for PostgreSQL constructor.
-     *
-     * This is the constructor of the implementation for PostgreSQL of
-     * {@link TemplateDAO}. It sets up everything for database connection, using
-     * the parameters read from <i>{@link config.php}</i> and saving the open
-     * connection in <var>{@link $pdo}</var>.
-     * Notice this DAO connects to the DB through PDO, unlike the rest of the
-     * application.
-     *
-     * @throws {@link DBConnectionErrorException}
+     * @see BaseDAO::__construct()
      */
     function __construct() {
-        // Call parent to initialize non-PDO database access, while we don't
-        // migrate all the methods here.
         parent::__construct();
-
-        // TODO: EXTRA_DB_CONNECTION_PARAMETERS used to expect pg_connect
-        // parameters, which were space-separated, but PDO requires semicolons
-        $connectionString = sprintf("pgsql:host=%s;port=%d;user=%s;dbname=%s;password=%s;%s",
-            ConfigurationParametersManager::getParameter('DB_HOST'),
-            ConfigurationParametersManager::getParameter('DB_PORT'),
-            ConfigurationParametersManager::getParameter('DB_USER'),
-            ConfigurationParametersManager::getParameter('DB_NAME'),
-            ConfigurationParametersManager::getParameter('DB_PASSWORD'),
-            ConfigurationParametersManager::getParameter('EXTRA_DB_CONNECTION_PARAMETERS'));
-
-        try {
-            $this->pdo = new PDO($connectionString);
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            error_log('Connection failed: ' . $e->getMessage());
-            throw new DBConnectionErrorException($connectionString);
-        }
     }
 
     /**

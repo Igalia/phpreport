@@ -31,6 +31,7 @@
 
 include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
+include_once(PHPREPORT_ROOT . '/util/DatabaseConnectionManager.php');
 include_once(PHPREPORT_ROOT . '/util/DBConnectionErrorException.php');
 include_once(PHPREPORT_ROOT . '/util/SQLQueryErrorException.php');
 
@@ -53,9 +54,23 @@ abstract class BaseDAO {
      */
     protected $connect;
 
+    /** The connection to DB.
+     *
+     * PDO object with an open connection to the database, initialized in the
+     * class constructor.
+     *
+     * @var resource
+     * @see __construct()
+     */
+    protected PDO $pdo;
+
     /** Base constructor.
      *
-     * This is the base constructor of all simple DAOs, and it just creates the connection with the parameters read from <i>{@link config.php}</i>, storing it in <var>{@link $connect}</var>.
+     * This is the base constructor of all simple DAOs, and it just creates the
+     * connection with the parameters read from <i>{@link config.php}</i>,
+     * storing it in <var>{@link $connect}</var>.
+     * It also sets up a connection using the PDO API, via
+     * DatabaseConnectionManager. Eventually, all DAOs should use it.
      *
      * @see ConfigurationParametersManager, config.php
      * @throws {@link ConnectionErrorException}
@@ -75,6 +90,9 @@ abstract class BaseDAO {
         if ($this->connect == NULL) throw new DBConnectionErrorException($connectionString);
 
         pg_set_error_verbosity($this->connect, PGSQL_ERRORS_VERBOSE);
+
+        // PDO setup for the DAOs that need it.
+        $this->pdo = DatabaseConnectionManager::getPDO();
     }
 
     /** Value object constructor.
