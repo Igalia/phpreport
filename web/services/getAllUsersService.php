@@ -53,8 +53,7 @@
 
         if ($active == "true")
         {
-            $groupDAO = DAOFactory::getUserGroupDAO();
-            $users = $groupDAO->getUsersByUserGroupName(ConfigurationParametersManager::getParameter("ALL_USERS_GROUP"));
+            $users = UsersFacade::GetAllActiveUsers();
         }
         else
         {

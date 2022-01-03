@@ -33,6 +33,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/CreateUserAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteUserAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllUsersAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllActiveUsersAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUsersByAreaIdDateAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserByLoginAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateUserAction.php');
@@ -158,6 +159,11 @@ abstract class UsersFacade {
 
     return $action->execute();
 
+    }
+
+    static function GetAllActiveUsers() {
+        $action = new GetAllActiveUsersAction();
+        return $action->execute();
     }
 
     /** Create User Function
