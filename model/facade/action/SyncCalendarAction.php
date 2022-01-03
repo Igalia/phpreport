@@ -72,21 +72,25 @@ class SyncCalendarAction extends Action
 
             $start = str_replace("-", "", $range['start']);
             $end = str_replace("-", "", $range['end']);
-            $event = "BEGIN:VCALENDAR
-VERSION:2.0
+            $userEmail = $this->user->getLogin() . "@" . $companyDomain;
+            $event = 'BEGIN:VCALENDAR
 PRODID:-//Igalia PhPReport//CalDAV Client//EN
+VERSION:2.0
 BEGIN:VEVENT
-UID:" . $start . "-" . $this->user->getLogin() . "-phpreport
-CLASS:PUBLIC
-DTSTAMP:" . $start . "
-DTSTART;VALUE=DATE:" . $start . "
-DTEND;VALUE=DATE:" . $end . "
-SUMMARY:" . $this->user->getLogin() . " holiday
-ORGANIZER:" . $this->user->getLogin() . "@" . $companyDomain . "
-ATTENDEE:" . $this->user->getLogin() . "@" . $companyDomain . "
+UID:' . $start . '-' . $this->user->getLogin() . '-phpreport
+SUMMARY:' . $this->user->getLogin() . ' holiday
 DESCRIPTION:Event created automatically from PhpReport
+CLASS:PUBLIC
+X-SOGO-SEND-APPOINTMENT-NOTIFICATIONS:NO
+ATTENDEE;PARTSTAT=NEEDS-ACTION;CN=' . $this->user->getLogin() . ';RSVP=TRUE;ROLE=REQ-PARTICIPANT:mailto:' . $userEmail . '
+TRANSP:OPAQUE
+DTSTART;VALUE=DATE:' . $start . '
+DTEND;VALUE=DATE:' . $end . '
+ORGANIZER;SENT-BY="MAILTO:'. $userEmail .'";CN=igalia-holidays:mailto: '. $calendarUser .'@'. $companyDomain .'
+X-SOGO-COMPONENT-CREATED-BY:' . $userEmail . '
+DTSTAMP:' . $start . '
 END:VEVENT
-END:VCALENDAR";
+END:VCALENDAR';
 
             $client->create($event);
         }
