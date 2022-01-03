@@ -73,6 +73,6 @@ Make sure you have composer and the projects dependencies installed.
 To install the dependencies run ``composer install`` in the project
 root directory.
 
-All the automated tests should be placed inside the `tests`
-From the project root, run `./vendor/bin/phpunit --testdox tests`
+All the automated tests should be placed inside the ``tests`` directory.
+From the project root, run ``./vendor/bin/phpunit --testdox tests``
 to execute the automated tests.
