@@ -40,17 +40,6 @@ include_once(PHPREPORT_ROOT . '/model/dao/BaseDAO.php');
  */
 abstract class CustomerDAO extends BaseDAO{
 
-    /** Customer DAO constructor.
-     *
-     * This is the base constructor of Customer DAOs, and it just calls its parent's constructor.
-     *
-     * @throws {@link ConnectionErrorException}
-     * @see BaseDAO::__construct()
-     */
-    protected function __construct() {
-    parent::__construct();
-    }
-
     /** Customer retriever by id.
      *
      * This function retrieves the row from Customer table with the id <var>$customerId</var> and creates a {@link CustomerVO} with its data.

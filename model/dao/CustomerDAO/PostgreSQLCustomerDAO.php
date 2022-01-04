@@ -51,7 +51,7 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
      * @see CustomerDAO::__construct()
      */
     function __construct() {
-    parent::__construct();
+        parent::__construct();
     }
 
     /** Customer value object constructor for PostgreSQL.
