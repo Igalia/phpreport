@@ -28,10 +28,12 @@
 
     define('PHPREPORT_ROOT', __DIR__ . '/../../');
     include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
+    include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
     include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
     include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
     $sid = $_GET['sid'] ?? NULL;
+    $active = $_GET['active'] ?? NULL;
 
     do {
         /* We check authentication and authorization */
@@ -49,7 +51,14 @@
             break;
         }
 
-        $users = UsersFacade::GetAllUsers();
+        if ($active == "true")
+        {
+            $users = UsersFacade::GetAllActiveUsers();
+        }
+        else
+        {
+            $users = UsersFacade::GetAllUsers();
+        }
 
         $string = "<users>";
 

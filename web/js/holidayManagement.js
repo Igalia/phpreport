@@ -200,7 +200,7 @@ var app = new Vue({
             }
         },
         async fetchUsers() {
-            const url = `services/getAllUsersService.php`;
+            const url = `services/getAllUsersService.php?active=true`;
             const res = await fetch(url, {
                 method: 'GET',
                 mode: 'same-origin',
