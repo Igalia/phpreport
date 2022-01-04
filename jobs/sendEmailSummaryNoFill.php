@@ -34,7 +34,6 @@
     include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
     include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
-    $ALL_USERS_GROUP = ConfigurationParametersManager::getParameter('ALL_USERS_GROUP');
     $NO_FILL_EMAIL_FROM = ConfigurationParametersManager::getParameter('NO_FILL_EMAIL_FROM');
     $NO_FILL_TEMPLATE_MANAGERS = ConfigurationParametersManager::getParameter('NO_FILL_TEMPLATE_MANAGERS');
     $NO_FILL_SUBJECT_MANAGERS = ConfigurationParametersManager::getParameter('NO_FILL_SUBJECT_MANAGERS');
@@ -44,7 +43,7 @@
     $today = new DateTime(date('Y-m-d'));
     $initDate = new DateTime($today->format('Y').'-01-01');
 
-    $users = UsersFacade::GetAllUsers();
+    $users = UsersFacade::GetAllActiveUsers();
     $excludedUsers = [];
     $criticalWarnedUsers = [];
     $lastWarnedUsers = [];
@@ -56,24 +55,20 @@
                 // User is not currently hired, skip it.
                 continue;
             }
-            $groups = $user->getGroups();
-            foreach ($groups as $group) {
-                if ($group->getName() == $ALL_USERS_GROUP) {
-                    $report = UsersFacade::ExtraHoursReport($initDate, $today, $user);
-                    $lastTaskDate = TasksFacade::getLastTaskDate($user, $today);
-                    if (is_null($lastTaskDate)) {
-                        // User never saved tasks, use their contract start date as reference
-                        $lastTaskDate = $period[0]->getInitDate();
-                    }
-                    $login = $user->getLogin();
-                    $difference = $lastTaskDate->diff($today);
-                    $difference = $difference->format('%a');
-                    if ($difference >= $NO_FILL_DAYS_TRIGGER_LAST) {
-                        array_push($lastWarnedUsers, $login);
-                    } elseif ($difference >= $NO_FILL_DAYS_TRIGGER_CRITICAL) {
-                        array_push($criticalWarnedUsers, $login);
-                    }
-                }
+
+            $report = UsersFacade::ExtraHoursReport($initDate, $today, $user);
+            $lastTaskDate = TasksFacade::getLastTaskDate($user, $today);
+            if (is_null($lastTaskDate)) {
+                // User never saved tasks, use their contract start date as reference
+                $lastTaskDate = $period[0]->getInitDate();
+            }
+            $login = $user->getLogin();
+            $difference = $lastTaskDate->diff($today);
+            $difference = $difference->format('%a');
+            if ($difference >= $NO_FILL_DAYS_TRIGGER_LAST) {
+                array_push($lastWarnedUsers, $login);
+            } elseif ($difference >= $NO_FILL_DAYS_TRIGGER_CRITICAL) {
+                array_push($criticalWarnedUsers, $login);
             }
         }
     }
