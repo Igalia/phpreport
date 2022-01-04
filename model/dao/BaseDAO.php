@@ -132,4 +132,25 @@ abstract class BaseDAO {
         return $VO;
     }
 
+    /**
+     * Encapsulates the logic to run a select query via the PDO API, that would
+     * return an array of VO objects.
+     * @param string $statement: An SQL select query with placeholders for
+     * parameter binding according to PDO syntax (":parameter_name").
+     * @param array $data: Data for parameter binding, array indexes must match
+     * the placeholder names in the query.
+     * @param string $fetchClass: The name of the class that should be created
+     * for every result row.
+     */
+    protected function runSelectQuery(string $statement, array $data, string $fetchClass) {
+        try {
+            $statement = $this->pdo->prepare($statement);
+            $statement->execute($data);
+            return $statement->fetchAll(PDO::FETCH_CLASS, $fetchClass);
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
+        }
+    }
+
 }
