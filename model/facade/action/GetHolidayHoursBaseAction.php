@@ -19,6 +19,7 @@
  */
 
 include_once(PHPREPORT_ROOT . '/model/facade/action/Action.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllActiveUsersAction.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
@@ -44,8 +45,8 @@ abstract class GetHolidayHoursBaseAction extends Action
 
         // If no User was specified, then we retrieve all
         if (is_null($this->user)) {
-            $groupDAO = DAOFactory::getUserGroupDAO();
-            $users = $groupDAO->getUsersByUserGroupName(ConfigurationParametersManager::getParameter("ALL_USERS_GROUP"));
+            $action = new GetAllActiveUsersAction();
+            $users = $action->execute();
         } else {
 
             // The User can be identified by either the id or the login
