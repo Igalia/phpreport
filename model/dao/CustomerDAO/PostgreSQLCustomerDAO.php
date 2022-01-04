@@ -78,18 +78,22 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
 
     /** Customer retriever by id.
      *
-     * This function retrieves the row from Customer table with the id <var>$customerId</var> and creates a {@link CustomerVO} with its data.
+     * This function retrieves the row from Customer table with the id
+     * <var>$customerId</var> and creates a {@link CustomerVO} with its data.
      *
      * @param int $customerId the id of the row we want to retrieve.
-     * @return CustomerVO a value object {@link CustomerVO} with its properties set to the values from the row.
+     * @return CustomerVO a value object {@link CustomerVO} with its properties
+     * set to the values from the row, or NULL if no customer was found for that id.
      * @throws {@link SQLQueryErrorException}
      */
     public function getById($customerId) {
         if (!is_numeric($customerId))
-        throw new SQLIncorrectTypeException($customerId);
-        $sql = "SELECT * FROM customer WHERE id=" . $customerId;
-    $result = $this->execute($sql);
-    return $result[0];
+            throw new SQLIncorrectTypeException($customerId);
+        $result = $this->runSelectQuery(
+            "SELECT * FROM customer WHERE id=:customerid",
+            [':customerid' => $customerId],
+            'CustomerVO');
+        return $result[0] ?? NULL;
     }
 
     /** Customers retriever by Sector id.
@@ -143,10 +147,12 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
      */
     public function getAll($active = False, $orderField = 'id') {
         if ($active)
-            $sql = "SELECT * FROM customer WHERE id IN (SELECT customerid FROM requests WHERE projectid IN (SELECT id FROM project WHERE activation = 'True')) ORDER BY " . $orderField  . " ASC";
+            $sql = "SELECT * FROM customer WHERE id IN " .
+                      "(SELECT customerid FROM project WHERE activation = 'True') " .
+                   "ORDER BY :orderfield ASC";
         else
-            $sql = "SELECT * FROM customer ORDER BY " . $orderField . " ASC";
-        return $this->execute($sql);
+            $sql = "SELECT * FROM customer ORDER BY :orderfield ASC";
+        return $this->runSelectQuery($sql, [':orderfield' => $orderField], 'CustomerVO');
     }
 
     /** Customer updater.

@@ -33,15 +33,18 @@
  *
  *  This class just stores Customer data.
  *
+ *  NOTICE: properties must match column names in the DB, for PDO::FETCH_CLASS
+ *  to work properly.
+ *
  *  @property int $id database internal identifier.
- *  @property int $sectorId database internal identifier of the associated Sector.
+ *  @property int $sectorid database internal identifier of the associated Sector.
  *  @property string $name name of the Customer.
  *  @property string $type type of the Customer.
  *  @property string $url URL of the Customer.
  */
 class CustomerVO {
     protected $id = NULL;
-    protected $sectorId = NULL;
+    protected $sectorid = NULL;
     protected $name = NULL;
     protected $type = NULL;
     protected $url = NULL;
@@ -59,13 +62,13 @@ class CustomerVO {
 
     public function setSectorId($sectorId) {
         if (is_null($sectorId))
-        $this->sectorId = $sectorId;
-    else
-            $this->sectorId = (int) $sectorId;
+            $this->sectorid = $sectorId;
+        else
+            $this->sectorid = (int) $sectorId;
     }
 
     public function getSectorId() {
-        return $this->sectorId;
+        return $this->sectorid;
     }
 
     public function setName($name) {
