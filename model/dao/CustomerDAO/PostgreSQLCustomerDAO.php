@@ -127,12 +127,17 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
      * @throws {@link SQLQueryErrorException}
      */
     public function getByProjectUserLogin($userLogin, $active = False, $orderField = 'id') {
-        $sql = "SELECT * FROM customer WHERE id IN (SELECT customerid FROM requests WHERE projectid IN (SELECT id FROM project WHERE";
+        $activeCondition = "TRUE";
         if ($active)
-            $sql = $sql . " activation = 'True' AND";
-        $sql = $sql . " id IN (SELECT projectid FROM project_usr WHERE usrid = ( SELECT id FROM usr WHERE login = " . DBPostgres::checkStringNull($userLogin) . " )))) ORDER BY " . $orderField  . " ASC";
-        $result = $this->execute($sql);
-        return $result;
+            $activeCondition = "activation = 'True'";
+        $sql = "SELECT * FROM customer WHERE id IN " .
+                  "(SELECT customerid FROM project WHERE " .
+                  $activeCondition . " AND id IN " .
+                      "(SELECT projectid FROM project_usr WHERE usrid =" .
+                          "(SELECT id FROM usr WHERE login = :userlogin ))) " .
+               "ORDER BY :orderfield ASC";
+        return $this->runSelectQuery($sql,
+            [':userlogin' => $userLogin, ':orderfield' => $orderField], 'CustomerVO');
     }
 
     /** Customer retriever.
