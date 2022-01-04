@@ -34,7 +34,6 @@
     include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
     include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
-    $ALL_USERS_GROUP = ConfigurationParametersManager::getParameter('ALL_USERS_GROUP');
     $COMPANY_DOMAIN = ConfigurationParametersManager::getParameter('COMPANY_DOMAIN');
     $NO_FILL_EMAIL_FROM = ConfigurationParametersManager::getParameter('NO_FILL_EMAIL_FROM');
     $NO_FILL_CC_CRITICAL = ConfigurationParametersManager::getParameter('NO_FILL_CC_CRITICAL');
@@ -76,7 +75,7 @@
     $today = new DateTime(date('Y-m-d'));
     $initDate = new DateTime($today->format('Y').'-01-01');
 
-    $users = UsersFacade::GetAllUsers();
+    $users = UsersFacade::GetAllActiveUsers();
     $excludedUsers = [];
 
     foreach ($users as $user) {
@@ -86,36 +85,32 @@
                 // User is not currently hired, skip it.
                 continue;
             }
-            $groups = $user->getGroups();
-            foreach ($groups as $group) {
-                if ($group->getName() == $ALL_USERS_GROUP) {
-                    $login = $user->getLogin();
-                    $email = $login . "@" . $COMPANY_DOMAIN;
-                    $from = $NO_FILL_EMAIL_FROM;
-                    $lastTaskDate = TasksFacade::getLastTaskDate($user, $today);
-                    if (is_null($lastTaskDate)) {
-                        // User never saved tasks, use their contract start date as reference
-                        $lastTaskDate = $period[0]->getInitDate();
-                    }
-                    $difference = $lastTaskDate->diff($today);
-                    $difference = $difference->format('%a');
-                    if ($difference == $NO_FILL_DAYS_TRIGGER_LAST) {
-                        $cc = $NO_FILL_CC_LAST;
-                        $subject = $NO_FILL_SUBJECT_LAST;
-                        $template = $NO_FILL_TEMPLATE_LAST;
-                        sendEmail($email, $lastTaskDate, $from, $cc, $subject, $template);
-                    } elseif ($difference == $NO_FILL_DAYS_TRIGGER_CRITICAL) {
-                        $cc = $NO_FILL_CC_CRITICAL;
-                        $subject = $NO_FILL_SUBJECT_CRITICAL;
-                        $template = $NO_FILL_TEMPLATE_CRITICAL;
-                        sendEmail($email, $lastTaskDate, $from, $cc, $subject, $template);
-                    } elseif ($difference == $NO_FILL_DAYS_TRIGGER_WARNING) {
-                        $cc = $NO_FILL_CC_WARNING;
-                        $subject = $NO_FILL_SUBJECT_WARNING;
-                        $template = $NO_FILL_TEMPLATE_WARNING;
-                        sendEmail($email, $lastTaskDate, $from, $cc, $subject, $template);
-                    }
-                }
+
+            $login = $user->getLogin();
+            $email = $login . "@" . $COMPANY_DOMAIN;
+            $from = $NO_FILL_EMAIL_FROM;
+            $lastTaskDate = TasksFacade::getLastTaskDate($user, $today);
+            if (is_null($lastTaskDate)) {
+                // User never saved tasks, use their contract start date as reference
+                $lastTaskDate = $period[0]->getInitDate();
+            }
+            $difference = $lastTaskDate->diff($today);
+            $difference = $difference->format('%a');
+            if ($difference == $NO_FILL_DAYS_TRIGGER_LAST) {
+                $cc = $NO_FILL_CC_LAST;
+                $subject = $NO_FILL_SUBJECT_LAST;
+                $template = $NO_FILL_TEMPLATE_LAST;
+                sendEmail($email, $lastTaskDate, $from, $cc, $subject, $template);
+            } elseif ($difference == $NO_FILL_DAYS_TRIGGER_CRITICAL) {
+                $cc = $NO_FILL_CC_CRITICAL;
+                $subject = $NO_FILL_SUBJECT_CRITICAL;
+                $template = $NO_FILL_TEMPLATE_CRITICAL;
+                sendEmail($email, $lastTaskDate, $from, $cc, $subject, $template);
+            } elseif ($difference == $NO_FILL_DAYS_TRIGGER_WARNING) {
+                $cc = $NO_FILL_CC_WARNING;
+                $subject = $NO_FILL_SUBJECT_WARNING;
+                $template = $NO_FILL_TEMPLATE_WARNING;
+                sendEmail($email, $lastTaskDate, $from, $cc, $subject, $template);
             }
         }
     }
