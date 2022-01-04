@@ -263,19 +263,4 @@ abstract class AdminFacade {
 
     }
 
-    /** Synchronize data Function
-     *
-     *  This function is used for synchronizing data on DB and LDAP. It can synchronize data of only a user, or for all them if we don't pass one.
-     *
-     * @param UserVO $user the User whose data we want to synchronize.
-     * @return int number of entries that have changed.
-     */
-    static function SynchronizeData(UserVO $user = NULL) {
-
-        $action = new SynchronizeDataAction($user);
-
-        return $action->execute();
-
-    }
-
 }
