@@ -30,6 +30,7 @@
  */
 
 include_once(PHPREPORT_ROOT . '/model/facade/action/Action.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllActiveUsersAction.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
@@ -324,9 +325,8 @@ class ExtraHoursReportAction extends Action {
 
         if (is_null($this->user))
         {
-            $groupDAO = DAOFactory::getUserGroupDAO();
-            $users = $groupDAO->getUsersByUserGroupName(
-                    ConfigurationParametersManager::getParameter("ALL_USERS_GROUP"));
+            $action = new GetAllActiveUsersAction();
+            $users = $action->execute();
         }
         else
         {
