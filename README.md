@@ -1,3 +1,5 @@
+[![Test](https://github.com/Igalia/phpreport/actions/workflows/runtests.yml/badge.svg)](https://github.com/Igalia/phpreport/actions/workflows/runtests.yml)
+
 # PhpReport
 
 PhpReport is a web application for time tracking, which provides useful
