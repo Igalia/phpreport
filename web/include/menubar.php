@@ -84,6 +84,9 @@ $ISSUE_TRACKER_LINKS_URL = unserialize(
             <li class="sprite-book">
                 <a href="projectsSummary.php">Projects summary</a>
             </li>
+            <li class="sprite-calendar-edit">
+                <a href="holidaySummary.php">Holiday summary</a>
+            </li>
         </ul>
     </li>
     <li class="dropdown">
