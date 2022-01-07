@@ -1,5 +1,6 @@
 body {
     background: linear-gradient(#dadada, white) bottom no-repeat;
+    font-family: tahoma,arial,helvetica,sans-serif;
 }
 
 #sidebar {
@@ -98,6 +99,7 @@ div#tasks textarea {
     text-transform: uppercase;
     font-weight: bold;
     margin: 2px;
+    text-decoration: none;
 }
 
 .btn:hover {

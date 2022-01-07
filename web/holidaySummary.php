@@ -60,6 +60,9 @@ include_once("include/header.php");
             </tr>
         </tbody>
     </table>
+    <p class="text-center">
+        <a href="services/downloadHolidaySummary.php" class="btn">Download Report</a>
+    </p>
 </div>
 
 <script src='js/holidaySummary.js'></script>

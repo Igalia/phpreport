@@ -49,6 +49,7 @@ $permissions = array(
         '/services/syncCalendar.php',
         '/holidayManagement.php',
         '/holidaySummary.php',
+        '/services/downloadHolidaySummary.php',
         '/services/getHolidaySummary.php',
         //templates
         '/services/createTemplatesService.php', '/services/getUserTemplatesService.php',
