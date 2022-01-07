@@ -158,12 +158,48 @@ class HolidayServiceTest extends TestCase
     public function testGroupByWeeksSameYear(): void
     {
         $dates = [
-            "2021-10-14",
-            "2021-10-15",
-            "2021-11-01"
+            "2021-10-14" => [
+                "init" => 0,
+                "end" => 420,
+            ],
+            "2021-10-15" => [
+                "init" => 0,
+                "end" => 420,
+            ],
+            "2021-11-01" => [
+                "init" => 0,
+                "end" => 420,
+            ]
         ];
         $result = [
             '2021W41' => 2,
+            '2021W44' => 1
+        ];
+        $this->assertEquals(
+            $result,
+            $this->instance::groupByWeeks($dates)
+        );
+    }
+
+    public function testGroupByWeeksWithPartialLeaves(): void
+    {
+        $dates = [
+            "2021-10-14" => [
+                "init" => 0,
+                "end" => 210,
+                "amount" => 0.5
+            ],
+            "2021-10-15" => [
+                "init" => 0,
+                "end" => 420,
+            ],
+            "2021-11-01" => [
+                "init" => 0,
+                "end" => 420,
+            ]
+        ];
+        $result = [
+            '2021W41' => 1.5,
             '2021W44' => 1
         ];
         $this->assertEquals(
@@ -177,9 +213,18 @@ class HolidayServiceTest extends TestCase
         // The first week of 2021 doesn't belong to the ISO week one of 2021,
         // instead it belongs to the last week (53) of 2020
         $dates = [
-            "2021-01-01",
-            "2021-01-02",
-            "2021-11-01"
+            "2021-01-01" =>  [
+                "init" => 0,
+                "end" => 420,
+            ],
+            "2021-01-02" =>  [
+                "init" => 0,
+                "end" => 420,
+            ],
+            "2021-11-01" =>  [
+                "init" => 0,
+                "end" => 420,
+            ],
         ];
         $result = [
             '2020W53' => 2,
