@@ -356,40 +356,13 @@ class HolidayService
         $weeks = $this::getWeeksFromYear();
         $holidays = [];
         for ($i = 0; $i < count($users); $i++) {
-            $journeyHistories = \UsersFacade::GetUserJourneyHistories($users[$i]->getLogin());
-            $startDate = array_map(fn ($history) => $history->getInitDate(), $journeyHistories);
-            $startDate = $startDate && min($startDate)->format('Y') == date("Y") ? date_format(min($startDate), 'Y-m-d') : '';
-            $leaves = $this::mapHalfLeaves(\UsersFacade::GetScheduledHolidays(
-                $init,
-                $end,
-                $users[$i]
-            ), $journeyHistories);
-            $summary = \UsersFacade::GetHolidayHoursSummary(
+            $holidays[$users[$i]->getLogin()] = \UsersFacade::GetHolidaySummaryReport(
                 $init,
                 $end,
                 $users[$i],
-                $end
+                $end,
+                $weeks
             );
-            $validJourney = array_filter(
-                $journeyHistories,
-                fn ($history) => $history->dateBelongsToJourney(date_create())
-            );
-            $validJourney = array_pop($validJourney);
-            $validJourney = $validJourney ? $validJourney->getJourney() : 0;
-            $leaves = $this->groupByWeeks($leaves, $weeks);
-            if (count($leaves) == 0) {
-                $leaves = $weeks;
-            }
-            $holidays[$users[$i]->getLogin()] = [
-                'user' => $users[$i]->getLogin(),
-                'availableHours' => round($summary['availableHours'][$users[$i]->getLogin()], 2),
-                'availableDays' => $this::formatHours($summary['availableHours'][$users[$i]->getLogin()], $validJourney, 1),
-                'pendingHours' => round($summary['pendingHours'][$users[$i]->getLogin()], 2),
-                'usedHours' => round($summary['usedHours'][$users[$i]->getLogin()], 2),
-                'percentage' =>  $summary['availableHours'][$users[$i]->getLogin()] ? round(($summary['usedHours'][$users[$i]->getLogin()] / $summary['availableHours'][$users[$i]->getLogin()]) * 100, 2) : 0,
-                'hoursDay' => $validJourney,
-                'holidays' => $leaves,
-            ];
         }
         asort($holidays);
         return [
