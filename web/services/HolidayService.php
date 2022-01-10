@@ -150,17 +150,18 @@ class HolidayService
         return $formatedHours;
     }
 
-    static function groupByWeeks(array $dates): array
+    static function groupByWeeks(array $leavesDetails, $weeks = []): array
     {
-        if (count($dates) == 0) return [];
+        if (count($leavesDetails) == 0) return [];
+        $dates = array_keys($leavesDetails);
         $previous_week = date("o\WW", strtotime($dates[0]));
-        $weeks[$previous_week] = 1;
+        $weeks[$previous_week] = $leavesDetails[$dates[0]]['amount'] ?? 1;
         for ($i = 1; $i < count($dates); $i++) {
             $current_week = date("o\WW", strtotime($dates[$i]));
             if ($current_week == $previous_week) {
-                $weeks[$current_week]++;
+                $weeks[$current_week] += $leavesDetails[$dates[$i]]['amount'] ?? 1;
             } else {
-                $weeks[$current_week] = 1;
+                $weeks[$current_week] = $leavesDetails[$dates[$i]]['amount'] ?? 1;
                 $previous_week = $current_week;
             }
         }
@@ -175,6 +176,7 @@ class HolidayService
             $validJourney = array_pop($validJourney);
             if (($validJourney->getJourney() * 60) > ($duration['end'] - $duration['init'])) {
                 $dates[$day]['isPartialLeave'] = True;
+                $dates[$day]['amount'] = round((($duration['end'] - $duration['init']) / ($validJourney->getJourney() * 60)), 2);
             }
         }
         return $dates;
@@ -204,7 +206,7 @@ class HolidayService
         return [
             'dates' => $vacations,
             'ranges' => $this->datesToRanges(array_keys($vacations)),
-            'weeks' => $this->groupByWeeks(array_keys($vacations))
+            'weeks' => $this->groupByWeeks($vacations)
         ];
     }
 
