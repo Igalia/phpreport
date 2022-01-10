@@ -28,8 +28,6 @@ var app = new Vue({
     created() {
         this.fetchSummary();
     },
-    computed: {
-    },
     methods: {
         async fetchSummary() {
             let url = `services/getHolidaySummary.php`;

@@ -25,7 +25,7 @@ define('PHPREPORT_ROOT', __DIR__ . '/../../');
 require_once(PHPREPORT_ROOT . "/vendor/autoload.php");
 require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 
-header('Content-Type: application/json; charset=utf-8');
+$csvExport = array_key_exists("format", $_GET) && $_GET["format"] == "csv";
 
 $loginManager = new \LoginManager();
 
@@ -33,4 +33,42 @@ $holidayService = new HolidayService($loginManager);
 
 $usersAndWeeks = $holidayService->retrieveHolidaysSummary();
 
-echo json_encode($usersAndWeeks);
+if (!$csvExport) {
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($usersAndWeeks);
+} else {
+    header('Content-Type: text/csv');
+    header('Content-Disposition: attachment; filename="holiday-summary.csv"');
+
+    $fp = fopen('php://output', 'wb');
+
+    $today = date_create();
+    fputcsv($fp, array('Report generated at', $today->format('Y-m-d H:i:s e')), ',');
+    fputcsv($fp, array(''), ',');
+
+    $weeksLine = array_merge(array('User', 'Hours/day', 'Holidays(days)', 'Holidays(hours)', 'Pending (hours)', 'Planned (hours)', '% planned'), array_keys($usersAndWeeks["weeks"]));
+
+    fputcsv($fp, $weeksLine, ',');
+    foreach ($usersAndWeeks["holidays"] as $line) {
+        if (count($line["holidays"]) == 0) {
+            $line["holidays"] = array_fill(0, count($usersAndWeeks["weeks"]), 0);
+        }
+        fputcsv(
+            $fp,
+            array_merge(
+                array(
+                    $line["user"],
+                    $line["hoursDay"],
+                    $line["availableDays"],
+                    $line["availableHours"],
+                    $line["pendingHours"],
+                    $line["usedHours"],
+                    $line["percentage"]
+                ),
+                $line["holidays"]
+            ),
+            ','
+        );
+    }
+    fclose($fp);
+}

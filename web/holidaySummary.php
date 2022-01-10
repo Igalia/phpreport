@@ -61,7 +61,7 @@ include_once("include/header.php");
         </tbody>
     </table>
     <p class="text-center">
-        <a href="services/downloadHolidaySummary.php" class="btn">Download Report</a>
+        <a href="services/getHolidaySummary.php?format=csv" class="btn">Download Report</a>
     </p>
 </div>
 
