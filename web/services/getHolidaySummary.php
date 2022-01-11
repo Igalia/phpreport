@@ -26,12 +26,13 @@ require_once(PHPREPORT_ROOT . "/vendor/autoload.php");
 require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 
 $csvExport = array_key_exists("format", $_GET) && $_GET["format"] == "csv";
+$year = $_GET["year"] ?? NULL;
 
 $loginManager = new \LoginManager();
 
 $holidayService = new HolidayService($loginManager);
 
-$usersAndWeeks = $holidayService->retrieveHolidaysSummary();
+$usersAndWeeks = $holidayService->retrieveHolidaysSummary($year);
 
 if (!$csvExport) {
     header('Content-Type: application/json; charset=utf-8');

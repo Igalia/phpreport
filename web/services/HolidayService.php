@@ -353,7 +353,7 @@ class HolidayService
         $end = date_create($year . "-12-31");
 
         $users = \UsersFacade::GetAllActiveUsers();
-        $weeks = $this::getWeeksFromYear();
+        $weeks = $this::getWeeksFromYear($year);
         $holidays = [];
         for ($i = 0; $i < count($users); $i++) {
             $holidays[$users[$i]->getLogin()] = \UsersFacade::GetHolidaySummaryReport(
