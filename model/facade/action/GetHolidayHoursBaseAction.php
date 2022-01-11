@@ -26,9 +26,9 @@ include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
 
 abstract class GetHolidayHoursBaseAction extends Action
 {
-    private ?UserVO $user;
-    private DateTime $init;
-    private DateTime $end;
+    protected ?UserVO $user;
+    protected DateTime $init;
+    protected DateTime $end;
 
     public function __construct(DateTime $init, DateTime $end, ?UserVO $user = NULL)
     {

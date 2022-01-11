@@ -150,6 +150,30 @@ class HolidayService
         return $formatedHours;
     }
 
+    static function getWeeksFromYear($year = NULL): array
+    {
+        $weeks = [];
+        $year = $year ?? date('Y');
+        $first_week = (int)date('W', mktime(0, 0, 0, 1, 1, $year));
+        $last_week = (int) date('W', mktime(0, 0, 0, 12, 31, $year));
+        if ($first_week == 52 || $first_week == 53) {
+            $weeks[($year - 1) . "W" . $first_week] = 0;
+            $first_week = 1;
+        }
+        if ($last_week == 1) {
+            $weeks[($year + 1) . "W01"] = 0;
+            // get the week number of the second to last week of the year
+            $last_week = date('W', mktime(0, 0, 0, 12, 24, $year));
+        }
+        for ($i = $first_week; $i <= (int) $last_week; $i++) {
+            $weekNumber = ($i < 10) ? "0" . $i : $i;
+            $weeks[$year . "W" . $weekNumber] = 0;
+        }
+        // Make sure the weeks are sorted
+        ksort($weeks);
+        return $weeks;
+    }
+
     static function groupByWeeks(array $leavesDetails, $weeks = []): array
     {
         if (count($leavesDetails) == 0) return [];
@@ -312,5 +336,38 @@ class HolidayService
 
         facade\CalDAVCalendarFacade::SyncCalendar($userVO, $datesRanges);
         return ['message' => 'Calendar synced'];
+    }
+
+    public function retrieveHolidaysSummary(string $year = NULL): array
+    {
+        if (!$this->loginManager::isLogged()) {
+            return ['error' => 'User not logged in'];
+        }
+
+        if (!$this->loginManager::isAllowed()) {
+            return ['error' => 'Forbidden service for this User'];
+        }
+
+        $year = $year ?? date('Y');
+        $init = date_create($year . "-01-01");
+        $end = date_create($year . "-12-31");
+
+        $users = \UsersFacade::GetAllActiveUsers();
+        $weeks = $this::getWeeksFromYear($year);
+        $holidays = [];
+        for ($i = 0; $i < count($users); $i++) {
+            $holidays[$users[$i]->getLogin()] = \UsersFacade::GetHolidaySummaryReport(
+                $init,
+                $end,
+                $users[$i],
+                $end,
+                $weeks
+            );
+        }
+        asort($holidays);
+        return [
+            "holidays" => $holidays,
+            "weeks" => $weeks
+        ];
     }
 }

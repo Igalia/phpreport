@@ -41,6 +41,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/ExtraHoursReportAction.php')
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetPendingHolidayHoursAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetScheduledHolidaysAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetHolidayHoursSummaryAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetHolidaySummaryReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateExtraHourAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteExtraHourAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllExtraHoursAction.php');
@@ -266,6 +267,10 @@ abstract class UsersFacade {
         return $action->execute();
     }
 
+    static function GetHolidaySummaryReport(DateTime $init, DateTime $end, UserVO $user = NULL, Datetime $referenceDate = NULL, array $weeks = []) {
+        $action = new GetHolidaySummaryReportAction($init, $end, $user, $referenceDate, $weeks);
+        return $action->execute();
+    }
 
     static function GetScheduledHolidays(DateTime $init, DateTime $end, UserVO $user = NULL) {
         $action = new GetScheduledHolidaysAction($init, $end, $user);
