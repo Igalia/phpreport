@@ -50,20 +50,6 @@ abstract class CustomerDAO extends BaseDAO{
      */
     public abstract function getById($customerId);
 
-    /** Customers retriever by Sector id.
-     *
-     * This function retrieves the rows from Customer table that are assigned to the Sector with
-     * the id <var>$sectorId</var> and creates a {@link CustomerVO} with data from each row.
-     *
-     * @param int $sectorId the id of the Sector whose Customers we want to retrieve.
-     * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
-     * @return array an array with value objects {@link CustomerVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see SectorDAO
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function getBySectorId($sectorId, $orderField = 'id');
-
     /** Customers retriever by projects done by a User identified by its login.
      *
      * This function retrieves the rows from Customer table that are related to Projects
