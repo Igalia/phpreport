@@ -135,9 +135,6 @@
 
         } while ($parser->read());
 
-        //var_dump($createCustomers);
-
-
         if (count($createCustomers) >= 1)
             foreach((array)$createCustomers as $createCustomer)
             {
@@ -149,9 +146,7 @@
 
             }
 
-
-
-        if (!$string)
+        if (!isset($string))
         {
 
             $string = "<return service='createCustomers'><ok>Operation Success!</ok><customers>";

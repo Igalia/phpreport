@@ -144,9 +144,6 @@
 
         } while ($parser->read());
 
-        //var_dump($updateCustomers);
-
-
         if (count($updateCustomers) >= 1)
             foreach((array)$updateCustomers as $updateCustomer)
             {
@@ -158,9 +155,7 @@
 
             }
 
-
-
-        if (!$string)
+        if (!isset($string))
         {
 
             $string = "<return service='updateCustomers'><ok>Operation Success!</ok><customers>";
