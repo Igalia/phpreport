@@ -54,26 +54,13 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
         parent::__construct();
     }
 
-    /** Customer value object constructor for PostgreSQL.
-     *
-     * This function creates a new {@link CustomerVO} with data retrieved from database.
-     *
-     * @param array $row an array with the Customer values from a row.
-     * @return CustomerVO a {@link CustomerVO} with its properties set to the values from <var>$row</var>.
-     * @see CustomerVO
+    /**
+     * This method is declared to fulfill this class as non-abstract, but it should not be used.
+     * PDO::FETCH_CLASS now takes care of transforming DB rows into VO objects.
      */
     protected function setValues($row)
     {
-
-    $customerVO = new CustomerVO();
-
-    $customerVO->setId($row['id']);
-    $customerVO->setName($row['name']);
-    $customerVO->setType($row['type']);
-    $customerVO->setUrl($row['url']);
-    $customerVO->setSectorId($row['sectorid']);
-
-    return $customerVO;
+        error_log("Unused CustomerDAO::setValues() called");
     }
 
     /** Customer retriever by id.
