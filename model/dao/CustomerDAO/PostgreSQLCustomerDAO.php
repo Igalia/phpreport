@@ -153,18 +153,22 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
     public function update(CustomerVO $customerVO) {
         $affectedRows = 0;
 
-        if($customerVO->getId() >= 0) {
-            $currCustomerVO = $this->getById($customerVO->getId());
-        }
+        $sql = "UPDATE customer " .
+               "SET name=:name, type=:type, url=:url, sectorid=:sectorid " .
+               "WHERE id=:id";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":name", $customerVO->getName(), PDO::PARAM_STR);
+            $statement->bindValue(":type", $customerVO->getType(), PDO::PARAM_STR);
+            $statement->bindValue(":url", $customerVO->getUrl(), PDO::PARAM_STR);
+            $statement->bindValue(":sectorid", $customerVO->getSectorId(), PDO::PARAM_INT);
+            $statement->bindValue(":id", $customerVO->getId(), PDO::PARAM_INT);
+            $statement->execute();
 
-        // If the query returned a row then update
-        if(sizeof($currCustomerVO) > 0) {
-
-        $sql = "UPDATE customer SET name=" . DBPostgres::checkStringNull($customerVO->getName()) . ", type="  . DBPostgres::checkStringNull($customerVO->getType()) . ", url="  . DBPostgres::checkStringNull($customerVO->getUrl()) . ", sectorid="  . DBPostgres::checkNull($customerVO->getSectorId()). " WHERE id=".$customerVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-            $affectedRows = pg_affected_rows($res);
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
         }
 
         return $affectedRows;
@@ -181,17 +185,25 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
     public function create(CustomerVO $customerVO) {
         $affectedRows = 0;
 
-    $sql = "INSERT INTO customer (name, type, url, sectorid) VALUES (" . DBPostgres::checkStringNull($customerVO->getName()) . ", "  . DBPostgres::checkStringNull($customerVO->getType()) . ", "  . DBPostgres::checkStringNull($customerVO->getUrl()) . ", "  . DBPostgres::checkNull($customerVO->getSectorId()) . ")";
+        $sql = "INSERT INTO customer (name, type, url, sectorid) " .
+               "VALUES (:name, :type, :url, :sectorid)";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":name", $customerVO->getName(), PDO::PARAM_STR);
+            $statement->bindValue(":type", $customerVO->getType(), PDO::PARAM_STR);
+            $statement->bindValue(":url", $customerVO->getUrl(), PDO::PARAM_STR);
+            $statement->bindValue(":sectorid", $customerVO->getSectorId(), PDO::PARAM_INT);
+            $statement->execute();
 
-        $res = pg_query($this->connect, $sql);
-    if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
+            $customerVO->setId($this->pdo->lastInsertId('customer_id_seq'));
 
-        $customerVO->setId(DBPostgres::getId($this->connect, "customer_id_seq"));
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
+        }
 
-    $affectedRows = pg_affected_rows($res);
-
-    return $affectedRows;
-
+        return $affectedRows;
     }
 
     /** Customer deleter.
@@ -205,19 +217,17 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
     public function delete(CustomerVO $customerVO) {
         $affectedRows = 0;
 
-        // Check for a user ID.
-        if($customerVO->getId() >= 0) {
-            $currCustomerVO = $this->getById($customerVO->getId());
+        $sql = "DELETE FROM customer WHERE id=:id";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":id", $customerVO->getId(), PDO::PARAM_INT);
+            $statement->execute();
+
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
         }
-
-        // Otherwise delete a user.
-        if(sizeof($currCustomerVO) > 0) {
-            $sql = "DELETE FROM customer WHERE id=".$customerVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-            $affectedRows = pg_affected_rows($res);
-    }
 
         return $affectedRows;
     }
