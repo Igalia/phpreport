@@ -92,9 +92,15 @@ class PartialUpdateTasksAction extends Action{
                 }
             }
 
+            $oldTask = $taskDao->getById($task->getId());
+            if (!isset($oldTask)) {
+                $discardedTasks[] = $task;
+                unset($this->tasks[$i]);
+                continue;
+            }
+
             // Do not allow updating tasks saved in locked dates or belonging
             // to a different user
-            $oldTask = $taskDao->getById($task->getId());
             if(!$configDao->isWriteAllowedForDate($oldTask->getDate()) ||
                     (!$taskDao->checkTaskUserId(
                         $task->getId(), $task->getUserId()))) {
