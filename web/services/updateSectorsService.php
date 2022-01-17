@@ -117,9 +117,6 @@
 
         } while ($parser->read());
 
-        //var_dump($createSectors);
-
-
         if (count($updateSectors) >= 1)
             foreach((array)$updateSectors as $updateSector)
             {
@@ -131,9 +128,7 @@
 
             }
 
-
-
-        if (!$string)
+        if (!isset($string))
         {
 
             $string = "<return service='updateSectors'><ok>Operation Success!</ok><sectors>";
