@@ -25,7 +25,7 @@ help:
 	echo -ne '  Generated on ' >> footer
 	date >> footer
 	#parse rst
-	for i in `find -name *.rst` ; do \
+	for i in `find -name *.rst -not -path "*vendor/*"` ; do \
 	  #rename .rst for .html in links to other doc pages \
 	  sed 's/\.rst/\.html/g' $$i > tmp; \
 	  #append footer \
@@ -49,7 +49,7 @@ minify:
 	      --source-map "filename=$${FILE}.min.js.map" -c -m; \
 	  cd -; \
 	  done
-	for i in `find web -name "*.php" -not -path "*web/holidayManagement.php"`; do \
+	for i in `find web -name "*.php" -not -path "*web/holiday*"`; do \
 	  #revert any previous minification changes \
 	  sed 's/<script src="\(.*\).min.js">/<script src="\1.js">/' $$i > tmp; \
 	  #modify script tags to link the minified file \
