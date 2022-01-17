@@ -54,40 +54,33 @@ class PostgreSQLSectorDAO extends SectorDAO{
         parent::__construct();
     }
 
-    /** Sector value object constructor for PostgreSQL.
-     *
-     * This function creates a new {@link SectorVO} with data retrieved from database.
-     *
-     * @param array $row an array with the Sector values from a row.
-     * @return SectorVO an {@link SectorVO} with its properties set to the values from <var>$row</var>.
-     * @see SectorVO
+    /**
+     * This method is declared to fulfill this class as non-abstract, but it should not be used.
+     * PDO::FETCH_CLASS now takes care of transforming DB rows into VO objects.
      */
     protected function setValues($row)
     {
-
-        $sectorVO = new SectorVO();
-
-        $sectorVO->setId($row['id']);
-        $sectorVO->setName($row['name']);
-
-        return $sectorVO;
-
+        error_log("Unused SectorDAO::setValues() called");
     }
 
     /** Sector retriever by id for PostgreSQL.
      *
-     * This function retrieves the row from Sector table with the id <var>$sectorId</var> and creates a {@link SectorVO} with its data.
+     * This function retrieves the row from Sector table with the id
+     * <var>$sectorId</var> and creates a {@link SectorVO} with its data.
      *
      * @param int $sectorId the id of the row we want to retrieve.
-     * @return SectorVO a value object {@link SectorVO} with its properties set to the values from the row.
+     * @return SectorVO a value object {@link SectorVO} with its properties set
+     * to the values from the row, or NULL if no object was found for that id.
      * @throws {@link SQLQueryErrorException}
      */
     public function getById($sectorId) {
         if (!is_numeric($sectorId))
-        throw new SQLIncorrectTypeException($sectorId);
-        $sql = "SELECT * FROM sector WHERE id=" . $sectorId;
-    $result = $this->execute($sql);
-    return $result[0];
+            throw new SQLIncorrectTypeException($customerId);
+        $result = $this->runSelectQuery(
+            "SELECT * FROM sector WHERE id=:sectorId",
+            [':sectorId' => $sectorId],
+            'SectorVO');
+        return $result[0] ?? NULL;
     }
 
     /** Customers retriever by Sector id for PostgreSQL.
@@ -118,7 +111,7 @@ class PostgreSQLSectorDAO extends SectorDAO{
      */
     public function getAll() {
         $sql = "SELECT * FROM sector ORDER BY id ASC";
-        return $this->execute($sql);
+        return $this->runSelectQuery($sql, array(), 'SectorVO');
     }
 
     /** Sector updater for PostgreSQL.
