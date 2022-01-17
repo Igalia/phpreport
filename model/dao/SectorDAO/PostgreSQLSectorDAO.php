@@ -51,7 +51,7 @@ class PostgreSQLSectorDAO extends SectorDAO{
      * @see SectorDAO::__construct()
      */
     function __construct() {
-    parent::__construct();
+        parent::__construct();
     }
 
     /** Sector value object constructor for PostgreSQL.
