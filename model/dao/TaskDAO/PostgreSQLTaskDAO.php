@@ -457,13 +457,9 @@ class PostgreSQLTaskDAO extends TaskDAO{
     if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
 
     $rows = array();
-    if(pg_num_rows($res) > 0) {
-        for($i = 0; $i < pg_num_rows($res); $i++) {
-            $rows[$i] = @pg_fetch_array($res);
-        }
+    for($i = 0; $i < pg_num_rows($res); $i++) {
+        $rows[$i] = @pg_fetch_array($res);
     }
-    else
-        return NULL;
 
     return $rows;
 
