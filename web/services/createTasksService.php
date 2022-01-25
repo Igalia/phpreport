@@ -69,6 +69,7 @@
             break;
                 }
 
+        $createTasks = array();
         do {
 
             if ($parser->name == "task")
