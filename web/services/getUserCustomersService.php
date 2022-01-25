@@ -31,23 +31,15 @@
     include_once(PHPREPORT_ROOT . '/model/facade/CustomersFacade.php');
     include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
-    $userLogin = $_GET['uid'];
+    $userLogin = $_GET['uid'] ?? "";
 
-    $active = $_GET['active'];
-
-    if (strtolower($active) == "true")
-    $active = True;
-    else
     $active = False;
+    if (isset($_GET['active']) && strtolower($_GET['active']) == "true")
+        $active = True;
 
-    $login = $_GET['login'];
+    $sid = $_GET['sid'] ?? NULL;
 
-    $sid = $_GET['sid'];
-
-    $order = $_GET['order'];
-
-    if ($order == '')
-        $order = 'id';
+    $order = $_GET['order'] ?? "id";
 
     do {
         /* We check authentication and authorization */

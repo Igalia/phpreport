@@ -40,17 +40,6 @@ include_once(PHPREPORT_ROOT . '/model/dao/BaseDAO.php');
  */
 abstract class CustomerDAO extends BaseDAO{
 
-    /** Customer DAO constructor.
-     *
-     * This is the base constructor of Customer DAOs, and it just calls its parent's constructor.
-     *
-     * @throws {@link ConnectionErrorException}
-     * @see BaseDAO::__construct()
-     */
-    protected function __construct() {
-    parent::__construct();
-    }
-
     /** Customer retriever by id.
      *
      * This function retrieves the row from Customer table with the id <var>$customerId</var> and creates a {@link CustomerVO} with its data.
@@ -60,20 +49,6 @@ abstract class CustomerDAO extends BaseDAO{
      * @throws {@link OperationErrorException}
      */
     public abstract function getById($customerId);
-
-    /** Customers retriever by Sector id.
-     *
-     * This function retrieves the rows from Customer table that are assigned to the Sector with
-     * the id <var>$sectorId</var> and creates a {@link CustomerVO} with data from each row.
-     *
-     * @param int $sectorId the id of the Sector whose Customers we want to retrieve.
-     * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
-     * @return array an array with value objects {@link CustomerVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see SectorDAO
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function getBySectorId($sectorId, $orderField = 'id');
 
     /** Customers retriever by projects done by a User identified by its login.
      *

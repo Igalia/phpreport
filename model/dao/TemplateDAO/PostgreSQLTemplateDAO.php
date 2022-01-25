@@ -56,17 +56,6 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
         error_log("Unused TemplateVO::setValues() called");
     }
 
-    protected function runSelectQuery(string $statement, array $data) {
-        try {
-            $statement = $this->pdo->prepare($statement);
-            $statement->execute($data);
-            return $statement->fetchAll(PDO::FETCH_CLASS, 'TemplateVO');
-        } catch (PDOException $e) {
-            error_log('Query failed: ' . $e->getMessage());
-            throw new SQLQueryErrorException($e->getMessage());
-        }
-    }
-
     /** Template retriever by id for PostgreSQL.
      *
      * This function retrieves the row from Template table with the id <var>$templateId</var> and creates a {@link TemplateVO} with its data.
@@ -81,7 +70,8 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
             throw new SQLIncorrectTypeException($templateId);
         $result = $this->runSelectQuery(
             "SELECT * FROM template WHERE id=:id",
-            [':id' => $templateId]);
+            [':id' => $templateId],
+            'TemplateVO');
         return $result[0] ?? NULL;
     }
 
@@ -100,7 +90,8 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
             throw new SQLIncorrectTypeException($userId);
         $result = $this->runSelectQuery(
             "SELECT * FROM template WHERE usrid=:usrid",
-            [':usrid' => $userId]);
+            [':usrid' => $userId],
+            'TemplateVO');
         return $result;
     }
 

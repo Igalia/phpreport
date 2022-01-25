@@ -51,63 +51,36 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
      * @see CustomerDAO::__construct()
      */
     function __construct() {
-    parent::__construct();
+        parent::__construct();
     }
 
-    /** Customer value object constructor for PostgreSQL.
-     *
-     * This function creates a new {@link CustomerVO} with data retrieved from database.
-     *
-     * @param array $row an array with the Customer values from a row.
-     * @return CustomerVO a {@link CustomerVO} with its properties set to the values from <var>$row</var>.
-     * @see CustomerVO
+    /**
+     * This method is declared to fulfill this class as non-abstract, but it should not be used.
+     * PDO::FETCH_CLASS now takes care of transforming DB rows into VO objects.
      */
     protected function setValues($row)
     {
-
-    $customerVO = new CustomerVO();
-
-    $customerVO->setId($row['id']);
-    $customerVO->setName($row['name']);
-    $customerVO->setType($row['type']);
-    $customerVO->setUrl($row['url']);
-    $customerVO->setSectorId($row['sectorid']);
-
-    return $customerVO;
+        error_log("Unused CustomerDAO::setValues() called");
     }
 
     /** Customer retriever by id.
      *
-     * This function retrieves the row from Customer table with the id <var>$customerId</var> and creates a {@link CustomerVO} with its data.
+     * This function retrieves the row from Customer table with the id
+     * <var>$customerId</var> and creates a {@link CustomerVO} with its data.
      *
      * @param int $customerId the id of the row we want to retrieve.
-     * @return CustomerVO a value object {@link CustomerVO} with its properties set to the values from the row.
+     * @return CustomerVO a value object {@link CustomerVO} with its properties
+     * set to the values from the row, or NULL if no customer was found for that id.
      * @throws {@link SQLQueryErrorException}
      */
     public function getById($customerId) {
         if (!is_numeric($customerId))
-        throw new SQLIncorrectTypeException($customerId);
-        $sql = "SELECT * FROM customer WHERE id=" . $customerId;
-    $result = $this->execute($sql);
-    return $result[0];
-    }
-
-    /** Customers retriever by Sector id.
-     *
-     * This function retrieves the rows from Customer table that are assigned to the Sector with
-     * the id <var>$sectorId</var> and creates a {@link CustomerVO} with data from each row.
-     *
-     * @param int $sectorId the id of the Sector whose Customers we want to retrieve.
-     * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
-     * @return array an array with value objects {@link CustomerVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see SectorDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getBySectorId($sectorId, $orderField = 'id') {
-    $sql = "SELECT * FROM customer WHERE sectorid=" . $sectorId . " ORDER BY " . $orderField  . " ASC";
-    $result = $this->execute($sql);
-    return $result;
+            throw new SQLIncorrectTypeException($customerId);
+        $result = $this->runSelectQuery(
+            "SELECT * FROM customer WHERE id=:customerid",
+            [':customerid' => $customerId],
+            'CustomerVO');
+        return $result[0] ?? NULL;
     }
 
     /** Customers retriever by projects done by a User identified by its login.
@@ -123,12 +96,17 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
      * @throws {@link SQLQueryErrorException}
      */
     public function getByProjectUserLogin($userLogin, $active = False, $orderField = 'id') {
-        $sql = "SELECT * FROM customer WHERE id IN (SELECT customerid FROM requests WHERE projectid IN (SELECT id FROM project WHERE";
+        $activeCondition = "TRUE";
         if ($active)
-            $sql = $sql . " activation = 'True' AND";
-        $sql = $sql . " id IN (SELECT projectid FROM project_usr WHERE usrid = ( SELECT id FROM usr WHERE login = " . DBPostgres::checkStringNull($userLogin) . " )))) ORDER BY " . $orderField  . " ASC";
-        $result = $this->execute($sql);
-        return $result;
+            $activeCondition = "activation = 'True'";
+        $sql = "SELECT * FROM customer WHERE id IN " .
+                  "(SELECT customerid FROM project WHERE " .
+                  $activeCondition . " AND id IN " .
+                      "(SELECT projectid FROM project_usr WHERE usrid =" .
+                          "(SELECT id FROM usr WHERE login = :userlogin ))) " .
+               "ORDER BY :orderfield ASC";
+        return $this->runSelectQuery($sql,
+            [':userlogin' => $userLogin, ':orderfield' => $orderField], 'CustomerVO');
     }
 
     /** Customer retriever.
@@ -143,10 +121,12 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
      */
     public function getAll($active = False, $orderField = 'id') {
         if ($active)
-            $sql = "SELECT * FROM customer WHERE id IN (SELECT customerid FROM requests WHERE projectid IN (SELECT id FROM project WHERE activation = 'True')) ORDER BY " . $orderField  . " ASC";
+            $sql = "SELECT * FROM customer WHERE id IN " .
+                      "(SELECT customerid FROM project WHERE activation = 'True') " .
+                   "ORDER BY :orderfield ASC";
         else
-            $sql = "SELECT * FROM customer ORDER BY " . $orderField . " ASC";
-        return $this->execute($sql);
+            $sql = "SELECT * FROM customer ORDER BY :orderfield ASC";
+        return $this->runSelectQuery($sql, [':orderfield' => $orderField], 'CustomerVO');
     }
 
     /** Customer updater.
@@ -160,18 +140,22 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
     public function update(CustomerVO $customerVO) {
         $affectedRows = 0;
 
-        if($customerVO->getId() >= 0) {
-            $currCustomerVO = $this->getById($customerVO->getId());
-        }
+        $sql = "UPDATE customer " .
+               "SET name=:name, type=:type, url=:url, sectorid=:sectorid " .
+               "WHERE id=:id";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":name", $customerVO->getName(), PDO::PARAM_STR);
+            $statement->bindValue(":type", $customerVO->getType(), PDO::PARAM_STR);
+            $statement->bindValue(":url", $customerVO->getUrl(), PDO::PARAM_STR);
+            $statement->bindValue(":sectorid", $customerVO->getSectorId(), PDO::PARAM_INT);
+            $statement->bindValue(":id", $customerVO->getId(), PDO::PARAM_INT);
+            $statement->execute();
 
-        // If the query returned a row then update
-        if(sizeof($currCustomerVO) > 0) {
-
-        $sql = "UPDATE customer SET name=" . DBPostgres::checkStringNull($customerVO->getName()) . ", type="  . DBPostgres::checkStringNull($customerVO->getType()) . ", url="  . DBPostgres::checkStringNull($customerVO->getUrl()) . ", sectorid="  . DBPostgres::checkNull($customerVO->getSectorId()). " WHERE id=".$customerVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-            $affectedRows = pg_affected_rows($res);
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
         }
 
         return $affectedRows;
@@ -188,17 +172,25 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
     public function create(CustomerVO $customerVO) {
         $affectedRows = 0;
 
-    $sql = "INSERT INTO customer (name, type, url, sectorid) VALUES (" . DBPostgres::checkStringNull($customerVO->getName()) . ", "  . DBPostgres::checkStringNull($customerVO->getType()) . ", "  . DBPostgres::checkStringNull($customerVO->getUrl()) . ", "  . DBPostgres::checkNull($customerVO->getSectorId()) . ")";
+        $sql = "INSERT INTO customer (name, type, url, sectorid) " .
+               "VALUES (:name, :type, :url, :sectorid)";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":name", $customerVO->getName(), PDO::PARAM_STR);
+            $statement->bindValue(":type", $customerVO->getType(), PDO::PARAM_STR);
+            $statement->bindValue(":url", $customerVO->getUrl(), PDO::PARAM_STR);
+            $statement->bindValue(":sectorid", $customerVO->getSectorId(), PDO::PARAM_INT);
+            $statement->execute();
 
-        $res = pg_query($this->connect, $sql);
-    if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
+            $customerVO->setId($this->pdo->lastInsertId('customer_id_seq'));
 
-        $customerVO->setId(DBPostgres::getId($this->connect, "customer_id_seq"));
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
+        }
 
-    $affectedRows = pg_affected_rows($res);
-
-    return $affectedRows;
-
+        return $affectedRows;
     }
 
     /** Customer deleter.
@@ -212,71 +204,18 @@ class PostgreSQLCustomerDAO extends CustomerDAO{
     public function delete(CustomerVO $customerVO) {
         $affectedRows = 0;
 
-        // Check for a user ID.
-        if($customerVO->getId() >= 0) {
-            $currCustomerVO = $this->getById($customerVO->getId());
+        $sql = "DELETE FROM customer WHERE id=:id";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":id", $customerVO->getId(), PDO::PARAM_INT);
+            $statement->execute();
+
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
         }
-
-        // Otherwise delete a user.
-        if(sizeof($currCustomerVO) > 0) {
-            $sql = "DELETE FROM customer WHERE id=".$customerVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-            $affectedRows = pg_affected_rows($res);
-    }
 
         return $affectedRows;
     }
 }
-
-
-
-
-//Uncomment these lines inuserGroup order to do a simple test of the Dao
-
-
-
-$dao = new PostgreSQLCustomerDAO();
-
-/*$userId = 114;
-
-var_dump($dao->getByProjectUser($userId));
-
-// We create a new customer
-
-$customer = new CustomerVO();
-
-$customer->setName("Telenet");
-$customer->setType("Internet");
-$customer->setSectorId(1);
-
-$dao->create($customer);
-
-print ("New customer Id is ". $customer->getId() ."\n");
-
-// We search for the new Id
-
-$customer = $dao->getById($customer->getId());
-
-print ("New customer Id found is ". $customer->getId() ."\n");
-
-// We update the customer with a differente name
-
-$customer->setName("Intranet");
-
-$dao->update($customer);
-
-// We search for the new name
-
-$customer = $dao->getById($customer->getId());
-
-print ("New customer name found is ". $customer->getName() ."\n");
-
-// We delete the new user
-
-$dao->delete($customer);
-
-$customs = $dao->getAll(True);
-
-var_dump($customs);*/

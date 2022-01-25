@@ -90,24 +90,6 @@ class PostgreSQLSectorDAO extends SectorDAO{
     return $result[0];
     }
 
-    /** Customers retriever by Sector id for PostgreSQL.
-     *
-     * This function retrieves the rows from Customer table that are assigned to the Sector with
-     * the id <var>$sectorId</var> and creates a {@link CustomerVO} with data from each row.
-     *
-     * @param int $sectorId the id of the Sector whose Customers we want to retrieve.
-     * @return array an array with value objects {@link CustomerVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see CustomerDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getCustomers($sectorId) {
-
-    $dao = DAOFactory::getCustomerDAO();
-    return $dao->getBySectorId($sectorId);
-
-    }
-
      /** Sectors retriever for PostgreSQL.
      *
      * This function retrieves all rows from Sector table and creates a {@link SectorVO} with data from each row.
