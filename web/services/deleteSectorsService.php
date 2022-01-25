@@ -108,9 +108,6 @@
 
         } while ($parser->read());
 
-        //var_dump($deleteSectors);
-
-
         if (count($deleteSectors) >= 1)
             foreach((array)$deleteSectors as $deleteSector)
             {
@@ -122,9 +119,7 @@
 
             }
 
-
-
-        if (!$string)
+        if (!isset($string))
             $string = "<return service='deleteSectors'><ok>Operation Success!</ok></return>";
 
     } while (false);

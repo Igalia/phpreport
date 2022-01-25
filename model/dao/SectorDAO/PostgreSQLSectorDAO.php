@@ -51,43 +51,36 @@ class PostgreSQLSectorDAO extends SectorDAO{
      * @see SectorDAO::__construct()
      */
     function __construct() {
-    parent::__construct();
+        parent::__construct();
     }
 
-    /** Sector value object constructor for PostgreSQL.
-     *
-     * This function creates a new {@link SectorVO} with data retrieved from database.
-     *
-     * @param array $row an array with the Sector values from a row.
-     * @return SectorVO an {@link SectorVO} with its properties set to the values from <var>$row</var>.
-     * @see SectorVO
+    /**
+     * This method is declared to fulfill this class as non-abstract, but it should not be used.
+     * PDO::FETCH_CLASS now takes care of transforming DB rows into VO objects.
      */
     protected function setValues($row)
     {
-
-        $sectorVO = new SectorVO();
-
-        $sectorVO->setId($row['id']);
-        $sectorVO->setName($row['name']);
-
-        return $sectorVO;
-
+        error_log("Unused SectorDAO::setValues() called");
     }
 
     /** Sector retriever by id for PostgreSQL.
      *
-     * This function retrieves the row from Sector table with the id <var>$sectorId</var> and creates a {@link SectorVO} with its data.
+     * This function retrieves the row from Sector table with the id
+     * <var>$sectorId</var> and creates a {@link SectorVO} with its data.
      *
      * @param int $sectorId the id of the row we want to retrieve.
-     * @return SectorVO a value object {@link SectorVO} with its properties set to the values from the row.
+     * @return SectorVO a value object {@link SectorVO} with its properties set
+     * to the values from the row, or NULL if no object was found for that id.
      * @throws {@link SQLQueryErrorException}
      */
     public function getById($sectorId) {
         if (!is_numeric($sectorId))
-        throw new SQLIncorrectTypeException($sectorId);
-        $sql = "SELECT * FROM sector WHERE id=" . $sectorId;
-    $result = $this->execute($sql);
-    return $result[0];
+            throw new SQLIncorrectTypeException($customerId);
+        $result = $this->runSelectQuery(
+            "SELECT * FROM sector WHERE id=:sectorId",
+            [':sectorId' => $sectorId],
+            'SectorVO');
+        return $result[0] ?? NULL;
     }
 
      /** Sectors retriever for PostgreSQL.
@@ -100,7 +93,7 @@ class PostgreSQLSectorDAO extends SectorDAO{
      */
     public function getAll() {
         $sql = "SELECT * FROM sector ORDER BY id ASC";
-        return $this->execute($sql);
+        return $this->runSelectQuery($sql, array(), 'SectorVO');
     }
 
     /** Sector updater for PostgreSQL.
@@ -112,26 +105,19 @@ class PostgreSQLSectorDAO extends SectorDAO{
      * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
      */
     public function update(SectorVO $sectorVO) {
-
         $affectedRows = 0;
 
-        if($sectorVO->getId() >= 0) {
-            $currsectorVO = $this->getById($sectorVO->getId());
-        }
+        $sql = "UPDATE sector SET name=:name WHERE id=:id";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":name", $sectorVO->getName(), PDO::PARAM_STR);
+            $statement->bindValue(":id", $sectorVO->getId(), PDO::PARAM_INT);
+            $statement->execute();
 
-        // If the query returned a row then update
-        if(sizeof($currsectorVO) > 0) {
-
-            $sql = "UPDATE sector SET name=" . DBPostgres::checkStringNull($sectorVO->getName()) . " WHERE id=".$sectorVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-
-            if ($res == NULL)
-                if (strpos(pg_last_error(), "unique_sector_name"))
-                    throw new SQLUniqueViolationException(pg_last_error());
-                else throw new SQLQueryErrorException(pg_last_error());
-
-            $affectedRows = pg_affected_rows($res);
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
         }
 
         return $affectedRows;
@@ -148,18 +134,19 @@ class PostgreSQLSectorDAO extends SectorDAO{
     public function create(SectorVO $sectorVO) {
         $affectedRows = 0;
 
-        $sql = "INSERT INTO sector (name) VALUES (" . DBPostgres::checkStringNull($sectorVO->getName()) . ")";
+        $sql = "INSERT INTO sector (name) VALUES (:name)";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":name", $sectorVO->getName(), PDO::PARAM_STR);
+            $statement->execute();
 
-        $res = pg_query($this->connect, $sql);
+            $sectorVO->setId($this->pdo->lastInsertId('sector_id_seq'));
 
-        if ($res == NULL)
-            if (strpos(pg_last_error(), "unique_sector_name"))
-                throw new SQLUniqueViolationException(pg_last_error());
-            else throw new SQLQueryErrorException(pg_last_error());
-
-        $sectorVO->setId(DBPostgres::getId($this->connect, "sector_id_seq"));
-
-        $affectedRows = pg_affected_rows($res);
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
+        }
 
         return $affectedRows;
 
@@ -176,61 +163,18 @@ class PostgreSQLSectorDAO extends SectorDAO{
     public function delete(SectorVO $sectorVO) {
         $affectedRows = 0;
 
-        // Check for a sector ID.
-        if($sectorVO->getId() >= 0) {
-            $currsectorVO = $this->getById($sectorVO->getId());
+        $sql = "DELETE FROM sector WHERE id=:id";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":id", $sectorVO->getId(), PDO::PARAM_INT);
+            $statement->execute();
+
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
         }
-
-        // Delete a sector.
-        if(sizeof($currsectorVO) > 0) {
-            $sql = "DELETE FROM sector WHERE id=".$sectorVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-            $affectedRows = pg_affected_rows($res);
-    }
 
         return $affectedRows;
     }
 }
-
-
-
-
-/*//Uncomment these lines in order to do a simple test of the Dao
-
-
-
-$dao = new PostgreSQLSectorDAO();
-
-// We create a new sector
-
-$sector = new sectorVO();
-
-$sector->setName("Telenet");
-
-$dao->create($sector);
-
-print ("New sector Id is ". $sector->getId() ."\n");
-
-// We search for the new Id
-
-$sector = $dao->getById($sector->getId());
-
-print ("New sector Id found is ". $sector->getId() ."\n");
-
-// We update the sector with a differente name
-
-$sector->setName("Intranet");
-
-$dao->update($sector);
-
-// We search for the new name
-
-$sector = $dao->getById($sector->getId());
-
-print ("New sector name found is ". $sector->getName() ."\n");
-
-// We delete the new sector
-
-$dao->delete($sector);*/

@@ -40,17 +40,6 @@ include_once(PHPREPORT_ROOT . '/model/dao/BaseDAO.php');
  */
 abstract class SectorDAO extends BaseDAO{
 
-    /** Sector DAO constructor.
-     *
-     * This is the base constructor of Sector DAOs, and it just calls its parent's constructor.
-     *
-     * @throws {@link ConnectionErrorException}
-     * @see BaseDAO::__construct()
-     */
-    protected function __construct() {
-    parent::__construct();
-    }
-
     /** Sector retriever by id.
      *
      * This function retrieves the row from Sector table with the id <var>$sectorId</var> and creates a {@link SectorVO} with its data.
