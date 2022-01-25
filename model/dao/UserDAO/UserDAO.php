@@ -95,50 +95,6 @@ abstract class UserDAO extends BaseDAO{
      */
     public abstract function getByAreaDate($areaId, DateTime $date);
 
-    /** User retriever by Iteration Project Area.
-     *
-     * This function retrieves the row from User table assigned to the same Area as a Project Iteration with id <var>$projectid</var> today.
-     *
-     * @param int $iterationid the id of the Project Iteration whose related Users (through Area) we want to retrieve.
-     * @return array an array with value objects {@link UserVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @throws {@link SQLQueryErrorException}
-     */
-    public abstract function getByIterationProjectAreaToday($iterationid);
-
-    /** User retriever by Module Project Area.
-     *
-     * This function retrieves the row from User table assigned to the same Area as a Project Module with id <var>$moduleid</var> today.
-     *
-     * @param int $moduleid the id of the Project Module whose related Users (through Area) we want to retrieve.
-     * @return array an array with value objects {@link UserVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @throws {@link SQLQueryErrorException}
-     */
-    public abstract function getByModuleProjectAreaToday($moduleid);
-
-    /** User retriever by Story Iteration Project Area.
-     *
-     * This function retrieves the row from User table assigned to the same Area as a Project Iteration Story with id <var>$storyid</var> today.
-     *
-     * @param int $storyid the id of the Project Iteration Story whose related Users (through Area) we want to retrieve.
-     * @return array an array with value objects {@link UserVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @throws {@link SQLQueryErrorException}
-     */
-    public abstract function getByStoryIterationProjectAreaToday($storyid);
-
-    /** User retriever by Section Module Project Area.
-     *
-     * This function retrieves the row from User table assigned to the same Area as a Project Module Section with id <var>$sectionid</var> today.
-     *
-     * @param int $sectionid the id of the Project Module Section whose related Users (through Area) we want to retrieve.
-     * @return array an array with value objects {@link UserVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @throws {@link SQLQueryErrorException}
-     */
-    public abstract function getBySectionModuleProjectAreaToday($sectionid);
-
     /** Users retriever.
      *
      * This function retrieves all rows from User table and creates a {@link UserVO} with data from each row.

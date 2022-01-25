@@ -353,42 +353,6 @@ class PostgreSQLProjectDAO extends ProjectDAO {
 
     }
 
-    /** Iterations retriever by Project id for PostgreSQL.
-     *
-     * This function retrieves the rows from Iteration table that are assigned through relationship Plans to the Project with
-     * the id <var>$projectId</var> and creates a {@link IterationVO} with data from each row.
-     *
-     * @param int $projectId the id of the Project whose Iterations we want to retrieve.
-     * @return array an array with value objects {@link IterationVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see IterationDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getIterations($projectId) {
-
-        $dao = DAOFactory::getIterationDAO();
-        return $dao->getByProjectId($projectId);
-
-    }
-
-    /** Modules retriever by Project id for PostgreSQL.
-     *
-     * This function retrieves the rows from Module table that are assigned through relationship Plans to the Project with
-     * the id <var>$projectId</var> and creates a {@link ModuleVO} with data from each row.
-     *
-     * @param int $projectId the id of the Project whose Modules we want to retrieve.
-     * @return array an array with value objects {@link ModuleVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see ModuleDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getModules($projectId) {
-
-        $dao = DAOFactory::getModuleDAO();
-        return $dao->getByProjectId($projectId);
-
-    }
-
     /** Tasks retriever by Project id for PostgreSQL.
      *
      * This function retrieves the rows from Task table that are assigned to the Project with

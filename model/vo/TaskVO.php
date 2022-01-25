@@ -48,7 +48,6 @@ include_once(PHPREPORT_ROOT . '/model/vo/DirtyTaskVO.php');
  *  @property string $phase phase of this Task.
  *  @property int $userId database internal identifier of the associated User.
  *  @property int $projectId database internal identifier of the associated Project.
- *  @property int $taskStoryId database internal identifier of the associated Task Story.
  */
 class TaskVO {
 
@@ -67,7 +66,6 @@ class TaskVO {
     protected $phase = NULL;
     protected $userId = NULL;
     protected $projectId = NULL;
-    protected $taskStoryId = NULL;
 
     public function setId($id) {
     if (is_null($id))
@@ -180,17 +178,6 @@ class TaskVO {
         return $this->projectId;
     }
 
-    public function setTaskStoryId($taskStoryId) {
-        if (is_null($taskStoryId))
-        $this->taskStoryId = $taskStoryId;
-    else
-            $this->taskStoryId = (int) $taskStoryId;
-    }
-
-    public function getTaskStoryId() {
-        return $this->taskStoryId;
-    }
-
     /**#@-*/
 
     /**
@@ -236,9 +223,6 @@ class TaskVO {
 
         if ($dirtyTask->isProjectIdDirty())
             $this->setProjectId($dirtyTask->getProjectId());
-
-        if ($dirtyTask->isTaskStoryIdDirty())
-            $this->setTaskStoryId($dirtyTask->getTaskStoryId());
     }
 
 }

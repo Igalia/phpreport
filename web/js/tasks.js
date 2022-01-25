@@ -58,7 +58,6 @@ var taskRecord = new Ext.data.Record.create([
     {name:'phase'},
     {name:'userId'},
     {name:'projectId'},
-    {name:'taskStoryId'}
 ]);
 
 /* Schema of the information about projects */
@@ -67,11 +66,6 @@ var projectRecord = new Ext.data.Record.create([
     {name:'description'},
     {name:'fullDescription'},
     {name:'customerName'}
-]);
-/* Schema of the information about task-stories */
-var taskStoryRecord = new Ext.data.Record.create([
-    {name:'id'},
-    {name:'friendlyName'},
 ]);
 /* Schema of the information of the personal summary */
 var summaryRecord = new Ext.data.Record.create([
@@ -92,7 +86,6 @@ var templateRecord = new Ext.data.Record.create([
     {name:'projectId'},
     {name:'ttype'},
     {name:'story'},
-    {name:'taskStoryId'},
     {name:'telework'},
     {name:'onsite'},
     {name:'text'},
@@ -290,7 +283,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
         this.projectComboBox.setDisabled(readOnly);
         this.taskTypeComboBox.setDisabled(readOnly);
         this.storyField.setDisabled(readOnly);
-        this.taskStoryComboBox.setDisabled(readOnly);
         this.teleworkCheckBox.setDisabled(readOnly);
         this.onsiteCheckBox.setDisabled(readOnly);
         this.descriptionTextArea.setDisabled(readOnly);
@@ -474,9 +466,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         }
 
                         this.setValueFromRecord(record);
-
-                        this.parent.taskRecord.set('taskStoryId', "");
-                        this.parent.taskStoryComboBox.setValue("");
                     },
                     'blur': function () {
                         // works in combination with typeAhead, fills the
@@ -488,11 +477,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         // delete the value and change the focus. In that case,
                         // 'select' or 'change' events wouldn't be triggered.
                         this.parent.taskRecord.set('projectId',this.getValue());
-                        this.parent.taskRecord.set('taskStoryId', "");
-
-                        //invoke changes in the "TaskStory" combo box
-                        this.parent.taskStoryComboBox.store.setBaseParam('pid',this.parent.taskRecord.data['projectId']);
-                        this.parent.taskStoryComboBox.store.load();
                     },
                     'collapse': function () {
                         // clear the project by deleting the text and closing
@@ -588,45 +572,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     }
                 }
             }),
-            taskStoryComboBox: new Ext.form.ComboBox({
-                parent: this,
-                width: 170,
-                store: new Ext.data.Store({
-                    parent: this,
-                    autoLoad: true,  //initial data are loaded in the application init
-                    autoSave: false, //if set true, changes will be sent instantly
-                    baseParams: {
-                        'uidActive': true,
-                        'pid': this.taskRecord.data['projectId'],
-                    },
-                    proxy: new Ext.data.HttpProxy({url: 'services/getOpenTaskStoriesService.php', method: 'GET'}),
-                    reader:new Ext.data.XmlReader({record: 'taskStory', id:'id' }, taskStoryRecord),
-                    remoteSort: false,
-                    listeners: {
-                        'load': function () {
-                            //the value of projectComboBox has to be set after loading the data on this store
-                            this.parent.taskStoryComboBox.setValue(this.parent.taskRecord.data['taskStoryId']);
-                        }
-                    },
-                }),
-                mode: 'local',
-                valueField: 'id',
-                typeAhead: true,
-                triggerAction: 'all',
-                displayField: 'friendlyName',
-                forceSelection: true,
-                listeners: {
-                    'select': function () {
-                        this.parent.taskRecord.set('taskStoryId',this.getValue());
-                    },
-                    'blur': function () {
-                        // workaround in case you set a value, save with ctrl+s,
-                        // delete the value and change the focus. In that case,
-                        // 'select' or 'change' events wouldn't be triggered.
-                        this.parent.taskRecord.set('taskStoryId',this.getValue());
-                    },
-                }
-            }),
             teleworkCheckBox: new Ext.form.Checkbox({
                 parent: this,
                 value: this.taskRecord.data['telework']=='true',
@@ -698,7 +643,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                             newTemplate.set('projectId', task.get('projectId'));
                             newTemplate.set('ttype', task.get('ttype'));
                             newTemplate.set('story', task.get('story'));
-                            newTemplate.set('taskStoryId', task.get('taskStoryId'));
                             newTemplate.set('telework', task.get('telework'));
                             newTemplate.set('onsite', task.get('onsite'));
                             newTemplate.set('initTime', task.get('initTime'));
@@ -718,13 +662,6 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                         new Ext.form.Label({text: 'Task type', style: 'display:block; padding:5px 2px 5px 2px'}),
                         this.taskTypeComboBox
         ]
-
-        if (menuCoordination == true ) {
-            bottomBoxTaskItems.push(
-               new Ext.form.Label({text: 'TaskStory', style: 'display:block; padding:5px 2px 5px 2px'}),
-              this.taskStoryComboBox
-            )
-        }
 
         bottomBoxItems = [
             new Ext.Container({
@@ -1312,7 +1249,6 @@ Ext.onReady(function(){
                     newTask.set('projectId', templateValues['projectId']);
                     newTask.set('ttype', templateValues['ttype']);
                     newTask.set('story', templateValues['story']);
-                    newTask.set('taskStoryId', templateValues['taskStoryId']);
                     newTask.set('text', templateValues['text']);
                     newTask.set('initTime', templateValues['initTime']);
                     newTask.set('endTime', templateValues['endTime']);

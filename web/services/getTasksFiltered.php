@@ -65,10 +65,6 @@
  *     <b>customerId</b> id of the customer whose tasks will be filtered.
  *   </li>
  *   <li>
- *     <b>taskStoryId</b> id of the story inside the XP tracker which tasks will
- *     be filtered.
- *   </li>
- *   <li>
  *     <b>filterStory</b> string to filter tasks by their story field. Tasks
  *     with a story that contains this string will be returned.
  *   </li>
@@ -101,7 +97,6 @@
  *     <userId>1</userId>
  *     <projectId>1</projectId>
  *     <customerId>1</customerId>
- *     <taskStoryId/>
  *   </task>
  *   ...
  * </tasks>
@@ -142,7 +137,7 @@
         // output header row
         fputcsv($csvFile, array("id", "date", "initTime", "endTime", "hours",
             "story", "telework", "onsite", "ttype", "text", "phase", "userId",
-            "projectId", "taskStoryId", "projectName"));
+            "projectId", "projectName"));
     }
 
     do {
@@ -167,7 +162,7 @@
         $type = $_GET['type'] ?? NULL;
         $projectId = $_GET['projectId'] ?? NULL;
         $customerId = $_GET['customerId'] ?? NULL;
-        $taskStoryId = $_GET['taskStoryId'] ?? NULL;
+        $taskStoryId = NULL;
         $filterStory = $_GET['filterStory'] ?? NULL;
         $filterStartDate = NULL;
         $filterEndDate = NULL;
@@ -247,8 +242,7 @@
                 "text" => maybeEscapeString($task->getText(), $csvExport),
                 "phase" => maybeEscapeString($task->getPhase(), $csvExport),
                 "userId" => $task->getUserId(),
-                "projectId" => $task->getProjectId(),
-                "taskStoryId" => $task->getTaskStoryId()
+                "projectId" => $task->getProjectId()
             );
             if ($showProjectNames) {
                 $project = ProjectsFacade::GetProject($taskArray["projectId"]);

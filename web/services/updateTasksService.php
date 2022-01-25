@@ -227,18 +227,6 @@
                                 }
                                 break;
 
-                        case "taskStoryId":$parser->read();
-                                if ($parser->hasValue)
-                                {
-                                    $taskVO->setTaskStoryId($parser->value);
-                                    $parser->next();
-                                    $parser->next();
-                                }
-                                else {
-                                    $taskVO->setTaskStoryId(NULL);
-                                }
-                                break;
-
                         case "projectId":$parser->read();
                                 if ($parser->hasValue)
                                 {

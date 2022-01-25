@@ -20,7 +20,6 @@
 
 include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
 $SHOW_MENU = LoginManager::isLogged();
-$MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINATION');
 $ISSUE_TRACKER_LINKS_TEXT = unserialize(
     ConfigurationParametersManager::getParameter('ISSUE_TRACKER_LINKS_TEXT'));
 $ISSUE_TRACKER_LINKS_URL = unserialize(
@@ -39,22 +38,6 @@ $ISSUE_TRACKER_LINKS_URL = unserialize(
     <?php if ($SHOW_MENU) {?>
     <li><a href="tasks.php">Tasks</a></li>
     <li><a href="holidayManagement.php">Holidays <span class="new-badge">new</span></a></li>
-    <?php if ($MENU_COORDINATION) {?>
-    <li class="dropdown">
-        <a href="#" class="dropdown-button">
-            Coordination
-            <img class="menu-arrow" alt="Dropdown menu" src="include/images/menu-arrow.svg"/>
-        </a>
-        <ul class="dropdown-content">
-            <li class="sprite-sitemap">
-                <a href="xptracker-summary.php">XP Tracker</a>
-            </li>
-            <li class="sprite-sitemap-color">
-                <a href="analysistracker-summary.php">Analysis Tracker</a>
-            </li>
-        </ul>
-    </li>
-    <?php } // endif ($MENU_COORDINATION) ?>
     <li class="dropdown">
         <a href="#" class="dropdown-button">
             Reports

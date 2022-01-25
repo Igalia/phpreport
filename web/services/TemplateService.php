@@ -108,15 +108,6 @@ class TemplateService
                             }
                             break;
 
-                        case "taskStoryId":
-                            $parser->read();
-                            if ($parser->hasValue) {
-                                $templatesVO->setTaskStoryId($parser->value);
-                                $parser->next();
-                                $parser->next();
-                            }
-                            break;
-
                         case "projectId":
                             $parser->read();
                             if ($parser->hasValue) {

@@ -25,9 +25,6 @@ require_once(PHPREPORT_ROOT . '/web/auth.php');
 
 include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
 
-$MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINATION');
-
-
 /* Include the generic header and sidebar*/
 define('PAGE_TITLE', "PhpReport - User tasks report");
 include_once("include/header.php");
@@ -43,7 +40,6 @@ if(LoginManager::hasExtraPermissions()) {
 } else {
     echo "var admin = false; \n";
 }
-echo "var menuCoordination = '$MENU_COORDINATION';\n";
 echo "</script>\n";
 ?>
 <script src="js/include/ExportableGridPanel.js"></script>

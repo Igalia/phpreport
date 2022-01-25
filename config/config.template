@@ -182,12 +182,6 @@ define('VACATIONS_PROJECT', 'Holidays');
 /* New from PhpReport 2.18 */
 
 /**
- * @name MENU_COORDINATION
- * @global boolean Active the Coordination menu in the sidebar
- */
-define('MENU_COORDINATION', TRUE);
-
-/**
  * @name EXTRA_HOURS_WARNING_TRIGGER
  * @global int Value that acts as a warning trigger for extra hours values.
  */

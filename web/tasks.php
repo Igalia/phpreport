@@ -28,7 +28,6 @@ include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
 
 include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
 
-$MENU_COORDINATION = ConfigurationParametersManager::getParameter('MENU_COORDINATION');
 $VACATIONS_PROJECT = ConfigurationParametersManager::getParameter('VACATIONS_PROJECT');
 
 $projects = ProjectsFacade::GetAllProjects();
@@ -97,7 +96,6 @@ echo "var dateString = '" . $dateString . "';\n";
 echo "var currentDate = Date.parseDate(dateString, 'Y-m-d');\n";
 echo "var user = '" . $user->getLogin() . "';\n";
 echo "var currentJourney = '$currentJourney';\n";
-echo "var menuCoordination = '$MENU_COORDINATION';\n";
 echo "var vacationsProjectId = '$VACATIONS_PROJECT_ID';\n";
 
 

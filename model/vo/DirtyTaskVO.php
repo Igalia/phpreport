@@ -51,7 +51,6 @@ class DirtyTaskVO extends TaskVO {
     private $dirtyUserId = false;
     private $dirtyProjectId = false;
     private $dirtyCustomerId = false;
-    private $dirtyTaskStoryId = false;
 
     public function setDate(DateTime $_date = NULL) {
         $this->dirtyDate = true;
@@ -209,25 +208,12 @@ class DirtyTaskVO extends TaskVO {
         return $this->dirtyCustomerId;
     }
 
-    public function setTaskStoryId($taskStoryId) {
-        $this->dirtyTaskStoryId = true;
-        parent::setTaskStoryId($taskStoryId);
-    }
-
-    public function clearDirtyTaskStoryId() {
-        $this->dirtyTaskStoryId = false;
-    }
-
-    public function isTaskStoryIdDirty() {
-        return $this->dirtyTaskStoryId;
-    }
-
     public function isDirty() {
         return $this->dirtyDate || $this->dirtyInit || $this->dirtyEnd ||
                 $this->dirtyStory || $this->dirtyTelework ||
                 $this->dirtyOnsite ||
                 $this->dirtyText || $this->dirtyTtype || $this->dirtyPhase ||
                 $this->dirtyUserId || $this->dirtyProjectId ||
-                $this->dirtyCustomerId || $this->dirtyTaskStoryId;
+                $this->dirtyCustomerId;
     }
 }
