@@ -107,11 +107,11 @@ class GetUserProjectWorkReportAction extends Action{
 
         $doubleResults = $dao->getTaskReport($this->userVO, $this->init, $this->end, "PROJECT");
 
+        $results = array();
+
         foreach($doubleResults as $doubleResult)
         {
-
-            $results[$doubleResult[projectid]] = $doubleResult[add_hours];
-
+            $results[$doubleResult['projectid']] = $doubleResult['add_hours'];
         }
 
         return $results;

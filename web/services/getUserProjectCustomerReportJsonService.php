@@ -35,19 +35,17 @@
 
     $userId = $_GET['uid'];
 
-    $init = $_GET['init'];
+    $init = $_GET['init'] ?? "";
 
-    $end = $_GET['end'];
+    $end = $_GET['end'] ?? "";
 
-    $dateFormat = $_GET['dateFormat'];
+    $dateFormat = $_GET['dateFormat'] ?? "Y-m-d";
 
-    $login = $_GET['login'];
-
-    $sid = $_GET['sid'];
+    $sid = $_GET['sid'] ?? NULL;
 
     do {
 
-        $response[uid] = $userId;
+        $response['uid'] = $userId;
 
         /* We check authentication and authorization */
         require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
@@ -55,26 +53,26 @@
         if (!LoginManager::isLogged($sid))
         {
             if ($init!="")
-                $response[init] = $init;
+                $response['init'] = $init;
             if ($end!="")
-                $response[end] = $end;
-            $response[success] = false;
-            $error[id] = 2;
-            $error[message] = "You must be logged in";
-            $response[error] = $error;
+                $response['end'] = $end;
+            $response['success'] = false;
+            $error['id'] = 2;
+            $error['message'] = "You must be logged in";
+            $response['error'] = $error;
             break;
         }
 
         if (!LoginManager::isAllowed($sid))
         {
             if ($init!="")
-                $response[init] = $init;
+                $response['init'] = $init;
             if ($end!="")
-                $response[end] = $end;
-            $response[success] = false;
-            $error[id] = 3;
-            $error[message] = "Forbidden service for this User";
-            $response[error] = $error;
+                $response['end'] = $end;
+            $response['success'] = false;
+            $error['id'] = 3;
+            $error['message'] = "Forbidden service for this User";
+            $response['error'] = $error;
             break;
         }
 
@@ -82,20 +80,17 @@
             $user = $_SESSION['user'];
             $loggedInUserId = $user->getId();
             if($userId != $loggedInUserId ) {
-                $response[success] = false;
-                $error[id] = 3;
-                $error[message] = "Forbidden service for this User";
-                $response[error] = $error;
+                $response['success'] = false;
+                $error['id'] = 3;
+                $error['message'] = "Forbidden service for this User";
+                $response['error'] = $error;
                 break;
             }
         }
 
-        if ($dateFormat=="")
-            $dateFormat = "Y-m-d";
-
         if ($init!="")
         {
-            $response[init] = $init;
+            $response['init'] = $init;
 
             $initParse = date_parse_from_format($dateFormat, $init);
 
@@ -108,7 +103,7 @@
 
         if ($end!="")
         {
-            $response[end] = $end;
+            $response['end'] = $end;
 
             $endParse = date_parse_from_format($dateFormat, $end);
 
@@ -126,11 +121,13 @@
 
         $count = 0;
 
-        $totalHours[total] = 0;
+        $totalHours = array('total' => 0);
+
+        $records = array();
 
         foreach((array) $report as $projectId => $hours)
         {
-            $count += count($hours);
+            $count += 1;
 
             if ($projectId != "")
             {
@@ -142,53 +139,53 @@
 
             $totalHours[$projectName] = 0;
 
-            $record[project] = $projectName;
+            $record['project'] = $projectName;
 
             $record['id'] = $projectId;
 
             $totalHours[$projectName] += round($hours, 2, PHP_ROUND_HALF_DOWN);
-            $totalHours[total] += round($hours, 2, PHP_ROUND_HALF_DOWN);
+            $totalHours['total'] += round($hours, 2, PHP_ROUND_HALF_DOWN);
 
-            $record[total] = $totalHours[$projectName];
+            $record['total'] = $totalHours[$projectName];
 
             $records[] = $record;
         }
 
         foreach($records as $record)
         {
-            $record[percentage] = round(100 * $totalHours[$record[project]]/$totalHours[total], 2, PHP_ROUND_HALF_DOWN);
-            $response[records][] = $record;
+            $record['percentage'] = round(100 * $totalHours[$record['project']]/$totalHours['total'], 2, PHP_ROUND_HALF_DOWN);
+            $response['records'][] = $record;
         }
 
-        $response[total] = $count;
+        $response['total'] = $count;
 
-        $metaData[totalProperty] = "total";
-        $metaData[root] = "records";
-        $metaData[id] = "project";
+        $metaData['totalProperty'] = "total";
+        $metaData['root'] = "records";
+        $metaData['id'] = "project";
 
-        $metaData[sortInfo][field] = 'project';
-        $metaData[sortInfo][direction] = 'ASC';
+        $metaData['sortInfo']['field'] = 'project';
+        $metaData['sortInfo']['direction'] = 'ASC';
 
-        $field[name] = "project";
-        $field[type] = "string";
+        $field['name'] = "project";
+        $field['type'] = "string";
 
-        $metaData[fields][] = $field;
+        $metaData['fields'][] = $field;
 
-        $field[name] = "total";
-        $field[type] = "float";
+        $field['name'] = "total";
+        $field['type'] = "float";
 
-        $metaData[fields][] = $field;
+        $metaData['fields'][] = $field;
 
-        $field[name] = "percentage";
-        $field[type] = "float";
+        $field['name'] = "percentage";
+        $field['type'] = "float";
 
-        $metaData[fields][] = $field;
+        $metaData['fields'][] = $field;
 
-        $column[header] = "Project";
-        $column[dataIndex] = "project";
-        $column[sortable] = true;
+        $column['header'] = "Project";
+        $column['dataIndex'] = "project";
+        $column['sortable'] = true;
 
-        $response[columns][] = $column;
+        $response['columns'][] = $column;
 
         $column['header'] = 'Id';
         $column['dataIndex'] = 'id';
@@ -197,28 +194,28 @@
         $field['name'] = 'id';
         $field['type'] = 'int';
 
-        $response[columns][] = $column;
-        $metaData[fields][] = $field;
+        $response['columns'][] = $column;
+        $metaData['fields'][] = $field;
 
-        $field[type] = "float";
+        $field['type'] = "float";
 
         $column['hidden'] = false;
 
-        $column[header] = "Total";
-        $column[dataIndex] = "total";
-        $column[sortable] = true;
+        $column['header'] = "Total";
+        $column['dataIndex'] = "total";
+        $column['sortable'] = true;
 
-                $response[columns][] = $column;
+        $response['columns'][] = $column;
 
-        $column[header] = "Percentage";
-        $column[dataIndex] = "percentage";
-        $column[sortable] = true;
+        $column['header'] = "Percentage";
+        $column['dataIndex'] = "percentage";
+        $column['sortable'] = true;
 
-                $response[columns][] = $column;
+        $response['columns'][] = $column;
 
-                $response[metaData] = $metaData;
+        $response['metaData'] = $metaData;
 
-        $response[success] = true;
+        $response['success'] = true;
 
     } while (False);
 
