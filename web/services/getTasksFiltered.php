@@ -123,9 +123,9 @@
         return $csvExport? $string : escape_string($string);
     }
 
-    $sid = $_GET['sid'];
+    $sid = $_GET['sid'] ?? NULL;
 
-    $csvExport = ($_GET["format"] && $_GET["format"] == "csv");
+    $csvExport = (isset($_GET["format"]) && $_GET["format"] == "csv");
     $csvFile = null;
     if ($csvExport)
     {
@@ -162,24 +162,21 @@
         }
 
         /* Retrieve the data from the request */
-        $dateFormat = "Y-m-d";
+        $dateFormat = $_GET['dateFormat'] ?? "Y-m-d";
+        $filterText = $_GET['filterText'] ?? NULL;
+        $type = $_GET['type'] ?? NULL;
+        $projectId = $_GET['projectId'] ?? NULL;
+        $customerId = $_GET['customerId'] ?? NULL;
+        $taskStoryId = $_GET['taskStoryId'] ?? NULL;
+        $filterStory = $_GET['filterStory'] ?? NULL;
         $filterStartDate = NULL;
         $filterEndDate = NULL;
         $telework = NULL;
         $onsite = NULL;
-        $filterText = NULL;
-        $type = NULL;
         $userId = NULL;
-        $projectId = NULL;
-        $customerId = NULL;
-        $taskStoryId = NULL;
-        $filterStory = NULL;
         $emptyText = NULL;
         $emptyStory = NULL;
         $showProjectNames = false;
-        if (isset($_GET['dateFormat'])) {
-            $dateFormat = $_GET['dateFormat'];
-        }
         if (isset($_GET['filterStartDate'])) {
             $filterStartDate = DateTime::createFromFormat(
                     $dateFormat, $_GET['filterStartDate']);
@@ -204,12 +201,6 @@
                 $onsite = false;
             }
         }
-        if (isset($_GET['filterText'])) {
-            $filterText = $_GET['filterText'];
-        }
-        if (isset($_GET['type'])) {
-            $type = $_GET['type'];
-        }
         if (isset($_GET['userId'])) {
             //Request to check user tasks of other user
             if($_GET['userId'] != $_SESSION['user']->getId()){
@@ -219,19 +210,6 @@
                 }
             }
             $userId = $_GET['userId'];
-        }
-        if (isset($_GET['projectId'])) {
-            $projectId = $_GET['projectId'];
-        }
-        if (isset($_GET['customerId'])) {
-            $customerId = $_GET['customerId'];
-        }
-
-        if (isset($_GET['taskStoryId'])) {
-            $taskStoryId = $_GET['taskStoryId'];
-        }
-        if (isset($_GET['filterStory'])) {
-            $filterStory = $_GET['filterStory'];
         }
         if (isset($_GET['emptyText'])) {
             $emptyText = filter_var($_GET['emptyText'],

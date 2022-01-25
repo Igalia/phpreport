@@ -20,8 +20,6 @@
 
 define('PHPREPORT_ROOT', __DIR__ . '/../');
 
-$sid = $_GET["sid"];
-
 /* We check authentication and authorization */
 require_once(PHPREPORT_ROOT . '/web/auth.php');
 
