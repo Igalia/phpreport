@@ -72,7 +72,6 @@ class TemplateServiceTest extends TestCase
             . '<name>awesome template</name>'
             . '<ttype>community</ttype>'
             . '<story>piedpiper</story>'
-            . '<taskStoryId>3</taskStoryId>'
             . '<telework>true</telework>'
             . '<onsite>false</onsite>'
             . '<text>fixing this crazy bug</text>'
@@ -89,7 +88,6 @@ class TemplateServiceTest extends TestCase
         $expectedTemplate->setTelework(true);
         $expectedTemplate->setOnsite(false);
         $expectedTemplate->setUserId('456');
-        $expectedTemplate->setTaskStoryId('3');
         $expectedTemplate->setTtype('community');
         $expectedTemplate->setName('awesome template');
         $expectedTemplate->setText('fixing this crazy bug');

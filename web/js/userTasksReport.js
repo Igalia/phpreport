@@ -33,12 +33,6 @@ Ext.onReady(function () {
         {name:'customerName'}
     ]);
 
-    /* Schema of the information about task-stories */
-    var taskStoryRecord = new Ext.data.Record.create([
-        {name:'id'},
-        {name:'friendlyName'},
-    ]);
-
     //schema of the information about users
     var userRecord = new Ext.data.Record.create([
         {name: 'id', type: 'int'},
@@ -125,19 +119,6 @@ Ext.onReady(function () {
         },
     });
 
-    /* Store object for taskStory field */
-    var taskStoryStore = new Ext.data.Store({
-        autoLoad: true,
-        autoSave: false,
-        proxy: new Ext.data.HttpProxy({
-            url: 'services/getOpenTaskStoriesService.php',
-            method: 'GET'
-        }),
-        reader:new Ext.data.XmlReader(
-            {record: 'taskStory', id:'id' }, taskStoryRecord),
-        remoteSort: false,
-    });
-
     /* Store object and data for task types */
     var taskTypeStore = new Ext.data.ArrayStore({
         idIndex: 0,
@@ -174,15 +155,6 @@ Ext.onReady(function () {
         var record =  projectsStore.getById(id);
         if (record) {
             return record.get('description');
-        }
-        return id;
-    };
-
-    /* Renderer to show the task story name in the grid */
-    function taskStoryRenderer(id) {
-        var record =  taskStoryStore.getById(id);
-        if (record) {
-            return record.get('friendlyName');
         }
         return id;
     };
@@ -330,21 +302,6 @@ Ext.onReady(function () {
             forceSelection: false,
             autoSelect: false,
         }]
-    if ( menuCoordination == true ) {
-        filtersPanelItems.push({
-            fieldLabel: 'TaskStory',
-            name: 'taskStory',
-            xtype: 'combo',
-            id: 'taskStory',
-            store: taskStoryStore,
-            mode: 'local',
-            valueField: 'id',
-            displayField: 'friendlyName',
-            typeAhead: true,
-            triggerAction: 'all',
-            forceSelection: true,
-        })
-    }
 
     /* Panel containing all the search parameters */
     var filtersPanel = new Ext.FormPanel({
@@ -431,12 +388,6 @@ Ext.onReady(function () {
                 baseParams.filterStory = value;
             }
         }
-        if ( menuCoordination == true ) {
-            if (Ext.getCmp('taskStory').getRawValue() != "") {
-                var value = Ext.getCmp('taskStory').getValue();
-                baseParams.taskStoryId = value;
-            }
-        }
         if (Ext.getCmp('telework').getRawValue() != "") {
             var value = Ext.getCmp('telework').getValue();
             baseParams.telework = (value == 'yes')? true : false;
@@ -465,9 +416,6 @@ Ext.onReady(function () {
         {name:'userId'},
         {name:'projectId'}
     ]
-    if ( menuCoordination == true ) {
-        taskRecordColumns.push({name:'taskStoryId'})
-    }
 
     /* Schema of the information about tasks */
     var taskRecord = new Ext.data.Record.create(taskRecordColumns);
@@ -549,15 +497,6 @@ Ext.onReady(function () {
         }
     ]
 
-    if ( menuCoordination == true ) {
-        columnModelItems.push({
-            header: "Task story",
-            sortable: true,
-            dataIndex: 'taskStoryId',
-            renderer: taskStoryRenderer,
-        })
-    }
-
     var columnModel = new Ext.grid.ColumnModel(columnModelItems);
 
     // setup the panel for the grid of tasks
@@ -610,9 +549,6 @@ Ext.onReady(function () {
         columnModel.setHidden(7, true);   //onsite
         columnModel.setHidden(8, false);  //description
         columnModel.setHidden(9, false);   //story
-        if ( menuCoordination == true ) {
-            columnModel.setHidden(10, false);  //taskStory
-        }
         columnModel.setColumnWidth(0, 80);
         columnModel.setColumnWidth(1, 55);
         columnModel.setColumnWidth(2, 55);
@@ -621,9 +557,6 @@ Ext.onReady(function () {
         columnModel.setColumnWidth(5, 120);
         columnModel.setColumnWidth(8, 435);
         columnModel.setColumnWidth(9, 120);
-        if ( menuCoordination == true ) {
-            columnModel.setColumnWidth(10, 120);
-        }
     }
 
     //function to show all the columns
@@ -638,9 +571,6 @@ Ext.onReady(function () {
         columnModel.setHidden(7, false);   //onsite
         columnModel.setHidden(8, false);  //description
         columnModel.setHidden(9, false);   //story
-        if ( menuCoordination == true ) {
-            columnModel.setHidden(10, false);  //taskStory
-        }
         columnModel.setColumnWidth(0, 80);
         columnModel.setColumnWidth(1, 55);
         columnModel.setColumnWidth(2, 55);
@@ -651,9 +581,6 @@ Ext.onReady(function () {
         columnModel.setColumnWidth(7, 50);
         columnModel.setColumnWidth(8, 435);
         columnModel.setColumnWidth(9, 100);
-        if ( menuCoordination == true ) {
-            columnModel.setColumnWidth(10, 100);
-        }
     }
 
     //hide the advanced columns

@@ -108,9 +108,9 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
         $affectedRows = 0;
 
         $sql = "INSERT INTO template (name, story, telework, onsite, text, " .
-                   "ttype, usrid, projectid, init_time, end_time, task_storyid) " .
+                   "ttype, usrid, projectid, init_time, end_time) " .
                "VALUES(:name, :story, :telework, :onsite, :text, :ttype, " .
-                   ":usrid, :projectid, :init_time, :end_time, :task_storyid)";
+                   ":usrid, :projectid, :init_time, :end_time)";
 
         try {
             $statement = $this->pdo->prepare($sql);
@@ -124,7 +124,6 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
             $statement->bindValue(":projectid", $templateVO->getProjectId(), PDO::PARAM_INT);
             $statement->bindValue(":init_time", $templateVO->getInitTime(), PDO::PARAM_INT);
             $statement->bindValue(":end_time", $templateVO->getEndTime(), PDO::PARAM_INT);
-            $statement->bindValue(":task_storyid", $templateVO->getTaskStoryId(), PDO::PARAM_INT);
             $statement->execute();
 
             $templateVO->setId($this->pdo->lastInsertId('template_id_seq'));

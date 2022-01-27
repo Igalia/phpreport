@@ -45,7 +45,6 @@
  *  @property string $ttype type of this Task.
  *  @property int $usrid database internal identifier of the associated User.
  *  @property int $projectid database internal identifier of the associated Project.
- *  @property int $task_storyid database internal identifier of the associated Task Story.
  */
 class TemplateVO {
 
@@ -61,7 +60,6 @@ class TemplateVO {
     protected $ttype = NULL;
     protected $usrid = NULL;
     protected $projectid = NULL;
-    protected $task_storyid = NULL;
     protected $init_time = NULL;
     protected $end_time = NULL;
     protected $initTimeRaw = NULL;
@@ -193,20 +191,6 @@ class TemplateVO {
         $this->projectid = $projectId;
     }
 
-    /**
-     * @return int
-     */
-    public function getTaskStoryId() {
-        return $this->task_storyid;
-    }
-
-    /**
-     * @param int $taskStoryId
-     */
-    public function setTaskStoryId($taskStoryId) {
-        $this->task_storyid = $taskStoryId;
-    }
-
     public function getInitTime(): ?int {
         return $this->init_time;
     }
@@ -246,7 +230,6 @@ class TemplateVO {
         $string .= "<ttype>{$this->ttype}</ttype>";
         $string .= "<userId>{$this->usrid}</userId>";
         $string .= "<projectId>{$this->projectid}</projectId>";
-        $string .= "<taskStoryId>{$this->task_storyid}</taskStoryId>";
         $string .= "<initTime>{$this->initTimeRaw}</initTime>";
         $string .= "<endTime>{$this->endTimeRaw}</endTime>";
         $string .= "</template>";

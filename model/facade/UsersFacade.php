@@ -69,10 +69,6 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserHourCostHistoriesActi
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateHourCostHistoryAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteHourCostHistoryAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateHourCostHistoryAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/GetIterationProjectAreaTodayUsersAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/GetStoryIterationProjectAreaTodayUsersAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/GetModuleProjectAreaTodayUsersAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/GetSectionModuleProjectAreaTodayUsersAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateUserGoalAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserGoalsAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateUserGoalAction.php');
@@ -277,23 +273,6 @@ abstract class UsersFacade {
         return $action->execute();
     }
 
-    /** User retriever by Project Iteration Function
-     *
-     * This function retrieves the Users assigned to the same Area as a Project Iteration with id <var>$iterationid</var> today.
-     *
-     * @param int $iterationid the id of the Project Iteration whose related Users (through Area) we want to retrieve.
-     * @return array an array with value objects {@link UserVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @throws {@link SQLQueryErrorException}
-     */
-    static function GetIterationProjectAreaTodayUsers($iterationid) {
-
-    $action = new GetIterationProjectAreaTodayUsersAction($iterationid);
-
-    return $action->execute();
-
-    }
-
     /** Users retriever By Area Id and Date function
      *
      *  This function is used for retrieving all Users that are assigned to an
@@ -311,57 +290,6 @@ abstract class UsersFacade {
         $action = new GetUsersByAreaIdDateAction($areaId, $date);
 
         return $action->execute();
-
-    }
-
-    /** User retriever by Project Module Function
-     *
-     * This function retrieves the Users assigned to the same Area as a Project Module with id <var>$moduleid</var> today.
-     *
-     * @param int $moduleid the id of the Project Module whose related Users (through Area) we want to retrieve.
-     * @return array an array with value objects {@link UserVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @throws {@link SQLQueryErrorException}
-     */
-    static function GetModuleProjectAreaTodayUsers($moduleid) {
-
-    $action = new GetModuleProjectAreaTodayUsersAction($moduleid);
-
-    return $action->execute();
-
-    }
-
-    /** User retriever by Project Iteration Story Function
-     *
-     * This function retrieves the Users assigned to the same Area as a Project Story with id <var>$storyid</var> today.
-     *
-     * @param int $storyid the id of the Project Story whose related Users (through Area) we want to retrieve.
-     * @return array an array with value objects {@link UserVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @throws {@link SQLQueryErrorException}
-     */
-    static function GetStoryIterationProjectAreaTodayUsers($storyid) {
-
-    $action = new GetStoryIterationProjectAreaTodayUsersAction($storyid);
-
-    return $action->execute();
-
-    }
-
-    /** User retriever by Project Module Section Function
-     *
-     * This function retrieves the Users assigned to the same Area as a Project Section with id <var>$sectionid</var> today.
-     *
-     * @param int $sectionid the id of the Project Section whose related Users (through Area) we want to retrieve.
-     * @return array an array with value objects {@link UserVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @throws {@link SQLQueryErrorException}
-     */
-    static function GetSectionModuleProjectAreaTodayUsers($sectionid) {
-
-    $action = new GetSectionModuleProjectAreaTodayUsersAction($sectionid);
-
-    return $action->execute();
 
     }
 

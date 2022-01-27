@@ -187,15 +187,6 @@
                                 }
                                 break;
 
-                        case "taskStoryId":$parser->read();
-                                if ($parser->hasValue)
-                                {
-                                    $taskVO->setTaskStoryId($parser->value);
-                                    $parser->next();
-                                    $parser->next();
-                                }
-                                break;
-
                         case "projectId":$parser->read();
                                 if ($parser->hasValue)
                                 {
@@ -240,7 +231,7 @@
                 foreach((array) $createTasks as $task)
             {
 
-            $string = $string . "<task><id>{$task->getId()}</id><date format='$dateFormat'>{$task->getDate()->format($dateFormat)}</date><initTime>" . str_pad(floor($task->getInit()/60), 2, "0", STR_PAD_LEFT) . ":" . str_pad($task->getInit()%60, 2, "0", STR_PAD_LEFT)  . "</initTime><endTime>" . str_pad(floor($task->getEnd()/60), 2, "0", STR_PAD_LEFT) . ":" . str_pad($task->getEnd()%60, 2, "0", STR_PAD_LEFT)  . "</endTime><story>" . escape_string($task->getStory()) . "</story><telework>{$task->getTelework()}</telework><onsite>{$task->getOnsite()}</onsite><ttype>" . escape_string($task->getTtype()) . "</ttype><text>" . escape_string($task->getText()) . "</text><phase>" . escape_string($task->getPhase()) . "</phase><userId>{$task->getUserId()}</userId><projectId>{$task->getProjectId()}</projectId><taskStoryId>{$task->getTaskStoryId()}</taskStoryId></task>";
+            $string = $string . "<task><id>{$task->getId()}</id><date format='$dateFormat'>{$task->getDate()->format($dateFormat)}</date><initTime>" . str_pad(floor($task->getInit()/60), 2, "0", STR_PAD_LEFT) . ":" . str_pad($task->getInit()%60, 2, "0", STR_PAD_LEFT)  . "</initTime><endTime>" . str_pad(floor($task->getEnd()/60), 2, "0", STR_PAD_LEFT) . ":" . str_pad($task->getEnd()%60, 2, "0", STR_PAD_LEFT)  . "</endTime><story>" . escape_string($task->getStory()) . "</story><telework>{$task->getTelework()}</telework><onsite>{$task->getOnsite()}</onsite><ttype>" . escape_string($task->getTtype()) . "</ttype><text>" . escape_string($task->getText()) . "</text><phase>" . escape_string($task->getPhase()) . "</phase><userId>{$task->getUserId()}</userId><projectId>{$task->getProjectId()}</projectId></task>";
 
             }
 

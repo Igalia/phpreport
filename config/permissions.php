@@ -53,17 +53,6 @@ $permissions = array(
         //templates
         '/services/createTemplatesService.php', '/services/getUserTemplatesService.php',
         '/services/deleteTemplatesService.php',
-        //XP tracker and analysis
-        '/analysistracker-summary.php', '/xptracker-summary.php',
-        '/moduleForm.php', '/sectionForm.php', '/taskSectionForm.php',
-        '/iterationForm.php', '/storyForm.php', '/taskStoryForm.php',
-        '/viewIteration.php', '/viewModule.php', '/viewStory.php', '/viewSection.php',
-        '/services/getIterationCustomStoriesService.php',  '/services/getProjectIterationsService.php',
-        '/services/getProjectAnalysisTrackerTree.php', '/services/getProjectTrackerTree.php',
-        '/services/getStoryCustomTaskStoriesService.php', '/services/getSectionCustomTaskSectionsService.php',
-        '/services/updateTaskStoriesService.php', '/services/createTaskStoriesService.php',
-        '/services/deleteTaskStoriesService.php', '/services/updateTaskSectionsService.php',
-        '/services/createTaskSectionsService.php', '/services/deleteTaskSectionsService.php',
         //reports
         '/projectDetailsReport.php', '/viewUserDetails.php', '/projectDetails.php', '/viewWorkingHoursResultsReport.php',
         '/services/getExtraHoursReportService.php', '/services/getPendingHolidayHoursService.php',
