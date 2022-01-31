@@ -1193,7 +1193,7 @@ Ext.onReady(function(){
             // Default button for full-holiday task
             new Ext.Button({
                 id: 'fullHolidayTaskButton',
-                text: 'Full Vacation Day task',
+                text: 'Full vacation day task',
                 disabled: forbidden,
                 handler: function () {
                     // Delay task creation until store gets loaded or it won't be properly added
