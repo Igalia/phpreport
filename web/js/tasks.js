@@ -1098,7 +1098,7 @@ Ext.onReady(function(){
             name: 'holidays_title',
             labelSeparator: '',
             labelStyle: userWorkSummaryTitleStyle,
-            fieldLabel:'Holidays',
+            fieldLabel:'Vacation days',
         },
         {
             id:'available_holidays',
@@ -1193,7 +1193,7 @@ Ext.onReady(function(){
             // Default button for full-holiday task
             new Ext.Button({
                 id: 'fullHolidayTaskButton',
-                text: 'Full-Holiday task',
+                text: 'Full Vacation Day task',
                 disabled: forbidden,
                 handler: function () {
                     // Delay task creation until store gets loaded or it won't be properly added

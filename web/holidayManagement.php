@@ -25,7 +25,7 @@ $sid = $_GET["sid"] ?? NULL;
 require_once(PHPREPORT_ROOT . '/web/auth.php');
 
 /* Include the generic header and sidebar*/
-define('PAGE_TITLE', "PhpReport - Holiday Management");
+define('PAGE_TITLE', "PhpReport - Vacation Management");
 include_once("include/header.php");
 
 ?>
@@ -37,13 +37,13 @@ include_once("include/header.php");
 
 <div id="holidaysApp">
     <nav class="submenu">
-        <li><a href="#my_holidays" id="personalCalendar" v-on:click="switchMode">My holidays</a></li>
-        <li><a href="#team_calendar" id="teamCalendar" v-on:click="switchMode">Team calendar</a></li>
+        <li><a href="#my_holidays" id="personalCalendar" v-on:click="switchMode">My Calendar</a></li>
+        <li><a href="#team_calendar" id="teamCalendar" v-on:click="switchMode">Team Calendar</a></li>
     </nav>
     <div class="holidayContainer">
         <div class="sidebar">
             <div class="holidaysList">
-                <h2 class="sidebarTitle">Holidays Summary for {{ currentYear }}</h2>
+                <h2 class="sidebarTitle">Summary for {{ currentYear }}</h2>
                 <div v-if="!isEditing" class="autocompleteContainer">
                     <input
                         class="autocompleteSearchInput"
@@ -83,10 +83,10 @@ include_once("include/header.php");
                 </table>
                 <div v-if="isEditing">
                     <p class="warning info">
-                        <strong>TIP:</strong> Double click on single dates if you want to delete existing holidays.
+                        <strong>TIP:</strong> Double click on single dates if you want to delete an existing vacation day.
                     </p>
                     <p class="text-center">
-                        <button class="btn" ref="saveBtn" v-on:click="onSaveClick">Save Holidays</button>
+                        <button class="btn" ref="saveBtn" v-on:click="onSaveClick">Save Vacation Days</button>
                     </p>
                 </div>
             </div>

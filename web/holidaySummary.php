@@ -25,7 +25,7 @@ $sid = $_GET["sid"] ?? NULL;
 require_once(PHPREPORT_ROOT . '/web/auth.php');
 
 /* Include the generic header and sidebar*/
-define('PAGE_TITLE', "PhpReport - Holiday Management");
+define('PAGE_TITLE', "PhpReport - Vacation Management");
 include_once("include/header.php");
 
 ?>
@@ -40,8 +40,8 @@ include_once("include/header.php");
         <thead slot="head">
             <th>User</th>
             <th>Hours/day</th>
-            <th>Holidays (days)</th>
-            <th>Holidays (hours)</th>
+            <th>Available (days)</th>
+            <th>Available (hours)</th>
             <th>Pending (hours)</th>
             <th>Planned (hours)</th>
             <th>% planned</th>

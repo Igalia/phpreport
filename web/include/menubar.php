@@ -37,7 +37,7 @@ $ISSUE_TRACKER_LINKS_URL = unserialize(
 
     <?php if ($SHOW_MENU) {?>
     <li><a href="tasks.php">Tasks</a></li>
-    <li><a href="holidayManagement.php">Holidays <span class="new-badge">new</span></a></li>
+    <li><a href="holidayManagement.php">Vacation Management</a></li>
     <li class="dropdown">
         <a href="#" class="dropdown-button">
             Reports
@@ -68,7 +68,7 @@ $ISSUE_TRACKER_LINKS_URL = unserialize(
                 <a href="projectsSummary.php">Projects summary</a>
             </li>
             <li class="sprite-calendar-edit">
-                <a href="holidaySummary.php">Holiday summary</a>
+                <a href="holidaySummary.php">Vacation summary</a>
             </li>
         </ul>
     </li>
