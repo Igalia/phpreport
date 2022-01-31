@@ -177,7 +177,7 @@ define('USER_GROUPS', serialize(array('staff', 'admin', 'manager')));
  * @name VACATIONS_PROJECT
  * @global string project used for identifying vacations tasks
  */
-define('VACATIONS_PROJECT', 'Holidays');
+define('VACATIONS_PROJECT', 'Vacation');
 
 /* New from PhpReport 2.18 */
 
