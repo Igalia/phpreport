@@ -361,7 +361,7 @@ class HolidayService
         $init = date_create($year . "-01-01");
         $end = date_create($year . "-12-31");
 
-        $users = \UsersFacade::GetAllActiveUsers();
+        $users = \UsersFacade::GetAllActiveUsers($filterEmployees = true);
         $weeks = $this::getWeeksFromYear($year);
         $holidays = [];
         for ($i = 0; $i < count($users); $i++) {
