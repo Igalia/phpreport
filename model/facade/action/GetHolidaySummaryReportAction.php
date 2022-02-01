@@ -21,6 +21,7 @@
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetHolidayHoursBaseAction.php');
 
 use Phpreport\Web\services\HolidayService;
+use Phpreport\Util\DateOperations;
 
 class GetHolidaySummaryReportAction extends GetHolidayHoursBaseAction
 {
@@ -53,7 +54,7 @@ class GetHolidaySummaryReportAction extends GetHolidayHoursBaseAction
         );
         $validJourney = array_filter(
             $journeyHistories,
-            fn ($history) => $history->dateBelongsToJourney(date_create())
+            fn ($history) => DateOperations::dateBelongsToPeriod(date_create(), $history->getInitDate(), $history->getEndDate())
         );
         $validJourney = array_pop($validJourney);
         $validJourney = $validJourney ? $validJourney->getJourney() : 0;

@@ -21,6 +21,7 @@
 namespace Phpreport\Web\services;
 
 use Phpreport\Model\facade;
+use Phpreport\Util\DateOperations;
 
 if (!defined('PHPREPORT_ROOT')) define('PHPREPORT_ROOT', __DIR__ . '/../../');
 
@@ -195,7 +196,11 @@ class HolidayService
     static function mapHalfLeaves($dates, array $journeyHistories): array
     {
         foreach ($dates as $day => $duration) {
-            $validJourney = array_filter($journeyHistories, fn ($history) => $history->dateBelongsToJourney(date_create($day)));
+            $validJourney = array_filter($journeyHistories, fn ($history) => DateOperations::dateBelongsToPeriod(
+                date_create($day),
+                $history->getInitDate(),
+                $history->getEndDate()
+            ));
             if (count($validJourney) == 0) continue;
             $validJourney = array_pop($validJourney);
             if (($validJourney->getJourney() * 60) > ($duration['end'] - $duration['init'])) {
@@ -258,7 +263,11 @@ class HolidayService
             if ($this->isWeekend($day)) continue;
 
             $currentDay = date_create($day);
-            $validJourney = array_filter($journeyHistories, fn ($history) => $history->dateBelongsToJourney($currentDay));
+            $validJourney = array_filter($journeyHistories, fn ($history) =>  DateOperations::dateBelongsToPeriod(
+                $currentDay,
+                $history->getInitDate(),
+                $history->getEndDate()
+            ));
             if (count($validJourney) != 1) {
                 $failed[] = $day;
                 continue;

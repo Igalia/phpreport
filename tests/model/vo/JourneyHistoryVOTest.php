@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
+use Phpreport\Util\DateOperations;
+
 if (!defined('PHPREPORT_ROOT')) define('PHPREPORT_ROOT', __DIR__ . '/../../../');
 
 include_once(PHPREPORT_ROOT . '/model/vo/JourneyHistoryVO.php');
@@ -24,7 +26,7 @@ class JourneyHistoryVOTest extends TestCase
         $date = date_create("2020-01-01");
         $this->assertEquals(
             false,
-            $this->instance->dateBelongsToJourney($date)
+            DateOperations::dateBelongsToPeriod($date, $this->instance->getInitDate(), $this->instance->getEndDate())
         );
     }
 
@@ -33,7 +35,7 @@ class JourneyHistoryVOTest extends TestCase
         $date = date_create("2021-05-01");
         $this->assertEquals(
             true,
-            $this->instance->dateBelongsToJourney($date)
+            DateOperations::dateBelongsToPeriod($date, $this->instance->getInitDate(), $this->instance->getEndDate())
         );
     }
 
@@ -42,7 +44,7 @@ class JourneyHistoryVOTest extends TestCase
         $date = date_create("2021-01-01");
         $this->assertEquals(
             true,
-            $this->instance->dateBelongsToJourney($date)
+            DateOperations::dateBelongsToPeriod($date, $this->instance->getInitDate(), $this->instance->getEndDate())
         );
     }
 
@@ -51,7 +53,7 @@ class JourneyHistoryVOTest extends TestCase
         $date = date_create("2021-06-01");
         $this->assertEquals(
             true,
-            $this->instance->dateBelongsToJourney($date)
+            DateOperations::dateBelongsToPeriod($date, $this->instance->getInitDate(), $this->instance->getEndDate())
         );
     }
 
@@ -60,7 +62,7 @@ class JourneyHistoryVOTest extends TestCase
         $date = date_create("2021-07-01");
         $this->assertEquals(
             false,
-            $this->instance->dateBelongsToJourney($date)
+            DateOperations::dateBelongsToPeriod($date, $this->instance->getInitDate(), $this->instance->getEndDate())
         );
     }
 }

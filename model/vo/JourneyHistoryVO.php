@@ -61,9 +61,4 @@ class JourneyHistoryVO extends BaseHistoryVO
     }
 
     /**#@-*/
-
-
-    public function dateBelongsToJourney(DateTime $date): bool{
-        return $date >= $this->getInitDate() && $date <= $this->getEndDate();
-    }
 }
