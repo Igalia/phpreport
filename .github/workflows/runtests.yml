@@ -23,6 +23,8 @@ jobs:
           ${{ runner.os }}-php-
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
+    - name: Generate autoload files
+      run: composer dump-autoload -o
     - name: Run tests
       run: ./vendor/bin/phpunit --testdox tests
 
