@@ -365,6 +365,9 @@ class HolidayService
         $weeks = $this::getWeeksFromYear($year);
         $holidays = [];
         for ($i = 0; $i < count($users); $i++) {
+            if (!isset($users[$i]) || !$users[$i]) {
+                continue;
+            };
             $holidays[$users[$i]->getLogin()] = \UsersFacade::GetHolidaySummaryReport(
                 $init,
                 $end,
