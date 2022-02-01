@@ -19,6 +19,8 @@
  */
 
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetHolidayHoursBaseAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/AdminFacade.php');
+include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 
 use Phpreport\Web\services\HolidayService;
 use Phpreport\Util\DateOperations;
@@ -62,8 +64,15 @@ class GetHolidaySummaryReportAction extends GetHolidayHoursBaseAction
         if (count($leaves) == 0) {
             $leaves = $this->weeks;
         }
+        $areas = \UsersFacade::GetUserAreaHistories($this->user->getLogin());
+        $currentArea = array_filter(
+            $areas,
+            fn ($area) => DateOperations::dateBelongsToPeriod(date_create(), $area->getInitDate(), $area->getEndDate())
+        );
+        $currentArea = AdminFacade::GetAreaById($currentArea[0]->getAreaId());
         return [
             'user' => $this->user->getLogin(),
+            'area' => $currentArea->getName(),
             'availableHours' => round($summary['availableHours'][$this->user->getLogin()], 2),
             'availableDays' => HolidayService::formatHours($summary['availableHours'][$this->user->getLogin()], $validJourney, 1),
             'pendingHours' => round($summary['pendingHours'][$this->user->getLogin()], 2),

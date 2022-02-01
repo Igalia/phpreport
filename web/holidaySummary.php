@@ -39,6 +39,7 @@ include_once("include/header.php");
     <table class="report">
         <thead slot="head">
             <th>User</th>
+            <th>Area</th>
             <th>Hours/day</th>
             <th>Available (days)</th>
             <th>Available (hours)</th>
@@ -50,11 +51,12 @@ include_once("include/header.php");
         <tbody>
             <tr v-for="row in displayData" :key="row.id">
                 <td>{{ row.user }}</td>
-                <td>{{row.hoursDay}}</td>
-                <td>{{row.availableDays}}</td>
-                <td>{{row.availableHours}}</td>
-                <td>{{row.pendingHours}}</td>
-                <td>{{row.usedHours}}</td>
+                <td>{{ row.area }}</td>
+                <td>{{ row.hoursDay }}</td>
+                <td>{{ row.availableDays }}</td>
+                <td>{{ row.availableHours }}</td>
+                <td>{{ row.pendingHours }}</td>
+                <td>{{ row.usedHours }}</td>
                 <td :class="{ 'alert': row.percentage < 50}">{{row.percentage}}</td>
                 <td v-for="userWeek in row.holidays" :key="userWeek" :class="{ 'highlight': userWeek > 0}">{{userWeek}}</td>
             </tr>
