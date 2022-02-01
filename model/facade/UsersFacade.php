@@ -158,8 +158,8 @@ abstract class UsersFacade {
 
     }
 
-    static function GetAllActiveUsers() {
-        $action = new GetAllActiveUsersAction();
+    static function GetAllActiveUsers($filterEmployees = false) {
+        $action = new GetAllActiveUsersAction($filterEmployees);
         return $action->execute();
     }
 
