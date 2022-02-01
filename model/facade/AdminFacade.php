@@ -42,6 +42,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/GetAllAreasAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateAreaAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteAreaAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateAreaAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/action/GetAreaByIdAction.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/CommonEventVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/CityVO.php');
@@ -263,4 +264,8 @@ abstract class AdminFacade {
 
     }
 
+    static function GetAreaById(int $areaId) {
+        $action = new GetAreaByIdAction($areaId);
+        return $action->execute();
+    }
 }
