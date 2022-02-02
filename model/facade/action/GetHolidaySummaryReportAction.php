@@ -69,10 +69,14 @@ class GetHolidaySummaryReportAction extends GetHolidayHoursBaseAction
             $areas,
             fn ($area) => DateOperations::dateBelongsToPeriod(date_create(), $area->getInitDate(), $area->getEndDate())
         );
-        $currentArea = AdminFacade::GetAreaById($currentArea[0]->getAreaId());
+        $currentArea = array_pop($currentArea);
+        if ($currentArea) {
+            $currentArea = AdminFacade::GetAreaById($currentArea->getAreaId());
+            $currentArea = $currentArea->getName();
+        }
         return [
             'user' => $this->user->getLogin(),
-            'area' => $currentArea->getName(),
+            'area' => $currentArea ?? '',
             'availableHours' => round($summary['availableHours'][$this->user->getLogin()], 2),
             'availableDays' => HolidayService::formatHours($summary['availableHours'][$this->user->getLogin()], $validJourney, 1),
             'pendingHours' => round($summary['pendingHours'][$this->user->getLogin()], 2),
