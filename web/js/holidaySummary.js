@@ -22,7 +22,8 @@ var app = new Vue({
     data() {
         return {
             weeks: {},
-            displayData: {}
+            displayData: {},
+            isLoading: true,
         };
     },
     created() {
@@ -43,6 +44,7 @@ var app = new Vue({
                 referrerPolicy: 'no-referrer',
             });
             const body = await res.json();
+            this.isLoading = false;
             this.weeks = Object.keys(body.weeks);
             this.displayData = body.holidays;
         }

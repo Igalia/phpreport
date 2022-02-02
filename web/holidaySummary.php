@@ -36,7 +36,10 @@ include_once("include/header.php");
 <script src="vuejs/v-calendar.2.3.2.min.js"></script>
 
 <div id="holidaySummaryReport">
-    <table class="report">
+    <div v-if="isLoading" class="loaderContainer">
+        <div class="loader"></div>
+    </div>
+    <table v-if="!isLoading" class="report">
         <thead slot="head">
             <th>User</th>
             <th>Area</th>
@@ -62,7 +65,7 @@ include_once("include/header.php");
             </tr>
         </tbody>
     </table>
-    <p class="text-center">
+    <p v-if="!isLoading" class="text-center">
         <a href="services/getHolidaySummary.php?format=csv" class="btn">Download Report</a>
     </p>
 </div>
