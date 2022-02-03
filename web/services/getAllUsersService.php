@@ -34,6 +34,7 @@
 
     $sid = $_GET['sid'] ?? NULL;
     $active = $_GET['active'] ?? NULL;
+    $filterEmployees = $_GET['filterEmployees'] ?? false;
 
     do {
         /* We check authentication and authorization */
@@ -53,7 +54,7 @@
 
         if ($active == "true")
         {
-            $users = UsersFacade::GetAllActiveUsers();
+            $users = UsersFacade::GetAllActiveUsers($filterEmployees);
         }
         else
         {

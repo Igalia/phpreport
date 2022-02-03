@@ -68,6 +68,16 @@ PhpReport::
    */
   define('ALL_USERS_GROUP', 'staff');
 
+You can also define a group to display only active employees based on
+its respective LDAP group:
+
+  /**
+   * @name EMPLOYEES_GROUP
+   * @global string users group used for retrieving all active employees
+   */
+  define('EMPLOYEES_GROUP', 'employees');
+
+
 And in this line you must indicate a list with the names of the user groups that
 will have some meaning for PhpReport::
 

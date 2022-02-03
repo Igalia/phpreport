@@ -167,6 +167,12 @@ define ('YEARLY_HOLIDAY_HOURS', 184);
 define('ALL_USERS_GROUP', 'staff');
 
 /**
+ * @name EMPLOYEES_GROUP
+ * @global string users group used for retrieving all active employees
+ */
+define('EMPLOYEES_GROUP', 'staff');
+
+/**
  * @name USER_GROUPS
  * @global string all user groups for displaying on the interfaces as
  * a serialized array, compulsory when using LDAP user authentication
