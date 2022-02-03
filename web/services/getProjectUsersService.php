@@ -31,7 +31,7 @@
     include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
     include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
-   $sid = $_GET['sid'];
+   $sid = $_GET['sid'] ?? NULL;
 
    $pid = $_GET['pid'];
 
