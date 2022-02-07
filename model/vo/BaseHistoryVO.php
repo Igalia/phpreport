@@ -90,4 +90,9 @@ abstract class BaseHistoryVO
     {
         return $this->endDate;
     }
+
+    public function dateBelongsToHistory(DateTime $date): bool
+    {
+        return $date >= $this->getInitDate() && $date <= $this->getEndDate();
+    }
 }
