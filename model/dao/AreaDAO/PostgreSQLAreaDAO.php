@@ -56,23 +56,13 @@ class PostgreSQLAreaDAO extends AreaDAO{
         parent::__construct();
     }
 
-    /** Area value object constructor for PostgreSQL.
-     *
-     * This function creates a new {@link AreaVO} with data retrieved from database.
-     *
-     * @param array $row an array with the Area values from a row.
-     * @return AreaVO an {@link AreaVO} with its properties set to the values from <var>$row</var>.
-     * @see AreaVO
+    /**
+     * This method is declared to fulfill this class as non-abstract, but it should not be used.
+     * PDO::FETCH_CLASS now takes care of transforming DB rows into VO objects.
      */
     protected function setValues($row)
     {
-
-        $areaVO = new AreaVO();
-
-        $areaVO->setId($row['id']);
-        $areaVO->setName($row['name']);
-
-    return $areaVO;
+        error_log("Unused AreaDAO::setValues() called");
     }
 
     /** Area retriever by name for PostgreSQL.
@@ -84,9 +74,11 @@ class PostgreSQLAreaDAO extends AreaDAO{
      * @throws {@link SQLQueryErrorException}
      */
     public function getByName($areaName) {
-        $sql = "SELECT * FROM area WHERE name=" . $areaName;
-    $result = $this->execute($sql);
-    return $result[0];
+        $result = $this->runSelectQuery(
+            "SELECT * FROM area WHERE name=:areaName",
+            [':areaName' => $areaName],
+            'AreaVO');
+        return $result[0] ?? NULL;
     }
 
     /** Area retriever by Id for PostgreSQL.
@@ -98,11 +90,13 @@ class PostgreSQLAreaDAO extends AreaDAO{
      * @throws {@link SQLQueryErrorException}
      */
     public function getById($areaId) {
-    if (!is_numeric($areaId))
-        throw new SQLIncorrectTypeException($areaId);
-        $sql = "SELECT * FROM area WHERE id=" . $areaId;
-    $result = $this->execute($sql);
-    return $result[0];
+        if (!is_numeric($areaId))
+            throw new SQLIncorrectTypeException($areaId);
+        $result = $this->runSelectQuery(
+            "SELECT * FROM area WHERE id=:areaId",
+            [':areaId' => $areaId],
+            'AreaVO');
+        return $result[0] ?? NULL;
     }
 
     /** Project retriever by Area id for PostgreSQL.
@@ -151,7 +145,7 @@ class PostgreSQLAreaDAO extends AreaDAO{
      */
     public function getAll() {
         $sql = "SELECT * FROM area ORDER BY id ASC";
-        return $this->execute($sql);
+        return $this->runSelectQuery($sql, array(), 'AreaVO');
     }
 
     /** Area updater for PostgreSQL.
