@@ -21,7 +21,6 @@
 namespace Phpreport\Web\services;
 
 use Phpreport\Model\facade;
-use Phpreport\Util\DateOperations;
 
 if (!defined('PHPREPORT_ROOT')) define('PHPREPORT_ROOT', __DIR__ . '/../../');
 
