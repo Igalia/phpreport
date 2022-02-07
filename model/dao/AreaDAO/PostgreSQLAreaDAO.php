@@ -56,15 +56,6 @@ class PostgreSQLAreaDAO extends AreaDAO{
         parent::__construct();
     }
 
-    /**
-     * This method is declared to fulfill this class as non-abstract, but it should not be used.
-     * PDO::FETCH_CLASS now takes care of transforming DB rows into VO objects.
-     */
-    protected function setValues($row)
-    {
-        error_log("Unused AreaDAO::setValues() called");
-    }
-
     /** Area retriever by Id for PostgreSQL.
      *
      * This function retrieves the row from Area table with the id <var>$areaId</var> and creates an {@link AreaVO} with its data.

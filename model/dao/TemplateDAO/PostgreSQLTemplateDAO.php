@@ -48,14 +48,6 @@ class PostgreSQLTemplateDAO extends TemplateDAO{
         parent::__construct();
     }
 
-    /**
-     * This method is declared to fulfill TemplateVO as non-abstract, but it should not be used.
-     * PDO::FETCH_CLASS now takes care of transforming DB rows into VO objects.
-     */
-    protected function setValues($row) {
-        error_log("Unused TemplateVO::setValues() called");
-    }
-
     /** Template retriever by id for PostgreSQL.
      *
      * This function retrieves the row from Template table with the id <var>$templateId</var> and creates a {@link TemplateVO} with its data.
