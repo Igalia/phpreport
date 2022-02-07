@@ -56,7 +56,7 @@ class GetHolidaySummaryReportAction extends GetHolidayHoursBaseAction
         );
         $validJourney = array_filter(
             $journeyHistories,
-            fn ($history) => DateOperations::dateBelongsToPeriod(date_create(), $history->getInitDate(), $history->getEndDate())
+            fn ($history) => $history->dateBelongsToHistory(date_create())
         );
         $validJourney = array_pop($validJourney);
         $validJourney = $validJourney ? $validJourney->getJourney() : 0;
@@ -67,7 +67,7 @@ class GetHolidaySummaryReportAction extends GetHolidayHoursBaseAction
         $areas = \UsersFacade::GetUserAreaHistories($this->user->getLogin());
         $currentArea = array_filter(
             $areas,
-            fn ($area) => DateOperations::dateBelongsToPeriod(date_create(), $area->getInitDate(), $area->getEndDate())
+            fn ($area) => $area->dateBelongsToHistory(date_create())
         );
         $currentArea = array_pop($currentArea);
         if ($currentArea) {

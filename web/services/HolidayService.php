@@ -196,10 +196,8 @@ class HolidayService
     static function mapHalfLeaves($dates, array $journeyHistories): array
     {
         foreach ($dates as $day => $duration) {
-            $validJourney = array_filter($journeyHistories, fn ($history) => DateOperations::dateBelongsToPeriod(
-                date_create($day),
-                $history->getInitDate(),
-                $history->getEndDate()
+            $validJourney = array_filter($journeyHistories, fn ($history) => $history->dateBelongsToHistory(
+                date_create($day)
             ));
             if (count($validJourney) == 0) continue;
             $validJourney = array_pop($validJourney);
@@ -263,10 +261,8 @@ class HolidayService
             if ($this->isWeekend($day)) continue;
 
             $currentDay = date_create($day);
-            $validJourney = array_filter($journeyHistories, fn ($history) =>  DateOperations::dateBelongsToPeriod(
-                $currentDay,
-                $history->getInitDate(),
-                $history->getEndDate()
+            $validJourney = array_filter($journeyHistories, fn ($history) =>  $history->dateBelongsToHistory(
+                $currentDay
             ));
             if (count($validJourney) != 1) {
                 $failed[] = $day;
