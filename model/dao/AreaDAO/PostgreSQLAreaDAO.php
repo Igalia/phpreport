@@ -53,7 +53,7 @@ class PostgreSQLAreaDAO extends AreaDAO{
      * @see AreaDAO::__construct()
      */
     function __construct() {
-    parent::__construct();
+        parent::__construct();
     }
 
     /** Area value object constructor for PostgreSQL.

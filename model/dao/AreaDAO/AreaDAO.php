@@ -40,17 +40,6 @@ include_once(PHPREPORT_ROOT . '/model/dao/BaseDAO.php');
  */
 abstract class AreaDAO extends BaseDAO{
 
-    /** Area DAO constructor.
-     *
-     * This is the base constructor of Area DAOs, and it just calls its parent's constructor.
-     *
-     * @throws {@link ConnectionErrorException}
-     * @see BaseDAO::__construct()
-     */
-    protected function __construct() {
-    parent::__construct();
-    }
-
     /** Area retriever by id.
      *
      * This function retrieves the row from Area table with the id <var>$areaId</var> and creates an {@link AreaVO} with its data.
