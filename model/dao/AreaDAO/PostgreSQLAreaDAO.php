@@ -143,23 +143,17 @@ class PostgreSQLAreaDAO extends AreaDAO{
     public function update(AreaVO $areaVO) {
         $affectedRows = 0;
 
-        if($areaVO->getId() >= 0) {
-            $currareaVO = $this->getById($areaVO->getId());
-        }
+        $sql = "UPDATE area SET name=:name WHERE id=:id";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":name", $areaVO->getName(), PDO::PARAM_STR);
+            $statement->bindValue(":id", $areaVO->getId(), PDO::PARAM_INT);
+            $statement->execute();
 
-        // If the query returned a row then update
-        if(sizeof($currareaVO) > 0) {
-
-            $sql = "UPDATE area SET name=" . DBPostgres::checkStringNull($areaVO->getName()) . " WHERE id=".$areaVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-
-            if ($res == NULL)
-                if (strpos(pg_last_error(), "unique_area_name"))
-                    throw new SQLUniqueViolationException(pg_last_error());
-                else throw new SQLQueryErrorException(pg_last_error());
-
-            $affectedRows = pg_affected_rows($res);
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
         }
 
         return $affectedRows;
@@ -176,18 +170,19 @@ class PostgreSQLAreaDAO extends AreaDAO{
     public function create(AreaVO $areaVO) {
         $affectedRows = 0;
 
-        $sql = "INSERT INTO area (name) VALUES (" . DBPostgres::checkStringNull($areaVO->getName()) . ")";
+        $sql = "INSERT INTO area (name) VALUES (:name)";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":name", $areaVO->getName(), PDO::PARAM_STR);
+            $statement->execute();
 
-        $res = pg_query($this->connect, $sql);
+            $areaVO->setId($this->pdo->lastInsertId('area_id_seq'));
 
-        if ($res == NULL)
-            if (strpos(pg_last_error(), "unique_area_name"))
-                throw new SQLUniqueViolationException(pg_last_error());
-            else throw new SQLQueryErrorException(pg_last_error());
-
-        $areaVO->setId(DBPostgres::getId($this->connect, "area_id_seq"));
-
-        $affectedRows = pg_affected_rows($res);
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
+        }
 
         return $affectedRows;
 
@@ -204,20 +199,16 @@ class PostgreSQLAreaDAO extends AreaDAO{
     public function delete(AreaVO $areaVO) {
         $affectedRows = 0;
 
-        // Check for an area ID.
-        if($areaVO->getId() >= 0) {
-            $currareaVO = $this->getById($areaVO->getId());
-        }
+        $sql = "DELETE FROM area WHERE id=:id";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":id", $areaVO->getId(), PDO::PARAM_INT);
+            $statement->execute();
 
-        // Delete an area.
-        if(sizeof($currareaVO) > 0) {
-            $sql = "DELETE FROM area WHERE id=".$areaVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-
-            if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-
-            $affectedRows = pg_affected_rows($res);
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
         }
 
         return $affectedRows;
