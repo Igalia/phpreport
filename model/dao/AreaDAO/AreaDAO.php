@@ -50,16 +50,6 @@ abstract class AreaDAO extends BaseDAO{
      */
     public abstract function getById($areaId);
 
-    /** Area retriever by name for PostgreSQL.
-     *
-     * This function retrieves the row from Area table with the name <var>$areaName</var> and creates an {@link AreaVO} with its data.
-     *
-     * @param string $areaName the name of the row we want to retrieve.
-     * @return AreaVO a value object {@link AreaVO} with its properties set to the values from the row.
-     * @throws {@link SQLQueryErrorException}
-     */
-    public abstract function getByName($areaName);
-
     /** Projects retriever by Area id.
      *
      * This function retrieves the rows from Project table that are assigned to the Area with

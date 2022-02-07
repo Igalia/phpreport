@@ -65,22 +65,6 @@ class PostgreSQLAreaDAO extends AreaDAO{
         error_log("Unused AreaDAO::setValues() called");
     }
 
-    /** Area retriever by name for PostgreSQL.
-     *
-     * This function retrieves the row from Area table with the name <var>$areaName</var> and creates an {@link AreaVO} with its data.
-     *
-     * @param string $areaName the name of the row we want to retrieve.
-     * @return AreaVO a value object {@link AreaVO} with its properties set to the values from the row.
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getByName($areaName) {
-        $result = $this->runSelectQuery(
-            "SELECT * FROM area WHERE name=:areaName",
-            [':areaName' => $areaName],
-            'AreaVO');
-        return $result[0] ?? NULL;
-    }
-
     /** Area retriever by Id for PostgreSQL.
      *
      * This function retrieves the row from Area table with the id <var>$areaId</var> and creates an {@link AreaVO} with its data.
