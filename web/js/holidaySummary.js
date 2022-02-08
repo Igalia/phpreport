@@ -17,6 +17,17 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+const xmlHeaders = {
+    method: 'GET',
+    mode: 'same-origin',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+        'Content-Type': 'text/xml'
+    },
+    referrerPolicy: 'no-referrer',
+}
+
 var app = new Vue({
     el: '#holidaySummaryReport',
     data() {
@@ -24,12 +35,46 @@ var app = new Vue({
             weeks: {},
             displayData: {},
             isLoading: true,
+            projectUsers: {},
+            projectsList: [],
+            allProjects: [],
         };
     },
     created() {
         this.fetchSummary();
     },
     methods: {
+        async fetchProjectUsers(projectId) {
+            let url = `services/getProjectUsersService.php?pid=${projectId}`;
+            const res = await fetch(url, xmlHeaders);
+            const body = await res.text();
+            parser = new DOMParser();
+            xmlDoc = parser.parseFromString(body, "text/xml");
+            const users = xmlDoc.getElementsByTagName("user");
+            let projectUsers = [];
+            for (var i = 0; i < users.length; i++) {
+                projectUsers.push(users[i].getElementsByTagName("login")[0].innerHTML);
+            }
+            this.projectUsers[projectId] = projectUsers;
+        },
+        async fetchProjects() {
+            let url = 'services/getProjectsService.php?active=true';
+            const res = await fetch(url, xmlHeaders);
+            const body = await res.text();
+            parser = new DOMParser();
+            xmlDoc = parser.parseFromString(body, "text/xml");
+            const projects = xmlDoc.getElementsByTagName("project");
+            let parsedProjects = [];
+            for (var i = 0; i < projects.length; i++) {
+                parsedProjects.push({
+                    id: projects[i].getElementsByTagName("id")[0].innerHTML,
+                    name: projects[i].getElementsByTagName("description")[0].innerHTML,
+                });
+                await this.fetchProjectUsers(parsedProjects[i].id);
+            }
+            this.projectsList = parsedProjects;
+            this.allProjects = parsedProjects;
+        },
         async fetchSummary() {
             let url = `services/getHolidaySummary.php`;
 
