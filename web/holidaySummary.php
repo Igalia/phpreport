@@ -39,35 +39,50 @@ include_once("include/header.php");
     <div v-if="isLoading" class="loaderContainer">
         <div class="loader"></div>
     </div>
-    <table v-if="!isLoading" class="report">
-        <thead slot="head">
-            <th>User</th>
-            <th>Area</th>
-            <th>Hours/day</th>
-            <th>Available (days)</th>
-            <th>Available (hours)</th>
-            <th>Pending (hours)</th>
-            <th>Planned (hours)</th>
-            <th>% planned</th>
-            <th v-for="week in weeks" :key="week">{{week}}</th>
-        </thead>
-        <tbody>
-            <tr v-for="row in displayData" :key="row.id">
-                <td>{{ row.user }}</td>
-                <td>{{ row.area }}</td>
-                <td>{{ row.hoursDay }}</td>
-                <td>{{ row.availableDays }}</td>
-                <td>{{ row.availableHours }}</td>
-                <td>{{ row.pendingHours }}</td>
-                <td>{{ row.usedHours }}</td>
-                <td :class="{ 'alert': row.percentage < 50}">{{row.percentage}}</td>
-                <td v-for="userWeek in row.holidays" :key="userWeek" :class="{ 'highlight': userWeek > 0}">{{userWeek}}</td>
-            </tr>
-        </tbody>
-    </table>
-    <p v-if="!isLoading" class="text-center">
-        <a href="services/getHolidaySummary.php?format=csv" class="btn">Download Report</a>
-    </p>
+    <section v-if="!isLoading" class="container">
+        <div class="filters">
+            <div class="projectFilter">
+                <span>Project</span>
+                <div>
+                    <input class="autocompleteSearchInput" type="text" v-model="searchProject" placeholder="Filter per project" @focus="showOptions" @keyup="filterProject" @focusout="hideOptions" @keyup.13="onSelectProject(activeProject)" @keyup.38="prevProject" @keyup.40="nextProject" />
+                    <ul :class="{ 'hidden': !autocompleteIsActive, 'autocomplete': true}" id="projectsDropdown">
+                        <li v-for="(project, index) in projectsList" class="autocompleteItem" v-on:click="onSelectProject(index)">
+                            <button :class="{ 'active': index == activeProject, 'autocompleteItemBtn': true}">{{ project.name }}</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <table class="report">
+            <thead slot="head">
+                <th>User</th>
+                <th>Area</th>
+                <th>Hours/day</th>
+                <th>Available (days)</th>
+                <th>Available (hours)</th>
+                <th>Pending (hours)</th>
+                <th>Planned (hours)</th>
+                <th>% planned</th>
+                <th v-for="week in weeks" :key="week">{{week}}</th>
+            </thead>
+            <tbody>
+                <tr v-for="row in displayData" :key="row.user">
+                    <td>{{ row.user }}</td>
+                    <td>{{ row.area }}</td>
+                    <td>{{ row.hoursDay }}</td>
+                    <td>{{ row.availableDays }}</td>
+                    <td>{{ row.availableHours }}</td>
+                    <td>{{ row.pendingHours }}</td>
+                    <td>{{ row.usedHours }}</td>
+                    <td :class="{ 'alert': row.percentage < 50}">{{row.percentage}}</td>
+                    <td v-for="(userWeek, index) in row.holidays" :key="row.user + '-' + index" :class="{ 'highlight': userWeek > 0}">{{userWeek}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="text-center">
+            <a href="services/getHolidaySummary.php?format=csv" class="btn">Download Report</a>
+        </p>
+    </section>
 </div>
 
 <script src='js/holidaySummary.js'></script>
