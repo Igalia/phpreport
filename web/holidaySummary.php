@@ -40,7 +40,7 @@ include_once("include/header.php");
         <div class="loader"></div>
     </div>
     <section v-if="!isLoading" class="container">
-        <div class="filters">
+        <div class="filters submenu">
             <div class="projectFilter">
                 <span>Project</span>
                 <div>

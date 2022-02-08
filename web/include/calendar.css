@@ -47,27 +47,6 @@
     font-weight: bold;
 }
 
-.submenu {
-    font-family: tahoma,arial,helvetica,sans-serif;
-    background-color: #eee;
-    display: flex;
-    padding: 15px;
-}
-
-.submenu a {
-    color: #005fb6;
-    text-decoration: none;
-}
-.submenu a:hover {
-    color: #005fb6;
-    text-decoration: underline;
-}
-
-.submenu li{
-    list-style: none;
-    margin: 0 20px;
-}
-
 .userList {
     display: none;
 }

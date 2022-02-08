@@ -56,8 +56,8 @@
 
 .filters {
     display: flex;
-    margin: 0 auto;
-    width: 90vw;
+    padding: 15px 50px;
+    margin-top: 10px;
 }
 
 .filters > div {
