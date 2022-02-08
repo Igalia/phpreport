@@ -53,3 +53,21 @@
     background-color: #ffe8e8;
     color: #8a2727;
 }
+
+.filters {
+    display: flex;
+    margin: 0 auto;
+    width: 90vw;
+}
+
+.filters > div {
+    display: flex;
+}
+
+.filters span {
+    margin: 10px;
+}
+
+.autocomplete {
+    max-width: 160px;
+}

@@ -38,6 +38,9 @@ var app = new Vue({
             projectUsers: {},
             projectsList: [],
             allProjects: [],
+            autocompleteIsActive: false,
+            searchProject: "",
+            activeProject: 0,
         };
     },
     created() {
@@ -92,6 +95,62 @@ var app = new Vue({
             this.isLoading = false;
             this.weeks = Object.keys(body.weeks);
             this.displayData = body.holidays;
-        }
+            this.rawData = body.holidays;
+            await this.fetchProjects();
+        },
+        // TODO: we should implement the autocomplete as a
+        // reusable Single File Component, but before that we need to improve our
+        // static files bundling.
+        onSelectProject(projectIndex) {
+            if (!this.projectsList[projectIndex]) return;
+            const project = this.projectsList[projectIndex];
+            this.searchProject = project.name;
+            this.autocompleteIsActive = false;
+            this.projectsList = this.allProjects;
+            this.displayData = {};
+            // Diplays only users from the project
+            let users = this.projectUsers[project.id];
+            for (let i = 0; i < users.length; i++) {
+                if (this.rawData[users[i]]) {
+                    this.displayData[users[i]] = this.rawData[users[i]];
+                }
+            }
+        },
+        showOptions() {
+            this.autocompleteIsActive = true;
+        },
+        hideOptions(event) {
+            if (!event.relatedTarget?.classList.contains('autocompleteItemBtn')) {
+                this.autocompleteIsActive = false;
+            }
+            this.activeProject = 0;
+        },
+        prevProject() {
+            if (this.activeProject > 0) {
+                this.activeProject--;
+            } else {
+                this.activeProject = this.projectsList.length - 1;
+            }
+            this.scrollAutocomplete();
+        },
+        nextProject() {
+            if (this.activeProject < this.projectsList.length - 1) {
+                this.activeProject++;
+            } else {
+                this.activeProject = 0;
+            }
+            this.scrollAutocomplete();
+        },
+        scrollAutocomplete() {
+            if (!document.getElementsByClassName('autocompleteItemBtn')[this.activeProject]) return;
+            const elementHeight = document.getElementsByClassName('autocompleteItemBtn')[this.activeProject].offsetHeight;
+            const offSet = document.getElementsByClassName('autocompleteItemBtn')[this.activeProject].offsetTop + elementHeight;
+            const clientHeight = document.getElementById('projectsDropdown').clientHeight;
+            document.getElementById('projectsDropdown').scrollTop = offSet - clientHeight;
+        },
+        filterProject(event) {
+            this.autocompleteIsActive = true;
+            this.projectsList = this.allProjects.filter(project => project.name.toLowerCase().includes(event.target.value.toLowerCase()));
+        },
     }
 })
