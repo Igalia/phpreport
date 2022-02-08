@@ -170,7 +170,7 @@ div#tasks textarea {
     overflow: auto;
     max-height: 200px;
     width: 100%;
-    z-index: 1;
+    z-index: 2;
 }
 
 .autocomplete.hidden {
@@ -225,4 +225,25 @@ div#tasks textarea {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.submenu {
+    font-family: tahoma,arial,helvetica,sans-serif;
+    background-color: #eee;
+    display: flex;
+    padding: 15px;
+}
+
+.submenu a {
+    color: #005fb6;
+    text-decoration: none;
+}
+.submenu a:hover {
+    color: #005fb6;
+    text-decoration: underline;
+}
+
+.submenu > li{
+    list-style: none;
+    margin: 0 20px;
 }
