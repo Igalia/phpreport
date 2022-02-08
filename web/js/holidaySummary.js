@@ -79,8 +79,7 @@ var app = new Vue({
             this.allProjects = parsedProjects;
         },
         async fetchSummary() {
-            let url = `services/getHolidaySummary.php`;
-
+            let url = 'services/getHolidaySummary.php';
             const res = await fetch(url, {
                 method: 'GET',
                 mode: 'same-origin',
