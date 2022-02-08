@@ -46,6 +46,11 @@ var app = new Vue({
     created() {
         this.fetchSummary();
     },
+    computed: {
+        downloadUrl() {
+            return `services/getHolidaySummary.php?format=csv&users=${Object.keys(this.displayData).join(",")}`;
+        },
+    },
     methods: {
         async fetchProjectUsers(projectId) {
             let url = `services/getProjectUsersService.php?pid=${projectId}`;

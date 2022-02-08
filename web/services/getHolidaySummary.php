@@ -27,6 +27,7 @@ require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 
 $csvExport = array_key_exists("format", $_GET) && $_GET["format"] == "csv";
 $year = $_GET["year"] ?? NULL;
+$users = $_GET["users"] ?? NULL;
 
 $loginManager = new \LoginManager();
 
@@ -47,6 +48,8 @@ if (!$csvExport) {
     fputcsv($fp, array('Report generated at', $today->format('Y-m-d H:i:s e')), ',');
     fputcsv($fp, array(''), ',');
 
+    if (isset($users))
+        $users = explode(",", $users);
     $weeksLine = array_merge(
         array(
             'User',
@@ -63,6 +66,9 @@ if (!$csvExport) {
 
     fputcsv($fp, $weeksLine, ',');
     foreach ($usersAndWeeks["holidays"] as $line) {
+        if ($users && !in_array($line["user"], $users)) {
+            continue;
+        }
         if (count($line["holidays"]) == 0) {
             $line["holidays"] = array_fill(0, count($usersAndWeeks["weeks"]), 0);
         }
