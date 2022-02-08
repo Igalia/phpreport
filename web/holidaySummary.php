@@ -80,7 +80,7 @@ include_once("include/header.php");
             </tbody>
         </table>
         <p class="text-center">
-            <a href="services/getHolidaySummary.php?format=csv" class="btn">Download Report</a>
+            <a :href="downloadUrl" class="btn">Download Report</a>
         </p>
     </section>
 </div>
