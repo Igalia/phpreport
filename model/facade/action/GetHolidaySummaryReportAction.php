@@ -19,8 +19,11 @@
  */
 
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetHolidayHoursBaseAction.php');
+include_once(PHPREPORT_ROOT . '/model/facade/AdminFacade.php');
+include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 
 use Phpreport\Web\services\HolidayService;
+use Phpreport\Util\DateOperations;
 
 class GetHolidaySummaryReportAction extends GetHolidayHoursBaseAction
 {
@@ -53,7 +56,7 @@ class GetHolidaySummaryReportAction extends GetHolidayHoursBaseAction
         );
         $validJourney = array_filter(
             $journeyHistories,
-            fn ($history) => $history->dateBelongsToJourney(date_create())
+            fn ($history) => $history->dateBelongsToHistory(date_create())
         );
         $validJourney = array_pop($validJourney);
         $validJourney = $validJourney ? $validJourney->getJourney() : 0;
@@ -61,8 +64,19 @@ class GetHolidaySummaryReportAction extends GetHolidayHoursBaseAction
         if (count($leaves) == 0) {
             $leaves = $this->weeks;
         }
+        $areas = \UsersFacade::GetUserAreaHistories($this->user->getLogin());
+        $currentArea = array_filter(
+            $areas,
+            fn ($area) => $area->dateBelongsToHistory(date_create())
+        );
+        $currentArea = array_pop($currentArea);
+        if ($currentArea) {
+            $currentArea = AdminFacade::GetAreaById($currentArea->getAreaId());
+            $currentArea = $currentArea->getName();
+        }
         return [
             'user' => $this->user->getLogin(),
+            'area' => $currentArea ?? '',
             'availableHours' => round($summary['availableHours'][$this->user->getLogin()], 2),
             'availableDays' => HolidayService::formatHours($summary['availableHours'][$this->user->getLogin()], $validJourney, 1),
             'pendingHours' => round($summary['pendingHours'][$this->user->getLogin()], 2),

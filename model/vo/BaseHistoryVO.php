@@ -40,52 +40,59 @@
  */
 abstract class BaseHistoryVO
 {
-    /**#@+
-     *  @ignore
-     */
     protected $id = NULL;
     protected $userId = NULL;
     protected $initDate = NULL;
     protected $endDate = NULL;
 
-    public function setId($id) {
+    public function setId($id)
+    {
         if (is_null($id))
-        $this->id = $id;
-    else
+            $this->id = $id;
+        else
             $this->id = (int) $id;
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function setUserId($userId) {
+    public function setUserId($userId)
+    {
         if (is_null($userId))
-        $this->userId = $userId;
-    else
+            $this->userId = $userId;
+        else
             $this->userId = (int) $userId;
     }
 
-    public function getUserId() {
+    public function getUserId()
+    {
         return $this->userId;
     }
 
-    public function setInitDate(DateTime $initDate = NULL) {
+    public function setInitDate(DateTime $initDate = NULL)
+    {
         $this->initDate = $initDate;
     }
 
-    public function getInitDate() {
+    public function getInitDate()
+    {
         return $this->initDate;
     }
 
-    public function setEndDate(DateTime $endDate = NULL) {
+    public function setEndDate(DateTime $endDate = NULL)
+    {
         $this->endDate = $endDate;
     }
 
-    public function getEndDate() {
+    public function getEndDate()
+    {
         return $this->endDate;
     }
 
-    /**#@-*/
-
+    public function dateBelongsToHistory(DateTime $date): bool
+    {
+        return $date >= $this->getInitDate() && $date <= $this->getEndDate();
+    }
 }

@@ -24,7 +24,7 @@ class JourneyHistoryVOTest extends TestCase
         $date = date_create("2020-01-01");
         $this->assertEquals(
             false,
-            $this->instance->dateBelongsToJourney($date)
+            $this->instance->dateBelongsToHistory($date)
         );
     }
 
@@ -33,7 +33,7 @@ class JourneyHistoryVOTest extends TestCase
         $date = date_create("2021-05-01");
         $this->assertEquals(
             true,
-            $this->instance->dateBelongsToJourney($date)
+            $this->instance->dateBelongsToHistory($date)
         );
     }
 
@@ -42,7 +42,7 @@ class JourneyHistoryVOTest extends TestCase
         $date = date_create("2021-01-01");
         $this->assertEquals(
             true,
-            $this->instance->dateBelongsToJourney($date)
+            $this->instance->dateBelongsToHistory($date)
         );
     }
 
@@ -51,7 +51,7 @@ class JourneyHistoryVOTest extends TestCase
         $date = date_create("2021-06-01");
         $this->assertEquals(
             true,
-            $this->instance->dateBelongsToJourney($date)
+            $this->instance->dateBelongsToHistory($date)
         );
     }
 
@@ -60,7 +60,7 @@ class JourneyHistoryVOTest extends TestCase
         $date = date_create("2021-07-01");
         $this->assertEquals(
             false,
-            $this->instance->dateBelongsToJourney($date)
+            $this->instance->dateBelongsToHistory($date)
         );
     }
 }

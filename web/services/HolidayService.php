@@ -195,7 +195,9 @@ class HolidayService
     static function mapHalfLeaves($dates, array $journeyHistories): array
     {
         foreach ($dates as $day => $duration) {
-            $validJourney = array_filter($journeyHistories, fn ($history) => $history->dateBelongsToJourney(date_create($day)));
+            $validJourney = array_filter($journeyHistories, fn ($history) => $history->dateBelongsToHistory(
+                date_create($day)
+            ));
             if (count($validJourney) == 0) continue;
             $validJourney = array_pop($validJourney);
             if (($validJourney->getJourney() * 60) > ($duration['end'] - $duration['init'])) {
@@ -258,7 +260,9 @@ class HolidayService
             if ($this->isWeekend($day)) continue;
 
             $currentDay = date_create($day);
-            $validJourney = array_filter($journeyHistories, fn ($history) => $history->dateBelongsToJourney($currentDay));
+            $validJourney = array_filter($journeyHistories, fn ($history) =>  $history->dateBelongsToHistory(
+                $currentDay
+            ));
             if (count($validJourney) != 1) {
                 $failed[] = $day;
                 continue;
@@ -352,10 +356,13 @@ class HolidayService
         $init = date_create($year . "-01-01");
         $end = date_create($year . "-12-31");
 
-        $users = \UsersFacade::GetAllActiveUsers();
+        $users = \UsersFacade::GetAllActiveUsers($filterEmployees = true);
         $weeks = $this::getWeeksFromYear($year);
         $holidays = [];
         for ($i = 0; $i < count($users); $i++) {
+            if (!isset($users[$i]) || !$users[$i]) {
+                continue;
+            };
             $holidays[$users[$i]->getLogin()] = \UsersFacade::GetHolidaySummaryReport(
                 $init,
                 $end,

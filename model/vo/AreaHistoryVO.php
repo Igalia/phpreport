@@ -43,23 +43,18 @@ include_once(PHPREPORT_ROOT . '/model/vo/BaseHistoryVO.php');
  */
 class AreaHistoryVO extends BaseHistoryVO
 {
-
-    /**#@+
-     *  @ignore
-     */
     protected $areaId = NULL;
 
-    public function setAreaId($areaId) {
+    public function setAreaId($areaId)
+    {
         if (is_null($areaId))
-        $this->areaId = $areaId;
-    else
+            $this->areaId = $areaId;
+        else
             $this->areaId = (int) $areaId;
     }
 
-    public function getAreaId() {
+    public function getAreaId()
+    {
         return $this->areaId;
     }
-
-    /**#@-*/
-
 }

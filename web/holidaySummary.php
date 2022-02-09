@@ -36,9 +36,13 @@ include_once("include/header.php");
 <script src="vuejs/v-calendar.2.3.2.min.js"></script>
 
 <div id="holidaySummaryReport">
-    <table class="report">
+    <div v-if="isLoading" class="loaderContainer">
+        <div class="loader"></div>
+    </div>
+    <table v-if="!isLoading" class="report">
         <thead slot="head">
             <th>User</th>
+            <th>Area</th>
             <th>Hours/day</th>
             <th>Available (days)</th>
             <th>Available (hours)</th>
@@ -50,17 +54,18 @@ include_once("include/header.php");
         <tbody>
             <tr v-for="row in displayData" :key="row.id">
                 <td>{{ row.user }}</td>
-                <td>{{row.hoursDay}}</td>
-                <td>{{row.availableDays}}</td>
-                <td>{{row.availableHours}}</td>
-                <td>{{row.pendingHours}}</td>
-                <td>{{row.usedHours}}</td>
+                <td>{{ row.area }}</td>
+                <td>{{ row.hoursDay }}</td>
+                <td>{{ row.availableDays }}</td>
+                <td>{{ row.availableHours }}</td>
+                <td>{{ row.pendingHours }}</td>
+                <td>{{ row.usedHours }}</td>
                 <td :class="{ 'alert': row.percentage < 50}">{{row.percentage}}</td>
                 <td v-for="userWeek in row.holidays" :key="userWeek" :class="{ 'highlight': userWeek > 0}">{{userWeek}}</td>
             </tr>
         </tbody>
     </table>
-    <p class="text-center">
+    <p v-if="!isLoading" class="text-center">
         <a href="services/getHolidaySummary.php?format=csv" class="btn">Download Report</a>
     </p>
 </div>

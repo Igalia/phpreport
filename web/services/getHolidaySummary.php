@@ -47,7 +47,19 @@ if (!$csvExport) {
     fputcsv($fp, array('Report generated at', $today->format('Y-m-d H:i:s e')), ',');
     fputcsv($fp, array(''), ',');
 
-    $weeksLine = array_merge(array('User', 'Hours/day', 'Holidays(days)', 'Holidays(hours)', 'Pending (hours)', 'Planned (hours)', '% planned'), array_keys($usersAndWeeks["weeks"]));
+    $weeksLine = array_merge(
+        array(
+            'User',
+            'Area',
+            'Hours/day',
+            'Available(days)',
+            'Available(hours)',
+            'Pending (hours)',
+            'Planned (hours)',
+            '% planned'
+        ),
+        array_keys($usersAndWeeks["weeks"])
+    );
 
     fputcsv($fp, $weeksLine, ',');
     foreach ($usersAndWeeks["holidays"] as $line) {
@@ -59,6 +71,7 @@ if (!$csvExport) {
             array_merge(
                 array(
                     $line["user"],
+                    $line["area"],
                     $line["hoursDay"],
                     $line["availableDays"],
                     $line["availableHours"],
