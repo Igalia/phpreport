@@ -97,12 +97,19 @@ abstract class BaseDAO {
 
     /** Value object constructor.
      *
-     * This is the function that DAOs will use to create new value objects with data retrieved from database.
+     * This is the function that DAOs will use to create new value objects with data retrieved
+     * from database.
+     *
+     * A default implementation is provided so PDO-based DAOs don't have to add a placeholder
+     * function, but it is expected to be overriden in DAOs that don't use the new API yet.
      *
      * @param array $row an array with the values from a row.
      * @return mixed a value object with its properties set to the values from <var>$row</var>.
      */
-    abstract protected function setValues($row);
+    protected function setValues($row)
+    {
+        error_log("Placeholder BaseDAO::setValues() called");
+    }
 
     /** SQL retrieving data sentences performer.
      *

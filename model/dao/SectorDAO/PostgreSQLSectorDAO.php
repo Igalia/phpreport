@@ -54,15 +54,6 @@ class PostgreSQLSectorDAO extends SectorDAO{
         parent::__construct();
     }
 
-    /**
-     * This method is declared to fulfill this class as non-abstract, but it should not be used.
-     * PDO::FETCH_CLASS now takes care of transforming DB rows into VO objects.
-     */
-    protected function setValues($row)
-    {
-        error_log("Unused SectorDAO::setValues() called");
-    }
-
     /** Sector retriever by id for PostgreSQL.
      *
      * This function retrieves the row from Sector table with the id

@@ -116,9 +116,7 @@
 
             }
 
-
-
-        if (!$string)
+        if (!isset($string))
         {
 
             $string = "<return service='createAreas'><ok>Operation Success!</ok><areas>";
