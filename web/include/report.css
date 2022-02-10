@@ -68,6 +68,6 @@
     margin: 10px;
 }
 
-.autocomplete {
-    max-width: 160px;
+.projectFilter > div, .autocomplete {
+    width: 200px;
 }
