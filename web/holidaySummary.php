@@ -44,7 +44,7 @@ include_once("include/header.php");
             <div class="projectFilter">
                 <span>Project</span>
                 <div>
-                    <input class="autocompleteSearchInput" type="text" v-model="searchProject" placeholder="Filter per project" @focus="showOptions" @keyup="filterProject" @focusout="hideOptions" @keyup.13="onSelectProject(activeProject)" @keyup.38="prevProject" @keyup.40="nextProject" />
+                    <input class="autocompleteSearchInput" type="text" v-model="searchProject" :disabled="isLoadingProjects" :placeholder="isLoadingProjects ? 'Loading projects': 'Filter by project'" @focus="showOptions" @keyup="filterProject" @focusout="hideOptions" @keyup.13="onSelectProject(activeProject)" @keyup.38="prevProject" @keyup.40="nextProject" />
                     <ul :class="{ 'hidden': !autocompleteIsActive, 'autocomplete': true}" id="projectsDropdown">
                         <li v-for="(project, index) in projectsList" class="autocompleteItem" v-on:click="onSelectProject(index)">
                             <button :class="{ 'active': index == activeProject, 'autocompleteItemBtn': true}">{{ project.name }}</button>
