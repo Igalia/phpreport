@@ -35,6 +35,7 @@ var app = new Vue({
             weeks: {},
             displayData: {},
             isLoading: true,
+            isLoadingProjects: true,
             projectUsers: {},
             projectsList: [],
             allProjects: [],
@@ -80,6 +81,7 @@ var app = new Vue({
                 });
                 await this.fetchProjectUsers(parsedProjects[i].id);
             }
+            this.isLoadingProjects = false;
             this.projectsList = parsedProjects;
             this.allProjects = parsedProjects;
         },
