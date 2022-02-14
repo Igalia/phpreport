@@ -55,8 +55,7 @@ if (!$csvExport) {
             'User',
             'Area',
             'Hours/day',
-            'Available(days)',
-            'Available(hours)',
+            'Available (hours)',
             'Pending (hours)',
             'Planned (hours)',
             '% planned'
@@ -79,7 +78,6 @@ if (!$csvExport) {
                     $line["user"],
                     $line["area"],
                     $line["hoursDay"],
-                    $line["availableDays"],
                     $line["availableHours"],
                     $line["pendingHours"],
                     $line["usedHours"],

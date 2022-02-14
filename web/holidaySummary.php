@@ -58,7 +58,6 @@ include_once("include/header.php");
                 <th>User</th>
                 <th>Area</th>
                 <th>Hours/day</th>
-                <th>Available (days)</th>
                 <th>Available (hours)</th>
                 <th>Pending (hours)</th>
                 <th>Planned (hours)</th>
@@ -70,7 +69,6 @@ include_once("include/header.php");
                     <td>{{ row.user }}</td>
                     <td>{{ row.area }}</td>
                     <td>{{ row.hoursDay }}</td>
-                    <td>{{ row.availableDays }}</td>
                     <td>{{ row.availableHours }}</td>
                     <td>{{ row.pendingHours }}</td>
                     <td>{{ row.usedHours }}</td>
