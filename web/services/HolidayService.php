@@ -359,18 +359,16 @@ class HolidayService
         $users = \UsersFacade::GetAllActiveUsers($filterEmployees = true);
         $weeks = $this::getWeeksFromYear($year);
         $holidays = [];
-        for ($i = 0; $i < count($users); $i++) {
-            if (!isset($users[$i]) || !$users[$i]) {
-                continue;
-            };
-            $holidays[$users[$i]->getLogin()] = \UsersFacade::GetHolidaySummaryReport(
+        foreach ($users as &$user) {
+            $holidays[$user->getLogin()] = \UsersFacade::GetHolidaySummaryReport(
                 $init,
                 $end,
-                $users[$i],
+                $user,
                 $end,
                 $weeks
             );
         }
+        unset($user);
         asort($holidays);
         return [
             "holidays" => $holidays,
