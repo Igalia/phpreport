@@ -47,6 +47,7 @@ $customerId = $_GET['customerId'] ?? NULL;
 $cname = $_GET['cname'] ?? NULL;
 $active = $_GET['active'] ?? false;
 $returnExtendedInfo = $_GET['returnExtendedInfo'] ?? false;
+$users =  $_GET['users'] ?? false;
 
 if (isset($_GET['filterStartDate'])) {
     $filterStartDate = DateTime::createFromFormat("Y-m-d", $_GET['filterStartDate']);
@@ -99,6 +100,19 @@ do {
             $string = $string . "<end format='Y-m-d'>{$project->getEnd()->format("Y-m-d")}</end>";
         } else {
             $string = $string . "<end/>";
+        }
+
+        if ($users) {
+            $projectUsers = ProjectsFacade::GetProjectUsers($project->getId());
+            $string = $string . "<users>";
+            foreach((array) $projectUsers as $retrievedUser)
+            {
+                $string = $string . "<user><id>{$retrievedUser->getId()}</id><login>{$retrievedUser->getLogin()}</login><userGroups>";
+                foreach ((array) $retrievedUser->getGroups() as $group)
+                    $string = $string . "<{$group->getName()}>true</{$group->getName()}>";
+                $string = $string . "</userGroups></user>";
+            }
+            $string = $string . "</users>";
         }
 
         if ($returnExtendedInfo) {

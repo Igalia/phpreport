@@ -53,21 +53,8 @@ var app = new Vue({
         },
     },
     methods: {
-        async fetchProjectUsers(projectId) {
-            let url = `services/getProjectUsersService.php?pid=${projectId}`;
-            const res = await fetch(url, xmlHeaders);
-            const body = await res.text();
-            parser = new DOMParser();
-            xmlDoc = parser.parseFromString(body, "text/xml");
-            const users = xmlDoc.getElementsByTagName("user");
-            let projectUsers = [];
-            for (var i = 0; i < users.length; i++) {
-                projectUsers.push(users[i].getElementsByTagName("login")[0].innerHTML);
-            }
-            this.projectUsers[projectId] = projectUsers;
-        },
         async fetchProjects() {
-            let url = 'services/getProjectsService.php?active=true';
+            let url = 'services/getProjectsService.php?active=true&users=true';
             const res = await fetch(url, xmlHeaders);
             const body = await res.text();
             parser = new DOMParser();
@@ -79,7 +66,12 @@ var app = new Vue({
                     id: projects[i].getElementsByTagName("id")[0].innerHTML,
                     name: projects[i].getElementsByTagName("description")[0].innerHTML,
                 });
-                await this.fetchProjectUsers(parsedProjects[i].id);
+                const users = projects[i].getElementsByTagName("user");
+                let projectUsers = [];
+                for (var j = 0; j < users.length; j++) {
+                    projectUsers.push(users[j].getElementsByTagName("login")[0].innerHTML);
+                }
+                this.projectUsers[parsedProjects[i].id] = projectUsers;
             }
             this.isLoadingProjects = false;
             this.projectsList = parsedProjects;
