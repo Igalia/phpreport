@@ -148,7 +148,13 @@ var app = new Vue({
         },
         filterProject(event) {
             this.autocompleteIsActive = true;
-            this.projectsList = this.allProjects.filter(project => project.name.toLowerCase().includes(event.target.value.toLowerCase()));
+            if (!event.target.value) {
+                // reset list of users when no project is selected
+                this.displayData = this.rawData;
+                this.projectList = this.allProjects;
+            } else {
+                this.projectsList = this.allProjects.filter(project => project.name.toLowerCase().includes(event.target.value.toLowerCase()));
+            }
         },
     }
 })
