@@ -64,7 +64,7 @@ var app = new Vue({
             for (var i = 0; i < projects.length; i++) {
                 parsedProjects.push({
                     id: projects[i].getElementsByTagName("id")[0].innerHTML,
-                    name: projects[i].getElementsByTagName("description")[0].innerHTML,
+                    name: projects[i].getElementsByTagName("fullDescription")[0].innerHTML,
                 });
                 const users = projects[i].getElementsByTagName("user");
                 let projectUsers = [];
