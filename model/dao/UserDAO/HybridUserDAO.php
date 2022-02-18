@@ -252,60 +252,6 @@ class HybridUserDAO extends UserDAO{
 
     }
 
-    /** Projects retriever by id (relationship Works) for LDAP/PostgreSQL Hybrid.
-     *
-     * This function retrieves the rows from Project table that are assigned through relationship Works to the User with
-     * the id <var>$userId</var> and creates a {@link ProjectVO} with data from each row.
-     *
-     * @param int $userId the id of the User whose Projects we want to retrieve.
-     * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see WorksDAO, ProjectDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getProjectsWorks($userId) {
-
-        $dao = DAOFactory::getWorksDAO();
-        return $dao->getByUserId($userId);
-
-    }
-
-    /** Works relationship entry creator by User id and Project id for LDAP/PostgreSQL Hybrid.
-     *
-     * This function creates a new entry in the table Works (that represents that relationship between Users and Projects)
-     * with the User id <var>$userId</var> and the Project id <var>$projectId</var>.
-     *
-     * @param int $userId the id of the User we want to relate to the Project.
-     * @param int $projectId the id of the Project we want to relate to the User.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @see WorksDAO, ProjectDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function addProjectWorks($userId, $projectId) {
-
-        $dao = DAOFactory::getWorksDAO();
-        return $dao->create($userId, $projectId);
-
-    }
-
-    /** Works relationship entry deleter by User id and Project id for LDAP/PostgreSQL Hybrid.
-     *
-     * This function deletes a entry in the table Works (that represents that relationship between Users and Projects)
-     * with the User id <var>$userId</var> and the Project id <var>$projectId</var>.
-     *
-     * @param int $userId the id of the User whose relation to the Project we want to delete.
-     * @param int $projectId the id of the Project whose relation to the User we want to delete.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @see WorksDAO, ProjectDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function removeProjectWorks($userId, $projectId) {
-
-        $dao = DAOFactory::getWorksDAO();
-        return $dao->delete($userId, $projectId);
-
-    }
-
     /** User Groups retriever by id for LDAP/PostgreSQL Hybrid.
      *
      * This function retrieves the rows from User Group table that are assigned through relationship Belongs to the User with

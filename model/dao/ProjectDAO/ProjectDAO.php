@@ -113,45 +113,6 @@ abstract class ProjectDAO extends BaseDAO{
      */
     public abstract function removeUserProject($projectId, $userId);
 
-    /** Users retriever by Project id (relationship Works).
-     *
-     * This function retrieves the rows from User table that are assigned through relationship Works to the Project with
-     * the id <var>$projectId</var> and creates a {@link UserVO} with data from each row.
-     *
-     * @param int $projectId the id of the Project whose Users we want to retrieve.
-     * @return array an array with value objects {@link UserVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see WorksDAO, UserDAO
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function getUsersWorks($projectId);
-
-    /** Works relationship entry creator by Project id and User id.
-     *
-     * This function creates a new entry in the table Works (that represents that relationship between Projects and Users)
-     * with the Project id <var>$projectId</var> and the User id <var>$userId</var>.
-     *
-     * @param int $projectId the id of the Project we want to relate to the User.
-     * @param int $userId the id of the User we want to relate to the Project.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @see WorksDAO, UserDAO
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function addUserWorks($projectId, $userId);
-
-    /** Works relationship entry deleter by Project id and User id.
-     *
-     * This function deletes a entry in the table Works (that represents that relationship between Projects and Users)
-     * with the Project id <var>$projectId</var> and the User id <var>$userId</var>.
-     *
-     * @param int $projectId the id of the Project whose relation to the User we want to delete.
-     * @param int $userId the id of the User whose relation to the Project we want to delete.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @see WorksDAO, UserDAO
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function removeUserWorks($projectId, $userId);
-
     /** Tasks retriever by Project id.
      *
      * This function retrieves the rows from Task table that are assigned to the Project with

@@ -400,26 +400,6 @@ class DAOFactory {
     return new $className;
   }
 
-    /** Works DAO creator
-     *
-     * This function returns a new instance of {@link WorksDAO}.
-     *
-     * @return WorksDAO a new instance of {@link WorksDAO}.
-     * @throws {@link UnknownParameterException}
-     */
-  public static function getWorksDAO() {
-    try {
-      $className = ConfigurationParametersManager::getParameter('WORKS_DAO');
-    }
-    catch(UnknownParameterException $e) {
-      $backend = ConfigurationParametersManager::getParameter('DAO_BACKEND');
-      $className = $backend . 'WorksDAO';
-    }
-
-    include_once(PHPREPORT_ROOT . '/model/dao/WorksDAO/' . $className . ".php");
-    return new $className;
-  }
-
     /** Config DAO creator
      *
      * This function returns a new instance of {@link ConfigDAO}.
