@@ -36,7 +36,6 @@ include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
 include_once(PHPREPORT_ROOT . '/model/vo/CustomProjectVO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/ProjectDAO/ProjectDAO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/ProjectUserDAO/PostgreSQLProjectUserDAO.php');
-include_once(PHPREPORT_ROOT . '/model/dao/WorksDAO/PostgreSQLWorksDAO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/TaskDAO/PostgreSQLTaskDAO.php');
 
 /** DAO for Projects in PostgreSQL
@@ -295,60 +294,6 @@ class PostgreSQLProjectDAO extends ProjectDAO {
     public function removeUserProject($projectId, $userId) {
 
         $dao = DAOFactory::getProjectUserDAO();
-        return $dao->delete($userId, $projectId);
-
-    }
-
-    /** Users retriever by Project id (relationship Works) for PostgreSQL.
-     *
-     * This function retrieves the rows from User table that are assigned through relationship Works to the Project with
-     * the id <var>$projectId</var> and creates an {@link UserVO} with data from each row.
-     *
-     * @param int $projectId the id of the Project whose Users we want to retrieve.
-     * @return array an array with value objects {@link UserVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see WorksDAO, UserDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getUsersWorks($projectId) {
-
-        $dao = DAOFactory::getWorksDAO();
-        return $dao->getByProjectId($projectId);
-
-    }
-
-    /** Works relationship entry creator by Project id and User id for PostgreSQL.
-     *
-     * This function creates a new entry in the table Works (that represents that relationship between Projects and Users)
-     * with the Project id <var>$projectId</var> and the User id <var>$userId</var>.
-     *
-     * @param int $projectId the id of the Project we want to relate to the User.
-     * @param int $userId the id of the User we want to relate to the Project.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @see WorksDAO, UserDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function addUserWorks($projectId, $userId) {
-
-        $dao = DAOFactory::getWorksDAO();
-        return $dao->create($userId, $projectId);
-
-    }
-
-    /** Works relationship entry deleter by Project id and User id for PostgreSQL.
-     *
-     * This function deletes an entry in the table Works (that represents that relationship between Projects and Users)
-     * with the Project id <var>$projectId</var> and the User id <var>$userId</var>.
-     *
-     * @param int $projectId the id of the Project whose relation to the User we want to delete.
-     * @param int $userId the id of the User whose relation to the Project we want to delete.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @see WorksDAO, UserDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function removeUserWorks($projectId, $userId) {
-
-        $dao = DAOFactory::getWorksDAO();
         return $dao->delete($userId, $projectId);
 
     }
