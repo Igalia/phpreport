@@ -95,33 +95,16 @@ var templateRecord = new Ext.data.Record.create([
 ]);
 
 /* Available values and display names for the `taskType` field in tasks */
-var taskTypeStore = new Ext.data.ArrayStore({
+var taskTypeStore = new Ext.data.JsonStore({
     fields: [
         'value',
         'displayText'
     ],
-    data: [
-        ['administration', 'Administration'],
-        ['analysis', 'Analysis'],
-        ['community', 'Community'],
-        ['coordination', 'Coordination'],
-        ['demonstration', 'Demonstration'],
-        ['deployment', 'Deployment'],
-        ['design', 'Design'],
-        ['documentation', 'Documentation'],
-        ['environment', 'Environment'],
-        ['implementation', 'Implementation'],
-        ['maintenance', 'Maintenance'],
-        ['publication', 'Publication'],
-        ['requirements', 'Requirements'],
-        ['sales', 'Sales'],
-        ['sys_maintenance', 'Systems maintenance'],
-        ['teaching', 'Teaching'],
-        ['technology', 'Technology'],
-        ['test', 'Test'],
-        ['training', 'Training'],
-        ['traveling', 'Traveling'],
-    ],
+    root: 'records',
+    idProperty: 'value',
+    successProperty: 'success',
+    url: 'services/getTaskTypes.php',
+    autoLoad: 'true',
 });
 
 /* Variable to store if all tasks has loaded completely for a day */
