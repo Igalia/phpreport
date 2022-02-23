@@ -93,6 +93,37 @@ var templateRecord = new Ext.data.Record.create([
     {name:'initTime'},
     {name:'endTime'}
 ]);
+
+/* Available values and display names for the `taskType` field in tasks */
+var taskTypeStore = new Ext.data.ArrayStore({
+    fields: [
+        'value',
+        'displayText'
+    ],
+    data: [
+        ['administration', 'Administration'],
+        ['analysis', 'Analysis'],
+        ['community', 'Community'],
+        ['coordination', 'Coordination'],
+        ['demonstration', 'Demonstration'],
+        ['deployment', 'Deployment'],
+        ['design', 'Design'],
+        ['documentation', 'Documentation'],
+        ['environment', 'Environment'],
+        ['implementation', 'Implementation'],
+        ['maintenance', 'Maintenance'],
+        ['publication', 'Publication'],
+        ['requirements', 'Requirements'],
+        ['sales', 'Sales'],
+        ['sys_maintenance', 'Systems maintenance'],
+        ['teaching', 'Teaching'],
+        ['technology', 'Technology'],
+        ['test', 'Test'],
+        ['training', 'Training'],
+        ['traveling', 'Traveling'],
+    ],
+});
+
 /* Variable to store if all tasks has loaded completely for a day */
 var loaded = false;
 
@@ -532,34 +563,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 typeAhead: true,
                 triggerAction: 'all',
                 forceSelection: true,
-                store: new Ext.data.ArrayStore({
-                    fields: [
-                        'value',
-                        'displayText'
-                    ],
-                    data: [
-                        ['administration', 'Administration'],
-                        ['analysis', 'Analysis'],
-                        ['community', 'Community'],
-                        ['coordination', 'Coordination'],
-                        ['demonstration', 'Demonstration'],
-                        ['deployment', 'Deployment'],
-                        ['design', 'Design'],
-                        ['documentation', 'Documentation'],
-                        ['environment', 'Environment'],
-                        ['implementation', 'Implementation'],
-                        ['maintenance', 'Maintenance'],
-                        ['publication', 'Publication'],
-                        ['requirements', 'Requirements'],
-                        ['sales', 'Sales'],
-                        ['sys_maintenance', 'Systems maintenance'],
-                        ['teaching', 'Teaching'],
-                        ['technology', 'Technology'],
-                        ['test', 'Test'],
-                        ['training', 'Training'],
-                        ['traveling', 'Traveling'],
-                    ],
-                }),
+                store: taskTypeStore,
                 listeners: {
                     'select': function () {
                         this.parent.taskRecord.set('ttype',this.getValue());
