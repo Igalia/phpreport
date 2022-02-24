@@ -39,7 +39,7 @@ class GetHolidaySummaryReportAction extends GetHolidayHoursBaseAction
     protected function doExecute()
     {
         $summary = $this->getHoursSummary($this->referenceDate);
-
+        $today = new DateTime(date('Y-m-d'));
         $journeyHistories = \UsersFacade::GetUserJourneyHistories($this->user->getLogin());
         $startDate = array_map(fn ($history) => $history->getInitDate(), $journeyHistories);
         $startDate = $startDate && min($startDate)->format('Y') == date("Y") ? date_format(min($startDate), 'Y-m-d') : '';
@@ -53,6 +53,12 @@ class GetHolidaySummaryReportAction extends GetHolidayHoursBaseAction
             $this->end,
             $this->user,
             $this->end
+        );
+        $summaryForToday = \UsersFacade::GetHolidayHoursSummary(
+            $this->init,
+            $this->end,
+            $this->user,
+            $today
         );
         $validJourney = array_filter(
             $journeyHistories,
@@ -78,8 +84,9 @@ class GetHolidaySummaryReportAction extends GetHolidayHoursBaseAction
             'user' => $this->user->getLogin(),
             'area' => $currentArea ?? '',
             'availableHours' => round($summary['availableHours'][$this->user->getLogin()], 2),
+            'usedHours' => round($summaryForToday['usedHours'][$this->user->getLogin()], 2),
             'pendingHours' => round($summary['pendingHours'][$this->user->getLogin()], 2),
-            'usedHours' => round($summary['usedHours'][$this->user->getLogin()], 2),
+            'plannedHours' => round($summary['usedHours'][$this->user->getLogin()], 2),
             'percentage' =>  $summary['availableHours'][$this->user->getLogin()] ? round(($summary['usedHours'][$this->user->getLogin()] / $summary['availableHours'][$this->user->getLogin()]) * 100, 2) : 0,
             'hoursDay' => $validJourney,
             'holidays' => $leaves,
