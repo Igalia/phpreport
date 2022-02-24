@@ -56,8 +56,9 @@ if (!$csvExport) {
             'Area',
             'Hours/day',
             'Available (hours)',
+            'Used (hours)',
+            'Scheduled (hours)',
             'Pending (hours)',
-            'Planned (hours)',
             '% planned'
         ),
         array_keys($usersAndWeeks["weeks"])
@@ -79,8 +80,9 @@ if (!$csvExport) {
                     $line["area"],
                     $line["hoursDay"],
                     $line["availableHours"],
-                    $line["pendingHours"],
                     $line["usedHours"],
+                    $line["plannedHours"],
+                    $line["pendingHours"],
                     $line["percentage"]
                 ),
                 $line["holidays"]

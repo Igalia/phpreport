@@ -59,8 +59,9 @@ include_once("include/header.php");
                 <th>Area</th>
                 <th>Hours/day</th>
                 <th>Available (hours)</th>
+                <th>Used (hours)</th>
+                <th>Scheduled (hours)</th>
                 <th>Pending (hours)</th>
-                <th>Planned (hours)</th>
                 <th>% planned</th>
                 <th v-for="week in weeks" :key="week">{{week}}</th>
             </thead>
@@ -70,8 +71,9 @@ include_once("include/header.php");
                     <td>{{ row.area }}</td>
                     <td>{{ row.hoursDay }}</td>
                     <td>{{ row.availableHours }}</td>
-                    <td>{{ row.pendingHours }}</td>
                     <td>{{ row.usedHours }}</td>
+                    <td>{{ row.plannedHours }}</td>
+                    <td>{{ row.pendingHours }}</td>
                     <td :class="{ 'alert': row.percentage < 50}">{{row.percentage}}</td>
                     <td v-for="(userWeek, index) in row.holidays" :key="row.user + '-' + index" :class="{ 'highlight': userWeek > 0}">{{userWeek}}</td>
                 </tr>
