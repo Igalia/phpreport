@@ -83,14 +83,11 @@ class PostgreSQLExtraHourDAO extends ExtraHourDAO{
      * @throws {@link SQLQueryErrorException}
      */
     public function getById($extraHourId) {
-        if (!is_numeric($extraHourId))
-            throw new SQLIncorrectTypeException($extraHourId);
-        $sql = "SELECT * FROM extra_hour WHERE id=".$extraHourId;
-        $result = $this->execute($sql);
-
-        if (empty($result))
-            return NULL;
-        return $result[0];
+        $result = $this->runSelectQuery(
+            "SELECT * FROM extra_hour WHERE id=:extraHourId",
+            [':extraHourId' => $extraHourId],
+            'ExtraHourVO');
+        return $result[0] ?? NULL;
     }
 
     /** Extra Hours retriever by User id for PostgreSQL.

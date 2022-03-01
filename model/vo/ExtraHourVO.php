@@ -33,22 +33,25 @@
  *
  *  This class just stores Extra Hour data.
  *
+ *  NOTICE: properties must match column names in the DB, for PDO::FETCH_CLASS
+ *  to work properly.
+ *
  *  @property int $id database internal identifier.
- *  @property int $userId database internal identifier of the associated User.
+ *  @property int $usrid database internal identifier of the associated User.
  *  @property DateTime $date date of the Extra Hour.
  *  @property double $hours number of extra hours.
  */
 class ExtraHourVO {
     protected $id = NULL;
-    protected $userId = NULL;
+    protected $usrid = NULL;
     protected $date = NULL;
     protected $hours = NULL;
     protected $comment = NULL;
 
     public function setId($id) {
         if (is_null($id))
-        $this->id = $id;
-    else
+            $this->id = $id;
+        else
             $this->id = (int) $id;
     }
 
@@ -58,13 +61,13 @@ class ExtraHourVO {
 
     public function setUserId($userId) {
         if (is_null($userId))
-        $this->userId = $userId;
-    else
-            $this->userId = (int) $userId;
+            $this->usrid = $userId;
+        else
+            $this->usrid = (int) $userId;
     }
 
     public function getUserId() {
-        return $this->userId;
+        return $this->usrid;
     }
 
     public function setDate(DateTime $date = NULL) {
@@ -77,8 +80,8 @@ class ExtraHourVO {
 
     public function setHours($hours) {
         if (is_null($hours))
-        $this->hours = $hours;
-    else
+            $this->hours = $hours;
+        else
             $this->hours = (double) $hours;
     }
 
@@ -92,5 +95,23 @@ class ExtraHourVO {
 
     public function getComment() {
         return $this->comment;
+    }
+
+    /* PHP will magically call this function to set the value of a property that
+     * does not exist yet. We can take advantage of this to properly set the
+     * $date property from the string stored in the DB during PDO::FETCH_CLASS.
+     * When PDO::FETCH_CLASS calls `__set('_date', $dateString)`, we will
+     * convert the string into a DateTime object.
+     *
+     * See:
+     *   https://www.php.net/manual/en/language.oop5.overloading.php#object.set
+     *   https://stackoverflow.com/a/69641430
+     */
+    public function __set($property, $value) {
+        if ($property === '_date') {
+            $this->date = date_create($value);
+        } else {
+            $this->$property = $value;
+        }
     }
 }
