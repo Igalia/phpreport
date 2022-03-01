@@ -40,17 +40,6 @@ include_once(PHPREPORT_ROOT . '/model/dao/BaseDAO.php');
  */
 abstract class ExtraHourDAO extends BaseDAO{
 
-    /** Extra Hour DAO constructor.
-     *
-     * This is the base constructor of Extra Hour DAOs, and it just calls its parent's constructor.
-     *
-     * @throws {@link ConnectionErrorException}
-     * @see BaseDAO::__construct()
-     */
-    protected function __construct() {
-    parent::__construct();
-    }
-
     /** Extra Hour retriever by id.
      *
      * This function retrieves the row from Extra Hour table with the id <var>$extraHourId</var> and creates an {@link ExtraHourVO} with its data.
