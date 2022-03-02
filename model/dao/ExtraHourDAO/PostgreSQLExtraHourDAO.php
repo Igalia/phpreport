@@ -103,12 +103,13 @@ class PostgreSQLExtraHourDAO extends ExtraHourDAO{
     public function getLastByUserId($userId, DateTime $nowadays) {
         if (!is_numeric($userId))
             throw new SQLIncorrectTypeException($userId);
-        $sql = "SELECT * FROM extra_hour WHERE usrid=" . $userId . " AND _date <=" . DBPostgres::formatDate($nowadays) . " ORDER BY _date DESC LIMIT 1";
-        $result = $this->execute($sql);
-
-        if (empty($result))
-            return NULL;
-        return $result[0];
+        $result = $this->runSelectQuery(
+            "SELECT * FROM extra_hour " .
+              "WHERE usrid=:userId AND _date <= :nowadays " .
+              "ORDER BY _date DESC LIMIT 1",
+            [':userId' => $userId, ':nowadays' => DBPostgres::formatDate($nowadays)],
+            'ExtraHourVO');
+        return $result[0] ?? NULL;
     }
 
     /** Extra Hours retriever for PostgreSQL.
@@ -121,7 +122,7 @@ class PostgreSQLExtraHourDAO extends ExtraHourDAO{
      */
     public function getAll() {
         $sql = "SELECT * FROM extra_hour ORDER BY id ASC";
-        return $this->execute($sql);
+        return $this->runSelectQuery($sql, [], 'ExtraHourVO');
     }
 
     /** Extra Hour updater for PostgreSQL.
