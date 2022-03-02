@@ -50,18 +50,6 @@ abstract class ExtraHourDAO extends BaseDAO{
      */
     public abstract function getById($extraHourId);
 
-    /** Extra Hours retriever by User id.
-     *
-     * This function retrieves the rows from Extra Hour table that are associated with the User with
-     * the id <var>$userId</var> and creates an {@link ExtraHourVO} with data from each row.
-     *
-     * @param int $userId the id of the User whose Extra Hours we want to retrieve.
-     * @return array an array with value objects {@link ExtraHourVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function getByUserId($userId);
-
     /** Extra Hour last entry retriever by User id and date.
      *
      * This function retrieves the latest row from Extra Hour table that is associated with the User with
