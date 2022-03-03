@@ -334,6 +334,32 @@ Ext.onReady(function(){
             ?>
     ]);
 
+    var userFilterPanel = new Ext.FormPanel({
+        width: 350,
+        labelWidth: 70,
+        frame: true,
+        title: 'User Filter',
+        renderTo: 'content',
+        bodyStyle: 'padding: 5px 5px 0px 5px;',
+        items: [{
+            id: 'userFilter',
+            fieldLabel: 'Filter',
+            name: 'userFilter',
+            xtype: 'combo',
+            autoSelect: false,
+            mode: 'local',
+            store: usersStore,
+            valueField: 'id',
+            displayField: 'login',
+            listeners: {
+                select: function (combo, record) {
+                    usersStore.filter('login', record.data.login);
+                }
+            }
+        }]
+    });
+    userFilterPanel.getComponent('userFilter').focus();
+
     var usersEditor = new editor();
 
     var userGrid = new inlineEditionPanel({
