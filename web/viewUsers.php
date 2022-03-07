@@ -1177,12 +1177,12 @@ Ext.onReady(function(){
         frame: false,
         plain: true,
         items:[
-            hourCostGrid,
             journeyGrid,
             areaGrid,
             cityGrid,
+            hourCostGrid,
             goalGrid
-            ]
+        ]
     });
 
     var historiesPanel = new Ext.Panel({
