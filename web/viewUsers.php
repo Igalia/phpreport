@@ -286,6 +286,9 @@ Ext.onReady(function(){
             direction: 'ASC',
         },
         listeners: {
+            'load': function() {
+                userGrid.getTopToolbar().getComponent('userFilter').focus();
+            },
             'write': function() {
                 App.setAlert(true, "Users Changes Saved");
             },
@@ -375,7 +378,8 @@ Ext.onReady(function(){
         fieldLabel: 'Filter',
         name: 'userFilter',
         xtype: 'combo',
-        autoSelect: false,
+        autoSelect: true,
+        typeAhead: true,
         mode: 'local',
         store: usersStore,
         valueField: 'id',
