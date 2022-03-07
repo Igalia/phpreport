@@ -383,6 +383,8 @@ Ext.onReady(function(){
         listeners: {
             select: function (combo, record) {
                 usersStore.filter('login', record.data.login);
+                // After the store is filtered to one user, the grid will only have one row
+                userGrid.getSelectionModel().selectFirstRow();
             }
         }
     });
