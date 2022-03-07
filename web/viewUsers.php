@@ -399,9 +399,10 @@ Ext.onReady(function(){
                     echo "userGrid.deleteBtn.setDisabled(sm.getCount() < 1);";
         ?>
         historiesPanel.setDisabled(sm.getCount() != 1);
-        if ((sm.getCount() == 1) && (!historiesPanel.collapsed))
-            if (!sm.getSelected().phantom)
-                loadHistories(sm.getSelected().get('login'), sm.getSelected().get('id'));
+        if ((sm.getCount() == 1) && (!sm.getSelected().phantom)) {
+            loadHistories(sm.getSelected().get('login'), sm.getSelected().get('id'));
+            historiesPanel.expand();
+        }
     });
 
     function loadHistories(login, userId){
