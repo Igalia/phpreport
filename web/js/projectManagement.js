@@ -308,7 +308,26 @@ Ext.onReady(function(){
                 iconCls: this.iconCls + '-go',
                 handler: this.onDetails,
                 scope: this
-                }, '-']
+                }, '-', 'Filter:', {
+                id: 'projectFilter',
+                fieldLabel: 'Filter',
+                width: 400,
+                name: 'projectFilter',
+                xtype: 'combo',
+                autoSelect: true,
+                typeAhead: true,
+                mode: 'local',
+                store: projectsStore,
+                valueField: 'id',
+                displayField: 'fullDescription',
+                listeners: {
+                    select: function (combo, record) {
+                        projectsStore.filter('id', record.data.id);
+                        // After the store is filtered to one user, the grid will only have one row
+                        projectGrid.getSelectionModel().selectFirstRow();
+                    }
+                }
+            }]
         },
 
         onAdd: function() {
@@ -1000,6 +1019,7 @@ Ext.onReady(function(){
     var projectRecord = new Ext.data.Record.create([
             {name: 'id', type: 'int'},
             {name: 'description', type: 'string'},
+            {name: 'fullDescription', type: 'string'},
             {name: 'activation', type: 'bool'},
             {name: 'init', type: 'date', dateFormat: 'Y-m-d'},
             {name: 'end', type: 'date', dateFormat: 'Y-m-d'},
