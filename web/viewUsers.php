@@ -149,7 +149,6 @@ Ext.onReady(function(){
 
             ?>
 
-
             // super
             inlineEditionPanel.superclass.initComponent.call(this);
         },
@@ -287,6 +286,9 @@ Ext.onReady(function(){
             direction: 'ASC',
         },
         listeners: {
+            'load': function() {
+                userGrid.getTopToolbar().getComponent('userFilter').focus();
+            },
             'write': function() {
                 App.setAlert(true, "Users Changes Saved");
             },
@@ -334,31 +336,6 @@ Ext.onReady(function(){
             ?>
     ]);
 
-    var userFilterPanel = new Ext.FormPanel({
-        width: 350,
-        labelWidth: 70,
-        frame: true,
-        title: 'User Filter',
-        renderTo: 'content',
-        bodyStyle: 'padding: 5px 5px 0px 5px;',
-        items: [{
-            id: 'userFilter',
-            fieldLabel: 'Filter',
-            name: 'userFilter',
-            xtype: 'combo',
-            autoSelect: false,
-            mode: 'local',
-            store: usersStore,
-            valueField: 'id',
-            displayField: 'login',
-            listeners: {
-                select: function (combo, record) {
-                    usersStore.filter('login', record.data.login);
-                }
-            }
-        }]
-    });
-    userFilterPanel.getComponent('userFilter').focus();
 
     var usersEditor = new editor();
 
@@ -396,15 +373,36 @@ Ext.onReady(function(){
         },
     });
 
+    userGrid.getTopToolbar().add('Filter:', {
+        id: 'userFilter',
+        fieldLabel: 'Filter',
+        name: 'userFilter',
+        xtype: 'combo',
+        autoSelect: true,
+        typeAhead: true,
+        mode: 'local',
+        store: usersStore,
+        valueField: 'id',
+        displayField: 'login',
+        listeners: {
+            select: function (combo, record) {
+                usersStore.filter('login', record.data.login);
+                // After the store is filtered to one user, the grid will only have one row
+                userGrid.getSelectionModel().selectFirstRow();
+            }
+        }
+    });
+
     userGrid.getSelectionModel().on('selectionchange', function(sm){
         <?php
                 if ($admin)
                     echo "userGrid.deleteBtn.setDisabled(sm.getCount() < 1);";
         ?>
         historiesPanel.setDisabled(sm.getCount() != 1);
-        if ((sm.getCount() == 1) && (!historiesPanel.collapsed))
-            if (!sm.getSelected().phantom)
-                loadHistories(sm.getSelected().get('login'), sm.getSelected().get('id'));
+        if ((sm.getCount() == 1) && (!sm.getSelected().phantom)) {
+            loadHistories(sm.getSelected().get('login'), sm.getSelected().get('id'));
+            historiesPanel.expand();
+        }
     });
 
     function loadHistories(login, userId){
@@ -1179,12 +1177,12 @@ Ext.onReady(function(){
         frame: false,
         plain: true,
         items:[
-            hourCostGrid,
             journeyGrid,
             areaGrid,
             cityGrid,
+            hourCostGrid,
             goalGrid
-            ]
+        ]
     });
 
     var historiesPanel = new Ext.Panel({
