@@ -221,7 +221,7 @@ function simplifyTitle(p){
  * Checks if there are unsaved changes in this page.
  */
 function isUnsaved() {
-    modifiedRecords = myStore.getModifiedRecords();
+    modifiedRecords = tasksStore.getModifiedRecords();
     if(modifiedRecords.length == 0) {
         return false;
     }
@@ -245,7 +245,7 @@ function isUnsaved() {
  */
 function removeFreshEmptyTask() {
     if(freshCreatedTaskRecord && freshCreatedTaskRecord.dirty && isUnTouched(freshCreatedTaskRecord)) {
-        myStore.remove(freshCreatedTaskRecord);
+        tasksStore.remove(freshCreatedTaskRecord);
         tasksScrollArea.remove(freshCreatedTaskPanel);
         freshCreatedTaskPanel.doLayout();
         tasksScrollArea.doLayout();
@@ -260,13 +260,13 @@ function removeFreshEmptyTask() {
 function addTask(newRecord) {
 
     // Add task to store
-    myStore.add(newRecord);
+    tasksStore.add(newRecord);
 
     // Create and show a panel for the task
     var taskPanel = new TaskPanel({
         parent: tasksScrollArea,
         taskRecord: newRecord,
-        store: myStore,
+        store: tasksStore,
         listeners: {
             'collapse': updateTitle,
             'beforeexpand': simplifyTitle,
@@ -723,63 +723,60 @@ var TaskPanel = Ext.extend(Ext.Panel, {
     }
 });
 
-
-Ext.onReady(function(){
-
-    Ext.QuickTips.init();
-
-    /* Container for the TaskPanels (with scroll bars enabled) */
-    tasksScrollArea = new Ext.Container({autoScroll:true,  renderTo: 'tasks'});
-
-    /* Proxy to the services related with load/save tasks */
-    var myProxy = new Ext.data.HttpProxy({
+/* Proxy to the services related with load/save tasks */
+var tasksServiceProxy = new Ext.data.HttpProxy({
     method: 'POST',
-        api: {
-            read    : {url: 'services/getUserTasksService.php', method: 'GET'},
-            create    : 'services/createTasksService.php',
-            update  : 'services/updateTasksService.php',
-            destroy : 'services/deleteTasksService.php'
-        },
-    });
+    api: {
+        read    : {url: 'services/getUserTasksService.php', method: 'GET'},
+        create  : 'services/createTasksService.php',
+        update  : 'services/updateTasksService.php',
+        destroy : 'services/deleteTasksService.php'
+    },
+});
 
-    /* Store to load/save tasks */
-    myStore = new Ext.ux.TasksStore({
-        autoLoad: true,  //initial data are loaded in the application init
-        autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {
-            'login': user,
-            'date': dateString,
-            'dateFormat': 'Y-m-d',
-        },
-        storeId: 'id',
-        proxy: myProxy,
-        reader:new Ext.data.XmlReader({record: 'task', successProperty: 'success', idProperty:'id' }, taskRecord),
-        writer:new Ext.data.XmlWriter({
-            xmlEncoding: 'UTF-8',
-            writeAllFields: false,
-            tpl: '<' + '?xml version="{version}" encoding="{encoding}"?' + '>' +
-                '<tpl if="records.length &gt; 0">' +
-                    '<tpl if="root">' +
-                        '<tasks>' +
-                            '<tpl for="records">' +
-                                '<task>' +
-                                    '<date>' + dateString + '</date>' +
-                                    '<tpl for=".">' +
-                                        '<{name}>{value}</{name}>' +
-                                    '</tpl>' +
-                                '</task>' +
-                            '</tpl>' +
-                        '</tasks>' +
-                    '</tpl>' +
-                '</tpl>'
-                }, taskRecord),
-        remoteSort: false,
-        sortInfo: {
-            field: 'initTime',
-            direction: 'ASC',
-        },
-        listeners: {
-            'load': function (store, records, options) {
+/* Store to load/save tasks */
+var tasksStore = new Ext.ux.TasksStore({
+    autoLoad: true,  //initial data are loaded in the application init
+    autoSave: false, //if set true, changes will be sent instantly
+    baseParams: {
+        'login': user,
+        'date': dateString,
+        'dateFormat': 'Y-m-d',
+    },
+    storeId: 'id',
+    proxy: tasksServiceProxy,
+    reader:new Ext.data.XmlReader({
+        record: 'task',
+        successProperty: 'success',
+        idProperty:'id'
+        }, taskRecord),
+    writer:new Ext.data.XmlWriter({
+        xmlEncoding: 'UTF-8',
+        writeAllFields: false,
+        tpl: '<' + '?xml version="{version}" encoding="{encoding}"?' + '>' +
+            '<tpl if="records.length &gt; 0">' +
+                '<tpl if="root">' +
+                    '<tasks>' +
+                        '<tpl for="records">' +
+                            '<task>' +
+                                '<date>' + dateString + '</date>' +
+                                '<tpl for=".">' +
+                                    '<{name}>{value}</{name}>' +
+                                '</tpl>' +
+                            '</task>' +
+                        '</tpl>' +
+                    '</tasks>' +
+                '</tpl>' +
+            '</tpl>'
+        }, taskRecord),
+    remoteSort: false,
+    sortInfo: {
+        field: 'initTime',
+        direction: 'ASC',
+    },
+    listeners: {
+        'load': function (store, records, options) {
+            Ext.onReady(function () {
                 if (options.add == true) {
                     for (i in records) {
                         if (i >= 0) {
@@ -792,7 +789,7 @@ Ext.onReady(function(){
                             var r = records[i];
                             taskPanel = new TaskPanel({
                                 parent: tasksScrollArea,
-                                store: myStore,
+                                store: tasksStore,
                                 taskRecord: r,
                                 listeners: {
                                     'collapse': updateTitle,
@@ -821,7 +818,7 @@ Ext.onReady(function(){
                     this.each(function(r) {
                         taskPanel = new TaskPanel({
                             parent: tasksScrollArea,
-                            store: myStore,
+                            store: tasksStore,
                             taskRecord:r,
                             listeners: {
                                 'collapse': updateTitle,
@@ -851,29 +848,42 @@ Ext.onReady(function(){
                     // Mark every item has loaded
                     loaded = true;
                 }
-            },
-            'save': function () {
-                if (!myStore.error) {
-                    Ext.getCmp('status_display').setText("Status: saved at "+ new Date());
-                    if(myStore.showConfirmation) {
-                        App.setAlert(true, "Task Records Changes Saved");
-                    }
-                    summaryStore.load();
+            }, this /* scope inside onReady = this (the store object) */);
+        },
+
+        'save': function () {
+            // We don't wrap this inside Ext.onReady, because it's not possible for
+            // users to trigger this operation before the page is fully interactive
+            if (!tasksStore.error) {
+                Ext.getCmp('status_display').setText("Status: saved at "+ new Date());
+                if(tasksStore.showConfirmation) {
+                    App.setAlert(true, "Task Records Changes Saved");
                 }
-                myStore.error = false;
-            },
-            'exception': function () {
-                App.setAlert(false, "Some Error Occurred While Saving The Changes (please check you haven't clipped working hours)");
-                myStore.error = true;
-            },
-            'update': function () {
-                Ext.getCmp('status_display').setText("Status: Pending changes");
-            },
-            'remove': function () {
-                Ext.getCmp('status_display').setText("Status: Pending changes requiring manual save");
+                summaryStore.load();
             }
+            tasksStore.error = false;
+        },
+        'exception': function () {
+            Ext.onReady(function () { // this may run in case of error in the initial load
+                App.setAlert(false, "Some Error Occurred While Saving The Changes (please check you haven't clipped working hours)");
+                tasksStore.error = true;
+            });
+        },
+        'update': function () {
+            Ext.getCmp('status_display').setText("Status: Pending changes");
+        },
+        'remove': function () {
+            Ext.getCmp('status_display').setText("Status: Pending changes requiring manual save");
         }
-    });
+    }
+});
+
+Ext.onReady(function(){
+
+    Ext.QuickTips.init();
+
+    /* Container for the TaskPanels (with scroll bars enabled) */
+    tasksScrollArea = new Ext.Container({autoScroll:true,  renderTo: 'tasks'});
 
     /* Proxy to load the personal summary */
     var summaryProxy = new Ext.data.HttpProxy({
@@ -943,8 +953,8 @@ Ext.onReady(function(){
 
     function saveTasks(showConfirmation) {
         if (validateTasks()) {
-            myStore.showConfirmation = showConfirmation;
-            myStore.save()
+            tasksStore.showConfirmation = showConfirmation;
+            tasksStore.save()
         } else if (showConfirmation)
             // Print error message only if save action was explicit
             App.setAlert(false, "Check For Invalid Field Values");
@@ -1018,7 +1028,7 @@ Ext.onReady(function(){
                         removeFreshEmptyTask();
 
                         // We load that day's tasks and append them into tasks' store
-                        myStore.load({
+                        tasksStore.load({
                             params: {'date': dateString},
                             add: true,
                         });
