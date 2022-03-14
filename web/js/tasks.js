@@ -723,6 +723,38 @@ var TaskPanel = Ext.extend(Ext.Panel, {
     }
 });
 
+/* Proxy to load the personal summary */
+var summaryProxy = new Ext.data.HttpProxy({
+method: 'GET',
+    api: {
+        read    : 'services/getPersonalSummaryByDateService.php',
+    },
+});
+/* Store to load the personal summary */
+var summaryStore = new Ext.data.Store({
+    baseParams: {
+        'date': dateString,
+        'dateFormat': 'Y-m-d',
+    },
+    storeId: 'summaryStore',
+    proxy: summaryProxy,
+    reader:new Ext.data.XmlReader({record: 'hours', idProperty:'month' }, summaryRecord),
+    remoteSort: false,
+    listeners: {
+        'load': function () {
+            Ext.getCmp('day').setValue(summaryStore.getAt(0).get('day') + " h");
+            Ext.getCmp('week').setValue(summaryStore.getAt(0).get('week') + " h");
+            Ext.getCmp('weekly_goal').setValue(summaryStore.getAt(0).get('weekly_goal') + " h");
+            Ext.getCmp('extra_hours').setValue(summaryStore.getAt(0).get('extra_hours') + " h");
+            Ext.getCmp('available_holidays').setValue(summaryStore.getAt(0).get('available_holidays') + " h");
+            Ext.getCmp('used_holidays').setValue(summaryStore.getAt(0).get('used_holidays') + " h");
+            Ext.getCmp('scheduled_holidays').setValue(summaryStore.getAt(0).get('scheduled_holidays') + " h");
+            Ext.getCmp('pending_holidays').setValue(summaryStore.getAt(0).get('pending_holidays') + " h");
+            Ext.getCmp('acc_extra_hours').setValue(summaryStore.getAt(0).get('acc_extra_hours') + " h");
+        },
+    }
+});
+
 /* Proxy to the services related with load/save tasks */
 var tasksServiceProxy = new Ext.data.HttpProxy({
     method: 'POST',
@@ -884,38 +916,6 @@ Ext.onReady(function(){
 
     /* Container for the TaskPanels (with scroll bars enabled) */
     tasksScrollArea = new Ext.Container({autoScroll:true,  renderTo: 'tasks'});
-
-    /* Proxy to load the personal summary */
-    var summaryProxy = new Ext.data.HttpProxy({
-    method: 'GET',
-        api: {
-            read    : 'services/getPersonalSummaryByDateService.php',
-        },
-    });
-    /* Store to load the personal summary */
-    var summaryStore = new Ext.data.Store({
-        baseParams: {
-            'date': dateString,
-            'dateFormat': 'Y-m-d',
-        },
-        storeId: 'summaryStore',
-        proxy: summaryProxy,
-        reader:new Ext.data.XmlReader({record: 'hours', idProperty:'month' }, summaryRecord),
-        remoteSort: false,
-        listeners: {
-            'load': function () {
-                Ext.getCmp('day').setValue(summaryStore.getAt(0).get('day') + " h");
-                Ext.getCmp('week').setValue(summaryStore.getAt(0).get('week') + " h");
-                Ext.getCmp('weekly_goal').setValue(summaryStore.getAt(0).get('weekly_goal') + " h");
-                Ext.getCmp('extra_hours').setValue(summaryStore.getAt(0).get('extra_hours') + " h");
-                Ext.getCmp('available_holidays').setValue(summaryStore.getAt(0).get('available_holidays') + " h");
-                Ext.getCmp('used_holidays').setValue(summaryStore.getAt(0).get('used_holidays') + " h");
-                Ext.getCmp('scheduled_holidays').setValue(summaryStore.getAt(0).get('scheduled_holidays') + " h");
-                Ext.getCmp('pending_holidays').setValue(summaryStore.getAt(0).get('pending_holidays') + " h");
-                Ext.getCmp('acc_extra_hours').setValue(summaryStore.getAt(0).get('acc_extra_hours') + " h");
-            },
-        }
-    });
 
     /* Add a callback to add new tasks */
     function newTask(freshCreatedTask) {
