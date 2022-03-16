@@ -254,7 +254,7 @@ var app = new Vue({
                         },
                         dates: new Date(d + 'T00:00:00'),
                         popover: {
-                            label: `Partial leave of ${duration}`
+                            label: `${duration} of vacation`
                         },
                         coveredDates: [d],
                     })
