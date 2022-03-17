@@ -577,12 +577,12 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
     $resultAux = @pg_fetch_array($res);
 
-    $vacId = $resultAux['id'];
-
-    if(is_null($vacId)) {
+    if(!$resultAux) {
         //the project configured as VACATIONS_PROJECT doesn't exist
         return null;
     }
+
+    $vacId = $resultAux['id'];
 
     $sql = "SELECT usrid, SUM(_end-init)/60.0 AS add_hours FROM task WHERE projectid=" . $vacId ." AND usrid=" . $userVO->getId();
 
