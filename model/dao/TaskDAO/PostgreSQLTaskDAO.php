@@ -621,8 +621,10 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
     }
 
-    public function getVacationsDates(UserVO $userVO, int $projectId = NULL, DateTime $initDate = NULL, DateTime $endDate = NULL): array
+    public function getVacationsDates(UserVO $userVO, DateTime $initDate = NULL, DateTime $endDate = NULL): array
     {
+        $projectId = $this->getVacationsProjectId();
+
         if (is_null($projectId)) {
             return [];
         }
