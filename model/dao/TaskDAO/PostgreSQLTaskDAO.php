@@ -557,6 +557,26 @@ class PostgreSQLTaskDAO extends TaskDAO{
         return $rows;
     }
 
+    private ?int $vacationsProjectId = null;
+
+    private function getVacationsProjectId() {
+        if (!is_null($this->vacationsProjectId)) {
+            return $this->vacationsProjectId;
+        }
+        $sql = "SELECT * FROM project WHERE description='" . ConfigurationParametersManager::getParameter('VACATIONS_PROJECT') . "'";
+
+        $res = pg_query($this->connect, $sql);
+        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
+        $resultAux = pg_fetch_array($res);
+
+        if (!$resultAux) {
+            //the project configured as VACATIONS_PROJECT doesn't exist
+            return null;
+        }
+        $this->vacationsProjectId = $resultAux['id'];
+        return $this->vacationsProjectId;
+    }
+
     /** Vacations report generator for PostgreSQL.
      *
      * This function generates a report of the vacations hours a user {@link UserVO} has spent as for today. Two optional DateTime parameters can be passed,
@@ -569,20 +589,12 @@ class PostgreSQLTaskDAO extends TaskDAO{
      * @throws {@link SQLQueryErrorException}
      */
     public function getVacations(UserVO $userVO, DateTime $initDate = NULL, DateTime $endDate = NULL) {
+    $vacId = $this->getVacationsProjectId();
 
-    $sql = "SELECT * FROM project WHERE description='" . ConfigurationParametersManager::getParameter('VACATIONS_PROJECT') . "'";
-
-    $res = pg_query($this->connect, $sql);
-    if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-
-    $resultAux = @pg_fetch_array($res);
-
-    if(!$resultAux) {
+    if (is_null($vacId)) {
         //the project configured as VACATIONS_PROJECT doesn't exist
         return null;
     }
-
-    $vacId = $resultAux['id'];
 
     $sql = "SELECT usrid, SUM(_end-init)/60.0 AS add_hours FROM task WHERE projectid=" . $vacId ." AND usrid=" . $userVO->getId();
 
