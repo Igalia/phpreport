@@ -89,8 +89,10 @@ Ext.onReady(function(){
             data : [
     <?php
 
-        foreach((array)$areas as $area)
-            echo "[{$area->getId()}, '{$area->getName()}'],";
+        foreach((array)$areas as $area) {
+            $areaName = json_encode($area->getName());
+            echo "[{$area->getId()}, {$areaName}],";
+        }
 
     ?>]});
 
