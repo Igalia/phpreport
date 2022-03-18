@@ -44,7 +44,8 @@ echo "<!-- Global variables extracted from the PHP side -->\n";
 echo "<script>\n";
 echo "var areasArray = [";
 foreach((array)$areas as $area) {
-    echo "[{$area->getId()}, '{$area->getName()}'],";
+    $areaName = json_encode($area->getName());
+    echo "[{$area->getId()}, {$areaName}],";
 }
 echo "];\n";
 echo "var customersArray = [";
@@ -59,7 +60,6 @@ echo "</script>\n";
 
 <div id="content">
 </div>
-<div id="variables"/>
 <?php
 /* Include the footer to close the header */
 include("include/footer.php");
