@@ -506,6 +506,13 @@ class PostgreSQLTaskDAO extends TaskDAO{
     private ?int $vacationsProjectId = null;
 
     private function getVacationsProjectId() {
+        try {
+            return ConfigurationParametersManager::getParameter('VACATIONS_PROJECT_ID');
+        }
+        catch (UnknownParameterException $e) {
+            error_log("The VACATIONS_PROJECT configuration parameter will be deprecated. Use VACATIONS_PROJECT_ID instead.");
+        }
+
         if (!is_null($this->vacationsProjectId)) {
             return $this->vacationsProjectId;
         }
