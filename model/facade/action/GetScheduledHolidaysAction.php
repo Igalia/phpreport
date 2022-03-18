@@ -45,7 +45,6 @@ class GetScheduledHolidaysAction extends Action
 
         $taskDao = DAOFactory::getTaskDAO();
         $userDao = DAOFactory::getUserDAO();
-        $projectDao = DAOFactory::getProjectDAO();
 
         if (is_null($this->user)) {
             return [];
@@ -58,12 +57,10 @@ class GetScheduledHolidaysAction extends Action
         } else
             if (is_null($this->user->getId()))
             $this->user = $userDao->getByUserLogin($this->user->getLogin());
-
-        $projectId = $projectDao->getByDescription(ConfigurationParametersManager::getParameter('VACATIONS_PROJECT'));
         $reportInit = $this->init;
         $reportEnd = $this->end;
 
-        $vacations = $taskDao->getVacationsDates($this->user, $projectId, $reportInit, $reportEnd);
+        $vacations = $taskDao->getVacationsDates($this->user, $reportInit, $reportEnd);
 
         return $vacations;
     }

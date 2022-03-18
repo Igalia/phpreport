@@ -258,7 +258,7 @@ abstract class TaskDAO extends BaseDAO{
      */
     public abstract function getVacations(UserVO $userVO, DateTime $initDate = NULL, DateTime $endDate = NULL);
 
-    public abstract function getVacationsDates(UserVO $userVO, int $projectId = NULL, DateTime $initDate = NULL, DateTime $endDate = NULL): array;
+    public abstract function getVacationsDates(UserVO $userVO, DateTime $initDate = NULL, DateTime $endDate = NULL): array;
 
     /** Task partial updater for PostgreSQL.
      *
