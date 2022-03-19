@@ -57,9 +57,9 @@ if(!LoginManager::hasExtraPermissions()) {
 echo "<!-- Global variables extracted from the PHP side -->\n";
 echo "<script>\n";
 echo "var projectData = {\n";
-echo "    description: '" . $project->getDescription() . "',\n";
+echo "    description: " . json_encode($project->getDescription()) . ",\n";
 echo "    id: " . $project->getId() . ",\n";
-echo "    customerName: '" . $project->getCustomerName() . "',\n";
+echo "    customerName: " . json_encode($project->getCustomerName()) . ",\n";
 echo "    estimatedHours: '" . $project->getEstHours() . "',\n";
 echo "    active: " . ($project->getActivation()? "true":"false") . ",\n";
 echo "    movedHours: '" . $project->getMovedHours() . "',\n";
