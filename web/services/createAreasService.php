@@ -121,8 +121,11 @@
 
             $string = "<return service='createAreas'><ok>Operation Success!</ok><areas>";
 
-            foreach((array) $createAreas as $createArea)
-                $string = $string . "<area><id>{$createArea->getId()}</id><name>{$createArea->getName()}</name></area>";
+            foreach((array) $createAreas as $area)
+            {
+                $string .= "<area><id>{$area->getId()}</id>" .
+                    "<name>" . escape_string($area->getName()) . "</name></area>";
+            }
 
             $string = $string . "</areas></return>";
 

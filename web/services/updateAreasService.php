@@ -130,8 +130,11 @@
 
             $string = "<return service='updateAreas'><ok>Operation Success!</ok><areas>";
 
-            foreach((array) $updateAreas as $updateArea)
-                $string = $string . "<area><id>{$updateArea->getId()}</id><name>{$updateArea->getName()}</name></area>";
+            foreach((array) $updateAreas as $area)
+            {
+                $string .= "<area><id>{$area->getId()}</id>" .
+                    "<name>" . escape_string($area->getName()) . "</name></area>";
+            }
 
             $string = $string . "</areas></return>";
 
