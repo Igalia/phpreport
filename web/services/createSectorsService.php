@@ -124,8 +124,12 @@
 
             $string = "<return service='createSectors'><ok>Operation Success!</ok><sectors>";
 
-            foreach((array) $createSectors as $createSector)
-                $string = $string . "<sector><id>{$createSector->getId()}</id><name>{$createSector->getName()}</name></sector>";
+            foreach((array) $createSectors as $sector)
+            {
+                $string .= "<sector><id>{$sector->getId()}</id>" .
+                    "<name>" . escape_string($sector->getName()) . "</name>" .
+                    "</sector>";
+            }
 
             $string = $string . "</sectors></return>";
 
