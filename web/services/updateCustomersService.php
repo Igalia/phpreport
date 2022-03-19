@@ -160,10 +160,17 @@
 
             $string = "<return service='updateCustomers'><ok>Operation Success!</ok><customers>";
 
-            foreach((array) $updateCustomers as $updateCustomer)
-                $string = $string . "<customer><id>{$updateCustomer->getId()}</id><name>{$updateCustomer->getName()}</name><sectorId>{$updateCustomer->getSectorId()}</sectorId><type>{$updateCustomer->getType()}</type><url>{$updateCustomer->getUrl()}</url></customer>";
+            foreach((array) $updateCustomers as $customer)
+            {
+                $string .= "<customer>" .
+                  "<id>{$customer->getId()}</id>" .
+                  "<sectorId>{$customer->getSectorId()}</sectorId>" .
+                  "<name>" . escape_string($customer->getName()) . "</name>" .
+                  "<type>{$customer->getType()}</type>" .
+                  "<url>" . escape_string($customer->getUrl()) ."</url></customer>";
+            }
 
-                $string = $string . "</customers></return>";
+            $string .= "</customers></return>";
 
         }
 
