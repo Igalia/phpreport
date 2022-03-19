@@ -91,9 +91,12 @@
 
         foreach((array) $customers as $customer)
         {
-
-        $string = $string . "<customer><id>{$customer->getId()}</id><sectorId>{$customer->getSectorId()}</sectorId><name>{$customer->getName()}</name><type>{$customer->getType()}</type><url>{$customer->getUrl()}</url></customer>";
-
+            $string .= "<customer>" .
+              "<id>{$customer->getId()}</id>" .
+              "<sectorId>{$customer->getSectorId()}</sectorId>" .
+              "<name>" . escape_string($customer->getName()) . "</name>" .
+              "<type>{$customer->getType()}</type>" .
+              "<url>" . escape_string($customer->getUrl()) ."</url></customer>";
         }
 
         $string = $string . "</customers>";
