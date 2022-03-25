@@ -308,7 +308,26 @@ Ext.onReady(function(){
                 iconCls: this.iconCls + '-go',
                 handler: this.onDetails,
                 scope: this
-                }, '-']
+                }, '-', 'Filter:', {
+                id: 'projectFilter',
+                fieldLabel: 'Filter',
+                width: 400,
+                name: 'projectFilter',
+                xtype: 'combo',
+                autoSelect: true,
+                typeAhead: false,
+                mode: 'local',
+                store: projectsStore,
+                valueField: 'id',
+                displayField: 'fullDescription',
+                listeners: {
+                    select: function (combo, record) {
+                        projectsStore.filter('id', record.data.id);
+                        // After the store is filtered to one user, the grid will only have one row
+                        projectGrid.getSelectionModel().selectFirstRow();
+                    }
+                }
+            }]
         },
 
         onAdd: function() {
@@ -1000,6 +1019,7 @@ Ext.onReady(function(){
     var projectRecord = new Ext.data.Record.create([
             {name: 'id', type: 'int'},
             {name: 'description', type: 'string'},
+            {name: 'fullDescription', type: 'string'},
             {name: 'activation', type: 'bool'},
             {name: 'init', type: 'date', dateFormat: 'Y-m-d'},
             {name: 'end', type: 'date', dateFormat: 'Y-m-d'},
@@ -1007,6 +1027,7 @@ Ext.onReady(function(){
             {name: 'estHours', type: 'float'},
             {name: 'areaId', type: 'int'},
             {name: 'customerId', type: 'int'},
+            {name: 'customerName', type: 'string'},
             {name: 'movedHours', type: 'float'},
             {name: 'schedType', type: 'string'},
             {name: 'type', type: 'string'},
@@ -1061,6 +1082,20 @@ Ext.onReady(function(){
         sortInfo: {
             field: 'init',
             direction: 'DESC',
+        },
+        filter: function (property, value, anyMatch, caseSensitive) {
+            // FIXME: this filter function is copied & pasted from tasks.js. There surely
+            // is a better way...
+            var fn;
+            if (((property == 'fullDescription') || (property == 'customerName')) && !Ext.isEmpty(value, false)) {
+                value = this.data.createValueMatcher(value, anyMatch, caseSensitive);
+                fn = function (r) {
+                    return value.test(r.data['fullDescription']) || value.test(r.data['customerName']);
+                };
+            } else {
+                fn = this.createFilterFn(property, value, anyMatch, caseSensitive);
+            }
+            return fn ? this.filterBy(fn) : this.clearFilter();
         },
         listeners: {
             'write': function (store, action, result, res, rs) {
