@@ -113,32 +113,28 @@ class PostgreSQLExtraHourDAO extends ExtraHourDAO{
      * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
      */
     public function update(ExtraHourVO $extraHourVO) {
-    $affectedRows = 0;
+        $affectedRows = 0;
 
-        if($extraHourVO->getId() != "") {
-            $currExtraHourVO = $this->getById($extraHourVO->getId());
+        $sql = "UPDATE extra_hour " .
+               "SET _date=:date, hours=:hours, usrid=:usrid, comment=:comment " .
+               "WHERE id=:id";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":date", DBPostgres::formatDate($extraHourVO->getDate()), PDO::PARAM_STR);
+            $statement->bindValue(":usrid", $extraHourVO->getUserId(), PDO::PARAM_INT);
+            $statement->bindValue(":comment", $extraHourVO->getComment(), PDO::PARAM_STR);
+            $statement->bindValue(":id", $extraHourVO->getId(), PDO::PARAM_INT);
+            // Notice there is no specific parameter for floating point values. A proposal
+            // existed but did not land: https://wiki.php.net/rfc/pdo_float_type
+            // The current recommended practice is to use PDO::PARAM_STR.
+            $statement->bindValue(":hours", $extraHourVO->getHours(), PDO::PARAM_STR);
+            $statement->execute();
+
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
         }
-
-        // If the query returned a row then update
-        if(sizeof($currExtraHourVO) > 0) {
-
-            $sql = "UPDATE extra_hour SET " .
-                    "_date=" .DBPostgres::formatDate($extraHourVO->getDate()) .
-                    ", hours="  . DBPostgres::checkNull($extraHourVO->getHours()) .
-                    ", usrid="  . DBPostgres::checkNull($extraHourVO->getUserId()) .
-                    ", comment="  . DBPostgres::checkStringNull($extraHourVO->getComment()) .
-                    " WHERE id=".$extraHourVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-
-            if ($res == NULL)
-                if (strpos(pg_last_error(), "unique_extra_hour_user_date"))
-                    throw new SQLUniqueViolationException(pg_last_error());
-                else throw new SQLQueryErrorException(pg_last_error());
-
-            $affectedRows = pg_affected_rows($res);
-        }
-
         return $affectedRows;
     }
 
@@ -154,25 +150,27 @@ class PostgreSQLExtraHourDAO extends ExtraHourDAO{
     public function create(ExtraHourVO $extraHourVO) {
         $affectedRows = 0;
 
-        $sql = "INSERT INTO extra_hour (_date, hours, usrid, comment) VALUES(" .
-                DBPostgres::formatDate($extraHourVO->getDate()) . ", "  .
-                DBPostgres::checkNull($extraHourVO->getHours()) . ","  .
-                DBPostgres::checkNull($extraHourVO->getUserId()) . ","  .
-                DBPostgres::checkStringNull($extraHourVO->getComment()) . ")";
+        $sql = "INSERT INTO extra_hour (_date, hours, usrid, comment) " .
+               "VALUES (:date, :hours, :usrid, :comment)";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":date", DBPostgres::formatDate($extraHourVO->getDate()), PDO::PARAM_STR);
+            $statement->bindValue(":usrid", $extraHourVO->getUserId(), PDO::PARAM_INT);
+            $statement->bindValue(":comment", $extraHourVO->getComment(), PDO::PARAM_STR);
+            // Notice there is no specific parameter for floating point values. A proposal
+            // existed but did not land: https://wiki.php.net/rfc/pdo_float_type
+            // The current recommended practice is to use PDO::PARAM_STR.
+            $statement->bindValue(":hours", $extraHourVO->getHours(), PDO::PARAM_STR);
+            $statement->execute();
 
-        $res = pg_query($this->connect, $sql);
+            $extraHourVO->setId($this->pdo->lastInsertId('extra_hour_id_seq'));
 
-        if ($res == NULL)
-            if (strpos(pg_last_error(), "unique_extra_hour_user_date"))
-                throw new SQLUniqueViolationException(pg_last_error());
-            else throw new SQLQueryErrorException(pg_last_error());
-
-        $extraHourVO->setId(DBPostgres::getId($this->connect, "extra_hour_id_seq"));
-
-        $affectedRows = pg_affected_rows($res);
-
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
+        }
         return $affectedRows;
-
     }
 
     /** Extra Hour deleter for PostgreSQL.
@@ -186,20 +184,17 @@ class PostgreSQLExtraHourDAO extends ExtraHourDAO{
     public function delete(ExtraHourVO $extraHourVO) {
         $affectedRows = 0;
 
-        // Check for a user ID.
-        if($extraHourVO->getId() >= 0) {
-            $currExtraHourVO = $this->getById($extraHourVO->getId());
+        $sql = "DELETE FROM extra_hour WHERE id=:id";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":id", $extraHourVO->getId(), PDO::PARAM_INT);
+            $statement->execute();
+
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
         }
-
-        // Otherwise delete a user.
-        if(sizeof($currExtraHourVO) > 0) {
-            $sql = "DELETE FROM extra_hour WHERE id=".$extraHourVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-            $affectedRows = pg_affected_rows($res);
-    }
-
         return $affectedRows;
     }
 }
