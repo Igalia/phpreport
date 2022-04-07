@@ -30,7 +30,6 @@
 define('PHPREPORT_ROOT', __DIR__ . '/../');
 
 /* We check authentication and authorization */
-$sid = $_GET["sid"];
 require_once(PHPREPORT_ROOT . '/web/auth.php');
 
 /* Include the generic header and sidebar */

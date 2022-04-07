@@ -152,7 +152,6 @@
 
         } while ($parser->read());
 
-
         if (count($extraHoursList) >= 1)
             foreach((array)$extraHoursList as $hour)
             {
@@ -164,9 +163,7 @@
 
             }
 
-
-
-        if (!$string)
+        if (!isset($string))
         {
 
             $string = "<return service='updateExtraHourVOs'><ok>Operation Success!</ok><extraHours>";

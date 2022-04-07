@@ -142,7 +142,6 @@
 
         } while ($parser->read());
 
-
         if (count($createExtraHours) >= 1)
             foreach((array)$createExtraHours as $hour)
             {
@@ -154,9 +153,7 @@
 
             }
 
-
-
-        if (!$string)
+        if (!isset($string))
         {
 
             $string = "<return service='createExtraHourVOs'><ok>Operation Success!</ok><extraHours>";
