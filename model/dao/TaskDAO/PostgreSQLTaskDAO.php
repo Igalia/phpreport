@@ -268,19 +268,6 @@ class PostgreSQLTaskDAO extends TaskDAO{
         return $rows[0];
     }
 
-    /** Tasks retriever for PostgreSQL.
-     *
-     * This function retrieves all rows from Task table and creates a {@link TaskVO} with data from each row.
-     *
-     * @return array an array with value objects {@link TaskVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getAll() {
-        $sql = "SELECT * FROM task ORDER BY id ASC";
-        return $this->execute($sql);
-    }
-
     public function getFiltered($filterStartDate = NULL, $filterEndDate = NULL,
             $telework = NULL, $onsite = NULL, $filterText = NULL, $type = NULL,
             $userId = NULL, $projectId = NULL, $customerId = NULL, $taskStoryId = NULL,
