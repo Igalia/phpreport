@@ -53,27 +53,6 @@ class PostgreSQLExtraHourDAO extends ExtraHourDAO{
         parent::__construct();
     }
 
-    /** Extra Hour value object constructor for PostgreSQL.
-     *
-     * This function creates a new {@link ExtraHourVO} with data retrieved from database.
-     *
-     * @param array $row an array with the Extra Hour values from a row.
-     * @return ExtraHourVO an {@link ExtraHourVO} with its properties set to the values from <var>$row</var>.
-     * @see ExtraHourVO
-     */
-    protected function setValues($row)
-    {
-        $extraHourVO = new ExtraHourVO();
-
-        $extraHourVO->setId($row['id']);
-        $extraHourVO->setDate(date_create($row['_date']));
-        $extraHourVO->setHours($row['hours']);
-        $extraHourVO->setUserId($row['usrid']);
-        $extraHourVO->setComment($row['comment']);
-
-        return $extraHourVO;
-    }
-
     /** Extra Hour retriever by id for PostgreSQL.
      *
      * This function retrieves the row from Extra Hour table with the id <var>$extraHourId</var> and creates an {@link ExtraHourVO} with its data.
