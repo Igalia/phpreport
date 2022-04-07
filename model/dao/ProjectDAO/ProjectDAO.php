@@ -113,19 +113,6 @@ abstract class ProjectDAO extends BaseDAO{
      */
     public abstract function removeUserProject($projectId, $userId);
 
-    /** Tasks retriever by Project id.
-     *
-     * This function retrieves the rows from Task table that are assigned to the Project with
-     * the id <var>$projectId</var> and creates a {@link TaskVO} with data from each row.
-     *
-     * @param int $projectId the id of the Project whose Tasks we want to retrieve.
-     * @return array an array with value objects {@link TaskVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see TaskDAO
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function getTasks($projectId);
-
     /** Projects retriever.
      *
      * This function retrieves all rows from Project table and creates a {@link ProjectVO} with data from each row.

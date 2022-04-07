@@ -124,18 +124,6 @@ abstract class TaskDAO extends BaseDAO{
      */
     public abstract function checkTaskUserId($taskId, $userId);
 
-    /** Tasks retriever by Project id.
-     *
-     * This function retrieves the rows from Task table that are associated with the Project with
-     * the id <var>$projectId</var> and creates a {@link TaskVO} with data from each row.
-     *
-     * @param int $projectId the id of the Project whose Tasks we want to retrieve.
-     * @return array an array with value objects {@link TaskVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function getByProjectId($projectId);
-
     /** Tasks retriever by multiple fields.
      *
      * This function retrieves a subset of rows from Task table and creates a

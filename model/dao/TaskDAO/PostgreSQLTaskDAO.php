@@ -183,25 +183,6 @@ class PostgreSQLTaskDAO extends TaskDAO{
     return false;
     }
 
-    /** Tasks retriever by Project id for PostgreSQL.
-     *
-     * This function retrieves the rows from Task table that are associated with the Project with
-     * the id <var>$projectId</var> and creates a {@link TaskVO} with data from each row.
-     *
-     * @param int $projectId the id of the Project whose Tasks we want to retrieve.
-     * @return array an array with value objects {@link TaskVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @throws {@link SQLIncorrectTypeException}
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getByProjectId($projectId) {
-    if (!is_numeric($projectId))
-        throw new SQLIncorrectTypeException($projectId);
-    $sql = "SELECT * FROM task WHERE projectid=".$projectId . " ORDER BY id ASC";
-    $result = $this->execute($sql);
-    return $result;
-    }
-
     /** Work Personal Summary retriever for PostgreSQL.
      *
      * This function retrieves the amount of minutes the User with id <var>$userId<var> has worked on
