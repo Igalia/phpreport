@@ -287,24 +287,6 @@ class PostgreSQLUserDAO extends UserDAO{
 
     }
 
-    /** Tasks retriever by id for PostgreSQL.
-     *
-     * This function retrieves the rows from Task table that are associated with the User with
-     * the id <var>$userId</var> and creates a {@link TaskVO} with data from each row.
-     *
-     * @param int $userId the id of the User whose Tasks we want to retrieve.
-     * @return array an array with value objects {@link TaskVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see TaskDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getTasks($userId) {
-
-    $dao = DAOFactory::getTaskDAO();
-    return $dao->getByUserId($userId);
-
-    }
-
     /** Extra Hours retriever by id for PostgreSQL.
      *
      * This function retrieves the rows from Extra Hour table that are associated with the User with

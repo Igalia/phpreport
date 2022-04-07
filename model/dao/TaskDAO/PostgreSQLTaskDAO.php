@@ -116,25 +116,6 @@ class PostgreSQLTaskDAO extends TaskDAO{
         return $result[0];
     }
 
-    /** Tasks retriever by User id for PostgreSQL.
-     *
-     * This function retrieves the rows from Task table that are associated with the User with
-     * the id <var>$userId</var> and creates a {@link TaskVO} with data from each row.
-     *
-     * @param int $userId the id of the User whose Tasks we want to retrieve.
-     * @return array an array with value objects {@link TaskVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @throws {@link SQLIncorrectTypeException}
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getByUserId($userId) {
-    if (!is_numeric($userId))
-        throw new SQLIncorrectTypeException($userId);
-        $sql = "SELECT * FROM task WHERE usrid=".$userId . " ORDER BY id ASC";
-    $result = $this->execute($sql);
-    return $result;
-    }
-
     /** Tasks retriever by User id and date for PostgreSQL.
      *
      * This function retrieves the rows from Task table that are associated with the User with

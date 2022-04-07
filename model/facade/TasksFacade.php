@@ -33,7 +33,6 @@
 include_once(PHPREPORT_ROOT . '/model/facade/action/CreateTasksAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/PartialUpdateTasksAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/GetUserTasksAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetPersonalSummaryByLoginDateAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetGlobalUsersProjectsReportAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetGlobalUsersStoriesReportAction.php');
@@ -170,22 +169,6 @@ abstract class TasksFacade {
         $action = new GetPersonalSummaryByLoginDateAction($userVO, $date);
 
         return $action->execute();
-
-    }
-
-    /** Get User Tasks Function
-     *
-     *  This function is used for retrieving all Tasks related to a User.
-     *
-     * @param UserVO $userVO the User whose Tasks we want to retieve.
-     * @return array an array with value objects {@link TaskVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     */
-    static function GetUserTasks(UserVO $userVO) {
-
-    $action = new GetUserTasksAction($userVO);
-
-    return $action->execute();
 
     }
 
