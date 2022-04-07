@@ -20,6 +20,8 @@
 
 define('PHPREPORT_ROOT', __DIR__ . '/../../');
 
+$sid = $_GET['sid'] ?? NULL;
+
 do {
     $response = array();
 
