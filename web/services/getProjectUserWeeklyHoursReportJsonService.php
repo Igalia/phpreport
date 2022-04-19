@@ -128,7 +128,7 @@ do {
     }
 
     // CSV formatter
-    if($_GET["format"] && $_GET["format"] == "csv")
+    if(isset($_GET["format"]) && $_GET["format"] == "csv")
     {
         // output headers so that the file is downloaded rather than displayed
         header('Content-type: text/csv');
@@ -214,5 +214,3 @@ $json = json_encode($response);
 
 // output correctly formatted Json
 echo $json;
-
-

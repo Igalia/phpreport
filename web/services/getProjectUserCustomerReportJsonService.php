@@ -130,6 +130,8 @@
 
         $totalHours['total'] = 0;
 
+        $records = array();
+
         foreach((array) $report as $login => $hours)
         {
             $record = array();

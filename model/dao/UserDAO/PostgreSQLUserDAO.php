@@ -104,7 +104,7 @@ class PostgreSQLUserDAO extends UserDAO{
 
         $result = $this->execute($sql);
 
-        if (!is_null($result[0]))
+        if (isset($result[0]))
         {
             // We normally won't want to retrieve md5 password
             $result[0]->setPassword($userPassword);

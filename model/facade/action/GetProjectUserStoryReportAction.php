@@ -101,24 +101,19 @@ class GetProjectUserStoryReportAction extends Action{
      * as second level one.
      */
     protected function doExecute() {
+        $results = array();
 
         $dao = DAOFactory::getTaskDAO();
-
         $dao2 = DAOFactory::getUserDAO();
 
         $doubleResults = $dao->getTaskReport($this->projectVO, $this->init, $this->end, "STORY", "USER");
-
         foreach ($doubleResults as $doubleResult)
         {
-
             $user = $dao2->getById($doubleResult['usrid']);
-
             $results[$user->getLogin()][$doubleResult['story']] =  $doubleResult['add_hours'];
-
         }
 
         return $results;
-
     }
 
 }
