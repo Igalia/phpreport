@@ -196,19 +196,6 @@ abstract class UserDAO extends BaseDAO{
      */
     public abstract function removeGroup($userId, $groupId);
 
-    /** Tasks retriever by id.
-     *
-     * This function retrieves the rows from Task table that are associated with the User with
-     * the id <var>$userId</var> and creates a {@link TaskVO} with data from each row.
-     *
-     * @param int $userId the id of the User whose Tasks we want to retrieve.
-     * @return array an array with value objects {@link TaskVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see TaskDAO
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function getTasks($userId);
-
     /** Extra Hours retriever by id.
      *
      * This function retrieves the rows from Extra Hour table that are associated with the User with
