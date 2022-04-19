@@ -449,15 +449,13 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
     if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
 
-        if(pg_num_rows($res) > 0) {
-            for($i = 0; $i < pg_num_rows($res); $i++)
-            {
-                $rows[$i] = @pg_fetch_array($res);
-            }
+        $rows = array();
+        for($i = 0; $i < pg_num_rows($res); $i++)
+        {
+            $rows[$i] = @pg_fetch_array($res);
         }
 
-    return $rows;
-
+        return $rows;
     }
 
     /** Weekly hours worked on project by users for PostgreSQL
@@ -496,11 +494,10 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
         if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
 
-        if(pg_num_rows($res) > 0) {
-            for($i = 0; $i < pg_num_rows($res); $i++)
-            {
-                $rows[$i] = @pg_fetch_array($res);
-            }
+        $rows = array();
+        for($i = 0; $i < pg_num_rows($res); $i++)
+        {
+            $rows[$i] = @pg_fetch_array($res);
         }
 
         return $rows;

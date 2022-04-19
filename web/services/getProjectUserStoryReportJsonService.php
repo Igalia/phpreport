@@ -111,6 +111,9 @@
 
         $totalHours['total'] = 0;
 
+        $records = array();
+        $stories = array();
+
         foreach((array) $report as $login => $report2)
         {
             $count += count($report2);
@@ -176,7 +179,7 @@
 
         $field['type'] = "float";
 
-        foreach((array)$stories as $name => $dumber)
+        foreach($stories as $name => $dumber)
         {
             $field['name'] = str_replace('.', ',', $name);
             $metaData['fields'][] = $field;

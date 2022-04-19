@@ -192,6 +192,9 @@ class PostgreSQLProjectDAO extends ProjectDAO {
             FROM project LEFT JOIN customer ON project.customerid=customer.id
             WHERE project.id={$projectId}";
         $result = $this->execute($sql);
+
+        if (empty($result))
+            return NULL;
         return $result[0];
     }
 

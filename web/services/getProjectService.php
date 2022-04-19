@@ -69,9 +69,9 @@
     include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
     include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
 
-    $projectId = $_GET['pid'];
+    $projectId = $_GET['pid'] ?? NULL;
 
-    $sid = $_GET['sid'];
+    $sid = $_GET['sid'] ?? NULL;
 
     do {
         /* We check authentication and authorization */

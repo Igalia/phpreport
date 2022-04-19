@@ -32,10 +32,12 @@
     include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 
     /* Allow login only via HTTP Authentication data only if both username and password are not empty*/
-    if (!$_SERVER['PHP_AUTH_USER'] || !$_SERVER['PHP_AUTH_PW']) {
+    if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {
         header('WWW-Authenticate: Basic realm="phpeport Authentication"');
         header('HTTP/1.0 401 Unauthorized');
         http_response_code(401);
+        $userLogin = false;
+        $userPassword = false;
     } else {
         $userLogin = $_SERVER['PHP_AUTH_USER'];
         $userPassword = $_SERVER['PHP_AUTH_PW'];
