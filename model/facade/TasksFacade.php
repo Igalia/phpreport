@@ -530,6 +530,21 @@ abstract class TasksFacade {
         return $dao->getLastTaskDate($userVO->getId(), $referenceDate);
     }
 
+    /** Retrieve the id for the configured VACATIONS_PROJECT.
+     *
+     * The project id will be retrieved based on the configuration parameters
+     * VACATIONS_PROJECT_ID and VACATIONS_PROJECT, in that order. The latter is
+     * considered deprecated and will log a warning.
+     * @return int The ID of the configured VACATIONS_PROJECT or null, if it's
+     * not properly set up.
+     */
+    static function GetVacationsProjectId(): ?int {
+        //There is no action object for this task:
+        //creating one action per facade method is an overkill if there
+        //are no plugins for that action; will be created only if needed.
+        $dao = DAOFactory::getTaskDAO();
+        return $dao->getVacationsProjectId();
+    }
 }
 
 //var_dump(TasksFacade::GetPersonalSummaryByUserIdDate(60, new DateTime()));

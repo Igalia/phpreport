@@ -309,8 +309,7 @@ class HolidayService
             date_create($end),
             $userVO
         ));
-        $holidayProjectId = \ProjectsFacade::GetProjectByDescription(\ConfigurationParametersManager::getParameter('VACATIONS_PROJECT'));
-
+        $holidayProjectId = \TasksFacade::GetVacationsProjectId();
         $daysToDelete = array_diff($existingVacations, $vacations);
         $resultDeleted = $this->deleteVacations($daysToDelete, $userVO, $holidayProjectId);
 

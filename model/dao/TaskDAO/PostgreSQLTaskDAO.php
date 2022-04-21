@@ -503,9 +503,21 @@ class PostgreSQLTaskDAO extends TaskDAO{
         return $rows;
     }
 
+    /**
+     * This variable caches the result produced by getVacationsProjectId().
+     * @see getVacationsProjectId().
+     */
     private ?int $vacationsProjectId = null;
 
-    private function getVacationsProjectId() {
+    /** Retrieve the id for the configured VACATIONS_PROJECT.
+     *
+     * The project id will be retrieved based on the configuration parameters
+     * VACATIONS_PROJECT_ID or VACATIONS_PROJECT, in that order. The latter is
+     * considered deprecated and will log a warning.
+     * @return int The ID of the configured VACATIONS_PROJECT or null, if it's
+     * not properly set up.
+     */
+    public function getVacationsProjectId(): ?int {
         try {
             return ConfigurationParametersManager::getParameter('VACATIONS_PROJECT_ID');
         }

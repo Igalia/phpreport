@@ -301,4 +301,13 @@ abstract class TaskDAO extends BaseDAO{
      */
     public abstract function getLastTaskDate($userId, DateTime $referenceDate);
 
+    /** Retrieve the id for the configured VACATIONS_PROJECT.
+     *
+     * The project id will be retrieved based on the configuration parameters
+     * VACATIONS_PROJECT_ID and VACATIONS_PROJECT, in that order. The latter is
+     * considered deprecated and will log a warning.
+     * @return int The ID of the configured VACATIONS_PROJECT or null, if it's
+     * not properly set up.
+     */
+    public abstract function getVacationsProjectId(): ?int;
 }
