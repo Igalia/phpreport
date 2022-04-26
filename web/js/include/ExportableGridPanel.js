@@ -59,18 +59,15 @@ Ext.ux.ExportableGridPanel = Ext.extend(Ext.grid.GridPanel, {
 
     initComponent: function () {
         Ext.apply(this, {
-            bbar: [
-                {
-                    xtype: 'button',
-                    text: 'Download as CSV',
-                    handler: function () {
-                        //FIXME there must be a better way to get the grid
-                        var gridComponent = this.ownerCt.ownerCt;
-                        window.open("data:text/plain," + encodeURI(
-                                fromStoreToCSV(gridComponent.getStore(), gridComponent.getColumnModel())));
-                    }
-                },
-            ],
+            bbar: [{
+                xtype: 'button',
+                text: 'Copy to clipboard as CSV',
+                handler: function () {
+                    //FIXME there must be a better way to get the grid
+                    var gridComponent = this.ownerCt.ownerCt;
+                    navigator.clipboard.writeText(fromStoreToCSV(gridComponent.getStore(), gridComponent.getColumnModel()));
+                }
+            }],
         });
 
         /* call the superclass to preserve base class functionality */
