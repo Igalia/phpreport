@@ -287,6 +287,40 @@ function addTask(newRecord) {
     return taskPanel;
 }
 
+/**
+ * Callback to add a new, empty tasks. Invoked from the "new task" buttons in
+ * the UI, from keyboard shortcuts and also called from addNewTaskIfEmpty().
+ */
+function newTask(freshCreatedTask) {
+    // Delay task creation until store gets loaded or it won't be properly added
+    if (!isLoaded()) {
+        window.setTimeout(newTask, 100);
+        return;
+    }
+    var newTask = new taskRecord();
+
+    // Add record to store and show in a panel
+    taskPanel = addTask(newTask);
+
+    if(typeof(freshCreatedTask) === 'boolean' && freshCreatedTask == true) {
+        freshCreatedTaskRecord = newTask;
+        freshCreatedTaskPanel = taskPanel;
+    }
+
+    // Put the focus on the init time field
+    taskPanel.initTimeField.focus();
+}
+
+/**
+ * Check if the day is empty, then add a new, empty task.
+ */
+function addNewTaskIfEmpty() {
+    if(tasksScrollArea.items.getCount() == 0 && !forbidden) {
+        newTask(true);
+        Ext.getCmp('status_display').setText("Status: New empty task created for editing");
+    }
+}
+
 /*  Class that stores a taskRecord element and shows it on screen.
     It keeps the taskRecord in synch with the content of the form on screen,
     in real-time (as soon as it changes). */
@@ -877,8 +911,11 @@ var tasksStore = new Ext.ux.TasksStore({
 
                         updateTasksLength(taskPanel);
                     });
+
                     // Mark every item has loaded
                     loaded = true;
+
+                    addNewTaskIfEmpty();
                 }
             }, this /* scope inside onReady = this (the store object) */);
         },
@@ -916,27 +953,6 @@ Ext.onReady(function(){
 
     /* Container for the TaskPanels (with scroll bars enabled) */
     tasksScrollArea = new Ext.Container({autoScroll:true,  renderTo: 'tasks'});
-
-    /* Add a callback to add new tasks */
-    function newTask(freshCreatedTask) {
-        // Delay task creation until store gets loaded or it won't be properly added
-        if (!isLoaded()) {
-            window.setTimeout(newTask, 100);
-            return;
-        }
-        var newTask = new taskRecord();
-
-        // Add record to store and show in a panel
-        taskPanel = addTask(newTask);
-
-        if(typeof(freshCreatedTask) === 'boolean' && freshCreatedTask == true) {
-            freshCreatedTaskRecord = newTask;
-            freshCreatedTaskPanel = taskPanel;
-        }
-
-        // Put the focus on the init time field
-        taskPanel.initTimeField.focus();
-    }
 
     // Validate the inputs in the task panel
     function validateTasks() {
@@ -1444,19 +1460,6 @@ Ext.onReady(function(){
 
     summaryStore.load();
 
-    // Wait for the page to load, and check if the day is empty to add in a new
-    // empty task
-    function addEmptyTask() {
-        if (isLoaded()) {
-            if(tasksScrollArea.items.getCount() == 0 && !forbidden) {
-                newTask(true);
-                Ext.getCmp('status_display').setText("Status: New empty task created for editing");
-            }
-        } else {
-            window.setTimeout(addEmptyTask, 1000);
-        }
-    }
-
     // Navigate on key left and right arrow press
     function checkKeyAndNavigate(e) {
         // We do not want navigation working while a user is editing a task
@@ -1474,8 +1477,5 @@ Ext.onReady(function(){
 
     // Add handler to check keyboard left/right clicks and change current date
     document.onkeydown = checkKeyAndNavigate;
-
-    // Adds in a new empty task when an empty day is clicked
-    addEmptyTask();
 
 });
