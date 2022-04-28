@@ -66,8 +66,12 @@ Ext.ux.ExportableGridPanel = Ext.extend(Ext.grid.GridPanel, {
                     handler: function () {
                         //FIXME there must be a better way to get the grid
                         var gridComponent = this.ownerCt.ownerCt;
-                        window.open("data:text/plain," + encodeURI(
-                                fromStoreToCSV(gridComponent.getStore(), gridComponent.getColumnModel())));
+                        const linkSource = `data:text/csv;charset=UTF-8,${encodeURIComponent(
+                            fromStoreToCSV(gridComponent.getStore(), gridComponent.getColumnModel()))}`;
+                        const downloadLink = document.createElement("a");
+                        downloadLink.href = linkSource;
+                        downloadLink.download = `${this.ownerCt.ownerCt.title.replace(/ /g, '')}.csv`;
+                        downloadLink.click();
                     }
                 },
             ],
