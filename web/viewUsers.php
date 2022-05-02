@@ -129,7 +129,6 @@ Ext.onReady(function(){
     inlineEditionPanel = Ext.extend(Ext.grid.GridPanel, {
         renderTo: 'content',
         frame: true,
-        height: 200,
         width: 580,
 
         initComponent : function() {
@@ -543,7 +542,6 @@ Ext.onReady(function(){
         id: 'hourCostGrid',
         iconCls: 'silk-money',
         width: 300,
-        height: 146,
         store: hourCostStore,
         frame: false,
         header: false,
@@ -1175,7 +1173,7 @@ Ext.onReady(function(){
     var historyTabs = new Ext.TabPanel({
         autoWidth: true,
         activeTab: 0,
-        //height: 200,
+        height: 300,
         frame: false,
         plain: true,
         items:[
@@ -1193,7 +1191,6 @@ Ext.onReady(function(){
         iconCls: 'silk-hourglass',
         collapsed: true,
         frame: true,
-        //height: 200,
         disabled: true,
         stateful: false,
         renderTo: 'content',
