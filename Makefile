@@ -39,21 +39,25 @@ help:
 	rm footer
 
 minify:
+	# WARNING: this will remove any unstaged changes! Do not run on a development directory
 	for i in `find -name "*.min.js" -not -path "*web/vuejs/*"`; do rm $$i; done
-	for i in `find -name "*.js" -not -path "*web/vuejs/*"` ; do \
+	for i in `find -name "*.min.js.map" -not -path "*web/vuejs/*"`; do rm $$i; done
+	#revert any previous minification changes
+	git reset --hard HEAD
+	for i in `find -name "*.js" -not -path "*web/vuejs/*" -not -path "*vendor*"` ; do \
 	  #extract file name to be used in the uglify output \
 	  FILE=`basename -s .js $$i`; \
 	  DIR=`dirname $$i`; \
+	  HASH=`md5sum $$i | awk '{ print $$1 }'`; \
 	  cd $$DIR; \
-	  uglifyjs $${FILE}.js --output $${FILE}.min.js \
-	      --source-map "filename=$${FILE}.min.js.map" -c -m; \
+	  uglifyjs $${FILE}.js --output $${FILE}.$${HASH}.min.js \
+	      --source-map "filename='$${FILE}.$${HASH}.min.js.map'" -c -m; \
 	  cd -; \
-	  done
-	for i in `find web -name "*.php" -not -path "*web/holiday*"`; do \
-	  #revert any previous minification changes \
-	  sed 's/<script src="\(.*\).min.js">/<script src="\1.js">/' $$i > tmp; \
-	  #modify script tags to link the minified file \
-	  sed 's/<script src="\(.*\).js">/<script src="\1.min.js">/' tmp > $$i; \
+	  for j in `find web -name "*.php"`; do \
+	    #modify script tags to link the minified file \
+	    sed "s/<script src=\"\(.*\)$${FILE}.js\">/<script src=\"\1$${FILE}.$${HASH}.min.js\">/" $$j > tmp; \
+	    cp tmp $$j; \
+	    done \
 	  done
 	rm tmp
 
