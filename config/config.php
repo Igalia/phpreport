@@ -332,3 +332,10 @@ define('CALENDAR_URL', '');
 define('CALENDAR_ID', '');
 define('CALENDAR_USERNAME', '');
 define('CALENDAR_PASSWORD', '');
+
+/**
+ * Id of the project used for identifying vacations tasks.
+ * Replaces VACATIONS_PROJECT.
+ * @global int vacations project id.
+ */
+define('VACATIONS_PROJECT_ID', 1);

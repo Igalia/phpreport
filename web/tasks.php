@@ -28,14 +28,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
 
 include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
 
-$VACATIONS_PROJECT = ConfigurationParametersManager::getParameter('VACATIONS_PROJECT');
-
-$projects = ProjectsFacade::GetAllProjects();
-foreach((array) $projects as $project) {
-    if($project->getDescription() == $VACATIONS_PROJECT) {
-        $VACATIONS_PROJECT_ID = $project->getId();
-    }
-}
+$VACATIONS_PROJECT_ID = TasksFacade::GetVacationsProjectId();
 
 $user = $_SESSION['user'];
 
