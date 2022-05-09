@@ -40,11 +40,11 @@ help:
 
 minify:
 	# WARNING: this will remove any unstaged changes! Do not run on a development directory
-	for i in `find -name "*.min.js" -not -path "*web/vuejs/*"`; do rm $$i; done
-	for i in `find -name "*.min.js.map" -not -path "*web/vuejs/*"`; do rm $$i; done
+	for i in `find web -name "*.min.js" -not -path "*web/vuejs/*"`; do rm $$i; done
+	for i in `find web -name "*.min.js.map" -not -path "*web/vuejs/*"`; do rm $$i; done
 	#revert any previous minification changes
 	git reset --hard HEAD
-	for i in `find -name "*.js" -not -path "*web/vuejs/*" -not -path "*vendor*"` ; do \
+	for i in `find web -name "*.js" -not -path "*web/vuejs/*"` ; do \
 	  #extract file name to be used in the uglify output \
 	  FILE=`basename -s .js $$i`; \
 	  DIR=`dirname $$i`; \

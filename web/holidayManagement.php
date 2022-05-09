@@ -114,7 +114,7 @@ include_once("include/header.php");
     </div>
 </div>
 
-<script src='js/holidayManagement.js'></script>
+<script src="js/holidayManagement.js"></script>
 
 <?php
 include("include/footer.php");
