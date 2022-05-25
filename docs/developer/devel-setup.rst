@@ -19,6 +19,8 @@ generate minified versions of the JS code and the documentation pages:
 * Fedora: packages ``uglify-js`` and ``python3-docutils``.
 * Debian/Ubuntu: packages ``uglifyjs`` and ``python3-docutils``.
 
+NOTICE: UglifyJS version must be 3.15 or above.
+
 Step 1: Setting up the database
 ===============================
 
@@ -29,7 +31,7 @@ Step 2: Setting up the files
 ============================
 
 Clone the PhpReport repository ``https://github.com/Igalia/phpreport`` in a
-location available to the web server. The usual default location for the 
+location available to the web server. The usual default location for the
 Apache web server is: ``/var/www/html/``
 
 Alternatively, clone it elsewhere and create a link from the web server
