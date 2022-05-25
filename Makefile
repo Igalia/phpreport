@@ -51,7 +51,7 @@ minify:
 	  HASH=`md5sum $$i | awk '{ print $$1 }'`; \
 	  cd $$DIR; \
 	  uglifyjs $${FILE}.js --output $${FILE}.$${HASH}.min.js \
-	      --source-map "filename='$${FILE}.$${HASH}.min.js.map'" -c -m; \
+	      --source-map "filename='$${FILE}.$${HASH}.min.js.map'" -m; \
 	  cd -; \
 	  for j in `find web -name "*.php"`; do \
 	    #modify script tags to link the minified file \
