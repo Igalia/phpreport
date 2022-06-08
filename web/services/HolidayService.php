@@ -188,6 +188,7 @@ class HolidayService
                 $weeks[$current_week] = $leavesDetails[$dates[$i]]['amount'] ?? 1;
                 $previous_week = $current_week;
             }
+            $weeks[$current_week] = round($weeks[$current_week], 2);
         }
         return $weeks;
     }
