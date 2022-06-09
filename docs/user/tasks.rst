@@ -55,7 +55,7 @@ Actions in task panels:
 
 * Clone: creates a new task with the same data and empty times.
 
-* Template: create a template based on that task.
+* Template: create a template based on that task. See `Using templates <tasks.rst#using-templates>`__ section below.
 
 * Collapse: the arrow icon in the top-right corner collapses the panel; it's
   useful to save vertical space when there are many tasks.
@@ -96,10 +96,10 @@ To create a new task from a template, click on the button with
 the name of the template.
 
 To add new templates to this list, first you have to create a task; fill it in
-with your data, put in *optional* description in the Task description box, and
-click on the *template* button. You will be asked to provide a **name** for the template,
-which will add up immediately in your templates deck on the left side.You don't
-have to fill the start and end times in because they won't be saved in the template.
+with the data you want to save as a template — any field can be saved, and none
+of them is compulsory; finally, click on the *Template* button in the task box.
+You will be asked to provide a **name** for the template, and when you confirm
+it will be added immediately to your templates deck on the left side.
 
 To delete a template, you only have to press the *Delete* button right to the
 button with template name in the list.
