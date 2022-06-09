@@ -66,6 +66,7 @@ class TaskVO {
     protected $phase = NULL;
     protected $userId = NULL;
     protected $projectId = NULL;
+    protected $updated_at = NULL;
 
     public function setId($id) {
         if (is_null($id))
@@ -176,6 +177,14 @@ class TaskVO {
 
     public function getProjectId() {
         return $this->projectId;
+    }
+
+    public function setUpdatedAt($updated_at) {
+        $this->updated_at = $updated_at ? new DateTime($updated_at) : NULL;
+    }
+
+    public function getUpdatedAt() {
+        return $this->updated_at;
     }
 
     /**#@-*/

@@ -89,6 +89,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
         $taskVO->setPhase($row['phase']);
         $taskVO->setUserId($row['usrid']);
         $taskVO->setProjectId($row['projectid']);
+        $taskVO->setUpdatedAt($row['updated_at']);
 
         return $taskVO;
     }
@@ -699,7 +700,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
         if ($last == (strlen($sql) - 2))
         $sql = substr($sql, 0, -2);
 
-        $sql = $sql . " WHERE id=".$taskVO->getId();
+        $sql = $sql . ", updated_at=now() WHERE id=".$taskVO->getId();
 
             $res = pg_query($this->connect, $sql);
         if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
@@ -899,7 +900,20 @@ class PostgreSQLTaskDAO extends TaskDAO{
     public function create(TaskVO $taskVO) {
         $affectedRows = 0;
 
-        $sql = "INSERT INTO task (_date, init, _end, story, telework, onsite, text, ttype, phase, usrid, projectid) VALUES(" .
+        $sql = "INSERT INTO task (" .
+            "_date, " .
+            "init, " .
+            "_end, " .
+            "story, " .
+            "telework, " .
+            "onsite, " .
+            "text, " .
+            "ttype, " .
+            "phase, " .
+            "usrid, " .
+            "projectid, " .
+            "updated_at " .
+            ") VALUES(" .
             DBPostgres::formatDate($taskVO->getDate()) . ", " .
             DBPostgres::checkNull($taskVO->getInit()) . ", " .
             DBPostgres::checkNull($taskVO->getEnd()) . ", " .
@@ -910,7 +924,9 @@ class PostgreSQLTaskDAO extends TaskDAO{
             DBPostgres::checkStringNull($taskVO->getTtype()) . ", " .
             DBPostgres::checkStringNull($taskVO->getPhase()) . ", " .
             DBPostgres::checkNull($taskVO->getUserId()) . ", " .
-            DBPostgres::checkNull($taskVO->getProjectId()) . ")";
+            DBPostgres::checkNull($taskVO->getProjectId()) . ", " .
+            "now()" .
+            ")" ;
 
         $res = pg_query($this->connect, $sql);
 
