@@ -210,3 +210,16 @@ ADD COLUMN end_time integer;
 --
 
 UPDATE config SET version='2.21';
+
+
+--
+-- Add updated_at to task table so we can track when a task (specially leave tasks) was updated.
+--
+ALTER TABLE task
+ADD COLUMN updated_at timestamp;
+
+--
+-- Set database version to 2.22
+--
+
+UPDATE config SET version='2.22';
