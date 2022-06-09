@@ -69,29 +69,28 @@ class PostgreSQLTaskDAO extends TaskDAO{
      */
     protected function setValues($row)
     {
+        $taskVO = new TaskVO();
 
-    $taskVO = new TaskVO();
+        $taskVO->setId($row['id']);
+        $taskVO->setDate(date_create($row['_date']));
+        $taskVO->setInit($row['init']);
+        $taskVO->setEnd($row['_end']);
+        $taskVO->setStory($row['story']);
+        if (strtolower($row['telework']) == "t")
+            $taskVO->setTelework(True);
+        elseif (strtolower($row['telework']) == "f")
+            $taskVO->setTelework(False);
+        if (strtolower($row['onsite']) == "t")
+            $taskVO->setOnsite(True);
+        elseif (strtolower($row['onsite']) == "f")
+            $taskVO->setOnsite(False);
+        $taskVO->setText($row['text']);
+        $taskVO->setTtype($row['ttype']);
+        $taskVO->setPhase($row['phase']);
+        $taskVO->setUserId($row['usrid']);
+        $taskVO->setProjectId($row['projectid']);
 
-    $taskVO->setId($row['id']);
-    $taskVO->setDate(date_create($row['_date']));
-    $taskVO->setInit($row['init']);
-    $taskVO->setEnd($row['_end']);
-    $taskVO->setStory($row['story']);
-    if (strtolower($row['telework']) == "t")
-        $taskVO->setTelework(True);
-    elseif (strtolower($row['telework']) == "f")
-        $taskVO->setTelework(False);
-    if (strtolower($row['onsite']) == "t")
-        $taskVO->setOnsite(True);
-    elseif (strtolower($row['onsite']) == "f")
-        $taskVO->setOnsite(False);
-    $taskVO->setText($row['text']);
-    $taskVO->setTtype($row['ttype']);
-    $taskVO->setPhase($row['phase']);
-    $taskVO->setUserId($row['usrid']);
-    $taskVO->setProjectId($row['projectid']);
-
-    return $taskVO;
+        return $taskVO;
     }
 
     /** Task retriever by id for PostgreSQL.

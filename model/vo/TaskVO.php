@@ -68,9 +68,9 @@ class TaskVO {
     protected $projectId = NULL;
 
     public function setId($id) {
-    if (is_null($id))
-        $this->id = $id;
-    else
+        if (is_null($id))
+            $this->id = $id;
+        else
             $this->id = (int) $id;
     }
 
@@ -87,9 +87,9 @@ class TaskVO {
     }
 
     public function setInit($init) {
-    if (is_null($init))
-        $this->init = $init;
-    else
+        if (is_null($init))
+            $this->init = $init;
+        else
             $this->init = (int) $init;
     }
 
@@ -98,9 +98,9 @@ class TaskVO {
     }
 
     public function setEnd($_end) {
-    if (is_null($_end))
-        $this->_end = $_end;
-    else
+        if (is_null($_end))
+            $this->_end = $_end;
+        else
             $this->_end = (int) $_end;
     }
 
@@ -158,8 +158,8 @@ class TaskVO {
 
     public function setUserId($userId) {
         if (is_null($userId))
-        $this->userId = $userId;
-    else
+            $this->userId = $userId;
+        else
             $this->userId = (int) $userId;
     }
 
@@ -169,8 +169,8 @@ class TaskVO {
 
     public function setProjectId($projectId) {
         if (is_null($projectId))
-        $this->projectId = $projectId;
-    else
+            $this->projectId = $projectId;
+        else
             $this->projectId = (int) $projectId;
     }
 
