@@ -69,7 +69,7 @@ able to create users with any permission level once you are logged in as
 ``admin``.
 
 Step 6: Running automated tests
-===========================
+===============================
 
 Make sure you have composer and the projects dependencies installed.
 To install the dependencies run ``composer install`` in the project
