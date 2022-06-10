@@ -835,55 +835,6 @@ class PostgreSQLTaskDAO extends TaskDAO{
         return true;
     }
 
-    /** Task updater for PostgreSQL.
-     *
-     * This function updates the data of a Task by its {@link TaskVO}.
-     * WARNING: it doesn't check if task overlaps with other tasks, because that
-     * would be very expensive to do for every task. TaskDAO::batchCreate should
-     * be used for that purpose.
-     * TODO: consider making private or even removing.
-     *
-     * @param TaskVO $taskVO the {@link TaskVO} with the data we want to update on database.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
-     */
-    public function update(TaskVO $taskVO) {
-        $affectedRows = 0;
-
-        if($taskVO->getId() != "") {
-            $currTaskVO = $this->getById($taskVO->getId());
-        }
-
-        // If the query returned a row then update
-        if(sizeof($currTaskVO) > 0) {
-
-            $sql = "UPDATE task SET _date=" . DBPostgres::formatDate($taskVO->getDate()) .
-                   ", init=" . DBPostgres::checkNull($taskVO->getInit()) .
-                   ", _end=" . DBPostgres::checkNull($taskVO->getEnd()) .
-                   ", story=" . DBPostgres::checkStringNull($taskVO->getStory()) .
-                   ", telework=" . DBPostgres::boolToString($taskVO->getTelework()) .
-                   ", onsite=" . DBPostgres::boolToString($taskVO->getOnsite()) .
-                   ", text=" . DBPostgres::checkStringNull($taskVO->getText()) .
-                   ", ttype=" . DBPostgres::checkStringNull($taskVO->getTtype()) .
-                   ", phase=" . DBPostgres::checkStringNull($taskVO->getPhase()) .
-                   ", usrid=" . DBPostgres::checkNull($taskVO->getUserId()) .
-                   ", projectid=" . DBPostgres::checkNull($taskVO->getProjectId()) .
-                   " WHERE id=".$taskVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-
-            if ($res == NULL)
-                if (strpos(pg_last_error(), "unique_task_usr_time"))
-                    throw new SQLUniqueViolationException(pg_last_error());
-                else throw new SQLQueryErrorException(pg_last_error());
-
-            $affectedRows = pg_affected_rows($res);
-
-        }
-
-        return $affectedRows;
-    }
-
     /** Task creator for PostgreSQL.
      *
      * This function creates a new row for a Task by its {@link TaskVO}.

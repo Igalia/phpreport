@@ -52,17 +52,6 @@ abstract class TaskDAO extends BaseDAO{
      */
     protected $groupFields = array("USER" => "usrid", "PROJECT" => "projectid", "CUSTOMER" => "customerid", "TTYPE" => "ttype", "STORY" => "story");
 
-    /** Task DAO constructor.
-     *
-     * This is the base constructor of Task DAOs, and it just calls its parent's constructor.
-     *
-     * @throws {@link ConnectionErrorException}
-     * @see BaseDAO::__construct()
-     */
-    protected function __construct() {
-    parent::__construct();
-    }
-
     /** Task retriever by id.
      *
      * This function retrieves the row from Task table with the id <var>$taskId</var> and creates a {@link TaskVO} with its data.
@@ -249,16 +238,6 @@ abstract class TaskDAO extends BaseDAO{
      *         equal to the size of $tasks).
      */
     public abstract function batchPartialUpdate($tasks);
-
-    /** Task updater.
-     *
-     * This function updates the data of a Task by its {@link TaskVO}.
-     *
-     * @param TaskVO $taskVO the {@link TaskVO} with the data we want to update on database.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link OperationErrorException}, {@link SQLUniqueViolationException}
-     */
-    public abstract function update(TaskVO $taskVO);
 
     /** Task creator.
      *
