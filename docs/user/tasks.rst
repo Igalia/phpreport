@@ -4,7 +4,7 @@ Tasks management
 .. contents::
 
 The first option in PhpReport top menu points to the task management screen. In
-this screens users will be able to fill in their tasks, modify or delete them.
+this screen, users will be able to fill in their tasks, modify or delete them.
 
 .. figure:: i/tasks-menu.png
 
@@ -42,9 +42,6 @@ fill the information about the task:
 
 * Task type: select one of the types for additional info about the task.
 
-* TaskStory: when using XP tracker for a project, this field is used to relate
-  the task with a category inside an iteration.
-
 * Telework: flag to differentiate telework tasks.
 
 * Onsite: flag to differentiate on-site tasks.
@@ -55,7 +52,7 @@ Actions in task panels:
 
 * Clone: creates a new task with the same data and empty times.
 
-* Template: create a template based on that task.
+* Template: create a template based on that task. See `Using templates <tasks.rst#using-templates>`__ section below.
 
 * Collapse: the arrow icon in the top-right corner collapses the panel; it's
   useful to save vertical space when there are many tasks.
@@ -96,10 +93,10 @@ To create a new task from a template, click on the button with
 the name of the template.
 
 To add new templates to this list, first you have to create a task; fill it in
-with your data, put in *optional* description in the Task description box, and
-click on the *template* button. You will be asked to provide a **name** for the template,
-which will add up immediately in your templates deck on the left side.You don't
-have to fill the start and end times in because they won't be saved in the template.
+with the data you want to save as a template — any field can be saved, and none
+of them is compulsory; finally, click on the *Template* button in the task box.
+You will be asked to provide a **name** for the template, and when you confirm
+it will be added immediately to your templates deck on the left side.
 
 To delete a template, you only have to press the *Delete* button right to the
 button with template name in the list.
@@ -143,13 +140,19 @@ create new ones on certain dates. It can happen because of two reasons:
 User work summary
 =================
 
-The *User work summary* panel on the left contains the following information:
+The *User work summary* panel on the left contains information on worked hours,
+extra hours and holidays. Figures are presented in days, hours and minutes,
+where a day is calculated based on the configured user journey; e.g. for a
+8-hour journey, 44 hours is 5 days, 4 hours.
 
-* **Worked (today):** Number of hours worked today.
+Worked hours, today:
+  Number of hours worked today.
 
-* **Worked (week):** Number of hours worked this week.
+Worked hours, week:
+  Number of hours worked this week.
 
-* **Goal (week):** Goal for the selected week.
+Worked hours, week goal:
+  Goal for the selected week.
 
   This value is calculated taking into account the users' journey values and
   the amount of worked hours so far.
@@ -167,11 +170,26 @@ The *User work summary* panel on the left contains the following information:
   `Setting user custom goals <users-management.rst#setting-user-custom-goals>`__
   section.
 
-* **Extra (year):** Number of extra hours corresponding to the current year.
+Extra hours, year:
+  Number of extra hours corresponding to the current year.
 
-* **Pending holidays (year):** Number of hours of holidays pending to be used this year.
+Extra hours, total:
+  Number of historically accumulated extra hours.
 
-* **Extra (total):** Number of historically accumulated extra hours.
+Vacation days, available for year:
+  Holidays available to be used this year.
+
+Vacation days, used:
+  Holidays already used in the year. More particularly, these are holidays
+  **saved** for dates **in the past**.
+
+Vacation days, scheduled:
+  Holidays scheduled for later in the year. More particularly, these are
+  holidays **saved** for dates **in the future**.
+
+Vacation days, pending:
+  Holidays pending to be scheduled or used. This is *(holidays available − used −
+  scheduled)*.
 
 Hotkeys
 =======

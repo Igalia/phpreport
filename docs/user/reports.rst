@@ -435,3 +435,21 @@ bottom of the grid.
 Finally, at the bottom of the box containing the grid there are two buttons named **All data**
 and **Only totals**. The latter hides all columns excepting *Project*, *Total*
 and *Percentage*, while the former shows all columns again.
+
+Vacation summary
+================
+
+This report shows the holiday information for the year in course, about all or a
+subset of users.
+
+By default, it will list all the active users in the system. There is a filter
+available to show only the users assigned to one specific, active project.
+
+Every row in the grid represents a user, and for every user we display their
+configured area and journey, the number of holiday hours and their status
+(available, used, scheduled, pending), the percentage of *scheduled/available*,
+and finally a detailed view of the *days* of holidays used for every week in the
+year.
+
+You can export the displayed data to a CSV file, using the **Download report**
+button at the bottom.
