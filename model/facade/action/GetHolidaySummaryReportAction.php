@@ -82,6 +82,7 @@ class GetHolidaySummaryReportAction extends GetHolidayHoursBaseAction
         }
         return [
             'user' => $this->user->getLogin(),
+            'updated_at' => $summary['updated_at'],
             'area' => $currentArea ?? '',
             'availableHours' => round($summary['availableHours'][$this->user->getLogin()], 2),
             'usedHours' => round($summaryForToday['usedHours'][$this->user->getLogin()], 2),

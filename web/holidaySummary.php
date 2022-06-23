@@ -56,6 +56,7 @@ include_once("include/header.php");
         <table class="report">
             <thead slot="head">
                 <th>User</th>
+                <th>Last Update</th>
                 <th>Area</th>
                 <th>Hours/day</th>
                 <th>Available (hours)</th>
@@ -68,6 +69,7 @@ include_once("include/header.php");
             <tbody>
                 <tr v-for="row in displayData" :key="row.user">
                     <td>{{ row.user }}</td>
+                    <td>{{ row.updated_at }}</td>
                     <td>{{ row.area }}</td>
                     <td>{{ row.hoursDay }}</td>
                     <td>{{ row.availableHours }}</td>

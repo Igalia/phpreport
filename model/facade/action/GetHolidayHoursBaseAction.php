@@ -124,8 +124,11 @@ abstract class GetHolidayHoursBaseAction extends Action
 
                 // We strictly get the holidays spent between the dates specified in
                 // the report, not until the end of the year (see #352).
-                $vacations = $taskDao->getVacations($userVO, $reportInit, $reportEnd);
-                $vacations = $vacations["add_hours"] ?? 0;
+                $vacations_sum = $taskDao->getVacations($userVO, $reportInit, $reportEnd);
+                $vacations = $vacations_sum["add_hours"] ?? 0;
+                $updated_at = "";
+                if ($vacations_sum && $vacations_sum["updated_at"])
+                    $updated_at = substr($vacations_sum["updated_at"], 0, 10);
 
                 // Yearly holiday hours is the standard for an 8-hour journey over a year, so the result is proportional
                 $holidayHours = ($workHours / (365 * 8)) * ConfigurationParametersManager::getParameter('YEARLY_HOLIDAY_HOURS');
@@ -144,7 +147,8 @@ abstract class GetHolidayHoursBaseAction extends Action
             'pendingHours' => $userPendingHolidayHours,
             'scheduledHours' => $userScheduledHours,
             'usedHours' => $userUsedHours,
-            'availableHours' => $userAvailableHours
+            'availableHours' => $userAvailableHours,
+            'updated_at' => $updated_at
         ];
     }
 }
