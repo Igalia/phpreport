@@ -23,7 +23,6 @@ include_once(PHPREPORT_ROOT . '/model/facade/AdminFacade.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 
 use Phpreport\Web\services\HolidayService;
-use Phpreport\Util\DateOperations;
 
 class GetHolidaySummaryReportAction extends GetHolidayHoursBaseAction
 {
