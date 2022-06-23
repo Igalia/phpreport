@@ -53,6 +53,7 @@ if (!$csvExport) {
     $weeksLine = array_merge(
         array(
             'User',
+            'Last Update',
             'Area',
             'Hours/day',
             'Available (hours)',
@@ -77,6 +78,7 @@ if (!$csvExport) {
             array_merge(
                 array(
                     $line["user"],
+                    $line["updated_at"],
                     $line["area"],
                     $line["hoursDay"],
                     $line["availableHours"],

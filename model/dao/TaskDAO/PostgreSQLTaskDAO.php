@@ -561,7 +561,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
         return null;
     }
 
-    $sql = "SELECT usrid, SUM(_end-init)/60.0 AS add_hours FROM task WHERE projectid=" . $vacId ." AND usrid=" . $userVO->getId();
+    $sql = "SELECT usrid, SUM(_end-init)/60.0 AS add_hours, max(updated_at) as updated_at FROM task WHERE projectid=" . $vacId ." AND usrid=" . $userVO->getId();
 
     if (!is_null($initDate))
     {

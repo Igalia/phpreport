@@ -37,7 +37,7 @@
 .report td, .report th {
     padding: 10px;
     margin: 0;
-    width: 30px;
+    white-space: nowrap;
 }
 
 .report tr:nth-child(even) {
