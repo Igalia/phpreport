@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update
 
-RUN apt-get -y install postgresql apache2 php php-pgsql php-xml supervisor make docutils-common node-uglify
+RUN apt-get -y install postgresql apache2 php php-pgsql php-xml supervisor make docutils-common node-uglify git
 
 ADD . /var/www/html/phpreport/
 
