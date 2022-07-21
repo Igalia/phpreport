@@ -1,6 +1,6 @@
 # Go to http://localhost/phpreport to use it (username: admin ; password = admin)
 
-FROM ubuntu:bionic
+FROM ubuntu:jammy
 
 MAINTAINER Juan A. Suarez Romero <jasuarez@igalia.com>
 
@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update
 
-RUN apt-get -y install postgresql apache2 php php-pgsql php-xml supervisor make docutils-common node-uglify git
+RUN apt-get -y install postgresql apache2 php php-pgsql php-xml supervisor make docutils-common uglifyjs git
 
 ADD . /var/www/html/phpreport/
 
