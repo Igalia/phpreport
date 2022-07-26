@@ -6,13 +6,9 @@ PhpReport is a web application for time tracking, which provides useful
 statistics about users, projects, and more.
 
 The application is focused on companies or any situation where multiple people
-collaborate on a project. PhpReport allows managers to see project-level
+collaborate on projects. PhpReport allows managers to see project-level
 statistics such as cost and deviation, as well as user-level statistics like
-number of days worked and unused vacation days. In addition, it also includes
-tools for scheduling projects using extreme programming (XP) methodologies.
-
-PhpReport makes use of the framework Ext JS to provide a rich user interaction
-with the web application.
+number of days worked and unused vacation days.
 
 Finally, PhpReport can communicate with external applications, like ERPs or
 desktop tools for personal time-tracking, by means of plugin development or
@@ -39,7 +35,7 @@ documents:
 
 ## More information 
 
-Check out the PhpReport project in [GitHub](https://github.com/Igalia/phpreport)
+Check out the [PhpReport project in GitHub](https://github.com/Igalia/phpreport)
 to learn about new releases, browse the documentation, report issues or fetch
 the latest source code.
 
@@ -53,6 +49,9 @@ This software includes code and assets from other open source projects:
 * The [ExtJS](https://sencha.com/products/extjs/) library,
   licensed under the terms of the
   [GNU General Public License, version 3](web/ext/gpl-3.0.txt).
+
+* The [Vue.js](https://v2.vuejs.org/) framework by Evan You.
+  Released under the [MIT License](https://github.com/vuejs/vue/blob/main/LICENSE).
 
 * The DatePickerPlus Addon by [Marco Wienkoop](http://www.lubber.de/),
   licensed under the terms of the
