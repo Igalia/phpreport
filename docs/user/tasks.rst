@@ -154,16 +154,26 @@ Worked hours, week:
 Worked hours, week goal:
   Goal for the selected week.
 
-  This value is calculated taking into account the users' journey values and
-  the amount of worked hours so far.
-
   By default, it represents **the number of hours users must work per week
-  to finish the year with zero accumulated hours in that period.**
+  to finish the year with zero accumulated hours in that period**. To put in
+  in a different way, they would finish the year with the same number of
+  historically accumulated extra hours they began it.
 
   For example, if you have worked some extra hours in the last weeks the
   weekly goal will become lower than your weekly schedule. This way you will
   have a way to know how to handle your time and finish the year with zero
   accumulated hours.
+
+  This value is calculated taking into account the users' journey values and
+  the amount of worked hours so far. For users whose contract period is shorter
+  than the year in course because they started or will finish working along the
+  year, or because they changed contract hours (journey value) in that period,
+  the time period will be constrained to the contract dates.
+  
+  For example, if a person was working full time in the first half of the year
+  and part time in the second half, there will be different "weekly goal"
+  periods for each half of the year and they work independently: the hours
+  accumulated in the first half are not taken into account in the second.
 
   Managers can customize per-user weekly goals with other time periods and
   amounts of hours different of zero. Read more about this in the
