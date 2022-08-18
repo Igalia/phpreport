@@ -45,6 +45,7 @@ class SyncCalendarAction extends Action
         $calendarUser = ConfigurationParametersManager::getParameter('CALENDAR_USERNAME');
         $password = ConfigurationParametersManager::getParameter('CALENDAR_PASSWORD');
         $companyDomain = ConfigurationParametersManager::getParameter('COMPANY_DOMAIN');
+        $calendarEmail = ConfigurationParametersManager::getParameter('CALENDAR_EMAIL');
 
         if (!$url || !$calendarUser || !$password || !$companyDomain)
             throw new Exception("CalDAV calendar not configured correctly");
@@ -82,11 +83,11 @@ SUMMARY:' . $this->user->getLogin() . ' holiday
 DESCRIPTION:Event created automatically from PhpReport
 CLASS:PUBLIC
 X-SOGO-SEND-APPOINTMENT-NOTIFICATIONS:NO
-ATTENDEE;PARTSTAT=NEEDS-ACTION;CN=' . $this->user->getLogin() . ';RSVP=TRUE;ROLE=REQ-PARTICIPANT:mailto:' . $userEmail . '
+ATTENDEE;PARTSTAT=TENTATIVE;CN=' . $this->user->getLogin() . ';RSVP=TRUE;ROLE=REQ-PARTICIPANT:mailto:' . $userEmail . '
 TRANSP:OPAQUE
 DTSTART;VALUE=DATE:' . $start . '
 DTEND;VALUE=DATE:' . $end . '
-ORGANIZER;SENT-BY="MAILTO:'. $userEmail .'";CN=igalia-holidays:mailto: '. $calendarUser .'@'. $companyDomain .'
+ORGANIZER;CN=' . $calendarUser . ':mailto:' . $calendarEmail . '
 X-SOGO-COMPONENT-CREATED-BY:' . $userEmail . '
 DTSTAMP:' . $start . '
 END:VEVENT
