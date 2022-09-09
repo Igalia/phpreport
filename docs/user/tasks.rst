@@ -216,7 +216,7 @@ CTRL + N
   key combination (e.g. Chrome), so you can use ALT + N, CTRL + U or ALT + U
   instead.
 
-CTRL + number
+ALT + SHIFT + number
   The cursor will be placed in the first field of the first, second, third, etc.
   task depending on the number you pressed.
 

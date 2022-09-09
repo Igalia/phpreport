@@ -1448,7 +1448,8 @@ Ext.onReady(function(){
     });
     new Ext.KeyMap(document, {
         key: '123456789',
-        ctrl: true,
+        alt: true,
+        shift: true,
         stopEvent: true,
         handler: function (key, event) {
             var i = key - 49; //49 is the key code for '1'
