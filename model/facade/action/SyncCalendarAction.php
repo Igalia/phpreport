@@ -83,7 +83,7 @@ SUMMARY:' . $this->user->getLogin() . ' holiday
 DESCRIPTION:Event created automatically from PhpReport
 CLASS:PUBLIC
 X-SOGO-SEND-APPOINTMENT-NOTIFICATIONS:NO
-ATTENDEE;PARTSTAT=TENTATIVE;CN=' . $this->user->getLogin() . ';RSVP=TRUE;ROLE=REQ-PARTICIPANT:mailto:' . $userEmail . '
+ATTENDEE;PARTSTAT=ACCEPTED;CN=' . $this->user->getLogin() . ';RSVP=TRUE;ROLE=REQ-PARTICIPANT:mailto:' . $userEmail . '
 TRANSP:OPAQUE
 DTSTART;VALUE=DATE:' . $start . '
 DTEND;VALUE=DATE:' . $end . '
