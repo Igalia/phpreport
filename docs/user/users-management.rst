@@ -186,3 +186,22 @@ of the year, the end of the journey or the beginning of a future custom goal,
 whatever is closer in time. The extra hours value of the default goal is 0.
 For the most common cases, a default goals is equivalent to setting 1st Jan as
 init date, 31st Dec as end date and 0 as extra hours.
+
+Filling long periods of Sick Leaves
+===================================
+
+Sometimes a user needs to fill long periods of Sick Leave and from the Vacations
+Management interface this is not possible yet. The easiest way to accomplish this,
+is by using the `web/services/updateLongLeaves.php` endpoint, in which an admin
+user can pass the period, the user and for which project this should be filled.
+
+Expected query parameters:
+
+- `init`: date in the format `YYYY-MM-DD` for the day the period starts.
+- `end`: date in the format `YYYY-MM-DD` for the day the period ends.
+- `projectId`: the projectId for the Long leave.
+- `user`: the username for the user that will have the leaves filled.
+- `sid`: the session id of the admin that is making the request. This id can be
+retrieved by doing a GET request to `/phpreport/web/services/loginService.php`.
+
+Note that dates that fall on weekends won't be created.
