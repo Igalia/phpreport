@@ -33,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     return;
 }
 
+$sid = $_GET['sid'] ?? NULL;
 $init = $_GET['init'] ?? '';
 $end = $_GET['end'] ?? '';
 $user = $_GET['user'] ?? '';
@@ -40,7 +41,7 @@ $projectId = $_GET['projectId'] ?? '';
 
 $loginManager = new \LoginManager();
 
-$holidayService = new HolidayService($loginManager);
+$holidayService = new HolidayService($loginManager, $sid);
 
 $response = $holidayService->updateLongLeaves($init, $end, $user, $projectId);
 
