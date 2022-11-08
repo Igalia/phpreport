@@ -366,4 +366,14 @@ class HolidayServiceTest extends TestCase
             $this->instance->getWeeksFromYear(2024)
         );
     }
+
+    public function testGetDaysBetweenDates(): void
+    {
+        $expectedDates = ['2022-12-01', '2022-12-02', '2022-12-03', '2022-12-04', '2022-12-05'];
+
+        $this->assertSame(
+            $expectedDates,
+            $this->instance->getDaysBetweenDates('2022-12-01', '2022-12-05')
+        );
+    }
 }
