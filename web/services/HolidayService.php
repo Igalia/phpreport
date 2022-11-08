@@ -209,6 +209,23 @@ class HolidayService
         return $dates;
     }
 
+    static function getDaysBetweenDates(string $init, string $end): array
+    {
+        $begin = new \DateTime($init);
+        $end = new \DateTime($end);
+        $end = $end->modify('+1 day');
+
+        $interval = new \DateInterval('P1D');
+        $daterange = new \DatePeriod($begin, $interval, $end);
+        $dates = [];
+
+        foreach ($daterange as $date) {
+            $dates[] = $date->format("Y-m-d");
+        }
+
+        return $dates;
+    }
+
     public function getUserVacationsRanges(string $init = NULL, string $end = NULL, $sid = NULL, $userLogin = NULL): array
     {
         if (!$this->loginManager::isLogged($sid)) {
