@@ -152,7 +152,7 @@ class LoginManager {
     /* We include the file with the array of permissions */
     require(PHPREPORT_ROOT . '/config/permissions.php');
 
-    if ($sid!=NULL)
+    if ($sid!=NULL && !isset($_SESSION))
       session_id($sid);
 
     if (!isset($_SESSION))
