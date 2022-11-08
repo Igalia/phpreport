@@ -119,7 +119,9 @@ $permissions = array(
         //system settings
         '/settings.php',
         //API test
-        '/APITest.php'
+        '/APITest.php',
+        //Vacations management
+        '/services/updateLongLeaves.php',
     )
 );
 

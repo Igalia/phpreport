@@ -50,22 +50,22 @@ class HolidayService
      *
      * It receives an array of dates in the ISO format YYYY-MM-DD
      * and group them into date ranges if they are close by 1 day.
-     * 
+     *
      * Single dates are converted into a range with the same start
      * and end.
-     * 
+     *
      * Examples:
-     * 
+     *
      * 1. the array ['2021-01-01', '2021-01-02'] should return a
      * single range of dates that starts in 2021-01-01 and ends in
-     * 2021-01-02: 
+     * 2021-01-02:
      * [
      *    [
      *        'start' => '2021-01-01',
      *        'end' => '2021-01-02'
      *    ]
      * ]
-     * 
+     *
      * 2. ['2021-01-01'] will be converted in a range with the same
      * start and end date:
      * [
@@ -99,7 +99,7 @@ class HolidayService
                 }
             } elseif ($i + 1 == count($vacations)) {
                 // If it's the last element and the interval is 1 or 0, it means it's a single
-                // element array, so we should create a range for it 
+                // element array, so we should create a range for it
                 $ranges[] = ['start' => $start, 'end' => $vacations[$i]];
             }
             $last_date = $vacations[$i];
@@ -338,6 +338,32 @@ class HolidayService
             "datesAndRanges" => $this->getUserVacationsRanges($init, $end),
             "resultCreation" => $resultCreation,
             "resultDeleted" => $resultDeleted
+        ];
+    }
+
+    public function updateLongLeaves(string $init, string $end, string $user, string $projectId): array
+    {
+        if (!$this->loginManager::isLogged()) {
+            return ['error' => 'User not logged in'];
+        }
+
+        if (!$this->loginManager::isAllowed()) {
+            return ['error' => 'Forbidden service for this User'];
+        }
+
+        if (!$init || !$end || !$user || !$projectId) {
+            return ['error' => 'Init and end dates, user and projectId are mandatory'];
+        }
+
+        $userVO = \UsersFacade::GetUserByLogin($user);
+
+        $dates = $this->getDaysBetweenDates($init, $end);
+
+        $result = $this->createVacations($dates, $userVO, $projectId);
+
+        return [
+            "created" => $result["created"],
+            "failed" => $result["failed"]
         ];
     }
 
