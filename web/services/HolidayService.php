@@ -34,11 +34,14 @@ require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 class HolidayService
 {
     private \LoginManager $loginManager;
+    private string $sid;
 
     public function __construct(
-        \LoginManager $loginManager
+        \LoginManager $loginManager,
+        string $sid = ''
     ) {
         $this->loginManager = $loginManager;
+        $this->sid = $sid;
     }
 
     function isWeekend(string $date): bool
@@ -343,11 +346,11 @@ class HolidayService
 
     public function updateLongLeaves(string $init, string $end, string $user, string $projectId): array
     {
-        if (!$this->loginManager::isLogged()) {
+        if (!$this->loginManager::isLogged($this->sid)) {
             return ['error' => 'User not logged in'];
         }
 
-        if (!$this->loginManager::isAllowed()) {
+        if (!$this->loginManager::isAllowed($this->sid)) {
             return ['error' => 'Forbidden service for this User'];
         }
 
