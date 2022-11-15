@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     return;
 }
 
-$sid = $_GET['sid'] ?? NULL;
+$sid = $_GET['sid'] ?? '';
 $init = $_GET['init'] ?? '';
 $end = $_GET['end'] ?? '';
 $user = $_GET['user'] ?? '';
