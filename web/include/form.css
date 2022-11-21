@@ -1,0 +1,23 @@
+.container {
+    max-width: 960px;
+    padding: 1rem;
+}
+
+.field {
+    display: flex;
+    margin: 10px 0;
+}
+
+.fieldLabel {
+    width: 30%;
+    max-width: 150px;
+}
+
+.field input,
+.field select {
+    width: 200px;
+}
+
+.submitBtn {
+    padding: 0.5rem;
+}
