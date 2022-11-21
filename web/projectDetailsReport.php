@@ -68,13 +68,13 @@ echo "    type: '" . $project->getType() . "',\n";
 
 echo "    finalEstimatedHours: '" . $project->getFinalEstHours() . "',\n";
 echo "    workedHours: '" . $project->getWorkedHours() . "',\n";
-echo "    workDeviation: '" . round($project->getAbsDev(), 2, PHP_ROUND_HALF_DOWN) . "',\n";
-echo "    workDeviationPercent: '" . round($project->getPercDev(), 2, PHP_ROUND_HALF_DOWN) . "',\n";
+echo "    workDeviation: '" . round($project->getAbsDev() ?? 0, 2, PHP_ROUND_HALF_DOWN) . "',\n";
+echo "    workDeviationPercent: '" . round($project->getPercDev() ?? 0, 2, PHP_ROUND_HALF_DOWN) . "',\n";
 
-echo "    estInvoice: '" . round($project->getEstHourInvoice(), 2, PHP_ROUND_HALF_DOWN) . "',\n";
-echo "    currentInvoice: '" . round($project->getWorkedHourInvoice(), 2, PHP_ROUND_HALF_DOWN) . "',\n";
-echo "    invoiceDeviation: '" . round($project->getWorkedHourInvoiceAbsoluteDeviation(), 2, PHP_ROUND_HALF_DOWN) . "',\n";
-echo "    invoiceDeviationPercent: '" . round($project->getWorkedHourInvoiceRelativeDeviation(), 2, PHP_ROUND_HALF_DOWN) . "',\n";
+echo "    estInvoice: '" . round($project->getEstHourInvoice() ?? 0, 2, PHP_ROUND_HALF_DOWN) . "',\n";
+echo "    currentInvoice: '" . round($project->getWorkedHourInvoice() ?? 0, 2, PHP_ROUND_HALF_DOWN) . "',\n";
+echo "    invoiceDeviation: '" . round($project->getWorkedHourInvoiceAbsoluteDeviation() ?? 0, 2, PHP_ROUND_HALF_DOWN) . "',\n";
+echo "    invoiceDeviationPercent: '" . round($project->getWorkedHourInvoiceRelativeDeviation() ?? 0, 2, PHP_ROUND_HALF_DOWN) . "',\n";
 
 if (is_null($project->getInit())) {
     echo "    initDate: '',\n";
