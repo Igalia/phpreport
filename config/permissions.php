@@ -122,6 +122,7 @@ $permissions = array(
         '/APITest.php',
         //Vacations management
         '/services/updateLongLeaves.php',
+        '/longLeaves.php',
     )
 );
 

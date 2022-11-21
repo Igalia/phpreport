@@ -99,6 +99,9 @@ $ISSUE_TRACKER_LINKS_URL = unserialize(
             <li class="sprite-script-edit">
                 <a href="hourCompensationManagement.php">Hour compensations</a>
             </li>
+            <li class="sprite-user-edit">
+                <a href="longLeaves.php">Long Leaves</a>
+            </li>
             <li class="sprite-brick-edit">
                 <a href="settings.php">Application settings</a>
             </li>
