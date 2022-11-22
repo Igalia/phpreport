@@ -273,7 +273,7 @@ class HolidayService
         ];
     }
 
-    public function createVacations(array $daysToCreate, \UserVO $userVO, int $holidayProjectId): array
+    public function createVacations(array $daysToCreate, \UserVO $userVO, int $holidayProjectId, string $description = ''): array
     {
         $journeyHistories = \UsersFacade::GetUserJourneyHistories($userVO->getLogin());
         $failed = [];
@@ -297,6 +297,7 @@ class HolidayService
             $taskVO->setEnd($validJourney->getJourney() * 60);
             $taskVO->setProjectId($holidayProjectId);
             $taskVO->setUserId($userVO->getId());
+            $taskVO->setText($description);
             if (\TasksFacade::CreateReport($taskVO) == -1)
                 $failed[] = $day;
         }
@@ -344,7 +345,7 @@ class HolidayService
         ];
     }
 
-    public function updateLongLeaves(string $init, string $end, string $user, string $projectId): array
+    public function updateLongLeaves(string $init, string $end, string $user, string $projectId, string $description = ''): array
     {
         if (!$this->loginManager::isLogged($this->sid)) {
             return ['error' => 'User not logged in'];
@@ -362,7 +363,7 @@ class HolidayService
 
         $dates = $this->getDaysBetweenDates($init, $end);
 
-        $result = $this->createVacations($dates, $userVO, $projectId);
+        $result = $this->createVacations($dates, $userVO, $projectId, $description);
 
         return [
             "created" => $result["created"],
