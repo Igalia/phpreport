@@ -44,7 +44,8 @@ var app = new Vue({
           users: [],
           serverMessages: [],
           initDate: '',
-          endDate: ''
+          endDate: '',
+          description: ''
         }
     },
     created() {
@@ -91,6 +92,7 @@ var app = new Vue({
                     'Content-Type': 'application/json'
                 },
                 referrerPolicy: 'no-referrer',
+                body: JSON.stringify(this.description)
             });
             const body = await res.json();
             if ("error" in body) {

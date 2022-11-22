@@ -60,6 +60,10 @@ include_once("include/header.php");
                 <label class="fieldLabel">End Date</label>
                 <input id="endDate" type="date" v-model="endDate" />
             </div>
+            <div class="field">
+                <label class="fieldLabel">Description</label>
+                <textarea id="description" v-model="description"></textarea>
+            </div>
             <input class="submitBtn" type="button" @click="submitForm" value="Create Leave" />
         </form>
     </section>

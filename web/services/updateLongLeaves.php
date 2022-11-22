@@ -38,12 +38,13 @@ $init = $_GET['init'] ?? '';
 $end = $_GET['end'] ?? '';
 $user = $_GET['user'] ?? '';
 $projectId = $_GET['projectId'] ?? '';
+$description = json_decode(file_get_contents('php://input'), true);
 
 $loginManager = new \LoginManager();
 
 $holidayService = new HolidayService($loginManager, $sid);
 
-$response = $holidayService->updateLongLeaves($init, $end, $user, $projectId);
+$response = $holidayService->updateLongLeaves($init, $end, $user, $projectId, $description);
 
 if (array_key_exists('error', $response)) {
     // user is logged out or doesn't have permission

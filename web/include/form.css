@@ -14,7 +14,9 @@
 }
 
 .field input,
-.field select {
+.field select,
+.field textarea {
+    padding: 5px;
     width: 200px;
 }
 
