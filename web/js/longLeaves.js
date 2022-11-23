@@ -101,7 +101,7 @@ var app = new Vue({
                 if (body["failed"] && body["failed"].length > 0) {
                     this.serverMessages.push({
                         classes: "message error",
-                        text: `These dates couldn't be created: ${body["failed"].join(", ")}`
+                        text: `These dates couldn't be created (probably duplicates): ${body["failed"].join(", ")}`
                     });
                 }
                 if (body["created"] && body["created"].length > 0) {
