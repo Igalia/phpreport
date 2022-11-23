@@ -34,7 +34,8 @@ include_once("include/header.php");
 
 <div id="longLeavesForm">
     <section class="container">
-        <h1>Create new period of Long Leaves</h1>
+        <h1 class="form-title">Create new period of Long Leaves</h1>
+        <p class="instructions">Make sure the details are correctly filled as there is no interface to remove multiple leaves at once.</p>
         <form>
             <div class="field">
                 <label class="fieldLabel">Type of leave</label>

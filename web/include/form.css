@@ -3,6 +3,16 @@
     padding: 1rem;
 }
 
+.form-title {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.instructions {
+    padding: 10px 0;
+    font-size: 0.9rem;
+}
+
 .field {
     display: flex;
     margin: 10px 0;
