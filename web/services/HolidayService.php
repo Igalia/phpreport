@@ -303,7 +303,8 @@ class HolidayService
         }
         unset($day);
         return [
-            'created' => array_diff($daysToCreate, $failed),
+            // Make sure to return a flat array, that's why we need array_values
+            'created' => array_values(array_diff($daysToCreate, $failed)),
             'failed' => $failed
         ];
     }
