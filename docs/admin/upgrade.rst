@@ -8,6 +8,36 @@ Upgrade instructions
   Please backup your database before running an upgrade, in case things go
   wrong during the process.
 
+From version 2.21 to 2.22
+=========================
+
+Unpack the files of PhpReport 2.21 at the same location as the original files,
+overwriting the existing contents. After that, run the upgrade script located at
+the directory ``update/``::
+
+  cd update
+  php -f update-from-2.21-to-2.22.php
+
+Alternatively, you can open the following URL in your browser to run the
+script::
+
+  http://your-web-server/phpreport/update/update-from-2.21-to-2.22.php
+
+This upgrade also adds several new values to ``config/config.php``. Open the
+file ``config/config.template`` and look for the message "New from PhpReport
+2.22". Copy the configuration parameters below that point to your own
+``config.php`` and customize them if necessary.
+
+In 2.22 we have decided to remove the coordination features (XP tracker and
+Analysis tracker). The UI and backend code have been removed, but data model has
+not been altered. Any existing data from these features will be preserved after
+the upgrade in the tables: ``iteration``, ``story``, ``task_story``, ``module``,
+``section`` and ``task_section``.
+
+Once the process is complete, remove the directories ``update/`` and
+``install/`` inside your PhpReport, to prevent other users from altering your
+DB.
+
 From version 2.20 to 2.21
 =========================
 
