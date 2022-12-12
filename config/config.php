@@ -194,12 +194,6 @@ define('VACATIONS_PROJECT', 'Vacation');
 define('EXTRA_HOURS_WARNING_TRIGGER', 50);
 
 /**
- * @name COMPANY_DOMAIN
- * @global string Domain of the users pinged on the NO_FILL emails
- */
-define('COMPANY_DOMAIN', "domain.com");
-
-/**
  * @name NO_FILL_EMAIL_FROM
  * @global string Email appearing on the from header fo all the NO_FILL emails
  */
@@ -342,3 +336,12 @@ define('CALENDAR_EMAIL', '');
  * @global int vacations project id.
  */
 define('VACATIONS_PROJECT_ID', 1);
+
+/**
+ * Domain for calendar appointments and emails sent to users by the vacation
+ * management and fill-up reminder features. Mail addresses will be composed as
+ * user login + @ + COMPANY_DOMAIN.
+ * Replaces NO_FILL_EMAIL_DOMAIN.
+ * @global string company domain to compose email addresses.
+ */
+define('COMPANY_DOMAIN', "domain.com");
