@@ -327,6 +327,8 @@ define('ISSUE_TRACKER_LINKS_URL',
  */
 define('ISSUE_TRACKER_LINKS_TEXT', serialize(array('Report an issue')));
 
+/* New from PhpReport 2.22 */
+
 /* CalDav integration */
 define('CALENDAR_URL', '');
 define('CALENDAR_ID', '');
