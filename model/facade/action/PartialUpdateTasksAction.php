@@ -128,18 +128,26 @@ class PartialUpdateTasksAction extends Action{
                 unset($this->tasks[$i]);
             }
 
-            if ($task->isInitDirty()){
-                // Check if init was updated and endTime should be converted to 24:00
-                // (case it was a 0-hour task and it's not anymore)
+            if ($task->isInitDirty() & !$task->isEndDirty()) {
                 $currentEndTime = $oldTask->getEnd();
                 $newInitTime = $task->getInit();
+                // Check if init was updated and endTime should be converted to 24:00
+                // (in case it was a 0-hour task and it's not anymore)
                 if ($newInitTime > $currentEndTime && $currentEndTime === 0) {
                     $task->setEnd(1440);
                 }
 
                 // Check if init was updated and endTime should be converted to 0h
-                // (case it was a regular task and now it's a 0-hour task)
+                // (in case it was a regular task and now it's a 0-hour task)
                 if ($newInitTime === 0 && $currentEndTime == 1440) {
+                    $task->setEnd(0);
+                }
+            } elseif ($task->isEndDirty()) {
+                $currentInitTime = $oldTask->getInit();
+                $newEndTime = $task->getEnd();
+                // Check if end was updated and it should be converted to 0
+                // (in case it became a 0-hour task)
+                if ($currentInitTime === 0 && $newEndTime === 1440) {
                     $task->setEnd(0);
                 }
             }
