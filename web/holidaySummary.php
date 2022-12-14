@@ -33,7 +33,6 @@ include_once("include/header.php");
 <link rel="stylesheet" type="text/css" href="include/report.css" />
 
 <script src="vuejs/vue.min.js"></script>
-<script src="vuejs/v-calendar.2.3.2.min.js"></script>
 
 <div id="holidaySummaryReport">
     <div v-if="isLoading" class="loaderContainer">
