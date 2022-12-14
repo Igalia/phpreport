@@ -1,3 +1,8 @@
+.content {
+    margin: 20px auto;
+    max-width: 90%;
+}
+
 .report {
     padding: 0;
     max-width: 90%;

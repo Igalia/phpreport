@@ -52,6 +52,9 @@ include_once("include/header.php");
                 </div>
             </div>
         </div>
+        <div class="content">
+            <h1>Summary for {{year}}</h1>
+        </div>
         <table class="report">
             <thead slot="head">
                 <th>User</th>
