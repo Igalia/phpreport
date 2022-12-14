@@ -42,6 +42,7 @@ var app = new Vue({
             autocompleteIsActive: false,
             searchProject: "",
             activeProject: 0,
+            year: new Date().getFullYear()
         };
     },
     created() {
@@ -49,7 +50,8 @@ var app = new Vue({
     },
     computed: {
         downloadUrl() {
-            return `services/getHolidaySummary.php?format=csv&users=${Object.keys(this.displayData).join(",")}`;
+            let url = `services/getHolidaySummary.php?format=csv&users=${Object.keys(this.displayData).join(",")}`;
+            return this.year ? `${url}&year=${this.year}` : url;
         },
     },
     methods: {
@@ -78,7 +80,13 @@ var app = new Vue({
             this.allProjects = parsedProjects;
         },
         async fetchSummary() {
+            let params = new URLSearchParams(window.location.search);
+            let year = params.get('year');
             let url = 'services/getHolidaySummary.php';
+            if (year) {
+                url += `?year=${year}`;
+                this.year = year;
+            }
             const res = await fetch(url, {
                 method: 'GET',
                 mode: 'same-origin',
