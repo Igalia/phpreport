@@ -109,13 +109,13 @@ Ext.apply(Ext.form.VTypes, {
             var start = field.parent.initTimeField;
             var time2 = start.parseDate(start.getValue());
             if (time2)
-                if ((time <= time2) && (val != "00:00")) return false;
+                if ((time < time2) && (val != "00:00")) return false;
         }
         else if (field.initTimeField) {
             var end = field.parent.endTimeField;
             var time2 = end.parseDate(end.getValue());
             if (time2)
-                if ((time2 <= time) && (end.getValue() != "00:00")) return false;
+                if ((time2 < time) && (end.getValue() != "00:00")) return false;
         }
         return true;
     },

@@ -173,7 +173,7 @@ function updateTasksLength(taskPanel) {
         end = taskPanel.endTimeField.getRawValue().split(':');
         endHour = end[0];
         endMinute = end[1];
-        if ((endHour == 0) && (endMinute == 0))
+        if ((endHour == 0) && (endMinute == 0) && (JSON.stringify(init) != JSON.stringify(end)))
             endHour = 24;
         diffHour = endHour - initHour;
         diffMinute = endMinute - initMinute;
