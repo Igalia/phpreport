@@ -17,6 +17,11 @@ You will probably need to add the following lines::
   # IPv6 local connections:
   host    all             all             ::1/128                 md5
 
+If your system uses SELinux (Fedora does), you also need to allow network
+connections from Apache to the database with::
+
+  setsebool -P httpd_can_network_connect_db 1
+
 I can't start PostgreSQL server service in Fedora
 -------------------------------------------------
 
