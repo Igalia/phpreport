@@ -40,6 +40,7 @@ concepts to use PhpReport both for worker and manager profiles.
    * `Setting the area for a user <users-management.rst#setting-the-area-for-a-user>`__
    * `Setting the city for a user <users-management.rst#setting-the-city-for-a-user>`__
    * `Setting user custom goals <users-management.rst#setting-user-custom-goals>`__
+   * `Filling long leave periods for absent users <users-management.rst#filling-long-leave-periods-for-absent-users>`__
 
 #. `Clients management <clients-management.rst>`__
 

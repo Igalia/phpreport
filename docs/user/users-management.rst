@@ -187,21 +187,29 @@ whatever is closer in time. The extra hours value of the default goal is 0.
 For the most common cases, a default goals is equivalent to setting 1st Jan as
 init date, 31st Dec as end date and 0 as extra hours.
 
-Filling long periods of Sick Leaves
-===================================
+Filling long leave periods for absent users
+===========================================
 
-Sometimes a user needs to fill long periods of Sick Leave and from the Vacations
-Management interface this is not possible yet. The easiest way to accomplish this,
-is by using the `web/services/updateLongLeaves.php` endpoint, in which an admin
-user can pass the period, the user and for which project this should be filled.
+Sometimes, an admin needs to fill long periods of sick leave or other kinds of
+leaves for an absent user. There is an interface to accomplish this, it can be
+accessed from the *Data management* menu, section *Long leaves*.
 
-Expected query parameters:
+You need to fill in the following data:
 
-- `init`: date in the format `YYYY-MM-DD` for the day the period starts.
-- `end`: date in the format `YYYY-MM-DD` for the day the period ends.
-- `projectId`: the projectId for the Long leave.
-- `user`: the username for the user that will have the leaves filled.
-- `sid`: the session id of the admin that is making the request. This id can be
-retrieved by doing a GET request to `/phpreport/web/services/loginService.php`.
+Type of leave:
+  The project the leave will be assigned to. To have projects listed here, they
+  need to have been saved with the project type "leave" in the
+  `Projects management <projects-management.rst>`__ area.
 
-Note that dates that fall on weekends won't be created.
+User:
+  User the leave will be assigned to.
+
+Start and end dates:
+  When the leave will start and end. One task will be created for every day
+  between those dates, excluding weekends.
+
+Description:
+  Optional text to be added in the task description.
+
+.. WARNING:: Make sure the details are correctly filled as there is no interface
+             to remove multiple leaves at once.
