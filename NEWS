@@ -1,6 +1,77 @@
 NEWS
 ====
 
+Version 2.22 (22 Dec 2022)
+-------------------------------
+
+The "🦆🦆🦆🦆🦆🦆🦆🦆" release.
+
+List of changes
+~~~~~~~~~~~~~~~
+
+* [#510] New feature: Vacation management screen [Ana Rute Mendes]
+  * Display user vacation time for the year on a calendar
+  * Save vacation days for periods of time instead of individually
+  * Track vacations used, scheduled and pending
+  * Synchronize vacation events with calendar applications
+  * Search reported vacation time for individual users
+
+* [#510] New feature: Vacation summary report [Ana Rute Mendes]
+  * Display vacation time per user and area, stats and distribution along the year
+  * Display when last updated
+  * Filter reported users by project
+  * Export to CSV
+
+* New feature: Simple UI to create long leaves [Ana Rute Mendes]
+  * Allows admin users to greate periods of long leaves for other users
+  * Includes service enpoint for automation
+
+* Remove project coordination features (XP tracker and Analysys tracker). [Jacobo Aragunde Pérez]
+  * These features have been unused and unmaintained for years, it's time to leave them behind to focus on the areas considered essential today.
+  * If they existed, coordination data will not be deleted from database after an upgrade.
+
+* Tasks
+  * [#164] Use alt+shift+number to switch tasks. [Jacobo Aragunde Pérez]
+  * [#506] Speed up tasks page. [Jacobo Aragunde Pérez]
+  * Remove timeout for new, empty task creation. [Jacobo Aragunde Pérez]
+  * Fix crash when updating a task whose id doesn't exist. [Jacobo Aragunde Pérez]
+  * Add updated_at column to task table [Ana Rute Mendes]
+  * Fix weekly goal calc if in last week of the year [Ana Rute Mendes]
+  * Allow 0 hour tasks (#603) [Ana Rute Mendes]
+
+* Reports
+  * [#564] Escape area names in project evaluation report. [Jacobo Aragunde Pérez]
+  * Fix regression in accumulated hours report with LDAP enabled. [Jacobo Aragunde Pérez]
+  * Fix Download as CSV button [Ana Rute Mendes]
+
+* Data management
+  * Review panel height values in user management page. [Jacobo Aragunde Pérez]
+  * Filter by project and customer in project management screen. [Jacobo Aragunde Pérez]
+  * Add filter by users to user management screen. [Jacobo Aragunde Pérez]
+  * Improve usability of user management screen. [Jacobo Aragunde Pérez]
+
+* Other
+  * [#431] Fix multiple PHP warnings. [Jacobo Aragunde Pérez][Ana Rute Mendes]
+  * [#439] Append a hash to minified file names. [Jacobo Aragunde Pérez]
+  * [#513] [ongoing] Port multiple DAOs to use the PDO API. [Jacobo Aragunde Pérez]
+  * [#585] Workaround minification error in tasks page. [Jacobo Aragunde Pérez]
+  * [#592] Fix Docker image fails building [Alexandre ZANNI][Jacobo Aragunde Pérez]
+  * Add docker compose [Alexandre ZANNI]
+  * Setup PHP Composer [Ana Rute Mendes]
+  * Deprecate VACATIONS_PROJECT config parameter. [Jacobo Aragunde Pérez]
+  * Introduce new, optional VACATIONS_PROJECT_ID config parameter. [Jacobo Aragunde Pérez]
+  * Escape user-entered string data in multiple services and generated JS code. [Jacobo Aragunde Pérez]
+  * Load task type field values from a service. [Jacobo Aragunde Pérez]
+  * Rename Holiday to Vacation [Ana Rute Mendes]
+  * Add new testing framework. [Ana Rute Mendes]
+  * Add Github action to run tests [Ana Rute Mendes]
+  * Remove code from PhpReport 1.x features that were never finished in 2.x [Jacobo Aragunde Pérez]
+  * Remove old, unused tests. [Ana Rute Mendes][Jacobo Aragunde Pérez]
+  * Other code health/refactor/simplification work. [Jacobo Aragunde Pérez][Ana Rute Mendes]
+  * Update and improve documentation [Jacobo Aragunde Pérez][Ana Rute Mendes]
+  * Text corrections [Martin Robinson]
+
+
 Version 2.21 (15 Sep 2021)
 -------------------------------
 
