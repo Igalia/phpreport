@@ -11,7 +11,8 @@ Step 0: Dependencies
 ====================
 
 Follow the corresponding section from the
-`installation instructions <../admin/installation.rst>`__.
+`installation instructions <../admin/installation.rst>`__. Make sure to also
+install *composer* as specified there.
 
 Additionally, a development environment may need the following dependencies to
 generate minified versions of the JS code and the documentation pages:
@@ -36,6 +37,10 @@ Apache web server is: ``/var/www/html/``
 
 Alternatively, clone it elsewhere and create a link from the web server
 directory.
+
+You must also run ``composer dump-autoload -o`` inside PhpReport root directory,
+so it can generate the autoload files. Then, run ``composer install`` to install
+the project dependencies.
 
 Step 3: Creating the schema and initial data of the database
 ============================================================
