@@ -29,13 +29,9 @@ Run the following command with root privileges:
 
 * Fedora: ``dnf install postgresql-server httpd php php-pgsql php-xml php-pdo``
 
-Install composer to manage the project dependencies. Follow the official
+If you are installing PhpReport from sources instead of a release package, you
+must install composer to manage the project dependencies. Follow the official
 docs for the instructions: https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos
-
-After installing composer, run ``composer dump-autoload -o`` inside PhpReport root
-directory, so it can generate the autoload files.
-
-Run ``composer install`` to install the project dependencies.
 
 Step 1: Setting up the database
 ===============================
@@ -61,6 +57,11 @@ Step 2: Setting up the files
 Move the program files to a location available for the web server, inside
 a directory called phpreport. The usual default location for the Apache web
 server is: ``/var/www/html/``
+
+If you are installing PhpReport from sources instead of a release package, you
+must also run ``composer dump-autoload -o`` inside PhpReport root directory,
+so it can generate the autoload files. Then, run ``composer install`` to install
+the project dependencies.
 
 Step 3: Creating the schema and initial data of the database
 ============================================================
