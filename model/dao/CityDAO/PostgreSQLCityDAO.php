@@ -58,24 +58,6 @@ class PostgreSQLCityDAO extends CityDAO {
         parent::__construct();
     }
 
-    /** City Histories retriever by City id.
-     *
-     * This function retrieves the rows from CityHistory table that are assigned to the City with
-     * the id <var>$cityId</var> and creates a {@link CityHistoryVO} with data from each row.
-     *
-     * @param int $cityId the id of the City whose City Histories we want to retrieve.
-     * @return array an array with value objects {@link CityHistoryVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see CityHistoryDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getCityHistories($cityId) {
-
-    $dao = DAOFactory::getCityHistoryDAO();
-    return $dao->getByCityId($cityId);
-
-    }
-
     /** City retriever.
      *
      * This function retrieves all rows from City table and creates a {@link CityVO} with data from each row.

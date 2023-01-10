@@ -40,19 +40,6 @@ include_once(PHPREPORT_ROOT . '/model/dao/BaseDAO.php');
  */
 abstract class CityDAO extends BaseDAO {
 
-    /** City Histories retriever by City id.
-     *
-     * This function retrieves the rows from City History table that are assigned to the City with
-     * the id <var>$cityId</var> and creates a {@link CityHistoryVO} with data from each row.
-     *
-     * @param int $cityId the id of the City whose City Histories we want to retrieve.
-     * @return array an array with value objects {@link CityHistoryVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see CityHistoryDAO
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function getCityHistories($cityId);
-
     /** Cities retriever.
      *
      * This function retrieves all rows from City table and creates a {@link CityVO} with data from each row.
