@@ -30,6 +30,7 @@
  */
 
 include_once(PHPREPORT_ROOT . '/util/SQLIncorrectTypeException.php');
+include_once(PHPREPORT_ROOT . '/util/SQLUniqueViolationException.php');
 include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
 include_once(PHPREPORT_ROOT . '/model/vo/CityVO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/CityDAO/CityDAO.php');
