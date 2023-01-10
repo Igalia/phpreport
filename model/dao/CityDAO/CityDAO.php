@@ -38,18 +38,7 @@ include_once(PHPREPORT_ROOT . '/model/dao/BaseDAO.php');
  *
  * @see DAOFactory::getCityDAO(), CityVO
  */
-abstract class CityDAO extends BaseDAO{
-
-    /** City DAO constructor.
-     *
-     * This is the base constructor of City DAOs, and it just calls its parent's constructor.
-     *
-     * @throws {@link ConnectionErrorException}
-     * @see BaseDAO::__construct()
-     */
-    protected function __construct() {
-    parent::__construct();
-    }
+abstract class CityDAO extends BaseDAO {
 
     /** City Histories retriever by City id.
      *

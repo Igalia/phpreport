@@ -43,17 +43,19 @@ include_once(PHPREPORT_ROOT . '/model/dao/CityHistoryDAO/PostgreSQLCityHistoryDA
  *
  * @see CityDAO, CityVO
  */
-class PostgreSQLCityDAO extends CityDAO{
+class PostgreSQLCityDAO extends CityDAO {
 
     /** City DAO for PostgreSQL constructor.
      *
-     * This is the constructor of the implementation for PostgreSQL of {@link CityDAO}, and it just calls its parent's constructor.
+     * This constructor just calls its parent's constructor. It's necessary
+     * to overwrite the visibility of the BaseDAO constructor, which is set
+     * to `protected`.
      *
      * @throws {@link DBConnectionErrorException}
-     * @see CityDAO::__construct()
+     * @see BaseDAO::__construct()
      */
     function __construct() {
-    parent::__construct();
+        parent::__construct();
     }
 
     /** City value object constructor for PostgreSQL.
