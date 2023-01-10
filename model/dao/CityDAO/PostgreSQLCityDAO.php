@@ -58,24 +58,6 @@ class PostgreSQLCityDAO extends CityDAO {
         parent::__construct();
     }
 
-    /** City value object constructor for PostgreSQL.
-     *
-     * This function creates a new {@link CityVO} with data retrieved from database.
-     *
-     * @param array $row an array with the City values from a row.
-     * @return CityVO a {@link CityVO} with its properties set to the values from <var>$row</var>.
-     * @see CityVO
-     */
-    protected function setValues($row)
-    {
-        $cityVO = new CityVO();
-
-        $cityVO->setId($row['id']);
-        $cityVO->setName($row['name']);
-
-        return $cityVO;
-    }
-
     /** City Histories retriever by City id.
      *
      * This function retrieves the rows from CityHistory table that are assigned to the City with
@@ -121,8 +103,8 @@ class PostgreSQLCityDAO extends CityDAO {
      * @throws {@link SQLQueryErrorException}
      */
     public function getAll() {
-        $sql = "SELECT * FROM city ORDER BY id ASC";
-        return $this->execute($sql);
+        return $this->runSelectQuery(
+            "SELECT * FROM city ORDER BY id ASC", [], 'CityVO');
     }
 
     /** City updater.
