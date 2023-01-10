@@ -76,24 +76,6 @@ class PostgreSQLCityDAO extends CityDAO {
 
     }
 
-    /** Common Events retriever by City id.
-     *
-     * This function retrieves the rows from Common Event table that are assigned to the City with
-     * the id <var>$cityId</var> and creates a {@link CommonEventVO} with data from each row.
-     *
-     * @param int $cityId the id of the City whose Common Events we want to retrieve.
-     * @return array an array with value objects {@link CommonEventVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see CommonEventDAO
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getCommonEvents($cityId) {
-
-    $dao = DAOFactory::getCommonEventDAO();
-    return $dao->getByCityId($cityId);
-
-    }
-
     /** City retriever.
      *
      * This function retrieves all rows from City table and creates a {@link CityVO} with data from each row.
