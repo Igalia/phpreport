@@ -73,22 +73,6 @@ class PostgreSQLCityDAO extends CityDAO{
         return $cityVO;
     }
 
-    /** Cities retriever by id.
-     *
-     * This function retrieves the row from City table with the id <var>$cityId</var> and creates a {@link CityVO} with its data.
-     *
-     * @param int $cityId the id of the row we want to retrieve.
-     * @return CityVO a value object {@link CityVO} with its properties set to the values from the row.
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getById($cityId) {
-        if (!is_numeric($cityId))
-        throw new SQLIncorrectTypeException($cityId);
-        $sql = "SELECT * FROM city WHERE id=" . $cityId;
-    $result = $this->execute($sql);
-    return $result[0];
-    }
-
     /** City Histories retriever by City id.
      *
      * This function retrieves the rows from CityHistory table that are assigned to the City with
