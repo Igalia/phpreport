@@ -147,25 +147,21 @@ class PostgreSQLCityDAO extends CityDAO{
      * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
      */
     public function update(CityVO $cityVO) {
-    $affectedRows = 0;
+        $affectedRows = 0;
 
-        if($cityVO->getId() >= 0) {
-            $currcityVO = $this->getById($cityVO->getId());
-        }
+        $sql = "UPDATE city SET name=:name WHERE id=:id";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":name", $cityVO->getName(), PDO::PARAM_STR);
+            $statement->bindValue(":id", $cityVO->getId(), PDO::PARAM_INT);
+            $statement->execute();
 
-        // If the query returned a row then update
-        if(sizeof($currcityVO) > 0) {
-
-            $sql = "UPDATE city SET name=" . DBPostgres::checkStringNull($cityVO->getName()) . " WHERE id=".$cityVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-
-            if ($res == NULL)
-                if (strpos(pg_last_error(), "unique_city_name"))
-                    throw new SQLUniqueViolationException(pg_last_error());
-                else throw new SQLQueryErrorException(pg_last_error());
-
-            $affectedRows = pg_affected_rows($res);
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            if (strpos($e->getMessage(), "unique_city_name"))
+                throw new SQLUniqueViolationException($e->getMessage());
+            else throw new SQLQueryErrorException($e->getMessage());
         }
 
         return $affectedRows;
@@ -180,24 +176,25 @@ class PostgreSQLCityDAO extends CityDAO{
      * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
      */
     public function create(CityVO $cityVO) {
-
         $affectedRows = 0;
 
-        $sql = "INSERT INTO city (name) VALUES (" . DBPostgres::checkStringNull($cityVO->getName()) . ")";
+        $sql = "INSERT INTO city (name) VALUES (:name)";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":name", $cityVO->getName(), PDO::PARAM_STR);
+            $statement->execute();
 
-        $res = pg_query($this->connect, $sql);
+            $cityVO->setId($this->pdo->lastInsertId('city_id_seq'));
 
-        if ($res == NULL)
-            if (strpos(pg_last_error(), "unique_city_name"))
-                throw new SQLUniqueViolationException(pg_last_error());
-            else throw new SQLQueryErrorException(pg_last_error());
-
-        $cityVO->setId(DBPostgres::getId($this->connect, "city_id_seq"));
-
-        $affectedRows = pg_affected_rows($res);
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            if (strpos($e->getMessage(), "unique_city_name"))
+                throw new SQLUniqueViolationException($e->getMessage());
+            else throw new SQLQueryErrorException($e->getMessage());
+        }
 
         return $affectedRows;
-
     }
 
     /** City deleter.
@@ -211,20 +208,16 @@ class PostgreSQLCityDAO extends CityDAO{
     public function delete(CityVO $cityVO) {
         $affectedRows = 0;
 
-        // Check for a city ID.
-        if($cityVO->getId() >= 0) {
-            $currcityVO = $this->getById($cityVO->getId());
-        }
+        $sql = "DELETE FROM city WHERE id=:id";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":id", $cityVO->getId(), PDO::PARAM_INT);
+            $statement->execute();
 
-        // Delete a city.
-        if(sizeof($currcityVO) > 0) {
-            $sql = "DELETE FROM city WHERE id=".$cityVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-
-            if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-
-            $affectedRows = pg_affected_rows($res);
+            $affectedRows = $statement->rowCount();
+        } catch (PDOException $e) {
+            error_log('Query failed: ' . $e->getMessage());
+            throw new SQLQueryErrorException($e->getMessage());
         }
 
         return $affectedRows;
