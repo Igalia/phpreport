@@ -116,9 +116,7 @@
 
             }
 
-
-
-        if (!$string)
+        if (!isset($string))
             $string = "<return service='deleteCities'><ok>Operation Success!</ok></return>";
 
     } while (false);
