@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2009 Igalia, S.L. <info@igalia.com>
+ * Copyright (C) 2023 Igalia, S.L. <info@igalia.com>
  *
  * This file is part of PhpReport.
  *
@@ -33,7 +33,7 @@
  *  This is the object returned for all CRUD operations
  *
   *  @property boolean $isSuccessful Whether the operation was successful or not
-  *  @property int $responseCode The http status code 
+  *  @property int $responseCode The http status code
   *  @property int $errorNumber The php error number
   *  @property string $message Error message that is passed up to front end. Can be php error or custom string.
  */
