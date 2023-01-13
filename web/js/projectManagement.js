@@ -1100,18 +1100,21 @@ Ext.onReady(function(){
         listeners: {
             'write': function (store, action, result, res, rs) {
                 App.setAlert(true, "Projects Changes Saved");
-
+                
                 // select newly added row and scroll to it
                 var rowIndex = store.indexOf(rs);
                 projectGrid.getSelectionModel().selectRow(rowIndex);
                 projectGrid.getView().focusRow(rowIndex);
             },
-            'exception': function(){
-                App.setAlert(false, "Some Error Occurred While Saving The Changes");
-            },
+            'exception': function(proxy, type, action, exception, res){
+                var parser = new DOMParser();
+                var errorDoc = parser.parseFromString(res.responseText, "text/xml");
+                var errorMessage = errorDoc.getElementsByTagName("error")[0].childNodes[0].nodeValue;
+                App.setAlert(false, errorMessage);
+            }
         }
     });
-
+   
 
     var projectColModel =  new Ext.grid.ColumnModel([
         {
