@@ -30,6 +30,7 @@
     include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
     include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
     include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
+    include_once(PHPREPORT_ROOT . '/model/OperationResult.php');
 
     $parser = new XMLReader();
 
@@ -208,11 +209,12 @@
 
 
     if (count($createProjects) >= 1)
-        if (ProjectsFacade::CreateProjects($createProjects) == -1)
-            $string = "<return service='createProjects'><error id='1'>There was some error while creating the projects</error></return>";
+        $operationResult = ProjectsFacade::CreateProjects($createProjects);
+        if (!$operationResult->isSuccessful)
+            $string = "<return service='createProjects'><error id='1'>". $operationResult->message . "</error></return>";
 
 
-    if (!$string)
+    if (!isset($string))
     {
         $string = "<return service='createProjects'><ok>Operation Success!</ok><projects>";
 
