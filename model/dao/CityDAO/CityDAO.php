@@ -38,54 +38,7 @@ include_once(PHPREPORT_ROOT . '/model/dao/BaseDAO.php');
  *
  * @see DAOFactory::getCityDAO(), CityVO
  */
-abstract class CityDAO extends BaseDAO{
-
-    /** City DAO constructor.
-     *
-     * This is the base constructor of City DAOs, and it just calls its parent's constructor.
-     *
-     * @throws {@link ConnectionErrorException}
-     * @see BaseDAO::__construct()
-     */
-    protected function __construct() {
-    parent::__construct();
-    }
-
-    /** City retriever by id.
-     *
-     * This function retrieves the row from City table with the id <var>$cityId</var> and creates a {@link CityVO} with its data.
-     *
-     * @param int $cityId the id of the row we want to retrieve.
-     * @return CityVO a value object {@link CityVO} with its properties set to the values from the row.
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function getById($cityId);
-
-    /** City Histories retriever by City id.
-     *
-     * This function retrieves the rows from City History table that are assigned to the City with
-     * the id <var>$cityId</var> and creates a {@link CityHistoryVO} with data from each row.
-     *
-     * @param int $cityId the id of the City whose City Histories we want to retrieve.
-     * @return array an array with value objects {@link CityHistoryVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see CityHistoryDAO
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function getCityHistories($cityId);
-
-    /** Common Events retriever by City id.
-     *
-     * This function retrieves the rows from Common Event table that are assigned to the City with
-     * the id <var>$cityId</var> and creates a {@link CommonEventVO} with data from each row.
-     *
-     * @param int $cityId the id of the City whose Common Events we want to retrieve.
-     * @return array an array with value objects {@link CommonEventVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @see CommonEventDAO
-     * @throws {@link OperationErrorException}
-     */
-    public abstract function getCommonEvents($cityId);
+abstract class CityDAO extends BaseDAO {
 
     /** Cities retriever.
      *
