@@ -32,6 +32,7 @@
 include_once(PHPREPORT_ROOT . '/model/facade/action/Action.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
+include_once(PHPREPORT_ROOT . '/model/OperationResult.php');
 
 /** Create Project Action
  *
@@ -68,19 +69,13 @@ class CreateProjectAction extends Action{
      *
      * This is the function that contains the code that creates the new Project, storing it persistently.
      *
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      * @throws {@link SQLQueryErrorException}
      */
     protected function doExecute() {
-
-    $dao = DAOFactory::getProjectDAO();
-        if ($dao->create($this->project)!=1) {
-            return -1;
-        }
-
-        return 0;
+        $dao = DAOFactory::getProjectDAO();
+        return $dao->create($this->project);
     }
-
 }
 
 

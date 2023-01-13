@@ -210,7 +210,7 @@ abstract class ProjectDAO extends BaseDAO{
      * The internal id of <var>$projectVO</var> will be set after its creation.
      *
      * @param ProjectVO $projectVO the {@link ProjectVO} with the data we want to insert on database.
-     * @return int the number of rows that have been affected (it should be 1).
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      * @throws {@link OperationErrorException}
      */
     public abstract function create(ProjectVO $projectVO);
@@ -220,7 +220,7 @@ abstract class ProjectDAO extends BaseDAO{
      * This function deletes the data of a Project by its {@link ProjectVO}.
      *
      * @param ProjectVO $projectVO the {@link ProjectVO} with the data we want to delete from database.
-     * @return int the number of rows that have been affected (it should be 1).
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      * @throws {@link OperationErrorException}
      */
     public abstract function delete(ProjectVO $projectVO);

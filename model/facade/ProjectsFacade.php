@@ -130,7 +130,7 @@ abstract class ProjectsFacade {
      *  This function is used for creating a new Project.
      *
      * @param ProjectVO $project the Project value object we want to create.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
+     * @return OperationResult it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
      * @throws {@link SQLQueryErrorException}
      */
     static function CreateProject(ProjectVO $project) {
@@ -147,17 +147,13 @@ abstract class ProjectsFacade {
      *  If an error occurs, it stops creating.
      *
      * @param array $projects the Project value objects we want to create.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
+     * @return OperationResult it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
      * @throws {@link SQLQueryErrorException}
      */
     static function CreateProjects($projects) {
 
-    foreach((array)$projects as $project)
-        if ((ProjectsFacade::CreateProject($project)) == -1)
-            return -1;
-
-    return 0;
-
+        foreach ((array) $projects as $project)
+            return ProjectsFacade::CreateProject($project);
     }
 
     /** Delete Project Function
