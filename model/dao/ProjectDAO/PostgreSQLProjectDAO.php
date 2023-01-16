@@ -595,13 +595,13 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      * The internal id of <var>$projectVO</var> will be set after its creation.
      *
      * @param ProjectVO $projectVO the {@link ProjectVO} with the data we want to insert on database.
-     * @return OperationResult an operation result object with properties indicating success and message
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      * @throws {@link SQLQueryErrorException}
      */
     public function create(ProjectVO $projectVO) {
         $result = new OperationResult(true);
 
-        $sql = "INSERT INTO project (activation, init, _end, invoice, est_hours, 
+        $sql = "INSERT INTO project (activation, init, _end, invoice, est_hours,
         areaid, customerid, type, description, moved_hours, sched_type) VALUES(
             :activation, :init, :end, :invoice, :est_hours,
         :areaid, :customerid, :type, :description, :moved_hours, :sched_type)";
@@ -609,8 +609,8 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         try {
             $statement = $this->pdo->prepare($sql);
             $statement->bindValue(":activation", $projectVO->getActivation(), PDO::PARAM_BOOL);
-            $statement->bindValue(":init", $projectVO->getInit(), PDO::PARAM_STR);
-            $statement->bindValue(":end", $projectVO->getEnd(), PDO::PARAM_STR);
+            $statement->bindValue(":init", DBPostgres::formatDate($projectVO->getInit()), PDO::PARAM_STR);
+            $statement->bindValue(":end", DBPostgres::formatDate($projectVO->getEnd()), PDO::PARAM_STR);
             $statement->bindValue(":invoice", $projectVO->getInvoice(), PDO::PARAM_STR);
             $statement->bindValue(":est_hours", $projectVO->getEstHours(), PDO::PARAM_STR);
             $statement->bindValue(":areaid", $projectVO->getAreaId(), PDO::PARAM_INT);
