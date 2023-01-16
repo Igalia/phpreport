@@ -633,6 +633,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
             error_log('Project creation failed: ' . $errorMessage);
             $result->setErrorNumber($ex->getCode());
             $resultMessage = "Project creation failed: \n";
+
             if(strpos($errorMessage, "Foreign key violation")){
                 if(strpos($errorMessage, "customerid")){
                     $resultMessage .= "Customer not yet created. Please create customer first. \n";
@@ -641,6 +642,12 @@ class PostgreSQLProjectDAO extends ProjectDAO {
                     $resultMessage .= "Area not yet created. Please create area first.";
                 }
             }
+            else if (strpos($errorMessage, "Not null violation")){
+                if(strpos($errorMessage,"areaid")){
+                    $resultMessage .= "Area is null. Please add area.";
+                }
+            }
+
             $result->setMessage($resultMessage);
             $result->setIsSuccessful(false);
             $result->setResponseCode(500);
