@@ -606,11 +606,14 @@ class PostgreSQLProjectDAO extends ProjectDAO {
             :activation, :init, :end, :invoice, :est_hours,
         :areaid, :customerid, :type, :description, :moved_hours, :sched_type)";
 
+        $initDateFormatted = (is_null($projectVO->getInit())) ? null : DBPostgres::formatDate($projectVO->getInit());
+        $endDateFormatted = (is_null($projectVO->getEnd())) ? null : DBPostgres::formatDate($projectVO->getEnd());
+
         try {
             $statement = $this->pdo->prepare($sql);
             $statement->bindValue(":activation", $projectVO->getActivation(), PDO::PARAM_BOOL);
-            $statement->bindValue(":init", DBPostgres::formatDate($projectVO->getInit()), PDO::PARAM_STR);
-            $statement->bindValue(":end", DBPostgres::formatDate($projectVO->getEnd()), PDO::PARAM_STR);
+            $statement->bindValue(":init", $initDateFormatted, PDO::PARAM_STR);
+            $statement->bindValue(":end", $endDateFormatted, PDO::PARAM_STR);
             $statement->bindValue(":invoice", $projectVO->getInvoice(), PDO::PARAM_STR);
             $statement->bindValue(":est_hours", $projectVO->getEstHours(), PDO::PARAM_STR);
             $statement->bindValue(":areaid", $projectVO->getAreaId(), PDO::PARAM_INT);
@@ -644,8 +647,12 @@ class PostgreSQLProjectDAO extends ProjectDAO {
             }
             else if (strpos($errorMessage, "Not null violation")){
                 if(strpos($errorMessage,"areaid")){
-                    $resultMessage .= "Area is null. Please add area.";
+                    $resultMessage .= "Area is null. Please choose area.";
                 }
+            }
+            else {
+                //if not a predictable error like FK/null violation, just return the native error code and message
+                $resultMessage .= $result . $errorMessage;
             }
 
             $result->setMessage($resultMessage);

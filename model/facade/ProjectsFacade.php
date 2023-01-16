@@ -147,13 +147,14 @@ abstract class ProjectsFacade {
      *  If an error occurs, it stops creating.
      *
      * @param array $projects the Project value objects we want to create.
-     * @return OperationResult the result {@link OperationResult} with information about operation status
+     * @return array OperationResult the araray of results {@link OperationResult} with information about operation status
      * @throws {@link SQLQueryErrorException}
      */
     static function CreateProjects($projects) {
-
+        $operationResults = [];
         foreach ((array) $projects as $project)
-            return ProjectsFacade::CreateProject($project);
+            $operationResults[] = ProjectsFacade::CreateProject($project);
+        return $operationResults;
     }
 
     /** Delete Project Function
