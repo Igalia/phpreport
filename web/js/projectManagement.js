@@ -1106,7 +1106,7 @@ Ext.onReady(function(){
                 projectGrid.getSelectionModel().selectRow(rowIndex);
                 projectGrid.getView().focusRow(rowIndex);
             },
-            'exception': function(proxy, type, action, exception, res){
+            'exception': function(proxy, type, action, eOpts, res){
                 let parser = new DOMParser();
                 let errorDoc = parser.parseFromString(res.responseText, "text/xml");
                 let errorMessage = errorDoc.getElementsByTagName("error")[0].childNodes[0].nodeValue;

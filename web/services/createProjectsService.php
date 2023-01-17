@@ -212,6 +212,7 @@
         if(count($createProjects) == 1){
             $operationResult = ProjectsFacade::CreateProject($createProjects[0]);
             if (!$operationResult->isSuccessful)
+                http_response_code(500);
                 $string = "<return service='createProjects'><error id='1'>". $operationResult->message . "</error></return>";
         }
         else {
@@ -219,19 +220,16 @@
             $operationResults = ProjectsFacade::CreateProjects($createProjects);
             $string = "<return service='createProjects'>";
             $errors = array_filter($operationResults, function ($item) {
-                return ($item->isSuccessful = false);
+                return ($item->isSuccessful == false);
             });
             if($errors){
-            $string .= "<errors>";
-                foreach((array) $errors as $result){
-                    if (!$result->isSuccessful)
-                        $string .= "<error id=''>" . $result->message . "</error>";
-                }
-            $string .= "</errors>";
-
-            }
-            else {
-            $string .= "<ok>All operations successful</ok>";
+                http_response_code(500);
+                $string .= "<errors>";
+                    foreach((array) $errors as $result){
+                        if (!$result->isSuccessful)
+                            $string .= "<error id=''>" . $result->message . "</error>";
+                    }
+                $string .= "</errors>";
             }
 
             $string .= "</return>";
