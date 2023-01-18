@@ -211,28 +211,26 @@
     if (count($createProjects) >= 1)
         if(count($createProjects) == 1){
             $operationResult = ProjectsFacade::CreateProject($createProjects[0]);
-            if (!$operationResult->isSuccessful)
+            if ($operationResult->isSuccessful == false){
                 http_response_code(500);
                 $string = "<return service='createProjects'><error id='1'>". $operationResult->message . "</error></return>";
+            }
         }
         else {
             //leaving the possibility to create multiple projects in the future
             $operationResults = ProjectsFacade::CreateProjects($createProjects);
-            $string = "<return service='createProjects'>";
             $errors = array_filter($operationResults, function ($item) {
                 return ($item->isSuccessful == false);
             });
             if($errors){
                 http_response_code(500);
-                $string .= "<errors>";
+                $string .= "<return service='createProjects'><errors>";
                     foreach((array) $errors as $result){
                         if (!$result->isSuccessful)
                             $string .= "<error id=''>" . $result->message . "</error>";
                     }
-                $string .= "</errors>";
+                $string .= "</errors></return>";
             }
-
-            $string .= "</return>";
         }
 
 
