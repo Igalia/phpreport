@@ -32,51 +32,52 @@
  *
  *  This is the object returned for all CRUD operations
  *
-  *  @property boolean $isSuccessful Whether the operation was successful or not
-  *  @property int $responseCode The http status code
-  *  @property int $errorNumber The php error number
-  *  @property string $message Error message that is passed up to front end. Can be php error or custom string.
+ *  @property boolean $isSuccessful Whether the operation was successful or not
+ *  @property int $responseCode The http status code
+ *  @property int $errorNumber The php error number
+ *  @property string $message Error message that is passed up to front end. Can be php error or custom string.
  */
-class OperationResult {
-	public $isSuccessful;
-	public $responseCode;
-	public $errorNumber;
-	public $message;
+class OperationResult
+{
+    private $isSuccessful;
+    private $responseCode;
+    private $errorNumber;
+    private $message;
 
-	function __construct($isSuccessful, $responseCode = null) {
-		$this->isSuccessful = $isSuccessful;
-		$this->responseCode = $responseCode;
-	}
+    function __construct($isSuccessful, $responseCode = null) {
+        $this->isSuccessful = $isSuccessful;
+        $this->responseCode = $responseCode;
+    }
 
-	public function getIsSuccessful(){
-		return $this->isSuccessful;
-	}
+    public function getIsSuccessful(){
+        return $this->isSuccessful;
+    }
 
-	public function setIsSuccessful($isSuccessful){
-		$this->isSuccessful = (boolean) $isSuccessful;
-	}
+    public function setIsSuccessful($isSuccessful){
+        $this->isSuccessful = (boolean) $isSuccessful;
+    }
 
-	public function getResponseCode(){
-		return $this->responseCode;
-	}
+    public function getResponseCode(){
+        return $this->responseCode;
+    }
 
-	public function setResponseCode($responseCode){
-		$this->responseCode = (int) $responseCode;
-	}
+    public function setResponseCode($responseCode){
+        $this->responseCode = (int) $responseCode;
+    }
 
-	public function getErrorNumber(){
-		return $this->errorNumber;
-	}
+    public function getErrorNumber(){
+        return $this->errorNumber;
+    }
 
-	public function setErrorNumber($errorNumber){
-		$this->errorNumber = (int) $errorNumber;
-	}
+    public function setErrorNumber($errorNumber){
+        $this->errorNumber = (int) $errorNumber;
+    }
 
-	public function getMessage(){
-		return $this->message;
-	}
+    public function getMessage(){
+        return $this->message;
+    }
 
-	public function setMessage($message){
-		$this->message = (string) $message;
-	}
+    public function setMessage($message){
+        $this->message = (string) $message;
+    }
 }

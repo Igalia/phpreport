@@ -599,7 +599,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      * @throws {@link SQLQueryErrorException}
      */
     public function create(ProjectVO $projectVO) {
-        $result = new OperationResult(true);
+        $result = new OperationResult(false);
 
         $sql = "INSERT INTO project (activation, init, _end, invoice, est_hours,
         areaid, customerid, type, description, moved_hours, sched_type) VALUES(
@@ -626,6 +626,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
 
             $projectVO->setId($this->pdo->lastInsertId('project_id_seq'));
 
+            $result->setIsSuccessful(true);
             $result->setMessage('Project created successfully.');
             $result->setResponseCode(201);
         }
