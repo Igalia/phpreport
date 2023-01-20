@@ -225,7 +225,7 @@
             if($errors){
                 //if multiple failures, let's just return a 500
                 http_response_code(500);
-                $string .= "<return service='createProjects'><errors>";
+                $string = "<return service='createProjects'><errors>";
                     foreach((array) $errors as $result){
                         if (!$result->getIsSuccessful())
                             $string .= "<error id=''>" . $result->getMessage() . "</error>";
