@@ -1,0 +1,22 @@
+version: '3'
+services:
+  phpreport-app:
+    build:
+      context: .
+      dockerfile: test.Dockerfile
+    image: igalia/phpreport
+    container_name: phpreport-app
+    restart: always
+    ports:
+      - '8000:8000'
+    depends_on:
+      - db
+  db:
+    build:
+      context: .
+      dockerfile: test_db.Dockerfile
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: phpreport
+      POSTGRES_USER: phpreport
