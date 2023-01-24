@@ -87,32 +87,32 @@
 --     Generated at:      Mon Nov 23 12:46:02 2009
 --     Input Files:       generateModelTrackers.dia
 
-drop table usr cascade ;
-drop table task cascade ;
-drop table customer cascade ;
-drop table project cascade ;
-drop table requests cascade ;
-drop table works cascade ;
-drop table project_schedule cascade ;
-drop table extra_hour cascade ;
-drop table user_group cascade ;
-drop table belongs cascade ;
-drop table hour_cost_history cascade ;
-drop table area_history cascade ;
-drop table city_history cascade ;
-drop table journey_history cascade ;
-drop table city cascade ;
-drop table common_event cascade ;
-drop table custom_event cascade ;
-drop table project_usr cascade ;
-drop table sector cascade ;
-drop table area cascade ;
-drop table iteration cascade ;
-drop table story cascade ;
-drop table task_story cascade ;
-drop table module cascade ;
-drop table section cascade ;
-drop table task_section cascade ;
+DROP TABLE IF EXISTS usr cascade ;
+DROP TABLE IF EXISTS task cascade ;
+DROP TABLE IF EXISTS customer cascade ;
+DROP TABLE IF EXISTS project cascade ;
+DROP TABLE IF EXISTS requests cascade ;
+DROP TABLE IF EXISTS works cascade ;
+DROP TABLE IF EXISTS project_schedule cascade ;
+DROP TABLE IF EXISTS extra_hour cascade ;
+DROP TABLE IF EXISTS user_group cascade ;
+DROP TABLE IF EXISTS belongs cascade ;
+DROP TABLE IF EXISTS hour_cost_history cascade ;
+DROP TABLE IF EXISTS area_history cascade ;
+DROP TABLE IF EXISTS city_history cascade ;
+DROP TABLE IF EXISTS journey_history cascade ;
+DROP TABLE IF EXISTS city cascade ;
+DROP TABLE IF EXISTS common_event cascade ;
+DROP TABLE IF EXISTS custom_event cascade ;
+DROP TABLE IF EXISTS project_usr cascade ;
+DROP TABLE IF EXISTS sector cascade ;
+DROP TABLE IF EXISTS area cascade ;
+DROP TABLE IF EXISTS iteration cascade ;
+DROP TABLE IF EXISTS story cascade ;
+DROP TABLE IF EXISTS task_story cascade ;
+DROP TABLE IF EXISTS module cascade ;
+DROP TABLE IF EXISTS section cascade ;
+DROP TABLE IF EXISTS task_section cascade ;
 
 
 -- Generated SQL Schema
