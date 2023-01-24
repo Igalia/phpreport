@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 use Phpreport\Web\services\TemplateService as TemplateService;
 
-define('PHPREPORT_ROOT', __DIR__ . '/../../../');
+if (!defined('PHPREPORT_ROOT')) define('PHPREPORT_ROOT', __DIR__ . '/../../../../');
 
 require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 
