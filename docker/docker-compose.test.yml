@@ -2,8 +2,8 @@ version: '3'
 services:
   phpreport-app:
     build:
-      context: .
-      dockerfile: test.Dockerfile
+      context: ../
+      dockerfile: docker/test.app.Dockerfile
     image: igalia/phpreport
     container_name: phpreport-app
     restart: always
@@ -13,8 +13,8 @@ services:
       - db
   db:
     build:
-      context: .
-      dockerfile: test_db.Dockerfile
+      context: ../
+      dockerfile: docker/test.db.Dockerfile
     ports:
       - "5432:5432"
     environment:

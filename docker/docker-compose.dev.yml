@@ -2,13 +2,15 @@
 version: '3'
 services:
   phpreport-app:
-    build: .
+    build:
+      context: ../
+      dockerfile: docker/dev.app.Dockerfile
     image: igalia/phpreport
     container_name: phpreport-app
     volumes:
       - phpreport-data:/var/lib/postgresql
     restart: always
-    ports: 
+    ports:
       - '80:80'
 
 volumes:

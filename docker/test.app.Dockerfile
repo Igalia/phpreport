@@ -6,9 +6,9 @@ RUN apt-get -y install php php-cli php-pgsql php-xml composer
 
 WORKDIR /app
 
-COPY . /app
+COPY ../. /app
 
-COPY config/config_test.php /app/config/config.php
+COPY config/config.test.php /app/config/config.php
 
 EXPOSE 8000
 
