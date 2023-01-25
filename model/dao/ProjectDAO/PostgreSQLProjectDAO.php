@@ -37,6 +37,7 @@ include_once(PHPREPORT_ROOT . '/model/vo/CustomProjectVO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/ProjectDAO/ProjectDAO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/ProjectUserDAO/PostgreSQLProjectUserDAO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/TaskDAO/PostgreSQLTaskDAO.php');
+include_once(PHPREPORT_ROOT . '/model/OperationResult.php');
 
 /** DAO for Projects in PostgreSQL
  *
@@ -594,36 +595,73 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      * The internal id of <var>$projectVO</var> will be set after its creation.
      *
      * @param ProjectVO $projectVO the {@link ProjectVO} with the data we want to insert on database.
-     * @return int the number of rows that have been affected (it should be 1).
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      * @throws {@link SQLQueryErrorException}
      */
     public function create(ProjectVO $projectVO) {
-        $affectedRows = 0;
+        $result = new OperationResult(false);
 
         $sql = "INSERT INTO project (activation, init, _end, invoice, est_hours,
-                areaid, customerid, type, description, moved_hours, sched_type) VALUES(" .
-                DBPostgres::boolToString($projectVO->getActivation()) . ", " .
-                DBPostgres::formatDate($projectVO->getInit()) . ", " .
-                DBPostgres::formatDate($projectVO->getEnd()) . ", " .
-                DBPostgres::checkNull($projectVO->getInvoice()) . ", " .
-                DBPostgres::checkNull($projectVO->getEstHours()) . ", " .
-                DBPostgres::checkNull($projectVO->getAreaId()) . ", " .
-                DBPostgres::checkNull($projectVO->getCustomerId()) . ", " .
-                DBPostgres::checkStringNull($projectVO->getType()) . ", " .
-                DBPostgres::checkStringNull($projectVO->getDescription()) . ", " .
-                DBPostgres::checkNull($projectVO->getMovedHours()) . ", " .
-                DBPostgres::checkStringNull($projectVO->getSchedType()) .")";
+        areaid, customerid, type, description, moved_hours, sched_type) VALUES(
+            :activation, :init, :end, :invoice, :est_hours,
+        :areaid, :customerid, :type, :description, :moved_hours, :sched_type)";
 
-        $res = pg_query($this->connect, $sql);
+        $initDateFormatted = (is_null($projectVO->getInit())) ? null : DBPostgres::formatDate($projectVO->getInit());
+        $endDateFormatted = (is_null($projectVO->getEnd())) ? null : DBPostgres::formatDate($projectVO->getEnd());
 
-        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":activation", $projectVO->getActivation(), PDO::PARAM_BOOL);
+            $statement->bindValue(":init", $initDateFormatted, PDO::PARAM_STR);
+            $statement->bindValue(":end", $endDateFormatted, PDO::PARAM_STR);
+            $statement->bindValue(":invoice", $projectVO->getInvoice(), PDO::PARAM_STR);
+            $statement->bindValue(":est_hours", $projectVO->getEstHours(), PDO::PARAM_STR);
+            $statement->bindValue(":areaid", $projectVO->getAreaId(), PDO::PARAM_INT);
+            $statement->bindValue(":customerid", $projectVO->getCustomerId(), PDO::PARAM_INT);
+            $statement->bindValue(":type", $projectVO->getType(), PDO::PARAM_STR);
+            $statement->bindValue(":description", $projectVO->getDescription(), PDO::PARAM_STR);
+            $statement->bindValue(":moved_hours", $projectVO->getMovedHours(), PDO::PARAM_STR);
+            $statement->bindValue(":sched_type", $projectVO->getSchedType(), PDO::PARAM_STR);
+            $statement->execute();
 
-        $projectVO->setId(DBPostgres::getId($this->connect, "project_id_seq"));
+            $projectVO->setId($this->pdo->lastInsertId('project_id_seq'));
 
-        $affectedRows = pg_affected_rows($res);
+            $result->setIsSuccessful(true);
+            $result->setMessage('Project created successfully.');
+            $result->setResponseCode(201);
+        }
+        catch (PDOException $ex) {
+            //make sure to log the error as a failure, but return the OperationResult object
+            //successfully so that front end can see error and fail gracefully
+            $errorMessage = $ex->getMessage();
+            error_log('Project creation failed: ' . $errorMessage);
+            $result->setErrorNumber($ex->getCode());
+            $resultMessage = "Project creation failed: \n";
 
-        return $affectedRows;
+            if(strpos($errorMessage, "Foreign key violation")){
+                if(strpos($errorMessage, "customerid")){
+                    $resultMessage .= "Customer not yet created. Please create customer first. \n";
+                }
+                if(strpos($errorMessage,"areaid")){
+                    $resultMessage .= "Area not yet created. Please create area first.";
+                }
+            }
+            else if (strpos($errorMessage, "Not null violation")){
+                if(strpos($errorMessage,"areaid")){
+                    $resultMessage .= "Area is null. Please choose area.";
+                }
+            }
+            else {
+                //if not a predictable error like FK/null violation, just return the native error code and message
+                $resultMessage .= $result . $errorMessage;
+            }
 
+            $result->setMessage($resultMessage);
+            $result->setIsSuccessful(false);
+            $result->setResponseCode(500);
+        }
+
+        return $result;
     }
 
     /** Project deleter for PostgreSQL.

@@ -1106,9 +1106,14 @@ Ext.onReady(function(){
                 projectGrid.getSelectionModel().selectRow(rowIndex);
                 projectGrid.getView().focusRow(rowIndex);
             },
-            'exception': function(){
-                App.setAlert(false, "Some Error Occurred While Saving The Changes");
-            },
+            'exception': function(proxy, type, action, eOpts, res){
+                let parser = new DOMParser();
+                let errorDoc = parser.parseFromString(res.responseText, "text/xml");
+                let errorMessage = errorDoc.getElementsByTagName("error")[0].childNodes[0].nodeValue;
+                App.setAlert(false, errorMessage);
+                //if creation fails, reload data store so that "dirty" record from attempt doesn't persist
+                projectsStore.reload();
+            }
         }
     });
 
