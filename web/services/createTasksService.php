@@ -217,7 +217,6 @@
                 }
                 //Support 0-hour tasks: reparse end time if initTime == 0 to the end so that order of parse doesn't cause error if end time added before init time by users
                 if (($endTimeParseOrig['hour']==0) && ($endTimeParseOrig['minute']==0) && ($initTime == 0)) {
-                    $endTimeParse = date_parse_from_format($endTimeFormat, $endTime);
                     $endTime = $endTimeParseOrig['hour']*60 + $endTimeParseOrig['minute'];
                     $taskVO->setEnd($endTime);
                 }
