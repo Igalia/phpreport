@@ -223,3 +223,18 @@ ADD COLUMN updated_at timestamp;
 --
 
 UPDATE config SET version='2.22';
+
+--
+-- Allow DELETE CASCADE of user assignments to projects.
+--
+ALTER TABLE project_usr DROP CONSTRAINT project_usr_fk_ProjectId;
+ALTER TABLE project_usr ADD CONSTRAINT project_usr_fk_ProjectId
+  FOREIGN KEY (projectId)
+  REFERENCES project (id)
+  ON DELETE CASCADE;
+
+--
+-- Set database version to 2.23
+--
+
+UPDATE config SET version='2.23';
