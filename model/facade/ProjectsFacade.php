@@ -162,15 +162,11 @@ abstract class ProjectsFacade {
      *  This function is used for deleting a Project.
      *
      * @param ProjectVO $project the Project value object we want to delete.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     static function DeleteProject(ProjectVO $project) {
-
-    $action = new DeleteProjectAction($project);
-
-    return $action->execute();
-
+        $action = new DeleteProjectAction($project);
+        return $action->execute();
     }
 
     /** Delete Projects Function
@@ -179,17 +175,13 @@ abstract class ProjectsFacade {
      *  If an error occurs, it stops deleting.
      *
      * @param array $projects the Project value objects we want to delete.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}
+     * @return array OperationResult the array of results {@link OperationResult} with information about operation status.
      */
     static function DeleteProjects($projects) {
-
-    foreach((array)$projects as $project)
-        if ((ProjectsFacade::DeleteProject($project)) == -1)
-            return -1;
-
-    return 0;
-
+        $operationResults = [];
+        foreach ((array) $projects as $project)
+            $operationResults[] = ProjectsFacade::DeleteProject($project);
+        return $operationResults;
     }
 
     /** Project Users Assigning

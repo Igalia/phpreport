@@ -669,27 +669,46 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      * This function deletes the data of a Project by its {@link ProjectVO}.
      *
      * @param ProjectVO $projectVO the {@link ProjectVO} with the data we want to delete from database.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link SQLQueryErrorException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public function delete(ProjectVO $projectVO) {
-        $affectedRows = 0;
+        $result = new OperationResult(false);
 
-        // Check for a user ID.
-        if($projectVO->getId() >= 0) {
-            $currProjectVO = $this->getById($projectVO->getId());
+        $sql = "DELETE FROM project WHERE id=:id";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":id", $projectVO->getId(), PDO::PARAM_INT);
+            $statement->execute();
+
+            $result->setIsSuccessful(true);
+            $result->setMessage('Project deleted successfully.');
+            $result->setResponseCode(200);
+        }
+        catch (PDOException $ex) {
+            $errorMessage = $ex->getMessage();
+            error_log('Project deletion failed: ' . $errorMessage);
+
+            $resultMessage = "Project deletion failed: \n";
+            if(strpos($errorMessage, "Foreign key violation")) {
+                if(strpos($errorMessage, "task")) {
+                    $resultMessage .= "The project has assigned tasks.\n";
+                }
+                else {
+                    // catch-all for any foreign key violations that we may add in the future
+                    $resultMessage .= "There is data associated to the project.\n";
+                }
+            }
+            else {
+                // unpredictable error, just return the native error code and message
+                $resultMessage .= $errorMessage;
+            }
+            $result->setErrorNumber($ex->getCode());
+            $result->setMessage($resultMessage);
+            $result->setIsSuccessful(false);
+            $result->setResponseCode(500);
         }
 
-        // If it exists, then delete.
-        if(sizeof($currProjectVO) > 0) {
-            $sql = "DELETE FROM project WHERE id=".$projectVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-            if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-                $affectedRows = pg_affected_rows($res);
-        }
-
-        return $affectedRows;
+        return $result;
     }
 }
 
