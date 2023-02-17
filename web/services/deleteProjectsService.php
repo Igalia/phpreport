@@ -99,12 +99,21 @@
 
     }
 
+    $operationResults = ProjectsFacade::DeleteProjects($deleteProjects);
+    $errors = array_filter($operationResults, function ($item) {
+        return (!$item->getIsSuccessful());
+    });
+    if ($errors) {
+        //if multiple failures, let's just return a 500
+        http_response_code(500);
+        $string = "<return service='deleteProjects'><errors>";
+        foreach ($errors as $result) {
+            $string .= "<error id='" . $result->getErrorNumber() . "'>" . $result->getMessage() . "</error>";
+        }
+        $string .= "</errors></return>";
+    }
 
-    if (count($deleteProjects) >= 1)
-        if (ProjectsFacade::DeleteProjects($deleteProjects) == -1)
-            $string = "<return service='deleteProjects'><error id='1'>There was some error while deleting the projects</error></return>";
-
-    if (!$string)
+    if (!isset($string))
         $string = "<return service='deleteProjects'><ok>Operation Success!</ok></return>";
 
 
