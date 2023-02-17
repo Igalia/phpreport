@@ -76,14 +76,3 @@ class DeleteProjectAction extends Action{
         return $dao->delete($this->project);
     }
 }
-
-/*
-//Test code
-
-$projectvo= new ProjectVO();
-$projectvo->setId(1);
-$action= new DeleteProjectAction($projectvo);
-var_dump($action);
-$action->execute();
-var_dump($projectvo);
-*/
