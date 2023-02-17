@@ -38,18 +38,7 @@ include_once(PHPREPORT_ROOT . '/model/dao/BaseDAO.php');
  *
  * @see DAOFactory::getProjectDAO(), ProjectVO
  */
-abstract class ProjectDAO extends BaseDAO{
-
-    /** Project DAO constructor.
-     *
-     * This is the base constructor of Project DAOs, and it just calls its parent's constructor.
-     *
-     * @throws {@link ConnectionErrorException}
-     * @see BaseDAO::__construct()
-     */
-    protected function __construct() {
-    parent::__construct();
-    }
+abstract class ProjectDAO extends BaseDAO {
 
     /** Project retriever by id.
      *
