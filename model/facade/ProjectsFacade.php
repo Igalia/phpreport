@@ -284,15 +284,11 @@ abstract class ProjectsFacade {
      *
      * @param ProjectVO $task the Project value object we want to update.
      * @param array $update the updating flags of the Project VO.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     static function PartialUpdateProject(ProjectVO $project, $update) {
-
-    $action = new PartialUpdateProjectAction($project, $update);
-
-    return $action->execute();
-
+        $action = new PartialUpdateProjectAction($project, $update);
+        return $action->execute();
     }
 
     /** Partial Update Projects Function
@@ -302,17 +298,13 @@ abstract class ProjectsFacade {
      *
      * @param array $projects the Project value objects we want to update.
      * @param array $updates the updating flag arrays of the Project VOs.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}
+     * @return array OperationResult the array of results {@link OperationResult} with information about operation status.
      */
     static function PartialUpdateProjects($projects, $updates) {
-
-    foreach((array)$projects as $i=>$project)
-        if ((ProjectsFacade::PartialUpdateProject($project, $updates[$i])) == -1)
-            return -1;
-
-    return 0;
-
+        $operationResults = [];
+        foreach ((array) $projects as $i=>$project)
+            $operationResults[] = ProjectsFacade::PartialUpdateProject($project, $updates[$i]);
+        return $operationResults;
     }
 
     /** GetProjectsByCustomerUserLogin Function
