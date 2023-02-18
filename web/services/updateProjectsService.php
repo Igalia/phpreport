@@ -66,7 +66,19 @@
 
         $projectVO = new ProjectVO();
 
-        $update = array();
+        $update = array(
+            "activation"  => false,
+            "init"        => false,
+            "end"         => false,
+            "invoice"     => false,
+            "estHours"    => false,
+            "description" => false,
+            "areaId"      => false,
+            "customerId"  => false,
+            "type"        => false,
+            "movedHours"  => false,
+            "schedType"   => false
+        );
 
         $parser->read();
 
@@ -226,11 +238,19 @@
 
     }
 
-
-    if (count($updateProjects) >= 1)
-        if (ProjectsFacade::PartialUpdateProjects($updateProjects, $updates) == -1)
-            $string = "<return service='updateProjects'><error id='1'>There was some error while updating the projects</error></return>";
-
+    $operationResults = ProjectsFacade::PartialUpdateProjects($updateProjects, $updates);
+    $errors = array_filter($operationResults, function ($item) {
+        return (!$item->getIsSuccessful());
+    });
+    if ($errors) {
+        //if multiple failures, let's just return a 500
+        http_response_code(500);
+        $string = "<return service='updateProjects'><errors>";
+        foreach ($errors as $result) {
+            $string .= "<error id='" . $result->getErrorNumber() . "'>" . $result->getMessage() . "</error>";
+        }
+        $string .= "</errors></return>";
+    }
 
     if (!isset($string))
         $string = "<return service='updateProjects'><ok>Operation Success!</ok></return>";

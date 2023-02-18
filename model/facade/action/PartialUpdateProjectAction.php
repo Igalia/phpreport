@@ -32,6 +32,7 @@
 include_once(PHPREPORT_ROOT . '/model/facade/action/Action.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
+include_once(PHPREPORT_ROOT . '/model/OperationResult.php');
 
 /** Partial Update Project Action
  *
@@ -77,17 +78,11 @@ class PartialUpdateProjectAction extends Action{
      *
      * This is the function that contains the code that updates the Project on persistent storing.
      *
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     protected function doExecute() {
-
         $dao = DAOFactory::getProjectDAO();
-
-        if ($dao->partialUpdate($this->project, $this->update)!=1) {
-            return -1;
-        }
-
-        return 0;
+        return $dao->partialUpdate($this->project, $this->update);
     }
 
 }

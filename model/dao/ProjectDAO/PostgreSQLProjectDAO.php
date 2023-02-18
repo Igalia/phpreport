@@ -482,70 +482,137 @@ class PostgreSQLProjectDAO extends ProjectDAO {
      *
      * @param ProjectVO $projectVO the {@link ProjectVO} with the data we want to update on database.
      * @param array $update an array with flags for updating or not the different fields.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link SQLQueryErrorException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public function partialUpdate(ProjectVO $projectVO, $update) {
-        $affectedRows = 0;
+        $result = new OperationResult(false);
 
-        if($projectVO->getId() != "") {
-            $currProjectVO = $this->getById($projectVO->getId());
+        $sql = "UPDATE project SET ";
+
+        if ($update['activation'])
+            $sql .= "activation=:activation, ";
+
+        if ($update['init'])
+            $sql .= "init=:init, ";
+
+        if ($update['end'])
+            $sql .= "_end=:end, ";
+
+        if ($update['invoice'])
+            $sql .= "invoice=:invoice, ";
+
+        if ($update['estHours'])
+            $sql .= "est_hours=:est_hours, ";
+
+        if ($update['areaId'])
+            $sql .= "areaid=:areaid, ";
+
+        if ($update['customerId'])
+            $sql .= "customerid=:customerid, ";
+
+        if ($update['description'])
+            $sql .= "description=:description, ";
+
+        if ($update['type'])
+            $sql .= "type=:type, ";
+
+        if ($update['movHours'])
+            $sql .= "moved_hours=:moved_hours, ";
+
+        if ($update['schedType'])
+            $sql .= "sched_type=:sched_type, ";
+
+        if (strlen($sql) == strlen("UPDATE project SET ")) {
+            $result->setIsSuccessful(true);
+            $result->setMessage('No changes.');
+            $result->setResponseCode(200);
+
+            return $result;
         }
 
-        // If the query returned a row then update
-        if (!is_null($currProjectVO)) {
+        // remove the last comma
+        $sql = substr($sql, 0, -2);
 
-            $sql = "UPDATE project SET ";
+        $sql .= " WHERE id=:id";
+
+        $initDateFormatted = (is_null($projectVO->getInit())) ? null : DBPostgres::formatDate($projectVO->getInit());
+        $endDateFormatted = (is_null($projectVO->getEnd())) ? null : DBPostgres::formatDate($projectVO->getEnd());
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":id", $projectVO->getId(), PDO::PARAM_INT);
 
             if ($update['activation'])
-                $sql .= "activation=" . DBPostgres::boolToString($projectVO->getActivation()) . ", ";
+                $statement->bindValue(":activation", $projectVO->getActivation(), PDO::PARAM_BOOL);
 
             if ($update['init'])
-                $sql .= "init=" . DBPostgres::formatDate($projectVO->getInit()) . ", ";
+                $statement->bindValue(":init", $initDateFormatted, PDO::PARAM_STR);
 
             if ($update['end'])
-                $sql .= "_end=" . DBPostgres::formatDate($projectVO->getEnd()) . ", ";
+                $statement->bindValue(":end", $endDateFormatted, PDO::PARAM_STR);
 
             if ($update['invoice'])
-                $sql .= "invoice=" . DBPostgres::checkNull($projectVO->getInvoice()) . ", ";
+                $statement->bindValue(":invoice", $projectVO->getInvoice(), PDO::PARAM_STR);
 
             if ($update['estHours'])
-                $sql .= "est_hours=" . DBPostgres::checkNull($projectVO->getEstHours()) . ", ";
+                $statement->bindValue(":est_hours", $projectVO->getEstHours(), PDO::PARAM_STR);
 
             if ($update['areaId'])
-                $sql .= "areaid=" . DBPostgres::checkNull($projectVO->getAreaId()) . ", ";
+                $statement->bindValue(":areaid", $projectVO->getAreaId(), PDO::PARAM_INT);
 
             if ($update['customerId'])
-                $sql .= "customerid=" . DBPostgres::checkNull($projectVO->getCustomerId()) . ", ";
+                $statement->bindValue(":customerid", $projectVO->getCustomerId(), PDO::PARAM_INT);
 
             if ($update['description'])
-                $sql .= "description=" . DBPostgres::checkStringNull($projectVO->getDescription()) . ", ";
+                $statement->bindValue(":description", $projectVO->getDescription(), PDO::PARAM_STR);
 
             if ($update['type'])
-                $sql .= "type=" . DBPostgres::checkStringNull($projectVO->getType()) . ", ";
+                $statement->bindValue(":type", $projectVO->getType(), PDO::PARAM_STR);
 
             if ($update['movHours'])
-                $sql .= "moved_hours=" . DBPostgres::checkNull($projectVO->getMovedHours()) . ", ";
+                $statement->bindValue(":moved_hours", $projectVO->getMovedHours(), PDO::PARAM_STR);
 
             if ($update['schedType'])
-                $sql .= "sched_type=" . DBPostgres::checkStringNull($projectVO->getSchedType());
+                $statement->bindValue(":sched_type", $projectVO->getSchedType(), PDO::PARAM_STR);
 
-            if (strlen($sql) == strlen("UPDATE project SET "))
-                return NULL;
+            $statement->execute();
 
-            $last = strrpos($sql, ",");
+            $result->setIsSuccessful(true);
+            $result->setMessage('Project created successfully.');
+            $result->setResponseCode(200);
+        }
+        catch (PDOException $ex) {
+            //make sure to log the error as a failure, but return the OperationResult object
+            //successfully so that front end can see error and fail gracefully
+            $errorMessage = $ex->getMessage();
+            error_log('Project update failed: ' . $errorMessage);
+            $result->setErrorNumber($ex->getCode());
+            $resultMessage = "Project update failed: \n";
 
-            if ($last == (strlen($sql) - 2))
-                $sql = substr($sql, 0, -2);
+            if (strpos($errorMessage, "Foreign key violation")){
+                if (strpos($errorMessage, "customerid")) {
+                    $resultMessage .= "Assigned customer does not exist.";
+                }
+                else if (strpos($errorMessage,"areaid")) {
+                    $resultMessage .= "Assigned area does not exist.";
+                }
+            }
+            else if (strpos($errorMessage, "Not null violation")) {
+                if (strpos($errorMessage,"areaid")) {
+                    $resultMessage .= "Area is null. Please choose area.";
+                }
+            }
+            else {
+                //if not a predictable error like FK/null violation, just return the native error code and message
+                $resultMessage .= $errorMessage;
+            }
 
-            $sql .= " WHERE id=".$projectVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-            if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-                $affectedRows = pg_affected_rows($res);
+            $result->setMessage($resultMessage);
+            $result->setIsSuccessful(false);
+            $result->setResponseCode(500);
         }
 
-        return $affectedRows;
+        return $result;
     }
 
     /** Project updater for PostgreSQL.
