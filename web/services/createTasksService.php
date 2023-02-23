@@ -226,11 +226,14 @@
 
         } while ($parser->read());
 
-
-        if (count($createTasks) >= 1)
-            if (TasksFacade::CreateReports($createTasks) == -1)
-                $string = "<return service='createTasks'><success>false</success><error id='1'>There was some error while creating the tasks</error></return>";
-
+        $result = TasksFacade::CreateReports($createTasks);
+        if (!$result->getIsSuccessful()) {
+            //if multiple failures, let's just return a 500
+            http_response_code(500);
+            $string = "<return service='deleteProjects'><errors>";
+            $string .= "<error id='" . $result->getErrorNumber() . "'>" . $result->getMessage() . "</error>";
+            $string .= "</errors></return>";
+        }
 
         if (!isset($string))
         {
