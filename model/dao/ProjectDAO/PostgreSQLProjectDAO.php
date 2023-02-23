@@ -653,7 +653,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
             }
             else {
                 //if not a predictable error like FK/null violation, just return the native error code and message
-                $resultMessage .= $result . $errorMessage;
+                $resultMessage .= $errorMessage;
             }
 
             $result->setMessage($resultMessage);
