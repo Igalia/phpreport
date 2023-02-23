@@ -546,39 +546,3 @@ abstract class TasksFacade {
         return $dao->getVacationsProjectId();
     }
 }
-
-//var_dump(TasksFacade::GetPersonalSummaryByUserIdDate(60, new DateTime()));
-
-/*$task = new TaskVO();
-
-$task->setId(1);
-
-$task->setStory("lolololol");
-
-$task->setTelework(true);
-
-$update = array();
-
-$update[telework] = true;
-
-$update[story] = true;
-
-$tasks[] = $task;
-
-$updates[] = $update;
-
-$task = new TaskVO();
-
-$task->setId(2);
-
-$task->setStory("lalalal");
-
-$update = array();
-
-$update[story] = false;
-
-$tasks[] = $task;
-
-$updates[] = $update;
-
-TasksFacade::PartialUpdateReports($tasks, $updates);*/
