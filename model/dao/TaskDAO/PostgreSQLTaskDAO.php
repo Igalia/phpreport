@@ -839,16 +839,28 @@ class PostgreSQLTaskDAO extends TaskDAO{
      *
      * This function creates a new row for a Task by its {@link TaskVO}.
      * The internal id of <var>$taskVO</var> will be set after its creation.
-     * WARNING: it doesn't check if task overlaps with other tasks, because that
-     * would be very expensive to do for every task. TaskDAO::batchCreate should
-     * be used for that purpose.
-     * TODO: consider making private.
      *
      * @param TaskVO $taskVO the {@link TaskVO} with the data we want to insert on database.
      * @return int the number of rows that have been affected (it should be 1).
      * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
      */
     public function create(TaskVO $taskVO) {
+        $tasks = array($taskVO);
+        return $this->batchCreate($tasks);
+    }
+
+    /** Task creator for PostgreSQL.
+     *
+     * This function creates a new row for a Task by its {@link TaskVO}.
+     * The internal id of <var>$taskVO</var> will be set after its creation.
+     * WARNING: it doesn't check if task overlaps with other tasks.
+     * TaskDAO::create and TaskDAO::batchCreate should be used for that purpose.
+     *
+     * @param TaskVO $taskVO the {@link TaskVO} with the data we want to insert on database.
+     * @return int the number of rows that have been affected (it should be 1).
+     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
+     */
+    private function createInternal(TaskVO $taskVO) {
         $affectedRows = 0;
 
         $sql = "INSERT INTO task (" .
@@ -894,6 +906,15 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
     }
 
+    /** Task batch creator.
+     *
+     * Equivalent to {@see create} for arrays of tasks.
+     *
+     * @param array $tasks array of {@link TaskVO} objects to be created.
+     * @return int the number of rows that have been affected (it should be
+     *         equal to the size of $tasks).
+     * @throws {@link SQLQueryErrorException}
+     */
     public function batchCreate($tasks) {
         if (!$this->checkOverlappingWithDBTasks($tasks)) {
             return 0;
@@ -902,7 +923,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
         $affectedRows = 0;
 
         foreach ($tasks as $task) {
-            $affectedRows += $this->create($task);
+            $affectedRows += $this->createInternal($task);
         }
 
         return $affectedRows;
