@@ -59,8 +59,8 @@ class TaskVO {
     protected $init = NULL;
     protected $_end = NULL;
     protected $story = NULL;
-    protected $telework = NULL;
-    protected $onsite = NULL;
+    protected $telework = false;
+    protected $onsite = false;
     protected $text = NULL;
     protected $ttype = NULL;
     protected $phase = NULL;
