@@ -932,9 +932,12 @@ var tasksStore = new Ext.ux.TasksStore({
             }
             tasksStore.error = false;
         },
-        'exception': function () {
+        'exception': function(proxy, type, action, eOpts, res) {
             Ext.onReady(function () { // this may run in case of error in the initial load
-                App.setAlert(false, "Some Error Occurred While Saving The Changes (please check you haven't clipped working hours)");
+                let parser = new DOMParser();
+                let errorDoc = parser.parseFromString(res.responseText, "text/xml");
+                let errorMessage = errorDoc.getElementsByTagName("error")[0].childNodes[0].nodeValue;
+                App.setAlert(false, errorMessage);
                 tasksStore.error = true;
             });
         },

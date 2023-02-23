@@ -841,8 +841,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
      * The internal id of <var>$taskVO</var> will be set after its creation.
      *
      * @param TaskVO $taskVO the {@link TaskVO} with the data we want to insert on database.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public function create(TaskVO $taskVO) {
         $tasks = array($taskVO);
@@ -911,13 +910,16 @@ class PostgreSQLTaskDAO extends TaskDAO{
      * Equivalent to {@see create} for arrays of tasks.
      *
      * @param array $tasks array of {@link TaskVO} objects to be created.
-     * @return int the number of rows that have been affected (it should be
-     *         equal to the size of $tasks).
-     * @throws {@link SQLQueryErrorException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public function batchCreate($tasks) {
+        $result = new OperationResult(false);
         if (!$this->checkOverlappingWithDBTasks($tasks)) {
-            return 0;
+            $result->setErrorNumber(10);
+            $result->setMessage("Task creation failed:\nDetected overlapping times.");
+            $result->setIsSuccessful(false);
+            $result->setResponseCode(500);
+            return $result;
         }
 
         $affectedRows = 0;
@@ -926,7 +928,11 @@ class PostgreSQLTaskDAO extends TaskDAO{
             $affectedRows += $this->createInternal($task);
         }
 
-        return $affectedRows;
+        if ($affectedRows == count($tasks)) {
+            $result->setIsSuccessful(true);
+            $result->setResponseCode(201);
+        }
+        return $result;
     }
 
     /** Task deleter for PostgreSQL.

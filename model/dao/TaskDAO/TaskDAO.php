@@ -245,8 +245,7 @@ abstract class TaskDAO extends BaseDAO{
      * The internal id of <var>$taskVO</var> will be set after its creation.
      *
      * @param TaskVO $taskVO the {@link TaskVO} with the data we want to insert on database.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link OperationErrorException}, {@link SQLUniqueViolationException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public abstract function create(TaskVO $taskVO);
 
@@ -255,9 +254,7 @@ abstract class TaskDAO extends BaseDAO{
      * Equivalent to {@see create} for arrays of tasks.
      *
      * @param array $tasks array of {@link TaskVO} objects to be created.
-     * @return int the number of rows that have been affected (it should be
-     *         equal to the size of $tasks).
-     * @throws {@link SQLQueryErrorException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public abstract function batchCreate($tasks);
 

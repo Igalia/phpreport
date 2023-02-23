@@ -68,40 +68,39 @@ class CreateTasksAction extends Action {
      *
      * Runs the action itself.
      *
-     * @return int it just indicates if there was any error (<i>-1</i>)
-     *         or not (<i>0</i>).
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     protected function doExecute() {
         $configDao = DAOFactory::getConfigDAO();
         $taskDao = DAOFactory::getTaskDAO();
         $projectDAO = DAOFactory::getProjectDAO();
         $discardedTasks = array();
+        $discardedReason = "";
 
         //first check permission on task write
         foreach ($this->tasks as $i => $task) {
             if (!$configDao->isWriteAllowedForDate($task->getDate())) {
                 $discardedTasks[] = $task;
+                $discardedReason .= "Not allowed to write to date.\n";
                 unset($this->tasks[$i]);
                 continue;
             }
             $projectVO = $projectDAO->getById($task->getProjectId());
             if (!$projectVO || !$projectVO->getActivation()) {
                 $discardedTasks[] = $task;
+                $discardedReason .= "Not allowed to write to project.\n";
                 unset($this->tasks[$i]);
             }
         }
 
-        if ($taskDao->batchCreate($this->tasks) < count($this->tasks)) {
-            return -1;
-        }
+        $result = $taskDao->batchCreate($this->tasks);
 
         //TODO: do something meaningful with the list of discarded tasks
-        if (empty($discardedTasks)) {
-            return 0;
+        if (!empty($discardedTasks)) {
+            $result = new OperationResult(false);
+            $result->setMessage("Some tasks were discarded:\n" . $discardedReason);
         }
-        else {
-            return -1;
-        }
+        return $result;
     }
 
 }
