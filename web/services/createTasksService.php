@@ -78,8 +78,6 @@
 
                 $taskVO = new TaskVO();
 
-                $taskVO->setTelework(false);
-
                 $parser->read();
 
                 while ($parser->name != "task") {

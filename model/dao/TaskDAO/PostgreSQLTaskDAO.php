@@ -860,49 +860,51 @@ class PostgreSQLTaskDAO extends TaskDAO{
      * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
      */
     private function createInternal(TaskVO $taskVO) {
-        $affectedRows = 0;
+        $result = new OperationResult(false);
 
-        $sql = "INSERT INTO task (" .
-            "_date, " .
-            "init, " .
-            "_end, " .
-            "story, " .
-            "telework, " .
-            "onsite, " .
-            "text, " .
-            "ttype, " .
-            "phase, " .
-            "usrid, " .
-            "projectid, " .
-            "updated_at " .
-            ") VALUES(" .
-            DBPostgres::formatDate($taskVO->getDate()) . ", " .
-            DBPostgres::checkNull($taskVO->getInit()) . ", " .
-            DBPostgres::checkNull($taskVO->getEnd()) . ", " .
-            DBPostgres::checkStringNull($taskVO->getStory()) . ", " .
-            DBPostgres::boolToString($taskVO->getTelework()) . ", " .
-            DBPostgres::boolToString($taskVO->getOnsite()) . ", " .
-            DBPostgres::checkStringNull($taskVO->getText()) . ", " .
-            DBPostgres::checkStringNull($taskVO->getTtype()) . ", " .
-            DBPostgres::checkStringNull($taskVO->getPhase()) . ", " .
-            DBPostgres::checkNull($taskVO->getUserId()) . ", " .
-            DBPostgres::checkNull($taskVO->getProjectId()) . ", " .
-            "now()" .
-            ")" ;
+        $sql =
+            "INSERT INTO task (_date, init, _end, story, telework, onsite, " .
+                "text, ttype, phase, usrid, projectid, updated_at) " .
+            "VALUES (:date, :init, :end, :story, :telework, :onsite, " .
+                ":text, :ttype, :phase, :usrid, :projectid, now() )";
 
-        $res = pg_query($this->connect, $sql);
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":date", DBPostgres::formatDate($taskVO->getDate()), PDO::PARAM_STR);
+            $statement->bindValue(":init", $taskVO->getInit(), PDO::PARAM_INT);
+            $statement->bindValue(":end", $taskVO->getEnd(), PDO::PARAM_INT);
+            $statement->bindValue(":story", $taskVO->getStory(), PDO::PARAM_STR);
+            $statement->bindValue(":telework", $taskVO->getTelework(), PDO::PARAM_BOOL);
+            $statement->bindValue(":onsite", $taskVO->getOnsite(), PDO::PARAM_BOOL);
+            $statement->bindValue(":text", $taskVO->getText(), PDO::PARAM_STR);
+            $statement->bindValue(":ttype", $taskVO->getTtype(), PDO::PARAM_STR);
+            $statement->bindValue(":phase", $taskVO->getPhase(), PDO::PARAM_STR);
+            $statement->bindValue(":usrid", $taskVO->getUserId(), PDO::PARAM_INT);
+            $statement->bindValue(":projectid", $taskVO->getProjectId(), PDO::PARAM_INT);
+            $statement->execute();
 
-        if ($res == NULL)
-            if (strpos(pg_last_error(), "unique_task_usr_time"))
-                throw new SQLUniqueViolationException(pg_last_error());
-            else throw new SQLQueryErrorException(pg_last_error());
+            $taskVO->setId($this->pdo->lastInsertId('task_id_seq'));
 
-        $taskVO->setId(DBPostgres::getId($this->connect, "task_id_seq"));
+            $result->setIsSuccessful(true);
+            $result->setMessage('Task created successfully.');
+            $result->setResponseCode(201);
+        }
+        catch (PDOException $ex) {
+            $errorMessage = $ex->getMessage();
+            $resultMessage = "Error creating task:\n";
+            if(strpos($errorMessage, "end_after_init_task")) {
+                $resultMessage .= "Start time later than end time.";
+            }
+            else {
+                $resultMessage .= $errorMessage;
+            }
+            $result->setErrorNumber($ex->getCode());
+            $result->setMessage($resultMessage);
+            $result->setIsSuccessful(false);
+            $result->setResponseCode(500);
+        }
 
-        $affectedRows = pg_affected_rows($res);
-
-        return $affectedRows;
-
+        return $result;
     }
 
     /** Task batch creator.
@@ -913,25 +915,20 @@ class PostgreSQLTaskDAO extends TaskDAO{
      * @return array OperationResult the array of {@link OperationResult} with information about operation status
      */
     public function batchCreate($tasks) {
-        $result = new OperationResult(false);
         if (!$this->checkOverlappingWithDBTasks($tasks)) {
+            $result = new OperationResult(false);
             $result->setErrorNumber(10);
             $result->setMessage("Task creation failed:\nDetected overlapping times.");
             $result->setResponseCode(500);
             return array($result);
         }
 
-        $affectedRows = 0;
-
+        $results = array();
         foreach ($tasks as $task) {
-            $affectedRows += $this->createInternal($task);
+            $results[] = $this->createInternal($task);
         }
 
-        if ($affectedRows == count($tasks)) {
-            $result->setIsSuccessful(true);
-            $result->setResponseCode(201);
-        }
-        return array($result);
+        return $results;
     }
 
     /** Task deleter for PostgreSQL.
