@@ -530,6 +530,19 @@ abstract class TasksFacade {
         return $dao->getLastTaskDate($userVO->getId(), $referenceDate);
     }
 
+    /** Retrieve list of days with no task in a period of time
+     *
+     * @param int $userId Id of the user to check
+     * @param  $start The start date of the period.
+     * @param  $end The end date of the period.
+     * @return array The list of week days in the period that doesn't have any task.
+     */
+    static function getEmptyDaysInPeriod(UserVO $userVO, DateTime $start, DateTime $end) {
+        $dao = DAOFactory::getTaskDAO();
+
+        return $dao->getEmptyDaysInPeriod($userVO->getId(), $start, $end);
+    }
+
     /** Retrieve the id for the configured VACATIONS_PROJECT.
      *
      * The project id will be retrieved based on the configuration parameters
