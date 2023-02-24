@@ -37,8 +37,6 @@
     $NO_FILL_EMAIL_FROM = ConfigurationParametersManager::getParameter('NO_FILL_EMAIL_FROM');
     $NO_FILL_TEMPLATE_MANAGERS = ConfigurationParametersManager::getParameter('NO_FILL_TEMPLATE_MANAGERS');
     $NO_FILL_SUBJECT_MANAGERS = ConfigurationParametersManager::getParameter('NO_FILL_SUBJECT_MANAGERS');
-    $NO_FILL_DAYS_TRIGGER_CRITICAL = ConfigurationParametersManager::getParameter('NO_FILL_DAYS_TRIGGER_CRITICAL');
-    $NO_FILL_DAYS_TRIGGER_LAST = ConfigurationParametersManager::getParameter('NO_FILL_DAYS_TRIGGER_LAST');
 
     $today = new DateTime(date('Y-m-d'));
     $initDate = new DateTime($today->format('Y').'-01-01');
@@ -47,6 +45,19 @@
     $excludedUsers = [];
     $criticalWarnedUsers = [];
     $lastWarnedUsers = [];
+
+    $lastMonday = new DateTime(date("Y-m-d", strtotime("last week monday")));
+    $lastFriday = new DateTime(date("Y-m-d", strtotime("last week friday")));
+
+    $monday2weeksAgo = new DateTime(date("Y-m-d", strtotime("last week monday -1 week")));
+    $friday2weeksAgo = new DateTime(date("Y-m-d", strtotime("last week friday -1 week")));
+
+    $monday3weeksAgo = new DateTime(date("Y-m-d", strtotime("last week monday -2 weeks")));
+    $friday3weeksAgo = new DateTime(date("Y-m-d", strtotime("last week friday -2 weeks")));
+
+    $warnedUsers = [];
+    $criticalUsers = [];
+    $blockedUsers = [];
 
     foreach ($users as $user) {
         if (! in_array($user->getLogin(), $excludedUsers)) {
@@ -57,18 +68,17 @@
             }
 
             $report = UsersFacade::ExtraHoursReport($initDate, $today, $user);
-            $lastTaskDate = TasksFacade::getLastTaskDate($user, $today);
-            if (is_null($lastTaskDate)) {
-                // User never saved tasks, use their contract start date as reference
-                $lastTaskDate = $period[0]->getInitDate();
+            $emptyDaysLastWeek = TasksFacade::getEmptyDaysInPeriod($user, $lastMonday, $lastFriday);
+            $emptyDays2WeeksAgo = TasksFacade::getEmptyDaysInPeriod($user, $monday2weeksAgo, $friday2weeksAgo);
+            $emptyDays3WeeksAgo = TasksFacade::getEmptyDaysInPeriod($user, $monday3weeksAgo, $friday3weeksAgo);
+            if (!empty($emptyDaysLastWeek)) {
+                array_push($warnedUsers, $user->getLogin());
             }
-            $login = $user->getLogin();
-            $difference = $lastTaskDate->diff($today);
-            $difference = $difference->format('%a');
-            if ($difference >= $NO_FILL_DAYS_TRIGGER_LAST) {
-                array_push($lastWarnedUsers, $login);
-            } elseif ($difference >= $NO_FILL_DAYS_TRIGGER_CRITICAL) {
-                array_push($criticalWarnedUsers, $login);
+            if (!empty($emptyDays2WeeksAgo)) {
+                array_push($criticalUsers, $user->getLogin());
+            }
+            if (!empty($emptyDays3WeeksAgo)) {
+                array_push($blockedUsers, $user->getLogin());
             }
         }
     }
@@ -79,27 +89,27 @@
     $headers = '';
     $headers = $headers . "From: " . $from . "\r\n";
     $headers = $headers . "Reply-To: " . $from . "\r\n";
-
-    $criticalWarnedPeople = "";
-    foreach($criticalWarnedUsers as $u)
-        $criticalWarnedPeople = $criticalWarnedPeople . $u . "\r\n";
-    $lastWarnedPeople = "";
-    foreach($lastWarnedUsers as $u)
-        $lastWarnedPeople = $lastWarnedPeople . $u . "\r\n";
-
     $message = file_get_contents($NO_FILL_TEMPLATE_MANAGERS);
 
-    $message = str_replace("###NO_FILL_DAYS_TRIGGER_CRITICAL###",$NO_FILL_DAYS_TRIGGER_CRITICAL,$message);
-    if ($criticalWarnedUsers == []) {
-        $message = str_replace("###CRITICAL_PEOPLE###","Nobody on this list today :-)",$message);
+    $message = str_replace("###WEEK-3###", $monday3weeksAgo->format("W"), $message);
+    $message = str_replace("###WEEK-2###", $monday2weeksAgo->format("W"), $message);
+    $message = str_replace("###WEEK-1###", $lastMonday->format("W"), $message);
+    if (empty($blockedUsers)) {
+        $message = str_replace("###BLOCKED_PEOPLE###","Nobody on this list today :-)",$message);
     } else {
-        $message = str_replace("###CRITICAL_PEOPLE###",$criticalWarnedPeople,$message);
+        $message = str_replace("###BLOCKED_PEOPLE###", implode("\r\n", $blockedUsers),$message);
     }
 
-    if ($lastWarnedUsers == []) {
-        $message = str_replace("###LAST_PEOPLE###","Nobody on this list today :-D",$message);
+    if (empty($criticalUsers)) {
+        $message = str_replace("###CRITICAL_PEOPLE###","Nobody on this list today :-)",$message);
     } else {
-        $message = str_replace("###LAST_PEOPLE###",$lastWarnedPeople,$message);
+        $message = str_replace("###CRITICAL_PEOPLE###", implode("\r\n", $criticalUsers),$message);
+    }
+
+    if (empty($warnedUsers)) {
+        $message = str_replace("###WARNED_PEOPLE###","Nobody on this list today :-D",$message);
+    } else {
+        $message = str_replace("###WARNED_PEOPLE###", implode("\r\n", $warnedUsers),$message);
     }
 
     mail($to, $subject, $message, $headers);

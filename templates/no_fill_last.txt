@@ -1,12 +1,9 @@
 Hello ###LOGIN###,
 
-The last task you recorded in PHPReport was on ###LAST_TASK_DATE###.
+Last week you didn't record any task in the days ###LIST_OF_DATES###.
 
-In three days, you will have gone one month without reporting hours
-in PHPReport. This is much more time than can be handled.
-
-PHPReport automatically locks days more than one month in the past,
-so in three days time, you will not be able to record hours for some
+PHPReport automatically locks days more than 2 weeks in the past,
+so in three days time, you will not be able to record hours for the
 days that you have not filled in. In order to unlock these locked days
 you will need to talk to the Project Managers to explain why you
 failed to record hours for this month.
