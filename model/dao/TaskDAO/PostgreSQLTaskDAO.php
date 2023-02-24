@@ -950,6 +950,34 @@ class PostgreSQLTaskDAO extends TaskDAO{
 
         return date_create($row);
     }
+
+    public function getEmptyDaysInPeriod($userId, DateTime $start, DateTime $end) {
+        $interval = new DateInterval('P1D');
+        $end->setTime(0,0,1); // tiny hack to make sure the end date is included in the date range loop
+        $dateRange = new DatePeriod($start, $interval, $end);
+        $datesInPeriod = [];
+        // Get weekdays for period
+        foreach ($dateRange as $date) {
+            if ($date->format('N') < 6) {
+                $datesInPeriod[] = $date->format('Y-m-d');
+            }
+        }
+        // Get dates that have tasks
+        $sql = "SELECT DISTINCT(_date) FROM task " .
+                "WHERE usrId=:userId AND _date BETWEEN :start AND :end";
+
+        $statement = $this->pdo->prepare($sql);
+        $statement->bindValue(":userId", $userId, PDO::PARAM_INT);
+        $statement->bindValue(":start", DBPostgres::formatDate($start), PDO::PARAM_STR);
+        $statement->bindValue(":end", DBPostgres::formatDate($end), PDO::PARAM_STR);
+        $statement->execute();
+
+        $daysWithTasks = $statement->fetch(PDO::FETCH_NUM);
+        if (!$daysWithTasks) {
+            $daysWithTasks = [];
+        }
+        return array_diff($datesInPeriod, $daysWithTasks);
+    }
 }
 
 
