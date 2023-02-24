@@ -39,30 +39,29 @@
     $NO_FILL_CC_CRITICAL = ConfigurationParametersManager::getParameter('NO_FILL_CC_CRITICAL');
     $NO_FILL_TEMPLATE_CRITICAL = ConfigurationParametersManager::getParameter('NO_FILL_TEMPLATE_CRITICAL');
     $NO_FILL_SUBJECT_CRITICAL = ConfigurationParametersManager::getParameter('NO_FILL_SUBJECT_CRITICAL');
-    $NO_FILL_DAYS_TRIGGER_CRITICAL = ConfigurationParametersManager::getParameter('NO_FILL_DAYS_TRIGGER_CRITICAL');
+    $NO_FILL_TRIGGER_CRITICAL_DAY = ConfigurationParametersManager::getParameter('NO_FILL_TRIGGER_CRITICAL_DAY');
     $NO_FILL_CC_WARNING = ConfigurationParametersManager::getParameter('NO_FILL_CC_WARNING');
     $NO_FILL_TEMPLATE_WARNING = ConfigurationParametersManager::getParameter('NO_FILL_TEMPLATE_WARNING');
     $NO_FILL_SUBJECT_WARNING = ConfigurationParametersManager::getParameter('NO_FILL_SUBJECT_WARNING');
-    $NO_FILL_DAYS_TRIGGER_WARNING = ConfigurationParametersManager::getParameter('NO_FILL_DAYS_TRIGGER_WARNING');
+    $NO_FILL_TRIGGER_WARNING_DAY = ConfigurationParametersManager::getParameter('NO_FILL_TRIGGER_WARNING_DAY');
     $NO_FILL_CC_LAST = ConfigurationParametersManager::getParameter('NO_FILL_CC_LAST');
     $NO_FILL_TEMPLATE_LAST = ConfigurationParametersManager::getParameter('NO_FILL_TEMPLATE_LAST');
     $NO_FILL_SUBJECT_LAST = ConfigurationParametersManager::getParameter('NO_FILL_SUBJECT_LAST');
-    $NO_FILL_DAYS_TRIGGER_LAST = ConfigurationParametersManager::getParameter('NO_FILL_DAYS_TRIGGER_LAST');
-     
+    $NO_FILL_TRIGGER_LAST_DAY = ConfigurationParametersManager::getParameter('NO_FILL_TRIGGER_LAST_DAY');
+
     /**
      * Function used te send emails to users, depending on the timing conditions
      * @param string $login: User login name
-     * @param dateTime $lastTaskDate: DateTime containing date of the last recorded task
+     * @param array $emptyDaysLastWeek: list of days that don't have any task during the previous week
      * @param string $cc: List of emails to be added in CC
      * @param string $subject: Subject of the email to be sent
      * @param string $template: Location of the email template
      * */
-    function sendEmail($email, $lastTaskDate, $from, $cc, $subject, $template) {
+    function sendEmail($email, $emptyDaysLastWeek, $from, $cc, $subject, $template) {
         $to = $email;
         $login=explode("@", $email)[0];
-        $subject = $subject;
         $message = file_get_contents($template);
-        $message = str_replace("###LAST_TASK_DATE###",$lastTaskDate->format('Y-m-d'),$message);
+        $message = str_replace("###LIST_OF_EMPTY_DAYS###", implode(", ", $emptyDaysLastWeek),$message);
         $message = str_replace("###LOGIN###",$login,$message);
         $headers = '';
         $headers = $headers . "From: " . $from . "\r\n";
@@ -89,28 +88,31 @@
             $login = $user->getLogin();
             $email = $login . "@" . $COMPANY_DOMAIN;
             $from = $NO_FILL_EMAIL_FROM;
-            $lastTaskDate = TasksFacade::getLastTaskDate($user, $today);
-            if (is_null($lastTaskDate)) {
-                // User never saved tasks, use their contract start date as reference
-                $lastTaskDate = $period[0]->getInitDate();
+            $lastMonday = new DateTime(date("Y-m-d", strtotime("last week monday")));
+            $lastFriday = new DateTime(date("Y-m-d", strtotime("last week friday")));
+
+            $emptyDaysLastWeek = TasksFacade::getEmptyDaysInPeriod($user, $lastMonday, $lastFriday);
+
+            if (empty($emptyDaysLastWeek)) {
+                // User doesn't have any empty day last week
+                continue;
             }
-            $difference = $lastTaskDate->diff($today);
-            $difference = $difference->format('%a');
-            if ($difference == $NO_FILL_DAYS_TRIGGER_LAST) {
-                $cc = $NO_FILL_CC_LAST;
-                $subject = $NO_FILL_SUBJECT_LAST;
-                $template = $NO_FILL_TEMPLATE_LAST;
-                sendEmail($email, $lastTaskDate, $from, $cc, $subject, $template);
-            } elseif ($difference == $NO_FILL_DAYS_TRIGGER_CRITICAL) {
-                $cc = $NO_FILL_CC_CRITICAL;
-                $subject = $NO_FILL_SUBJECT_CRITICAL;
-                $template = $NO_FILL_TEMPLATE_CRITICAL;
-                sendEmail($email, $lastTaskDate, $from, $cc, $subject, $template);
-            } elseif ($difference == $NO_FILL_DAYS_TRIGGER_WARNING) {
+            $dayOfWeek = $today->format('w');
+            if ($dayOfWeek == $NO_FILL_TRIGGER_WARNING_DAY) {
                 $cc = $NO_FILL_CC_WARNING;
                 $subject = $NO_FILL_SUBJECT_WARNING;
                 $template = $NO_FILL_TEMPLATE_WARNING;
-                sendEmail($email, $lastTaskDate, $from, $cc, $subject, $template);
+                sendEmail($email, $emptyDaysLastWeek, $from, $cc,$subject, $template);
+            } elseif ($dayOfWeek == $NO_FILL_TRIGGER_CRITICAL_DAY) {
+                $cc = $NO_FILL_CC_CRITICAL;
+                $subject = $NO_FILL_SUBJECT_CRITICAL;
+                $template = $NO_FILL_TEMPLATE_CRITICAL;
+                sendEmail($email, $emptyDaysLastWeek, $from, $cc,$subject, $template);
+            } elseif ($dayOfWeek == $NO_FILL_TRIGGER_LAST_DAY) {
+                $cc = $NO_FILL_CC_LAST;
+                $subject = $NO_FILL_SUBJECT_LAST;
+                $template = $NO_FILL_TEMPLATE_LAST;
+                sendEmail($email, $emptyDaysLastWeek, $from, $cc,$subject, $template);
             }
         }
     }

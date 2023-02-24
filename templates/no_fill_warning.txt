@@ -1,8 +1,8 @@
 Hello ###LOGIN###,
 
-The last task you recorded in PHPReport was on ###LAST_TASK_DATE###.
+Last week you didn't record any task in the days ###LIST_OF_DATES###.
 
-This was a while ago. Recall that you should record your hours on a
+Recall that you should record your hours on a
 more timely maner. As time passes, the accuracy of the recorded hours
 will suffer and some information may be lost.
 

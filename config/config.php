@@ -260,22 +260,25 @@ define('NO_FILL_SUBJECT_LAST', '[URGENT] Three days remain to update PHPReport')
 define('NO_FILL_SUBJECT_MANAGERS', 'Report: Summary of people late filling in PHPReport');
 
  /**
- * @name NO_FILL_DAYS_TRIGGER_WARNING
- * @global int Value in days to consider sending a warning message.
+ * @name NO_FILL_TRIGGER_WARNING_DAY
+ * @global int Day of the week that will trigger sending a warning message.
+ * 0 (for Sunday) through 6 (for Saturday)
  */
-define('NO_FILL_DAYS_TRIGGER_WARNING', 15);
+define('NO_FILL_TRIGGER_WARNING_DAY', 2);
 
  /**
- * @name NO_FILL_DAYS_TRIGGER_CRITICAL
- * @global int Value in days to consider sending a critical message.
+ * @name NO_FILL_TRIGGER_CRITICAL_DAY
+ * @global int Day of the week that will trigger sending a critical message.
+ * 0 (for Sunday) through 6 (for Saturday)
  */
-define('NO_FILL_DAYS_TRIGGER_CRITICAL', 21);
+define('NO_FILL_TRIGGER_CRITICAL_DAY', 3);
 
  /**
- * @name NO_FILL_DAYS_TRIGGER_LAST
- * @global int Value in days to consider sending the last message.
+ * @name NO_FILL_TRIGGER_LAST_DAY
+ * @global int Day of the week that will trigger sending the last message.
+ * 0 (for Sunday) through 6 (for Saturday)
  */
-define('NO_FILL_DAYS_TRIGGER_LAST', 27);
+define('NO_FILL_TRIGGER_LAST_DAY', 5);
 
 /* New from PhpReport 2.19 */
 
