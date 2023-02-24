@@ -845,7 +845,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
      */
     public function create(TaskVO $taskVO) {
         $tasks = array($taskVO);
-        return $this->batchCreate($tasks);
+        return $this->batchCreate($tasks)[0];
     }
 
     /** Task creator for PostgreSQL.
@@ -910,16 +910,15 @@ class PostgreSQLTaskDAO extends TaskDAO{
      * Equivalent to {@see create} for arrays of tasks.
      *
      * @param array $tasks array of {@link TaskVO} objects to be created.
-     * @return OperationResult the result {@link OperationResult} with information about operation status
+     * @return array OperationResult the array of {@link OperationResult} with information about operation status
      */
     public function batchCreate($tasks) {
         $result = new OperationResult(false);
         if (!$this->checkOverlappingWithDBTasks($tasks)) {
             $result->setErrorNumber(10);
             $result->setMessage("Task creation failed:\nDetected overlapping times.");
-            $result->setIsSuccessful(false);
             $result->setResponseCode(500);
-            return $result;
+            return array($result);
         }
 
         $affectedRows = 0;
@@ -932,7 +931,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
             $result->setIsSuccessful(true);
             $result->setResponseCode(201);
         }
-        return $result;
+        return array($result);
     }
 
     /** Task deleter for PostgreSQL.

@@ -68,39 +68,46 @@ class CreateTasksAction extends Action {
      *
      * Runs the action itself.
      *
-     * @return OperationResult the result {@link OperationResult} with information about operation status
+     * @return array OperationResult the array of {@link OperationResult} with information about operation status
      */
     protected function doExecute() {
         $configDao = DAOFactory::getConfigDAO();
         $taskDao = DAOFactory::getTaskDAO();
         $projectDAO = DAOFactory::getProjectDAO();
         $discardedTasks = array();
-        $discardedReason = "";
+        $discardedResults = array();
 
         //first check permission on task write
         foreach ($this->tasks as $i => $task) {
             if (!$configDao->isWriteAllowedForDate($task->getDate())) {
+                $result = new OperationResult(false);
+                $result->setErrorNumber(20);
+                $result->setResponseCode(500);
+                $result->setMessage("Error creating task:\nNot allowed to write to date.");
+                $discardedResults[] = $result;
                 $discardedTasks[] = $task;
-                $discardedReason .= "Not allowed to write to date.\n";
                 unset($this->tasks[$i]);
                 continue;
             }
             $projectVO = $projectDAO->getById($task->getProjectId());
             if (!$projectVO || !$projectVO->getActivation()) {
+                $result = new OperationResult(false);
+                $result->setErrorNumber(30);
+                $result->setResponseCode(500);
+                $result->setMessage("Error creating task:\nNot allowed to write to project.");
                 $discardedTasks[] = $task;
-                $discardedReason .= "Not allowed to write to project.\n";
+                $discardedResults[] = $result;
                 unset($this->tasks[$i]);
             }
         }
 
-        $result = $taskDao->batchCreate($this->tasks);
+        $results = $taskDao->batchCreate($this->tasks);
 
         //TODO: do something meaningful with the list of discarded tasks
         if (!empty($discardedTasks)) {
-            $result = new OperationResult(false);
-            $result->setMessage("Some tasks were discarded:\n" . $discardedReason);
+            return array_merge($discardedResults, $results);
         }
-        return $result;
+        return $results;
     }
 
 }

@@ -936,7 +936,10 @@ var tasksStore = new Ext.ux.TasksStore({
             Ext.onReady(function () { // this may run in case of error in the initial load
                 let parser = new DOMParser();
                 let errorDoc = parser.parseFromString(res.responseText, "text/xml");
-                let errorMessage = errorDoc.getElementsByTagName("error")[0].childNodes[0].nodeValue;
+                let errorMessage = "";
+                for (error of errorDoc.getElementsByTagName("error")) {
+                    errorMessage += error.childNodes[0].nodeValue + "\n";
+                }
                 App.setAlert(false, errorMessage);
                 tasksStore.error = true;
             });
