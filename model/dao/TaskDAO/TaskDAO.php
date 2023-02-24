@@ -254,7 +254,7 @@ abstract class TaskDAO extends BaseDAO{
      * Equivalent to {@see create} for arrays of tasks.
      *
      * @param array $tasks array of {@link TaskVO} objects to be created.
-     * @return OperationResult the result {@link OperationResult} with information about operation status
+     * @return array OperationResult the array of {@link OperationResult} with information about operation status
      */
     public abstract function batchCreate($tasks);
 

@@ -30,6 +30,7 @@
     include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
     include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
     include_once(PHPREPORT_ROOT . '/model/vo/TaskVO.php');
+    include_once(PHPREPORT_ROOT . '/model/OperationResult.php');
 
     $parser = new XMLReader();
 
@@ -226,12 +227,18 @@
 
         } while ($parser->read());
 
-        $result = TasksFacade::CreateReports($createTasks);
-        if (!$result->getIsSuccessful()) {
+        $operationResults = TasksFacade::CreateReports($createTasks);
+        $errors = array_filter($operationResults, function ($item) {
+            return (!$item->getIsSuccessful());
+        });
+        if ($errors) {
             //if multiple failures, let's just return a 500
             http_response_code(500);
-            $string = "<return service='deleteProjects'><errors>";
-            $string .= "<error id='" . $result->getErrorNumber() . "'>" . $result->getMessage() . "</error>";
+            $string = "<return service='createTasks'><errors>";
+            foreach((array) $errors as $result){
+                if (!$result->getIsSuccessful())
+                    $string .= "<error id='" . $result->getErrorNumber() . "'>" . $result->getMessage() . "</error>";
+            }
             $string .= "</errors></return>";
         }
 
