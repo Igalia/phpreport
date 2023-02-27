@@ -68,39 +68,11 @@ class UpdateProjectAction extends Action{
      *
      * This is the function that contains the code that update the Project on persistent storing.
      *
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     protected function doExecute() {
-
-    $dao = DAOFactory::getProjectDAO();
-        if ($dao->update($this->project)!=1) {
-            return -1;
-        }
-
-        return 0;
+        $dao = DAOFactory::getProjectDAO();
+        return $dao->update($this->project);
     }
 
 }
-
-
-/*//Test code
-
-$projectvo = new ProjectVO();
-$projectvo->setInit(date_create("2999-12-31"));
-$projectvo->setAreaId(1);
-$projectvo->setEnd(date_create("3000-12-31"));
-$projectvo->setDescription("Good news, everyone!");
-$projectvo->setActivation(TRUE);
-$projectvo->setSchedType("Good news, everyone!");
-$projectvo->setType("I've taught the toaster to feel love!");
-$projectvo->setMovedHours(3.14);
-$projectvo->setInvoice(5.55);
-$projectvo->setEstHours(3.25);
-$projectvo->setId(1);
-
-$action= new UpdateProjectAction($projectvo);
-var_dump($action);
-$action->execute();
-var_dump($projectvo);
-*/

@@ -475,105 +475,46 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         return $resultAux['id'] ?? NULL;
     }
 
-    /** Project partial updater for PostgreSQL.
+    /** Project updater for PostgreSQL.
      *
-     * This function updates only some fields of the data of a Project by its {@link ProjectVO}, reading
-     * the flags on the associative array <var>$update</var>.
+     * This function updates the data of a Project by its {@link ProjectVO}.
      *
      * @param ProjectVO $projectVO the {@link ProjectVO} with the data we want to update on database.
-     * @param array $update an array with flags for updating or not the different fields.
      * @return OperationResult the result {@link OperationResult} with information about operation status
      */
-    public function partialUpdate(ProjectVO $projectVO, $update) {
+    public function update(ProjectVO $projectVO) {
         $result = new OperationResult(false);
 
-        $sql = "UPDATE project SET ";
-
-        if ($update['activation'])
-            $sql .= "activation=:activation, ";
-
-        if ($update['init'])
-            $sql .= "init=:init, ";
-
-        if ($update['end'])
-            $sql .= "_end=:end, ";
-
-        if ($update['invoice'])
-            $sql .= "invoice=:invoice, ";
-
-        if ($update['estHours'])
-            $sql .= "est_hours=:est_hours, ";
-
-        if ($update['areaId'])
-            $sql .= "areaid=:areaid, ";
-
-        if ($update['customerId'])
-            $sql .= "customerid=:customerid, ";
-
-        if ($update['description'])
-            $sql .= "description=:description, ";
-
-        if ($update['type'])
-            $sql .= "type=:type, ";
-
-        if ($update['movHours'])
-            $sql .= "moved_hours=:moved_hours, ";
-
-        if ($update['schedType'])
-            $sql .= "sched_type=:sched_type, ";
-
-        if (strlen($sql) == strlen("UPDATE project SET ")) {
-            $result->setIsSuccessful(true);
-            $result->setMessage('No changes.');
-            $result->setResponseCode(200);
-
-            return $result;
-        }
-
-        // remove the last comma
-        $sql = substr($sql, 0, -2);
-
-        $sql .= " WHERE id=:id";
+        $sql = "UPDATE project SET activation=:activation" .
+                ", init=:init" .
+                ", _end=:end" .
+                ", invoice=:invoice" .
+                ", est_hours=:est_hours" .
+                ", areaid=:areaid" .
+                ", customerid=:customerid" .
+                ", type=:type" .
+                ", description=:description" .
+                ", moved_hours=:moved_hours" .
+                ", sched_type=:sched_type" .
+                " WHERE id=:id";
 
         $initDateFormatted = (is_null($projectVO->getInit())) ? null : DBPostgres::formatDate($projectVO->getInit());
         $endDateFormatted = (is_null($projectVO->getEnd())) ? null : DBPostgres::formatDate($projectVO->getEnd());
 
         try {
             $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":activation", $projectVO->getActivation(), PDO::PARAM_BOOL);
+            $statement->bindValue(":init", $initDateFormatted, PDO::PARAM_STR);
+            $statement->bindValue(":end", $endDateFormatted, PDO::PARAM_STR);
+            $statement->bindValue(":invoice", $projectVO->getInvoice(), PDO::PARAM_STR);
+            $statement->bindValue(":est_hours", $projectVO->getEstHours(), PDO::PARAM_STR);
+            $statement->bindValue(":areaid", $projectVO->getAreaId(), PDO::PARAM_INT);
+            $statement->bindValue(":customerid", $projectVO->getCustomerId(), PDO::PARAM_INT);
+            $statement->bindValue(":description", $projectVO->getDescription(), PDO::PARAM_STR);
+            $statement->bindValue(":type", $projectVO->getType(), PDO::PARAM_STR);
+            $statement->bindValue(":moved_hours", $projectVO->getMovedHours(), PDO::PARAM_STR);
+            $statement->bindValue(":sched_type", $projectVO->getSchedType(), PDO::PARAM_STR);
             $statement->bindValue(":id", $projectVO->getId(), PDO::PARAM_INT);
-
-            if ($update['activation'])
-                $statement->bindValue(":activation", $projectVO->getActivation(), PDO::PARAM_BOOL);
-
-            if ($update['init'])
-                $statement->bindValue(":init", $initDateFormatted, PDO::PARAM_STR);
-
-            if ($update['end'])
-                $statement->bindValue(":end", $endDateFormatted, PDO::PARAM_STR);
-
-            if ($update['invoice'])
-                $statement->bindValue(":invoice", $projectVO->getInvoice(), PDO::PARAM_STR);
-
-            if ($update['estHours'])
-                $statement->bindValue(":est_hours", $projectVO->getEstHours(), PDO::PARAM_STR);
-
-            if ($update['areaId'])
-                $statement->bindValue(":areaid", $projectVO->getAreaId(), PDO::PARAM_INT);
-
-            if ($update['customerId'])
-                $statement->bindValue(":customerid", $projectVO->getCustomerId(), PDO::PARAM_INT);
-
-            if ($update['description'])
-                $statement->bindValue(":description", $projectVO->getDescription(), PDO::PARAM_STR);
-
-            if ($update['type'])
-                $statement->bindValue(":type", $projectVO->getType(), PDO::PARAM_STR);
-
-            if ($update['movHours'])
-                $statement->bindValue(":moved_hours", $projectVO->getMovedHours(), PDO::PARAM_STR);
-
-            if ($update['schedType'])
-                $statement->bindValue(":sched_type", $projectVO->getSchedType(), PDO::PARAM_STR);
 
             $statement->execute();
 
@@ -613,47 +554,6 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         }
 
         return $result;
-    }
-
-    /** Project updater for PostgreSQL.
-     *
-     * This function updates the data of a Project by its {@link ProjectVO}.
-     *
-     * @param ProjectVO $projectVO the {@link ProjectVO} with the data we want to update on database.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function update(ProjectVO $projectVO) {
-        $affectedRows = 0;
-
-        if($projectVO->getId() != "") {
-            $currProjectVO = $this->getById($projectVO->getId());
-        }
-
-        // If the query returned a row then update
-        if(sizeof($currProjectVO) > 0) {
-
-            $sql = "UPDATE project SET activation=" . DBPostgres::boolToString($projectVO->getActivation()) .
-                    ", init=" . DBPostgres::formatDate($projectVO->getInit()) .
-                    ", _end=" . DBPostgres::formatDate($projectVO->getEnd()) .
-                    ", invoice=" . DBPostgres::checkNull($projectVO->getInvoice()) .
-                    ", est_hours=" . DBPostgres::checkNull($projectVO->getEstHours()) .
-                    ", areaid=" . DBPostgres::checkNull($projectVO->getAreaId()) .
-                    ", customerid=" . DBPostgres::checkNull($projectVO->getCustomerId()) .
-                    ", type=" . DBPostgres::checkStringNull($projectVO->getType()) .
-                    ", description=" . DBPostgres::checkStringNull($projectVO->getDescription()) .
-                    ", moved_hours=" . DBPostgres::checkNull($projectVO->getMovedHours()) .
-                    ", sched_type=" . DBPostgres::checkStringNull($projectVO->getSchedType()) .
-                    " WHERE id=".$projectVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-
-            if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-
-            $affectedRows = pg_affected_rows($res);
-        }
-
-        return $affectedRows;
     }
 
     /** Project creator for PostgreSQL.

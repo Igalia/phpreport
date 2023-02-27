@@ -66,20 +66,6 @@
 
         $projectVO = new ProjectVO();
 
-        $update = array(
-            "activation"  => false,
-            "init"        => false,
-            "end"         => false,
-            "invoice"     => false,
-            "estHours"    => false,
-            "description" => false,
-            "areaId"      => false,
-            "customerId"  => false,
-            "type"        => false,
-            "movedHours"  => false,
-            "schedType"   => false
-        );
-
         $parser->read();
 
         while ($parser->name != "project") {
@@ -107,7 +93,6 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update["activation"] = true;
                         break;
 
                 case "init":    $dateFormat = $parser->getAttribute("format");
@@ -123,7 +108,6 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update["init"] = true;
                         break;
 
                 case "end":    $dateFormat = $parser->getAttribute("format");
@@ -139,7 +123,6 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update["end"] = true;
                         break;
 
                 case "invoice":$parser->read();
@@ -149,7 +132,6 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update["invoice"] = true;
                         break;
 
                 case "estHours":$parser->read();
@@ -159,7 +141,6 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update["estHours"] = true;
                         break;
 
                 case "description":$parser->read();
@@ -169,7 +150,6 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update["description"] = true;
                         break;
 
                 case "areaId":$parser->read();
@@ -179,7 +159,6 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update["areaId"] = true;
                         break;
 
                 case "customerId":$parser->read();
@@ -189,7 +168,6 @@
                         $parser->next();
                         $parser->next();
                     }
-                    $update["customerId"] = true;
                     break;
 
                 case "type":    $parser->read();
@@ -199,7 +177,6 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update["type"] = true;
                         break;
 
                 case "movedHours":    $parser->read();
@@ -209,7 +186,6 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update["movHours"] = true;
                         break;
 
                 case "schedType":    $parser->read();
@@ -219,7 +195,6 @@
                             $parser->next();
                             $parser->next();
                         }
-                        $update["schedType"] = true;
                         break;
 
                 default:    $parser->next();
@@ -232,13 +207,11 @@
 
         $updateProjects[] = $projectVO;
 
-        $updates[] = $update;
-
     }
 
     }
 
-    $operationResults = ProjectsFacade::PartialUpdateProjects($updateProjects, $updates);
+    $operationResults = ProjectsFacade::UpdateProjects($updateProjects);
     $errors = array_filter($operationResults, function ($item) {
         return (!$item->getIsSuccessful());
     });

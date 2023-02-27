@@ -171,25 +171,12 @@ abstract class ProjectDAO extends BaseDAO {
 
     public abstract function getByDescription(string $description): ?int;
 
-    /** Project partial updater.
-     *
-     * This function updates only some fields of the data of a Project by its {@link ProjectVO}, reading
-     * the flags on the associative array <var>$update</var>.
-     *
-     * @param ProjectVO $projectVO the {@link ProjectVO} with the data we want to update on database.
-     * @param array $update an array with flags for updating or not the different fields.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link SQLQueryErrorException}
-     */
-    public abstract function partialUpdate(ProjectVO $projectVO, $update);
-
     /** Project updater.
      *
      * This function updates the data of a Project by its {@link ProjectVO}.
      *
      * @param ProjectVO $projectVO the {@link ProjectVO} with the data we want to update on database.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link OperationErrorException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public abstract function update(ProjectVO $projectVO);
 

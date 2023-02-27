@@ -40,7 +40,6 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/AssignUserToProjectAction.ph
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeassignUserFromProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateProjectAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/PartialUpdateProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectsByCustomerUserLoginAction.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
@@ -264,46 +263,27 @@ abstract class ProjectsFacade {
 
     /** Update Project Function
      *
-     *  This function is used for updating a Project.
+     *  This function is used for updating an entire Project object. It updates all the fields of the object.
      *
      * @param ProjectVO $project the Project value object we want to update.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}
-     */
-    static function UpdateProject(ProjectVO $project) {
-
-    $action = new UpdateProjectAction($project);
-
-    return $action->execute();
-
-    }
-
-    /** Partial Update Project Function
-     *
-     *  This function is used for partially updating a Project.
-     *
-     * @param ProjectVO $task the Project value object we want to update.
-     * @param array $update the updating flags of the Project VO.
      * @return OperationResult the result {@link OperationResult} with information about operation status
      */
-    static function PartialUpdateProject(ProjectVO $project, $update) {
-        $action = new PartialUpdateProjectAction($project, $update);
+    static function UpdateProject(ProjectVO $project) {
+        $action = new UpdateProjectAction($project);
         return $action->execute();
     }
 
-    /** Partial Update Projects Function
+    /** Update Projects Function
      *
-     *  This function is used for partially updating an array of Projects.
-     *  If an error occurs, it stops updating.
+     *  This function is used for updating an array of Project objects. It updates all the fields of the object.
      *
      * @param array $projects the Project value objects we want to update.
-     * @param array $updates the updating flag arrays of the Project VOs.
      * @return array OperationResult the array of results {@link OperationResult} with information about operation status.
      */
-    static function PartialUpdateProjects($projects, $updates) {
+    static function UpdateProjects($projects) {
         $operationResults = [];
-        foreach ((array) $projects as $i=>$project)
-            $operationResults[] = ProjectsFacade::PartialUpdateProject($project, $updates[$i]);
+        foreach ($projects as $project)
+            $operationResults[] = ProjectsFacade::UpdateProject($project);
         return $operationResults;
     }
 
