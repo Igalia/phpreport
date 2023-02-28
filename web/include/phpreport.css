@@ -130,6 +130,21 @@ div#tasks textarea {
     margin-bottom: 10px;
 }
 
+/* ExtJS message box */
+.icon-status-error {
+    color: #cc0f35;
+    padding-left: 20px;
+}
+
+.icon-status-error:before {
+    content: "";
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    left: 14px;
+    background-image: url(icons/cross.png);
+}
+
 .message.error {
     background-color: #feecf0;
     border: 1px solid #cc0f35;

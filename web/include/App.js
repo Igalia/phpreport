@@ -145,17 +145,9 @@ Ext.extend(Ext.App, Ext.util.Observable, {
      * @param {Bool} status
      */
     addMessage : function(status, msg) {
-        var delay = 3;    // <-- default delay of msg box is 1 second.
+        var delay = 3;    // <-- default delay
         if (status == false) {
-            delay = 5;    // <-- when status is error, msg box delay is 3 seconds.
-        }
-        // add some smarts to msg's duration (div by 13.3 between 3 & 9 seconds)
-        delay = msg.length / 13.3;
-        if (delay < 3) {
-            delay = 3;
-        }
-        else if (delay > 9) {
-            delay = 9;
+            delay = 9;    // <-- when status is error, msg box delay is increased
         }
 
         this.msgCt.alignTo(document, 't-t');
