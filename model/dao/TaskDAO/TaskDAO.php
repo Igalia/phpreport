@@ -261,8 +261,7 @@ abstract class TaskDAO extends BaseDAO{
      * This function deletes the data of a Task by its {@link TaskVO}.
      *
      * @param TaskVO $taskVO the {@link TaskVO} with the data we want to delete from database.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link OperationErrorException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public abstract function delete(TaskVO $taskVO);
 

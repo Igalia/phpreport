@@ -32,6 +32,7 @@
 include_once(PHPREPORT_ROOT . '/model/facade/action/Action.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/TaskVO.php');
+include_once(PHPREPORT_ROOT . '/model/OperationResult.php');
 
 /** Delete Task Action
  *
@@ -68,32 +69,42 @@ class DeleteReportAction extends Action{
      *
      * This is the function that contains the code that deletes the Task from persistent storing.
      *
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     protected function doExecute() {
         //first check if current configuration allows deleting tasks in that date
         $configDao = DAOFactory::getConfigDAO();
         if(!$configDao->isWriteAllowedForDate($this->task->getDate())) {
-            return -1;
+            $result = new OperationResult(false);
+            $result->setErrorNumber(20);
+            $result->setResponseCode(500);
+            $result->setMessage("Error deleting task:\nNot allowed to write to date.");
+            return $result;
         }
 
         $dao = DAOFactory::getTaskDAO();
 
-        if (!$dao->checkTaskUserId($this->task->getId(), $this->task->getUserId()))
-            return -1;
+        if (!$dao->checkTaskUserId($this->task->getId(), $this->task->getUserId())) {
+            $result = new OperationResult(false);
+            $result->setErrorNumber(50);
+            $result->setResponseCode(500);
+            $result->setMessage("Error deleting task:\nBelongs to a different user.");
+            return $result;
+        }
 
         // Do not allow deleting tasks which belong to inactive projects
         $oldTask = $dao->getById($this->task->getId());
         $projectId = $oldTask->getProjectId();
         $projectVO = DAOFactory::getProjectDAO()->getById($projectId);
-        if (!$projectVO || !$projectVO->getActivation())
-            return -1;
-
-        if ($dao->delete($this->task)!=1) {
-            return -1;
+        if (!$projectVO || !$projectVO->getActivation()) {
+            $result = new OperationResult(false);
+            $result->setErrorNumber(30);
+            $result->setResponseCode(500);
+            $result->setMessage("Error updating task:\nNot allowed to write to project.");
+            return $result;
         }
 
-        return 0;
+        return $dao->delete($this->task);
     }
 
 }
