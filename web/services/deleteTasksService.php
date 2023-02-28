@@ -126,10 +126,20 @@
 
         } while ($parser->read());
 
-
-        if (count($deleteTasks) >= 1)
-            if (TasksFacade::DeleteReports($deleteTasks) == -1)
-                $string = "<return service='deleteTasks'><success>false</success><error id='1'>There was some error while deleting the tasks</error></return>";
+        $operationResults = TasksFacade::DeleteReports($deleteTasks);
+        $errors = array_filter($operationResults, function ($item) {
+            return (!$item->getIsSuccessful());
+        });
+        if ($errors) {
+            //if multiple failures, let's just return a 500
+            http_response_code(500);
+            $string = "<return service='deleteTasks'><errors>";
+            foreach((array) $errors as $result){
+                if (!$result->getIsSuccessful())
+                    $string .= "<error id='" . $result->getErrorNumber() . "'>" . $result->getMessage() . "</error>";
+            }
+            $string .= "</errors></return>";
+        }
 
         if (!isset($string))
             $string = "<return service='deleteTasks'><success>true</success><ok>Operation Success!</ok></return>";

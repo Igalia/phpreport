@@ -959,27 +959,33 @@ class PostgreSQLTaskDAO extends TaskDAO{
      * This function deletes the data of a Task by its {@link TaskVO}.
      *
      * @param TaskVO $taskVO the {@link TaskVO} with the data we want to delete from database.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link SQLQueryErrorException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public function delete(TaskVO $taskVO) {
-        $affectedRows = 0;
+        $result = new OperationResult(false);
 
-        // Check for a task ID.
-        if($taskVO->getId() >= 0) {
-            $currTaskVO = $this->getById($taskVO->getId());
+        $sql = "DELETE FROM task WHERE id=:id";
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":id", $taskVO->getId(), PDO::PARAM_INT);
+            $statement->execute();
+
+            $result->setIsSuccessful(true);
+            $result->setMessage('Task deleted successfully.');
+            $result->setResponseCode(200);
+        }
+        catch (PDOException $ex) {
+            $errorMessage = $ex->getMessage();
+            $resultMessage = "Task deletion failed: \n";
+            // unpredictable error, just return the native error code and message
+            $resultMessage .= $errorMessage;
+            $result->setErrorNumber($ex->getCode());
+            $result->setMessage($resultMessage);
+            $result->setIsSuccessful(false);
+            $result->setResponseCode(500);
         }
 
-        // Otherwise delete a task.
-        if(!is_null($currTaskVO)) {
-            $sql = "DELETE FROM task WHERE id=".$taskVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-            if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-                $affectedRows = pg_affected_rows($res);
-        }
-
-        return $affectedRows;
+        return $result;
     }
 
     public function getLastTaskDate($userId, DateTime $date, $strictBeforeDate=True) {
