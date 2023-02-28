@@ -129,11 +129,10 @@ abstract class TasksFacade {
      * @param DirtyTaskVO $task the Task value object we want to update. Must be
      *        a DirtyTaskVO object which contains also the information about
      *        which fields must be updated.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     static function PartialUpdateReport(DirtyTaskVO $task) {
-        return TasksFacade::PartialUpdateReports(array($task));
+        return TasksFacade::PartialUpdateReports(array($task))[0];
     }
 
     /** Partial Update Tasks Function
@@ -144,8 +143,7 @@ abstract class TasksFacade {
      * @param array $tasks the Task value objects we want to update. Must be
      *        a DirtyTaskVO object which contains also the information about
      *        which fields must be updated.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
+     * @return array OperationResult the array of {@link OperationResult} with information about operation status
      */
     static function PartialUpdateReports($tasks) {
         $action = new PartialUpdateTasksAction($tasks);

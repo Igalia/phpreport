@@ -72,20 +72,25 @@ class PartialUpdateTasksAction extends Action{
      *
      * Runs the action itself.
      *
-     * @return int it just indicates if there was any error (<i>-1</i>)
-     *         or not (<i>0</i>).
+     * @return array OperationResult the array of {@link OperationResult} with information about operation status
      */
     protected function doExecute() {
         $configDao = DAOFactory::getConfigDAO();
         $taskDao = DAOFactory::getTaskDAO();
         $projectDAO = DAOFactory::getProjectDAO();
         $discardedTasks = array();
+        $discardedResults = array();
 
         //first check permission on task write
         foreach ($this->tasks as $i => $task) {
             // Do not allow assigning a task to a locked date
             if ($task->isDateDirty()) {
                 if(!$configDao->isWriteAllowedForDate($task->getDate())) {
+                    $result = new OperationResult(false);
+                    $result->setErrorNumber(20);
+                    $result->setResponseCode(500);
+                    $result->setMessage("Error updating task:\nNot allowed to write to date.");
+                    $discardedResults[] = $result;
                     $discardedTasks[] = $task;
                     unset($this->tasks[$i]);
                     continue;
@@ -94,16 +99,36 @@ class PartialUpdateTasksAction extends Action{
 
             $oldTask = $taskDao->getById($task->getId());
             if (!isset($oldTask)) {
+                $result = new OperationResult(false);
+                $result->setErrorNumber(40);
+                $result->setResponseCode(500);
+                $result->setMessage("Error updating task:\nTask does not exist.");
+                $discardedResults[] = $result;
                 $discardedTasks[] = $task;
                 unset($this->tasks[$i]);
                 continue;
             }
 
-            // Do not allow updating tasks saved in locked dates or belonging
-            // to a different user
-            if(!$configDao->isWriteAllowedForDate($oldTask->getDate()) ||
-                    (!$taskDao->checkTaskUserId(
-                        $task->getId(), $task->getUserId()))) {
+            // Do not allow updating tasks saved in locked dates
+            if(!$configDao->isWriteAllowedForDate($oldTask->getDate())) {
+                $result = new OperationResult(false);
+                $result->setErrorNumber(20);
+                $result->setResponseCode(500);
+                $result->setMessage("Error updating task:\nNot allowed to write to date.");
+                $discardedResults[] = $result;
+                $discardedTasks[] = $task;
+                unset($this->tasks[$i]);
+                continue;
+            }
+
+            // Do not allow updating tasks belonging to a different user
+            if(!$taskDao->checkTaskUserId(
+                        $task->getId(), $task->getUserId())) {
+                $result = new OperationResult(false);
+                $result->setErrorNumber(50);
+                $result->setResponseCode(500);
+                $result->setMessage("Error updating task:\nBelongs to a different user.");
+                $discardedResults[] = $result;
                 $discardedTasks[] = $task;
                 unset($this->tasks[$i]);
                 continue;
@@ -114,6 +139,11 @@ class PartialUpdateTasksAction extends Action{
                 $projectId = $task->getProjectId();
                 $projectVO = $projectDAO->getById($projectId);
                 if (!$projectVO || !$projectVO->getActivation()) {
+                    $result = new OperationResult(false);
+                    $result->setErrorNumber(30);
+                    $result->setResponseCode(500);
+                    $result->setMessage("Error updating task:\nNot allowed to write to project.");
+                    $discardedResults[] = $result;
                     $discardedTasks[] = $task;
                     unset($this->tasks[$i]);
                     continue;
@@ -124,8 +154,14 @@ class PartialUpdateTasksAction extends Action{
             $projectId = $oldTask->getProjectId();
             $projectVO = $projectDAO->getById($projectId);
             if (!$projectVO || !$projectVO->getActivation()) {
+                $result = new OperationResult(false);
+                $result->setErrorNumber(30);
+                $result->setResponseCode(500);
+                $result->setMessage("Error updating task:\nNot allowed to write to project.");
+                $discardedResults[] = $result;
                 $discardedTasks[] = $task;
                 unset($this->tasks[$i]);
+                continue;
             }
 
             if ($task->isInitDirty() & !$task->isEndDirty()) {
@@ -153,17 +189,13 @@ class PartialUpdateTasksAction extends Action{
             }
         }
 
-        if ($taskDao->batchPartialUpdate($this->tasks) < count($this->tasks)) {
-            return -1;
-        }
+        $results = $taskDao->batchPartialUpdate($this->tasks);
 
         //TODO: do something meaningful with the list of discarded tasks
-        if (empty($discardedTasks)) {
-            return 0;
+        if (!empty($discardedTasks)) {
+            return array_merge($discardedResults, $results);
         }
-        else {
-            return -1;
-        }
+        return $results;
     }
 
 }

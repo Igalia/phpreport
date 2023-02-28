@@ -224,8 +224,7 @@ abstract class TaskDAO extends BaseDAO{
      * @param DirtyTaskVO $taskVO the {@link TaskVO} with the data we want to
      *        update on database and the information about which fields must be
      *        updated.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link SQLQueryErrorException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public abstract function partialUpdate(DirtyTaskVO $taskVO);
 
@@ -234,8 +233,7 @@ abstract class TaskDAO extends BaseDAO{
      * Equivalent to {@see partialUpdate} for arrays of tasks.
      *
      * @param array $tasks array of {@link DirtyTaskVO} objects to be updated.
-     * @return int the number of rows that have been affected (it should be
-     *         equal to the size of $tasks).
+     * @return array OperationResult the array of {@link OperationResult} with information about operation
      */
     public abstract function batchPartialUpdate($tasks);
 

@@ -634,11 +634,10 @@ class PostgreSQLTaskDAO extends TaskDAO{
      * @param DirtyTaskVO $taskVO the {@link TaskVO} with the data we want to
      *        update on database and the information about which fields must be
      *        updated.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link SQLQueryErrorException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public function partialUpdate(DirtyTaskVO $taskVO) {
-        $affectedRows = 0;
+        $result = new OperationResult(false);
 
         if($taskVO->getId() != "") {
             $currTaskVO = $this->getById($taskVO->getId());
@@ -703,11 +702,27 @@ class PostgreSQLTaskDAO extends TaskDAO{
         $sql = $sql . ", updated_at=now() WHERE id=".$taskVO->getId();
 
             $res = pg_query($this->connect, $sql);
-        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-            $affectedRows = pg_affected_rows($res);
+        if ($res == NULL) {
+            $errorMessage = pg_last_error();
+            $resultMessage = "Task update failed:\n";
+            if(strpos($errorMessage, "end_after_init_task")) {
+                $resultMessage .= "Start time later than end time.";
+            }
+            else {
+                $resultMessage .= $errorMessage;
+            }
+            $result->setMessage($resultMessage);
+            $result->setIsSuccessful(false);
+            $result->setResponseCode(500);
+        }
+        else if (pg_affected_rows($res) == 1) {
+            $result->setIsSuccessful(true);
+            $result->setMessage('Task updated successfully.');
+            $result->setResponseCode(201);
+        }
         }
 
-        return $affectedRows;
+        return $result;
     }
 
     /** Update a batch of DirtyTaskVO objects.
@@ -720,22 +735,23 @@ class PostgreSQLTaskDAO extends TaskDAO{
      * @param array $tasks the Task value objects we want to update. Must be
      *        DirtyTaskVO objects which contain also the information about
      *        which fields must be updated.
-     * @return int the number of rows that have been affected. It should match
-     *         the length of $tasks, otherwise there was an error.
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
+     * @return array OperationResult the array of {@link OperationResult} with information about operation status
      */
     public function batchPartialUpdate($tasks) {
         if (!$this->checkOverlappingWithDBTasks($tasks)) {
-            return 0;
+            $result = new OperationResult(false);
+            $result->setErrorNumber(10);
+            $result->setMessage("Task update failed:\nDetected overlapping times.");
+            $result->setResponseCode(500);
+            return array($result);
         }
 
-        $affectedRows = 0;
-
+        $results = array();
         foreach ($tasks as $task) {
-            $affectedRows += $this->partialUpdate($task);
+            $results[] = $this->partialUpdate($task);
         }
 
-        return $affectedRows;
+        return $results;
     }
 
     /**
