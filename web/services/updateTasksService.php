@@ -266,12 +266,20 @@
         } while ($parser->read());
 
 
-        if (count($updateTasks) >= 1)
-            if (TasksFacade::PartialUpdateReports($updateTasks) == -1) {
-                http_response_code(500);
-                $string = "<return service='updateTasks'><success>false</success><error id='1'>There was some error while updating the tasks</error></return>";
+        $operationResults = TasksFacade::PartialUpdateReports($updateTasks);
+        $errors = array_filter($operationResults, function ($item) {
+            return (!$item->getIsSuccessful());
+        });
+        if ($errors) {
+            //if multiple failures, let's just return a 500
+            http_response_code(500);
+            $string = "<return service='updateTasks'><errors>";
+            foreach((array) $errors as $result){
+                if (!$result->getIsSuccessful())
+                    $string .= "<error id='" . $result->getErrorNumber() . "'>" . $result->getMessage() . "</error>";
             }
-
+            $string .= "</errors></return>";
+        }
 
         if (!isset($string))
             $string = "<return service='updateTasks'><success>true</success><ok>Operation Success!</ok></return>";
