@@ -62,8 +62,8 @@
     foreach ($users as $user) {
         if (! in_array($user->getLogin(), $excludedUsers)) {
             $period = UsersFacade::GetUserJourneyHistoriesByIntervals($today, $today, $user->getId());
-            if (empty($period)) {
-                // User is not currently hired, skip it.
+            if (empty($period) || ($period[0]->getJourney() == 0)) {
+                // User is not currently hired or is on leave of absence, skip it.
                 continue;
             }
 
