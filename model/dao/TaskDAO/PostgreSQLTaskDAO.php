@@ -1002,9 +1002,9 @@ class PostgreSQLTaskDAO extends TaskDAO{
         $statement->bindValue(":end", DBPostgres::formatDate($end), PDO::PARAM_STR);
         $statement->execute();
 
-        $daysWithTasks = $statement->fetch(PDO::FETCH_NUM);
-        if (!$daysWithTasks) {
-            $daysWithTasks = [];
+        $daysWithTasks = [];
+        while ($day = $statement->fetch(PDO::FETCH_NUM, PDO::FETCH_ORI_NEXT)) {
+            $daysWithTasks[] = $day[0];
         }
         return array_diff($datesInPeriod, $daysWithTasks);
     }
