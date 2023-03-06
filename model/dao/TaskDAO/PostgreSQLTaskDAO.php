@@ -895,6 +895,13 @@ class PostgreSQLTaskDAO extends TaskDAO{
             if(strpos($errorMessage, "end_after_init_task")) {
                 $resultMessage .= "Start time later than end time.";
             }
+            else if(strpos($errorMessage, "Not null violation")) {
+                $resultMessage .= "Missing compulsory data";
+                if(!$taskVO->getInit() || !$taskVO->getEnd()) {
+                    $resultMessage .= ": init and/or end time";
+                }
+                $resultMessage .= ".";
+            }
             else {
                 $resultMessage .= $errorMessage;
             }
