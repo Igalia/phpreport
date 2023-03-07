@@ -707,13 +707,14 @@ class PostgreSQLTaskDAO extends TaskDAO{
             $resultMessage = "Task update failed:\n";
             if(strpos($errorMessage, "end_after_init_task")) {
                 $resultMessage .= "Start time later than end time.";
+                $result->setResponseCode(400);
             }
             else {
                 $resultMessage .= $errorMessage;
+                $result->setResponseCode(500);
             }
             $result->setMessage($resultMessage);
             $result->setIsSuccessful(false);
-            $result->setResponseCode(500);
         }
         else if (pg_affected_rows($res) == 1) {
             $result->setIsSuccessful(true);
@@ -742,7 +743,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
             $result = new OperationResult(false);
             $result->setErrorNumber(10);
             $result->setMessage("Task update failed:\nDetected overlapping times.");
-            $result->setResponseCode(500);
+            $result->setResponseCode(400);
             return array($result);
         }
 
@@ -910,6 +911,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
             $resultMessage = "Error creating task:\n";
             if(strpos($errorMessage, "end_after_init_task")) {
                 $resultMessage .= "Start time later than end time.";
+                $result->setResponseCode(400);
             }
             else if(strpos($errorMessage, "Not null violation")) {
                 $resultMessage .= "Missing compulsory data";
@@ -917,14 +919,15 @@ class PostgreSQLTaskDAO extends TaskDAO{
                     $resultMessage .= ": init and/or end time";
                 }
                 $resultMessage .= ".";
+                $result->setResponseCode(400);
             }
             else {
                 $resultMessage .= $errorMessage;
+                $result->setResponseCode(500);
             }
             $result->setErrorNumber($ex->getCode());
             $result->setMessage($resultMessage);
             $result->setIsSuccessful(false);
-            $result->setResponseCode(500);
         }
 
         return $result;
@@ -942,7 +945,7 @@ class PostgreSQLTaskDAO extends TaskDAO{
             $result = new OperationResult(false);
             $result->setErrorNumber(10);
             $result->setMessage("Task creation failed:\nDetected overlapping times.");
-            $result->setResponseCode(500);
+            $result->setResponseCode(400);
             return array($result);
         }
 

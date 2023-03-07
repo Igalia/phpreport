@@ -77,7 +77,7 @@ class DeleteReportAction extends Action{
         if(!$configDao->isWriteAllowedForDate($this->task->getDate())) {
             $result = new OperationResult(false);
             $result->setErrorNumber(20);
-            $result->setResponseCode(500);
+            $result->setResponseCode(403);
             $result->setMessage("Error deleting task:\nNot allowed to write to date.");
             return $result;
         }
@@ -87,7 +87,7 @@ class DeleteReportAction extends Action{
         if (!$dao->checkTaskUserId($this->task->getId(), $this->task->getUserId())) {
             $result = new OperationResult(false);
             $result->setErrorNumber(50);
-            $result->setResponseCode(500);
+            $result->setResponseCode(403);
             $result->setMessage("Error deleting task:\nBelongs to a different user.");
             return $result;
         }
@@ -99,7 +99,7 @@ class DeleteReportAction extends Action{
         if (!$projectVO || !$projectVO->getActivation()) {
             $result = new OperationResult(false);
             $result->setErrorNumber(30);
-            $result->setResponseCode(500);
+            $result->setResponseCode(403);
             $result->setMessage("Error updating task:\nNot allowed to write to project.");
             return $result;
         }

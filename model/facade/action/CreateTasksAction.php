@@ -82,7 +82,7 @@ class CreateTasksAction extends Action {
             if (!$configDao->isWriteAllowedForDate($task->getDate())) {
                 $result = new OperationResult(false);
                 $result->setErrorNumber(20);
-                $result->setResponseCode(500);
+                $result->setResponseCode(403);
                 $result->setMessage("Error creating task:\nNot allowed to write to date.");
                 $discardedResults[] = $result;
                 $discardedTasks[] = $task;
@@ -93,7 +93,7 @@ class CreateTasksAction extends Action {
             if (!$projectVO || !$projectVO->getActivation()) {
                 $result = new OperationResult(false);
                 $result->setErrorNumber(30);
-                $result->setResponseCode(500);
+                $result->setResponseCode(403);
                 $result->setMessage("Error creating task:\nNot allowed to write to project.");
                 $discardedTasks[] = $task;
                 $discardedResults[] = $result;
