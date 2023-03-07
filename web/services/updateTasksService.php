@@ -271,8 +271,8 @@
             return (!$item->getIsSuccessful());
         });
         if ($errors) {
-            //if multiple failures, let's just return a 500
-            http_response_code(500);
+            // if multiple failures, just return the code of the first one
+            http_response_code($errors[0]->getResponseCode());
             $string = "<return service='updateTasks'><errors>";
             foreach((array) $errors as $result){
                 if (!$result->getIsSuccessful())
