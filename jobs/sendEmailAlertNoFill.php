@@ -61,7 +61,7 @@
         $to = $email;
         $login=explode("@", $email)[0];
         $message = file_get_contents($template);
-        $message = str_replace("###LIST_OF_EMPTY_DAYS###", implode(", ", $emptyDaysLastWeek),$message);
+        $message = str_replace("###LIST_OF_DATES###", implode(", ", $emptyDaysLastWeek),$message);
         $message = str_replace("###LOGIN###",$login,$message);
         $headers = '';
         $headers = $headers . "From: " . $from . "\r\n";
