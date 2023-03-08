@@ -32,7 +32,7 @@
 include_once(PHPREPORT_ROOT . '/util/SQLIncorrectTypeException.php');
 include_once(PHPREPORT_ROOT . '/util/DBPostgres.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
-include_once(PHPREPORT_ROOT . '/model/dao/UserDAO/UserDAO.php');
+include_once(PHPREPORT_ROOT . '/model/dao/UserDAO/PostgreSQLUserDAO.php');
 include_once(PHPREPORT_ROOT . '/util/LDAPConnectionErrorException.php');
 include_once(PHPREPORT_ROOT . '/util/LDAPInvalidOperationException.php');
 include_once(PHPREPORT_ROOT . '/util/LDAPOperationErrorException.php');
@@ -42,10 +42,11 @@ include_once(PHPREPORT_ROOT . '/util/IncorrectLoginException.php');
 /** DAO for Users in LDAP/PostgreSQL Hybrid
  *
  *  This is the implementation for LDAP/PostgreSQL Hybrid of {@link UserDAO}.
+ *  It extends PostgreSQLUserDAO so it can reuse the DB operations when needed.
  *
  * @see UserDAO, UserVO
  */
-class HybridUserDAO extends UserDAO{
+class HybridUserDAO extends PostgreSQLUserDAO {
 
     protected $ldapConnect;
 
@@ -454,12 +455,9 @@ class HybridUserDAO extends UserDAO{
      * The internal id of <var>$userVO</var> will be set after its creation.
      *
      * @param UserVO $userVO the {@link UserVO} with the data we want to insert on database.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public function create(UserVO $userVO) {
-        $affectedRows = 0;
-
         // check if a user with that login exists in LDAP
         if (!$sr=ldap_list($this->ldapConnect,"ou=People," .
                 ConfigurationParametersManager::getParameter('LDAP_BASE'),
@@ -470,29 +468,20 @@ class HybridUserDAO extends UserDAO{
             return $affectedRows;
         }
         $ldapResult = ldap_get_entries($this->ldapConnect, $sr);
-        if($ldapResult["count"] == 0)
-            // user does not exist in LDAP
-            return $affectedRows;
+        if($ldapResult["count"] == 0) {
+            $result = new OperationResult(false);
+            $result->setResponseCode(400);
+            $result->setErrorNumber(1234);
+            $result->setMessage("Error creating user:\nLogin does not exist in LDAP.");
+            return $result;
+        }
 
-        $sql = "INSERT INTO usr (login) VALUES(" . DBPostgres::checkStringNull($userVO->getLogin()) . ")";
-
-        $res = pg_query($this->connect, $sql);
-
-        if ($res == NULL)
-            if (strpos(pg_last_error(), "unique_usr_login"))
-                throw new SQLUniqueViolationException(pg_last_error());
-            else throw new SQLQueryErrorException(pg_last_error());
-
-        // populate UserVO with newly created ID from DB
-        $userVO->setID(DBPostgres::getId($this->connect, "usr_id_seq"));
+        $result = parent::create($userVO);
 
         // populate UserVO with existing group assignation in LDAP
         $userVO->setGroups($this->getGroupsByLogin($userVO->getLogin()));
 
-        $affectedRows = pg_affected_rows($res);
-
-        return $affectedRows;
-
+        return $result;
     }
 
     /** User deleter for LDAP/PostgreSQL Hybrid.
