@@ -180,15 +180,11 @@ abstract class UsersFacade {
      *  This function is used for deleting a User.
      *
      * @param UserVO $user the User value object we want to delete.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     static function DeleteUser(UserVO $user) {
-
-    $action = new DeleteUserAction($user);
-
-    return $action->execute();
-
+        $action = new DeleteUserAction($user);
+        return $action->execute();
     }
 
     /** Update User Function

@@ -503,29 +503,52 @@ class PostgreSQLUserDAO extends UserDAO{
      * This function deletes the data of a User by its {@link UserVO}.
      *
      * @param UserVO $userVO the {@link UserVO} with the data we want to delete from database.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link SQLQueryErrorException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public function delete(UserVO $userVO) {
-        $affectedRows = 0;
+        $result = new OperationResult(false);
 
-        // Check for a user ID.
-        if($userVO->getId() >= 0) {
-            $currUserVO = $this->getById($userVO->getId());
+        $sql = "DELETE FROM usr WHERE id=:id";
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":id", $userVO->getId(), PDO::PARAM_INT);
+            $statement->execute();
+
+            $result->setIsSuccessful(true);
+            $result->setMessage('User deleted successfully.');
+            $result->setResponseCode(200);
+        }
+        catch (PDOException $ex) {
+            $errorMessage = $ex->getMessage();
+            $resultMessage = "Error deleting user:\n";
+            if(strpos($errorMessage, "Foreign key violation")) {
+                $result->setResponseCode(409);
+                if(strpos($errorMessage, "task")) {
+                    $resultMessage .= "The user has assigned tasks.";
+                }
+                else if(strpos($errorMessage, "project_usr")) {
+                    $resultMessage .= "The user is assigned to projects.";
+                }
+                else if(strpos($errorMessage, "history")) {
+                    $resultMessage .= "There is user history data associated to the user.";
+                }
+                else {
+                    // catch-all for any foreign key violations that we may add in the future
+                    $resultMessage .= "There is data associated to the user.";
+                    error_log($errorMessage);
+                }
+            }
+            else {
+                $resultMessage .= $errorMessage;
+                $result->setResponseCode(500);
+            }
+            $result->setErrorNumber($ex->getCode());
+            $result->setMessage($resultMessage);
+            $result->setIsSuccessful(false);
         }
 
-        // Otherwise delete a user.
-        if(isset($currUserVO)) {
-            $sql = "DELETE FROM usr WHERE id=".$userVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-
-            if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-
-            $affectedRows = pg_affected_rows($res);
-        }
-
-        return $affectedRows;
+        return $result;
     }
 }
 

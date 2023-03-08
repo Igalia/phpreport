@@ -286,8 +286,7 @@ abstract class UserDAO extends BaseDAO{
      * This function deletes the data of a User by its {@link UserVO}.
      *
      * @param UserVO $userVO the {@link UserVO} with the data we want to delete from database.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link OperationErrorException}, {@link InvalidOperationException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public abstract function delete(UserVO $userVO);
 

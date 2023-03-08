@@ -128,9 +128,11 @@
         if (count($deleteUsers) >= 1)
             foreach((array)$deleteUsers as $user)
             {
-                if (UsersFacade::DeleteUser($user) == -1)
-                {
-                    $string = "<return service='deleteUsers'><error id='1'>There was some error while deleting the users</error></return>";
+                $result = UsersFacade::DeleteUser($user);
+                if (!$result->getIsSuccessful()) {
+                    http_response_code($result->getResponseCode());
+                    $string = "<return service='updateUsers'><error id='" . $result->getErrorNumber() . "'>" .
+                            $result->getMessage() . "</error></return>";
                     break;
                 }
             }

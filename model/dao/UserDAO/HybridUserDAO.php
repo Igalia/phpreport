@@ -468,29 +468,10 @@ class HybridUserDAO extends PostgreSQLUserDAO {
      * This function deletes the data of a User by its {@link UserVO}.
      *
      * @param UserVO $userVO the {@link UserVO} with the data we want to delete from database.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link SQLQueryErrorException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public function delete(UserVO $userVO) {
-        $affectedRows = 0;
-
-        // Check for a user ID.
-        if($userVO->getId() >= 0) {
-            $currUserVO = $this->getById($userVO->getId());
-        }
-
-        // Otherwise delete a user.
-        if(sizeof($currUserVO) > 0) {
-            $sql = "DELETE FROM usr WHERE id=".$userVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-
-            if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
-
-            $affectedRows = pg_affected_rows($res);
-        }
-
-        return $affectedRows;
+        return parent::delete($userVO);
     }
 }
 
