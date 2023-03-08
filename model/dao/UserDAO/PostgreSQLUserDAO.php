@@ -401,38 +401,48 @@ class PostgreSQLUserDAO extends UserDAO{
      * UserVO doesn't contain a password, it won't be updated.
      *
      * @param UserVO $userVO the {@link UserVO} with the data we want to update on database.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public function update(UserVO $userVO) {
+        $result = new OperationResult(false);
 
-        $affectedRows = 0;
+        $sql = "UPDATE usr SET login=:login";
+        $emptyPassword = true;
+        if ($userVO->getPassword() !== '') {
+            $emptyPassword = false;
+            $sql .= ", password=md5(:password)";
+        }
+        $sql .= " WHERE id=:id";
 
-        if($userVO->getId() >= 0) {
-            $currUserVO = $this->getById($userVO->getId());
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":login", $userVO->getLogin(), PDO::PARAM_STR);
+            $statement->bindValue(":id", $userVO->getId(), PDO::PARAM_INT);
+            if (!$emptyPassword)
+                $statement->bindValue(":password", $userVO->getPassword(), PDO::PARAM_STR);
+            $statement->execute();
+
+            $result->setIsSuccessful(true);
+            $result->setMessage('User updated successfully.');
+            $result->setResponseCode(200);
+        }
+        catch (PDOException $ex) {
+            $errorMessage = $ex->getMessage();
+            $resultMessage = "Error updating user:\n";
+            if(strpos($errorMessage, "unique_usr_login")) {
+                $resultMessage .= "Login is already used.";
+                $result->setResponseCode(400);
+            }
+            else {
+                $resultMessage .= $errorMessage;
+                $result->setResponseCode(500);
+            }
+            $result->setErrorNumber($ex->getCode());
+            $result->setMessage($resultMessage);
+            $result->setIsSuccessful(false);
         }
 
-        // If the query returned a row then update
-        if(isset($currUserVO)) {
-
-            $sql = "UPDATE usr SET login=" . DBPostgres::checkStringNull($userVO->getLogin());
-
-            if (DBPostgres::checkStringNull($userVO->getPassword()) != "NULL")
-                $sql .= ", password=md5(" . DBPostgres::checkStringNull($userVO->getPassword()) . ")";
-
-            $sql .= " WHERE id=" .$userVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-
-            if ($res == NULL)
-                if (strpos(pg_last_error(), "unique_usr_login"))
-                    throw new SQLUniqueViolationException(pg_last_error());
-                else throw new SQLQueryErrorException(pg_last_error());
-
-            $affectedRows = pg_affected_rows($res);
-        }
-
-        return $affectedRows;
+        return $result;
     }
 
     /** User creator for PostgreSQL.

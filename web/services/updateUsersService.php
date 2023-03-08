@@ -175,15 +175,14 @@
 
         } while ($parser->read());
 
-        //var_dump($updateUsers);
 
-
-        if (count($updateUsers) >= 1)
             foreach((array)$updateUsers as $updateUser)
             {
-                if (UsersFacade::UpdateUser($updateUser) == -1)
-                {
-                    $string = "<return service='updateUsers'><error id='1'>There was some error while updating the users</error></return>";
+                $result = UsersFacade::UpdateUser($updateUser);
+                if (!$result->getIsSuccessful()) {
+                    http_response_code($result->getResponseCode());
+                    $string = "<return service='updateUsers'><error id='" . $result->getErrorNumber() . "'>" .
+                            $result->getMessage() . "</error></return>";
                     break;
                 }
 

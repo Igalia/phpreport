@@ -196,15 +196,11 @@ abstract class UsersFacade {
      *  This function is used for updating a User.
      *
      * @param UserVO $user the User value object we want to update.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     static function UpdateUser(UserVO $user) {
-
-    $action = new UpdateUserAction($user);
-
-    return $action->execute();
-
+        $action = new UpdateUserAction($user);
+        return $action->execute();
     }
 
     /** Get Extra Hours report Function
