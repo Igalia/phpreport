@@ -176,18 +176,18 @@
         } while ($parser->read());
 
 
-            foreach((array)$updateUsers as $updateUser)
-            {
-                $result = UsersFacade::UpdateUser($updateUser);
-                if (!$result->getIsSuccessful()) {
-                    http_response_code($result->getResponseCode());
-                    $string = "<return service='updateUsers'><error id='" . $result->getErrorNumber() . "'>" .
-                            $result->getMessage() . "</error></return>";
-                    break;
-                }
+        foreach((array)$updateUsers as $updateUser)
+        {
+            $result = UsersFacade::UpdateUser($updateUser);
+            if (!$result->getIsSuccessful()) {
+                http_response_code($result->getResponseCode());
+                $string = "<return service='updateUsers'><error id='" . $result->getErrorNumber() . "'>" .
+                        $result->getMessage() . "</error></return>";
+                break;
+            }
 
-                foreach((array) $updateUser->getGroups() as $group)
-                {
+            try {
+                foreach((array) $updateUser->getGroups() as $group) {
 
                     $group = UsersFacade::GetUserGroupByName($group->getName());
 
@@ -199,22 +199,33 @@
 
                 }
             }
+            catch (LDAPInvalidOperationException $e) {
+                // the LDAP backend is enabled so UserGroup operations are forbidden
+                // we can ignore this error
+            }
+        }
 
-            foreach((array) $deassignGroups as $userId=>$groups)
-                foreach((array) $groups as $group)
-                {
-
-                    $group = UsersFacade::GetUserGroupByName($group->getName());
-
-                    if (UsersFacade::DeassignUserFromUserGroup($userId, $group->getId()) == -1)
+        if (!$string) {
+            try {
+                foreach((array) $deassignGroups as $userId=>$groups)
+                    foreach((array) $groups as $group)
                     {
-                        $string = "<return service='updateUsers'><error id='1'>There was some error while updating the user groups new deassignements</error></return>";
-                        break;
+
+                        $group = UsersFacade::GetUserGroupByName($group->getName());
+
+                        if (UsersFacade::DeassignUserFromUserGroup($userId, $group->getId()) == -1)
+                        {
+                            $string = "<return service='updateUsers'><error id='1'>There was some error while updating the user groups new deassignements</error></return>";
+                            break;
+                        }
+
                     }
-
-                }
-
-
+            }
+            catch (LDAPInvalidOperationException $e) {
+                // the LDAP backend is enabled so UserGroup operations are forbidden
+                // we can ignore this error
+            }
+        }
 
         if (!$string)
         {

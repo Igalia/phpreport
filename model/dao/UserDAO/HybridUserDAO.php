@@ -418,35 +418,14 @@ class HybridUserDAO extends PostgreSQLUserDAO {
     /** User updater for LDAP/PostgreSQL Hybrid.
      *
      * This function updates the data of a User by its {@link UserVO}.
+     * WARNING: this function allows to update to a name that does not exist in LDAP.
+     * Do we really want this behavior?
      *
      * @param UserVO $userVO the {@link UserVO} with the data we want to update on database.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public function update(UserVO $userVO) {
-
-        $affectedRows = 0;
-
-        if($userVO->getId() >= 0) {
-            $currUserVO = $this->getById($userVO->getId());
-        }
-
-        // If the query returned a row then update
-        if(sizeof($currUserVO) > 0) {
-
-            $sql = "UPDATE usr SET login=" . DBPostgres::checkStringNull($userVO->getLogin()) . ", password=" . DBPostgres::checkStringNull($userVO->getPassword()) . " WHERE id=" .$userVO->getId();
-
-            $res = pg_query($this->connect, $sql);
-
-            if ($res == NULL)
-                if (strpos(pg_last_error(), "unique_usr_login"))
-                    throw new SQLUniqueViolationException(pg_last_error());
-                else throw new SQLQueryErrorException(pg_last_error());
-
-            $affectedRows = pg_affected_rows($res);
-        }
-
-        return $affectedRows;
+        return parent::update($userVO);
     }
 
     /** User creator for LDAP/PostgreSQL Hybrid.
