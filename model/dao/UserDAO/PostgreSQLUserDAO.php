@@ -413,7 +413,7 @@ class PostgreSQLUserDAO extends UserDAO{
         }
 
         // If the query returned a row then update
-        if(sizeof($currUserVO) > 0) {
+        if(isset($currUserVO)) {
 
             $sql = "UPDATE usr SET login=" . DBPostgres::checkStringNull($userVO->getLogin());
 
@@ -486,7 +486,7 @@ class PostgreSQLUserDAO extends UserDAO{
         }
 
         // Otherwise delete a user.
-        if(sizeof($currUserVO) > 0) {
+        if(isset($currUserVO)) {
             $sql = "DELETE FROM usr WHERE id=".$userVO->getId();
 
             $res = pg_query($this->connect, $sql);
@@ -497,8 +497,6 @@ class PostgreSQLUserDAO extends UserDAO{
         }
 
         return $affectedRows;
-        if (!is_numeric($userId))
-        throw new SQLIncorrectTypeException($userId);
     }
 }
 
