@@ -160,34 +160,33 @@
 
         } while ($parser->read());
 
-        //var_dump($createUsers);
 
+        foreach((array)$createUsers as $createUser)
+        {
+            $result = UsersFacade::CreateUser($createUser);
+            if (!$result->getIsSuccessful()) {
+                http_response_code($result->getResponseCode());
+                $string = "<return service='createUsers'><error id='" . $result->getErrorNumber() . "'>" .
+                        $result->getMessage() . "</error></return>";
+                break;
+            }
 
-        if (count($createUsers) >= 1)
-            foreach((array)$createUsers as $createUser)
-            {
-                if (UsersFacade::CreateUser($createUser) == -1)
+            try {
+                foreach((array) $createUser->getGroups() as $group)
                 {
-                    $string = "<return service='createUsers'><error id='1'>There was some error while updating the users</error></return>";
-                    break;
-                }
-
-                try {
-                    foreach((array) $createUser->getGroups() as $group)
+                    $group = UsersFacade::GetUserGroupByName($group->getName());
+                    if (UsersFacade::AssignUserToUserGroup($createUser->getId(), $group->getId()) == -1)
                     {
-                        $group = UsersFacade::GetUserGroupByName($group->getName());
-                        if (UsersFacade::AssignUserToUserGroup($createUser->getId(), $group->getId()) == -1)
-                        {
-                            $string = "<return service='createUsers'><error id='1'>There was some error while updating the user groups new assignements</error></return>";
-                            break;
-                        }
+                        $string = "<return service='createUsers'><error id='1'>There was some error while updating the user groups new assignements</error></return>";
+                        break;
                     }
                 }
-                catch (LDAPInvalidOperationException $e) {
-                    // the LDAP backend is enabled so UserGroup operations are forbidden
-                    // we can ignore this error
-                }
             }
+            catch (LDAPInvalidOperationException $e) {
+                // the LDAP backend is enabled so UserGroup operations are forbidden
+                // we can ignore this error
+            }
+        }
 
 
 

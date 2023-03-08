@@ -31,6 +31,7 @@
 
 include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 include_once(PHPREPORT_ROOT . '/model/dao/BaseDAO.php');
+include_once(PHPREPORT_ROOT . '/model/OperationResult.php');
 include_once(PHPREPORT_ROOT . '/util/IncorrectLoginException.php');
 
 /** DAO for Users
@@ -277,8 +278,7 @@ abstract class UserDAO extends BaseDAO{
      * The internal id of <var>$userVO</var> will be set after its creation.
      *
      * @param UserVO $userVO the {@link UserVO} with the data we want to insert on database.
-     * @return int the number of rows that have been affected (it should be 1).
-     * @throws {@link OperationErrorException}, {@link InvalidOperationException}, {@link SQLUniqueViolationException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public abstract function create(UserVO $userVO);
 

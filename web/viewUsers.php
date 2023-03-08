@@ -293,8 +293,15 @@ Ext.onReady(function(){
             'write': function() {
                 App.setAlert(true, "Users Changes Saved");
             },
-            'exception': function(){
-                App.setAlert(false, "Some Error Occurred While Saving The Changes");
+            'exception': function(proxy, type, action, eOpts, res) {
+                let parser = new DOMParser();
+                let errorDoc = parser.parseFromString(res.responseText, "text/xml");
+                let errorMessage = "";
+                for (error of errorDoc.getElementsByTagName("error")) {
+                    errorMessage += error.childNodes[0].nodeValue + "\n";
+                }
+                App.setAlert(false, errorMessage);
+                tasksStore.error = true;
             },
             'update': function() {
                 this.save();
