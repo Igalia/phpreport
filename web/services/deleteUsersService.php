@@ -125,11 +125,15 @@
             // we can ignore this error
         }
 
+        $successMessage = "";
         if (count($deleteUsers) >= 1)
             foreach((array)$deleteUsers as $user)
             {
                 $result = UsersFacade::DeleteUser($user);
-                if (!$result->getIsSuccessful()) {
+                if ($result->getIsSuccessful()) {
+                    $successMessage .= $result->getMessage() . "\n";
+                }
+                else {
                     http_response_code($result->getResponseCode());
                     $string = "<return service='updateUsers'><error id='" . $result->getErrorNumber() . "'>" .
                             $result->getMessage() . "</error></return>";
@@ -140,7 +144,7 @@
 
 
         if (!$string)
-            $string = "<return service='deleteUsers'><ok>Operation Success!</ok></return>";
+            $string = "<return service='deleteUsers'><ok>" . $successMessage . "</ok></return>";
 
     } while (false);
 

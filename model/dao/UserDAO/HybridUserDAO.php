@@ -419,13 +419,16 @@ class HybridUserDAO extends PostgreSQLUserDAO {
      *
      * This function updates the data of a User by its {@link UserVO}.
      * WARNING: this function allows to update to a name that does not exist in LDAP.
-     * Do we really want this behavior?
+     * A user with a name not matching the LDAP won't be able to log in, this should be a
+     * transitory situation while the name is not updated in both places.
      *
      * @param UserVO $userVO the {@link UserVO} with the data we want to update on database.
      * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     public function update(UserVO $userVO) {
-        return parent::update($userVO);
+        $result = parent::update($userVO);
+        $result->setMessage("Warning: user names not matching LDAP won't be able to login.");
+        return $result;
     }
 
     /** User creator for LDAP/PostgreSQL Hybrid.

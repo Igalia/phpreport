@@ -290,8 +290,12 @@ Ext.onReady(function(){
             'load': function() {
                 userGrid.getTopToolbar().getComponent('userFilter').focus();
             },
-            'write': function() {
-                App.setAlert(true, "Users Changes Saved");
+            'write': function (proxy, type, action, eOpts, res) {
+                const successTags = eOpts.raw.getElementsByTagName("ok");
+                if (successTags.length > 0)
+                    App.setAlert(true, successTags[0].innerHTML);
+                else
+                    App.setAlert(true, "Users Changes Saved");
             },
             'exception': function(proxy, type, action, eOpts, res) {
                 let parser = new DOMParser();

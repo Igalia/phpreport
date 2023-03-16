@@ -175,11 +175,14 @@
 
         } while ($parser->read());
 
-
+        $successMessage = "";
         foreach((array)$updateUsers as $updateUser)
         {
             $result = UsersFacade::UpdateUser($updateUser);
-            if (!$result->getIsSuccessful()) {
+            if ($result->getIsSuccessful()) {
+                $successMessage .= $result->getMessage() . "\n";
+            }
+            else {
                 http_response_code($result->getResponseCode());
                 $string = "<return service='updateUsers'><error id='" . $result->getErrorNumber() . "'>" .
                         $result->getMessage() . "</error></return>";
@@ -230,7 +233,7 @@
         if (!$string)
         {
 
-            $string = "<return service='updateUsers'><ok>Operation Success!</ok><users>";
+            $string = "<return service='updateUsers'><ok>" . $successMessage . "</ok><users>";
 
             foreach((array) $updateUsers as $updateUser)
             {

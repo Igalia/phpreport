@@ -160,11 +160,14 @@
 
         } while ($parser->read());
 
-
+        $successMessage = "";
         foreach((array)$createUsers as $createUser)
         {
             $result = UsersFacade::CreateUser($createUser);
-            if (!$result->getIsSuccessful()) {
+            if ($result->getIsSuccessful()) {
+                $successMessage .= $result->getMessage() . "\n";
+            }
+            else {
                 http_response_code($result->getResponseCode());
                 $string = "<return service='createUsers'><error id='" . $result->getErrorNumber() . "'>" .
                         $result->getMessage() . "</error></return>";
@@ -193,7 +196,7 @@
         if (!$string)
         {
 
-            $string = "<return service='createUsers'><ok>Operation Success!</ok><users>";
+            $string = "<return service='createUsers'><ok>" . $successMessage . "</ok><users>";
 
             foreach((array) $createUsers as $createUser)
             {
