@@ -197,23 +197,22 @@ class PostgreSQLBelongsDAO extends BelongsDAO{
      * @throws {@link SQLQueryErrorException}
      */
     public function create($userId, $userGroupId) {
-    $affectedRows = 0;
+        $affectedRows = 0;
 
-    // Check for a belongs entry ID.
+        // Check for a belongs entry ID.
         $currBelongs = $this->getByIds($userId, $userGroupId);
 
         // If it doesn't exist, then create.
-        if(sizeof($currBelongs) == 0) {
-        $sql = "INSERT INTO belongs (usrid, user_groupid) VALUES (" . $userId . ", " . $userGroupId . ")";
+        if(!isset($currBelongs) || sizeof($currBelongs) == 0) {
+            $sql = "INSERT INTO belongs (usrid, user_groupid) VALUES (" . $userId . ", " . $userGroupId . ")";
 
             $res = pg_query($this->connect, $sql);
-        if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
+            if ($res == NULL) throw new SQLQueryErrorException(pg_last_error());
 
-        $affectedRows = pg_affected_rows($res);
-    }
+            $affectedRows = pg_affected_rows($res);
+        }
 
-    return $affectedRows;
-
+        return $affectedRows;
     }
 
     /** Belongs relationship entry deleter by User id and User Group id for PostgreSQL.
@@ -234,7 +233,7 @@ class PostgreSQLBelongsDAO extends BelongsDAO{
         $currBelongs = $this->getByIds($userId, $userGroupId);
 
         // If it exists, then delete.
-        if(sizeof($currBelongs) > 0) {
+        if(isset($currBelongs) && sizeof($currBelongs) > 0) {
             $sql = "DELETE FROM belongs WHERE usrid=" . $userId . " AND user_groupid=" . $userGroupId;
 
             $res = pg_query($this->connect, $sql);

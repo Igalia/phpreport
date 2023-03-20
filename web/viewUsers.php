@@ -290,11 +290,22 @@ Ext.onReady(function(){
             'load': function() {
                 userGrid.getTopToolbar().getComponent('userFilter').focus();
             },
-            'write': function() {
-                App.setAlert(true, "Users Changes Saved");
+            'write': function (proxy, type, action, eOpts, res) {
+                const successTags = eOpts.raw.getElementsByTagName("ok");
+                if (successTags.length > 0)
+                    App.setAlert(true, successTags[0].innerHTML);
+                else
+                    App.setAlert(true, "Users Changes Saved");
             },
-            'exception': function(){
-                App.setAlert(false, "Some Error Occurred While Saving The Changes");
+            'exception': function(proxy, type, action, eOpts, res) {
+                let parser = new DOMParser();
+                let errorDoc = parser.parseFromString(res.responseText, "text/xml");
+                let errorMessage = "";
+                for (error of errorDoc.getElementsByTagName("error")) {
+                    errorMessage += error.childNodes[0].nodeValue + "\n";
+                }
+                App.setAlert(false, errorMessage);
+                tasksStore.error = true;
             },
             'update': function() {
                 this.save();

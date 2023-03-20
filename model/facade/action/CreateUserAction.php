@@ -68,17 +68,11 @@ class CreateUserAction extends Action{
      *
      * This is the function that contains the code that creates the new User, storing it persistently.
      *
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     protected function doExecute() {
-
-    $dao = DAOFactory::getUserDAO();
-        if ($dao->create($this->user)!=1) {
-            return -1;
-        }
-
-        return 0;
+        $dao = DAOFactory::getUserDAO();
+        return $dao->create($this->user);
     }
 
 }

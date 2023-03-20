@@ -168,15 +168,11 @@ abstract class UsersFacade {
      *  This function is used for creating a new User.
      *
      * @param UserVO $user the User value object we want to create.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     static function CreateUser(UserVO $user) {
-
-    $action = new CreateUserAction($user);
-
-    return $action->execute();
-
+        $action = new CreateUserAction($user);
+        return $action->execute();
     }
 
     /** Delete User Function
@@ -184,15 +180,11 @@ abstract class UsersFacade {
      *  This function is used for deleting a User.
      *
      * @param UserVO $user the User value object we want to delete.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     static function DeleteUser(UserVO $user) {
-
-    $action = new DeleteUserAction($user);
-
-    return $action->execute();
-
+        $action = new DeleteUserAction($user);
+        return $action->execute();
     }
 
     /** Update User Function
@@ -200,15 +192,11 @@ abstract class UsersFacade {
      *  This function is used for updating a User.
      *
      * @param UserVO $user the User value object we want to update.
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
-     * @throws {@link SQLQueryErrorException}, {@link SQLUniqueViolationException}
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     static function UpdateUser(UserVO $user) {
-
-    $action = new UpdateUserAction($user);
-
-    return $action->execute();
-
+        $action = new UpdateUserAction($user);
+        return $action->execute();
     }
 
     /** Get Extra Hours report Function

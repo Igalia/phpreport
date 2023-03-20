@@ -68,16 +68,11 @@ class DeleteUserAction extends Action{
      *
      * This is the function that contains the code that deletes the User from persistent storing.
      *
-     * @return int it just indicates if there was any error (<i>-1</i>) or not (<i>0</i>).
+     * @return OperationResult the result {@link OperationResult} with information about operation status
      */
     protected function doExecute() {
-
         $dao = DAOFactory::getUserDAO();
-        if ($dao->delete($this->user)!=1) {
-            return -1;
-        }
-
-        return 0;
+        return $dao->delete($this->user);
     }
 
 }
