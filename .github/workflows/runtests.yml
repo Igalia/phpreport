@@ -16,4 +16,4 @@ jobs:
       with:
         compose-file: "./docker/docker-compose.test.yml"
     - name: Run tests
-      run: docker-compose -f docker/docker-compose.test.yml run --entrypoint='./vendor/bin/phpunit --testdox tests' -T phpreport-app <&-
+      run: docker-compose -f docker/docker-compose.test.yml run -T test
