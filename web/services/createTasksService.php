@@ -36,8 +36,6 @@
 
     $request = trim(file_get_contents('php://input'));
 
-        /*$request = '<?xml version="1.0" encoding="ISO-8859-15"?><tasks><task><date>2009-10-29</date><initTime>00:00</initTime><endTime>03:00</endTime><customerId>10</customerId><projectId>196</projectId><ttype>hjgjhg</ttype><story>jhgjhgjk</story><text>uyefsdgfdghfdhgf</text><telework>true</telework></task><task><date>2009-10-28</date><initTime>03:30</initTime><endTime>10:45</endTime><customerId>10</customerId><projectId>196</projectId><ttype>hjgjhg</ttype><story>jhgjhgjk</story><text>uyefsdgfdghfdhgf</text><telework>true</telework></task></tasks>';*/
-
     $parser->XML($request);
 
     do {
