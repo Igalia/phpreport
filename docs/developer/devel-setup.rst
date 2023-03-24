@@ -76,10 +76,26 @@ able to create users with any permission level once you are logged in as
 Step 6: Running automated tests
 ===============================
 
-Make sure you have composer and the projects dependencies installed.
+There 2 types of tests in the project: unit and integration tests.
+
+The unit tests will work locally without issues, but the integration
+tests will only work if there is a service running on the port 8000
+with the data from the `sql/initialData.sql` file. In that case it's
+easier to run it with docker, as it has everything setup.
+
+In one terminal build and run the application and the database:
+
+``docker-compose -f docker/docker-compose.test.yml up --build --renew-anon-volumes``
+
+In a second terminal run the ``test`` container to run the tests:
+
+``docker-compose -f docker/docker-compose.test.yml run -T test``
+
+If you don't want to setup docker, it's possible to run only the
+unit tests. Make sure you have composer and the projects dependencies installed.
 To install the dependencies run ``composer install`` in the project
 root directory.
 
 All the automated tests should be placed inside the ``tests`` directory.
-From the project root, run ``./vendor/bin/phpunit --testdox tests``
+From the project root, run ``./vendor/bin/phpunit --testdox tests/unit``
 to execute the automated tests.
