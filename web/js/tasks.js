@@ -992,7 +992,7 @@ Ext.onReady(function(){
         if(isUnsaved()) {
             saveTasks(false);
         }
-    }, 10000);
+    }, 30000);
 
     /* Build a calendar on the auxiliar sidebar */
     new Ext.Panel({
