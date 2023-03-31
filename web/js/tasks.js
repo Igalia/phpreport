@@ -1290,14 +1290,17 @@ Ext.onReady(function(){
                 text: 'Delete',
                 flex: 1,
                 handler: function () {
-                    //remove from the store
-                    store = Ext.StoreMgr.get('templatesStore')
-                    store.remove(store.getById(templateValues['id']));
-
-                    //remove from the panel
-                    var row = this.findParentByType('panel');
-                    var panel = row.findParentByType('panel');
-                    panel.remove(row);
+                    Ext.Msg.confirm("Confirmation", "Are you sure you want to delete this template?", function(btnText){
+                        if(btnText == "yes"){
+                            //remove from the store
+                            store = Ext.StoreMgr.get('templatesStore')
+                            store.remove(store.getById(templateValues['id']));
+                            //remove from the panel
+                            var row = this.findParentByType('panel');
+                            var panel = row.findParentByType('panel');
+                            panel.remove(row);
+                        }
+                    }, this)
                 },
             });
             this.add(new Ext.Panel({
