@@ -1244,7 +1244,42 @@ Ext.onReady(function(){
                         }
                     }, 500);
                 }
-            })
+            }),
+            // Default button for zero hours day task
+            new Ext.Button({
+                id: 'zeroDayTaskButton',
+                text: 'Zero Hours Day',
+                disabled: forbidden,
+                handler: function () {
+                    // Delay task creation until store gets loaded or it won't be properly added
+                    if (!isLoaded()) {
+                        window.setTimeout(Ext.getCmp('zeroDayTaskButton').handler, 100);
+                        return;
+                    }
+                    if (currentJourney == 0)
+                        return;
+
+                    removeFreshEmptyTask();
+
+                    // Create task and fill init and end times
+                    let newTask = new taskRecord();
+                    let init = new Date();
+                    init.setHours(0, 0, 0, 0);
+                    let end = init;
+                    newTask.set('initTime', init.format('H:i'));
+                    newTask.set('endTime', end.format('H:i'));
+                    newTask.set('projectId', vacationsProjectId);
+
+                    // Add record to store and show in a panel
+                    let taskPanel = addTask(newTask);
+                    // Autosave
+                    window.setTimeout(function () {
+                        if(isUnsaved()) {
+                            saveTasks(true);
+                        }
+                    }, 500);
+                }
+            }),
         ],
         addButtonForTemplate: function (templateValues) {
             var createButton = new Ext.Button({
