@@ -79,7 +79,10 @@
 
     foreach ($users as $user) {
         if (!in_array($user->getLogin(), $excludedUsers)) {
-            $period = UsersFacade::GetUserJourneyHistoriesByIntervals($today, $today, $user->getId());
+            $lastMonday = new DateTime(date("Y-m-d", strtotime("last week monday")));
+            $lastFriday = new DateTime(date("Y-m-d", strtotime("last week friday")));
+
+            $period = UsersFacade::GetUserJourneyHistoriesByIntervals($lastMonday, $lastMonday, $user->getId());
             if (empty($period) || ($period[0]->getJourney() == 0)) {
                 // User is not currently hired or is on leave of absence, skip it.
                 continue;
@@ -88,8 +91,6 @@
             $login = $user->getLogin();
             $email = $login . "@" . $COMPANY_DOMAIN;
             $from = $NO_FILL_EMAIL_FROM;
-            $lastMonday = new DateTime(date("Y-m-d", strtotime("last week monday")));
-            $lastFriday = new DateTime(date("Y-m-d", strtotime("last week friday")));
 
             $emptyDaysLastWeek = TasksFacade::getEmptyDaysInPeriod($user, $lastMonday, $lastFriday);
 

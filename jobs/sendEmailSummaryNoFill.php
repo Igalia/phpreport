@@ -61,7 +61,7 @@
 
     foreach ($users as $user) {
         if (! in_array($user->getLogin(), $excludedUsers)) {
-            $period = UsersFacade::GetUserJourneyHistoriesByIntervals($today, $today, $user->getId());
+            $period = UsersFacade::GetUserJourneyHistoriesByIntervals($monday3weeksAgo, $lastMonday, $user->getId());
             if (empty($period) || ($period[0]->getJourney() == 0)) {
                 // User is not currently hired or is on leave of absence, skip it.
                 continue;
@@ -71,13 +71,13 @@
             $emptyDaysLastWeek = TasksFacade::getEmptyDaysInPeriod($user, $lastMonday, $lastFriday);
             $emptyDays2WeeksAgo = TasksFacade::getEmptyDaysInPeriod($user, $monday2weeksAgo, $friday2weeksAgo);
             $emptyDays3WeeksAgo = TasksFacade::getEmptyDaysInPeriod($user, $monday3weeksAgo, $friday3weeksAgo);
-            if (!empty($emptyDaysLastWeek)) {
+            if (!empty($emptyDaysLastWeek) && ($period[0]->getInitDate() <= $lastMonday)) {
                 array_push($warnedUsers, $user->getLogin());
             }
-            if (!empty($emptyDays2WeeksAgo)) {
+            if (!empty($emptyDays2WeeksAgo) && ($period[0]->getInitDate() <= $monday2weeksAgo)) {
                 array_push($criticalUsers, $user->getLogin());
             }
-            if (!empty($emptyDays3WeeksAgo)) {
+            if (!empty($emptyDays3WeeksAgo) && ($period[0]->getInitDate() <= $monday3weeksAgo)) {
                 array_push($blockedUsers, $user->getLogin());
             }
         }
