@@ -10,7 +10,7 @@ RUN apt-get update
 
 RUN apt-get -y install postgresql apache2 php php-pgsql php-xml supervisor make docutils-common uglifyjs git
 
-ADD . /var/www/html/phpreport/
+COPY . /var/www/html/phpreport/
 
 WORKDIR  /var/www/html/phpreport/
 
