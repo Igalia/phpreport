@@ -141,6 +141,11 @@ Ext.onReady(function () {
         return id;
     };
 
+    /* Renderer for html */
+    function descriptionRenderer(text){
+        return Ext.util.Format.htmlEncode(text)
+    }
+
     /* Renderer to show the task type in the grid */
     function taskTypeRenderer(value) {
         var record =  taskTypeStore.getById(value);
@@ -472,6 +477,7 @@ Ext.onReady(function () {
             header: 'Description',
             sortable: true,
             dataIndex: 'text',
+            renderer: descriptionRenderer
         },{
             header: 'Story',
             sortable: true,
