@@ -323,6 +323,7 @@ Ext.onReady(function(){
             editor: {
                 xtype: 'textfield',
                 allowBlank: false,
+                emptyText: 'login',
                 listeners: {
                     'change': function() {
                         this.setValue(this.getValue().trim());
@@ -338,6 +339,7 @@ Ext.onReady(function(){
             editor: {
                 xtype: 'textfield',
                 inputType: 'password',
+                emptyText: 'password',
                 allowBlank: true,
             }
         }<?php
@@ -374,9 +376,7 @@ Ext.onReady(function(){
          * onAdd
          */
         onAdd: function(btn, ev) {
-            var u = new userRecord({
-                login: 'New User',
-            });
+            var u = new userRecord({});
             this.inlineEditor.stopEditing();
             this.store.insert(0, u);
             this.getView().refresh();

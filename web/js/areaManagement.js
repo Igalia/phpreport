@@ -213,6 +213,7 @@ Ext.onReady(function(){
             editor: {
                 xtype: 'textfield',
                 allowBlank: false,
+                emptyText: 'Area name',
                 listeners: {
                     'change': function() {
                         this.setValue(this.getValue().trim());
@@ -244,9 +245,7 @@ Ext.onReady(function(){
          * onAdd
          */
         onAdd: function(btn, ev) {
-            var u = new areaRecord({
-                name: 'New Area',
-            });
+            var u = new areaRecord({});
             this.inlineEditor.stopEditing();
             this.store.insert(0, u);
             this.getView().refresh();

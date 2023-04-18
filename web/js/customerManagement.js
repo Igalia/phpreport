@@ -315,6 +315,7 @@ Ext.onReady(function(){
             editor: {
                 xtype: 'textfield',
                 allowBlank: false,
+                emptyText: 'Client name',
                 listeners: {
                     'change': function() {
                         this.setValue(this.getValue().trim());
@@ -402,11 +403,7 @@ Ext.onReady(function(){
          * onAdd
          */
         onAdd: function(btn, ev) {
-            var u = new customerRecord({
-                name: 'New Client',
-                sectorId: sectorsStore.getAt(0).get('id'),
-                type: typesStore.getAt(0).get('name'),
-            });
+            var u = new customerRecord({});
             this.inlineEditor.stopEditing();
             this.store.insert(0, u);
             this.getView().refresh();
@@ -463,6 +460,7 @@ Ext.onReady(function(){
             editor: {
                 xtype: 'textfield',
                 allowBlank: false,
+                emptyText: 'sector name',
                 listeners: {
                     'change': function() {
                         this.setValue(this.getValue().trim());
@@ -494,9 +492,7 @@ Ext.onReady(function(){
          * onAdd
          */
         onAdd: function(btn, ev) {
-            var u = new sectorRecord({
-                name: 'New Sector',
-            });
+            var u = new sectorRecord({});
             this.inlineEditor.stopEditing();
             this.store.insert(0, u);
             this.getView().refresh();
