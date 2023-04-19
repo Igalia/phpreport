@@ -63,7 +63,6 @@ class ProjectVO {
     protected $movedHours = NULL;
     protected $schedType = NULL;
     protected $type = NULL;
-    protected $futureLoggedHours = NULL;
 
     public function setId($id) {
         if (is_null($id))
@@ -147,14 +146,6 @@ class ProjectVO {
 
     public function getMovedHours() {
         return $this->movedHours;
-    }
-
-    public function getFutureLoggedHours() {
-        return $this->futureLoggedHours;
-    }
-
-    public function setFutureLoggedHours($futureHours = false) {
-        $this->futureLoggedHours = $futureHours;
     }
 
     public function setAreaId($areaId) {

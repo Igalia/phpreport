@@ -97,7 +97,6 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         if(isset($row['customerid'])) {
             $projectVO->setCustomerId($row['customerid']);
         }
-        $projectVO->setFutureLoggedHours($row['futureLoggedHours']);
 
         return $projectVO;
 
