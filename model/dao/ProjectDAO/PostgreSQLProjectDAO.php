@@ -97,6 +97,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         if(isset($row['customerid'])) {
             $projectVO->setCustomerId($row['customerid']);
         }
+        $projectVO->setFutureLoggedHours($row['futureLoggedHours']);
 
         return $projectVO;
 
@@ -173,6 +174,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         if(isset($row['customerid'])) {
             $projectVO->setCustomerId($row['customerid']);
         }
+        $projectVO->setFutureLoggedHours($row['futureLoggedHours']);
 
         return $projectVO;
 
@@ -228,7 +230,23 @@ class PostgreSQLProjectDAO extends ProjectDAO {
                 "project.type, project.moved_hours, project.sched_type, ".
                 "project.customerid, customer.name";
         $result = $this->customExecute($sql);
-        return $result[0];
+        $project = $result[0];
+
+        // Get possible hours logged in the future
+        $sql =
+            "SELECT CASE ".
+                "WHEN COUNT(*) = 0 THEN 0 ".
+                "ELSE ROUND(SUM((task._end - task.init) / 60.0),2) ".
+            "END AS future_hours ".
+            "FROM task ".
+            "WHERE projectid=:projectId and _date > CURRENT_DATE";
+        $statement = $this->pdo->prepare($sql);
+        $statement->bindValue(":projectId", $projectId, PDO::PARAM_INT);
+        $statement->execute();
+        $hours = $statement->fetch(PDO::FETCH_NUM);
+        $project->setFutureLoggedHours($hours[0]);
+
+        return $project;
     }
 
     /** Projects retriever by Area id for PostgreSQL.
