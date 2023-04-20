@@ -139,7 +139,16 @@ Ext.onReady(function(){
                         name:'workDeviationPercent',
                         fieldLabel: 'Deviation %',
                         value: projectData.workDeviationPercent,
-                    }
+                    },
+                    (projectData.futureLoggedHours > 0) ?
+                    {
+                        id: 'futureLoggedHours',
+                        name:'futureLoggedHours',
+                        fieldLabel: 'Hours Logged in The Future',
+                        value: projectData.futureLoggedHours,
+                        labelStyle: 'color:red; font-weight:bold;',
+                        style: {color:"red"},
+                    } : {},
                 ]
             },{
                 xtype: 'fieldset',

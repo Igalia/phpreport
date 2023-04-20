@@ -65,6 +65,7 @@ echo "    active: " . ($project->getActivation()? "true":"false") . ",\n";
 echo "    movedHours: '" . $project->getMovedHours() . "',\n";
 echo "    invoice: '" . $project->getInvoice() . "',\n";
 echo "    type: '" . $project->getType() . "',\n";
+echo "    futureLoggedHours: '" . $project->getFutureLoggedHours() . "',\n";
 
 echo "    finalEstimatedHours: '" . $project->getFinalEstHours() . "',\n";
 echo "    workedHours: '" . $project->getWorkedHours() . "',\n";

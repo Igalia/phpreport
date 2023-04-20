@@ -56,6 +56,7 @@ class CustomProjectVO extends ProjectVO {
      */
     protected $workedHours = NULL;
     protected $totalCost = NULL;
+    protected $futureLoggedHours = NULL;
 
     public function setTotalCost($totalCost) {
         if (is_null($totalCost))
@@ -187,6 +188,14 @@ class CustomProjectVO extends ProjectVO {
             return (100*$this->getWorkedHourInvoiceAbsoluteDeviation()/
                     $estHourInvoice);
         else return null;
+    }
+
+    public function getFutureLoggedHours() {
+        return $this->futureLoggedHours;
+    }
+
+    public function setFutureLoggedHours($futureHours = false) {
+        $this->futureLoggedHours = $futureHours;
     }
 
 }
