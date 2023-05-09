@@ -116,6 +116,7 @@ var app = new Vue({
             this.displayData = {};
             // Diplays only users from the project
             let users = this.projectUsers[project.id];
+            users.sort()
             for (let i = 0; i < users.length; i++) {
                 if (this.rawData[users[i]]) {
                     this.displayData[users[i]] = this.rawData[users[i]];
