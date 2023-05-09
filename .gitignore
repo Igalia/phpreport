@@ -27,3 +27,7 @@ vendor
 
 # do not ignore vue.js and v-calendar files
 !web/vuejs/*.min.js
+
+# Python libs
+.venv
+__pycache__
