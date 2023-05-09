@@ -74,6 +74,7 @@ var app = new Vue({
                     projectUsers.push(users[j].getElementsByTagName("login")[0].innerHTML);
                 }
                 this.projectUsers[parsedProjects[i].id] = projectUsers;
+                projectUsers.sort()
             }
             this.isLoadingProjects = false;
             this.projectsList = parsedProjects;
