@@ -582,6 +582,11 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                 forceSelection: true,
                 store: taskTypeStore,
                 listeners: {
+                    'expand': function() {
+                        this.getStore().filterBy(function(record) {
+                            return record.json.active;
+                        });
+                    },
                     'select': function () {
                         this.parent.taskRecord.set('ttype',this.getValue());
                     },
