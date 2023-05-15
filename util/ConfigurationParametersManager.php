@@ -28,10 +28,8 @@
  * @subpackage util
  * @author Jacobo Aragunde Pérez <jaragunde@igalia.com>
  */
-
+require_once(PHPREPORT_ROOT . '/vendor/autoload.php');
 include_once(PHPREPORT_ROOT . '/util/UnknownParameterException.php');
-require_once(PHPREPORT_ROOT . '/config/config.php');
-
 /** Configuration parameters manager
  *
  *  This class is used for obtaining configuration parameters values from the file {@link config.php}.
@@ -39,8 +37,6 @@ require_once(PHPREPORT_ROOT . '/config/config.php');
  * @see config.php
  */
 class ConfigurationParametersManager {
-
-
     /** Parameters values retriever.
      *
      * This function retrieves the value of the parameter with the name <var>$parameterName</var>.
@@ -50,23 +46,20 @@ class ConfigurationParametersManager {
      * @throws {@link UnknownParameterException}
      */
   public static function getParameter($parameterName) {
+    $parameterValue = getenv($parameterName);
 
-    if (defined($parameterName))
-      return constant($parameterName);
+    if(!is_null($parameterValue) and $parameterValue != false){
+      return trim($parameterValue, '"');
+    }
+    else {
+        $dotenv = Dotenv\Dotenv::createMutable(PHPREPORT_ROOT);
+        $dotenv->load();
+        $parameterValue = $_ENV[$parameterName];
+
+        if(!is_null($parameterValue))
+          return $parameterValue;
+    }
 
     throw new UnknownParameterException($parameterName);
   }
-
 }
-
-
-/*// Test code
-echo ConfigurationParametersManager::getParameter('DB_PORT');
-echo "\n";
-echo ConfigurationParametersManager::getParameter('USER_DAO');
-echo "\n";
-echo ConfigurationParametersManager::getParameter('TASK_DAO');
-echo "\n";
-echo ConfigurationParametersManager::getParameter('unknownParameter');
-echo "\n";
-*/

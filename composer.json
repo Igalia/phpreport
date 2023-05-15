@@ -20,6 +20,7 @@
         "phpunit/phpunit": "9.6.5"
     },
     "require": {
-        "thecsea/simple-caldav-client": "dev-master"
+        "thecsea/simple-caldav-client": "dev-master",
+        "vlucas/phpdotenv":"^5.5@dev"
     }
 }

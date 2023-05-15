@@ -12,8 +12,11 @@ jobs:
     steps:
     # need checkout before using compose-action
     - uses: actions/checkout@v3
-    - uses: isbang/compose-action@v1.4.1
-      with:
-        compose-file: "./docker/docker-compose.test.yml"
+    - name: Build containers
+      run: docker build -t igalia/phpreport -f docker/test.app.Dockerfile .
+    - name: Run the containers
+      run: docker-compose -f ./docker/docker-compose.test.yml up -d
+    - name: Wait
+      run: sleep 15s
     - name: Run tests
-      run: docker-compose -f docker/docker-compose.test.yml run -T test
+      run: docker exec -t phpreport-app ./vendor/bin/phpunit --testdox tests --verbose

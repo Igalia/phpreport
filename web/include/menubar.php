@@ -20,10 +20,8 @@
 
 include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
 $SHOW_MENU = LoginManager::isLogged();
-$ISSUE_TRACKER_LINKS_TEXT = unserialize(
-    ConfigurationParametersManager::getParameter('ISSUE_TRACKER_LINKS_TEXT'));
-$ISSUE_TRACKER_LINKS_URL = unserialize(
-    ConfigurationParametersManager::getParameter('ISSUE_TRACKER_LINKS_URL'));
+$ISSUE_TRACKER_LINKS_TEXT = explode(',', ConfigurationParametersManager::getParameter('ISSUE_TRACKER_LINKS_TEXT'));
+$ISSUE_TRACKER_LINKS_URL = explode(',', ConfigurationParametersManager::getParameter('ISSUE_TRACKER_LINKS_URL'));
 ?>
 
 <link rel="stylesheet" type="text/css" href="include/menubar.css"/>

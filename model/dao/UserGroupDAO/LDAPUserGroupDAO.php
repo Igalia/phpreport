@@ -166,7 +166,7 @@ class LDAPUserGroupDAO extends UserGroupDAO{
      */
     public function getAll() {
         $groups = array();
-        $groupNames = unserialize(ConfigurationParametersManager::getParameter('USER_GROUPS'));
+        $groupNames = explode(',', ConfigurationParametersManager::getParameter('USER_GROUPS'));
         foreach ($groupNames as $groupName) {
             $userGroupVO = new UserGroupVO();
             $userGroupVO->setName($groupName);

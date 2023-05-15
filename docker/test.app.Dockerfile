@@ -6,8 +6,7 @@ RUN apt-get -y install php php-cli php-pgsql php-xml php-curl composer
 WORKDIR /app
 
 COPY . /app
-
-COPY config/config.test.php /app/config/config.php
+COPY .env.test /app/.env
 
 RUN composer update
 RUN composer install
