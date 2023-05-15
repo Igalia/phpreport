@@ -15,6 +15,9 @@ phpreport*.zip
 #default config file
 config/config.defaults
 
+.env
+docker/.env
+
 #minified JS and source maps
 *.min.js
 *.min.js.map

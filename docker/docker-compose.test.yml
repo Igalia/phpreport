@@ -20,14 +20,3 @@ services:
     environment:
       POSTGRES_PASSWORD: phpreport
       POSTGRES_USER: phpreport
-  test:
-    build:
-      context: ../
-      dockerfile: docker/test.app.Dockerfile
-    image: igalia/phpreport
-    container_name: test
-    entrypoint: ./vendor/bin/phpunit --testdox tests
-    depends_on:
-      - phpreport-app
-    profiles:
-      - tools

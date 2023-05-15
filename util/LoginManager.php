@@ -65,7 +65,7 @@ class LoginManager {
 
     // if we receive the user and password, we try to log in
     try {
-        if (ConfigurationParametersManager::getParameter('USE_EXTERNAL_AUTHENTICATION')) {
+        if (strtolower(ConfigurationParametersManager::getParameter('USE_EXTERNAL_AUTHENTICATION')) === "true") {
             // bypass password check. We assume that the external authenticator did that.
             $user = UsersFacade::GetUserByLogin($login);
             if (!$user) throw new IncorrectLoginException("User not found");
