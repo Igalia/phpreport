@@ -178,7 +178,7 @@ class HolidayService
         return $weeks;
     }
 
-    static function groupByWeeks(array $leavesDetails, $weeks = [], array $journeyHistories) : array
+    static function groupByWeeks(array $leavesDetails, array $journeyHistories, $weeks = []) : array
     {
         if (count($leavesDetails) == 0) return [];
         $dates = array_keys($leavesDetails);
@@ -265,7 +265,7 @@ class HolidayService
         return [
             'dates' => $vacations,
             'ranges' => $this->datesToRanges(array_keys($vacations)),
-            'weeks' => $this->groupByWeeks($vacations, [], $journeyHistories),
+            'weeks' => $this->groupByWeeks($vacations, $journeyHistories),
             'journey' => $journey
         ];
     }
