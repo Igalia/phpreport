@@ -161,6 +161,13 @@ define('DAO_BACKEND', 'PostgreSQL');
 define ('YEARLY_HOLIDAY_HOURS', 184);
 
 /**
+ * @name STANDARD_WORKING_DAY
+ * @global int standard working day length (i.e., journey)
+ */
+define ('STANDARD_WORKING_DAY', 8);
+
+
+/**
  * @name ALL_USERS_GROUP
  * @global string users group used for retrieving all users
  */

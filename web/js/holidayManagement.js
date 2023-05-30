@@ -57,6 +57,11 @@ function formatMinutesToHours(minutes) {
     return minutesLeft > 0 ? hours + minutesLeft + "m" : hours;
 }
 
+function formatMinutesToDecimal(minutes){
+    let hours = (minutes / 60).toFixed(1);
+    return hours;
+}
+
 function addDays(date, days) {
     var result = new Date(date);
     result.setDate(result.getDate() + days);
@@ -258,6 +263,26 @@ var app = new Vue({
                         },
                         coveredDates: [d],
                     })
+                }
+                else {
+                   const durationInDecimal = formatMinutesToDecimal(datesAndRanges.dates[d].end - datesAndRanges.dates[d].init);
+                   const duration = formatMinutesToHours(datesAndRanges.dates[d].end - datesAndRanges.dates[d].init);
+                   const journeyDuration = formatMinutesToHours(datesAndRanges.journey * 60);
+                   if (durationInDecimal > datesAndRanges.journey)
+                   {
+                    datesAndRanges.dates[d].hoursOver = (durationInDecimal - datesAndRanges.journey).toFixed(1);
+                    attributes.push({
+                        highlight: {
+                            color: 'red',
+                            fillMode: 'light',
+                        },
+                        dates: new Date(d + 'T00:00:00'),
+                        popover: {
+                            label: `Vacation hours (${duration}) longer than workday hours (${journeyDuration})`
+                        },
+                        coveredDates: [d],
+                    })
+                   }
                 }
             });
             return {
