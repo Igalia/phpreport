@@ -739,13 +739,13 @@ class PostgreSQLTaskDAO extends TaskDAO{
      * @return array OperationResult the array of {@link OperationResult} with information about operation status
      */
     public function batchPartialUpdate($tasks) {
-        if (!$this->checkOverlappingWithDBTasks($tasks)) {
-            $result = new OperationResult(false);
-            $result->setErrorNumber(10);
-            $result->setMessage("Task update failed:\nDetected overlapping times.");
-            $result->setResponseCode(400);
-            return array($result);
-        }
+        // if (!$this->checkOverlappingWithDBTasks($tasks)) {
+        //     $result = new OperationResult(false);
+        //     $result->setErrorNumber(10);
+        //     $result->setMessage("Task update failed:\nDetected overlapping times.");
+        //     $result->setResponseCode(400);
+        //     return array($result);
+        // }
 
         $results = array();
         foreach ($tasks as $task) {
@@ -941,13 +941,13 @@ class PostgreSQLTaskDAO extends TaskDAO{
      * @return array OperationResult the array of {@link OperationResult} with information about operation status
      */
     public function batchCreate($tasks) {
-        if (!$this->checkOverlappingWithDBTasks($tasks)) {
-            $result = new OperationResult(false);
-            $result->setErrorNumber(10);
-            $result->setMessage("Task creation failed:\nDetected overlapping times.");
-            $result->setResponseCode(400);
-            return array($result);
-        }
+        // if (!$this->checkOverlappingWithDBTasks($tasks)) {
+        //     $result = new OperationResult(false);
+        //     $result->setErrorNumber(10);
+        //     $result->setMessage("Task creation failed:\nDetected overlapping times.");
+        //     $result->setResponseCode(400);
+        //     return array($result);
+        // }
 
         $results = array();
         foreach ($tasks as $task) {

@@ -252,13 +252,41 @@ function removeFreshEmptyTask() {
     }
 }
 
+function getMinutes(time){
+    const hours = Number(time.split(':')[0]);
+    const minutes = Number(time.split(':')[1]);
+    return hours + minutes;
+}
+
+function checkTaskForOverlap(store){
+    let tasksCopy1 = store.data.items;
+    let tasksCopy2 = store.data.items;
+
+    //compare the end of one task with the beginning of the next one
+    let overlapping = [];
+    let overlapsTasks = false;
+    let message = "";
+
+    tasksCopy1.forEach(x => {
+        tasksCopy2.forEach(t => {
+            //if an item is not itself and overlaps
+            if(t.data != x.data && (getMinutes(t.data.endTime) > getMinutes(x.data.initTime) && getMinutes(t.data.initTime) < getMinutes(x.data.endTime))){
+                overlapsTasks = true;
+                overlapping.push(x);
+                message = "Task from " + t.data.initTime + " to " + t.data.endTime + " overlaps with task from " + x.data.initTime + " to " + x.data.endTime;
+            }
+        })
+
+    });
+    return { overlapsOneOrMoreExistingTasks: overlapsTasks, tasksOverlappedWith: overlapping, message: message }
+}
+
 /**
  * Creates and show a panel for a task, and adds that task to the store.
  * @param newRecord the task record to be added.
  * @return the TaskPanel object that has been created.
  */
 function addTask(newRecord) {
-
     // Add task to store
     tasksStore.add(newRecord);
 
@@ -972,19 +1000,27 @@ Ext.onReady(function(){
             if (!panels.get(panel).initTimeField.isValid()
                 || !panels.get(panel).endTimeField.isValid()
                 || !panels.get(panel).projectComboBox.isValid()) {
-                return false;
+                return {validated: false, message: "Start/end time or project id is invalid"};
             }
         }
-        return true;
+        //check to make sure times are not overlapping
+        let check = checkTaskForOverlap(tasksStore);
+
+        if(check.overlapsOneOrMoreExistingTasks){
+            return { validated: false, message: check.message}
+        }
+
+        return { validated: true, message: "Tasks valid"};
     }
 
     function saveTasks(showConfirmation) {
-        if (validateTasks()) {
+        let validation = validateTasks();
+        if (validation.validated) {
             tasksStore.showConfirmation = showConfirmation;
             tasksStore.save()
         } else if (showConfirmation)
             // Print error message only if save action was explicit
-            App.setAlert(false, "Check For Invalid Field Values");
+            App.setAlert(false, validation.message);
     }
 
     // Callback for save buttons in the UI
@@ -995,7 +1031,7 @@ Ext.onReady(function(){
     // Implement autosave of data, when valid contents are typed in to the task fields
     window.setInterval(function () {
         if(isUnsaved()) {
-            saveTasks(false);
+            saveTasks(true);
         }
     }, 30000);
 
