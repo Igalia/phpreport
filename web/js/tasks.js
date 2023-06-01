@@ -259,25 +259,29 @@ function getMinutes(time){
 }
 
 function checkTaskForOverlap(store){
-    let tasksCopy1 = store.data.items;
-    let tasksCopy2 = store.data.items;
+    let existingTasks = store.data.items.filter(x => !x.id.startsWith("ext"));
+    let unsavedTasks = store.data.items.filter(x => x.id.startsWith("ext"));
 
-    //compare the end of one task with the beginning of the next one
     let overlapping = [];
     let overlapsTasks = false;
     let message = "";
 
-    tasksCopy1.forEach(x => {
-        tasksCopy2.forEach(t => {
-            //if an item is not itself and overlaps
-            if(t.data != x.data && (getMinutes(t.data.endTime) > getMinutes(x.data.initTime) && getMinutes(t.data.initTime) < getMinutes(x.data.endTime))){
+    existingTasks.forEach(x => {
+        unsavedTasks.forEach(t => {
+            if(getMinutes(t.data.endTime) > getMinutes(x.data.initTime) && getMinutes(t.data.initTime) < getMinutes(x.data.endTime)){
                 overlapsTasks = true;
                 overlapping.push(x);
-                message = "Task from " + t.data.initTime + " to " + t.data.endTime + " overlaps with task from " + x.data.initTime + " to " + x.data.endTime;
+                message = "Task from " + x.data.initTime + " to " + x.data.endTime + " overlaps with task from " + t.data.initTime + " to " + t.data.endTime;
+            }
+            else if (getMinutes(t.data.initTime) == getMinutes(x.data.initTime) || getMinutes(t.data.endTime) == getMinutes(x.data.endTime)){
+                overlapsTasks = true;
+                overlapping.push(x);
+                message = "Task from " + x.data.initTime + " to " + x.data.endTime + " overlaps with task from " + t.data.initTime + " to " + t.data.endTime;
             }
         })
 
     });
+
     return { overlapsOneOrMoreExistingTasks: overlapsTasks, tasksOverlappedWith: overlapping, message: message }
 }
 
@@ -996,11 +1000,21 @@ Ext.onReady(function(){
     // Validate the inputs in the task panel
     function validateTasks() {
         var panels = tasksScrollArea.items;
+        let errorMessage = "";
         for(var panel=0; panel<panels.getCount(); panel++) {
             if (!panels.get(panel).initTimeField.isValid()
                 || !panels.get(panel).endTimeField.isValid()
                 || !panels.get(panel).projectComboBox.isValid()) {
-                return {validated: false, message: "Start/end time or project id is invalid"};
+                    if(!panels.get(panel).initTimeField.isValid()){
+                        errorMessage += "Start time invalid. "
+                    }
+                    if(!panels.get(panel).endTimeField.isValid()){
+                        errorMessage += "End time invalid. "
+                    }
+                    if(!panels.get(panel).projectComboBox.isValid()){
+                        errorMessage += "Project invalid. "
+                    }
+                return { validated: false, message: errorMessage };
             }
         }
         //check to make sure times are not overlapping
