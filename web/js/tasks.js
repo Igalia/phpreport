@@ -268,12 +268,9 @@ function checkTaskForOverlap(store){
 
     existingTasks.forEach(x => {
         unsavedTasks.forEach(t => {
-            if(getMinutes(t.data.endTime) > getMinutes(x.data.initTime) && getMinutes(t.data.initTime) < getMinutes(x.data.endTime)){
-                overlapsTasks = true;
-                overlapping.push(x);
-                message = "Task from " + x.data.initTime + " to " + x.data.endTime + " overlaps with task from " + t.data.initTime + " to " + t.data.endTime;
-            }
-            else if (getMinutes(t.data.initTime) == getMinutes(x.data.initTime) || getMinutes(t.data.endTime) == getMinutes(x.data.endTime)){
+            let overlapsTasksDuration = (getMinutes(t.data.endTime) > getMinutes(x.data.initTime) && getMinutes(t.data.initTime) < getMinutes(x.data.endTime));
+            let coincidesInitOrEndTimes =  (getMinutes(t.data.initTime) == getMinutes(x.data.initTime) || getMinutes(t.data.endTime) == getMinutes(x.data.endTime));
+            if (overlapsTasksDuration || coincidesInitOrEndTimes) {
                 overlapsTasks = true;
                 overlapping.push(x);
                 message = "Task from " + x.data.initTime + " to " + x.data.endTime + " overlaps with task from " + t.data.initTime + " to " + t.data.endTime;
