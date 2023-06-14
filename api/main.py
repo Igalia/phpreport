@@ -1,6 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import projects
+from routers import projects
+
+from db.db_connection import SessionLocal, engine
+from db.base_class import Base
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 

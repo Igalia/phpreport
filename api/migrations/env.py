@@ -1,10 +1,10 @@
 from __future__ import with_statement
 
-import os
-
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
+
+from db.db_connection import get_url
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -28,14 +28,6 @@ target_metadata = Base.metadata
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
-
-
-def get_url():
-    user = os.getenv("DB_USER", "phpreport")
-    password = os.getenv("DB_PASSWORD", "phpreport")
-    server = os.getenv("DB_HOST", "localhost")
-    db = os.getenv("DB_NAME", "phpreport")
-    return f"postgresql://{user}:{password}@{server}/{db}"
 
 
 def run_migrations_offline():
