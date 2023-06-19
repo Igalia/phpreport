@@ -40,7 +40,6 @@ include_once(PHPREPORT_ROOT . '/model/facade/action/AssignUserToProjectAction.ph
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeassignUserFromProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/DeleteProjectAction.php');
 include_once(PHPREPORT_ROOT . '/model/facade/action/UpdateProjectAction.php');
-include_once(PHPREPORT_ROOT . '/model/facade/action/GetProjectsByCustomerUserLoginAction.php');
 include_once(PHPREPORT_ROOT . '/model/dao/DAOFactory.php');
 include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
 
@@ -286,25 +285,4 @@ abstract class ProjectsFacade {
             $operationResults[] = ProjectsFacade::UpdateProject($project);
         return $operationResults;
     }
-
-    /** GetProjectsByCustomerUserLogin Function
-     *
-     *  Retrieves a list of projects using the attributes customer, user and activation as filters.
-     *
-     * @param int $customerID If not null, the list of projects will contain those related with this customer.
-     * @param string $userLogin If not null, the list of projects will contain those the user is assigned to.
-     * @param bool $active If true, only active projects will be listed. Otherwise, but inactive and active will appear.
-     * @param string $order optional parameter for sorting value objects in a specific way (by default, by their internal id).
-     * @return array Returns a list of ProjectVO objects satisfying the received criteria.
-     */
-    static function GetProjectsByCustomerUserLogin($customerId = NULL, $userLogin = NULL, $active = False, $order = 'id') {
-        if (is_null($customerId) and is_null($userLogin) and !$active)
-          $action = new GetAllProjectsAction($active, $order);
-        else
-          $action = new GetProjectsByCustomerUserLoginAction($customerId, $userLogin, $active, $order);
-
-        return $action->execute();
-    }
 }
-
-//var_dump(ProjectsFacade::GetProjectUsers(4));

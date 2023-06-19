@@ -319,44 +319,6 @@ class PostgreSQLProjectDAO extends ProjectDAO {
 
     }
 
-    /** Projects retriever for PostgreSQL.
-     *
-     * This function retrieves the rows from Project table, applying three optional conditions:
-     * projects assigned to a specific Customer through Requests,
-     * projects related with a User through ProjectUser
-     * or projects with the Activation flag as True.
-     *
-     * @param int $customerId the id of the Customer whose Projects we want to retrieve.
-     * @param string $userLogin login of the user we want to use as a filter.
-     * @param bool $active parameter for obtaining only the active Projects (by default it returns all them).
-     * @param string $orderField optional parameter for sorting value objects in a specific way (by default, by their internal id).
-     * @return array an array with value objects {@link ProjectVO} with their properties set to the values from the rows
-     * and ordered ascendantly by their database internal identifier.
-     * @throws {@link SQLQueryErrorException}
-     */
-    public function getByCustomerUserLogin($customerId = NULL, $userLogin = NULL,
-            $active = False, $orderField = 'id') {
-        $customerCondition = "true";
-        $userCondition = "true";
-        $activeCondition = "true";
-
-        if ($customerId)
-            $customerCondition = "id IN (SELECT projectid FROM requests where customerid = ".
-                    DBPostgres::checkNull($customerId) . ")";
-
-        if ($userLogin)
-            $userCondition = "id IN (SELECT projectid FROM project_usr LEFT JOIN usr ON usrid=id ".
-                    "WHERE login=" . DBPostgres::checkStringNull($userLogin) . ") ";
-
-        if ($active)
-            $activeCondition = "activation='True'";
-
-        $sql = "SELECT * FROM project".
-            " WHERE ".$customerCondition." AND ".$userCondition." AND ".$activeCondition.
-            " ORDER BY " . $orderField . " ASC";
-
-        return $this->execute($sql);
-    }
 
     /** Projects retriever for PostgreSQL.
      *
