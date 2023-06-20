@@ -171,13 +171,19 @@ class HolidayServiceTest extends TestCase
                 "end" => 420,
             ]
         ];
+        $journey = new JourneyHistoryVO();
+        $journey->setInitDate(DateTime::createFromFormat('Y-m-d', '2021-01-01'));
+        $journey->setEndDate(DateTime::createFromFormat('Y-m-d', '2021-12-31'));
+        $journey->setJourney(7.0);
+        $journeyHistories[] = array();
+        $journeyHistories[0] = $journey;
         $result = [
             '2021W41' => 2,
             '2021W44' => 1
         ];
         $this->assertEquals(
             $result,
-            $this->instance::groupByWeeks($dates)
+            $this->instance::groupByWeeks($dates, $journeyHistories)
         );
     }
 
@@ -198,13 +204,51 @@ class HolidayServiceTest extends TestCase
                 "end" => 420,
             ]
         ];
+        $journey = new JourneyHistoryVO();
+        $journey->setInitDate(DateTime::createFromFormat('Y-m-d', '2021-01-01'));
+        $journey->setEndDate(DateTime::createFromFormat('Y-m-d', '2021-12-31'));
+        $journey->setJourney(7.0);
+        $journeyHistories[] = array();
+        $journeyHistories[0] = $journey;
         $result = [
             '2021W41' => 1.5,
             '2021W44' => 1
         ];
         $this->assertEquals(
             $result,
-            $this->instance::groupByWeeks($dates)
+            $this->instance::groupByWeeks($dates, $journeyHistories)
+        );
+    }
+
+    public function testGroupByWeeksWithExtraLeaves(): void
+    {
+        $dates = [
+            "2021-10-14" => [
+                "init" => 0,
+                "end" => 336,
+            ],
+            "2021-10-15" => [
+                "init" => 0,
+                "end" => 336,
+            ],
+            "2021-11-01" => [
+                "init" => 0,
+                "end" => 420,
+            ]
+        ];
+        $journey = new JourneyHistoryVO();
+        $journey->setInitDate(DateTime::createFromFormat('Y-m-d', '2021-01-01'));
+        $journey->setEndDate(DateTime::createFromFormat('Y-m-d', '2021-12-31'));
+        $journey->setJourney(5.6);
+        $journeyHistories[] = array();
+        $journeyHistories[0] = $journey;
+        $result = [
+            '2021W41' => 2,
+            '2021W44' => 1.25
+        ];
+        $this->assertEquals(
+            $result,
+            $this->instance::groupByWeeks($dates, $journeyHistories)
         );
     }
 
@@ -230,9 +274,15 @@ class HolidayServiceTest extends TestCase
             '2020W53' => 2,
             '2021W44' => 1
         ];
+        $journey = new JourneyHistoryVO();
+        $journey->setInitDate(DateTime::createFromFormat('Y-m-d', '2021-01-01'));
+        $journey->setEndDate(DateTime::createFromFormat('Y-m-d', '2021-12-31'));
+        $journey->setJourney(7.0);
+        $journeyHistories[] = array();
+        $journeyHistories[0] = $journey;
         $this->assertEquals(
             $result,
-            $this->instance::groupByWeeks($dates)
+            $this->instance::groupByWeeks($dates, $journeyHistories)
         );
     }
 

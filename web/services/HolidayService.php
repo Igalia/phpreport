@@ -30,6 +30,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
 include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
+include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
 
 class HolidayService
 {
@@ -177,18 +178,24 @@ class HolidayService
         return $weeks;
     }
 
-    static function groupByWeeks(array $leavesDetails, $weeks = []): array
+    static function groupByWeeks(array $leavesDetails, array $journeyHistories, $weeks = []) : array
     {
         if (count($leavesDetails) == 0) return [];
         $dates = array_keys($leavesDetails);
         $previous_week = date("o\WW", strtotime($dates[0]));
         $weeks[$previous_week] = $leavesDetails[$dates[0]]['amount'] ?? 1;
         for ($i = 1; $i < count($dates); $i++) {
+            $currentJourney= array_filter($journeyHistories, fn($history) => $history->dateBelongsToHistory(date_create($dates[$i])))[0];
+            $journey = $currentJourney->getJourney() ?? \ConfigurationParametersManager::getParameter('STANDARD_WORKING_DAY');
             $current_week = date("o\WW", strtotime($dates[$i]));
             if ($current_week == $previous_week) {
-                $weeks[$current_week] += $leavesDetails[$dates[$i]]['amount'] ?? 1;
+                $leaveInDays = ($leavesDetails[$dates[$i]]['end'] - $leavesDetails[$dates[$i]]['init']) / 60;
+                $leavePerDayBasedOnJourney = $leaveInDays / $journey;
+                $weeks[$current_week] += $leavePerDayBasedOnJourney ?? 1;
             } else {
-                $weeks[$current_week] = $leavesDetails[$dates[$i]]['amount'] ?? 1;
+                $leaveInDays = ($leavesDetails[$dates[$i]]['end'] - $leavesDetails[$dates[$i]]['init']) / 60;
+                $leavePerDayBasedOnJourney = $leaveInDays / $journey;
+                $weeks[$current_week] = $leavePerDayBasedOnJourney ?? 1;
                 $previous_week = $current_week;
             }
             $weeks[$current_week] = round($weeks[$current_week], 2);
@@ -250,10 +257,16 @@ class HolidayService
         $vacations = \UsersFacade::GetScheduledHolidays($init, $end, $userVO);
         $vacations = $this::mapHalfLeaves($vacations, $journeyHistories);
 
+        for ($i = 1; $i < count($vacations); $i++){
+            $currentJourney = array_filter($journeyHistories, fn($history) => $history->dateBelongsToHistory(date_create($vacations[$i])))[0];
+        }
+
+        $journey = $currentJourney->getJourney() ?? \ConfigurationParametersManager::getParameter('STANDARD_WORKING_DAY');
         return [
             'dates' => $vacations,
             'ranges' => $this->datesToRanges(array_keys($vacations)),
-            'weeks' => $this->groupByWeeks($vacations)
+            'weeks' => $this->groupByWeeks($vacations, $journeyHistories),
+            'journey' => $journey
         ];
     }
 

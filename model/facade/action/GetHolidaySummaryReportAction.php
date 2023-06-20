@@ -72,7 +72,7 @@ class GetHolidaySummaryReportAction extends GetHolidayHoursBaseAction
         );
         $validJourney = array_pop($validJourney);
         $validJourney = $validJourney ? $validJourney->getJourney() : 0;
-        $leaves = HolidayService::groupByWeeks($leaves, $this->weeks);
+        $leaves = HolidayService::groupByWeeks($leaves, $this->weeks, $journeyHistories);
         if (count($leaves) == 0) {
             $leaves = $this->weeks;
         }
