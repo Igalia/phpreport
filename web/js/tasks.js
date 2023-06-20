@@ -273,10 +273,9 @@ function checkTaskForOverlap(store){
             if (overlapsTasksDuration || coincidesInitOrEndTimes) {
                 overlapsTasks = true;
                 overlapping.push(x);
-                message = "Task from " + x.data.initTime + " to " + x.data.endTime + " overlaps with task from " + t.data.initTime + " to " + t.data.endTime;
+                message += "Task from " + t.data.initTime + " to " + t.data.endTime + " overlaps with task from " + x.data.initTime + " to " + x.data.endTime + ". ";
             }
         })
-
     });
 
     return { overlapsOneOrMoreExistingTasks: overlapsTasks, tasksOverlappedWith: overlapping, message: message }
