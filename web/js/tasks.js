@@ -255,7 +255,7 @@ function removeFreshEmptyTask() {
 function getMinutes(time){
     const hours = Number(time.split(':')[0]);
     const minutes = Number(time.split(':')[1]);
-    return hours + minutes;
+    return (hours * 60) + minutes;
 }
 
 function checkTaskForOverlap(store){
