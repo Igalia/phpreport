@@ -198,9 +198,9 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint('usrid')
         )
 
-        # ----------------------------------------------------------------------
-        # Deprecated models that should be in the initial migration
-        # for compatibility with the current production DB state
+    # ----------------------------------------------------------------------
+    # Deprecated models that should be in the initial migration
+    # for compatibility with the current production DB state
     if not table_exists('iteration'):
         op.create_table('iteration',
         sa.Column('id', sa.INTEGER(), server_default=sa.text("nextval('iteration_id_seq'::regclass)"), autoincrement=True, nullable=False),
