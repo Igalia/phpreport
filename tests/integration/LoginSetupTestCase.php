@@ -6,6 +6,8 @@ use PHPUnit\Framework\TestCase;
 
 if (!defined('PHPREPORT_ROOT')) define('PHPREPORT_ROOT', __DIR__ . '/../../');
 
+include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
+
 class LoginSetupTestCase extends TestCase {
 
     public string $sessionId;
@@ -55,5 +57,25 @@ class LoginSetupTestCase extends TestCase {
     {
         $xml = $this->makeRequest("/web/services/loginService.php");
         $this->sessionId = $xml->sessionId;
+    }
+
+    public function cleanUpTasks(): void
+    {
+        $parameters[] = \ConfigurationParametersManager::getParameter('DB_HOST');
+        $parameters[] = \ConfigurationParametersManager::getParameter('DB_PORT');
+        $parameters[] = \ConfigurationParametersManager::getParameter('DB_USER');
+        $parameters[] = \ConfigurationParametersManager::getParameter('DB_NAME');
+        $parameters[] = \ConfigurationParametersManager::getParameter('DB_PASSWORD');
+        $parameters[] = \ConfigurationParametersManager::getParameter('EXTRA_DB_CONNECTION_PARAMETERS');
+
+        $connectionString = "host=$parameters[0] port=$parameters[1] user=$parameters[2] dbname=$parameters[3] password=$parameters[4] $parameters[5]";
+
+        $connect = pg_connect($connectionString);
+
+        $result = pg_query($connect, $query="DELETE FROM task");
+        if ($result == NULL) error_log("ERROR: Could not run query: $query");
+        var_dump($result);
+
+        pg_freeresult($result);
     }
 }

@@ -2,13 +2,12 @@
 
 use Phpreport\Tests\integration\LoginSetupTestCase;
 
-if (!defined('PHPREPORT_ROOT')) define('PHPREPORT_ROOT', __DIR__ . '/../../');
-
 class TaskServiceTest extends LoginSetupTestCase {
 
     public function setUp(): void
     {
         parent::setUp();
+        parent::cleanUpTasks();
     }
 
     public function testCreateTaskFailsWithUserLoggedOut(): void
@@ -30,6 +29,12 @@ class TaskServiceTest extends LoginSetupTestCase {
 
     public function testCreateTaskFailsForOverlappingTimes(): void
     {
+        $request = '<?xml version="1.0" encoding="ISO-8859-15"?>';
+        $request .= '<tasks sid="'. $this->sessionId .'">';
+        $request .= '<task><date>2023-03-24</date><initTime>00:00</initTime><endTime>03:00</endTime>';
+        $request .= '<customerId>1</customerId><projectId>1</projectId></task></tasks>';
+        $res = $this->makeRequest('web/services/createTasksService.php', null, 'POST', $request);
+
         // Creating a task with the same values of the previous test should fail
         // because they overlap.
         $request = '<?xml version="1.0" encoding="ISO-8859-15"?>';
