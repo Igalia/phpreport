@@ -101,17 +101,17 @@
             $dayOfWeek = $today->format('w');
             if ($dayOfWeek == $NO_FILL_TRIGGER_WARNING_DAY) {
                 $cc = $NO_FILL_CC_WARNING;
-                $subject = $NO_FILL_SUBJECT_WARNING;
+                $subject = str_replace("###WEEK_NUMBER###", $lastMonday->format("W"), $NO_FILL_SUBJECT_WARNING);
                 $template = $NO_FILL_TEMPLATE_WARNING;
                 sendEmail($email, $emptyDaysLastWeek, $from, $cc,$subject, $template);
             } elseif ($dayOfWeek == $NO_FILL_TRIGGER_CRITICAL_DAY) {
                 $cc = $NO_FILL_CC_CRITICAL;
-                $subject = $NO_FILL_SUBJECT_CRITICAL;
+                $subject = str_replace("###WEEK_NUMBER###", $lastMonday->format("W"), $NO_FILL_SUBJECT_CRITICAL);
                 $template = $NO_FILL_TEMPLATE_CRITICAL;
                 sendEmail($email, $emptyDaysLastWeek, $from, $cc,$subject, $template);
             } elseif ($dayOfWeek == $NO_FILL_TRIGGER_LAST_DAY) {
                 $cc = $NO_FILL_CC_LAST;
-                $subject = $NO_FILL_SUBJECT_LAST;
+                $subject = str_replace("###WEEK_NUMBER###", $lastMonday->format("W"), $NO_FILL_SUBJECT_LAST);
                 $template = $NO_FILL_TEMPLATE_LAST;
                 sendEmail($email, $emptyDaysLastWeek, $from, $cc,$subject, $template);
             }
