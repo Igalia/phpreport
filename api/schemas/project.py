@@ -1,8 +1,7 @@
-from datetime import date, datetime, time, timedelta
-
-from typing import Optional
+from datetime import date
 
 from pydantic import BaseModel
+
 
 class Project(BaseModel):
     id: str
@@ -20,4 +19,3 @@ class Project(BaseModel):
 
     class Config:
         orm_mode = True
-

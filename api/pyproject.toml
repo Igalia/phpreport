@@ -18,6 +18,7 @@ dependencies = [
     "alembic == 1.10.4",
     "sqlalchemy == 2.0.12",
     "fastapi >= 0.95.2",
+    "tox==4.6.3",
     "uvicorn >= 0.22.0"
 ]
 
@@ -34,3 +35,13 @@ dev = [
 
 [tool.setuptools]
 py-modules = []
+
+[tool.black]
+line-length = 120
+extend-exclude = '''
+(
+  ^/migrations/*
+  | .venv
+  | .env
+)
+'''

@@ -1,7 +1,7 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, Date
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, Boolean, Date
 
 from db.base_class import Base
+
 
 class Config(Base):
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)

@@ -2,21 +2,24 @@ name: Test
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
     steps:
-    # need checkout before using compose-action
-    - uses: actions/checkout@v3
-    - name: Build containers
-      run: docker build -t igalia/phpreport -f docker/test.app.Dockerfile .
-    - name: Run the containers
-      run: docker-compose -f ./docker/docker-compose.test.yml up -d
-    - name: Wait
-      run: sleep 15s
-    - name: Run tests
-      run: docker exec -t phpreport-app ./vendor/bin/phpunit --testdox tests --verbose
+      - uses: actions/checkout@v3
+      - name: Build containers
+        run: docker build -t igalia/phpreport -f docker/test.app.Dockerfile .
+      - name: Run the containers
+        run: docker-compose -f ./docker/docker-compose.test.yml up -d
+      - name: Wait
+        run: sleep 15s
+      - name: Run tests
+        run: docker exec -t phpreport-app ./vendor/bin/phpunit --testdox tests --verbose
+      - name: Run flake8 check
+        run: docker exec -t phpreport-app tox -c api/tox.ini -e flake8
+      - name: Run black check
+        run: docker exec -t phpreport-app tox -c api/tox.ini -e black
