@@ -31,3 +31,5 @@ vendor
 # Python libs
 .venv
 __pycache__
+.tox
+*.egg-info
