@@ -34,9 +34,9 @@
 
     $end = $_GET['end'];
 
-    $dateFormat = $_GET['dateFormat'];
+    $dateFormat = $_GET['dateFormat'] && NULL;
 
-    $sid = $_GET['sid'];
+    $sid = $_GET['sid'] && NULL;
 
     do {
 
