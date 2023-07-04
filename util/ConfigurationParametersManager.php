@@ -36,28 +36,28 @@ include_once(PHPREPORT_ROOT . '/util/UnknownParameterException.php');
  *
  * @see config.php
  */
-class ConfigurationParametersManager {
-    /** Parameters values retriever.
-     *
-     * This function retrieves the value of the parameter with the name <var>$parameterName</var>.
-     *
-     * @param string $parameterName the name of the parameter we want to retrieve.
-     * @return string the value of the parameter.
-     * @throws {@link UnknownParameterException}
-     */
-  public static function getParameter($parameterName) {
-    $parameterValue = getenv($parameterName);
-
-    if(!is_null($parameterValue) and $parameterValue != false){
-      return trim($parameterValue, '"');
+class ConfigurationParametersManager
+{
+  /** Parameters values retriever.
+   *
+   * This function retrieves the value of the parameter with the name <var>$parameterName</var>.
+   *
+   * @param string $parameterName the name of the parameter we want to retrieve.
+   * @return string the value of the parameter.
+   * @throws {@link UnknownParameterException}
+   */
+  public static function getParameter($parameterName)
+  {
+    if (!defined('ENV_LOADED')) {
+      $dotenv = Dotenv\Dotenv::createMutable(PHPREPORT_ROOT);
+      $dotenv->load();
+      define('ENV_LOADED', true);
     }
-    else {
-        $dotenv = Dotenv\Dotenv::createMutable(PHPREPORT_ROOT);
-        $dotenv->load();
-        $parameterValue = $_ENV[$parameterName];
 
-        if(!is_null($parameterValue))
-          return $parameterValue;
+    $parameterValue = $_SERVER[$parameterName];
+
+    if (!is_null($parameterValue) and $parameterValue !== false) {
+      return trim($parameterValue, '"');
     }
 
     throw new UnknownParameterException($parameterName);
