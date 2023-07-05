@@ -20,24 +20,25 @@
 // Check if session exists, or alert user
 
 function checkIfSessionExists() {
-    Ext.Ajax.request({
-        url: 'services/checkSessionActive.php',
-        failure: function (response) {
-            Ext.MessageBox.confirm('Session Expired', 'Do you want to login again?', function(btn){
-                if(btn === 'yes'){
-                    window.location.reload();
-                }
-            });
-        },
-        success: function (response) {
-            Ext.MessageBox.hide();
+  Ext.Ajax.request({
+    url: 'services/checkSessionActive.php',
+    failure: function (response) {
+      Ext.MessageBox.confirm('Session Expired', 'Do you want to login again?', function (btn) {
+        if (btn === 'yes') {
+          window.location.reload();
         }
-    });
+      });
+    },
+    success: function (response) {
+      Ext.MessageBox.hide();
+    }
+  });
 }
 
 window.onload = function () {
-    if (!window.location.pathname.endsWith("login.php")) { //do not run this check in the login screen!
-        window.setInterval(checkIfSessionExists, 300000);
-        document.addEventListener("visibilitychange", checkIfSessionExists);
-    }
+  if (!window.location.pathname.endsWith('login.php')) {
+    //do not run this check in the login screen!
+    window.setInterval(checkIfSessionExists, 3600000);
+    document.addEventListener('visibilitychange', checkIfSessionExists);
+  }
 };
