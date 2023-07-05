@@ -54,7 +54,7 @@ class ConfigurationParametersManager
       define('ENV_LOADED', true);
     }
 
-    $parameterValue = $_SERVER[$parameterName];
+    $parameterValue = $_SERVER[$parameterName] ?? NULL;
 
     if (!is_null($parameterValue) and $parameterValue !== false) {
       return trim($parameterValue, '"');
