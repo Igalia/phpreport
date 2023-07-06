@@ -37,10 +37,6 @@ function set_location_header_on_login_success_url(){
 /* First check if a custom authentication header was set. */
 $customHeader = ConfigurationParametersManager::getParameter('EXTERNAL_AUTHENTICATION_USER_HEADER');
 
-if (LoginManager::isLogged()) {
-    set_location_header_on_login_success_url();
-}
-
 if (!empty($customHeader)) {
     if(isset($_SERVER[$customHeader]) &&
             LoginManager::login($_SERVER[$customHeader]))
@@ -61,6 +57,10 @@ else if(isset($_POST["login"]) && isset($_POST["password"])) {
         set_location_header_on_login_success_url();
     else
         echo _("Incorrect login information");
+}
+// If already logged in 
+else if (LoginManager::isLogged()) {
+    set_location_header_on_login_success_url();
 }
 include("include/header.php");
 ?>
