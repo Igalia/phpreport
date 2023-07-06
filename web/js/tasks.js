@@ -259,8 +259,8 @@ function getMinutes(time){
 }
 
 function checkTaskForOverlap(store){
-    let existingTasks = store.data.items.filter(x => !x.id.startsWith("ext"));
-    let unsavedTasks = store.data.items.filter(x => x.id.startsWith("ext"));
+    let existingTasks = store.data.items.filter(x => x.id && !x.id.startsWith("ext"));
+    let unsavedTasks = store.data.items.filter(x => x.id && x.id.startsWith("ext"));
 
     let overlapping = [];
     let overlapsTasks = false;
