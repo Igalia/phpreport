@@ -23,11 +23,13 @@ function checkIfSessionExists() {
   Ext.Ajax.request({
     url: 'services/checkSessionActive.php',
     failure: function (response) {
-      Ext.MessageBox.confirm('Session Expired', 'Do you want to login again?', function (btn) {
-        if (btn === 'yes') {
-          window.location.reload();
-        }
-      });
+      if (response.status == 401) {
+        Ext.MessageBox.confirm('Session Expired', 'Do you want to login again?', function (btn) {
+          if (btn === 'yes') {
+            window.location.reload();
+          }
+        });
+      }
     },
     success: function (response) {
       Ext.MessageBox.hide();
