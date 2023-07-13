@@ -24,7 +24,7 @@ class Task(Base):
     story = Column(String(length=80), nullable=True)
     telework = Column(Boolean, nullable=True)
     text = Column(String(length=8192), nullable=True)
-    ttype = Column(String(length=40), nullable=True)
+    task_type = Column("ttype", String, ForeignKey("task_type.slug"), nullable=True)
     phase = Column(String(length=15), nullable=True)
     onsite = Column(Boolean, default=False, nullable=False)
     updated_at = Column(postgresql.TIMESTAMP(), nullable=True)
@@ -34,6 +34,15 @@ class Task(Base):
     project = Column("projectid", Integer, ForeignKey("project.id"), nullable=False)
 
     __table_args__ = (UniqueConstraint("usrid", "init", "_date", name="unique_task_usr_time"),)
+
+
+class TaskType(Base):
+    __tablename__ = "task_type"
+
+    id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
+    active = Column(Boolean, nullable=True, default=True)
+    name = Column(String, nullable=True)
+    slug = Column(String, nullable=False, unique=True)
 
 
 class ExtraHour(Base):
