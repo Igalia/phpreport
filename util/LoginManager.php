@@ -28,7 +28,9 @@
  * @subpackage util
  * @author Jacobo Aragunde Perez <jaragunde@igalia.com>
  */
+use JuliusPC\OpenIDConnect\Client;
 
+require_once(PHPREPORT_ROOT . '/vendor/autoload.php');
 require_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
 require_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 require_once(PHPREPORT_ROOT . '/model/vo/UserGroupVO.php');
@@ -39,8 +41,21 @@ require_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
  * Utility class containing two functions used by the controller
  * to manage login and authorization.
  */
-class LoginManager {
+class LoginManager{
+  /** Instantiates OIDC client to perform auth
+   *  * @return Client OIDC client
+   */
+  public static function setupOidcClient(){
+    $oidc = new Client(
+      ConfigurationParametersManager::getParameter('OIDC_AUTHORITY'),
+      ConfigurationParametersManager::getParameter('JWT_AUDIENCE'),
+      ConfigurationParametersManager::getParameter('JWT_SECRET')
+    );
+    $oidc->setResponseTypes(array('code'));
+    $oidc->setTimeout(6000);
 
+    return $oidc;
+  }
   /** Login utility function
    *
    * If invoked with the parameters $login and $pass, it will
@@ -55,32 +70,41 @@ class LoginManager {
    * @return boolean True if the user has (or already had) logged
    * in correctly.
    */
-  public static function login($login=NULL, $password=NULL) {
+  public static function login($login = NULL, $password = NULL){
 
     session_start();
 
     // we are already logged in
-    if ($login==NULL && $password==NULL && isset($_SESSION['user']))
+    if ($login == NULL && $password == NULL && isset($_SESSION['user']))
       return true;
 
     // if we receive the user and password, we try to log in
     try {
-        if (strtolower(ConfigurationParametersManager::getParameter('USE_EXTERNAL_AUTHENTICATION')) === "true") {
-            // bypass password check. We assume that the external authenticator did that.
-            $user = UsersFacade::GetUserByLogin($login);
-            if (!$user) throw new IncorrectLoginException("User not found");
-        }
-        else {
-            $user = UsersFacade::Login($login, $password);
-        }
+      if (strtolower(ConfigurationParametersManager::getParameter('USE_EXTERNAL_AUTHENTICATION')) === "true") {
+        $oidc = self::setupOidcClient();
 
-        unset($_SESSION['user']);
-        $_SESSION['user'] = $user;
+        $oidc->authenticate();
+        $oidc_user = $oidc->requestUserInfo('sub');
+        $api_token = $oidc->getIdToken();
+        $test = $oidc->getRefreshToken();
+        $test2 = $oidc->refreshToken($test);
 
-        return true;
-    }
-    catch (IncorrectLoginException $exc) {
-        return false;
+        unset($_SESSION['api_token']);
+        $_SESSION['api_token'] = $api_token;
+
+        $user = UsersFacade::GetUserByLogin($oidc_user);
+        if (!$user)
+          throw new IncorrectLoginException("User not found");
+      } else {
+        $user = UsersFacade::Login($login, $password);
+      }
+
+      unset($_SESSION['user']);
+      $_SESSION['user'] = $user;
+
+      return true;
+    } catch (IncorrectLoginException $exc) {
+      return false;
     }
   }
 
@@ -89,7 +113,8 @@ class LoginManager {
    * Removes all the data stored in the session and the session cookie.
    * @return void
    */
-  public static function logout() {
+  public static function logout()
+  {
     // Initialize the session.
     session_start();
 
@@ -98,15 +123,23 @@ class LoginManager {
 
     // To kill the session, we also delete the session cookie.
     if (ini_get("session.use_cookies")) {
-        $params = session_get_cookie_params();
-        setcookie(session_name(), '', time() - 42000,
-            $params["path"], $params["domain"],
-            $params["secure"], $params["httponly"]
-        );
+      $params = session_get_cookie_params();
+      setcookie(
+        session_name(),
+        '', time() - 42000,
+        $params["path"], $params["domain"],
+        $params["secure"], $params["httponly"]
+      );
     }
 
     // Finally, destroy the session.
     session_destroy();
+
+    if (strtolower(ConfigurationParametersManager::getParameter('USE_EXTERNAL_AUTHENTICATION')) === "true") {
+      $oidc = self::setupOidcClient();
+
+      $oidc->signOut(null, '');
+    }
   }
 
   /** Login check utility function
