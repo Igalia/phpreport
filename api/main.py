@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import projects
+from routers.v1 import projects, timelog
 
 from db.db_connection import engine
 from db.base_class import Base
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(title="PhpReport API")
 
 origins = [
     "http://localhost",
@@ -27,7 +27,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(projects.router)
+app.include_router(projects.router, prefix="/v1")
+app.include_router(timelog.router, prefix="/v1")
 
 
 @app.get("/")
