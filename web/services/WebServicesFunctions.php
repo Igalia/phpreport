@@ -18,6 +18,7 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
 
 function escape_string($string)
 {
@@ -45,4 +46,41 @@ function authenticate($login, $sid = NULL)
 
     return $_SESSION['user'];
 
+}
+
+function makeAPIRequest($path, $params = null, $method = 'GET', $data = null)
+{
+    $requestUri = ConfigurationParametersManager::getParameter('API_BASE_URL') . $path;
+    $api_token = $_SESSION['api_token'];
+
+    if ($params) {
+        $requestUri .= '?' . http_build_query($params);
+    }
+    $ch = curl_init();
+    $headers = array(
+        "Content-type: application/json",
+        "Authorization: Bearer " . $api_token,
+    );
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_URL, $requestUri);
+    curl_setopt($ch, CURLOPT_SSH_COMPRESSION, true);
+
+    if ($method == 'POST') {
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    }
+
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_URL => $requestUri
+    ]);
+    $result = curl_exec($ch);
+    if (curl_errno($ch)) {
+        echo 'Curl error: ' . curl_error($ch);
+    }
+
+    curl_close($ch);
+    return json_decode($result);
 }
