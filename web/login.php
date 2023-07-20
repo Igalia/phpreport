@@ -35,30 +35,25 @@ function set_location_header_on_login_success_url(){
 }
 
 /* First check if a custom authentication header was set. */
-$customHeader = ConfigurationParametersManager::getParameter('EXTERNAL_AUTHENTICATION_USER_HEADER');
-
-if (!empty($customHeader)) {
-    if(isset($_SERVER[$customHeader]) &&
-            LoginManager::login($_SERVER[$customHeader]))
-        set_location_header_on_login_success_url();
-    else
-        echo _("Incorrect login information");
+if (strtolower(ConfigurationParametersManager::getParameter('USE_EXTERNAL_AUTHENTICATION')) === 'true') {
+    LoginManager::login();
+    set_location_header_on_login_success_url();
 }
 /* There are Http authentication data: we try to log in*/
 else if (isset($_SERVER['PHP_AUTH_USER'])) {
-    if(LoginManager::login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']))
+    if (LoginManager::login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']))
         set_location_header_on_login_success_url();
     else
         echo _("Incorrect login information");
 }
 /* There are POST data: we try to log in */
-else if(isset($_POST["login"]) && isset($_POST["password"])) {
-    if(LoginManager::login($_POST["login"], $_POST["password"]))
+else if (isset($_POST["login"]) && isset($_POST["password"])) {
+    if (LoginManager::login($_POST["login"], $_POST["password"]))
         set_location_header_on_login_success_url();
     else
         echo _("Incorrect login information");
 }
-// If already logged in 
+// If already logged in
 else if (LoginManager::isLogged()) {
     set_location_header_on_login_success_url();
 }

@@ -21,6 +21,7 @@
     },
     "require": {
         "thecsea/simple-caldav-client": "dev-master",
-        "vlucas/phpdotenv":"^5.5@dev"
+        "vlucas/phpdotenv":"^5.5@dev",
+        "juliuspc/openid-connect-php": "dev-main"
     }
 }
