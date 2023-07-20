@@ -18,6 +18,8 @@ config/config.defaults
 .env
 docker/.env
 
+src/node_modules
+
 #minified JS and source maps
 *.min.js
 *.min.js.map
@@ -33,3 +35,5 @@ vendor
 __pycache__
 .tox
 *.egg-info
+
+web/v2/assets/
