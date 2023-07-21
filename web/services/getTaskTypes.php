@@ -19,6 +19,7 @@
  */
 
 define('PHPREPORT_ROOT', __DIR__ . '/../../');
+include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 
 $sid = $_GET['sid'] ?? NULL;
 
@@ -54,31 +55,15 @@ do {
         break;
     }
 
-    // Hard-coded data
     $response['success'] = true;
-    $response['records'] = array(
-        array('value' => 'administration',  'displayText' => 'Administration', 'active' => true),
-        array('value' => 'analysis',        'displayText' => 'Analysis', 'active' => true),
-        array('value' => 'community',       'displayText' => 'Community', 'active' => true),
-        array('value' => 'coordination',    'displayText' => 'Coordination', 'active' => true),
-        array('value' => 'demonstration',   'displayText' => 'Demonstration', 'active' => true),
-        array('value' => 'deployment',      'displayText' => 'Deployment', 'active' => true),
-        array('value' => 'design',          'displayText' => 'Design', 'active' => true),
-        array('value' => 'documentation',   'displayText' => 'Documentation', 'active' => true),
-        array('value' => 'environment',     'displayText' => 'Environment', 'active' => true),
-        array('value' => 'implementation',  'displayText' => 'Implementation', 'active' => true),
-        array('value' => 'maintenance',     'displayText' => 'Maintenance', 'active' => true),
-        array('value' => 'publication',     'displayText' => 'Publication', 'active' => false),
-        array('value' => 'requirements',    'displayText' => 'Requirements', 'active' => true),
-        array('value' => 'sales',           'displayText' => 'Sales', 'active' => true),
-        array('value' => 'sys_maintenance', 'displayText' => 'Systems maintenance', 'active' => true),
-        array('value' => 'teaching',        'displayText' => 'Teaching', 'active' => true),
-        array('value' => 'technology',      'displayText' => 'Technology', 'active' => true),
-        array('value' => 'test',            'displayText' => 'Test', 'active' => true),
-        array('value' => 'training',        'displayText' => 'Training', 'active' => true),
-        array('value' => 'traveling',       'displayText' => 'Traveling', 'active' => true),
-        array('value' => 'deprecated_type', 'displayText' => 'Deprecated Type', 'active' => false),
-    );
+    $taskTypes = makeAPIRequest("/v1/timelog/task_types/");
+    $response['records'] = array_map(function ($item) {
+        return array(
+            'value' => $item->slug,
+            'displayText' => $item->name,
+            'active' => $item->active
+        );
+    }, $taskTypes);
 
 } while (False);
 
