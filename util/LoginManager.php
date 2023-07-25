@@ -84,7 +84,7 @@ class LoginManager{
         $oidc = self::setupOidcClient();
 
         $oidc->authenticate();
-        $oidc_user = $oidc->requestUserInfo('sub');
+        $oidc_user = $oidc->requestUserInfo('preferred_username');
         $api_token = $oidc->getIdToken();
         $test = $oidc->getRefreshToken();
         $test2 = $oidc->refreshToken($test);
