@@ -18,7 +18,7 @@ config/config.defaults
 .env
 docker/.env
 
-src/node_modules
+frontend/node_modules
 
 #minified JS and source maps
 *.min.js
