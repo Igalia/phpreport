@@ -10,16 +10,21 @@ software:
   - Support for PDO and PostgreSQL
 - Web server (tested with Apache 2.x)
   - PHP module
+- Node.js with a version of 20 or higher
+- NPM
+- Python with a version of 3.11 or higher
+- PIP
+- The Alembic package for Python
 
 ### Installing dependencies on selected GNU/Linux distros
 
 Run the following command with root privileges:
 
 - Ubuntu:
-  `apt install postgresql apache2 php php-pgsql php-xml php-pdo`
-- Debian: `apt install postgresql apache2 php php-pgsql php-xml`
+  `apt install postgresql apache2 php php-pgsql php-xml php-pdo nodejs npm python3`
+- Debian: `apt install postgresql apache2 php php-pgsql php-xml nodejs npm python3`
 - Fedora:
-  `dnf install postgresql-server httpd php php-pgsql php-xml php-pdo`
+  `dnf install postgresql-server httpd php php-pgsql php-xml php-pdo nodejs npm python3`
 
 If you are installing PhpReport from sources instead of a release
 package, you must install composer to manage the project dependencies.
@@ -57,11 +62,15 @@ root directory, so it can generate the autoload files. Then, run
 
 ## Step 3: Creating the schema and initial data of the database
 
+Now that Alembic has been set up in the project, database setup can be handled with it. Please see the section in the [api documentation](../developer/api.md) dealing with Alembic and running the migrations.
+
+### Legacy methods
+
 You have two ways to do it: using the included [web installation
 wizard](#installation-wizard) or
 [manually](#manual-setup-of-schema-and-initial-data).
 
-### Installation wizard
+#### Installation wizard
 
 As a precondition, your web server has to have write permissions on the
 config directory of PhpReport to write the configuration file. Once that
@@ -70,16 +79,17 @@ is done, open the url
 on-screen instructions. If you didn't change the names and passwords
 specified in step 1, you won't need to modify the default values.
 
-### Manual setup of schema and initial data
+#### Manual setup of schema and initial data
 
 Follow these steps only if you haven't used the installation wizard. In
 first place, browse to the `phpreport` directory and create a
 configuration file with the default options with the command:
 
-    cp config/config.defaults config/config.php
+    cp .env.example .env
+    cp frontend/.env.example frontend/.env
 
 If you changed any of data on the first step, edit the file
-`config/config.php` and set the correct values for the DB name, user,
+`.env` and set the correct values for the DB name, user,
 password, host, etc.
 
 Browse to the directory `sql/` and run the following commands (you will
@@ -100,25 +110,24 @@ user name `admin` and the password `admin` for the first time. You will
 be able to create more users and change their passwords once you enter
 the application.
 
-## Step 5: remove dangerous files
+## Step 5: Remove dangerous files
 
 Once the installation is complete and you have checked it is working,
 remove the `install/` and `update/` directories inside your PhpReport,
 to prevent other users from resetting your DB.
 
-## Step 6: last configuration bits
+## Step 6: Last configuration bits
 
 You might have to modify some parameters in the file
-[config/config.php]{.title-ref} to match your work domain. In
+[.env] to match your work domain. In
 particular, you might have to modify the default total number of holiday
 hours for a full-time worker. It is specified by the
-[YEARLY_HOLIDAY_HOURS]{.title-ref} attribute, and you have to modify the
+[YEARLY_HOLIDAY_HOURS] attribute, and you have to modify the
 following line to change it:
 
-    * @name YEARLY_HOLIDAY_HOURS
-    * @global int holiday hours per year for an 8-hour working journey
-    */
-    define ('YEARLY_HOLIDAY_HOURS', 184);
+```
+YEARLY_HOLIDAY_HOURS=184
+```
 
 Remember to check the [data model for holiday
 management](../user/overview.md#data-model-for-holiday-management) to

@@ -1,10 +1,14 @@
-# Requirements
+# API
+
+The API is built using [FastAPI](https://fastapi.tiangolo.com/).
+
+## Requirements
 
 Python > 3.11
 Pip
 virtualenv
 
-# Install dependencies
+## Install dependencies
 
 Activate the env and install the dependencies
 
@@ -14,7 +18,7 @@ source .env/bin/activate
 pip install .
 ```
 
-## Setting up the DB and running migrations
+### Setting up the DB and running migrations
 
 Run the migrations with
 
@@ -30,7 +34,7 @@ alembic revision --autogenerate -m "Migrations description"
 
 For more details check the alembic documentation.
 
-## Run FastAPI
+### Run FastAPI
 
 Inside the `api` folder, make sure you have the virtual environment
 activated and all the dependencies installed.
