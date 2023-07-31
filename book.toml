@@ -1,0 +1,12 @@
+[book]
+authors = ["Igalia"]
+language = "en"
+multilingual = false
+title = "PhpReport Documentation"
+description = "Time tracking and project management"
+src = "docs"
+
+[output.html]
+theme = "theme"
+git-repository-icon = "fa-git"
+git-repository-url = "https://github.com/Igalia/phpreport"
