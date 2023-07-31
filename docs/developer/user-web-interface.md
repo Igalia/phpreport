@@ -1,5 +1,7 @@
 # User web interface
 
+> ⚠️ Note that we are currently in the process of implementing a React frontend that will eventually replace all of the existing pages. Any new features/pages will be implemented in React. The code for this new frontend is in the `frontend` folder.
+
 The user web interface is mostly implemented in JavaScript, using the
 Ext JS 3.x library. There are some small parts written directly in HTML
 and PHP, which cover the basic UI blocks and access control,
