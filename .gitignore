@@ -5,8 +5,8 @@
 *~
 \#*\#
 
-#compiled help files
-help/*
+#compiled docs
+docs/book
 
 #release tarballs
 phpreport*.tar.gz
