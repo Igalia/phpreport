@@ -16,5 +16,5 @@ Thanks for considering contributing to PhpReport! Here's how you can help us:
   important for you.
 
 - **Contribute code**: check the
-  [developer documentation](docs/developer/index.md), then fork our project and
+  [developer documentation](http://igalia.github.io/phpreport/developer/index.html), then fork our project and
   send us back your contribution as a pull request.
