@@ -108,7 +108,7 @@ $ISSUE_TRACKER_LINKS_URL = explode(',', ConfigurationParametersManager::getParam
     <!-- Last items must be listed from right to left -->
     <li class="right"><a href="logout.php">Logout</a></li>
     <?php } // endif ($SHOW_MENU) ?>
-    <li class="right"><a href="../help/user" target="blank">Help</a></li>
+    <li class="right"><a href="http://igalia.github.io/phpreport/user/index.html" target="blank">Help</a></li>
     <?php foreach ($ISSUE_TRACKER_LINKS_TEXT as $key => $text) { ?>
     <li class="right">
         <a href="<?php echo $ISSUE_TRACKER_LINKS_URL[$key] ?>" target="blank">

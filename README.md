@@ -1,6 +1,5 @@
 [![Test](https://github.com/Igalia/phpreport/actions/workflows/runtests.yml/badge.svg)](https://github.com/Igalia/phpreport/actions/workflows/runtests.yml)
-
-[![Documentation](https://github.com/Igalia/phpreport/actions/workflows/publish-docs.yml/badge.svg)](https://github.com/Igalia/phpreport/actions/workflows/publish-docs.yml)
+[![Documentation](https://github.com/Igalia/phpreport/actions/workflows/publish-docs.yml/badge.svg)](https://github.com/Igalia/phpreport/actions/workflows/mdbook.yml)
 
 # PhpReport
 
@@ -21,7 +20,7 @@ through the exposed web services.
 Download PhpReport from our
 [releases page](https://github.com/Igalia/phpreport/releases).
 
-Then follow the instructions in the [administrator manual](docs/admin/index.md)
+Then follow the instructions in the [administrator manual](http://igalia.github.io/phpreport/admin/)
 to install it or to upgrade from an earlier release.
 
 ## Documentation
@@ -31,9 +30,9 @@ with every release. Additionally, there is documentation intended for developers
 in the project repository, together with the latest version of user and admin
 documents:
 
-- [User manual](docs/user/index.md)
-- [Administrator manual](docs/admin/index.md)
-- [Developer documentation](docs/developer/index.md)
+- [User manual](http://igalia.github.io/phpreport/user/)
+- [Administrator manual](http://igalia.github.io/phpreport/admin/)
+- [Developer documentation](http://igalia.github.io/phpreport/developer/)
 
 ## More information
 
@@ -77,6 +76,6 @@ This software includes code and assets from other open source projects:
 
 ## Screenshots
 
-![Tasks](docs/user/i/tasks-screen.png)
-![Acc hours](docs/user/i/acc-hours-screen.png)
-![User tasks](docs/user/i/user-tasks-screen.png)
+![Tasks](http://igalia.github.io/phpreport/user/i/tasks-screen.png)
+![Acc hours](http://igalia.github.io/phpreport/user/i/acc-hours-screen.png)
+![User tasks](http://igalia.github.io/phpreport/user/i/user-tasks-screen.png)
