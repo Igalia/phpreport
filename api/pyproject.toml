@@ -21,7 +21,8 @@ dependencies = [
     "sqlalchemy == 2.0.12",
     "fastapi >= 0.95.2",
     "tox==4.6.3",
-    "uvicorn >= 0.22.0"
+    "uvicorn >= 0.22.0",
+    "pyjwt[crypto]"
 ]
 
 [project.optional-dependencies]
