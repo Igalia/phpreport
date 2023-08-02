@@ -48,7 +48,7 @@ class LoginManager{
   public static function setupOidcClient(){
     $oidc = new Client(
       ConfigurationParametersManager::getParameter('OIDC_AUTHORITY'),
-      ConfigurationParametersManager::getParameter('JWT_AUDIENCE'),
+      ConfigurationParametersManager::getParameter('OIDC_CLIENT_ID'),
       ConfigurationParametersManager::getParameter('JWT_SECRET')
     );
     $oidc->setResponseTypes(array('code'));
@@ -84,10 +84,8 @@ class LoginManager{
         $oidc = self::setupOidcClient();
 
         $oidc->authenticate();
-        $oidc_user = $oidc->requestUserInfo('preferred_username');
-        $api_token = $oidc->getIdToken();
-        $test = $oidc->getRefreshToken();
-        $test2 = $oidc->refreshToken($test);
+        $oidc_user = $oidc->requestUserInfo(ConfigurationParametersManager::getParameter('OIDC_USERNAME_PROPERTY'));
+        $api_token = $oidc->getAccessToken();
 
         unset($_SESSION['api_token']);
         $_SESSION['api_token'] = $api_token;
@@ -138,7 +136,7 @@ class LoginManager{
     if (strtolower(ConfigurationParametersManager::getParameter('USE_EXTERNAL_AUTHENTICATION')) === "true") {
       $oidc = self::setupOidcClient();
 
-      $oidc->signOut(null, '');
+      $oidc->signOut(null, null);
     }
   }
 
