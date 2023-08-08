@@ -51,6 +51,20 @@ function authenticate($login, $sid = NULL)
 function makeAPIRequest($path, $params = null, $method = 'GET', $data = null)
 {
     $requestUri = ConfigurationParametersManager::getParameter('API_BASE_URL') . $path;
+    $is_token_active = LoginManager::isTokenActive($_SESSION['api_token']);
+    if (!$is_token_active) {
+        try {
+            LoginManager::refreshAccessToken();
+        } catch (Exception $e) {
+            return
+                array(
+                    'token_refresh_error' => array(
+                        'msg' => $e->getMessage(),
+                        'code' => $e->getCode()
+                    )
+                );
+        }
+    }
     $api_token = $_SESSION['api_token'];
 
     if ($params) {

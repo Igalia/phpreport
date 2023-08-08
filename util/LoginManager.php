@@ -41,21 +41,19 @@ require_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
  * Utility class containing two functions used by the controller
  * to manage login and authorization.
  */
-class LoginManager{
-  /** Instantiates OIDC client to perform auth
-   *  * @return Client OIDC client
-   */
-  public static function setupOidcClient(){
-    $oidc = new Client(
+class LoginManager
+{
+  private static function setupOidcClient()
+  {
+    $client = new Client(
       ConfigurationParametersManager::getParameter('OIDC_AUTHORITY'),
       ConfigurationParametersManager::getParameter('OIDC_CLIENT_ID'),
       ConfigurationParametersManager::getParameter('JWT_SECRET')
     );
-    $oidc->setResponseTypes(array('code'));
-    $oidc->setTimeout(6000);
-
-    return $oidc;
+    $client->setResponseTypes(array('code'));
+    return $client;
   }
+
   /** Login utility function
    *
    * If invoked with the parameters $login and $pass, it will
@@ -70,12 +68,13 @@ class LoginManager{
    * @return boolean True if the user has (or already had) logged
    * in correctly.
    */
-  public static function login($login = NULL, $password = NULL){
+  public static function login( $login = NULL, $password = NULL )
+  {
 
     session_start();
 
     // we are already logged in
-    if ($login == NULL && $password == NULL && isset($_SESSION['user']))
+    if ($login == NULL && $password == NULL && self::isLogged())
       return true;
 
     // if we receive the user and password, we try to log in
@@ -86,9 +85,15 @@ class LoginManager{
         $oidc->authenticate();
         $oidc_user = $oidc->requestUserInfo(ConfigurationParametersManager::getParameter('OIDC_USERNAME_PROPERTY'));
         $api_token = $oidc->getAccessToken();
+        $refresh_token = $oidc->getRefreshToken();
+        $id_token = $oidc->getIdToken();
 
         unset($_SESSION['api_token']);
         $_SESSION['api_token'] = $api_token;
+        unset($_SESSION['id_token']);
+        $_SESSION['id_token'] = $id_token;
+        unset($_SESSION['refresh_token']);
+        $_SESSION['refresh_token'] = $refresh_token;
 
         $user = UsersFacade::GetUserByLogin($oidc_user);
         if (!$user)
@@ -115,7 +120,7 @@ class LoginManager{
   {
     // Initialize the session.
     session_start();
-
+    $id_token = $_SESSION['id_token'];
     // Unset all of the session variables.
     $_SESSION = array();
 
@@ -135,8 +140,7 @@ class LoginManager{
 
     if (strtolower(ConfigurationParametersManager::getParameter('USE_EXTERNAL_AUTHENTICATION')) === "true") {
       $oidc = self::setupOidcClient();
-
-      $oidc->signOut(null, null);
+      $oidc->signOut($id_token, null);
     }
   }
 
@@ -151,8 +155,8 @@ class LoginManager{
    * @return UserVO the User if it's logged in already, or a NULL
    * value otherwise.
    */
-  public static function isLogged($sid = NULL) {
-
+  public static function isLogged( $sid = NULL )
+  {
     if ($sid)
       session_id($sid);
 
@@ -160,11 +164,60 @@ class LoginManager{
       session_start();
 
     if (empty($_SESSION['user']))
+      return NULL;
+
+    if (strtolower(ConfigurationParametersManager::getParameter('USE_EXTERNAL_AUTHENTICATION')) === "true") {
+      if (!self::isTokenActive($_SESSION['api_token']) && !self::isTokenActive($_SESSION['refresh_token']))
         return NULL;
+    }
 
     return $_SESSION['user'];
 
+  }
+
+  public static function isTokenActive( $token )
+  {
+    $oidc = self::setupOidcClient();
+    $intro_token = $oidc->introspectToken(
+      $token,
+      null,
+      ConfigurationParametersManager::getParameter('OIDC_CLIENT_ID'),
+      ConfigurationParametersManager::getParameter('JWT_SECRET')
+    );
+    return $intro_token->active;
+  }
+
+  /**
+   * @return void
+   * @throws Exception
+   */
+  public static function refreshAccessToken()
+  {
+    //tokens from session, stored originally on login
+    $current_refresh_token = $_SESSION['refresh_token'];
+    $current_access_token = $_SESSION['api_token'];
+
+    if ($current_access_token && $current_refresh_token) {
+      //introspect the access token; if it's good, move along; if not, go next to introspect the refresh token and if valid, do a refresh and get new access_token and new refresh token
+      if (!self::isTokenActive($current_access_token)) {
+        //now check the refresh token
+        if (self::isTokenActive($current_refresh_token)) {
+          //fyi - the refreshToken() method brings back an object
+          $refreshed_token = self::setupOidcClient()->refreshToken($current_refresh_token, false);
+          unset($_SESSION['api_token']);
+          $_SESSION['api_token'] = $refreshed_token->access_token;
+          unset($_SESSION['refresh_token']);
+          $_SESSION['refresh_token'] = $refreshed_token->refresh_token;
+        } else {
+          //both access and refresh tokens have expired
+          throw new Exception('Error: Access and refresh tokens both expired');
+        }
+      }
+    } else {
+      //one or both tokens are null
+      throw new Exception('Error: One or both tokens are null');
     }
+  }
 
   /** Authorization utility function
    *
@@ -178,24 +231,27 @@ class LoginManager{
    * @return boolean true if the user belongs to a group able
    * to open the current url, false otherwise.
    */
-  public static function isAllowed($sid=NULL) {
+  public static function isAllowed( $sid = NULL )
+  {
 
     /* We include the file with the array of permissions */
     require(PHPREPORT_ROOT . '/config/permissions.php');
 
-    if ($sid!=NULL && !isset($_SESSION))
+    if ($sid != NULL && !isset($_SESSION))
       session_id($sid);
 
     if (!isset($_SESSION))
       session_start();
 
     if (isset($_SESSION['user'])) {
-      $user=$_SESSION['user'];
+      $user = $_SESSION['user'];
       $url = explode($urlHeader, $_SERVER["SCRIPT_NAME"]);
 
       foreach ($user->getGroups() as $group) {
-        if (isset($permissions[$group->getName()]) &&
-            in_array($url[1], $permissions[$group->getName()]))
+        if (
+          isset($permissions[$group->getName()]) &&
+          in_array($url[1], $permissions[$group->getName()])
+        )
           return true;
       }
     }
@@ -216,24 +272,27 @@ class LoginManager{
    * @return boolean true if the user belongs to a admin group for
    * the current url, false otherwise.
    */
-  public static function hasExtraPermissions($sid=NULL) {
+  public static function hasExtraPermissions( $sid = NULL )
+  {
 
     /* We include the file with the array of permissions */
     require(PHPREPORT_ROOT . '/config/permissions.php');
 
-    if ($sid!=NULL)
+    if ($sid != NULL)
       session_id($sid);
 
     if (!isset($_SESSION))
       session_start();
 
     if (isset($_SESSION['user'])) {
-      $user=$_SESSION['user'];
+      $user = $_SESSION['user'];
 
       foreach ($user->getGroups() as $group) {
         $url = explode($urlHeader, $_SERVER["SCRIPT_NAME"]);
-        if (isset($extraPermissions[$group->getName()]) &&
-            in_array($url[1], $extraPermissions[$group->getName()]))
+        if (
+          isset($extraPermissions[$group->getName()]) &&
+          in_array($url[1], $extraPermissions[$group->getName()])
+        )
           return true;
       }
     }

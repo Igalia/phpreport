@@ -55,9 +55,16 @@ do {
         break;
     }
 
-    $response['success'] = true;
     $taskTypes = makeAPIRequest("/v1/timelog/task_types/");
-    $response['records'] = array_map(function ($item) {
+    if (array_key_exists('token_refresh_error', $taskTypes)) {
+        $response['success'] = false;
+        $response['error'] = 'token_refresh_error';
+        $error['message'] = "You must be logged in";
+        break;
+    }
+    $response['success'] = true;
+    $response['records'] = array_map(function ($item)
+    {
         return array(
             'value' => $item->slug,
             'displayText' => $item->name,
