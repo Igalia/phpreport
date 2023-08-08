@@ -12,6 +12,7 @@ const oidcConfig = {
   metadataUrl: import.meta.env.VITE_OIDC_METADATA_URL,
   response_type: import.meta.env.VITE_OIDC_RESPONSE_CODE,
   silent_redirect_uri: import.meta.env.VITE_OIDC_REDIRECT_URL,
+  automaticSilentRenew: true,
   onSigninCallback() {
     window.history.replaceState({}, document.title, window.location.pathname);
   }
