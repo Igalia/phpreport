@@ -1,39 +1,21 @@
-# Go to http://localhost/phpreport to use it (username: admin ; password = admin)
+FROM debian:trixie-slim
 
-FROM ubuntu:jammy
+RUN apt update
+RUN apt -y install php php-cli php-pgsql php-xml php-curl composer
 
-MAINTAINER Juan A. Suarez Romero <jasuarez@igalia.com>
+WORKDIR /app
 
-ENV DEBIAN_FRONTEND noninteractive
+ADD composer.json /app
 
-RUN apt-get update
+RUN composer update
+RUN composer install
+RUN composer dump-autoload -o
 
-RUN apt-get -y install postgresql apache2 php php-pgsql php-xml supervisor make docutils-common uglifyjs git
+ADD . /app
 
-COPY . /var/www/html/phpreport/
+# Remove other services files
+RUN rm -rf app/api app/frontend
 
-WORKDIR  /var/www/html/phpreport/
+EXPOSE 8000
 
-RUN make help minify
-
-RUN service postgresql start && su postgres -c psql < /var/www/html/phpreport/sql/create_db.sql
-
-RUN service postgresql start && env PGPASSWORD='phpreport' psql -h localhost -U phpreport phpreport < /var/www/html/phpreport/sql/schema.sql
-
-RUN service postgresql start && env PGPASSWORD='phpreport' psql -h localhost -U phpreport phpreport < /var/www/html/phpreport/sql/uniqueConstraints.sql
-
-RUN service postgresql start && env PGPASSWORD='phpreport' psql -h localhost -U phpreport phpreport < /var/www/html/phpreport/sql/otherConstraints.sql
-
-RUN service postgresql start && env PGPASSWORD='phpreport' psql -h localhost -U phpreport phpreport < /var/www/html/phpreport/sql/initialData.sql
-
-RUN service postgresql start && env PGPASSWORD='phpreport' psql -h localhost -U phpreport phpreport < /var/www/html/phpreport/sql/update/all.sql
-
-RUN ln -sf /var/www/html/phpreport/supervisor/supervisord.conf /etc/supervisor/conf.d/
-
-RUN rm -fr /var/www/html/phpreport/install /var/www/html/phpreport/update
-
-VOLUME /var/lib/postgresql/
-
-EXPOSE 80
-
-CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD ["php", "-S", "0.0.0.0:8000"]

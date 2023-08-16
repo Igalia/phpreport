@@ -1,17 +1,55 @@
-
-version: '3'
+version: "3"
 services:
+  db:
+    build:
+      context: ../
+      dockerfile: docker/test.db.Dockerfile
+    container_name: phpreport-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: phpreport
+      POSTGRES_USER: phpreport
   phpreport-app:
     build:
       context: ../
       dockerfile: docker/dev.app.Dockerfile
-    image: igalia/phpreport
     container_name: phpreport-app
-    volumes:
-      - phpreport-data:/var/lib/postgresql
-    restart: always
     ports:
-      - '80:80'
-
+      - "8000:8000"
+    volumes:
+      - ../:/app
+    depends_on:
+      - db
+  api:
+    build:
+      context: ../
+      dockerfile: docker/dev.api.Dockerfile
+    container_name: phpreport-api
+    env_file:
+      - ../.env
+    volumes:
+      - ../api:/api
+    ports:
+      - "8555:8555"
+    depends_on:
+      - db
+  frontend:
+    build:
+      context: ../
+      dockerfile: docker/dev.frontend.Dockerfile
+    container_name: phpreport-frontend
+    env_file:
+      - ../frontend/.env
+    volumes:
+     - type: bind
+       source: ../frontend
+       target: /frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
 volumes:
-  phpreport-data:
+  pgdata:
