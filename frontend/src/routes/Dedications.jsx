@@ -6,6 +6,7 @@ export default function Dedications() {
   const auth = useAuth();
   const [projects, setProjects] = useState(null);
   const token = auth.user?.id_token;
+  const username_prop = import.meta.env.VITE_OIDC_USERNAME_PROPERTY
 
   useEffect(() => {
     const getProjects = async () => {
@@ -26,7 +27,7 @@ export default function Dedications() {
   return (
     <>
       <h1>This is the Dedications page</h1>
-      <h2>Welcome {auth.user?.profile.sub}</h2>
+      <h2>Welcome {auth.user?.profile[username_prop]}</h2>
       <p>This is a sample React page that is using the FastApi backend to fetch some data.</p>
       <hr />
       <div>
