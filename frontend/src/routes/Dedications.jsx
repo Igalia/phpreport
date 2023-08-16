@@ -5,7 +5,7 @@ import axios from '../utils/ApiClient';
 export default function Dedications() {
   const auth = useAuth();
   const [projects, setProjects] = useState(null);
-  const token = auth.user?.id_token;
+  const token = auth.user?.access_token;
   const username_prop = import.meta.env.VITE_OIDC_USERNAME_PROPERTY
 
   useEffect(() => {
