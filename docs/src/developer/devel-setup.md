@@ -3,6 +3,28 @@
 Some steps described here overlap the ones described in the
 [installation instructions](../admin/installation.md).
 
+## Using Docker
+
+Inside the `docker` folder you can find all the Dockerfile and docker-compose
+files for several enviroments. To run the development setup, copy the
+`.env.example` to `.env` and update it to the values of your environment.
+
+You need docker and docker-compose running and you can run it from the root
+folder of the project with:
+
+`docker-compose -f docker/docker-compose.dev.yml up`
+
+To run migrations:
+
+`docker exec -ti phpreport-db alembic upgrade head`
+
+To create migrations:
+
+`docker exec -ti phpreport-db alembic revision --autogenerate -m "Migrations description"`
+
+All the services are setup to reload when the files are updated without the need
+of rebuild the containers.
+
 ## Dependencies
 
 Follow the corresponding section from the [installation
@@ -13,8 +35,8 @@ Additionally, a development environment may need the following
 dependencies to generate minified versions of the JS code and the
 documentation pages:
 
-- Fedora: packages `uglify-js` and `python3-docutils`.
-- Debian/Ubuntu: packages `uglifyjs` and `python3-docutils`.
+- Fedora: package `uglify-js`.
+- Debian/Ubuntu: package `uglifyjs`.
 
 NOTICE: UglifyJS version must be 3.15 or above.
 
