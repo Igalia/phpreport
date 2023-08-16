@@ -12,7 +12,7 @@ export default function Dedications() {
     const getProjects = async () => {
       try {
         axios(token)
-          .get('/projects')
+          .get('/v1/projects')
           .then(({ data }) => {
             setProjects(data);
           });
