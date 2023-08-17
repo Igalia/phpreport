@@ -9,6 +9,18 @@ Inside the `docker` folder you can find all the Dockerfile and docker-compose
 files for several enviroments. To run the development setup, copy the
 `.env.example` to `.env` and update it to the values of your environment.
 
+In the root `.env`, use these values
+```
+DB_HOST=db
+...
+API_BASE_URL="http://phpreport-api:8555"
+```
+In the `frontend/.env`, use the following:
+```
+VITE_OIDC_REDIRECT_URL='http://0.0.0.0:5173/web/v2/'
+VITE_API_BASE='http://0.0.0.0:8555'
+```
+
 You need docker and docker-compose running and you can run it from the root
 folder of the project with:
 
@@ -24,6 +36,40 @@ To create migrations:
 
 All the services are setup to reload when the files are updated without the need
 of rebuild the containers.
+
+If you are using an external OAuth provider, you will also need to add a user to
+the database with the same username as your OAuth user because PhpReport will
+match on the username. To do this, you will want to run the following commands
+once your db container is up and running:
+
+```
+docker exec -ti phpreport-db bash
+psql -U phpreport
+INSERT INTO usr (id, password, login) VALUES (DEFAULT, md5('myusername'), 'myusername') RETURNING id;
+```
+
+This will echo the id of the user you just created. Keep this terminal open. Now
+you will need to also add some permissions to your user. To do this you'll need
+to insert the user id into the `belongs` table along with the proper group id.
+The default group ids added are as follows:
+
+| id | name |
+| -- |  ----- |
+| 1 | staff |
+| 2 | admin |
+| 3 | manager |
+
+If you want your user to have the highest permission level, then run the
+following and replace `{your user id}` with the value returned when you inserted
+your user: `INSERT into belongs VALUES(1, {your user id}), (2, {your user id}),
+(3, {your user id});`
+
+If you want your user to have lower permissions, then remove whichever groups
+from your INSERT statement you don't want your user in.
+
+If you've given your user the highest permissions, then you'll be able to use
+the interface to create clients and projects to use for creating tasks.
+
 
 ## Dependencies
 
