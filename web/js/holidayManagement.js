@@ -222,6 +222,15 @@ var app = new Vue({
                     name: users[i].children[1].innerHTML,
                 });
             }
+            parsedUsers.sort((a, b) => {
+                if (a.name < b.name) {
+                    return -1;
+                }
+                if (a.name > b.name) {
+                    return 1;
+                }
+                return 0;
+            });
             this.usersList = parsedUsers;
             this.users = parsedUsers;
         },
