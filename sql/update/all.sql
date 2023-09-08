@@ -101,28 +101,6 @@ alter table template add constraint includes
   references task_story (id)  ;
 
 --
--- Add new manager user group to the user_group table
--- Restricts access to default staff profile
---
-
-INSERT INTO user_group VALUES (3,'manager');
-SELECT nextval(pg_get_serial_sequence('user_group', 'id'));
---
--- Add admin user to the manager group
---
-
-INSERT INTO belongs VALUES (3, 2);
-
---
--- Create manager user and give proper permissions (staff and manager)
---
-
-INSERT INTO usr VALUES (3, md5('manager'), 'manager');
-SELECT nextval(pg_get_serial_sequence('usr', 'id'));
-INSERT INTO belongs VALUES (1, 3);
-INSERT INTO belongs VALUES (3, 3);
-
---
 -- New table for user goals templates.
 --
 
