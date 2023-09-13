@@ -6,7 +6,7 @@ from typing import Optional
 
 class Project(BaseModel):
     id: str
-    activation: bool
+    is_active: bool
     init: Optional[date]
     end: Optional[date]
     invoice: Optional[float]
