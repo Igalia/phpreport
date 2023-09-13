@@ -1,9 +1,7 @@
 version: "3"
 services:
   db:
-    build:
-      context: ../
-      dockerfile: docker/test.db.Dockerfile
+    image: postgres:13.9
     container_name: phpreport-db
     ports:
       - "5432:5432"
@@ -12,6 +10,7 @@ services:
     environment:
       POSTGRES_PASSWORD: phpreport
       POSTGRES_USER: phpreport
+      POSTGRES_DB: phpreport
   phpreport-app:
     build:
       context: ../
