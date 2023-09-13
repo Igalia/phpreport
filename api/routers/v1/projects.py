@@ -12,10 +12,9 @@ from auth.auth_bearer import BearerToken
 router = APIRouter(prefix="/projects", tags=["projects"])
 
 
-# TODO implement pagination
 @router.get("/", dependencies=[Depends(BearerToken())], response_model=List[ProjectSchema])
-async def get_projects(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
-    return ProjectService(db).get_items()
+async def get_projects(db: Session = Depends(get_db), offset: int = 0, limit: int = 100, status: str = None):
+    return ProjectService(db).get_items(offset, limit, status)
 
 
 @router.get("/{project_id}", dependencies=[Depends(BearerToken())], response_model=ProjectSchema)
