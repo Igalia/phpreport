@@ -12,7 +12,7 @@ class Project(Base):
         autoincrement=True,
         nullable=False,
     )
-    activation = Column(Boolean, default=True, nullable=False)
+    is_active = Column("activation", Boolean, default=True, nullable=False)
     init = Column(Date, nullable=True)
     end = Column("_end", Date, nullable=True)
     invoice = Column(Double, nullable=True)
