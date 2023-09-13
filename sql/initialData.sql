@@ -58,4 +58,4 @@ INSERT INTO sector VALUES (1, 'tech');
 SELECT nextval(pg_get_serial_sequence('sector', 'id'));
 
 INSERT INTO customer (name, type, sectorid) VALUES ('Internal', 'Small', 1);
-INSERT INTO project (description, areaid, customerid) VALUES ('Holidays', 1, 1);
+INSERT INTO project (description, areaid, customerid, activation) VALUES ('Holidays', 1, 1, true);
