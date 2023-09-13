@@ -26,13 +26,23 @@ folder of the project with:
 
 `docker-compose -f docker/docker-compose.dev.yml up`
 
-To run migrations:
+During the first time running the app, the API will fail because it needs to
+access the database tables that still don't exist, so run the migrations
+to create the tables with:
 
-`docker exec -ti phpreport-db alembic upgrade head`
+`docker exec -ti phpreport-api alembic upgrade head`
 
-To create migrations:
+Kill the containers and run them again, so the API can connect to the database
+correctly.
 
-`docker exec -ti phpreport-db alembic revision --autogenerate -m "Migrations description"`
+[Optional] When running the project for the first time, you can add some
+basic data for the development environment:
+
+`docker exec -dti phpreport-db psql phpreport -U phpreport < sql/initialData.sql`
+
+If you make changes to the models and want to create migrations:
+
+`docker exec -ti phpreport-api alembic revision --autogenerate -m "Migrations description"`
 
 All the services are setup to reload when the files are updated without the need
 of rebuild the containers.
