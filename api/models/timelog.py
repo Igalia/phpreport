@@ -63,13 +63,14 @@ class Template(Base):
     story = Column(String(length=80), nullable=True)
     telework = Column(Boolean, nullable=True)
     onsite = Column(Boolean, nullable=True)
-    text = Column(String(length=8192), nullable=True)
-    ttype = Column(String(length=40), nullable=True)
+    description = Column("text", String(length=8192), nullable=True)
+    task_type = Column("ttype", String(length=40), nullable=True)
     init_time = Column(Integer, nullable=True)
     end_time = Column(Integer, nullable=True)
-    customer = Column("customerid", Integer, ForeignKey("customer.id"), nullable=True)
-    user = Column("usrid", Integer, ForeignKey("usr.id"), nullable=False)
-    project = Column("projectid", Integer, ForeignKey("project.id"), nullable=True)
+    customer_id = Column("customerid", Integer, ForeignKey("customer.id"), nullable=True)
+    user_id = Column("usrid", Integer, ForeignKey("usr.id"), nullable=True)
+    project_id = Column("projectid", Integer, ForeignKey("project.id"), nullable=True)
+    is_global = Column(Boolean, nullable=False, default=False)
 
 
 class TotalHoursOverride(Base):
