@@ -92,7 +92,7 @@ def upgrade() -> None:
         sa.Column('usrid', sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(['user_groupid'], ['user_group.id'], ),
         sa.ForeignKeyConstraint(['usrid'], ['usr.id'], ),
-        sa.PrimaryKeyConstraint('user_groupid')
+        sa.PrimaryKeyConstraint('user_groupid', 'usrid')
         )
     if not table_exists('city_history'):
         op.create_table('city_history',

@@ -22,7 +22,7 @@ class UserPermissions(Base):
     __tablename__ = "belongs"
 
     group_id = Column("user_groupid", ForeignKey("user_group.id"), nullable=False, primary_key=True)
-    user_id = Column("usrid", Integer, ForeignKey("usr.id"), nullable=False)
+    user_id = Column("usrid", Integer, ForeignKey("usr.id"), nullable=False, primary_key=True)
 
 
 class UserLocation(Base):
