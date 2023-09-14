@@ -42,11 +42,11 @@ services:
       dockerfile: docker/dev.frontend.Dockerfile
     container_name: phpreport-frontend
     env_file:
-      - ../frontend/.env
+      - ../frontend/.env.local
     volumes:
-     - type: bind
-       source: ../frontend
-       target: /frontend
+      - type: bind
+        source: ../frontend
+        target: /frontend
     ports:
       - "5173:5173"
     depends_on:
