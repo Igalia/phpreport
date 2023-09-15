@@ -1,5 +1,8 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Date, Double
 import sqlalchemy as sa
+from sqlalchemy.orm import relationship, Mapped
+from sqlalchemy.ext.hybrid import hybrid_property
+from models.customer import Customer
 
 from db.base_class import Base
 
@@ -23,6 +26,11 @@ class Project(Base):
     schedule_type = Column("sched_type", String(length=256), nullable=True)
     customer_id = Column("customerid", ForeignKey("customer.id"))
     area_id = Column("areaid", ForeignKey("area.id"), nullable=False)
+    customer: Mapped["Customer"] = relationship()
+
+    @hybrid_property
+    def customer_name(self):
+        return self.customer.name
 
 
 class ProjectAssignment(Base):

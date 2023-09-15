@@ -10,6 +10,9 @@ from sqlalchemy import (
     UniqueConstraint,
 )
 from sqlalchemy.dialects import postgresql
+from sqlalchemy.orm import relationship, Mapped
+from sqlalchemy.ext.hybrid import hybrid_property
+from models.project import Project
 
 from db.base_class import Base
 
@@ -23,15 +26,23 @@ class Task(Base):
     end = Column("_end", Integer, nullable=False)
     story = Column(String(length=80), nullable=True)
     telework = Column(Boolean, nullable=True)
-    text = Column(String(length=8192), nullable=True)
+    description = Column("text", String(length=8192), nullable=True)
     task_type = Column("ttype", String, ForeignKey("task_type.slug"), nullable=True)
     phase = Column(String(length=15), nullable=True)
     onsite = Column(Boolean, default=False, nullable=False)
     updated_at = Column(postgresql.TIMESTAMP(), nullable=True)
     end_after_init_task = CheckConstraint("_end >= init AND init >= 0", name="end_after_init_task")
-    customer = Column("customerid", Integer, ForeignKey("customer.id"), nullable=True)
-    user = Column("usrid", Integer, ForeignKey("usr.id"), nullable=False)
-    project = Column("projectid", Integer, ForeignKey("project.id"), nullable=False)
+    user_id = Column("usrid", Integer, ForeignKey("usr.id"), nullable=False)
+    project_id = Column("projectid", Integer, ForeignKey("project.id"), nullable=False)
+    project: Mapped["Project"] = relationship()
+
+    @hybrid_property
+    def project_name(self):
+        return self.project.description
+
+    @hybrid_property
+    def customer_name(self):
+        return self.project.customer_name
 
     __table_args__ = (UniqueConstraint("usrid", "init", "_date", name="unique_task_usr_time"),)
 
