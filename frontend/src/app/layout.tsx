@@ -1,9 +1,15 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import { AuthProvider } from './auth/AuthProvider'
+import localFont from 'next/font/local'
+import { AuthProvider } from '@/app/auth/AuthProvider'
+import { Sidebar } from '@/ui/sidebar/Sidebar'
+import { CssVarsProvider } from '@mui/joy/styles'
+import { theme } from '@/ui/theme'
 
-const inter = Inter({ subsets: ['latin'] })
+const monaSans = localFont({
+  src: '../assets/fonts/Mona-Sans.woff2',
+  display: 'swap'
+})
 
 export const metadata: Metadata = {
   title: 'PhpReport',
@@ -13,8 +19,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <AuthProvider>{children}</AuthProvider>
+      <body className={monaSans.className}>
+        <AuthProvider>
+          <CssVarsProvider theme={theme}>
+            <Sidebar />
+            {children}
+          </CssVarsProvider>
+        </AuthProvider>
       </body>
     </html>
   )
