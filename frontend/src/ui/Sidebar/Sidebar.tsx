@@ -18,6 +18,7 @@ import fullLogo from '@/assets/images/full_logo.png'
 import { styled } from '@mui/joy/styles'
 import Link from 'next/link'
 import { DarkModeSwitch } from './DarkModeSwitch'
+import { ScreenReaderOnly } from '@/ui/ScreenReaderOnly/ScreenReaderOnly'
 
 export const Sidebar = () => {
   const [expanded, setExpanded] = useState(false)
@@ -57,10 +58,20 @@ export const Sidebar = () => {
         }}
       >
         <ChevronRight16Filled primaryFill="black" />
+        <ScreenReaderOnly>Expand/collapse menu</ScreenReaderOnly>
       </Button>
       <Stack sx={{ overflow: 'hidden', height: '100%' }} component="nav">
         <Logo height={32} src={expanded ? fullLogo : smallLogo} alt="Igalia Logo" />
-        <Stack sx={{ svg: { minWidth: '32px' }, whiteSpace: 'nowrap' }} component="ul" spacing={2}>
+        <Stack
+          sx={{
+            svg: { minWidth: '32px' },
+            whiteSpace: 'nowrap',
+            padding: '0 4px',
+            listStyleType: 'none'
+          }}
+          component="ul"
+          spacing={2}
+        >
           <Box component="li">
             <NavLink href="/tasks">
               <TaskListSquareAdd24Filled />

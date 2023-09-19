@@ -34,4 +34,12 @@ describe('Sidebar', () => {
     fireEvent.click(expandButton)
     expect(screen.getByRole('complementary')).toHaveStyle({ width: '73px' })
   })
+
+  it('should have an invisible screen-reader text for the collapse button', () => {
+    render(<Sidebar />)
+
+    const expandButton = screen.getByRole('button')
+
+    expect(expandButton).toHaveTextContent('Expand/collapse menu')
+  })
 })

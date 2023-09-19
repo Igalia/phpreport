@@ -2,7 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import { AuthProvider } from '@/app/auth/AuthProvider'
-import { Sidebar } from '@/ui/sidebar/Sidebar'
+import { Sidebar } from '@/ui/Sidebar/Sidebar'
 import { CssVarsProvider } from '@mui/joy/styles'
 import { theme } from '@/ui/theme'
 
