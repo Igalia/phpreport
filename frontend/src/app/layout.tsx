@@ -5,6 +5,7 @@ import { AuthProvider } from '@/app/auth/AuthProvider'
 import { Sidebar } from '@/ui/Sidebar/Sidebar'
 import { CssVarsProvider } from '@mui/joy/styles'
 import { theme } from '@/ui/theme'
+import { Main, SkipNavigation } from '@/ui/SkipNavigation/SkipNavigation'
 
 const monaSans = localFont({
   src: '../assets/fonts/Mona-Sans.woff2',
@@ -22,8 +23,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={monaSans.className}>
         <AuthProvider>
           <CssVarsProvider theme={theme}>
+            <SkipNavigation href="#main-content">Skip Navigation</SkipNavigation>
             <Sidebar />
-            {children}
+            <Main id="main-content" tabIndex={-1}>
+              {children}
+            </Main>
           </CssVarsProvider>
         </AuthProvider>
       </body>
