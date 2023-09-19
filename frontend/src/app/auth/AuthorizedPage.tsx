@@ -28,7 +28,7 @@ export const AuthorizedPage = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (!isAuthenticated) {
-    return <button onClick={() => signinRedirect()}>BOTAO</button>
+    return <div>Redirecting...</div>
   }
 
   return children
