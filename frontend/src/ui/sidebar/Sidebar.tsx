@@ -32,6 +32,7 @@ export const Sidebar = () => {
         bgcolor: '#001C37',
         padding: '22px 16px 18px'
       }}
+      component="aside"
     >
       <Button
         size="sm"
