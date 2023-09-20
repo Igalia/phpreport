@@ -15,6 +15,8 @@ export const SkipNavigation = styled('a')`
 `
 
 export const Main = styled('main')`
+  width: 100%;
+
   &:focus {
     outline: none;
   }
