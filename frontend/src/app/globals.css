@@ -94,6 +94,10 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
 }
 
 a {

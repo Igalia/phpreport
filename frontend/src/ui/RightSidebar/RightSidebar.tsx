@@ -14,9 +14,9 @@ export const RightSidebar = ({ children }: RightSidebarProps) => {
   return (
     <Box
       sx={{
-        height: '100vh',
-        width: expanded ? 320 : 60,
-        transition: 'width 0.6s',
+        height: { xs: expanded ? '60px' : '320px', sm: '100vh' },
+        width: { xs: '100vw', sm: expanded ? '60px' : '320px' },
+        transition: { xs: 'height 0.6s', sm: 'width 0.6s' },
         position: 'relative',
         bgcolor: 'white',
         border: '1px solid #D2D2D4'
@@ -24,11 +24,13 @@ export const RightSidebar = ({ children }: RightSidebarProps) => {
     >
       <CollapseButton
         sx={{
-          left: '-16px',
-          top: '61px',
-          transform: 'rotateY(180deg)',
+          left: { xs: '0px', sm: '-16px' },
+          right: { xs: '0px', sm: 'unset' },
+          top: { xs: '-16px', sm: '61px' },
+          margin: '0 auto',
+          transform: { xs: 'rotateZ(90deg)', sm: 'rotateZ(180deg)' },
           ...(expanded && {
-            transform: 'rotateY(0deg)'
+            transform: { xs: 'rotateZ(-90deg)', sm: 'rotateZ(0deg)' }
           })
         }}
         onClick={() => setExpanded((prevState) => !prevState)}
