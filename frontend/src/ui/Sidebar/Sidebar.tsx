@@ -11,7 +11,6 @@ import {
   DataArea24Filled,
   DataPie24Filled
 } from '@fluentui/react-icons'
-import smallLogo from '@/assets/images/small_logo.png'
 import fullLogo from '@/assets/images/full_logo.png'
 import { styled } from '@mui/joy/styles'
 import Link from 'next/link'
