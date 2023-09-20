@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import { AuthProvider } from '@/app/auth/AuthProvider'
 import { Sidebar } from '@/ui/Sidebar/Sidebar'
-import { RightSidebar } from '@/ui/RightSidebar/RightSidebar'
+import { ContentSidebar } from '@/ui/ContentSidebar/ContentSidebar'
 import { CssVarsProvider } from '@mui/joy/styles'
 import { theme } from '@/ui/theme'
 import { Main, SkipNavigation } from '@/ui/SkipNavigation/SkipNavigation'
@@ -29,9 +29,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Main id="main-content" tabIndex={-1}>
               {children}
             </Main>
-            <RightSidebar>
+            <ContentSidebar>
               <div style={{ color: 'black' }}>Right Sidebar</div>
-            </RightSidebar>
+            </ContentSidebar>
           </CssVarsProvider>
         </AuthProvider>
       </body>

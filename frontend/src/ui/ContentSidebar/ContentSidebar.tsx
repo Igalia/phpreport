@@ -4,11 +4,11 @@ import { useState } from 'react'
 import Box from '@mui/joy/Box'
 import { CollapseButton } from '../CollapseButton/CollapseButton'
 
-type RightSidebarProps = {
+type ContentSidebarProps = {
   children: React.ReactNode
 }
 
-export const RightSidebar = ({ children }: RightSidebarProps) => {
+export const ContentSidebar = ({ children }: ContentSidebarProps) => {
   const [expanded, setExpanded] = useState(false)
 
   return (
