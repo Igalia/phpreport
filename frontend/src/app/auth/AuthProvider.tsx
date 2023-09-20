@@ -1,8 +1,9 @@
 'use client'
 
 import { AuthProvider as AuthProviderLib } from 'react-oidc-context'
+import type { AuthProviderProps } from 'react-oidc-context'
 
-const oidcConfig = {
+const oidcConfig: AuthProviderProps = {
   authority: process.env.NEXT_PUBLIC_OIDC_AUTHORITY || '',
   client_id: process.env.NEXT_PUBLIC_OIDC_CLIENT_ID || '',
   client_secret: process.env.NEXT_PUBLIC_OIDC_CLIENT_SECRET,
