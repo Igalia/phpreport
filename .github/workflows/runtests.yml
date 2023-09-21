@@ -11,8 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Build containers
-        run: docker build -t igalia/phpreport -f docker/test.app.Dockerfile .
       - name: Run the containers
         run: docker-compose -f ./docker/docker-compose.test.yml up -d
       - name: Wait
@@ -20,6 +18,8 @@ jobs:
       - name: Run tests
         run: docker exec -t phpreport-app ./vendor/bin/phpunit --testdox tests --verbose
       - name: Run flake8 check
-        run: docker exec -t phpreport-app tox -c api/tox.ini -e flake8
+        run: docker exec -t phpreport-api tox -e flake8
       - name: Run black check
-        run: docker exec -t phpreport-app tox -c api/tox.ini -e black
+        run: docker exec -t phpreport-api tox -e black
+      - name: Run jest
+        run: docker exec -t phpreport-frontend npm run test

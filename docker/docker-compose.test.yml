@@ -1,22 +1,47 @@
 version: '3'
 services:
-  phpreport-app:
-    build:
-      context: ../
-      dockerfile: docker/test.app.Dockerfile
-    image: igalia/phpreport
-    container_name: phpreport-app
-    restart: always
-    ports:
-      - '8000:8000'
-    depends_on:
-      - db
   db:
     build:
       context: ../
       dockerfile: docker/test.db.Dockerfile
+    container_name: phpreport-db
     ports:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: phpreport
       POSTGRES_USER: phpreport
+      POSTGRES_DB: phpreport
+  phpreport-app:
+    build:
+      context: ../
+      dockerfile: docker/dev.app.Dockerfile
+    env_file:
+      - ../.env.test
+    container_name: phpreport-app
+    command: bash -c "cp .env.test .env && php -S 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  api:
+    build:
+      context: ../
+      dockerfile: docker/dev.api.Dockerfile
+    container_name: phpreport-api
+    env_file:
+      - ../.env.test
+    ports:
+      - "8555:8555"
+    depends_on:
+      - db
+  frontend:
+    build:
+      context: ../
+      dockerfile: docker/dev.frontend.Dockerfile
+    container_name: phpreport-frontend
+    env_file:
+      - ../frontend/.env.example
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
