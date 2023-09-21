@@ -8,9 +8,11 @@ export const SkipNavigation = styled('a')`
   z-index: 1;
 
   &:focus {
-    right: 5px;
+    left: 0;
+    right: 0;
     top: 5px;
-    left: unset;
+    margin: 0 auto;
+    width: fit-content;
   }
 `
 
