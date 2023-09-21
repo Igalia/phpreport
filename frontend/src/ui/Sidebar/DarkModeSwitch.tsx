@@ -16,7 +16,7 @@ type SwitchComponentProps = {
 }
 
 const TrackText = ({ icon: Icon, children, sx }: SwitchComponentProps) => (
-  <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px', ...sx }}>
+  <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: '24px', ...sx }}>
     <Icon color="#00396d" />
     <Typography sx={{ color: '#b3cfe9' }}>{children}</Typography>
   </Box>
@@ -36,7 +36,9 @@ const SwitchThumb = ({ icon: Icon, children }: SwitchComponentProps) => (
     }}
   >
     <Icon color="#b3cfe9" />
-    <Typography sx={{ color: '#F0F3F7' }}>{children}</Typography>
+    <Typography sx={{ display: { xs: 'none', sm: 'block' }, color: '#F0F3F7' }}>
+      {children}
+    </Typography>
   </Box>
 )
 
@@ -69,12 +71,6 @@ export const DarkModeSwitch = ({ sx }: DarkModeSwitchProps) => {
         }
       }}
       sx={{
-        '--Switch-thumbWidth': '148px',
-        '--Switch-thumbSize': '30px',
-        '--Switch-trackWidth': '260px',
-        '--Switch-thumbRadius': '20px',
-        '--Switch-trackHeight': '40px',
-        '--Switch-trackRadius': '25px',
         '--Switch-thumbBackground': '#00396d',
         '--Switch-trackBackground': '#030D1A',
         '&:hover': {
@@ -87,6 +83,12 @@ export const DarkModeSwitch = ({ sx }: DarkModeSwitchProps) => {
             '--Switch-trackBackground': '#030D1A'
           }
         },
+        '--Switch-thumbWidth': { xs: '40px', sm: '148px' },
+        '--Switch-thumbSize': { xs: '20px', sm: '30px' },
+        '--Switch-trackWidth': { xs: '60px', sm: '260px' },
+        '--Switch-thumbRadius': { xs: '', sm: '20px' },
+        '--Switch-trackHeight': { xs: '', sm: '40px' },
+        '--Switch-trackRadius': { xs: '', sm: '25px' },
         ...sx
       }}
     />
