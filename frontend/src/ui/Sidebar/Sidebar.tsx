@@ -62,25 +62,25 @@ export const Sidebar = () => {
         >
           <Box component="li">
             <NavLink href="/tasks">
-              <TaskListSquareAdd24Filled />
+              <TaskListSquareAdd24Filled color="white" />
               <Typography textColor="white">Tasks</Typography>
             </NavLink>
           </Box>
           <Box component="li">
             <NavLink href="/vacation">
-              <Beach24Filled />
+              <Beach24Filled color="white" />
               <Typography textColor="white">Vacation Management</Typography>
             </NavLink>
           </Box>
           <Box component="li">
             <NavLink href="/reports">
-              <DataArea24Filled />
+              <DataArea24Filled color="white" />
               <Typography textColor="white">Reports</Typography>
             </NavLink>
           </Box>
           <Box component="li">
             <NavLink href="/data-managment">
-              <DataPie24Filled />
+              <DataPie24Filled color="white" />
               <Typography textColor="white">Data Management</Typography>
             </NavLink>
           </Box>
