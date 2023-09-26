@@ -22,7 +22,7 @@ export default function Tasks() {
   const projects = useProjects()
   const taskTypes = useTaskTypes()
 
-  const { formState, handleChange } = useForm<Task>({
+  const { formState, handleChange, resetForm } = useForm<Task>({
     initialValues: {
       project: '',
       taskType: '',
@@ -79,14 +79,19 @@ export default function Tasks() {
           placeholder="Task description..."
         ></TextArea>
         <Stack flexDirection="row">
-          {/* <Select
+          <Select
             sx={{ width: '264px' }}
             name="moreActions"
             defaultValue=""
             label="More Actions"
             options={[]}
-          /> */}
-          <Button sx={{ ml: 'auto', mr: '20px', width: '82px', height: '40px' }}>Clear</Button>
+          />
+          <Button
+            onClick={resetForm}
+            sx={{ ml: 'auto', mr: '20px', width: '82px', height: '40px' }}
+          >
+            Clear
+          </Button>
           <Button sx={{ width: '82px', height: '40px' }} type="submit">
             Save
           </Button>

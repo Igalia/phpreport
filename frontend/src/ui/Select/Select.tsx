@@ -17,7 +17,7 @@ type SelectProps = {
   name: string
   label: string
   value?: string
-  sx: SxProps
+  sx?: SxProps
 }
 
 export const Select = ({

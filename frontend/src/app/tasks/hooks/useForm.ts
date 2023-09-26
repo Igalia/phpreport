@@ -11,5 +11,7 @@ export const useForm = <T>({ initialValues }: UseFormProps<T>) => {
     setFormState((prevFormState) => ({ ...prevFormState, [field]: newValue }))
   }
 
-  return { handleChange, formState }
+  const resetForm = () => setFormState(initialValues)
+
+  return { handleChange, formState, resetForm }
 }
