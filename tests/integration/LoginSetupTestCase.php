@@ -74,7 +74,6 @@ class LoginSetupTestCase extends TestCase {
 
         $result = pg_query($connect, $query="DELETE FROM task");
         if ($result == NULL) error_log("ERROR: Could not run query: $query");
-        var_dump($result);
 
         pg_freeresult($result);
     }
