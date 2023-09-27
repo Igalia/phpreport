@@ -1,5 +1,7 @@
 from sqlalchemy import Date, Column, ForeignKey, Integer, String, Numeric, UniqueConstraint, CheckConstraint
-
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
 from db.base_class import Base
 
 
@@ -18,11 +20,12 @@ class UserGroup(Base):
     name = Column(String(length=128), nullable=True, unique=True)
 
 
-class UserPermissions(Base):
+class UserRoles(Base):
     __tablename__ = "belongs"
-
-    group_id = Column("user_groupid", ForeignKey("user_group.id"), nullable=False, primary_key=True)
-    user_id = Column("usrid", Integer, ForeignKey("usr.id"), nullable=False, primary_key=True)
+    group_id: Mapped[int] = mapped_column("user_groupid", ForeignKey("user_group.id"), nullable=False, primary_key=True)
+    user_id: Mapped[int] = mapped_column("usrid", ForeignKey("usr.id"), nullable=False, primary_key=True)
+    role: Mapped["UserGroup"] = relationship()
+    user: Mapped["User"] = relationship()
 
 
 class UserLocation(Base):
