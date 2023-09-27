@@ -12,7 +12,11 @@ class TaskServiceTest extends LoginSetupTestCase {
 
     public function testCreateTaskFailsWithUserLoggedOut(): void
     {
-        $res = $this->makeRequest('web/services/createTasksService.php', null, 'POST', '');
+        $request = '<?xml version="1.0" encoding="ISO-8859-15"?>';
+        $request .= '<tasks sid="">'; // send an empty session
+        $request .= '<task><date>2023-03-24</date><initTime>00:00</initTime><endTime>03:00</endTime>';
+        $request .= '<customerId>1</customerId><projectId>1</projectId></task></tasks>';
+        $res = $this->makeRequest('web/services/createTasksService.php', null, 'POST', $request);
         $this->assertEquals('You must be logged in', $res->error);
     }
 
