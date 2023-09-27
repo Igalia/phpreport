@@ -80,17 +80,28 @@ export default function Tasks() {
           placeholder="Task description..."
           value={formState.description}
         ></TextArea>
-        <Stack flexDirection="row">
-          <Select sx={{ width: '264px' }} name="moreActions" label="More Actions" options={[]} />
-          <Button
-            onClick={resetForm}
-            sx={{ ml: 'auto', mr: '20px', width: '82px', height: '40px' }}
+        <Stack sx={{ flexDirection: { xs: 'column', sm: 'row' }, gap: '16px' }}>
+          <Select
+            sx={{ width: { xs: '100%', sm: '264px' } }}
+            name="moreActions"
+            label="More Actions"
+            options={[]}
+          />
+          <Stack
+            sx={{
+              alignSelf: 'flex-end',
+              flexDirection: 'row',
+              ml: { xs: '0', sm: 'auto' },
+              gap: '20px'
+            }}
           >
-            Clear
-          </Button>
-          <Button sx={{ width: '82px', height: '40px' }} type="submit">
-            Save
-          </Button>
+            <Button variant="outlined" onClick={resetForm} sx={{ width: '82px' }}>
+              Clear
+            </Button>
+            <Button sx={{ width: '82px' }} type="submit">
+              Save
+            </Button>
+          </Stack>
         </Stack>
       </Stack>
     </AuthorizedPage>
