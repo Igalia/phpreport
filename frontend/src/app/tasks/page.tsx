@@ -16,6 +16,7 @@ type Task = {
   project: string
   taskType: string
   story: string
+  description: string
 }
 
 export default function Tasks() {
@@ -26,7 +27,8 @@ export default function Tasks() {
     initialValues: {
       project: '',
       taskType: '',
-      story: ''
+      story: '',
+      description: ''
     }
   })
 
@@ -43,24 +45,22 @@ export default function Tasks() {
         gap="16px"
       >
         <Select
-          defaultValue=""
-          onChange={handleChange}
+          onChange={(_, option) => option && handleChange('project', option.value)}
           value={formState.project}
           name="project"
           label="Select project"
           options={projects.map((project) => ({ value: project.id, label: project.description }))}
         />
         <Select
-          defaultValue=""
           name="taskType"
           label="Select task type"
           value={formState.taskType}
-          onChange={handleChange}
+          onChange={(_, option) => option && handleChange('taskType', option.value)}
           options={taskTypes.map((taskType) => ({ value: taskType.slug, label: taskType.name }))}
         />
         <Input
           value={formState.story}
-          onChange={handleChange}
+          onChange={(e) => handleChange('story', e.target.value)}
           name="story"
           placeholder="Story"
           label="Story"
@@ -73,19 +73,14 @@ export default function Tasks() {
         </Stack>
         <TextArea
           name="description"
-          onChange={handleChange}
+          onChange={(e) => handleChange('description', e.target.value)}
           label="Task description"
           sx={{ minHeight: '208px' }}
           placeholder="Task description..."
+          value={formState.description}
         ></TextArea>
         <Stack flexDirection="row">
-          <Select
-            sx={{ width: '264px' }}
-            name="moreActions"
-            defaultValue=""
-            label="More Actions"
-            options={[]}
-          />
+          <Select sx={{ width: '264px' }} name="moreActions" label="More Actions" options={[]} />
           <Button
             onClick={resetForm}
             sx={{ ml: 'auto', mr: '20px', width: '82px', height: '40px' }}

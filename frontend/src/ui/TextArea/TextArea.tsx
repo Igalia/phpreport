@@ -9,7 +9,8 @@ type TextAreaProps = {
   placeholder: string
   name: string
   sx: SxProps
-  onChange: (field: string, value: string | null) => void
+  onChange: React.ChangeEventHandler<HTMLTextAreaElement> | undefined
+  value: string
 }
 
 type InnerTextAreaProps = JSX.IntrinsicElements['textarea'] & Omit<TextAreaProps, 'sx'>
@@ -26,13 +27,14 @@ const InnerTextarea = React.forwardRef<HTMLTextAreaElement, InnerTextAreaProps>(
   }
 )
 
-export const TextArea = ({ sx, label, placeholder, name, onChange }: TextAreaProps) => {
+export const TextArea = ({ sx, label, placeholder, name, onChange, value }: TextAreaProps) => {
   return (
     <Textarea
-      onChange={(e) => onChange(name, e.target.value)}
+      onChange={onChange}
       slots={{ textarea: InnerTextarea }}
       slotProps={{ textarea: { placeholder, label, name } }}
       sx={{ borderRadius: '8px', ...sx }}
+      value={value}
     />
   )
 }

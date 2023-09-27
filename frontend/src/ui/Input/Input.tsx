@@ -5,9 +5,9 @@ import JoyInput from '@mui/joy/Input'
 type InputProps = {
   label: string
   placeholder: string
-  onChange: (field: string, value: string | null) => void
   name: string
   value: string
+  onChange: React.ChangeEventHandler<HTMLInputElement> | undefined
 }
 
 type InnerInputProps = JSX.IntrinsicElements['input'] & InputProps
@@ -28,7 +28,7 @@ const InnerInput = React.forwardRef<HTMLInputElement, InnerInputProps>(function 
 export const Input = ({ label, placeholder, onChange, name, value }: InputProps) => {
   return (
     <JoyInput
-      onChange={(e) => onChange(name, e.target.value)}
+      onChange={onChange}
       slots={{ input: InnerInput }}
       slotProps={{ input: { placeholder, label, name, value } }}
       sx={{

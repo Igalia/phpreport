@@ -7,7 +7,7 @@ type UseFormProps<T> = {
 export const useForm = <T>({ initialValues }: UseFormProps<T>) => {
   const [formState, setFormState] = useState(initialValues)
 
-  const handleChange = (field: string, newValue: string | null) => {
+  const handleChange = <F extends keyof T>(field: F, newValue: T[F]) => {
     setFormState((prevFormState) => ({ ...prevFormState, [field]: newValue }))
   }
 
