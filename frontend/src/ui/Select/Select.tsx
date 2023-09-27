@@ -1,9 +1,8 @@
 import * as React from 'react'
-import JoySelect from '@mui/joy/Select'
-import Option from '@mui/joy/Option'
+import Autocomplete from '@mui/joy/Autocomplete'
 import Box from '@mui/joy/Box'
 import { styled } from '@mui/joy/styles'
-import { SxProps } from '@mui/joy/styles/types'
+import { AutocompleteProps } from '@mui/joy/Autocomplete'
 
 type Option = {
   value: string
@@ -11,24 +10,11 @@ type Option = {
 }
 
 type SelectProps = {
-  options: Array<Option>
-  defaultValue: string
-  onChange?: (field: string, value: string | null) => void
-  name: string
   label: string
   value?: string
-  sx?: SxProps
-}
+} & Omit<AutocompleteProps<Option, undefined, undefined, undefined>, 'value'>
 
-export const Select = ({
-  options,
-  defaultValue = '',
-  sx,
-  onChange,
-  name,
-  value,
-  label
-}: SelectProps) => {
+export const Select = ({ options, sx, onChange, name, value, label }: SelectProps) => {
   const selectButtonId = `select-button-${name}`
   const selectLabelId = `select-label-${name}`
 
@@ -37,34 +23,14 @@ export const Select = ({
       <StyledLabel htmlFor={selectButtonId} id={selectLabelId}>
         {label}
       </StyledLabel>
-      <JoySelect
-        defaultValue={defaultValue}
-        onChange={(_, newValue) => {
-          if (onChange) {
-            onChange(name, newValue)
-          }
-        }}
+      <Autocomplete<Option>
+        onChange={onChange}
         name={name}
-        value={value}
+        value={options.find((option) => option.value === value)}
         sx={sx}
-        slotProps={{
-          button: {
-            id: selectButtonId,
-            'aria-labelledby': `${selectLabelId} ${selectButtonId}`,
-            sx: {
-              paddingTop: '1em'
-            }
-          }
-        }}
-      >
-        {options.map((option) => {
-          return (
-            <Option key={option.value} value={option.value}>
-              {option.label}
-            </Option>
-          )
-        })}
-      </JoySelect>
+        options={options}
+        isOptionEqualToValue={(option, value) => option.value === value.value}
+      ></Autocomplete>
     </Box>
   )
 }

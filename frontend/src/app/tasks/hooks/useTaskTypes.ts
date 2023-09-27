@@ -13,7 +13,10 @@ const fetchTasks = (token: string): Promise<Array<Task>> => {
   // return apiClient(token)
   //   .get('/v1/timelog/task_types/')
   //   .then((response) => response.data)
-  const mockData = Promise.resolve([{ name: 'mock task type', slug: 'mock-test', active: true }])
+  const mockData = Promise.resolve([
+    { name: 'mock task type', slug: 'mock-test', active: true },
+    { name: 'mock task type 2', slug: 'mock-test-2', active: true }
+  ])
   return mockData
 }
 

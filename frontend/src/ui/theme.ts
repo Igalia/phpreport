@@ -8,7 +8,7 @@ export const theme = extendTheme({
     body: 'inherit' // applies to `title-*` and `body-*`
   },
   components: {
-    JoySelect: {
+    JoyAutocomplete: {
       styleOverrides: {
         root: () => ({
           height: '56px',
