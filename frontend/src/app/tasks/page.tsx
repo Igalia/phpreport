@@ -20,7 +20,7 @@ type Task = {
 }
 
 export default function Tasks() {
-  const projects = useProjects()
+  const { projects, isLoading: isProjectsLoading } = useProjects()
   const taskTypes = useTaskTypes()
 
   const { formState, handleChange, resetForm } = useForm<Task>({
@@ -50,6 +50,7 @@ export default function Tasks() {
           name="project"
           label="Select project"
           options={projects.map((project) => ({ value: project.id, label: project.description }))}
+          loading={isProjectsLoading}
         />
         <Select
           name="taskType"

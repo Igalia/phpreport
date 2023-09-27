@@ -28,13 +28,12 @@ export const useProjects = () => {
   const auth = useAuth()
   const token = auth.user?.access_token || ''
 
-  const { data } = useQuery({
+  const { data = [], isLoading } = useQuery({
     queryKey: ['projects', token],
     queryFn: () => {
       return fetchProjects(token)
-    },
-    initialData: []
+    }
   })
 
-  return data
+  return { projects: data, isLoading }
 }

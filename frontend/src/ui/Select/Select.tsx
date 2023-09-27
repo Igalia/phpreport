@@ -14,7 +14,7 @@ type SelectProps = {
   value?: string
 } & Omit<AutocompleteProps<Option, undefined, undefined, undefined>, 'value'>
 
-export const Select = ({ options, sx, onChange, name, value, label }: SelectProps) => {
+export const Select = ({ options, sx, onChange, name, value, label, loading }: SelectProps) => {
   const selectButtonId = `select-button-${name}`
   const selectLabelId = `select-label-${name}`
 
@@ -26,10 +26,12 @@ export const Select = ({ options, sx, onChange, name, value, label }: SelectProp
       <Autocomplete<Option>
         onChange={onChange}
         name={name}
-        value={options.find((option) => option.value === value)}
+        value={options.find((option) => option.value === value) || null}
         sx={sx}
         options={options}
         isOptionEqualToValue={(option, value) => option.value === value.value}
+        slotProps={{ input: { sx: { pt: '10px' } } }}
+        loading={loading}
       ></Autocomplete>
     </Box>
   )
