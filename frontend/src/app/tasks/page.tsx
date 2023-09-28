@@ -45,7 +45,7 @@ export default function Tasks() {
         gap="16px"
       >
         <Select
-          onChange={(_, option) => option && handleChange('project', option.value)}
+          onChange={(_, option) => handleChange('project', option?.value || '')}
           value={formState.project}
           name="project"
           label="Select project"
@@ -56,7 +56,7 @@ export default function Tasks() {
           name="taskType"
           label="Select task type"
           value={formState.taskType}
-          onChange={(_, option) => option && handleChange('taskType', option.value)}
+          onChange={(_, option) => handleChange('taskType', option?.value || '')}
           options={taskTypes.map((taskType) => ({ value: taskType.slug, label: taskType.name }))}
         />
         <Input
