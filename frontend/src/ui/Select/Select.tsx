@@ -29,6 +29,8 @@ export const Select = ({ options, sx, onChange, name, value, label, loading }: S
         value={options.find((option) => option.value === value) || null}
         sx={sx}
         options={options}
+        autoSelect
+        autoHighlight
         isOptionEqualToValue={(option, value) => option.value === value.value}
         slotProps={{ input: { sx: { pt: '10px' } } }}
         loading={loading}
