@@ -52,6 +52,20 @@ export default function Tasks() {
           options={projects.map((project) => ({ value: project.id, label: project.description }))}
           loading={isProjectsLoading}
         />
+        <Stack flexDirection="row" gap="30px">
+          <Box>Start timer</Box>
+          <Box>From</Box>
+          <Box>To</Box>
+        </Stack>
+        <Box>Logged Time 0h 0m 0s</Box>
+        <TextArea
+          name="description"
+          onChange={(e) => handleChange('description', e.target.value)}
+          label="Task description"
+          sx={{ minHeight: '208px' }}
+          placeholder="Task description..."
+          value={formState.description}
+        ></TextArea>
         <Select
           name="taskType"
           label="Select task type"
@@ -66,20 +80,6 @@ export default function Tasks() {
           placeholder="Story"
           label="Story"
         />
-        <Box>Logged Time 0h 0m 0s</Box>
-        <Stack flexDirection="row" gap="30px">
-          <Box>Start timer</Box>
-          <Box>From</Box>
-          <Box>To</Box>
-        </Stack>
-        <TextArea
-          name="description"
-          onChange={(e) => handleChange('description', e.target.value)}
-          label="Task description"
-          sx={{ minHeight: '208px' }}
-          placeholder="Task description..."
-          value={formState.description}
-        ></TextArea>
         <Stack sx={{ flexDirection: { xs: 'column', sm: 'row' }, gap: '16px' }}>
           <Select
             sx={{ width: { xs: '100%', sm: '264px' } }}
