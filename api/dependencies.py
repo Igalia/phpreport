@@ -18,21 +18,23 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl=OIDC_TOKEN_ENDPOINT)
 
 
 class AppUser(BaseModel):
-    id: Optional[int]
-    username: Optional[str]
-    email: Optional[str]
-    first_name: Optional[str]
-    last_name: Optional[str]
-    roles: Optional[List[str]]
+    id: Optional[int] = None
+    username: Optional[str] = None
+    email: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    roles: Optional[List[str]] = None
 
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)):
     decoded = decode_token(token)
-    user_in_db = UserService(db).get_user(decoded[OIDC_USERNAME_PROPERTY])
+    username = decoded[OIDC_USERNAME_PROPERTY]
+    user_in_db = UserService(db).get_user(username=username)
     if not user_in_db:
         raise HTTPException(status_code=401, detail="You are not an authorized user.")
     user = AppUser(
         id=user_in_db.id,
+        username=username,
         email=decoded["email"],
         first_name=decoded["given_name"],
         last_name=decoded["family_name"],

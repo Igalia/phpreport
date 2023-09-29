@@ -14,6 +14,7 @@ from sqlalchemy.orm import relationship, Mapped
 from sqlalchemy.ext.hybrid import hybrid_property
 from models.project import Project
 from models.user import User
+from helpers.time import int_to_time_string
 
 from db.base_class import Base
 
@@ -44,6 +45,14 @@ class Task(Base):
     @hybrid_property
     def customer_name(self):
         return self.project.customer_name
+
+    @hybrid_property
+    def start_time(self):
+        return int_to_time_string(self.init)
+
+    @hybrid_property
+    def end_time(self):
+        return int_to_time_string(self.end)
 
     __table_args__ = (UniqueConstraint("usrid", "init", "_date", name="unique_task_usr_time"),)
 
@@ -77,12 +86,20 @@ class Template(Base):
     onsite = Column(Boolean, nullable=True)
     description = Column("text", String(length=8192), nullable=True)
     task_type = Column("ttype", String(length=40), nullable=True)
-    init_time = Column(Integer, nullable=True)
-    end_time = Column(Integer, nullable=True)
+    init = Column("init_time", Integer, nullable=True)
+    end = Column("end_time", Integer, nullable=True)
     customer_id = Column("customerid", Integer, ForeignKey("customer.id"), nullable=True)
     user_id = Column("usrid", Integer, ForeignKey(User.id), nullable=True)
     project_id = Column("projectid", Integer, ForeignKey("project.id"), nullable=True)
     is_global = Column(Boolean, nullable=False, default=False)
+
+    @hybrid_property
+    def start_time(self):
+        return int_to_time_string(self.init) if self.init else None
+
+    @hybrid_property
+    def end_time(self):
+        return int_to_time_string(self.end) if self.end else None
 
 
 class TotalHoursOverride(Base):

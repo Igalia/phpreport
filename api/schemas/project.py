@@ -1,22 +1,20 @@
 from datetime import date
 
-from pydantic import BaseModel
+from pydantic import ConfigDict, BaseModel
 from typing import Optional
 
 
 class Project(BaseModel):
     id: str
     is_active: bool
-    init: Optional[date]
-    end: Optional[date]
-    invoice: Optional[float]
-    estimated_hours: Optional[float]
-    moved_hours: Optional[float]
-    description: Optional[str]
-    project_type: Optional[str]
-    schedule_type: Optional[str]
+    init: Optional[date] = None
+    end: Optional[date] = None
+    invoice: Optional[float] = None
+    estimated_hours: Optional[float] = None
+    moved_hours: Optional[float] = None
+    description: Optional[str] = None
+    project_type: Optional[str] = None
+    schedule_type: Optional[str] = None
     customer_id: int
     area_id: int
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
