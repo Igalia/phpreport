@@ -13,6 +13,7 @@ from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import relationship, Mapped
 from sqlalchemy.ext.hybrid import hybrid_property
 from models.project import Project
+from models.user import User
 
 from db.base_class import Base
 
@@ -79,7 +80,7 @@ class Template(Base):
     init_time = Column(Integer, nullable=True)
     end_time = Column(Integer, nullable=True)
     customer_id = Column("customerid", Integer, ForeignKey("customer.id"), nullable=True)
-    user_id = Column("usrid", Integer, ForeignKey("usr.id"), nullable=True)
+    user_id = Column("usrid", Integer, ForeignKey(User.id), nullable=True)
     project_id = Column("projectid", Integer, ForeignKey("project.id"), nullable=True)
     is_global = Column(Boolean, nullable=False, default=False)
 
