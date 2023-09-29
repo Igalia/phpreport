@@ -1,16 +1,19 @@
 from typing import List
-from datetime import date
+from datetime import date, datetime
 from sqlalchemy import or_
 
 from services.main import AppService
 from models.timelog import TaskType, Template, Task
-from schemas.timelog import TemplateNew
+from schemas.timelog import TemplateNew, TaskNew, TaskValidate
 
 
 class TaskTypeService(AppService):
     def get_items(self) -> List[TaskType]:
         task_types = self.db.query(TaskType).all() or []
         return task_types
+
+    def slug_is_valid(self, slug: str) -> bool:
+        return any(self.db.query(TaskType).where(TaskType.slug == slug))
 
 
 class TemplateService(AppService):
@@ -25,8 +28,8 @@ class TemplateService(AppService):
             name=template.name,
             story=template.story,
             task_type=template.task_type,
-            init_time=template.init_time,
-            end_time=template.end_time,
+            init=template.init,
+            end=template.end,
             user_id=template.user_id,
             project_id=template.project_id,
             is_global=template.is_global,
@@ -48,3 +51,40 @@ class TaskService(AppService):
             or []
         )
         return tasks
+
+    def create_task(self, task: TaskNew) -> Task:
+        new_task = Task(
+            date=task.date,
+            init=task.init,
+            end=task.end,
+            story=task.story,
+            description=task.description,
+            task_type=task.task_type,
+            updated_at=datetime.now(),
+            user_id=task.user_id,
+            project_id=task.project_id,
+        )
+        self.db.add(new_task)
+        self.db.commit()
+        self.db.refresh(new_task)
+        return new_task
+
+    def check_task_for_overlap(self, task: Task) -> TaskValidate:
+        validated_task = TaskValidate(is_task_valid=True, message="")
+        user_tasks_for_day = self.db.query(Task).where(Task.user_id == task.user_id, Task.date == task.date).all() or []
+        if len(user_tasks_for_day) <= 0:
+            return validated_task
+        for user_task_for_day in user_tasks_for_day:
+            if task.init == user_task_for_day.init:
+                validated_task.is_task_valid = False
+                validated_task.message += f"You have already logged a task beginning at {user_task_for_day.start_time}."
+            if task.end == user_task_for_day.end:
+                validated_task.is_task_valid = False
+                validated_task.message += f"You have already logged a task ending at {user_task_for_day.end_time}."
+            if task.end > user_task_for_day.init and task.init < user_task_for_day.end:
+                validated_task.is_task_valid = False
+                validated_task.message += (
+                    f"Task from {task.start_time} to {task.end_time} overlaps an existing task from"
+                    f" {user_task_for_day.start_time} to {user_task_for_day.end_time}."
+                )
+        return validated_task

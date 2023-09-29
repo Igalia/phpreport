@@ -1,24 +1,18 @@
-from pydantic import BaseModel
+from pydantic import ConfigDict, BaseModel
 
 
 class User(BaseModel):
     id: int
     login: str
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserGroup(BaseModel):
     id: int
     name: str
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserRoles(BaseModel):
     role: UserGroup
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
