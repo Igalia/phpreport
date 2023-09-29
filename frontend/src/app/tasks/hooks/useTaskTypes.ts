@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useAuth } from 'react-oidc-context'
 
-type Task = {
+type TaskType = {
   slug: string
   name: string
   active: boolean
@@ -9,7 +9,7 @@ type Task = {
 
 // Temporary disable so we don't need to change the fetch api for now.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const fetchTasks = (token: string): Promise<Array<Task>> => {
+const fetchTaskTypes = (token: string): Promise<Array<TaskType>> => {
   // return apiClient(token)
   //   .get('/v1/timelog/task_types/')
   //   .then((response) => response.data)
@@ -25,9 +25,9 @@ export const useTaskTypes = () => {
   const token = auth.user?.access_token || ''
 
   const { data } = useQuery({
-    queryKey: ['tasks', token],
+    queryKey: ['taskTypes', token],
     queryFn: () => {
-      return fetchTasks(token)
+      return fetchTaskTypes(token)
     },
     initialData: []
   })
