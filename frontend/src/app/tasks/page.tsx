@@ -58,7 +58,7 @@ export default function Tasks() {
           label="Select project"
           options={projects}
           loading={isProjectsLoading}
-          getOptionLabel={(option) => option.id}
+          getOptionLabel={(option) => option.description}
         />
         <Stack flexDirection="row" gap="30px">
           <Button
