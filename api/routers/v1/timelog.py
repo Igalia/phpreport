@@ -7,16 +7,17 @@ from schemas.timelog import (
     TaskTypeItem,
     Template as TemplateSchema,
     TemplateNew as TemplateNewSchema,
+    TemplateUpdate as TemplateUpdateSchema,
     Task as TaskSchema,
     TaskNew as TaskNewSchema,
-    TaskValidate,
 )
+from schemas.validation import ValidatedObject
 from services.timelog import TaskTypeService, TemplateService, TaskService
 from services.projects import ProjectService
 from services.config import ConfigService
 from db.db_connection import get_db
 from auth.auth_bearer import BearerToken
-from dependencies import get_current_user
+from dependencies import get_current_user, AppUser
 
 router = APIRouter(
     prefix="/timelog",
@@ -61,12 +62,42 @@ async def add_template(
     \f
     :param item: User input.
     """
-    if template.is_global and "manager" not in current_user.roles:
-        raise HTTPException(status_code=403, detail="You are not authorized to create global templates")
-    else:
-        if template.user_id and template.user_id != current_user.id:
-            raise HTTPException(status_code=403, detail="You are not authorized to create templates for this user")
+    validated_template = validate_template(template, db, current_user)
+    if not validated_template.is_valid:
+        raise HTTPException(status_code=422, detail=validated_template.message)
     result = TemplateService(db).create_template(template)
+    return result
+
+
+@router.put("/templates/{template_id}", response_model=TemplateSchema)
+async def update_template(
+    template_id: int,
+    template: TemplateUpdateSchema,
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """
+    Update a template with any of the following:
+
+    - **name**: each template must have a name
+    - **story**: the task story
+    - **description**: the task description
+    - **task type**: the task type
+    - **user id**: the user id (global templates should leave this null; user template should fill)
+    - **project id**: the project id
+    - **is global**: whether or not this template is global for all users (required)
+    - **start time**: the task start time
+    - **end time**: the task end time
+    \f
+    :param item: User input.
+    """
+    existing_template = TemplateService(db).get_template(template_id)
+    if not existing_template:
+        raise HTTPException(status_code=404, detail=f"Template with id {template_id} not found")
+    validated_template = validate_template(template, db, current_user)
+    if not validated_template.is_valid:
+        raise HTTPException(status_code=422, detail=validated_template.message)
+    result = TemplateService(db).update_template(existing_template, template)
     return result
 
 
@@ -106,14 +137,14 @@ async def add_task(task: TaskNewSchema, current_user=Depends(get_current_user), 
     if current_user.id != task.user_id:
         raise HTTPException(status_code=403, detail="You are not authorized to create tasks for this user.")
     validated_task = validate_task(task, db)
-    if not validated_task.is_task_valid:
+    if not validated_task.is_valid:
         raise HTTPException(status_code=422, detail=validated_task.message)
     result = TaskService(db).create_task(task)
     return result
 
 
 def validate_task(task: TaskSchema, db: Session):
-    validated = TaskValidate(is_task_valid=False, message="")
+    validated = ValidatedObject(is_valid=False, message="")
     user_can_create_tasks = ConfigService(db).can_user_edit_task(task.date)
     if not user_can_create_tasks:
         validated.message += "You cannot create or edit a task for this date - it is outside the allowed range."
@@ -128,8 +159,31 @@ def validate_task(task: TaskSchema, db: Session):
         validated.message += "You cannot add a task for an inactive project."
         return validated
     overlapping_tasks = TaskService(db).check_task_for_overlap(task)
-    if not overlapping_tasks.is_task_valid:
+    if not overlapping_tasks.is_valid:
         validated.message += overlapping_tasks.message
         return validated
-    validated.is_task_valid = True
+    validated.is_valid = True
+    return validated
+
+
+def validate_template(template: TemplateSchema, db: Session, current_user: AppUser):
+    validated = ValidatedObject(is_valid=False, message="")
+    if template.is_global and "manager" not in current_user.roles:
+        raise HTTPException(status_code=403, detail="You are not authorized to create or update global templates")
+    else:
+        if template.user_id and template.user_id != current_user.id:
+            raise HTTPException(
+                status_code=403, detail="You are not authorized to create or update templates for this user"
+            )
+    if template.task_type:
+        task_type_valid = TaskTypeService(db).slug_is_valid(template.task_type)
+        if not task_type_valid:
+            validated.message += f"Task type {template.task_type} does not exist."
+            return validated
+    if template.project_id:
+        project_active = ProjectService(db).is_project_active(template.project_id)
+        if not project_active:
+            validated.message += "You cannot add a template for an inactive project."
+            return validated
+    validated.is_valid = True
     return validated

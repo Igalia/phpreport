@@ -14,16 +14,25 @@ class TaskTypeItem(BaseModel):
 
 # Shared properties
 class TemplateBase(BaseModel):
-    name: Optional[Annotated[str, StringConstraints(max_length=80)]]
-    story: Optional[Annotated[str, StringConstraints(max_length=80)]]
-    description: Optional[Annotated[str, StringConstraints(max_length=8192)]]
-    task_type: Optional[Annotated[str, StringConstraints(max_length=40)]]
-    customer_id: Optional[int]
-    user_id: Optional[int]
-    project_id: Optional[int]
-    is_global: Optional[bool]
-    start_time: Optional[str]
-    end_time: Optional[str]
+    name: Optional[Annotated[str, StringConstraints(max_length=80)]] = None
+    story: Optional[Annotated[str, StringConstraints(max_length=80)]] = None
+    description: Optional[Annotated[str, StringConstraints(max_length=8192)]] = None
+    task_type: Optional[Annotated[str, StringConstraints(max_length=40)]] = None
+    customer_id: Optional[int] = None
+    user_id: Optional[int] = None
+    project_id: Optional[int] = None
+    is_global: Optional[bool] = None
+    start_time: Optional[str] = None
+    end_time: Optional[str] = None
+
+    @model_validator(mode="after")
+    @classmethod
+    def user_template_not_global(cls, data: Any) -> Any:
+        if data.is_global and data.user_id is not None:
+            raise ValueError("Global templates should not have a user_id.")
+        if not data.is_global and not data.user_id:
+            raise ValueError("Private templates should have a user_id.")
+        return data
 
 
 # Properties to receive on creation
@@ -46,6 +55,11 @@ class TemplateNew(TemplateBase):
             return None
 
         return time_string_to_int(self.end_time)
+
+
+class TemplateUpdate(TemplateNew):
+    name: Optional[Annotated[str, StringConstraints(max_length=80)]] = None
+    is_global: Optional[bool] = None
 
 
 # Properties shared by models stored in db
@@ -119,8 +133,3 @@ class TaskInDb(TaskBase):
 class Task(TaskInDb):
     project_name: str
     customer_name: Optional[str] = None
-
-
-class TaskValidate(BaseModel):
-    is_task_valid: bool
-    message: Optional[str] = None
