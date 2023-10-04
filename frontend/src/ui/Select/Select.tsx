@@ -27,7 +27,7 @@ export const Select = <T,>({
   const selectLabelId = `select-label-${name}`
 
   return (
-    <Box sx={{ position: 'relative' }}>
+    <Box sx={{ position: 'relative', zIndex: 0 }}>
       <StyledLabel htmlFor={selectButtonId} id={selectLabelId}>
         {label}
       </StyledLabel>
@@ -63,7 +63,7 @@ export const FreeSoloSelect = ({
   const selectLabelId = `select-label-${name}`
 
   return (
-    <Box sx={{ position: 'relative' }}>
+    <Box sx={{ position: 'relative', zIndex: 0 }}>
       <StyledLabel htmlFor={selectButtonId} id={selectLabelId}>
         {label}
       </StyledLabel>

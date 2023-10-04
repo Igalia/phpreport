@@ -1,9 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
-import { Sidebar } from '@/ui/Sidebar/Sidebar'
-import { ContentSidebar } from '@/ui/ContentSidebar/ContentSidebar'
-import { Main, SkipNavigation } from '@/ui/SkipNavigation/SkipNavigation'
+import { BaseLayout } from '@/ui/BaseLayout/BaseLayout'
 import { Providers } from './providers'
 
 const monaSans = localFont({
@@ -21,14 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={monaSans.className}>
         <Providers>
-          <SkipNavigation href="#main-content">Skip Navigation</SkipNavigation>
-          <Sidebar />
-          <Main id="main-content" tabIndex={-1}>
-            {children}
-          </Main>
-          <ContentSidebar>
-            <div style={{ color: 'black' }}>Right Sidebar</div>
-          </ContentSidebar>
+          <BaseLayout>{children}</BaseLayout>
         </Providers>
       </body>
     </html>

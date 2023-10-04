@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import Box from '@mui/joy/Box'
@@ -18,16 +17,22 @@ import { DarkModeSwitch } from './DarkModeSwitch'
 import { CollapseButton } from '../CollapseButton/CollapseButton'
 import { SxProps } from '@mui/joy/styles/types'
 
-export const Sidebar = () => {
-  const [expanded, setExpanded] = useState(false)
+type SidebarProps = {
+  expanded: boolean
+  toggleSidebar: () => void
+}
 
+export const Sidebar = ({ expanded, toggleSidebar }: SidebarProps) => {
   return (
     <Box
       sx={{
-        height: { xs: expanded ? '73px' : '280px', sm: '100vh' },
+        height: { xs: expanded ? '280px' : '73px', sm: '100%' },
         width: { xs: '100vw', sm: expanded ? 336 : 73 },
         transition: { xs: 'height 0.6s', sm: 'width 0.6s' },
-        position: 'relative',
+        position: 'fixed',
+        zIndex: 1,
+        top: 0,
+        left: 0,
         bgcolor: '#001C37',
         padding: '22px 16px 18px'
       }}
@@ -39,13 +44,15 @@ export const Sidebar = () => {
           left: { xs: '0px', sm: 'unset' },
           top: { xs: 'unset', sm: '61px' },
           bottom: { xs: '-16px', sm: 'unset' },
-          margin: '0 auto',
-          transform: { xs: 'rotateZ(-90deg)', sm: 'rotateZ(0deg)' },
+          margin: '0 auto'
+        }}
+        iconSx={{
+          transform: { xs: 'rotateZ(90deg)', sm: 'rotateZ(0deg)' },
           ...(expanded && {
-            transform: { xs: 'rotateZ(90deg)', sm: 'rotateZ(180deg)' }
+            transform: { xs: 'rotateZ(-90deg)', sm: 'rotateZ(180deg)' }
           })
         }}
-        onClick={() => setExpanded((prevState) => !prevState)}
+        onClick={toggleSidebar}
       />
       <Box sx={navGridStyle} component="nav">
         <Logo height={32} src={fullLogo} alt="Igalia Logo" />
