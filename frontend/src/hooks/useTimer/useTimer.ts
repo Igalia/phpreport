@@ -13,10 +13,10 @@ export const useTimer = () => {
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined
     if (isTimerRunning) {
-      intervalId = setInterval(() => setTime(time + 1), 1000)
+      intervalId = setInterval(() => setTime((prevTime) => prevTime + 1), 1000)
     }
     return () => clearInterval(intervalId)
-  }, [isTimerRunning, time])
+  }, [isTimerRunning])
 
   const seconds = Math.floor(time % 60)
   const minutes = Math.floor((time / 60) % 60)
