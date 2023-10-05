@@ -27,9 +27,9 @@ describe('useTimer', () => {
     act(() => {
       const oneHour = 3600000
       const fiftyMinutes = 60000 * 50
-      const thirthySeconds = 30000
+      const thirtySeconds = 30000
 
-      jest.advanceTimersByTime(oneHour + fiftyMinutes + thirthySeconds)
+      jest.advanceTimersByTime(oneHour + fiftyMinutes + thirtySeconds)
     })
 
     expect(result.current.hours).toBe(1)
