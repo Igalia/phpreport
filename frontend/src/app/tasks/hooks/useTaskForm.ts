@@ -34,15 +34,15 @@ export const useTaskForm = () => {
     stopTimer()
   }
 
+  const toggleTimer = () => (isTimerRunning ? onStopTimer() : onStartTimer())
+  const loggedTime = `${hours}h ${minutes}m ${seconds}s`
+
   return {
     task: formState,
     handleChange,
     resetForm,
-    onStartTimer,
-    onStopTimer,
-    seconds,
-    minutes,
-    hours,
+    toggleTimer,
+    loggedTime,
     isTimerRunning
   }
 }
