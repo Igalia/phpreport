@@ -32,6 +32,7 @@ export const Select = <T,>({
         {label}
       </StyledLabel>
       <Autocomplete
+        id={selectButtonId}
         onChange={onChange}
         name={name}
         value={value}
@@ -68,6 +69,7 @@ export const FreeSoloSelect = ({
         {label}
       </StyledLabel>
       <Autocomplete
+        id={selectButtonId}
         onChange={onChange}
         name={name}
         value={value}
