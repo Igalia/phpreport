@@ -1,5 +1,5 @@
 import { TaskForm } from '../TaskForm'
-import { screen, setup, act, within } from '@/test-utils/test-utils'
+import { screen, setup, act } from '@/test-utils/test-utils'
 
 jest.mock('../hooks/useProjects', () => ({
   useProjects: () => ({
@@ -34,7 +34,7 @@ describe('TasksPage', () => {
   beforeEach(() => {
     jest.useFakeTimers()
     jest.spyOn(global, 'setInterval')
-    jest.setSystemTime(new Date('2023-01-01'))
+    jest.setSystemTime(new Date('January 01, 2023 23:15:00'))
   })
 
   describe('when the timer is activated', () => {
@@ -105,8 +105,8 @@ describe('TasksPage', () => {
 
       await user.click(screen.getByRole('button', { name: 'Stop Timer' }))
 
-      expect(startTimeSelect).toHaveValue('09:00pm')
-      expect(endTimeSelect).toHaveValue('09:05pm')
+      expect(startTimeSelect).toHaveValue('23:15')
+      expect(endTimeSelect).toHaveValue('23:20')
     })
   })
 
@@ -116,11 +116,11 @@ describe('TasksPage', () => {
     const startTimeSelect = screen.getByRole('combobox', { name: 'From' })
     const endTimeSelect = screen.getByRole('combobox', { name: 'To' })
 
-    await user.type(startTimeSelect, '9:43am')
-    await user.type(endTimeSelect, '9:43am')
+    await user.type(startTimeSelect, '23:15')
+    await user.type(endTimeSelect, '23:20')
 
-    expect(startTimeSelect).toHaveValue('9:43am')
-    expect(endTimeSelect).toHaveValue('9:43am')
+    expect(startTimeSelect).toHaveValue('23:15')
+    expect(endTimeSelect).toHaveValue('23:20')
   })
 
   it('changes the field values and clear it', async () => {
@@ -137,10 +137,10 @@ describe('TasksPage', () => {
     await user.click(screen.getByRole('option', { name: 'Holidays' }))
 
     await user.click(startTimeSelect)
-    await user.click(screen.getByRole('option', { name: '12:00am' }))
+    await user.click(screen.getByRole('option', { name: '12:00' }))
 
     await user.click(endTimeSelect)
-    await user.click(screen.getByRole('option', { name: '1:00pm' }))
+    await user.click(screen.getByRole('option', { name: '13:00' }))
 
     await user.type(descriptionInput, 'description!')
 
@@ -150,8 +150,8 @@ describe('TasksPage', () => {
     await user.type(storyInput, 'story!')
 
     expect(projectSelect).toHaveValue('Holidays')
-    expect(startTimeSelect).toHaveValue('12:00am')
-    expect(endTimeSelect).toHaveValue('1:00pm')
+    expect(startTimeSelect).toHaveValue('12:00')
+    expect(endTimeSelect).toHaveValue('13:00')
     expect(descriptionInput).toHaveValue('description!')
     expect(taskTypeSelect).toHaveValue('mock task type')
     expect(storyInput).toHaveValue('story!')

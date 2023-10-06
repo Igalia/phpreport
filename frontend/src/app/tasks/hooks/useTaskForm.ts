@@ -25,12 +25,12 @@ export const useTaskForm = () => {
   })
 
   const onStartTimer = () => {
-    handleChange('startTime', format(new Date(), 'hh:mmaaa'))
+    handleChange('startTime', format(new Date(), 'HH:mm'))
     startTimer()
   }
 
   const onStopTimer = () => {
-    handleChange('endTime', format(new Date(), 'hh:mmaaa'))
+    handleChange('endTime', format(new Date(), 'HH:mm'))
     stopTimer()
   }
 

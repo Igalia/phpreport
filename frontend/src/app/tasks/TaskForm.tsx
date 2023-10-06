@@ -14,14 +14,10 @@ import { useTaskTypes } from './hooks/useTaskTypes'
 import { useTaskForm } from './hooks/useTaskForm'
 
 const timeOptions = () => {
-  const hours = Array.from({ length: 12 }, (_, i) => i + 1)
-  hours.unshift(hours.pop()!)
+  const hours = Array.from({ length: 24 }, (_, i) => i)
   const minutes = ['00', '15', '30', '45']
-  const meridians = ['am', 'pm']
 
-  const time = hours.flatMap((h) => minutes.map((m) => `${h}:${m}`))
-
-  return meridians.flatMap((meridian) => time.map((t) => `${t}${meridian}`))
+  return hours.flatMap((h) => minutes.map((m) => `${h}:${m}`))
 }
 
 export const TaskForm = () => {
