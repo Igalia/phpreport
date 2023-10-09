@@ -37,6 +37,10 @@ describe('TasksPage', () => {
     jest.setSystemTime(new Date('January 01, 2023 23:15:00'))
   })
 
+  afterEach(() => {
+    jest.clearAllTimers()
+  })
+
   describe('when the timer is activated', () => {
     it('activates by clicking Start Timer', async () => {
       const { user } = setup(<TaskForm />, { advanceTimers: jest.advanceTimersByTime })
