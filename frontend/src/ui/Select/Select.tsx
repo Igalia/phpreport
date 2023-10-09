@@ -4,37 +4,85 @@ import Box from '@mui/joy/Box'
 import { styled } from '@mui/joy/styles'
 import { AutocompleteProps } from '@mui/joy/Autocomplete'
 
-type Option = {
-  value: string
+type SelectProps<T> = {
   label: string
-}
+} & AutocompleteProps<T, undefined, undefined, undefined>
 
-type SelectProps = {
+type FreeSoloProps = {
   label: string
-  value?: string
-} & Omit<AutocompleteProps<Option, undefined, undefined, undefined>, 'value'>
+} & AutocompleteProps<string, undefined, undefined, true>
 
-export const Select = ({ options, sx, onChange, name, value, label, loading }: SelectProps) => {
+export const Select = <T,>({
+  options,
+  sx,
+  onChange,
+  name,
+  value,
+  label,
+  loading,
+  getOptionLabel,
+  disabled
+}: SelectProps<T>) => {
   const selectButtonId = `select-button-${name}`
   const selectLabelId = `select-label-${name}`
 
   return (
-    <Box sx={{ position: 'relative' }}>
+    <Box sx={{ position: 'relative', zIndex: 0 }}>
       <StyledLabel htmlFor={selectButtonId} id={selectLabelId}>
         {label}
       </StyledLabel>
-      <Autocomplete<Option>
+      <Autocomplete
+        id={selectButtonId}
         onChange={onChange}
         name={name}
-        value={options.find((option) => option.value === value) || null}
+        value={value}
         sx={sx}
         options={options}
         autoSelect
         autoHighlight
-        isOptionEqualToValue={(option, value) => option.value === value.value}
         slotProps={{ input: { sx: { pt: '10px' } } }}
         loading={loading}
-      ></Autocomplete>
+        getOptionLabel={getOptionLabel}
+        disabled={disabled}
+      />
+    </Box>
+  )
+}
+
+export const FreeSoloSelect = ({
+  options,
+  sx,
+  onChange,
+  name,
+  value,
+  label,
+  loading,
+  getOptionLabel,
+  disabled
+}: FreeSoloProps) => {
+  const selectButtonId = `select-button-${name}`
+  const selectLabelId = `select-label-${name}`
+
+  return (
+    <Box sx={{ position: 'relative', zIndex: 0 }}>
+      <StyledLabel htmlFor={selectButtonId} id={selectLabelId}>
+        {label}
+      </StyledLabel>
+      <Autocomplete
+        id={selectButtonId}
+        onChange={onChange}
+        name={name}
+        value={value}
+        sx={sx}
+        options={options}
+        autoSelect
+        autoHighlight
+        slotProps={{ input: { sx: { pt: '10px' } } }}
+        loading={loading}
+        getOptionLabel={getOptionLabel}
+        disabled={disabled}
+        freeSolo
+      />
     </Box>
   )
 }
