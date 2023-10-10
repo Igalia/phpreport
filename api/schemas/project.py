@@ -5,7 +5,7 @@ from typing import Optional
 
 
 class Project(BaseModel):
-    id: str
+    id: int
     is_active: bool
     init: Optional[date] = None
     end: Optional[date] = None
