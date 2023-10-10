@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers.v1 import projects, timelog
+from routers.v1 import projects, timelog, users
 
 from db.db_connection import engine
 from db.base_class import Base
@@ -30,6 +30,7 @@ app.add_middleware(
 
 app.include_router(projects.router, prefix="/v1")
 app.include_router(timelog.router, prefix="/v1")
+app.include_router(users.router, prefix="/v1")
 
 
 @app.get("/")
