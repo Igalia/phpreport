@@ -2,11 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers.v1 import projects, timelog, users
 
-from db.db_connection import engine
-from db.base_class import Base
-
-Base.metadata.create_all(bind=engine)
-
 app = FastAPI(title="PhpReport API")
 
 origins = [
