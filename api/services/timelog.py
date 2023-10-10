@@ -5,7 +5,7 @@ from fastapi.encoders import jsonable_encoder
 
 from services.main import AppService
 from models.timelog import TaskType, Template, Task
-from schemas.timelog import TemplateNew, TemplateUpdate, TaskNew
+from schemas.timelog import TemplateNew, TemplateUpdate, TaskNew, TaskUpdate
 from schemas.validation import ValidatedObject
 
 
@@ -69,6 +69,10 @@ class TaskService(AppService):
         )
         return tasks
 
+    def get_task(self, task_id: int) -> Task:
+        task = self.db.query(Task).where(Task.id == task_id).first() or None
+        return task
+
     def create_task(self, task: TaskNew) -> Task:
         new_task = Task(
             date=task.date,
@@ -86,9 +90,25 @@ class TaskService(AppService):
         self.db.refresh(new_task)
         return new_task
 
+    def update_task(self, existing_task: Task, task_updates: TaskUpdate) -> Task:
+        existing_data = jsonable_encoder(existing_task)
+        update_data = task_updates.dict(exclude_unset=True)
+        for field in existing_data:
+            if field in update_data:
+                setattr(existing_task, field, update_data[field])
+        self.db.add(existing_task)
+        self.db.commit()
+        self.db.refresh(existing_task)
+        return existing_task
+
     def check_task_for_overlap(self, task: Task) -> ValidatedObject:
         validated_task = ValidatedObject(is_valid=True, message="")
-        user_tasks_for_day = self.db.query(Task).where(Task.user_id == task.user_id, Task.date == task.date).all() or []
+        user_tasks_for_day = self.db.query(Task).where(Task.user_id == task.user_id, Task.date == task.date)
+        # if existing task is being validated, we don't want to check it for overlap with itself
+        if hasattr(task, "id"):
+            user_tasks_for_day = user_tasks_for_day.filter(Task.id != task.id).all() or []
+        else:
+            user_tasks_for_day = user_tasks_for_day.all() or []
         if len(user_tasks_for_day) <= 0:
             return validated_task
         for user_task_for_day in user_tasks_for_day:
