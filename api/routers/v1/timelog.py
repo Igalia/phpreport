@@ -1,6 +1,7 @@
 from typing import List
 from datetime import date
 from fastapi import APIRouter, Depends, Query, HTTPException
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
 from schemas.timelog import (
@@ -10,6 +11,7 @@ from schemas.timelog import (
     TemplateUpdate as TemplateUpdateSchema,
     Task as TaskSchema,
     TaskNew as TaskNewSchema,
+    TaskUpdate as TaskUpdateSchema,
 )
 from schemas.validation import ValidatedObject
 from services.timelog import TaskTypeService, TemplateService, TaskService
@@ -18,6 +20,7 @@ from services.config import ConfigService
 from db.db_connection import get_db
 from auth.auth_bearer import BearerToken
 from dependencies import get_current_user, AppUser
+from helpers.time import time_string_to_int
 
 router = APIRouter(
     prefix="/timelog",
@@ -54,8 +57,8 @@ async def add_template(
     - **story**: the task story
     - **description**: the task description
     - **task type**: the task type
-    - **start time**: the task start time
-    - **end time**: the task end time
+    - **start time**: the task start time in 24h time notation (HH:mm)
+    - **end time**: the task end time in 24h time notation (HH:mm)
     - **user id**: the user id (global templates should leave this null; user template should fill)
     - **project id**: the project id
     - **is global***: whether or not this template is global for all users (required)
@@ -86,8 +89,8 @@ async def update_template(
     - **user id**: the user id (global templates should leave this null; user template should fill)
     - **project id**: the project id
     - **is global**: whether or not this template is global for all users (required)
-    - **start time**: the task start time
-    - **end time**: the task end time
+    - **start time**: the task start time in 24h time notation (HH:mm)
+    - **end time**: the task end time in 24h time notation (HH:mm)
     \f
     :param item: User input.
     """
@@ -127,9 +130,9 @@ async def add_task(task: TaskNewSchema, current_user=Depends(get_current_user), 
     - **story**: the task story
     - **description**: the task description
     - **task type**: the task type
-    - **date**: the task date
-    - **start time**: the task start time
-    - **end time**: the task end time
+    - **date**: the task date (YYYY-MM-DD)
+    - **start time**: the task start time in 24h time notation (HH:mm)
+    - **end time**: the task end time in 24h time notation (HH:mm)
 
     \f
     :param item: User input.
@@ -143,22 +146,62 @@ async def add_task(task: TaskNewSchema, current_user=Depends(get_current_user), 
     return result
 
 
-def validate_task(task: TaskSchema, db: Session):
+@router.put("/tasks/{task_id}", response_model=TaskSchema)
+async def update_task(
+    task_id: int, task: TaskUpdateSchema, current_user=Depends(get_current_user), db: Session = Depends(get_db)
+):
+    """
+    Update an task with any of the following data:
+
+    - **user id**: the user id
+    - **project_id**: the project the task is associated with
+    - **story**: the task story
+    - **description**: the task description
+    - **task type**: the task type
+    - **date**: the task date (YYYY-MM-DD)
+    - **start time**: the task start time in 24h time notation (HH:mm)
+    - **end time**: the task end time in 24h time notation (HH:mm)
+
+    \f
+    :param item: User input.
+    """
+    existing_task = TaskService(db).get_task(task_id)
+    if not existing_task:
+        raise HTTPException(status_code=404, detail=f"Task with id {task_id} not found")
+    if current_user.id != existing_task.user_id:
+        raise HTTPException(status_code=403, detail="You are not authorized to update tasks for this user.")
+    if task.start_time:
+        task.init = time_string_to_int(task.start_time)
+    if task.end_time:
+        task.end = time_string_to_int(task.end_time)
+    existing_data = jsonable_encoder(existing_task)
+    update_data = task.dict(exclude_unset=True)
+    for field in existing_data:
+        if field in update_data:
+            setattr(existing_task, field, update_data[field])
+    validated_task = validate_task(existing_task, db)
+    if not validated_task.is_valid:
+        raise HTTPException(status_code=422, detail=validated_task.message)
+    result = TaskService(db).update_task(existing_task, task)
+    return result
+
+
+def validate_task(task_to_validate: TaskSchema, db: Session):
     validated = ValidatedObject(is_valid=False, message="")
-    user_can_create_tasks = ConfigService(db).can_user_edit_task(task.date)
+    user_can_create_tasks = ConfigService(db).can_user_edit_task(task_to_validate.date)
     if not user_can_create_tasks:
         validated.message += "You cannot create or edit a task for this date - it is outside the allowed range."
         return validated
-    if task.task_type:
-        task_type_valid = TaskTypeService(db).slug_is_valid(task.task_type)
+    if task_to_validate.task_type:
+        task_type_valid = TaskTypeService(db).slug_is_valid(task_to_validate.task_type)
         if not task_type_valid:
-            validated.message += f"Task type {task.task_type} does not exist."
+            validated.message += f"Task type {task_to_validate.task_type} does not exist."
             return validated
-    project_active = ProjectService(db).is_project_active(task.project_id)
+    project_active = ProjectService(db).is_project_active(task_to_validate.project_id)
     if not project_active:
         validated.message += "You cannot add a task for an inactive project."
         return validated
-    overlapping_tasks = TaskService(db).check_task_for_overlap(task)
+    overlapping_tasks = TaskService(db).check_task_for_overlap(task_to_validate)
     if not overlapping_tasks.is_valid:
         validated.message += overlapping_tasks.message
         return validated

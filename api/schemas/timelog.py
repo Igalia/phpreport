@@ -107,8 +107,8 @@ class TaskNew(TaskBase):
     date: date
     project_id: int
     user_id: int
-    start_time: Annotated[str, StringConstraints(pattern=r"^[0-9]{2}:[0-9]{2}")]
-    end_time: Annotated[str, StringConstraints(pattern=r"^[0-9]{2}:[0-9]{2}")]
+    start_time: Annotated[str, StringConstraints(pattern=r"^([01]?[0-9]|2[0-3]):[0-5][0-9]")]
+    end_time: Annotated[str, StringConstraints(pattern=r"^([01]?[0-9]|2[0-3]):[0-5][0-9]")]
 
     @computed_field
     @property
@@ -121,11 +121,21 @@ class TaskNew(TaskBase):
         return time_string_to_int(self.end_time)
 
 
+class TaskUpdate(TaskBase):
+    date: Optional[date] = None
+    start_time: Optional[Annotated[str, StringConstraints(pattern=r"^([01]?[0-9]|2[0-3]):[0-5][0-9]")]] = None
+    end_time: Optional[Annotated[str, StringConstraints(pattern=r"^([01]?[0-9]|2[0-3]):[0-5][0-9]")]] = None
+    project_name: Optional[str] = None
+    init: Optional[int] = None
+    end: Optional[int] = None
+
+
 # Properties shared by models stored in db
 class TaskInDb(TaskBase):
     id: int
     init: int
     end: int
+    date: date
     model_config = ConfigDict(from_attributes=True)
 
 
