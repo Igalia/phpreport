@@ -21,5 +21,7 @@ jobs:
         run: docker exec -t phpreport-api tox -e flake8
       - name: Run black check
         run: docker exec -t phpreport-api tox -e black
+      - name: Run API tests
+        run: docker exec -t phpreport-api tox -e pytest
       - name: Run jest
         run: docker exec -t phpreport-frontend npm run test
