@@ -1,6 +1,7 @@
 'use client'
 
 import Stack from '@mui/joy/Stack'
+import Box from '@mui/joy/Box'
 import Button from '@mui/joy/Button'
 import { Select, FreeSoloSelect } from '@/ui/Select/Select'
 import { Input } from '@/ui/Input/Input'
@@ -8,6 +9,7 @@ import { TextArea } from '@/ui/TextArea/TextArea'
 import Typography from '@mui/joy/Typography'
 import Divider from '@mui/joy/Divider'
 import { Play24Filled, RecordStop24Regular } from '@fluentui/react-icons'
+import Alert from '@mui/joy/Alert'
 
 import { useProjects } from './hooks/useProjects'
 import { useTaskTypes } from './hooks/useTaskTypes'
@@ -32,7 +34,9 @@ export const TaskForm = () => {
     loggedTime,
     isTimerRunning,
     selectStartTime,
-    formRef
+    formRef,
+    submitAlert,
+    closeAlert
   } = useTaskForm()
 
   return (
@@ -154,6 +158,28 @@ export const TaskForm = () => {
           </Button>
         </Stack>
       </Stack>
+      {submitAlert.showAlert && (
+        <Box
+          sx={{
+            position: 'fixed',
+            bottom: { xs: '20px', sm: '50px' },
+            right: { xs: '20px', sm: '100px' },
+            zIndex: 9,
+            width: '300px'
+          }}
+        >
+          <Alert
+            color={submitAlert.type}
+            endDecorator={
+              <Button onClick={closeAlert} size="sm" variant="solid" color={submitAlert.type}>
+                Close
+              </Button>
+            }
+          >
+            {submitAlert.message}
+          </Alert>
+        </Box>
+      )}
     </Stack>
   )
 }

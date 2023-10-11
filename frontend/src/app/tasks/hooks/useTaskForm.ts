@@ -1,14 +1,25 @@
 import { useForm } from '@/hooks/useForm/useForm'
 import { useTimer } from '@/hooks/useTimer/useTimer'
 import { format } from 'date-fns'
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useState } from 'react'
 import { useAddTask } from './useTask'
 import { useCurrentUser } from '@/app/user/hooks/useCurrentUser'
 import { TaskIntent } from '@/domain/Task'
 
+type Alert = {
+  showAlert: boolean
+  message: string
+  type?: 'warning' | 'success'
+}
+
 export const useTaskForm = () => {
   const formRef = useRef<HTMLFormElement>(null)
   const { user } = useCurrentUser()
+  const { addTask } = useAddTask()
+  const [submitAlert, setSubmitAlert] = useState<Alert>({
+    showAlert: false,
+    message: 'test'
+  })
 
   const { startTimer, stopTimer, seconds, minutes, hours, isTimerRunning } = useTimer()
   const { formState, handleChange, resetForm } = useForm<TaskIntent>({
@@ -27,11 +38,31 @@ export const useTaskForm = () => {
     handleChange('userId', user.id)
   }, [handleChange, user])
 
-  const { addTask } = useAddTask()
+  const closeAlert = () =>
+    setSubmitAlert({
+      showAlert: false,
+      message: ''
+    })
 
   const handleSubmit = useCallback(() => {
-    addTask(formState)
+    addTask(formState, {
+      onSuccess: () => {
+        setSubmitAlert({ showAlert: true, message: 'Task successfully added', type: 'success' })
+      },
+      onError: () => {
+        setSubmitAlert({ showAlert: true, message: 'Failed to add task', type: 'warning' })
+      }
+    })
   }, [addTask, formState])
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout | undefined
+    if (submitAlert.showAlert) {
+      timeoutId = setTimeout(closeAlert, 15000)
+    }
+
+    return () => clearTimeout(timeoutId)
+  }, [submitAlert])
 
   const setDate = () => handleChange('date', format(new Date(), 'yyyy-MM-dd'))
 
@@ -77,6 +108,8 @@ export const useTaskForm = () => {
     isTimerRunning,
     selectStartTime,
     handleSubmit,
-    formRef
+    formRef,
+    submitAlert,
+    closeAlert
   }
 }
