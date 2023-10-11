@@ -28,6 +28,6 @@ app.include_router(timelog.router, prefix="/v1")
 app.include_router(users.router, prefix="/v1")
 
 
-@app.get("/")
+@app.get("/status")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "OK"}
