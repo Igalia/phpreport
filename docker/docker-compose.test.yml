@@ -15,8 +15,6 @@ services:
     build:
       context: ../
       dockerfile: docker/dev.app.Dockerfile
-    env_file:
-      - ../.env.test
     container_name: phpreport-app
     command: bash -c "cp .env.test .env && php -S 0.0.0.0:8000"
     ports:
@@ -30,6 +28,7 @@ services:
     container_name: phpreport-api
     env_file:
       - ../.env.test
+    command: bash -c "env > .env && uvicorn main:app --host 0.0.0.0 --port 8555"
     ports:
       - "8555:8555"
     depends_on:
