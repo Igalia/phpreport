@@ -3,22 +3,15 @@ import { useTimer } from '@/hooks/useTimer/useTimer'
 import { format } from 'date-fns'
 import { useEffect, useRef, useCallback } from 'react'
 import { useAddTask } from './useTask'
-
-type Task = {
-  projectId: string
-  taskType: string
-  story: string
-  description: string
-  startTime: string
-  endTime: string
-  date: string
-}
+import { useCurrentUser } from '@/app/user/hooks/useCurrentUser'
+import { TaskIntent } from '@/domain/Task'
 
 export const useTaskForm = () => {
   const formRef = useRef<HTMLFormElement>(null)
+  const { user } = useCurrentUser()
 
   const { startTimer, stopTimer, seconds, minutes, hours, isTimerRunning } = useTimer()
-  const { formState, handleChange, resetForm } = useForm<Task>({
+  const { formState, handleChange, resetForm } = useForm<TaskIntent>({
     initialValues: {
       projectId: '',
       taskType: '',
@@ -30,14 +23,17 @@ export const useTaskForm = () => {
     }
   })
 
+  useEffect(() => {
+    handleChange('userId', user.id)
+  }, [handleChange, user])
+
   const { addTask } = useAddTask()
 
   const handleSubmit = useCallback(() => {
-    console.log({ formState })
-    // addTask({ token, task: formState })
-  }, [formState])
+    addTask(formState)
+  }, [addTask, formState])
 
-  const setDate = () => handleChange('date', format(new Date(), 'yyyy-mm-dd'))
+  const setDate = () => handleChange('date', format(new Date(), 'yyyy-MM-dd'))
 
   const onStartTimer = () => {
     handleChange('startTime', format(new Date(), 'HH:mm'))
@@ -57,15 +53,13 @@ export const useTaskForm = () => {
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      event.preventDefault()
       if (event.key === 's' && event.ctrlKey) {
+        event.preventDefault()
         formRef.current?.requestSubmit()
       }
     }
-    // attach the event listener
     document.addEventListener('keydown', handleKeyPress)
 
-    // remove the event listener
     return () => {
       document.removeEventListener('keydown', handleKeyPress)
     }
