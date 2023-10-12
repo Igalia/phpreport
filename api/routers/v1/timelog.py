@@ -200,6 +200,17 @@ async def update_task(
     return result
 
 
+@router.delete("/tasks/{task_id}", status_code=204)
+async def delete_task(task_id: int, current_user=Depends(get_current_user), db: Session = Depends(get_db)):
+    task = TaskService(db).get_task(task_id)
+    if not task:
+        raise HTTPException(status_code=404, detail=f"Task with id {task_id} not found")
+    if current_user.id != task.user_id:
+        raise HTTPException(status_code=403, detail="You are not authorized to delete tasks for this user")
+    TaskService(db).delete_task(task_id)
+    return
+
+
 def validate_task(task_to_validate: TaskSchema, db: Session):
     validated = ValidatedObject(is_valid=False, message="")
     user_can_create_tasks = ConfigService(db).can_user_edit_task(task_to_validate.date)

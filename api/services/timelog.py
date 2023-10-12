@@ -106,6 +106,11 @@ class TaskService(AppService):
         self.db.refresh(existing_task)
         return existing_task
 
+    def delete_task(self, task_id: int):
+        task = self.get_task(task_id)
+        self.db.delete(task)
+        self.db.commit()
+
     def check_task_for_overlap(self, task: Task) -> ValidatedObject:
         validated_task = ValidatedObject(is_valid=True, message="")
         user_tasks_for_day = self.db.query(Task).where(Task.user_id == task.user_id, Task.date == task.date)
