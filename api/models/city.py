@@ -1,5 +1,4 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Date
-import sqlalchemy as sa
 from sqlalchemy.schema import UniqueConstraint
 
 from db.base_class import Base
@@ -9,7 +8,6 @@ class City(Base):
     id = Column(
         Integer,
         primary_key=True,
-        server_default=sa.text("nextval('city_id_seq'::regclass)"),
         autoincrement=True,
         nullable=False,
     )

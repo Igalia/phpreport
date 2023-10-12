@@ -1,5 +1,4 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
-import sqlalchemy as sa
 
 from db.base_class import Base
 
@@ -8,7 +7,6 @@ class Customer(Base):
     id = Column(
         Integer,
         primary_key=True,
-        server_default=sa.text("nextval('customer_id_seq'::regclass)"),
         autoincrement=True,
         nullable=False,
     )
