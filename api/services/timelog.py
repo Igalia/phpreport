@@ -56,6 +56,11 @@ class TemplateService(AppService):
         self.db.refresh(existing_template)
         return existing_template
 
+    def delete_template(self, template_id: int):
+        template = self.get_template(template_id)
+        self.db.delete(template)
+        self.db.commit()
+
 
 class TaskService(AppService):
     def get_user_tasks(self, user_id: int, offset: int, limit: int, start: date, end: date) -> List[Task]:
