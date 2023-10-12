@@ -1,5 +1,4 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Date, Double
-import sqlalchemy as sa
 from sqlalchemy.orm import relationship, Mapped
 from sqlalchemy.ext.hybrid import hybrid_property
 from models.customer import Customer
@@ -11,7 +10,6 @@ class Project(Base):
     id = Column(
         Integer,
         primary_key=True,
-        server_default=sa.text("nextval('project_id_seq'::regclass)"),
         autoincrement=True,
         nullable=False,
     )
