@@ -10,7 +10,7 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     password = Column(String(length=256), nullable=True)
-    login = Column(String(length=20), nullable=False, unique=True)
+    login = Column(String(length=100), nullable=False, unique=True)
 
 
 class UserGroup(Base):
