@@ -104,6 +104,20 @@ async def update_template(
     return result
 
 
+@router.delete("/templates/{template_id}", status_code=204)
+async def delete_template(template_id: int, current_user=Depends(get_current_user), db: Session = Depends(get_db)):
+    template = TemplateService(db).get_template(template_id)
+    if not template:
+        raise HTTPException(status_code=404, detail=f"Template with id {template.id} not found.")
+    if template.is_global and "manager" not in current_user.roles:
+        raise HTTPException(status_code=403, detail="You are not authorized to delete global templates")
+    else:
+        if template.user_id and template.user_id != current_user.id:
+            raise HTTPException(status_code=403, detail="You are not authorized to delete templates for this user")
+    TemplateService(db).delete_template(template_id)
+    return
+
+
 @router.get("/tasks", response_model=List[TaskSchema])
 async def get_user_tasks(
     user_id: int,
