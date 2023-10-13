@@ -1,22 +1,12 @@
 import { TaskForm } from '../TaskForm'
 import { screen, setup, act } from '@/test-utils/test-utils'
+import { useAddTask } from '../hooks/useTask'
 
 jest.mock('../../user/hooks/useCurrentUser', () => ({
   useCurrentUser: () => ({ user: { id: 0 } })
 }))
 
-jest.mock('../../../ui/Alert/useAlert', () => ({
-  useAlert: () => ({
-    showSuccess: () => {},
-    showError: () => {}
-  })
-}))
-
-jest.mock('../hooks/useTask', () => ({
-  useAddTask: () => ({
-    addTask: () => {}
-  })
-}))
+jest.mock('../hooks/useTask')
 
 jest.mock('../hooks/useProjects', () => ({
   useProjects: () => ({
@@ -49,6 +39,8 @@ jest.mock('../hooks/useTaskTypes', () => ({
 
 describe('TasksPage', () => {
   beforeEach(() => {
+    ;(useAddTask as jest.Mock).mockReturnValue({ addTask: () => {} })
+
     jest.useFakeTimers()
     jest.spyOn(global, 'setInterval')
     jest.setSystemTime(new Date('January 01, 2023 23:15:00'))
@@ -185,5 +177,41 @@ describe('TasksPage', () => {
     expect(descriptionInput).toHaveValue('')
     expect(taskTypeSelect).toHaveValue('')
     expect(storyInput).toHaveValue('')
+  })
+
+  it('submits the form with the correct data', async () => {
+    const addTask = jest.fn()
+
+    ;(useAddTask as jest.Mock).mockReturnValue({ addTask })
+    const { user } = setup(<TaskForm />, { advanceTimers: jest.advanceTimersByTime })
+
+    await user.click(screen.getByRole('combobox', { name: 'Select project' }))
+    await user.click(screen.getByRole('option', { name: 'Holidays' }))
+
+    await user.click(screen.getByRole('combobox', { name: 'From' }))
+    await user.click(screen.getByRole('option', { name: '12:00' }))
+
+    await user.click(screen.getByRole('combobox', { name: 'To' }))
+    await user.click(screen.getByRole('option', { name: '13:00' }))
+
+    await user.type(screen.getByRole('textbox', { name: 'Task description' }), 'description!')
+
+    await user.click(screen.getByRole('combobox', { name: 'Select task type' }))
+    await user.click(screen.getByRole('option', { name: 'mock task type' }))
+
+    await user.type(screen.getByRole('textbox', { name: 'Story' }), 'story!')
+
+    await user.click(screen.getByRole('button', { name: 'Save' }))
+
+    expect(addTask).toHaveBeenCalledWith({
+      date: '2023-01-01',
+      description: 'description!',
+      endTime: '13:00',
+      projectId: '1',
+      startTime: '12:00',
+      story: 'story!',
+      taskType: 'mock-test',
+      userId: 0
+    })
   })
 })

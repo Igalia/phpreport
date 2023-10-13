@@ -5,13 +5,11 @@ import { useEffect, useRef, useCallback } from 'react'
 import { useAddTask } from './useTask'
 import { useCurrentUser } from '@/app/user/hooks/useCurrentUser'
 import { TaskIntent } from '@/domain/Task'
-import { useAlert } from '@/ui/Alert/useAlert'
 
 export const useTaskForm = () => {
   const formRef = useRef<HTMLFormElement>(null)
   const { user } = useCurrentUser()
   const { addTask } = useAddTask()
-  const { showError, showSuccess } = useAlert()
 
   const { startTimer, stopTimer, seconds, minutes, hours, isTimerRunning } = useTimer()
   const { formState, handleChange, resetForm } = useForm<TaskIntent>({
@@ -31,15 +29,8 @@ export const useTaskForm = () => {
   }, [handleChange, user.id])
 
   const handleSubmit = useCallback(() => {
-    addTask(formState, {
-      onSuccess: () => {
-        showSuccess('Task added succesfully')
-      },
-      onError: () => {
-        showError('Failed to add task')
-      }
-    })
-  }, [addTask, formState, showError, showSuccess])
+    addTask(formState)
+  }, [addTask, formState])
 
   const setDate = () => handleChange('date', format(new Date(), 'yyyy-MM-dd'))
 
