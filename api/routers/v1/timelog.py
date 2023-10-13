@@ -217,6 +217,8 @@ def validate_task(task_to_validate: TaskSchema, db: Session):
     if not user_can_create_tasks:
         validated.message += "You cannot create or edit a task for this date - it is outside the allowed range."
         return validated
+    if task_to_validate.task_type == "":
+        task_to_validate.task_type = None
     if task_to_validate.task_type:
         task_type_valid = TaskTypeService(db).slug_is_valid(task_to_validate.task_type)
         if not task_type_valid:
