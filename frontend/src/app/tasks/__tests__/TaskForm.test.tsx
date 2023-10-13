@@ -1,6 +1,23 @@
 import { TaskForm } from '../TaskForm'
 import { screen, setup, act } from '@/test-utils/test-utils'
 
+jest.mock('../../user/hooks/useCurrentUser', () => ({
+  useCurrentUser: () => ({ user: { id: 0 } })
+}))
+
+jest.mock('../../../ui/Alert/useAlert', () => ({
+  useAlert: () => ({
+    showSuccess: () => {},
+    showError: () => {}
+  })
+}))
+
+jest.mock('../hooks/useTask', () => ({
+  useAddTask: () => ({
+    addTask: () => {}
+  })
+}))
+
 jest.mock('../hooks/useProjects', () => ({
   useProjects: () => ({
     projects: [

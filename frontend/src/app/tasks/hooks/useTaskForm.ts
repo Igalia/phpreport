@@ -28,7 +28,7 @@ export const useTaskForm = () => {
 
   useEffect(() => {
     handleChange('userId', user.id)
-  }, [handleChange, user])
+  }, [handleChange, user.id])
 
   const handleSubmit = useCallback(() => {
     addTask(formState, {
