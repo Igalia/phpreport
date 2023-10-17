@@ -9,8 +9,9 @@ import Typography from '@mui/joy/Typography'
 import Divider from '@mui/joy/Divider'
 import { Play24Filled, RecordStop24Regular } from '@fluentui/react-icons'
 
-import { useProjects } from './hooks/useProjects'
-import { useTaskTypes } from './hooks/useTaskTypes'
+import { Project } from '@/domain/Project'
+import { TaskType } from '@/domain/TaskType'
+
 import { useTaskForm } from './hooks/useTaskForm'
 
 const timeOptions = () => {
@@ -20,18 +21,21 @@ const timeOptions = () => {
   return hours.flatMap((h) => minutes.map((m) => `${h}:${m}`))
 }
 
-export const TaskForm = () => {
-  const { projects, isLoading: isProjectsLoading } = useProjects()
-  const taskTypes = useTaskTypes()
+type TaskFormProps = {
+  projects: Array<Project>
+  taskTypes: Array<TaskType>
+}
+
+export const TaskForm = ({ projects, taskTypes }: TaskFormProps) => {
   const {
     task,
     handleChange,
-    handleSubmit,
     resetForm,
     toggleTimer,
     loggedTime,
     isTimerRunning,
     selectStartTime,
+    handleSubmit,
     formRef
   } = useTaskForm()
 
@@ -53,7 +57,6 @@ export const TaskForm = () => {
         name="projectId"
         label="Select project"
         options={projects}
-        loading={isProjectsLoading}
         getOptionLabel={(option) => option.description}
         required
       />
