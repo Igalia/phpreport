@@ -35,5 +35,6 @@ vendor
 __pycache__
 .tox
 *.egg-info
+.pytest_cache
 
 web/v2/assets/
