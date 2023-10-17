@@ -1,13 +1,13 @@
-from os import getenv
+from decouple import config
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
 def get_url():
-    user = getenv("DB_USER", "phpreport")
-    password = getenv("DB_PASSWORD", "phpreport")
-    server = getenv("DB_HOST", "localhost")
-    db = getenv("DB_NAME", "phpreport")
+    user = config("DB_USER")
+    password = config("DB_PASSWORD")
+    server = config("DB_HOST")
+    db = config("DB_NAME")
     return f"postgresql://{user}:{password}@{server}/{db}"
 
 
