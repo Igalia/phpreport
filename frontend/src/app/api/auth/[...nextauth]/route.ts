@@ -10,9 +10,7 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   callbacks: {
-    async redirect({ url, baseUrl }) {
-      console.log({ url, baseUrl })
-
+    async redirect({ baseUrl }) {
       return `${baseUrl}/web/v2/`
     },
     async session({ session, token }) {
