@@ -1,28 +1,19 @@
-//import config from './config';
-import jwtDecode from 'jwt-decode'
-import axios from 'axios'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { validateToken } from './validateToken'
+import { RequestInit } from 'next/dist/server/web/spec-extension/request'
 
-type DecodedAcessToken = {
-  exp: number
-}
+export const apiClient = async (url: string, config: RequestInit = {}) => {
+  const session = await getServerSession(authOptions)
 
-export const apiClient = (token: string) => {
-  const decodedAccessToken: DecodedAcessToken = jwtDecode(token)
-  const isAccessTokenValid = decodedAccessToken.exp * 1000 > new Date().getTime()
+  const isAccessTokenValid = session && validateToken(session.accessToken)
 
-  const initialConfig = {
-    baseURL: process.env.NEXT_PUBLIC_API_BASE
-  }
-  const client = axios.create(initialConfig)
   if (isAccessTokenValid) {
-    console.log('token is valid')
-    client.interceptors.request.use((config) => {
-      config.headers['Authorization'] = `Bearer ${token}`
-      return config
-    })
-  } else {
-    console.log('your login session is not valid')
-    //TODO: do something more useful here
+    config.headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${session.accessToken}`
+    }
   }
-  return client
+
+  return fetch(`${process.env.PUBLIC_API_BASE}${url}`, config)
 }
