@@ -7,4 +7,5 @@ def time_string_to_int(time_string: str) -> int:
 
 
 def int_to_time_string(time_minutes: int) -> str:
-    return str(timedelta(minutes=time_minutes))
+    # Drop the seconds as the default format we are using is HH:mm
+    return str(timedelta(minutes=time_minutes))[:-3]
