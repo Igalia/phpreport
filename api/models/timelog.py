@@ -95,11 +95,11 @@ class Template(Base):
 
     @hybrid_property
     def start_time(self):
-        return int_to_time_string(self.init) if self.init else None
+        return int_to_time_string(self.init) if self.init is not None else None
 
     @hybrid_property
     def end_time(self):
-        return int_to_time_string(self.end) if self.end else None
+        return int_to_time_string(self.end) if self.end is not None else None
 
 
 class TotalHoursOverride(Base):
