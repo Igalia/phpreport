@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET
   })
 
-  const isAccessTokenValid = session && validateToken(session.accessToken)
+  const isAccessTokenValid = session?.accessToken && validateToken(session.accessToken)
 
   if (!isAccessTokenValid && isProtected) {
     return NextResponse.redirect(new URL('/web/v2/auth/signin', request.url))

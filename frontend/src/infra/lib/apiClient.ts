@@ -6,7 +6,7 @@ import { RequestInit } from 'next/dist/server/web/spec-extension/request'
 export const apiClient = async (url: string, config: RequestInit = {}) => {
   const session = await getServerSession(authOptions)
 
-  const isAccessTokenValid = session && validateToken(session.accessToken)
+  const isAccessTokenValid = session?.accessToken && validateToken(session.accessToken)
 
   if (isAccessTokenValid) {
     config.headers = {
