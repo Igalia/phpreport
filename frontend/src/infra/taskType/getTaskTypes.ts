@@ -1,4 +1,4 @@
-import { apiClient } from '@/infra/apiClient'
+import { apiClient } from '@/infra/lib/apiClient'
 import { TaskType } from '@/domain/TaskType'
 
 export const getTaskTypes = async (): Promise<Array<TaskType>> => {

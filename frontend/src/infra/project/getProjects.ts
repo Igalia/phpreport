@@ -1,4 +1,4 @@
-import { apiClient } from '@/infra/apiClient'
+import { apiClient } from '@/infra/lib/apiClient'
 import { Project } from '@/domain/Project'
 
 export const getProjects = async (): Promise<Array<Project>> => {

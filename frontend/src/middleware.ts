@@ -1,7 +1,7 @@
 import { getToken } from 'next-auth/jwt'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { validateToken } from './infra/validateToken'
+import { validateToken } from './infra/lib/validateToken'
 
 const protectedRoutes = ['/tasks']
 

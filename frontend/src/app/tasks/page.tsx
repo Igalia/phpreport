@@ -1,6 +1,6 @@
 import { TaskForm } from './TaskForm'
-import { getProjects } from './getProjects'
-import { getTaskTypes } from './getTaskTypes'
+import { getProjects } from '@/infra/project/getProjects'
+import { getTaskTypes } from '@/infra/taskType/getTaskTypes'
 
 export default async function Tasks() {
   const projectsData = getProjects()
