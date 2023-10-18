@@ -3,7 +3,6 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import { BaseLayout } from '@/ui/BaseLayout/BaseLayout'
 import { Providers } from './providers'
-import { Suspense } from 'react'
 
 const monaSans = localFont({
   src: '../assets/fonts/Mona-Sans.woff2',
@@ -20,9 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={monaSans.className}>
         <Providers>
-          <BaseLayout>
-            <Suspense fallback={<div>Loading!</div>}>{children}</Suspense>
-          </BaseLayout>
+          <BaseLayout>{children}</BaseLayout>
         </Providers>
       </body>
     </html>
