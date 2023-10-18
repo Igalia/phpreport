@@ -23,18 +23,29 @@ const timeOptions = () => {
 export const TaskForm = () => {
   const { projects, isLoading: isProjectsLoading } = useProjects()
   const taskTypes = useTaskTypes()
-  const { task, handleChange, resetForm, toggleTimer, loggedTime, isTimerRunning } = useTaskForm()
+  const {
+    task,
+    handleChange,
+    handleSubmit,
+    resetForm,
+    toggleTimer,
+    loggedTime,
+    isTimerRunning,
+    selectStartTime,
+    formRef
+  } = useTaskForm()
 
   return (
     <Stack
       onSubmit={(e) => {
         e.preventDefault()
-        console.log(task)
+        handleSubmit()
       }}
       component="form"
       maxWidth="558px"
       margin="0 auto"
       gap="16px"
+      ref={formRef}
     >
       <Select
         onChange={(_, option) => handleChange('projectId', option?.id || '')}
@@ -44,6 +55,7 @@ export const TaskForm = () => {
         options={projects}
         loading={isProjectsLoading}
         getOptionLabel={(option) => option.description}
+        required
       />
       <Stack flexDirection="row" gap="30px">
         <Button sx={{ width: '166px', display: 'flex', gap: '8px' }} onClick={toggleTimer}>
@@ -64,11 +76,12 @@ export const TaskForm = () => {
           value={task.startTime}
           onChange={(_, option) => {
             if (option) {
-              handleChange('startTime', option)
+              selectStartTime(option)
             }
           }}
           options={timeOptions()}
           disabled={isTimerRunning}
+          required
         />
         <FreeSoloSelect
           sx={{ width: '166px' }}
@@ -82,6 +95,7 @@ export const TaskForm = () => {
           }}
           options={timeOptions()}
           disabled={isTimerRunning}
+          required
         />
       </Stack>
       <Stack bgcolor="#EFEFF4" padding="26px 16px" borderRadius="8px">

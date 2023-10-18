@@ -21,7 +21,8 @@ export const Select = <T,>({
   label,
   loading,
   getOptionLabel,
-  disabled
+  disabled,
+  required
 }: SelectProps<T>) => {
   const selectButtonId = `select-button-${name}`
   const selectLabelId = `select-label-${name}`
@@ -44,6 +45,7 @@ export const Select = <T,>({
         loading={loading}
         getOptionLabel={getOptionLabel}
         disabled={disabled}
+        required={required}
       />
     </Box>
   )
@@ -58,7 +60,8 @@ export const FreeSoloSelect = ({
   label,
   loading,
   getOptionLabel,
-  disabled
+  disabled,
+  required
 }: FreeSoloProps) => {
   const selectButtonId = `select-button-${name}`
   const selectLabelId = `select-label-${name}`
@@ -81,6 +84,7 @@ export const FreeSoloSelect = ({
         loading={loading}
         getOptionLabel={getOptionLabel}
         disabled={disabled}
+        required={required}
         freeSolo
       />
     </Box>

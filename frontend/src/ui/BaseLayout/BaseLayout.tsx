@@ -4,6 +4,7 @@ import { styled } from '@mui/joy/styles'
 
 import { Sidebar } from '@/ui/Sidebar/Sidebar'
 import { ContentSidebar } from '@/ui/ContentSidebar/ContentSidebar'
+import { Alert } from '@/ui/Alert/Alert'
 
 export const BaseLayout = ({ children }: { children: React.ReactNode }) => {
   const [navBarExpanded, setNavBarExpanded] = useState(false)
@@ -34,6 +35,7 @@ export const BaseLayout = ({ children }: { children: React.ReactNode }) => {
       >
         <div style={{ color: 'black' }}>Right Sidebar</div>
       </ContentSidebar>
+      <Alert />
     </>
   )
 }
