@@ -51,19 +51,9 @@ async def add_template(
     template: TemplateNewSchema, current_user=Depends(get_current_user), db: Session = Depends(get_db)
 ):
     """
-    Create a template with all the information:
-
-    - **name***: each template must have a name
-    - **story**: the task story
-    - **description**: the task description
-    - **task type**: the task type
-    - **start time**: the task start time in 24h time notation (HH:mm)
-    - **end time**: the task end time in 24h time notation (HH:mm)
-    - **user id**: the user id (global templates should leave this null; user template should fill)
-    - **project id**: the project id
-    - **is global***: whether or not this template is global for all users (required)
-    \f
-    :param item: User input.
+    Create a user or global template. Required fields are: `name` and `is_global`.
+    In case the template is not global, the `user_id` field is also mandatory.
+    \nBoth `start` and `end` times are in 24h time notation (HH:mm).
     """
     validated_template = validate_template(template, db, current_user)
     if not validated_template.is_valid:
@@ -80,19 +70,9 @@ async def update_template(
     db: Session = Depends(get_db),
 ):
     """
-    Update a template with any of the following:
-
-    - **name**: each template must have a name
-    - **story**: the task story
-    - **description**: the task description
-    - **task type**: the task type
-    - **user id**: the user id (global templates should leave this null; user template should fill)
-    - **project id**: the project id
-    - **is global**: whether or not this template is global for all users (required)
-    - **start time**: the task start time in 24h time notation (HH:mm)
-    - **end time**: the task end time in 24h time notation (HH:mm)
-    \f
-    :param item: User input.
+    Update a template. Required fields are: `name` and `is_global`.
+    In case the template is not global, the `user_id` field is also mandatory.
+    \nBoth `start` and `end` times are in 24h time notation (HH:mm).
     """
     existing_template = TemplateService(db).get_template(template_id)
     if not existing_template:
