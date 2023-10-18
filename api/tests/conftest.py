@@ -4,6 +4,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import sessionmaker
 
 from api.main import app
+from auth.auth_handler import create_access_token
 from db import base  # noqa
 from db.base_class import Base
 from db.db_connection import engine
@@ -49,3 +50,19 @@ def init_db():
     yield
 
     db.close()
+
+
+@pytest.fixture(scope="module")
+def get_regular_user_token_headers(client: TestClient) -> Dict[str, str]:
+    user = {
+        "aud": "account",
+        "roles": ["Regular User"],
+        "name": "Yaphit",
+        "preferred_username": "user",
+        "given_name": "Yaphit",
+        "family_name": "Green",
+        "email": "yaphit@theorville.tv",
+    }
+    token = create_access_token(user)
+    headers = {"Authorization": f"Bearer {token}"}
+    return headers
