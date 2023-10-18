@@ -31,6 +31,8 @@ services:
     command: bash -c "env > .env && bash /scripts/generate_jwt_keys.sh && uvicorn main:app --host 0.0.0.0 --port 8555"
     ports:
       - "8555:8555"
+    volumes:
+      - ../api:/api
     depends_on:
       - db
   frontend:
