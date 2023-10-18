@@ -1,6 +1,7 @@
 from models.area import Area
 from models.customer import Customer
 from models.project import Project
+from models.timelog import TaskType
 from models.user import User, UserGroup, UserRoles
 from models.sector import Sector
 
@@ -40,5 +41,12 @@ DATA = [
     (
         Project,
         [{"id": 1, "description": "Holidays", "area_id": 1, "customer_id": 1, "is_active": True}],
+    ),
+    (
+        TaskType,
+        [
+            {"id": 1, "active": True, "name": "Meeting", "slug": "meeting"},
+            {"id": 2, "active": False, "name": "Deprecated Type", "slug": "deprecated"},
+        ],
     ),
 ]
