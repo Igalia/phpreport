@@ -20,9 +20,7 @@ class TaskTypeService(AppService):
 
 class TemplateService(AppService):
     def get_user_templates(self, user_id: int) -> List[Template]:
-        templates = (
-            self.db.query(Template).filter(or_(Template.user_id == user_id, Template.is_global is True)).all() or []
-        )
+        templates = self.db.query(Template).filter(or_(Template.user_id == user_id, Template.is_global)).all() or []
         return templates
 
     def get_template(self, template_id: int) -> Template:
