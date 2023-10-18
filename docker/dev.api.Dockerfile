@@ -1,10 +1,11 @@
 FROM debian:bullseye-slim
 
-RUN apt update && apt -y install python3 python3-pip
+RUN apt update && apt -y install python3 python3-pip openssh-client
 
 WORKDIR /api
 
 COPY ./api /api
+COPY ./docker/generate_jwt_keys.sh /scripts/generate_jwt_keys.sh
 
 RUN python3 -m pip install --upgrade pip
 RUN pip install --no-cache-dir .
