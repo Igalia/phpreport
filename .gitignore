@@ -36,5 +36,6 @@ __pycache__
 .tox
 *.egg-info
 .pytest_cache
+*.key*
 
 web/v2/assets/
