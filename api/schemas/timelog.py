@@ -71,7 +71,8 @@ class TemplateInDb(TemplateBase):
 
 
 # Properties to return to client
-class Template(TemplateInDb):
+class Template(TemplateBase):
+    id: int
     pass
 
 
