@@ -24,6 +24,6 @@ export const createTask = async (task: TaskIntent, apiClient: ApiClient): Promis
     })
     .then((response) => response.json())
     .catch((e) => {
-      return new Error(e)
+      throw new Error(e)
     })
 }

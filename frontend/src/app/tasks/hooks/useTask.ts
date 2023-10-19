@@ -5,7 +5,6 @@ import { createTask } from '@/infra/task/createTask'
 import { useClientFetch } from '@/infra/lib/useClientFetch'
 
 export const useAddTask = () => {
-  console.log('test')
   const apiClient = useClientFetch()
   const { showError, showSuccess } = useAlert()
 
