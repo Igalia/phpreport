@@ -46,7 +46,7 @@ class TemplateService(AppService):
 
     def update_template(self, existing_template: Template, template_updates: TemplateUpdate) -> Template:
         existing_data = jsonable_encoder(existing_template)
-        update_data = template_updates.dict(exclude_unset=True)
+        update_data = template_updates.model_dump(exclude_unset=True)
         for field in existing_data:
             if field in update_data:
                 setattr(existing_template, field, update_data[field])
