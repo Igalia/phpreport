@@ -1,10 +1,10 @@
 version: "3"
 services:
-  db:
+  test_db:
     build:
       context: ../
       dockerfile: docker/test.db.Dockerfile
-    container_name: phpreport-db
+    container_name: test-db
     ports:
       - "5432:5432"
     environment:
@@ -20,7 +20,7 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - test_db
   api:
     build:
       context: ../
@@ -34,7 +34,7 @@ services:
     volumes:
       - ../api:/api
     depends_on:
-      - db
+      - test_db
   frontend:
     build:
       context: ../
