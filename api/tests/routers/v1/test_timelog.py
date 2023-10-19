@@ -240,3 +240,52 @@ def test_cannot_update_other_users_template(client: TestClient, get_regular_user
     assert response.status_code == HTTPStatus.FORBIDDEN
     res = response.json()
     assert res["detail"] == "You are not authorized to create or update templates for this user"
+
+
+def test_delete_template(client: TestClient, get_regular_user_token_headers: Dict[str, str]) -> None:
+    # Check existing templates first
+    response = client.get(
+        f"{API_BASE_URL}/v1/timelog/templates/", headers=get_regular_user_token_headers, params={"user_id": 1}
+    )
+    assert response.status_code == HTTPStatus.OK
+    templates = response.json()
+    assert len(templates) == 2
+
+    response = client.delete(
+        f"{API_BASE_URL}/v1/timelog/templates/1",
+        headers=get_regular_user_token_headers,
+        params={"user_id": 1},
+    )
+    assert response.status_code == HTTPStatus.NO_CONTENT
+
+    # There should be only one template now
+    response = client.get(
+        f"{API_BASE_URL}/v1/timelog/templates/", headers=get_regular_user_token_headers, params={"user_id": 1}
+    )
+    assert response.status_code == HTTPStatus.OK
+    templates = response.json()
+    assert len(templates) == 1
+
+
+def test_cannot_delete_other_users_template(client: TestClient, get_regular_user_token_headers: Dict[str, str]) -> None:
+    response = client.delete(
+        f"{API_BASE_URL}/v1/timelog/templates/2",
+        headers=get_regular_user_token_headers,
+        params={"user_id": 1},
+    )
+    assert response.status_code == HTTPStatus.FORBIDDEN
+    res = response.json()
+    assert res["detail"] == "You are not authorized to delete templates for this user"
+
+
+def test_cannot_delete_other_global_template(
+    client: TestClient, get_regular_user_token_headers: Dict[str, str]
+) -> None:
+    response = client.delete(
+        f"{API_BASE_URL}/v1/timelog/templates/3",
+        headers=get_regular_user_token_headers,
+        params={"user_id": 1},
+    )
+    assert response.status_code == HTTPStatus.FORBIDDEN
+    res = response.json()
+    assert res["detail"] == "You are not authorized to delete global templates"
