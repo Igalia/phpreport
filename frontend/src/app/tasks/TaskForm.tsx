@@ -24,9 +24,10 @@ const timeOptions = () => {
 type TaskFormProps = {
   projects: Array<Project>
   taskTypes: Array<TaskType>
+  userId: number
 }
 
-export const TaskForm = ({ projects, taskTypes }: TaskFormProps) => {
+export const TaskForm = ({ projects, taskTypes, userId }: TaskFormProps) => {
   const {
     task,
     handleChange,
@@ -37,7 +38,7 @@ export const TaskForm = ({ projects, taskTypes }: TaskFormProps) => {
     selectStartTime,
     handleSubmit,
     formRef
-  } = useTaskForm()
+  } = useTaskForm({ userId })
 
   return (
     <Stack

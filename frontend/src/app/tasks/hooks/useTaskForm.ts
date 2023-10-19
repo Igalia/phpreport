@@ -3,17 +3,16 @@ import { useTimer } from '@/hooks/useTimer/useTimer'
 import { format } from 'date-fns'
 import { useEffect, useRef, useCallback } from 'react'
 import { useAddTask } from './useTask'
-import { useCurrentUser } from '@/app/user/hooks/useCurrentUser'
 import { TaskIntent } from '@/domain/Task'
 
-export const useTaskForm = () => {
+export const useTaskForm = ({ userId }: { userId: TaskIntent['userId'] }) => {
   const formRef = useRef<HTMLFormElement>(null)
-  const { user } = useCurrentUser()
   const { addTask } = useAddTask()
 
   const { startTimer, stopTimer, seconds, minutes, hours, isTimerRunning } = useTimer()
   const { formState, handleChange, resetForm } = useForm<TaskIntent>({
     initialValues: {
+      userId,
       projectId: '',
       taskType: '',
       story: '',
@@ -23,10 +22,6 @@ export const useTaskForm = () => {
       date: ''
     }
   })
-
-  useEffect(() => {
-    handleChange('userId', user.id)
-  }, [handleChange, user.id])
 
   const handleSubmit = useCallback(() => {
     addTask(formState)

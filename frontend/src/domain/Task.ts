@@ -1,6 +1,6 @@
 export type Task = {
   id: number
-  userId?: number
+  userId: number
   projectId: string
   taskType: string
   story: string
