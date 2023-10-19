@@ -47,7 +47,7 @@ export const useTaskForm = ({ userId }: { userId: TaskIntent['userId'] }) => {
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === 's' && event.ctrlKey) {
+      if ((event.key === 's' && event.ctrlKey) || event.key === 'Enter') {
         event.preventDefault()
         formRef.current?.requestSubmit()
       }
