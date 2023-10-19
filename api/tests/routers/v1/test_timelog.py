@@ -67,3 +67,102 @@ def test_get_user_and_global_templates(client: TestClient, get_regular_user_toke
     templates = response.json()
     assert len(templates) == 2
     assert templates == expected_templates
+
+
+def test_create_user_template(client: TestClient, get_regular_user_token_headers: Dict[str, str]) -> None:
+    template_payload = {
+        "name": "Full work day",
+        "story": "work",
+        "description": "Just a regular day",
+        "start_time": "9:00",
+        "end_time": "17:00",
+        "task_type": "meeting",
+        "project_id": 1,
+        "user_id": 1,
+        "is_global": False,
+    }
+    response = client.get(
+        f"{API_BASE_URL}/v1/timelog/templates/", headers=get_regular_user_token_headers, params={"user_id": 1}
+    )
+    assert response.status_code == HTTPStatus.OK
+    templates = response.json()
+    assert len(templates) == 2
+
+    response = client.post(
+        f"{API_BASE_URL}/v1/timelog/templates",
+        headers=get_regular_user_token_headers,
+        params={"user_id": 1},
+        json=template_payload,
+    )
+    assert response.status_code == HTTPStatus.CREATED
+
+    expected_response = {
+        "id": 4,
+        "name": "Full work day",
+        "story": "work",
+        "description": "Just a regular day",
+        "start_time": "9:00",
+        "end_time": "17:00",
+        "project_id": 1,
+        "user_id": 1,
+        "is_global": False,
+        "task_type": "meeting",
+    }
+    assert response.json() == expected_response
+
+    response = client.get(
+        f"{API_BASE_URL}/v1/timelog/templates/", headers=get_regular_user_token_headers, params={"user_id": 1}
+    )
+    assert response.status_code == HTTPStatus.OK
+    templates = response.json()
+    assert len(templates) == 3
+
+
+def test_regular_user_cannot_create_global_template(
+    client: TestClient, get_regular_user_token_headers: Dict[str, str]
+) -> None:
+    template_payload = {
+        "name": "TGIF",
+        "story": "no work",
+        "description": "No work on Friday",
+        "start_time": "0:00",
+        "end_time": "0:00",
+        "project_id": 1,
+        "is_global": True,
+    }
+
+    response = client.post(
+        f"{API_BASE_URL}/v1/timelog/templates",
+        headers=get_regular_user_token_headers,
+        params={"user_id": 1},
+        json=template_payload,
+    )
+    assert response.status_code == HTTPStatus.FORBIDDEN
+
+    res = response.json()
+    assert res["detail"] == "You are not authorized to create or update global templates"
+
+
+def test_regular_user_cannot_create_template_for_another_user(
+    client: TestClient, get_regular_user_token_headers: Dict[str, str]
+) -> None:
+    template_payload = {
+        "name": "TGIF",
+        "story": "no work",
+        "description": "No work on Friday",
+        "start_time": "0:00",
+        "end_time": "0:00",
+        "project_id": 1,
+        "is_global": True,
+    }
+
+    response = client.post(
+        f"{API_BASE_URL}/v1/timelog/templates",
+        headers=get_regular_user_token_headers,
+        params={"user_id": 1},
+        json=template_payload,
+    )
+    assert response.status_code == HTTPStatus.FORBIDDEN
+
+    res = response.json()
+    assert res["detail"] == "You are not authorized to create or update global templates"
