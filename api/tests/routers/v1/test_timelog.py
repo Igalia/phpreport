@@ -43,7 +43,6 @@ def test_get_user_and_global_templates(client: TestClient, get_regular_user_toke
             "end_time": "7:00",
             "user_id": 1,
             "is_global": False,
-            "customer_id": None,
             "project_id": None,
         },
         {
@@ -56,7 +55,6 @@ def test_get_user_and_global_templates(client: TestClient, get_regular_user_toke
             "end_time": "22:00",
             "user_id": None,
             "is_global": True,
-            "customer_id": None,
             "project_id": None,
         },
     ]

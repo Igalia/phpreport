@@ -18,7 +18,6 @@ class TemplateBase(BaseModel):
     story: Optional[Annotated[str, StringConstraints(max_length=80)]] = None
     description: Optional[Annotated[str, StringConstraints(max_length=8192)]] = None
     task_type: Optional[Annotated[str, StringConstraints(max_length=40)]] = None
-    customer_id: Optional[int] = None
     user_id: Optional[int] = None
     project_id: Optional[int] = None
     is_global: Optional[bool] = None
