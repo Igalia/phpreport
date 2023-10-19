@@ -2,7 +2,7 @@ import { TaskForm } from './TaskForm'
 import { getProjects } from '@/infra/project/getProjects'
 import { getTaskTypes } from '@/infra/taskType/getTaskTypes'
 import { getCurrentUser } from '@/infra/user/getCurrentUser'
-import { serverFetch } from '@/infra/lib/apiClient'
+import { serverFetch } from '@/infra/lib/serverFetch'
 
 const getPageData = async () => {
   const apiClient = await serverFetch()

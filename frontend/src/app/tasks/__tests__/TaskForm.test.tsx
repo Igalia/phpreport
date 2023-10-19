@@ -1,5 +1,8 @@
 import { TaskForm } from '../TaskForm'
 import { screen, renderWithUser, act } from '@/test-utils/test-utils'
+import { useAddTask } from '../hooks/useTask'
+
+jest.mock('../hooks/useTask')
 
 const setupTaskForm = () => {
   const projects = [
@@ -24,13 +27,15 @@ const setupTaskForm = () => {
     { name: 'mock task type 2', slug: 'mock-test-2', active: true }
   ]
 
-  return renderWithUser(<TaskForm projects={projects} taskTypes={taskTypes} />, {
+  return renderWithUser(<TaskForm userId={0} projects={projects} taskTypes={taskTypes} />, {
     advanceTimers: jest.advanceTimersByTime
   })
 }
 
 describe('TasksPage', () => {
   beforeEach(() => {
+    ;(useAddTask as jest.Mock).mockReturnValue({ addTask: () => {} })
+
     jest.useFakeTimers()
     jest.spyOn(global, 'setInterval')
     jest.setSystemTime(new Date('January 01, 2023 23:15:00'))
@@ -171,6 +176,7 @@ describe('TasksPage', () => {
 
   it('submits the form when clicking Save', async () => {
     const addTask = jest.fn()
+    ;(useAddTask as jest.Mock).mockReturnValue({ addTask })
 
     const { user } = setupTaskForm()
 
@@ -206,6 +212,7 @@ describe('TasksPage', () => {
 
   it('submits the form when pressing ctrl+S', async () => {
     const addTask = jest.fn()
+    ;(useAddTask as jest.Mock).mockReturnValue({ addTask })
 
     const { user } = setupTaskForm()
 
