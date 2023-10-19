@@ -31,6 +31,7 @@ class TemplateService(AppService):
         new_template = Template(
             name=template.name,
             story=template.story,
+            description=template.description,
             task_type=template.task_type,
             init=template.init,
             end=template.end,
