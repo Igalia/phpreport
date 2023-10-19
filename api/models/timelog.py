@@ -88,7 +88,6 @@ class Template(Base):
     task_type = Column("ttype", String(length=40), nullable=True)
     init = Column("init_time", Integer, nullable=True)
     end = Column("end_time", Integer, nullable=True)
-    customer_id = Column("customerid", Integer, ForeignKey("customer.id"), nullable=True)
     user_id = Column("usrid", Integer, ForeignKey(User.id), nullable=True)
     project_id = Column("projectid", Integer, ForeignKey("project.id"), nullable=True)
     is_global = Column(Boolean, nullable=False, default=False)
