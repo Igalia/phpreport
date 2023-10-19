@@ -166,3 +166,77 @@ def test_regular_user_cannot_create_template_for_another_user(
 
     res = response.json()
     assert res["detail"] == "You are not authorized to create or update global templates"
+
+
+def test_update_user_template(client: TestClient, get_regular_user_token_headers: Dict[str, str]) -> None:
+    template_payload = {
+        "name": "Coffee Break updated",
+        "story": "coffee time",
+        "description": "Need to recharge again",
+        "task_type": "meeting",
+        "start_time": "15:00",
+        "end_time": "15:30",
+        "project_id": 1,
+        "user_id": 1,
+    }
+
+    response = client.put(
+        f"{API_BASE_URL}/v1/timelog/templates/1",
+        headers=get_regular_user_token_headers,
+        params={"user_id": 1},
+        json=template_payload,
+    )
+    assert response.status_code == HTTPStatus.OK
+
+    expected_template = {
+        "id": 1,
+        "name": "Coffee Break updated",
+        "story": "coffee time",
+        "description": "Need to recharge again",
+        "task_type": "meeting",
+        "start_time": "15:00",
+        "end_time": "15:30",
+        "project_id": 1,
+        "is_global": False,
+        "user_id": 1,
+    }
+
+    res = response.json()
+    assert res == expected_template
+
+
+def test_update_nonexistent_template(client: TestClient, get_regular_user_token_headers: Dict[str, str]) -> None:
+    template_payload = {
+        "name": "Fake template",
+        "user_id": 1,
+    }
+
+    response = client.put(
+        f"{API_BASE_URL}/v1/timelog/templates/100",
+        headers=get_regular_user_token_headers,
+        params={"user_id": 1},
+        json=template_payload,
+    )
+    assert response.status_code == HTTPStatus.NOT_FOUND
+
+    res = response.json()
+    assert res["detail"] == "Template with id 100 not found"
+
+
+def test_cannot_update_other_users_template(client: TestClient, get_regular_user_token_headers: Dict[str, str]) -> None:
+    template_payload = {
+        "name": "Series time",
+        "description": "Watching Tuca and Bertie",
+        "user_id": 2,
+        "is_global": False,
+    }
+
+    response = client.put(
+        f"{API_BASE_URL}/v1/timelog/templates/2",
+        headers=get_regular_user_token_headers,
+        params={"user_id": 1},
+        json=template_payload,
+    )
+    assert response.status_code == HTTPStatus.FORBIDDEN
+    res = response.json()
+    assert res["detail"] == "You are not authorized to create or update templates for this user"
