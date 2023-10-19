@@ -1,4 +1,5 @@
 from decouple import config
+from http import HTTPStatus
 from fastapi.testclient import TestClient
 from typing import Dict
 
@@ -15,7 +16,7 @@ def test_get_task_types_authenticated(client: TestClient, get_regular_user_token
         f"{API_BASE_URL}/v1/timelog/task_types/",
         headers=get_regular_user_token_headers,
     )
-    assert response.status_code == 200
+    assert response.status_code == HTTPStatus.OK
     task_types = response.json()
     assert task_types == expected_types
 
@@ -26,7 +27,7 @@ def test_get_user_cannot_get_templates_from_other_user(
     response = client.get(
         f"{API_BASE_URL}/v1/timelog/templates/", headers=get_regular_user_token_headers, params={"user_id": 2}
     )
-    assert response.status_code == 403
+    assert response.status_code == HTTPStatus.FORBIDDEN
     content = response.json()
     assert content["detail"] == "You are not authorized to see templates for this user"
 
@@ -62,7 +63,7 @@ def test_get_user_and_global_templates(client: TestClient, get_regular_user_toke
     response = client.get(
         f"{API_BASE_URL}/v1/timelog/templates/", headers=get_regular_user_token_headers, params={"user_id": 1}
     )
-    assert response.status_code == 200
+    assert response.status_code == HTTPStatus.OK
     templates = response.json()
     assert len(templates) == 2
     assert templates == expected_templates
