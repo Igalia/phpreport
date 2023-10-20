@@ -245,4 +245,40 @@ describe('TasksPage', () => {
       userId: 0
     })
   })
+
+  it('submits the form when pressing Enter', async () => {
+    const addTask = jest.fn()
+    ;(useAddTask as jest.Mock).mockReturnValue({ addTask })
+
+    const { user } = setupTaskForm()
+
+    await user.click(screen.getByRole('combobox', { name: 'Select project' }))
+    await user.click(screen.getByRole('option', { name: 'Holidays' }))
+
+    await user.click(screen.getByRole('combobox', { name: 'From' }))
+    await user.click(screen.getByRole('option', { name: '12:00' }))
+
+    await user.click(screen.getByRole('combobox', { name: 'To' }))
+    await user.click(screen.getByRole('option', { name: '13:00' }))
+
+    await user.type(screen.getByRole('textbox', { name: 'Task description' }), 'description!')
+
+    await user.click(screen.getByRole('combobox', { name: 'Select task type' }))
+    await user.click(screen.getByRole('option', { name: 'mock task type' }))
+
+    await user.type(screen.getByRole('textbox', { name: 'Story' }), 'story!')
+
+    await user.keyboard('{Enter}')
+
+    expect(addTask).toHaveBeenCalledWith({
+      date: '2023-01-01',
+      description: 'description!',
+      endTime: '13:00',
+      projectId: '1',
+      startTime: '12:00',
+      story: 'story!',
+      taskType: 'mock-test',
+      userId: 0
+    })
+  })
 })
