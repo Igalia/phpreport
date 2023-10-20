@@ -20,15 +20,14 @@
     "@types/node": "20.6.0",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
-    "axios": "^1.5.0",
     "date-fns": "^2.30.0",
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
+    "jwt-decode": "^3.1.2",
     "next": "13.4.19",
-    "oidc-client-ts": "^2.2.5",
+    "next-auth": "^4.23.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-oidc-context": "^2.3.0",
     "typescript": "5.2.2"
   },
   "devDependencies": {

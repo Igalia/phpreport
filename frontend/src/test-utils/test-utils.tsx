@@ -12,7 +12,7 @@ const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
 const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
   render(ui, { wrapper: AllTheProviders, ...options })
 
-function setup(jsx: ReactElement, options?: Options) {
+function renderWithUser(jsx: ReactElement, options?: Options) {
   return {
     user: userEvent.setup(options),
     ...customRender(jsx)
@@ -20,4 +20,4 @@ function setup(jsx: ReactElement, options?: Options) {
 }
 
 export * from '@testing-library/react'
-export { customRender as render, setup }
+export { customRender as render, renderWithUser }

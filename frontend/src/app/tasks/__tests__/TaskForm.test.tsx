@@ -1,41 +1,36 @@
 import { TaskForm } from '../TaskForm'
-import { screen, setup, act } from '@/test-utils/test-utils'
+import { screen, renderWithUser, act } from '@/test-utils/test-utils'
 import { useAddTask } from '../hooks/useTask'
-
-jest.mock('../../user/hooks/useCurrentUser', () => ({
-  useCurrentUser: () => ({ user: { id: 0 } })
-}))
 
 jest.mock('../hooks/useTask')
 
-jest.mock('../hooks/useProjects', () => ({
-  useProjects: () => ({
-    projects: [
-      {
-        id: '1',
-        is_active: true,
-        init: null,
-        end: null,
-        invoice: null,
-        estimated_hours: null,
-        moved_hours: null,
-        description: 'Holidays',
-        project_type: null,
-        schedule_type: null,
-        customer_id: 1,
-        area_id: 1
-      }
-    ],
-    isLoading: false
-  })
-}))
+const setupTaskForm = () => {
+  const projects = [
+    {
+      id: '1',
+      is_active: true,
+      init: null,
+      end: null,
+      invoice: null,
+      estimated_hours: null,
+      moved_hours: null,
+      description: 'Holidays',
+      project_type: null,
+      schedule_type: null,
+      customer_id: 1,
+      area_id: 1
+    }
+  ]
 
-jest.mock('../hooks/useTaskTypes', () => ({
-  useTaskTypes: () => [
+  const taskTypes = [
     { name: 'mock task type', slug: 'mock-test', active: true },
     { name: 'mock task type 2', slug: 'mock-test-2', active: true }
   ]
-}))
+
+  return renderWithUser(<TaskForm userId={0} projects={projects} taskTypes={taskTypes} />, {
+    advanceTimers: jest.advanceTimersByTime
+  })
+}
 
 describe('TasksPage', () => {
   beforeEach(() => {
@@ -52,7 +47,7 @@ describe('TasksPage', () => {
 
   describe('when the timer is activated', () => {
     it('activates by clicking Start Timer', async () => {
-      const { user } = setup(<TaskForm />, { advanceTimers: jest.advanceTimersByTime })
+      const { user } = setupTaskForm()
 
       const timerButton = screen.getByRole('button', { name: 'Start Timer' })
 
@@ -66,7 +61,7 @@ describe('TasksPage', () => {
     })
 
     it('stops by clicking Stop Timer', async () => {
-      const { user } = setup(<TaskForm />, { advanceTimers: jest.advanceTimersByTime })
+      const { user } = setupTaskForm()
 
       const startTimerButton = screen.getByRole('button', { name: 'Start Timer' })
 
@@ -84,7 +79,7 @@ describe('TasksPage', () => {
     })
 
     it('disables the startTime and endTime selects when the timer is running', async () => {
-      const { user } = setup(<TaskForm />, { advanceTimers: jest.advanceTimersByTime })
+      const { user } = setupTaskForm()
 
       const startTimerButton = screen.getByRole('button', { name: 'Start Timer' })
 
@@ -105,7 +100,7 @@ describe('TasksPage', () => {
     })
 
     it('changes the value of the startTime and endTime select', async () => {
-      const { user } = setup(<TaskForm />, { advanceTimers: jest.advanceTimersByTime })
+      const { user } = setupTaskForm()
 
       await user.click(screen.getByRole('button', { name: 'Start Timer' }))
 
@@ -124,7 +119,7 @@ describe('TasksPage', () => {
   })
 
   it('manually edits the starTime and endTime by typing', async () => {
-    const { user } = setup(<TaskForm />, { advanceTimers: jest.advanceTimersByTime })
+    const { user } = setupTaskForm()
 
     const startTimeSelect = screen.getByRole('combobox', { name: 'From' })
     const endTimeSelect = screen.getByRole('combobox', { name: 'To' })
@@ -137,7 +132,7 @@ describe('TasksPage', () => {
   })
 
   it('changes the field values and clear it', async () => {
-    const { user } = setup(<TaskForm />, { advanceTimers: jest.advanceTimersByTime })
+    const { user } = setupTaskForm()
 
     const projectSelect = screen.getByRole('combobox', { name: 'Select project' })
     const startTimeSelect = screen.getByRole('combobox', { name: 'From' })
@@ -181,9 +176,9 @@ describe('TasksPage', () => {
 
   it('submits the form when clicking Save', async () => {
     const addTask = jest.fn()
-
     ;(useAddTask as jest.Mock).mockReturnValue({ addTask })
-    const { user } = setup(<TaskForm />, { advanceTimers: jest.advanceTimersByTime })
+
+    const { user } = setupTaskForm()
 
     await user.click(screen.getByRole('combobox', { name: 'Select project' }))
     await user.click(screen.getByRole('option', { name: 'Holidays' }))
@@ -217,9 +212,9 @@ describe('TasksPage', () => {
 
   it('submits the form when pressing ctrl+S', async () => {
     const addTask = jest.fn()
-
     ;(useAddTask as jest.Mock).mockReturnValue({ addTask })
-    const { user } = setup(<TaskForm />, { advanceTimers: jest.advanceTimersByTime })
+
+    const { user } = setupTaskForm()
 
     await user.click(screen.getByRole('combobox', { name: 'Select project' }))
     await user.click(screen.getByRole('option', { name: 'Holidays' }))
