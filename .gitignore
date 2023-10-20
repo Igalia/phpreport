@@ -37,5 +37,6 @@ __pycache__
 *.egg-info
 .pytest_cache
 *.key*
+.coverage
 
 web/v2/assets/
