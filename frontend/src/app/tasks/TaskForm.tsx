@@ -2,7 +2,7 @@
 
 import Stack from '@mui/joy/Stack'
 import Button from '@mui/joy/Button'
-import { Select, FreeSoloSelect } from '@/ui/Select/Select'
+import { Select } from '@/ui/Select/Select'
 import { Input } from '@/ui/Input/Input'
 import { TextArea } from '@/ui/TextArea/TextArea'
 import Typography from '@mui/joy/Typography'
@@ -13,13 +13,7 @@ import { Project } from '@/domain/Project'
 import { TaskType } from '@/domain/TaskType'
 
 import { useTaskForm } from './hooks/useTaskForm'
-
-const timeOptions = () => {
-  const hours = Array.from({ length: 24 }, (_, i) => i)
-  const minutes = ['00', '15', '30', '45']
-
-  return hours.flatMap((h) => minutes.map((m) => `${h}:${m}`))
-}
+import { TimePicker } from './components/TimePicker'
 
 type TaskFormProps = {
   projects: Array<Project>
@@ -53,12 +47,12 @@ export const TaskForm = ({ projects, taskTypes, userId }: TaskFormProps) => {
       ref={formRef}
     >
       <Select
-        onChange={(_, option) => handleChange('projectId', option?.id || '')}
-        value={projects.find((project) => project.id === task.projectId) || null}
+        onChange={(e) => handleChange('projectId', e.target.value)}
+        value={task.projectId}
         name="projectId"
         label="Select project"
-        options={projects}
-        getOptionLabel={(option) => option.description}
+        placeholder="Select project"
+        options={projects.map((project) => ({ label: project.description, value: project.id }))}
         required
       />
       <Stack flexDirection="row" gap="30px">
@@ -73,31 +67,24 @@ export const TaskForm = ({ projects, taskTypes, userId }: TaskFormProps) => {
             </>
           )}
         </Button>
-        <FreeSoloSelect
-          sx={{ width: '166px' }}
+        <TimePicker
           name="startTime"
           label="From"
           value={task.startTime}
-          onChange={(_, option) => {
-            if (option) {
-              selectStartTime(option)
-            }
-          }}
-          options={timeOptions()}
+          onChange={selectStartTime}
+          sx={{ width: '166px' }}
           disabled={isTimerRunning}
           required
         />
-        <FreeSoloSelect
-          sx={{ width: '166px' }}
+
+        <TimePicker
           name="endTime"
           label="To"
           value={task.endTime}
-          onChange={(_, option) => {
-            if (option) {
-              handleChange('endTime', option)
-            }
+          onChange={(option: string) => {
+            handleChange('endTime', option)
           }}
-          options={timeOptions()}
+          sx={{ width: '166px' }}
           disabled={isTimerRunning}
           required
         />
@@ -122,10 +109,10 @@ export const TaskForm = ({ projects, taskTypes, userId }: TaskFormProps) => {
       <Select
         name="taskType"
         label="Select task type"
-        value={taskTypes.find((taskType) => taskType.slug === task.taskType) || null}
-        onChange={(_, option) => handleChange('taskType', option?.slug || '')}
-        options={taskTypes}
-        getOptionLabel={(option) => option.name}
+        value={task.taskType}
+        onChange={(e) => handleChange('taskType', e.target.value)}
+        options={taskTypes.map((taskType) => ({ label: taskType.name, value: taskType.slug }))}
+        placeholder="Select task type"
       />
       <Input
         value={task.story}

@@ -1,15 +1,16 @@
-import * as React from 'react'
-import { Input } from '@/ui/Input/Input'
+import { MaskedInput, Mask } from '@/ui/Input/MaskedInput'
 import { SxProps } from '@mui/joy/styles/types'
 import { BaseSelect, Option } from './BaseSelect'
 
-type SelectProps = JSX.IntrinsicElements['input'] & {
+export type MaskedSelectProps = Omit<JSX.IntrinsicElements['input'], 'onChange'> & {
   sx?: SxProps
   options: Array<Option>
   label: string
+  mask: Mask
+  onChange: (option: string) => void
 }
 
-export const Select = ({
+export const MaskedSelect = ({
   sx,
   value,
   onChange,
@@ -18,20 +19,22 @@ export const Select = ({
   label,
   placeholder,
   disabled,
-  required
-}: SelectProps) => {
+  required,
+  mask
+}: MaskedSelectProps) => {
   return (
     <BaseSelect options={options} name={name}>
-      <Input
+      <MaskedInput
         list={`${name}-list`}
         placeholder={placeholder}
-        onChange={onChange}
+        onAccept={onChange}
         value={value}
         name={name}
         sx={sx}
         label={label}
         disabled={disabled}
         required={required}
+        mask={mask}
       />
     </BaseSelect>
   )
