@@ -1,12 +1,14 @@
 import * as React from 'react'
 import { Input } from '@/ui/Input/Input'
 import { SxProps } from '@mui/joy/styles/types'
-import { BaseSelect, Option } from './BaseSelect'
+import { BaseSelect, Options } from './BaseSelect'
 
-type SelectProps = JSX.IntrinsicElements['input'] & {
+type SelectProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
   sx?: SxProps
-  options: Array<Option>
+  options: Options
   label: string
+  value: string
+  onChange?: (value: string) => void
 }
 
 export const Select = ({
@@ -21,18 +23,27 @@ export const Select = ({
   required
 }: SelectProps) => {
   return (
-    <BaseSelect options={options} name={name}>
-      <Input
-        list={`${name}-list`}
-        placeholder={placeholder}
-        onChange={onChange}
-        value={value}
-        name={name}
-        sx={sx}
-        label={label}
-        disabled={disabled}
-        required={required}
-      />
-    </BaseSelect>
+    <BaseSelect
+      options={options}
+      name={name}
+      value={value}
+      onChange={onChange}
+      renderInput={(props) => (
+        <Input
+          placeholder={placeholder}
+          onChange={(e) => {
+            if (onChange) {
+              onChange(e.target.value)
+            }
+          }}
+          name={name}
+          sx={sx}
+          label={label}
+          disabled={disabled}
+          required={required}
+          {...props}
+        />
+      )}
+    />
   )
 }

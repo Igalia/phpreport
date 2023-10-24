@@ -6,7 +6,7 @@ import { StyledLabel, StyledInput } from './styles'
 
 export type Mask = React.ComponentProps<typeof IMaskInput>['mask']
 
-type InputProps = JSX.IntrinsicElements['input'] & {
+type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label: string
   onAccept?: (value: string) => void
   sx?: SxProps
@@ -14,11 +14,13 @@ type InputProps = JSX.IntrinsicElements['input'] & {
   mask: Mask
 }
 
-type InnerInputProps = JSX.IntrinsicElements['input'] & InputProps
+type InnerInputProps = React.InputHTMLAttributes<HTMLInputElement> & InputProps
 
-const MixinInput = IMaskMixin(({ inputRef, ...props }) => <StyledInput ref={inputRef} {...props} />)
+const MixinInput = IMaskMixin(({ inputRef, ...props }) => {
+  return <StyledInput ref={inputRef} {...props} />
+})
 
-const MaskedInput1 = React.forwardRef<HTMLElement, InnerInputProps>(function MaskedInput(
+const MaskedInputAdapter = React.forwardRef<HTMLElement, InnerInputProps>(function MaskedInput(
   { onAccept, label, ...props },
   ref
 ) {
@@ -35,30 +37,20 @@ const MaskedInput1 = React.forwardRef<HTMLElement, InnerInputProps>(function Mas
 export const MaskedInput = ({
   sx,
   label,
-  placeholder,
   onAccept,
-  name,
-  value,
-  list,
   endDecorator,
   mask,
-  required,
-  disabled
+  ...inputProps
 }: InputProps) => {
   return (
     <JoyInput
       slotProps={{
         input: {
-          component: MaskedInput1,
-          placeholder,
+          component: MaskedInputAdapter,
           label,
-          name,
-          value,
-          list,
           mask,
           onAccept,
-          required,
-          disabled
+          ...inputProps
         }
       }}
       sx={{

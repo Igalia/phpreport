@@ -47,12 +47,15 @@ export const TaskForm = ({ projects, taskTypes, userId }: TaskFormProps) => {
       ref={formRef}
     >
       <Select
-        onChange={(e) => handleChange('projectId', e.target.value)}
+        onChange={(value) => handleChange('projectId', value)}
         value={task.projectId}
         name="projectId"
         label="Select project"
         placeholder="Select project"
-        options={projects.map((project) => ({ label: project.description, value: project.id }))}
+        options={projects.map((project) => ({
+          label: project.description,
+          value: project.id.toString()
+        }))}
         required
       />
       <Stack flexDirection="row" gap="30px">
@@ -110,7 +113,7 @@ export const TaskForm = ({ projects, taskTypes, userId }: TaskFormProps) => {
         name="taskType"
         label="Select task type"
         value={task.taskType}
-        onChange={(e) => handleChange('taskType', e.target.value)}
+        onChange={(value) => handleChange('taskType', value)}
         options={taskTypes.map((taskType) => ({ label: taskType.name, value: taskType.slug }))}
         placeholder="Select task type"
       />
@@ -128,6 +131,7 @@ export const TaskForm = ({ projects, taskTypes, userId }: TaskFormProps) => {
           name="moreActions"
           label="More Actions"
           options={[]}
+          value=""
         />
         <Stack
           sx={{

@@ -3,7 +3,7 @@ import { StyledLabel, StyledInput } from './styles'
 import JoyInput from '@mui/joy/Input'
 import { SxProps } from '@mui/joy/styles/types'
 
-type InputProps = JSX.IntrinsicElements['input'] & {
+type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label: string
   list?: string
   sx?: SxProps
@@ -23,23 +23,12 @@ const InnerInput = React.forwardRef<HTMLInputElement, InputProps>(function Inner
   )
 })
 
-export const Input = ({
-  sx,
-  label,
-  placeholder,
-  onChange,
-  name,
-  value,
-  list,
-  endDecorator,
-  required,
-  disabled
-}: InputProps) => {
+export const Input = ({ sx, onChange, endDecorator, ...inputProps }: InputProps) => {
   return (
     <JoyInput
       onChange={onChange}
       slots={{ input: InnerInput }}
-      slotProps={{ input: { placeholder, label, name, value, list, required, disabled } }}
+      slotProps={{ input: inputProps }}
       sx={{
         '--Input-minHeight': '56px',
         '--Input-radius': '6px',
