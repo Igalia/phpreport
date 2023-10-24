@@ -1,4 +1,5 @@
 type Roles = Array<string>
+type AuthorizedScopes = Array<string>
 
 export type User = {
   id: number
@@ -8,6 +9,7 @@ export type User = {
   lastName: string
   roles: Roles
   capacities: Array<UserCapacity>
+  authorizedScopes: AuthorizedScopes
 }
 
 type UserCapacity = {
