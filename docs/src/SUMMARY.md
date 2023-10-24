@@ -11,6 +11,7 @@
   - [User interface](./developer/user-web-interface.md)
   - [Business logic layer and plugin system](./developer/business-logic-layer.md)
   - [Web service layer](./developer/web-service-layer.md)
+  - [Application Roles and Permissions](./developer/permissions.md)
 - [User Documentation](./user/index.md)
   - [Overview](./user/overview.md)
   - [Tasks Management](./user/tasks.md)
