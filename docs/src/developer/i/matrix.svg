@@ -1,0 +1,462 @@
+<svg fill="none" viewBox="0 0 800 2000" width="800" height="2000" xmlns="http://www.w3.org/2000/svg">
+    <foreignObject width="100%" height="100%">
+      <div xmlns="http://www.w3.org/1999/xhtml">
+        <style>
+            .container {
+                font-family: sans-serif;
+            }
+
+            .text-vert {
+                writing-mode: vertical-rl;
+                text-orientation: mixed;
+            }
+
+            .styled-table {
+                border-collapse: collapse;
+                border-radius: 1em;
+                overflow: hidden;
+                margin: 0.5em 0;
+                font-size: 0.9em;
+                min-width: 15em;
+                color: black;
+            }
+
+            .styled-table thead tr {
+                background-color: #005FB6;
+                color: #ffffff;
+                text-align: left;
+            }
+
+            .styled-table th,
+            .styled-table td {
+                padding: 0.6rem 0.8rem;
+            }
+
+
+            .styled-table tbody tr:nth-of-type(even) {
+                background-color: #f4f4f4;
+            }
+
+            .styled-table tbody tr:nth-of-type(odd) {
+                background-color: #fff;
+            }
+
+
+            .styled-table tbody td.filler {
+                background-color: #b3cfe9;
+                padding: 0.3em;
+            }
+
+            .info {
+                background-color: #337fc5;
+                ;
+                /*✅🚫⛔️*/
+            }
+
+            .sr-only {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border: 0;
+            }
+        </style>
+            <div class="container">
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Roles and Permissions matrix</th>
+                            <th scope="col" class="text-vert info">User roles</th>
+                            <th scope="col" class="text-vert">Staff</th>
+                            <th scope="col" class="text-vert">Project Manager</th>
+                            <th scope="col" class="text-vert">Human Resources</th>
+                            <th scope="col" class="text-vert">Manager</th>
+                            <th scope="col" class="text-vert">Admin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="7" class="filler">Task Operations</td>
+                        </tr>
+                        <tr>
+                            <td>Create task</td>
+                            <td class="filler"></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Update task</td>
+                            <td class="filler"></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Delete task</td>
+                            <td class="filler"></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Clone task</td>
+                            <td class="filler"></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Copy tasks from another day</td>
+                            <td class="filler"></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Save task as template</td>
+                            <td class="filler"></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Create global task templates</td>
+                            <td class="filler"></td>
+                            <td>⛔️<span class="sr-only">not allowed</span></td>
+                            <td>⛔️<span class="sr-only">not allowed</span></td>
+                            <td>⛔️<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Add task type</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Update task type</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Deactivate task type</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="filler">Project Operations</td>
+                        </tr>
+                        <tr>
+                            <td>Create project</td>
+                            <td class="filler"></td>
+                            <td>⛔️<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>⛔️<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Update project</td>
+                            <td class="filler"></td>
+                            <td>⛔️<span class="sr-only">not allowed</span></td>
+                            <td>⚠️<span class="sr-only">partially allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Delete project</td>
+                            <td class="filler"></td>
+                            <td>⛔️<span class="sr-only">not allowed</span></td>
+                            <td>⚠️<span class="sr-only">partially allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Assign staff to project</td>
+                            <td class="filler"></td>
+                            <td>⛔️<span class="sr-only">not allowed</span></td>
+                            <td>⚠️<span class="sr-only">partially allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Unassign staff from project</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⚠️<span class="sr-only">partially allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Move hours of user from one project to another (FUTURE)</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⚠️<span class="sr-only">partially allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>View project details (report)</td>
+                            <td class="filler"></td>
+                            <td>⚠️<span class="sr-only">partially allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>⚠️<span class="sr-only">partially allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>View project evaluation (report)</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⚠️<span class="sr-only">partially allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>View project summary (report)</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>View project planner (NEW)</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Update project planner (NEW)</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⚠️<span class="sr-only">partially allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Create project status</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Update project status</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Delete project status</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="filler">User Operations</td>
+                        </tr>
+                        <tr>
+                            <td>Add user capacity</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Update user capacity</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Delete user capacity</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="filler">Client Operations</td>
+                        </tr>
+                        <tr>
+                            <td>Add client</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Update client</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Delete client</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="filler">Vacation Operations</td>
+                        </tr>
+                        <tr>
+                            <td>Create vacation (self)</td>
+                            <td class="filler"></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Update vacation (self)</td>
+                            <td class="filler"></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>View vacation (self and others')</td>
+                            <td class="filler"></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="filler">Long Leave Operations</td>
+                        </tr>
+                        <tr>
+                            <td>Create long leave</td>
+                            <td class="filler"></td>
+                            <td>⛔️<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Update long leave</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="filler">Notification Operations</td>
+                        </tr>
+                        <tr>
+                            <td>Create email template (FUTURE)</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Update email templates (FUTURE)</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Send notification to users through interface (FUTURE)</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="filler">Configuration Operations</td>
+                        </tr>
+                        <tr>
+                            <td>Update configuration value (FUTURE)</td>
+                            <td class="filler"></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>⛔<span class="sr-only">not allowed</span></td>
+                            <td>✅<span class="sr-only">allowed</span></td>
+                        </tr>
+                    </tbody>
+                    <tfoot></tfoot>
+                </table>
+            </div>
+      </div>
+   </foreignObject>
+  </svg>

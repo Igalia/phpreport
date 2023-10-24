@@ -14,3 +14,4 @@ implement new features, fix bugs or implement plugins.
 6.  [Business logic layer and plugin system](business-logic-layer.md)
 7.  [Web service layer](web-service-layer.md)
 8.  [User interface](user-web-interface.md)
+9.  [Application Roles and Permissions](permissions.md)
