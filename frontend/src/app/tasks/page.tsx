@@ -16,6 +16,7 @@ const getPageData = async () => {
   ])
 }
 
+
 export default async function Tasks() {
   const [projects, taskTypes, currentUser] = await getPageData()
 
