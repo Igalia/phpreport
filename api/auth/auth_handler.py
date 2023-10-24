@@ -8,8 +8,8 @@ JWT_SECRET = config("JWT_SECRET")
 JWT_ALGORITHM = config("JWT_ALGORITHM")
 JWT_AUDIENCE = config("JWT_AUDIENCE")
 OIDC_CERTS_URL = config("OIDC_CERTS_URL")
-JWT_PUB_KEY = config("JWT_PUB_KEY")
-JWT_PRIVATE_KEY = config("JWT_PRIVATE_KEY")
+JWT_PUB_KEY = config("JWT_PUB_KEY", None)
+JWT_PRIVATE_KEY = config("JWT_PRIVATE_KEY", None)
 
 
 def token_response(token: str):
