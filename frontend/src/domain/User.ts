@@ -7,4 +7,12 @@ export type User = {
   firstName: string
   lastName: string
   roles: Roles
+  capacities: Array<UserCapacity>
+}
+
+type UserCapacity = {
+  capacity: number
+  start: string
+  end: string
+  isCurrent: boolean
 }

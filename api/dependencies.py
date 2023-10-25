@@ -30,6 +30,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Se
         first_name=decoded["given_name"],
         last_name=decoded["family_name"],
         roles=[],
+        capacities=user_in_db.capacities,
     )
     if USE_OIDC_ROLES:
         user.roles = decoded[OIDC_ROLES_PROPERTY].copy()

@@ -1,8 +1,9 @@
+from typing import List
 from sqlalchemy import Date, Column, ForeignKey, Integer, String, Numeric, UniqueConstraint, CheckConstraint
-from sqlalchemy.orm import relationship
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship, Mapped, mapped_column
+from sqlalchemy.ext.hybrid import hybrid_property
 from db.base_class import Base
+from datetime import date
 
 
 class User(Base):
@@ -11,6 +12,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     password = Column(String(length=256), nullable=True)
     login = Column(String(length=100), nullable=False, unique=True)
+    capacities: Mapped[List["UserCapacity"]] = relationship()
 
 
 class UserGroup(Base):
@@ -63,9 +65,15 @@ class UserCapacity(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     capacity = Column("journey", Numeric(precision=8, scale=4), nullable=False)
-    init_date = Column(Date, nullable=False)
-    end_date = Column(Date, nullable=True)
-    user = Column("usrid", Integer, ForeignKey("usr.id"), nullable=False)
+    start = Column("init_date", Date, nullable=False)
+    end = Column("end_date", Date, nullable=True)
+    user_id = Column("usrid", Integer, ForeignKey("usr.id"), nullable=False)
+
+    @hybrid_property
+    def is_current(self):
+        if not self.end:
+            return date.today() >= self.start
+        return date.today() >= self.start and date.today() <= self.end
 
     __table_args__ = (
         UniqueConstraint("usrid", "init_date", name="unique_journey_history_user_date"),
