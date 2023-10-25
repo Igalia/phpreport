@@ -1,18 +1,12 @@
 'use client'
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState } from 'react'
 import Box from '@mui/joy/Box'
-import Typography from '@mui/joy/Typography'
-import Button from '@mui/joy/Button'
 import { styled } from '@mui/joy'
-import { Dismiss12Regular } from '@fluentui/react-icons'
-
-type Option = {
-  value: string
-  label: string
-}
-
-export type Options = Array<string> | Array<Option>
+import { ClearInput } from './components/ClearInput'
+import { Option, NoResult } from './components/Option'
+import { getDisplayValue, autoCompleteMatch } from './select-utils'
+import { Options } from './types'
 
 type RenderInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   endDecorator: React.ReactNode
@@ -26,14 +20,6 @@ type BaseSelectProps = {
   onChange?: (value: string) => void
 }
 
-type OptionsProp = {
-  label: string
-  selectOption: () => void
-  isActive: boolean
-  selected: boolean
-  key: string
-}
-
 type OptionsProps = {
   options: Options
   name?: string
@@ -42,75 +28,9 @@ type OptionsProps = {
   activeIndex: number
 }
 
-type ClearInputProps = {
-  clearInput: () => void
-}
-
-const getDisplayValue = (value: string, options: Options) => {
-  if (options[0] === 'string') {
-    return value
-  }
-
-  return (options as Array<Option>).find((option) => option.value === value)?.label || value
-}
-
-const autoCompleteMatch = (value: string, options: Options) => {
-  const regex = new RegExp('^' + value, 'i')
-
-  if (value.length === 0) {
-    return options
-  }
-
-  return options.filter((option) => {
-    const optionLabel = typeof option === 'string' ? option : option.label
-
-    return optionLabel.match(regex)
-  })
-}
-
-const ClearInput = ({ clearInput }: ClearInputProps) => {
-  return (
-    <ClearInputWrapper onClick={clearInput}>
-      <Dismiss12Regular color="#404040" />
-    </ClearInputWrapper>
-  )
-}
-
-const Option = ({ label, selectOption, isActive, selected, key }: OptionsProp) => {
-  const optionRef = useRef<HTMLLIElement>(null)
-
-  useEffect(() => {
-    if (isActive) {
-      optionRef.current?.focus()
-    }
-  }, [isActive])
-
-  return (
-    <li
-      tabIndex={-1}
-      onClick={selectOption}
-      onKeyDown={(e) => {
-        if (isActive && e.key === 'Tab') {
-          selectOption()
-        }
-      }}
-      ref={optionRef}
-      role="option"
-      aria-selected={selected}
-      key={key}
-    >
-      <OptionText sx={{ background: isActive ? '#efeff4' : '#fff' }}>{label}</OptionText>
-    </li>
-  )
-}
-
 const Options = ({ options, selectOption, name, value, activeIndex }: OptionsProps) => {
   if (options.length === 0) {
-    return (
-      <li>
-        <OptionText>No results</OptionText>
-      </li>
-    )
+    return <NoResult></NoResult>
   }
 
   return options.map((option, index) => {
@@ -146,11 +66,13 @@ const Options = ({ options, selectOption, name, value, activeIndex }: OptionsPro
 export const BaseSelect = ({ options, name, renderInput, value, onChange }: BaseSelectProps) => {
   const [open, setOpen] = useState(false)
   const [activeOption, setActiveOption] = useState(-1)
+
   const selectId = `${name}-select-dropdown`
+
   const displayValue = getDisplayValue(value, options)
   const filteredOptions = autoCompleteMatch(displayValue, options)
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const navigateList = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown' && activeOption < filteredOptions.length - 1) {
       e.preventDefault()
 
@@ -165,7 +87,7 @@ export const BaseSelect = ({ options, name, renderInput, value, onChange }: Base
   }
 
   return (
-    <Box onKeyDown={handleKeyDown} onBlur={() => setOpen(false)} sx={{ position: 'relative' }}>
+    <Box onKeyDown={navigateList} onBlur={() => setOpen(false)} sx={{ position: 'relative' }}>
       {renderInput({
         value: displayValue,
         role: 'combobox',
@@ -232,23 +154,6 @@ export const BaseSelect = ({ options, name, renderInput, value, onChange }: Base
     </Box>
   )
 }
-
-const OptionText = styled(Typography)`
-  padding: 8px;
-
-  &:hover {
-    background: #efeff4;
-  }
-`
-
-const ClearInputWrapper = styled(Button)`
-  background: #fff;
-  padding: 4px 8px;
-
-  &:hover {
-    background: #e0e0e0;
-  }
-`
 
 const SelectDropdown = styled(Box)`
   position: absolute;

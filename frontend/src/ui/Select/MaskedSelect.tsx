@@ -1,6 +1,7 @@
 import { MaskedInput, Mask } from '@/ui/Input/MaskedInput'
 import { SxProps } from '@mui/joy/styles/types'
-import { BaseSelect, Options } from './BaseSelect'
+import { BaseSelect } from './BaseSelect'
+import { Options } from './types'
 
 export type MaskedSelectProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
   sx?: SxProps

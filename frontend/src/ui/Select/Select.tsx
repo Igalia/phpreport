@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { Input } from '@/ui/Input/Input'
 import { SxProps } from '@mui/joy/styles/types'
-import { BaseSelect, Options } from './BaseSelect'
+import { BaseSelect } from './BaseSelect'
+import { Options } from './types'
 
 type SelectProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
   sx?: SxProps
