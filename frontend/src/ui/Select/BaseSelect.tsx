@@ -9,7 +9,7 @@ import { getDisplayValue, autoCompleteMatch } from './select-utils'
 import { Options } from './types'
 
 type RenderInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  endDecorator: React.ReactNode
+  endDecorator?: React.ReactNode
 }
 
 type BaseSelectProps = {
@@ -91,6 +91,24 @@ export const BaseSelect = ({ options, name, renderInput, value, onChange }: Base
       {renderInput({
         value: displayValue,
         role: 'combobox',
+        name,
+        'aria-autocomplete': 'list',
+        'aria-haspopup': 'listbox',
+        'aria-expanded': open,
+        'aria-controls': selectId,
+        'aria-labelledby': 'select input',
+        onKeyDown: (e) => {
+          if (onChange && e.key === 'Tab') {
+            if (value.length > 0 && filteredOptions.length > 0) {
+              const nextOption = filteredOptions[0]
+              const newValue = typeof nextOption === 'string' ? nextOption : nextOption.value
+
+              onChange(newValue)
+            }
+
+            setOpen(false)
+          }
+        },
         onFocus: () => setOpen(true),
         endDecorator: (
           <>
@@ -102,7 +120,7 @@ export const BaseSelect = ({ options, name, renderInput, value, onChange }: Base
               component="ul"
               role="listbox"
               id={selectId}
-              tabIndex={0}
+              tabIndex={filteredOptions.length > 0 ? 0 : undefined}
               onFocus={() => setOpen(true)}
               onBlur={() => setOpen(false)}
             >
@@ -112,11 +130,11 @@ export const BaseSelect = ({ options, name, renderInput, value, onChange }: Base
                 value={value}
                 activeIndex={activeOption}
                 selectOption={(value) => {
+                  setOpen(false)
                   if (onChange) {
                     setActiveOption(-1)
                     onChange(value)
                   }
-                  setOpen(false)
                 }}
               />
             </SelectDropdown>
@@ -132,24 +150,7 @@ export const BaseSelect = ({ options, name, renderInput, value, onChange }: Base
               />
             )}
           </>
-        ),
-        'aria-autocomplete': 'list',
-        'aria-haspopup': 'listbox',
-        'aria-expanded': open,
-        'aria-controls': selectId,
-        'aria-labelledby': 'select input',
-        onKeyDown: (e) => {
-          if (onChange && e.key === 'Tab') {
-            if (value.length > 0) {
-              const nextOption = filteredOptions[0]
-              const newValue = typeof nextOption === 'string' ? nextOption : nextOption.value
-
-              onChange(newValue)
-            }
-
-            setOpen(false)
-          }
-        }
+        )
       })}
     </Box>
   )

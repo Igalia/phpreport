@@ -16,7 +16,7 @@ export const NoResult = () => (
   </li>
 )
 
-export const Option = ({ label, selectOption, isActive, selected, key }: OptionsProp) => {
+export const Option = ({ label, selectOption, isActive, selected }: OptionsProp) => {
   const optionRef = useRef<HTMLLIElement>(null)
 
   useEffect(() => {
@@ -37,7 +37,6 @@ export const Option = ({ label, selectOption, isActive, selected, key }: Options
       ref={optionRef}
       role="option"
       aria-selected={selected}
-      key={key}
     >
       <OptionText sx={{ background: isActive ? '#efeff4' : '#fff' }}>{label}</OptionText>
     </li>
