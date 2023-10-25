@@ -54,6 +54,20 @@ const getDisplayValue = (value: string, options: Options) => {
   return (options as Array<Option>).find((option) => option.value === value)?.label || value
 }
 
+const autoCompleteMatch = (value: string, options: Options) => {
+  const regex = new RegExp('^' + value, 'i')
+
+  if (value.length === 0) {
+    return options
+  }
+
+  return options.filter((option) => {
+    const optionLabel = typeof option === 'string' ? option : option.label
+
+    return optionLabel.match(regex)
+  })
+}
+
 const ClearInput = ({ clearInput }: ClearInputProps) => {
   return (
     <ClearInputWrapper onClick={clearInput}>
@@ -133,77 +147,88 @@ export const BaseSelect = ({ options, name, renderInput, value, onChange }: Base
   const [open, setOpen] = useState(false)
   const [activeOption, setActiveOption] = useState(-1)
   const selectId = `${name}-select-dropdown`
-  const filteredOptions = options.filter((option) => {
-    if (typeof option === 'string') {
-      return option.toLowerCase().includes(value.toLowerCase())
-    } else {
-      return option.label.toLowerCase().includes(value.toLowerCase())
+  const displayValue = getDisplayValue(value, options)
+  const filteredOptions = autoCompleteMatch(displayValue, options)
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowDown' && activeOption < filteredOptions.length - 1) {
+      e.preventDefault()
+
+      setActiveOption((prevState) => prevState + 1)
     }
-  })
+
+    if (e.key === 'ArrowUp' && filteredOptions.length > 0) {
+      e.preventDefault()
+
+      setActiveOption((prevState) => prevState - 1)
+    }
+  }
 
   return (
-    <Box
-      onKeyDown={(e) => {
-        if (e.key === 'ArrowDown' && activeOption < filteredOptions.length - 1) {
-          e.preventDefault()
-
-          setActiveOption((prevState) => prevState + 1)
-        }
-
-        if (e.key === 'ArrowUp' && filteredOptions.length > 0) {
-          e.preventDefault()
-
-          setActiveOption((prevState) => prevState - 1)
-        }
-      }}
-      onFocus={() => setOpen(true)}
-      onBlur={() => setOpen(false)}
-      sx={{ position: 'relative' }}
-    >
+    <Box onKeyDown={handleKeyDown} onBlur={() => setOpen(false)} sx={{ position: 'relative' }}>
       {renderInput({
-        value: getDisplayValue(value, options),
+        value: displayValue,
         role: 'combobox',
-        endDecorator: value.length > 0 && (
-          <ClearInput
-            clearInput={() => {
-              if (onChange) {
-                onChange('')
-                setActiveOption(-1)
-                setOpen(false)
-              }
-            }}
-          />
+        onFocus: () => setOpen(true),
+        endDecorator: (
+          <>
+            <SelectDropdown
+              sx={{
+                opacity: open ? 100 : 0,
+                visibility: open ? 'visible' : 'hidden'
+              }}
+              component="ul"
+              role="listbox"
+              id={selectId}
+              tabIndex={0}
+              onFocus={() => setOpen(true)}
+              onBlur={() => setOpen(false)}
+            >
+              <Options
+                options={filteredOptions as Options}
+                name={name}
+                value={value}
+                activeIndex={activeOption}
+                selectOption={(value) => {
+                  if (onChange) {
+                    setActiveOption(-1)
+                    onChange(value)
+                  }
+                  setOpen(false)
+                }}
+              />
+            </SelectDropdown>
+            {value.length > 0 && (
+              <ClearInput
+                clearInput={() => {
+                  if (onChange) {
+                    onChange('')
+                    setActiveOption(-1)
+                    setOpen(false)
+                  }
+                }}
+              />
+            )}
+          </>
         ),
         'aria-autocomplete': 'list',
         'aria-haspopup': 'listbox',
         'aria-expanded': open,
         'aria-controls': selectId,
-        'aria-labelledby': 'select input'
-      })}
-      <SelectDropdown
-        sx={{
-          opacity: open ? 100 : 0,
-          visibility: open ? 'visible' : 'hidden'
-        }}
-        component="ul"
-        role="listbox"
-        id={selectId}
-        tabIndex={0}
-      >
-        <Options
-          options={filteredOptions as Options}
-          name={name}
-          value={value}
-          activeIndex={activeOption}
-          selectOption={(value) => {
-            if (onChange) {
-              setActiveOption(-1)
-              onChange(value)
+        'aria-labelledby': 'select input',
+        onKeyDown: (e) => {
+          if (onChange && e.key === 'Tab') {
+            if (value.length > 0) {
+              const nextOption = filteredOptions[0]
+              const newValue = typeof nextOption === 'string' ? nextOption : nextOption.value
+
+              onChange(newValue)
             }
+
             setOpen(false)
-          }}
-        />
-      </SelectDropdown>
+          }
+        }
+      })}
     </Box>
   )
 }
@@ -227,6 +252,8 @@ const ClearInputWrapper = styled(Button)`
 
 const SelectDropdown = styled(Box)`
   position: absolute;
+  top: 55px;
+  right: 0;
   z-index: 1;
   list-style: none;
   width: 100%;
@@ -235,7 +262,7 @@ const SelectDropdown = styled(Box)`
   border: 1px solid #caced1;
   border-radius: 8px;
   padding: 10px 0;
-  margin-top: 10px;
+  margin-top: 5px;
   max-height: 200px;
   overflow-y: auto;
   transition: 0.2s ease;
