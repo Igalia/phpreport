@@ -30,17 +30,21 @@ export const MaskedSelect = ({
       name={name}
       value={value}
       onChange={onChange}
-      renderInput={(props) => (
+      renderInput={({ onChange, ...props }) => (
         <MaskedInput
+          {...props}
           placeholder={placeholder}
-          onAccept={onChange}
+          onAccept={(value) => {
+            if (onChange) {
+              onChange(value)
+            }
+          }}
           name={name}
           sx={sx}
           label={label}
           disabled={disabled}
           required={required}
           mask={mask}
-          {...props}
         />
       )}
     />

@@ -1,15 +1,18 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Box from '@mui/joy/Box'
 import { styled } from '@mui/joy'
 import { ClearInput } from './components/ClearInput'
-import { Option, NoResult } from './components/Option'
+import { Option } from './components/Option'
 import { getDisplayValue, autoCompleteMatch } from './select-utils'
 import { Options } from './types'
 
-type RenderInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+const NO_OPTION_SELECTED = -1
+
+type RenderInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
   endDecorator?: React.ReactNode
+  onChange: (value: string) => void
 }
 
 type BaseSelectProps = {
@@ -23,29 +26,21 @@ type BaseSelectProps = {
 type OptionsProps = {
   options: Options
   name?: string
-  value: string
   selectOption: (value: string) => void
   activeIndex: number
 }
 
-const Options = ({ options, selectOption, name, value, activeIndex }: OptionsProps) => {
-  if (options.length === 0) {
-    return <NoResult></NoResult>
-  }
-
+const Options = ({ options, selectOption, name, activeIndex }: OptionsProps) => {
   return options.map((option, index) => {
-    let selected: boolean
     let label: string
     let key: string
     let newValue: string
 
     if (typeof option === 'string') {
-      selected = option === value
       label = option
       key = `${name}-${option}`
       newValue = option
     } else {
-      selected = option.value === value
       label = option.label
       key = option.value
       newValue = option.value
@@ -53,11 +48,11 @@ const Options = ({ options, selectOption, name, value, activeIndex }: OptionsPro
 
     return (
       <Option
-        selected={selected}
         label={label}
         key={key}
         selectOption={() => selectOption(newValue)}
-        isActive={index === activeIndex}
+        selected={index === activeIndex}
+        id={`${name}-${index}`}
       />
     )
   })
@@ -65,93 +60,164 @@ const Options = ({ options, selectOption, name, value, activeIndex }: OptionsPro
 
 export const BaseSelect = ({ options, name, renderInput, value, onChange }: BaseSelectProps) => {
   const [open, setOpen] = useState(false)
-  const [activeOption, setActiveOption] = useState(-1)
+  const [activeOption, setActiveOption] = useState(NO_OPTION_SELECTED)
+  const [displayValue, setDisplayValue] = useState(getDisplayValue(value, options))
 
   const selectId = `${name}-select-dropdown`
-
-  const displayValue = getDisplayValue(value, options)
   const filteredOptions = autoCompleteMatch(displayValue, options)
 
-  const navigateList = (e: React.KeyboardEvent) => {
-    if (e.key === 'ArrowDown' && activeOption < filteredOptions.length - 1) {
-      e.preventDefault()
-
-      setActiveOption((prevState) => prevState + 1)
+  const handleChange = (newValue: string) => {
+    if (onChange) {
+      onChange(newValue)
     }
 
-    if (e.key === 'ArrowUp' && filteredOptions.length > 0) {
-      e.preventDefault()
+    setDisplayValue(getDisplayValue(newValue, options))
+  }
 
-      setActiveOption((prevState) => prevState - 1)
+  useEffect(() => {
+    if (filteredOptions.length === 0) {
+      setOpen(false)
     }
+  }, [filteredOptions])
+
+  const selectedOption = () => {
+    const selected = filteredOptions[activeOption]
+
+    return typeof selected === 'string' ? selected : selected.value
+  }
+
+  const closeDropdown = () => {
+    setOpen(false)
+    setActiveOption(NO_OPTION_SELECTED)
   }
 
   return (
-    <Box onKeyDown={navigateList} onBlur={() => setOpen(false)} sx={{ position: 'relative' }}>
+    <Box sx={{ position: 'relative' }}>
       {renderInput({
         value: displayValue,
         role: 'combobox',
         name,
+        autoComplete: 'off',
         'aria-autocomplete': 'list',
+        'aria-activedescendant': `${name}-${activeOption}`,
         'aria-haspopup': 'listbox',
         'aria-expanded': open,
         'aria-controls': selectId,
         'aria-labelledby': 'select input',
+        onClick: () => setOpen(true),
+        onBlur: () => closeDropdown(),
+        onChange: (newValue) => {
+          if (!open && newValue.length > 0 && !(filteredOptions.length === 1)) {
+            setOpen(true)
+          }
+
+          handleChange(newValue)
+          setActiveOption(NO_OPTION_SELECTED)
+        },
         onKeyDown: (e) => {
-          if (onChange && e.key === 'Tab') {
-            if (value.length > 0 && filteredOptions.length > 0) {
-              const nextOption = filteredOptions[0]
-              const newValue = typeof nextOption === 'string' ? nextOption : nextOption.value
-
-              onChange(newValue)
+          if (e.key === 'ArrowDown' && e.altKey) {
+            if (!open) {
+              setOpen(true)
             }
+          }
 
-            setOpen(false)
+          const lastElement = filteredOptions.length - 1
+          const firstElement = 0
+
+          switch (e.key) {
+            case 'Tab':
+              if (value.length > 0 && filteredOptions.length > 0) {
+                const optionIndex = activeOption === NO_OPTION_SELECTED ? 0 : activeOption
+                const nextOption = filteredOptions[optionIndex]
+                const newValue = typeof nextOption === 'string' ? nextOption : nextOption.value
+
+                handleChange(newValue)
+              }
+              break
+
+            case 'Enter':
+              if (open) {
+                e.preventDefault()
+              }
+
+              if (activeOption !== NO_OPTION_SELECTED) {
+                handleChange(selectedOption())
+              }
+
+              closeDropdown()
+              break
+            case 'Escape':
+              if (open) {
+                closeDropdown()
+              }
+
+              handleChange('')
+              break
+            case 'ArrowLeft':
+            case 'ArrowRight':
+            case 'Home':
+            case 'End':
+              setActiveOption(NO_OPTION_SELECTED)
+              break
+            case 'ArrowDown':
+              if (!open) {
+                setOpen(true)
+              }
+
+              if (activeOption === NO_OPTION_SELECTED || activeOption === lastElement) {
+                e.preventDefault()
+                setActiveOption(firstElement)
+              } else {
+                e.preventDefault()
+                setActiveOption((prevState) => prevState + 1)
+              }
+              break
+            case 'ArrowUp':
+              if (!open) {
+                setOpen(true)
+              }
+
+              if (activeOption === NO_OPTION_SELECTED || activeOption === firstElement) {
+                e.preventDefault()
+                setActiveOption(lastElement)
+              } else {
+                e.preventDefault()
+                setActiveOption((prevState) => prevState - 1)
+              }
+              break
           }
         },
-        onFocus: () => setOpen(true),
         endDecorator: (
           <>
-            <SelectDropdown
-              sx={{
-                opacity: open ? 100 : 0,
-                visibility: open ? 'visible' : 'hidden'
-              }}
-              component="ul"
-              role="listbox"
-              id={selectId}
-              tabIndex={filteredOptions.length > 0 ? 0 : undefined}
-              onFocus={() => setOpen(true)}
-              onBlur={() => setOpen(false)}
-            >
-              <Options
-                options={filteredOptions as Options}
-                name={name}
-                value={value}
-                activeIndex={activeOption}
-                selectOption={(value) => {
-                  setOpen(false)
-                  if (onChange) {
-                    setActiveOption(-1)
-                    onChange(value)
-                  }
-                }}
-              />
-            </SelectDropdown>
             {value.length > 0 && (
               <ClearInput
                 clearInput={() => {
-                  if (onChange) {
-                    onChange('')
-                    setActiveOption(-1)
-                    setOpen(false)
-                  }
+                  handleChange('')
+                  closeDropdown()
                 }}
               />
             )}
           </>
         )
       })}
+      <SelectDropdown
+        sx={{
+          opacity: open ? 100 : 0,
+          visibility: open ? 'visible' : 'hidden'
+        }}
+        component="ul"
+        role="listbox"
+        data-testid={`${name}-dropdown`}
+        id={selectId}
+        tabIndex={-1}
+      >
+        <Options
+          options={filteredOptions as Options}
+          name={name}
+          activeIndex={activeOption}
+          selectOption={(value) => handleChange(value)}
+        />
+      </SelectDropdown>
     </Box>
   )
 }

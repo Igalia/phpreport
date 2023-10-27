@@ -1,13 +1,13 @@
-import React, { useRef, useEffect } from 'react'
+import React from 'react'
 import Typography from '@mui/joy/Typography'
 import { styled } from '@mui/joy'
 
 type OptionsProp = {
   label: string
   selectOption: () => void
-  isActive: boolean
   selected: boolean
   key: string
+  id: string
 }
 
 export const NoResult = () => (
@@ -16,29 +16,10 @@ export const NoResult = () => (
   </li>
 )
 
-export const Option = ({ label, selectOption, isActive, selected }: OptionsProp) => {
-  const optionRef = useRef<HTMLLIElement>(null)
-
-  useEffect(() => {
-    if (isActive) {
-      optionRef.current?.focus()
-    }
-  }, [isActive])
-
+export const Option = ({ label, selectOption, selected, id }: OptionsProp) => {
   return (
-    <li
-      tabIndex={-1}
-      onClick={selectOption}
-      onKeyDown={(e) => {
-        if (isActive && e.key === 'Tab') {
-          selectOption()
-        }
-      }}
-      ref={optionRef}
-      role="option"
-      aria-selected={selected}
-    >
-      <OptionText sx={{ background: isActive ? '#efeff4' : '#fff' }}>{label}</OptionText>
+    <li id={id} onClick={selectOption} role="option" aria-selected={selected}>
+      <OptionText sx={{ background: selected ? '#efeff4' : '#fff' }}>{label}</OptionText>
     </li>
   )
 }

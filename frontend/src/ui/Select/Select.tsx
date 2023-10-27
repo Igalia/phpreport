@@ -31,10 +31,11 @@ export const Select = ({
       onChange={onChange}
       renderInput={(props) => (
         <Input
+          {...props}
           placeholder={placeholder}
           onChange={(e) => {
-            if (onChange) {
-              onChange(e.target.value)
+            if (props.onChange) {
+              props.onChange(e.target.value)
             }
           }}
           name={name}
@@ -42,7 +43,6 @@ export const Select = ({
           label={label}
           disabled={disabled}
           required={required}
-          {...props}
         />
       )}
     />

@@ -8,7 +8,13 @@ type ClearInputProps = {
 
 export const ClearInput = ({ clearInput }: ClearInputProps) => {
   return (
-    <ClearInputWrapper aria-label="clear input" onClick={clearInput}>
+    <ClearInputWrapper
+      tabIndex={-1}
+      aria-label="clear input"
+      onClick={() => {
+        clearInput()
+      }}
+    >
       <Dismiss12Regular color="#404040" />
     </ClearInputWrapper>
   )

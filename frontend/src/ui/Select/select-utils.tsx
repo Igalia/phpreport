@@ -9,7 +9,7 @@ export const getDisplayValue = (value: string, options: Options) => {
 }
 
 export const autoCompleteMatch = (value: string, options: Options) => {
-  const regex = new RegExp('^' + value, 'i')
+  const regex = new RegExp('^' + value.replace(':', ''), 'i')
 
   if (value.length === 0) {
     return options
@@ -18,6 +18,6 @@ export const autoCompleteMatch = (value: string, options: Options) => {
   return options.filter((option) => {
     const optionLabel = typeof option === 'string' ? option : option.label
 
-    return optionLabel.match(regex)
+    return optionLabel.replace(':', '').match(regex)
   })
 }
