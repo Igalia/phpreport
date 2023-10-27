@@ -86,6 +86,8 @@ class TaskBase(BaseModel):
     start_time: Optional[str] = None
     end_time: Optional[str] = None
 
+
+class TaskCreationBase(TaskBase):
     @model_validator(mode="after")
     @classmethod
     def end_after_init_task(cls, data: Any) -> Any:
@@ -103,7 +105,7 @@ class TaskBase(BaseModel):
 
 
 # Properties to receive on creation
-class TaskNew(TaskBase):
+class TaskNew(TaskCreationBase):
     date: date
     project_id: int
     user_id: int
@@ -121,8 +123,7 @@ class TaskNew(TaskBase):
         return time_string_to_int(self.end_time)
 
 
-class TaskUpdate(TaskBase):
-    date: Optional[date] = None
+class TaskUpdate(TaskCreationBase):
     start_time: Optional[Annotated[str, StringConstraints(pattern=r"^([01]?[0-9]|2[0-3]):[0-5][0-9]")]] = None
     end_time: Optional[Annotated[str, StringConstraints(pattern=r"^([01]?[0-9]|2[0-3]):[0-5][0-9]")]] = None
     project_name: Optional[str] = None
@@ -140,6 +141,7 @@ class TaskInDb(TaskBase):
 
 
 # Properties to return to client
-class Task(TaskInDb):
+class Task(TaskBase):
+    id: int
     project_name: str
     customer_name: Optional[str] = None
