@@ -169,7 +169,7 @@ async def update_task(
     if task.end_time:
         task.end = time_string_to_int(task.end_time)
     existing_data = jsonable_encoder(existing_task)
-    update_data = task.dict(exclude_unset=True)
+    update_data = task.model_dump(exclude_unset=True)
     for field in existing_data:
         if field in update_data:
             setattr(existing_task, field, update_data[field])
