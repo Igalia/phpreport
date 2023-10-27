@@ -1,7 +1,7 @@
 from models.area import Area
 from models.customer import Customer
 from models.project import Project
-from models.timelog import TaskType, Template
+from models.timelog import Task, TaskType, Template
 from models.user import User, UserGroup, UserRoles
 from models.sector import Sector
 
@@ -40,13 +40,17 @@ DATA = [
     ),
     (
         Project,
-        [{"description": "Holidays", "area_id": 1, "customer_id": 1, "is_active": True}],
+        [
+            {"description": "Holidays", "area_id": 1, "customer_id": 1, "is_active": True},
+            {"description": "Internal", "area_id": 1, "customer_id": 1, "is_active": True},
+        ],
     ),
     (
         TaskType,
         [
             {"active": True, "name": "Meeting", "slug": "meeting"},
             {"active": False, "name": "Deprecated Type", "slug": "deprecated"},
+            {"active": True, "name": "Project time", "slug": "project"},
         ],
     ),
     (
@@ -81,6 +85,31 @@ DATA = [
                 "end": 1320,
                 "user_id": None,
                 "is_global": True,
+            },
+        ],
+    ),
+    (
+        Task,
+        [
+            {
+                "date": "2023-10-20",
+                "init": 1200,
+                "end": 1320,
+                "story": "that project",
+                "task_type": "project",
+                "description": "Working in that awesome project",
+                "user_id": 1,
+                "project_id": 2,
+            },
+            {
+                "date": "2023-10-20",
+                "init": 1200,
+                "end": 1320,
+                "story": "that project",
+                "task_type": "project",
+                "description": "Doing some stuff",
+                "user_id": 2,
+                "project_id": 2,
             },
         ],
     ),
