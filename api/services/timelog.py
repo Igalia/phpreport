@@ -96,7 +96,7 @@ class TaskService(AppService):
 
     def update_task(self, existing_task: Task, task_updates: TaskUpdate) -> Task:
         existing_data = jsonable_encoder(existing_task)
-        update_data = task_updates.dict(exclude_unset=True)
+        update_data = task_updates.model_dump(exclude_unset=True)
         for field in existing_data:
             if field in update_data:
                 setattr(existing_task, field, update_data[field])
