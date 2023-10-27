@@ -117,19 +117,8 @@ async def get_user_tasks(
 @router.post("/tasks", response_model=TaskSchema, status_code=201)
 async def add_task(task: TaskNewSchema, current_user=Depends(get_current_user), db: Session = Depends(get_db)):
     """
-    Create a task with the following data:
-
-    - **user id**: the user id
-    - **project_id**: the project the task is associated with
-    - **story**: the task story
-    - **description**: the task description
-    - **task type**: the task type
-    - **date**: the task date (YYYY-MM-DD)
-    - **start time**: the task start time in 24h time notation (HH:mm)
-    - **end time**: the task end time in 24h time notation (HH:mm)
-
-    \f
-    :param item: User input.
+    Create a user task. Required fields are: `user_id`, `date`, `project_id`, `start_time` and `end_time`.
+    \nBoth `start` and `end` times are in 24h time notation (HH:mm).
     """
     if current_user.id != task.user_id:
         raise HTTPException(status_code=403, detail="You are not authorized to create tasks for this user.")
@@ -145,19 +134,8 @@ async def update_task(
     task_id: int, task: TaskUpdateSchema, current_user=Depends(get_current_user), db: Session = Depends(get_db)
 ):
     """
-    Update an task with any of the following data:
-
-    - **user id**: the user id
-    - **project_id**: the project the task is associated with
-    - **story**: the task story
-    - **description**: the task description
-    - **task type**: the task type
-    - **date**: the task date (YYYY-MM-DD)
-    - **start time**: the task start time in 24h time notation (HH:mm)
-    - **end time**: the task end time in 24h time notation (HH:mm)
-
-    \f
-    :param item: User input.
+    Update a user task. Required fields are: `user_id`, `date`, `project_id`, `start_time` and `end_time`.
+    \nBoth `start` and `end` times are in 24h time notation (HH:mm).
     """
     existing_task = TaskService(db).get_task(task_id)
     if not existing_task:
