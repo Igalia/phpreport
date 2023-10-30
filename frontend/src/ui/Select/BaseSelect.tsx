@@ -80,6 +80,10 @@ export const BaseSelect = ({ options, name, renderInput, value, onChange }: Base
     }
   }, [filteredOptions])
 
+  useEffect(() => {
+    setDisplayValue(getDisplayValue(value, options))
+  }, [options, value])
+
   const selectedOption = () => {
     const selected = filteredOptions[activeOption]
 
