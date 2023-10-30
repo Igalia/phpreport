@@ -2,19 +2,25 @@ import { Select } from '../Select'
 import { screen, renderWithUser, act } from '@/test-utils/test-utils'
 import { Options } from '../types'
 
-const strOptions = ['beach', 'mountain', 'city']
-const structOptions = [
-  { label: 'beach', value: 0 },
-  { label: 'mountain', value: 1 },
-  { label: 'city', value: 2 }
+const strOptions: Options = ['beach', 'mountain', 'city']
+const structOptions: Options = [
+  { label: 'beach', value: '0' },
+  { label: 'mountain', value: '1' },
+  { label: 'city', value: '2' }
 ]
 
 const setupBaseSelect = ({
   value = '',
-  options = [] as Options,
-  onChange = () => {},
+  options = [],
+  onChange,
   name = 'select-name',
   label = 'Select Option'
+}: {
+  value?: string
+  options?: Options
+  onChange?: () => void
+  name?: string
+  label?: string
 }) => {
   return renderWithUser(
     <Select value={value} label={label} name={name} onChange={onChange} options={options} />
@@ -22,21 +28,91 @@ const setupBaseSelect = ({
 }
 
 describe('Select', () => {
-  // it('renders the component with string options and selects an option', async () => {
-  //   const onChange = jest.fn()
-  //   const { user } = setupBaseSelect({ options: strOptions, onChange })
+  describe('when the options are an array of strings', () => {
+    it('renders the options', async () => {
+      const { user } = setupBaseSelect({ options: strOptions })
 
-  //   const selectInput = screen.getByRole('combobox', { name: 'Select Option' })
+      const selectInput = screen.getByRole('combobox', { name: 'Select Option' })
 
-  //   await user.click(selectInput)
+      await user.click(selectInput)
 
-  //   expect(screen.getByRole('listbox')).toBeVisible()
+      expect(screen.getByRole('option', { name: 'beach' })).toBeVisible()
+      expect(screen.getByRole('option', { name: 'mountain' })).toBeVisible()
+      expect(screen.getByRole('option', { name: 'city' })).toBeVisible()
+    })
 
-  //   await user.click(screen.getByRole('option', { name: 'beach' }))
+    it('selects an options when it the option is clicked', async () => {
+      const { user } = setupBaseSelect({ options: strOptions })
 
-  //   expect(onChange).toBeCalledWith('beach')
-  //   expect(screen.getByRole('listbox')).not.toBeVisible()
-  // })
+      const selectInput = screen.getByRole('combobox', { name: 'Select Option' })
+
+      await user.click(selectInput)
+
+      await user.click(screen.getByRole('option', { name: 'beach' }))
+
+      expect(selectInput).toHaveValue('beach')
+    })
+
+    it('calls the onChange function when the select is clicked if it is provided', async () => {
+      const onChange = jest.fn()
+      const { user } = setupBaseSelect({ options: strOptions, onChange })
+
+      const selectInput = screen.getByRole('combobox', { name: 'Select Option' })
+
+      await user.click(selectInput)
+
+      await user.click(screen.getByRole('option', { name: 'beach' }))
+
+      expect(onChange).toHaveBeenCalledWith('beach')
+    })
+  })
+
+  describe('when the options are an array of an option hash', () => {
+    it('renders the options', async () => {
+      const { user } = setupBaseSelect({ options: structOptions })
+
+      const selectInput = screen.getByRole('combobox', { name: 'Select Option' })
+
+      await user.click(selectInput)
+
+      expect(screen.getByRole('option', { name: 'beach' })).toBeVisible()
+      expect(screen.getByRole('option', { name: 'mountain' })).toBeVisible()
+      expect(screen.getByRole('option', { name: 'city' })).toBeVisible()
+    })
+
+    it('selects an options when it the option is clicked', async () => {
+      const { user } = setupBaseSelect({ options: structOptions })
+
+      const selectInput = screen.getByRole('combobox', { name: 'Select Option' })
+
+      await user.click(selectInput)
+
+      await user.click(screen.getByRole('option', { name: 'beach' }))
+
+      expect(selectInput).toHaveValue('beach')
+    })
+
+    it('calls the onChange function with the option value', async () => {
+      const onChange = jest.fn()
+      const { user } = setupBaseSelect({ options: structOptions, onChange })
+
+      const selectInput = screen.getByRole('combobox', { name: 'Select Option' })
+
+      await user.click(selectInput)
+
+      await user.click(screen.getByRole('option', { name: 'beach' }))
+
+      expect(onChange).toHaveBeenCalledWith('0')
+    })
+
+    it('shows the correct display value when the option is selected', async () => {
+      setupBaseSelect({ options: structOptions, value: '0' })
+
+      const selectInput = screen.getByRole('combobox', { name: 'Select Option' })
+
+      expect(selectInput).toHaveValue('beach')
+    })
+  })
 
   it('opens the dropdown when the user clicks on the input', async () => {
     const { user } = setupBaseSelect({ options: strOptions })
