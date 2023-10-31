@@ -21,6 +21,7 @@ type BaseSelectProps = {
   renderInput: (props: RenderInputProps) => React.ReactNode
   value: string
   onChange?: (value: string) => void
+  disabled?: boolean
 }
 
 type OptionsProps = {
@@ -58,7 +59,14 @@ const Options = ({ options, selectOption, name, activeIndex }: OptionsProps) => 
   })
 }
 
-export const BaseSelect = ({ options, name, renderInput, value, onChange }: BaseSelectProps) => {
+export const BaseSelect = ({
+  options,
+  name,
+  renderInput,
+  value,
+  onChange,
+  disabled
+}: BaseSelectProps) => {
   const [open, setOpen] = useState(false)
   const [activeOption, setActiveOption] = useState(NO_OPTION_SELECTED)
   const [displayValue, setDisplayValue] = useState(getDisplayValue(value, options))
@@ -101,6 +109,7 @@ export const BaseSelect = ({ options, name, renderInput, value, onChange }: Base
         value: displayValue,
         role: 'combobox',
         name,
+        disabled,
         autoComplete: 'off',
         'aria-autocomplete': 'list',
         'aria-activedescendant': `${name}-${activeOption}`,
@@ -111,7 +120,7 @@ export const BaseSelect = ({ options, name, renderInput, value, onChange }: Base
         onClick: () => setOpen(true),
         onBlur: () => closeDropdown(),
         onChange: (newValue) => {
-          if (!open && newValue.length > 0 && !(filteredOptions.length === 1)) {
+          if (!open && newValue.length > 0) {
             setOpen(true)
           }
 
@@ -195,6 +204,7 @@ export const BaseSelect = ({ options, name, renderInput, value, onChange }: Base
           <>
             {value.length > 0 && (
               <ClearInput
+                disabled={disabled}
                 clearInput={() => {
                   handleChange('')
                   closeDropdown()

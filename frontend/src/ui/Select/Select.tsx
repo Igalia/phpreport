@@ -29,6 +29,7 @@ export const Select = ({
       name={name}
       value={value}
       onChange={onChange}
+      disabled={disabled}
       renderInput={(props) => (
         <Input
           {...props}
@@ -41,7 +42,6 @@ export const Select = ({
           name={name}
           sx={sx}
           label={label}
-          disabled={disabled}
           required={required}
         />
       )}

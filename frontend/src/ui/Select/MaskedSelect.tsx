@@ -30,6 +30,7 @@ export const MaskedSelect = ({
       name={name}
       value={value}
       onChange={onChange}
+      disabled={disabled}
       renderInput={({ onChange, ...props }) => (
         <MaskedInput
           {...props}
@@ -42,7 +43,6 @@ export const MaskedSelect = ({
           name={name}
           sx={sx}
           label={label}
-          disabled={disabled}
           required={required}
           mask={mask}
         />

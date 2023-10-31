@@ -4,9 +4,10 @@ import { styled } from '@mui/joy'
 
 type ClearInputProps = {
   clearInput: () => void
+  disabled?: boolean
 }
 
-export const ClearInput = ({ clearInput }: ClearInputProps) => {
+export const ClearInput = ({ clearInput, disabled }: ClearInputProps) => {
   return (
     <ClearInputWrapper
       tabIndex={-1}
@@ -14,6 +15,7 @@ export const ClearInput = ({ clearInput }: ClearInputProps) => {
       onClick={() => {
         clearInput()
       }}
+      disabled={disabled}
     >
       <Dismiss12Regular color="#404040" />
     </ClearInputWrapper>
