@@ -83,12 +83,6 @@ export const BaseSelect = ({
   }
 
   useEffect(() => {
-    if (filteredOptions.length === 0) {
-      setOpen(false)
-    }
-  }, [filteredOptions])
-
-  useEffect(() => {
     setDisplayValue(getDisplayValue(value, options))
   }, [options, value])
 
@@ -120,6 +114,10 @@ export const BaseSelect = ({
         onClick: () => setOpen(true),
         onBlur: () => closeDropdown(),
         onChange: (newValue) => {
+          if (value === newValue) {
+            return
+          }
+
           if (!open && newValue.length > 0) {
             setOpen(true)
           }
@@ -216,8 +214,8 @@ export const BaseSelect = ({
       })}
       <SelectDropdown
         sx={{
-          opacity: open ? 100 : 0,
-          visibility: open ? 'visible' : 'hidden'
+          opacity: open && filteredOptions.length > 0 ? 100 : 0,
+          visibility: open && filteredOptions.length > 0 ? 'visible' : 'hidden'
         }}
         component="ul"
         role="listbox"
