@@ -1,18 +1,18 @@
-import * as React from 'react'
-import { Input } from '@/ui/Input/Input'
+import { MaskedInput, Mask } from '@/ui/Input/MaskedInput'
 import { SxProps } from '@mui/joy/styles/types'
 import { BaseSelect } from './BaseSelect'
 import { Options } from './types'
 
-type SelectProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
+export type MaskedSelectProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
   sx?: SxProps
   options: Options
   label: string
   value: string
+  mask: Mask
   onChange?: (value: string) => void
 }
 
-export const Select = ({
+export const MaskedSelect = ({
   sx,
   value,
   onChange,
@@ -21,8 +21,9 @@ export const Select = ({
   label,
   placeholder,
   disabled,
-  required
-}: SelectProps) => {
+  required,
+  mask
+}: MaskedSelectProps) => {
   return (
     <BaseSelect
       options={options}
@@ -30,19 +31,20 @@ export const Select = ({
       value={value}
       onChange={onChange}
       disabled={disabled}
-      renderInput={(props) => (
-        <Input
+      renderInput={({ onChange, ...props }) => (
+        <MaskedInput
           {...props}
           placeholder={placeholder}
-          onChange={(e) => {
-            if (props.onChange) {
-              props.onChange(e.target.value)
+          onAccept={(value) => {
+            if (onChange) {
+              onChange(value)
             }
           }}
           name={name}
           sx={sx}
           label={label}
           required={required}
+          mask={mask}
         />
       )}
     />
