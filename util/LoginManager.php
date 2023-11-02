@@ -43,7 +43,7 @@ require_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
  */
 class LoginManager
 {
-  private static function setupOidcClient()
+  public static function setupOidcClient()
   {
     $client = new Client(
       ConfigurationParametersManager::getParameter('OIDC_AUTHORITY'),
