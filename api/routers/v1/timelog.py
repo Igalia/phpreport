@@ -1,6 +1,6 @@
 from typing import List
 from datetime import date
-from fastapi import APIRouter, Depends, Query, HTTPException
+from fastapi import APIRouter, Depends, Query, HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
@@ -14,41 +14,66 @@ from schemas.timelog import (
     TaskUpdate as TaskUpdateSchema,
 )
 from schemas.validation import ValidatedObject
+from schemas.user import AppUser
 from services.timelog import TaskTypeService, TemplateService, TaskService
 from services.projects import ProjectService
 from services.config import ConfigService
 from db.db_connection import get_db
 from auth.auth_bearer import BearerToken
-from dependencies import get_current_user, AppUser
+from dependencies import get_current_user, PermissionsValidator
 from helpers.time import time_string_to_int
 
 router = APIRouter(
     prefix="/timelog",
     tags=["timelog"],
-    responses={403: {"description": "Forbidden"}, 404: {"description": "Not found"}},
+    responses={
+        status.HTTP_403_FORBIDDEN: {"description": "Forbidden"},
+        status.HTTP_404_NOT_FOUND: {"description": "Not found"},
+    },
     dependencies=[Depends(BearerToken())],
 )
 
 
-@router.get("/task_types/", response_model=List[TaskTypeItem])
+@router.get(
+    "/task_types/",
+    response_model=List[TaskTypeItem],
+    dependencies=[Depends(PermissionsValidator(required_permissions=["task_type:read"]))],
+)
 async def get_task_types(
-    current_user=Depends(get_current_user), db: Session = Depends(get_db), skip: int = 0, limit: int = 100
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+    skip: int = 0,
+    limit: int = 100,
 ):
     items = TaskTypeService(db).get_items()
     return items
 
 
-@router.get("/templates", response_model=List[TemplateSchema])
+@router.get(
+    "/templates",
+    response_model=List[TemplateSchema],
+    dependencies=[Depends(PermissionsValidator(required_permissions=["template:read-own", "template:read-global"]))],
+)
 async def get_user_templates(user_id: int, current_user=Depends(get_current_user), db: Session = Depends(get_db)):
     if user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="You are not authorized to see templates for this user")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not authorized to see templates for this user",
+        )
     templates = TemplateService(db).get_user_templates(user_id)
     return templates
 
 
-@router.post("/templates", response_model=TemplateSchema, status_code=201)
+@router.post(
+    "/templates",
+    response_model=TemplateSchema,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(PermissionsValidator(required_permissions=["template:create-own"]))],
+)
 async def add_template(
-    template: TemplateNewSchema, current_user=Depends(get_current_user), db: Session = Depends(get_db)
+    template: TemplateNewSchema,
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
     """
     Create a user or global template. Required fields are: `name` and `is_global`.
@@ -57,12 +82,19 @@ async def add_template(
     """
     validated_template = validate_template(template, db, current_user)
     if not validated_template.is_valid:
-        raise HTTPException(status_code=422, detail=validated_template.message)
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=validated_template.message,
+        )
     result = TemplateService(db).create_template(template)
     return result
 
 
-@router.put("/templates/{template_id}", response_model=TemplateSchema)
+@router.put(
+    "/templates/{template_id}",
+    response_model=TemplateSchema,
+    dependencies=[Depends(PermissionsValidator(required_permissions=["template:update-own"]))],
+)
 async def update_template(
     template_id: int,
     template: TemplateUpdateSchema,
@@ -76,29 +108,56 @@ async def update_template(
     """
     existing_template = TemplateService(db).get_template(template_id)
     if not existing_template:
-        raise HTTPException(status_code=404, detail=f"Template with id {template_id} not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Template with id {template_id} not found",
+        )
     validated_template = validate_template(template, db, current_user)
     if not validated_template.is_valid:
-        raise HTTPException(status_code=422, detail=validated_template.message)
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=validated_template.message,
+        )
     result = TemplateService(db).update_template(existing_template, template)
     return result
 
 
-@router.delete("/templates/{template_id}", status_code=204)
-async def delete_template(template_id: int, current_user=Depends(get_current_user), db: Session = Depends(get_db)):
+@router.delete(
+    "/templates/{template_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(PermissionsValidator(required_permissions=["template:delete-own"]))],
+)
+async def delete_template(
+    template_id: int,
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
     template = TemplateService(db).get_template(template_id)
     if not template:
-        raise HTTPException(status_code=404, detail=f"Template with id {template.id} not found.")
-    if template.is_global and "manager" not in current_user.roles:
-        raise HTTPException(status_code=403, detail="You are not authorized to delete global templates")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Template with id {template.id} not found.",
+        )
+    if template.is_global and "template:delete-global" not in current_user.authorized_scopes:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not authorized to delete global templates",
+        )
     else:
         if template.user_id and template.user_id != current_user.id:
-            raise HTTPException(status_code=403, detail="You are not authorized to delete templates for this user")
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You are not authorized to delete templates for this user",
+            )
     TemplateService(db).delete_template(template_id)
     return
 
 
-@router.get("/tasks", response_model=List[TaskSchema])
+@router.get(
+    "/tasks",
+    response_model=List[TaskSchema],
+    dependencies=[Depends(PermissionsValidator(required_permissions=["task:read-own"]))],
+)
 async def get_user_tasks(
     user_id: int,
     current_user=Depends(get_current_user),
@@ -108,30 +167,55 @@ async def get_user_tasks(
     start: date = date.today(),
     end: date = date.today(),
 ):
-    if current_user.id != user_id and "manager" not in current_user.roles:
-        raise HTTPException(status_code=403, detail="You are not authorized to view tasks for this user")
+    if current_user.id != user_id and "task:read-other" not in current_user.authorized_scopes:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not authorized to view tasks for this user",
+        )
     tasks = TaskService(db).get_user_tasks(user_id, offset, limit, start, end)
     return tasks
 
 
-@router.post("/tasks", response_model=TaskSchema, status_code=201)
-async def add_task(task: TaskNewSchema, current_user=Depends(get_current_user), db: Session = Depends(get_db)):
+@router.post(
+    "/tasks",
+    response_model=TaskSchema,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(PermissionsValidator(required_permissions=["task:create-own"]))],
+)
+async def add_task(
+    task: TaskNewSchema,
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
     """
     Create a user task. Required fields are: `user_id`, `date`, `project_id`, `start_time` and `end_time`.
     \nBoth `start` and `end` times are in 24h time notation (HH:mm).
     """
     if current_user.id != task.user_id:
-        raise HTTPException(status_code=403, detail="You are not authorized to create tasks for this user.")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not authorized to create tasks for this user.",
+        )
     validated_task = validate_task(task, db)
     if not validated_task.is_valid:
-        raise HTTPException(status_code=422, detail=validated_task.message)
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=validated_task.message,
+        )
     result = TaskService(db).create_task(task)
     return result
 
 
-@router.put("/tasks/{task_id}", response_model=TaskSchema)
+@router.put(
+    "/tasks/{task_id}",
+    response_model=TaskSchema,
+    dependencies=[Depends(PermissionsValidator(required_permissions=["task:update-own"]))],
+)
 async def update_task(
-    task_id: int, task: TaskUpdateSchema, current_user=Depends(get_current_user), db: Session = Depends(get_db)
+    task_id: int,
+    task: TaskUpdateSchema,
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
     """
     Update a user task. Required fields are: `user_id`, `date`, `project_id`, `start_time` and `end_time`.
@@ -139,9 +223,15 @@ async def update_task(
     """
     existing_task = TaskService(db).get_task(task_id)
     if not existing_task:
-        raise HTTPException(status_code=404, detail=f"Task with id {task_id} not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Task with id {task_id} not found",
+        )
     if current_user.id != existing_task.user_id:
-        raise HTTPException(status_code=403, detail="You are not authorized to update tasks for this user.")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not authorized to update tasks for this user.",
+        )
     if task.start_time:
         task.init = time_string_to_int(task.start_time)
     if task.end_time:
@@ -153,18 +243,31 @@ async def update_task(
             setattr(existing_task, field, update_data[field])
     validated_task = validate_task(existing_task, db)
     if not validated_task.is_valid:
-        raise HTTPException(status_code=422, detail=validated_task.message)
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=validated_task.message,
+        )
     result = TaskService(db).update_task(existing_task, task)
     return result
 
 
-@router.delete("/tasks/{task_id}", status_code=204)
+@router.delete(
+    "/tasks/{task_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(PermissionsValidator(required_permissions=["task:delete-own"]))],
+)
 async def delete_task(task_id: int, current_user=Depends(get_current_user), db: Session = Depends(get_db)):
     task = TaskService(db).get_task(task_id)
     if not task:
-        raise HTTPException(status_code=404, detail=f"Task with id {task_id} not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Task with id {task_id} not found",
+        )
     if current_user.id != task.user_id:
-        raise HTTPException(status_code=403, detail="You are not authorized to delete tasks for this user")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not authorized to delete tasks for this user",
+        )
     TaskService(db).delete_task(task_id)
     return
 
@@ -196,12 +299,16 @@ def validate_task(task_to_validate: TaskSchema, db: Session):
 
 def validate_template(template: TemplateSchema, db: Session, current_user: AppUser):
     validated = ValidatedObject(is_valid=False, message="")
-    if template.is_global and "manager" not in current_user.roles:
-        raise HTTPException(status_code=403, detail="You are not authorized to create or update global templates")
+    if template.is_global and "template:create-global" not in current_user.authorized_scopes:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not authorized to create or update global templates",
+        )
     else:
         if template.user_id and template.user_id != current_user.id:
             raise HTTPException(
-                status_code=403, detail="You are not authorized to create or update templates for this user"
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You are not authorized to create or update templates for this user",
             )
     if template.task_type:
         task_type_valid = TaskTypeService(db).slug_is_valid(template.task_type)
