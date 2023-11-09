@@ -2,7 +2,7 @@ import { Task } from '@/domain/Task'
 import { TaskIntent } from '@/domain/Task'
 import { ApiClient } from '../lib/apiClient'
 
-export const createTask = async (task: TaskIntent, apiClient: ApiClient): Promise<Task | Error> => {
+export const createTask = async (task: TaskIntent, apiClient: ApiClient): Promise<Task> => {
   return apiClient('/v1/timelog/tasks', {
     method: 'POST',
     body: JSON.stringify({
@@ -22,7 +22,7 @@ export const createTask = async (task: TaskIntent, apiClient: ApiClient): Promis
       }
       return response
     })
-    .then((response) => response.json())
+    .then((response) => response.json() as Promise<Task>)
     .catch((e) => {
       throw new Error(e)
     })
