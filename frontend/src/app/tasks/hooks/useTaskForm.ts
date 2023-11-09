@@ -2,12 +2,15 @@ import { useForm } from '@/hooks/useForm/useForm'
 import { useTimer } from '@/hooks/useTimer/useTimer'
 import { format } from 'date-fns'
 import { useEffect, useRef, useCallback } from 'react'
-import { useAddTask } from './useTask'
-import { TaskIntent } from '@/domain/Task'
+import { useAddTask, useGetTasks } from './useTask'
+import { TaskIntent, getOverlappingTasks } from '@/domain/Task'
+import { useAlert } from '@/ui/Alert/useAlert'
 
 export const useTaskForm = ({ userId }: { userId: TaskIntent['userId'] }) => {
   const formRef = useRef<HTMLFormElement>(null)
-  const { addTask } = useAddTask()
+  const { addTask } = useAddTask(userId)
+  const { showError } = useAlert()
+  const tasks = useGetTasks(userId)
 
   const { startTimer, stopTimer, seconds, minutes, hours, isTimerRunning } = useTimer()
   const { formState, handleChange, resetForm } = useForm<TaskIntent>({
@@ -24,8 +27,25 @@ export const useTaskForm = ({ userId }: { userId: TaskIntent['userId'] }) => {
   })
 
   const handleSubmit = useCallback(() => {
+    const validation = TaskIntent.safeParse(formState)
+
+    if (!validation.success) {
+      validation.error.issues.map(({ message }) => {
+        showError(message)
+      })
+
+      return
+    }
+
+    const { message } = getOverlappingTasks(formState, tasks)
+
+    if (message.length > 0) {
+      showError(message)
+      return
+    }
+
     addTask(formState)
-  }, [addTask, formState])
+  }, [addTask, formState, showError, tasks])
 
   const setDate = () => handleChange('date', format(new Date(), 'yyyy-MM-dd'))
 
