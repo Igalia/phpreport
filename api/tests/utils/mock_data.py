@@ -13,14 +13,58 @@ DATA = [
             {"login": "user", "password": "user"},
             {"login": "admin", "password": "admin"},
             {"login": "manager", "password": "manager"},
+            {"login": "human_resources", "password": "human_resources"},
+            {"login": "project_manager", "password": "project_manager"},
+            {"login": "no_roles", "password": "no_roles"},
+            {"login": "missing_scope", "password": "missing_scope"},
         ],
     ),
     (
         UserGroup,
         [
-            {"id": 1, "name": "staff"},
-            {"id": 2, "name": "admin"},
-            {"id": 3, "name": "manager"},
+            {
+                "id": 1,
+                "name": "staff",
+                "scopes": (
+                    "task:create-own,task:read-own,task:update-own,task:delete-own,task_type:read,"
+                    "template:create-own,template:update-own,template:read-own,template:read-global,template:delete-own"
+                ),
+            },
+            {
+                "id": 2,
+                "name": "admin",
+                "scopes": (
+                    "task:create-own,task:read-own,task:update-own,task:delete-own,task_type:read,"
+                    "template:create-own,template:update-own,template:read-own,template:read-global,"
+                    "template:delete-own,template:create-global,template:update-global,template:delete-global"
+                ),
+            },
+            {
+                "id": 3,
+                "name": "manager",
+                "scopes": (
+                    "task:create-own,task:read-own,task:update-own,task:delete-own,task_type:read,"
+                    "template:create-own,template:update-own,template:read-own,template:read-global,"
+                    "template:delete-own,template:create-global,template:update-global,template:delete-global"
+                ),
+            },
+            {
+                "id": 4,
+                "name": "human resources",
+                "scopes": (
+                    "task:create-own,task:read-own,task:update-own,task:delete-own,task_type:read,"
+                    "template:create-own,template:update-own,template:read-own,template:read-global,"
+                    "template:delete-own"
+                ),
+            },
+            {
+                "id": 5,
+                "name": "project manager",
+                "scopes": "task:create-own,task:read-own,task:update-own,task:delete-own,task_type:read,"
+                "template:create-own,template:update-own,template:read-own,template:read-global,"
+                "template:delete-own",
+            },
+            {"id": 6, "name": "few scopes", "scopes": "task:read-own"},
         ],
     ),
     (
@@ -31,6 +75,11 @@ DATA = [
             {"group_id": 2, "user_id": 2},
             {"group_id": 1, "user_id": 3},
             {"group_id": 3, "user_id": 3},
+            {"group_id": 1, "user_id": 4},
+            {"group_id": 4, "user_id": 4},
+            {"group_id": 1, "user_id": 5},
+            {"group_id": 5, "user_id": 5},
+            {"group_id": 6, "user_id": 7},
         ],
     ),
     (
