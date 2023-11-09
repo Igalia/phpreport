@@ -39,4 +39,5 @@ class AppUser(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     roles: Optional[List[str]] = None
+    authorized_scopes: Optional[List[str]] = None
     capacities: Optional[List[UserCapacity]] = None
