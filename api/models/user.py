@@ -20,6 +20,7 @@ class UserGroup(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     name = Column(String(length=128), nullable=True, unique=True)
+    scopes = Column(String(length=1000), nullable=True)
 
 
 class UserRoles(Base):
