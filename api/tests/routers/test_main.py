@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 
 
-def test_status_enpoint(client: TestClient) -> None:
+def test_status_endpoint(client: TestClient) -> None:
     response = client.get(
         "/status",
     )

@@ -22,6 +22,16 @@ def test_get_task_types_authenticated(client: TestClient, get_regular_user_token
     assert task_types == expected_types
 
 
+def test_get_task_types_no_scope(client: TestClient, get_user_missing_scopes_token_headers: Dict[str, str]) -> None:
+    response = client.get(
+        f"{API_BASE_URL}/v1/timelog/task_types/",
+        headers=get_user_missing_scopes_token_headers,
+    )
+    assert response.status_code == HTTPStatus.FORBIDDEN
+    res = response.json()
+    assert res["detail"] == "You do not have permission to perform this action."
+
+
 def test_get_user_cannot_get_templates_from_other_user(
     client: TestClient, get_regular_user_token_headers: Dict[str, str]
 ) -> None:
@@ -342,6 +352,19 @@ def test_regular_user_cannot_get_other_users_tasks(
     assert response.status_code == HTTPStatus.FORBIDDEN
     res = response.json()
     assert res["detail"] == "You are not authorized to view tasks for this user"
+
+
+def test_user_without_any_roles_cannot_get_tasks(
+    client: TestClient, get_user_without_roles_token_headers: Dict[str, str]
+) -> None:
+    response = client.get(
+        f"{API_BASE_URL}/v1/timelog/tasks/",
+        headers=get_user_without_roles_token_headers,
+        params={"user_id": 6, "start": "2023-10-20", "end": "2023-10-20"},
+    )
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
+    res = response.json()
+    assert res["detail"] == "You have not been assigned any roles in the application. Please speak to your sysadmin."
 
 
 def test_create_task(client: TestClient, get_regular_user_token_headers: Dict[str, str]) -> None:

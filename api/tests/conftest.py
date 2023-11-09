@@ -66,3 +66,35 @@ def get_regular_user_token_headers(client: TestClient) -> Dict[str, str]:
     token = create_access_token(user)
     headers = {"Authorization": f"Bearer {token}"}
     return headers
+
+
+@pytest.fixture(scope="module")
+def get_user_without_roles_token_headers(client: TestClient) -> Dict[str, str]:
+    user = {
+        "aud": "account",
+        "roles": [],
+        "name": "Danaerys",
+        "preferred_username": "no_roles",
+        "given_name": "Danaerys",
+        "family_name": "Targaryen",
+        "email": "mother_of_dragons@westeros.com",
+    }
+    token = create_access_token(user)
+    headers = {"Authorization": f"Bearer {token}"}
+    return headers
+
+
+@pytest.fixture(scope="module")
+def get_user_missing_scopes_token_headers(client: TestClient) -> Dict[str, str]:
+    user = {
+        "aud": "account",
+        "roles": ["few scopes"],
+        "name": "Leslie",
+        "preferred_username": "missing_scope",
+        "given_name": "Leslie",
+        "family_name": "Knope",
+        "email": "knope@pawnee.gov",
+    }
+    token = create_access_token(user)
+    headers = {"Authorization": f"Bearer {token}"}
+    return headers
