@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from db.db_connection import get_db
@@ -9,7 +9,10 @@ from schemas.user import AppUser
 router = APIRouter(
     prefix="/users",
     tags=["users"],
-    responses={403: {"description": "Forbidden"}, 404: {"description": "Not found"}},
+    responses={
+        status.HTTP_403_FORBIDDEN: {"description": "Forbidden"},
+        status.HTTP_404_NOT_FOUND: {"description": "Not found"},
+    },
     dependencies=[Depends(BearerToken())],
 )
 
