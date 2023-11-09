@@ -1,5 +1,5 @@
-from typing import Annotated
-from fastapi import Depends, HTTPException
+from typing import Annotated, List
+from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
 from decouple import config
@@ -22,7 +22,10 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Se
     username = decoded[OIDC_USERNAME_PROPERTY]
     user_in_db = UserService(db).get_user(username=username)
     if not user_in_db:
-        raise HTTPException(status_code=401, detail="You are not an authorized user.")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="You are not an authorized user.",
+        )
     user = AppUser(
         id=user_in_db.id,
         username=username,
@@ -30,6 +33,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Se
         first_name=decoded["given_name"],
         last_name=decoded["family_name"],
         roles=[],
+        authorized_scopes=[],
         capacities=[],
     )
     for c in user_in_db.capacities:
@@ -38,8 +42,35 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Se
 
     if USE_OIDC_ROLES:
         user.roles = decoded[OIDC_ROLES_PROPERTY].copy()
+        user.authorized_scopes = decoded["scopes"].copy()
     else:
         user_roles = UserService(db).get_user_roles(user.id)
+        scopes = []
         for user_role in user_roles:
             user.roles.append(user_role.role.name)
+            scopes += user_role.role.scopes.split(",")
+        user.authorized_scopes = list(set(scopes))
     return user
+
+
+class PermissionsValidator:
+    def __init__(self, required_permissions: List[str]):
+        self.required_permissions = required_permissions
+
+    def __call__(
+        self,
+        current_user: Annotated[AppUser, Depends(get_current_user)],
+    ):
+        required_permissions_set = set(self.required_permissions)
+
+        if not current_user.roles:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="You have not been assigned any roles in the application. Please speak to your sysadmin.",
+            )
+
+        if not any(x in required_permissions_set for x in current_user.authorized_scopes):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You do not have permission to perform this action.",
+            )
