@@ -1,13 +1,13 @@
 import { TaskForm } from '../TaskForm'
 import { screen, renderWithUser, act } from '@/test-utils/test-utils'
-import { useAddTask } from '../hooks/useTask'
+import { useAddTask, useGetTasks } from '../hooks/useTask'
 
 jest.mock('../hooks/useTask')
 
 const setupTaskForm = () => {
   const projects = [
     {
-      id: '1',
+      id: 1,
       is_active: true,
       init: null,
       end: null,
@@ -35,6 +35,7 @@ const setupTaskForm = () => {
 describe('TasksPage', () => {
   beforeEach(() => {
     ;(useAddTask as jest.Mock).mockReturnValue({ addTask: () => {} })
+    ;(useGetTasks as jest.Mock).mockReturnValue([])
 
     jest.useFakeTimers()
     jest.spyOn(global, 'setInterval')
@@ -43,6 +44,59 @@ describe('TasksPage', () => {
 
   afterEach(() => {
     jest.clearAllTimers()
+  })
+
+  describe('required fields', () => {
+    it("doesn't submit if it doesn't have a selected project", async () => {
+      const addTask = jest.fn()
+      ;(useAddTask as jest.Mock).mockReturnValue({ addTask })
+
+      const { user } = setupTaskForm()
+
+      await user.click(screen.getByRole('combobox', { name: 'From' }))
+      await user.click(screen.getByRole('option', { name: '12:00' }))
+
+      await user.click(screen.getByRole('combobox', { name: 'To' }))
+      await user.click(screen.getByRole('option', { name: '13:00' }))
+
+      await user.keyboard('{Enter}')
+
+      expect(addTask).not.toHaveBeenCalled()
+    })
+
+    it("doesn't submit if it doesn't have a startTime", async () => {
+      const addTask = jest.fn()
+      ;(useAddTask as jest.Mock).mockReturnValue({ addTask })
+
+      const { user } = setupTaskForm()
+
+      await user.click(screen.getByRole('combobox', { name: 'Select project' }))
+      await user.click(screen.getByRole('option', { name: 'Holidays' }))
+
+      await user.click(screen.getByRole('combobox', { name: 'To' }))
+      await user.click(screen.getByRole('option', { name: '13:00' }))
+
+      await user.keyboard('{Enter}')
+
+      expect(addTask).not.toHaveBeenCalled()
+    })
+
+    it("doesn't submit if it doesn't have a endTime", async () => {
+      const addTask = jest.fn()
+      ;(useAddTask as jest.Mock).mockReturnValue({ addTask })
+
+      const { user } = setupTaskForm()
+
+      await user.click(screen.getByRole('combobox', { name: 'Select project' }))
+      await user.click(screen.getByRole('option', { name: 'Holidays' }))
+
+      await user.click(screen.getByRole('combobox', { name: 'From' }))
+      await user.click(screen.getByRole('option', { name: '12:00' }))
+
+      await user.keyboard('{Enter}')
+
+      expect(addTask).not.toHaveBeenCalled()
+    })
   })
 
   describe('when the timer is activated', () => {
@@ -280,5 +334,42 @@ describe('TasksPage', () => {
       taskType: 'mock-test',
       userId: 0
     })
+  })
+
+  it("doesn't submit if it has overlapping tasks", async () => {
+    const addTask = jest.fn()
+    ;(useAddTask as jest.Mock).mockReturnValue({ addTask })
+    ;(useGetTasks as jest.Mock).mockReturnValue([
+      {
+        date: '2023-01-01',
+        story: '',
+        description: 'test',
+        taskType: null,
+        projectId: 1,
+        userId: 4,
+        startTime: '12:12',
+        endTime: '13:14',
+        id: 18,
+        init: 672,
+        end: 674,
+        projectName: 'Holidays',
+        customerName: 'Internal'
+      }
+    ])
+
+    const { user } = setupTaskForm()
+
+    await user.click(screen.getByRole('combobox', { name: 'Select project' }))
+    await user.click(screen.getByRole('option', { name: 'Holidays' }))
+
+    await user.click(screen.getByRole('combobox', { name: 'Select project' }))
+    await user.click(screen.getByRole('option', { name: 'Holidays' }))
+
+    await user.click(screen.getByRole('combobox', { name: 'From' }))
+    await user.click(screen.getByRole('option', { name: '12:00' }))
+
+    await user.keyboard('{Enter}')
+
+    expect(addTask).not.toHaveBeenCalled()
   })
 })
