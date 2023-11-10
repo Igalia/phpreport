@@ -1,5 +1,12 @@
 from datetime import date
-from pydantic import StringConstraints, ConfigDict, BaseModel, computed_field, model_validator
+from pydantic import (
+    StringConstraints,
+    ConfigDict,
+    BaseModel,
+    computed_field,
+    model_validator,
+)
+from pydantic.alias_generators import to_camel
 from typing import Optional, Any
 from typing_extensions import Annotated
 from helpers.time import time_string_to_int
@@ -9,11 +16,12 @@ class TaskTypeItem(BaseModel):
     slug: str
     name: str
     active: bool
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
 
 # Shared properties
 class TemplateBase(BaseModel):
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
     name: Optional[Annotated[str, StringConstraints(max_length=80)]] = None
     story: Optional[Annotated[str, StringConstraints(max_length=80)]] = None
     description: Optional[Annotated[str, StringConstraints(max_length=8192)]] = None
@@ -66,7 +74,6 @@ class TemplateInDb(TemplateBase):
     id: int
     init: Optional[int]
     end: Optional[int]
-    model_config = ConfigDict(from_attributes=True)
 
 
 # Properties to return to client
@@ -77,6 +84,7 @@ class Template(TemplateBase):
 
 # Shared properties
 class TaskBase(BaseModel):
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
     date: Optional[date]
     story: Optional[Annotated[str, StringConstraints(max_length=80)]] = None
     description: Optional[Annotated[str, StringConstraints(max_length=8192)]] = None
@@ -137,7 +145,6 @@ class TaskInDb(TaskBase):
     init: int
     end: int
     date: date
-    model_config = ConfigDict(from_attributes=True)
 
 
 # Properties to return to client

@@ -26,7 +26,9 @@ def test_get_user_cannot_get_templates_from_other_user(
     client: TestClient, get_regular_user_token_headers: Dict[str, str]
 ) -> None:
     response = client.get(
-        f"{API_BASE_URL}/v1/timelog/templates/", headers=get_regular_user_token_headers, params={"user_id": 2}
+        f"{API_BASE_URL}/v1/timelog/templates/",
+        headers=get_regular_user_token_headers,
+        params={"user_id": 2},
     )
     assert response.status_code == HTTPStatus.FORBIDDEN
     content = response.json()
@@ -40,29 +42,31 @@ def test_get_user_and_global_templates(client: TestClient, get_regular_user_toke
             "name": "Coffee Break",
             "story": "coffee",
             "description": "Need to recharge",
-            "task_type": "meeting",
-            "start_time": "0:00",
-            "end_time": "7:00",
-            "user_id": 1,
-            "is_global": False,
-            "project_id": None,
+            "taskType": "meeting",
+            "startTime": "0:00",
+            "endTime": "7:00",
+            "userId": 1,
+            "isGlobal": False,
+            "projectId": None,
         },
         {
             "id": 3,
             "name": "Working at night",
             "story": None,
             "description": "Working late",
-            "task_type": "meeting",
-            "start_time": "20:00",
-            "end_time": "22:00",
-            "user_id": None,
-            "is_global": True,
-            "project_id": None,
+            "taskType": "meeting",
+            "startTime": "20:00",
+            "endTime": "22:00",
+            "userId": None,
+            "isGlobal": True,
+            "projectId": None,
         },
     ]
 
     response = client.get(
-        f"{API_BASE_URL}/v1/timelog/templates/", headers=get_regular_user_token_headers, params={"user_id": 1}
+        f"{API_BASE_URL}/v1/timelog/templates/",
+        headers=get_regular_user_token_headers,
+        params={"user_id": 1},
     )
     assert response.status_code == HTTPStatus.OK
     templates = response.json()
@@ -75,15 +79,17 @@ def test_create_user_template(client: TestClient, get_regular_user_token_headers
         "name": "Full work day",
         "story": "work",
         "description": "Just a regular day",
-        "start_time": "9:00",
-        "end_time": "17:00",
-        "task_type": "meeting",
-        "project_id": 1,
-        "user_id": 1,
-        "is_global": False,
+        "startTime": "9:00",
+        "endTime": "17:00",
+        "taskType": "meeting",
+        "projectId": 1,
+        "userId": 1,
+        "isGlobal": False,
     }
     response = client.get(
-        f"{API_BASE_URL}/v1/timelog/templates/", headers=get_regular_user_token_headers, params={"user_id": 1}
+        f"{API_BASE_URL}/v1/timelog/templates/",
+        headers=get_regular_user_token_headers,
+        params={"user_id": 1},
     )
     assert response.status_code == HTTPStatus.OK
     templates = response.json()
@@ -102,17 +108,19 @@ def test_create_user_template(client: TestClient, get_regular_user_token_headers
         "name": "Full work day",
         "story": "work",
         "description": "Just a regular day",
-        "start_time": "9:00",
-        "end_time": "17:00",
-        "project_id": 1,
-        "user_id": 1,
-        "is_global": False,
-        "task_type": "meeting",
+        "startTime": "9:00",
+        "endTime": "17:00",
+        "projectId": 1,
+        "userId": 1,
+        "isGlobal": False,
+        "taskType": "meeting",
     }
     assert response.json() == expected_response
 
     response = client.get(
-        f"{API_BASE_URL}/v1/timelog/templates/", headers=get_regular_user_token_headers, params={"user_id": 1}
+        f"{API_BASE_URL}/v1/timelog/templates/",
+        headers=get_regular_user_token_headers,
+        params={"user_id": 1},
     )
     assert response.status_code == HTTPStatus.OK
     templates = response.json()
@@ -126,10 +134,10 @@ def test_regular_user_cannot_create_global_template(
         "name": "TGIF",
         "story": "no work",
         "description": "No work on Friday",
-        "start_time": "0:00",
-        "end_time": "0:00",
-        "project_id": 1,
-        "is_global": True,
+        "startTime": "0:00",
+        "endTime": "0:00",
+        "projectId": 1,
+        "isGlobal": True,
     }
 
     response = client.post(
@@ -151,10 +159,10 @@ def test_regular_user_cannot_create_template_for_another_user(
         "name": "TGIF",
         "story": "no work",
         "description": "No work on Friday",
-        "start_time": "0:00",
-        "end_time": "0:00",
-        "project_id": 1,
-        "is_global": True,
+        "startTime": "0:00",
+        "endTime": "0:00",
+        "projectId": 1,
+        "isGlobal": True,
     }
 
     response = client.post(
@@ -174,11 +182,11 @@ def test_update_user_template(client: TestClient, get_regular_user_token_headers
         "name": "Coffee Break updated",
         "story": "coffee time",
         "description": "Need to recharge again",
-        "task_type": "meeting",
-        "start_time": "15:00",
-        "end_time": "15:30",
-        "project_id": 1,
-        "user_id": 1,
+        "taskType": "meeting",
+        "startTime": "15:00",
+        "endTime": "15:30",
+        "projectId": 1,
+        "userId": 1,
     }
 
     response = client.put(
@@ -194,12 +202,12 @@ def test_update_user_template(client: TestClient, get_regular_user_token_headers
         "name": "Coffee Break updated",
         "story": "coffee time",
         "description": "Need to recharge again",
-        "task_type": "meeting",
-        "start_time": "15:00",
-        "end_time": "15:30",
-        "project_id": 1,
-        "is_global": False,
-        "user_id": 1,
+        "taskType": "meeting",
+        "startTime": "15:00",
+        "endTime": "15:30",
+        "projectId": 1,
+        "isGlobal": False,
+        "userId": 1,
     }
 
     res = response.json()
@@ -209,7 +217,7 @@ def test_update_user_template(client: TestClient, get_regular_user_token_headers
 def test_update_nonexistent_template(client: TestClient, get_regular_user_token_headers: Dict[str, str]) -> None:
     template_payload = {
         "name": "Fake template",
-        "user_id": 1,
+        "userId": 1,
     }
 
     response = client.put(
@@ -228,8 +236,8 @@ def test_cannot_update_other_users_template(client: TestClient, get_regular_user
     template_payload = {
         "name": "Series time",
         "description": "Watching Tuca and Bertie",
-        "user_id": 2,
-        "is_global": False,
+        "userId": 2,
+        "isGlobal": False,
     }
 
     response = client.put(
@@ -246,7 +254,9 @@ def test_cannot_update_other_users_template(client: TestClient, get_regular_user
 def test_delete_template(client: TestClient, get_regular_user_token_headers: Dict[str, str]) -> None:
     # Check existing templates first
     response = client.get(
-        f"{API_BASE_URL}/v1/timelog/templates/", headers=get_regular_user_token_headers, params={"user_id": 1}
+        f"{API_BASE_URL}/v1/timelog/templates/",
+        headers=get_regular_user_token_headers,
+        params={"user_id": 1},
     )
     assert response.status_code == HTTPStatus.OK
     templates = response.json()
@@ -261,7 +271,9 @@ def test_delete_template(client: TestClient, get_regular_user_token_headers: Dic
 
     # There should be only one template now
     response = client.get(
-        f"{API_BASE_URL}/v1/timelog/templates/", headers=get_regular_user_token_headers, params={"user_id": 1}
+        f"{API_BASE_URL}/v1/timelog/templates/",
+        headers=get_regular_user_token_headers,
+        params={"user_id": 1},
     )
     assert response.status_code == HTTPStatus.OK
     templates = response.json()
@@ -296,16 +308,16 @@ def test_get_user_tasks(client: TestClient, get_regular_user_token_headers: Dict
     expected_tasks = [
         {
             "id": 1,
-            "user_id": 1,
+            "userId": 1,
             "date": "2023-10-20",
             "description": "Working in that awesome project",
-            "start_time": "20:00",
-            "end_time": "22:00",
-            "project_id": 2,
-            "project_name": "Internal",
-            "customer_name": "Internal Customer",
+            "startTime": "20:00",
+            "endTime": "22:00",
+            "projectId": 2,
+            "projectName": "Internal",
+            "customerName": "Internal Customer",
             "story": "that project",
-            "task_type": "project",
+            "taskType": "project",
         },
     ]
 
@@ -337,11 +349,11 @@ def test_create_task(client: TestClient, get_regular_user_token_headers: Dict[st
         "date": "2023-10-21",
         "story": "project",
         "description": "Adding tests",
-        "task_type": "project",
-        "project_id": 1,
-        "user_id": 1,
-        "start_time": "08:30",
-        "end_time": "14:00",
+        "taskType": "project",
+        "projectId": 1,
+        "userId": 1,
+        "startTime": "08:30",
+        "endTime": "14:00",
     }
     response = client.get(
         f"{API_BASE_URL}/v1/timelog/tasks/",
@@ -365,13 +377,13 @@ def test_create_task(client: TestClient, get_regular_user_token_headers: Dict[st
         "date": "2023-10-21",
         "story": "project",
         "description": "Adding tests",
-        "task_type": "project",
-        "project_id": 1,
-        "user_id": 1,
-        "start_time": "8:30",
-        "end_time": "14:00",
-        "project_name": "Holidays",
-        "customer_name": "Internal Customer",
+        "taskType": "project",
+        "projectId": 1,
+        "userId": 1,
+        "startTime": "8:30",
+        "endTime": "14:00",
+        "projectName": "Holidays",
+        "customerName": "Internal Customer",
     }
     assert response.json() == expected_response
 
@@ -392,11 +404,11 @@ def test_regular_user_cannot_create_tasks_for_other_users(
         "date": "2023-10-21",
         "story": "project",
         "description": "Adding tests",
-        "task_type": "project",
-        "project_id": 1,
-        "user_id": 2,
-        "start_time": "08:30",
-        "end_time": "14:00",
+        "taskType": "project",
+        "projectId": 1,
+        "userId": 2,
+        "startTime": "08:30",
+        "endTime": "14:00",
     }
     response = client.post(
         f"{API_BASE_URL}/v1/timelog/tasks",
@@ -412,9 +424,9 @@ def test_regular_user_cannot_create_tasks_for_other_users(
 def test_update_task(client: TestClient, get_regular_user_token_headers: Dict[str, str]) -> None:
     task_payload = {
         "date": "2023-10-22",
-        "start_time": "10:00",
-        "end_time": "12:00",
-        "user_id": 1,
+        "startTime": "10:00",
+        "endTime": "12:00",
+        "userId": 1,
     }
 
     response = client.put(
@@ -428,16 +440,16 @@ def test_update_task(client: TestClient, get_regular_user_token_headers: Dict[st
 
     expected_task = {
         "id": 1,
-        "user_id": 1,
+        "userId": 1,
         "date": "2023-10-22",
         "description": "Working in that awesome project",
-        "start_time": "10:00",
-        "end_time": "12:00",
-        "project_id": 2,
-        "project_name": "Internal",
-        "customer_name": "Internal Customer",
+        "startTime": "10:00",
+        "endTime": "12:00",
+        "projectId": 2,
+        "projectName": "Internal",
+        "customerName": "Internal Customer",
         "story": "that project",
-        "task_type": "project",
+        "taskType": "project",
     }
 
     res = response.json()
@@ -505,11 +517,11 @@ def test_user_cannot_create_task_with_overlapping_hours(
         "date": "2023-10-20",
         "story": "project",
         "description": "Overlapping time with task 1",
-        "task_type": "project",
-        "project_id": 1,
-        "user_id": 1,
-        "start_time": "20:30",
-        "end_time": "23:00",
+        "taskType": "project",
+        "projectId": 1,
+        "userId": 1,
+        "startTime": "20:30",
+        "endTime": "23:00",
     }
 
     response = client.post(

@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 from decouple import config
 from db.db_connection import get_db
 from auth.auth_handler import decode_token
-from schemas.user import AppUser
+from schemas.user import AppUser, UserCapacity
 from services.user import UserService
 
 
@@ -30,8 +30,12 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Se
         first_name=decoded["given_name"],
         last_name=decoded["family_name"],
         roles=[],
-        capacities=user_in_db.capacities,
+        capacities=[],
     )
+    for c in user_in_db.capacities:
+        cap = UserCapacity(capacity=c.capacity, start=c.start, end=c.end, is_current=c.is_current)
+        user.capacities.append(cap)
+
     if USE_OIDC_ROLES:
         user.roles = decoded[OIDC_ROLES_PROPERTY].copy()
     else:
