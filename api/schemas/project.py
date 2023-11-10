@@ -1,6 +1,6 @@
 from datetime import date
-
 from pydantic import ConfigDict, BaseModel
+from pydantic.alias_generators import to_camel
 from typing import Optional
 
 
@@ -16,5 +16,6 @@ class Project(BaseModel):
     project_type: Optional[str] = None
     schedule_type: Optional[str] = None
     customer_id: int
+    customer_name: Optional[str] = None
     area_id: int
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)

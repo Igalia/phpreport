@@ -15,7 +15,14 @@ DATA = [
             {"login": "manager", "password": "manager"},
         ],
     ),
-    (UserGroup, [{"id": 1, "name": "staff"}, {"id": 2, "name": "admin"}, {"id": 3, "name": "manager"}]),
+    (
+        UserGroup,
+        [
+            {"id": 1, "name": "staff"},
+            {"id": 2, "name": "admin"},
+            {"id": 3, "name": "manager"},
+        ],
+    ),
     (
         UserRoles,
         [
@@ -41,8 +48,18 @@ DATA = [
     (
         Project,
         [
-            {"description": "Holidays", "area_id": 1, "customer_id": 1, "is_active": True},
-            {"description": "Internal", "area_id": 1, "customer_id": 1, "is_active": True},
+            {
+                "description": "Holidays",
+                "area_id": 1,
+                "customer_id": 1,
+                "is_active": True,
+            },
+            {
+                "description": "Internal",
+                "area_id": 1,
+                "customer_id": 1,
+                "is_active": True,
+            },
         ],
     ),
     (
