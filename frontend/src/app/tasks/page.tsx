@@ -1,3 +1,5 @@
+import Box from '@mui/joy/Box'
+import { TaskList } from './TaskList'
 import { TaskForm } from './TaskForm'
 import { getProjects } from '@/infra/project/getProjects'
 import { getTaskTypes } from '@/infra/taskType/getTaskTypes'
@@ -17,5 +19,18 @@ const getPageData = async () => {
 export default async function Tasks() {
   const [projects, taskTypes, currentUser] = await getPageData()
 
-  return <TaskForm projects={projects} taskTypes={taskTypes} userId={currentUser.id} />
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        margin: '0 auto',
+        gap: '30px',
+        justifyContent: 'center'
+      }}
+    >
+      <TaskForm projects={projects} taskTypes={taskTypes} userId={currentUser.id} />
+      <TaskList userId={currentUser.id} />
+    </Box>
+  )
 }
