@@ -30,14 +30,19 @@ export const TaskList = ({ userId }: TaskListProps) => {
   return (
     <Box
       component="ul"
-      sx={{ width: '558px', display: 'flex', flexDirection: 'column', gap: '16px' }}
+      sx={{
+        maxWidth: { xs: '100%', sm: '558px' },
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '16px'
+      }}
     >
       {tasks.map((task) => (
         <Box
           sx={{
             backgroundColor: '#A8AEEB',
             height: '96px',
-            width: '558px',
+            width: { xs: '100%', sm: '558px' },
             display: 'flex',
             flexDirection: 'column',
             borderRadius: '8px',

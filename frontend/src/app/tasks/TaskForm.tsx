@@ -41,8 +41,7 @@ export const TaskForm = ({ projects, taskTypes, userId }: TaskFormProps) => {
         handleSubmit()
       }}
       component="form"
-      maxWidth="558px"
-      margin="0 auto"
+      sx={{ maxWidth: { xs: '100%', sm: '558px' } }}
       gap="16px"
       ref={formRef}
     >

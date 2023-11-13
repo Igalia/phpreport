@@ -23,10 +23,11 @@ export default async function Tasks() {
     <Box
       sx={{
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: { xs: 'column', sm: 'row' },
         margin: '0 auto',
         gap: '30px',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        padding: { xs: '0 8px', sm: 0 }
       }}
     >
       <TaskForm projects={projects} taskTypes={taskTypes} userId={currentUser.id} />
