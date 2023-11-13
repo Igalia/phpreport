@@ -9,8 +9,6 @@ const setupTaskForm = () => {
     {
       id: 1,
       is_active: true,
-      init: null,
-      end: null,
       invoice: null,
       estimated_hours: null,
       moved_hours: null,
@@ -350,8 +348,6 @@ describe('TasksPage', () => {
         startTime: '12:12',
         endTime: '13:14',
         id: 18,
-        init: 672,
-        end: 674,
         projectName: 'Holidays',
         customerName: 'Internal'
       }

@@ -10,8 +10,6 @@ export type Task = {
   startTime: string
   endTime: string
   date: string
-  init: number
-  end: number
   projectName: string
   customerName: string
 }
