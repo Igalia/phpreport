@@ -5,7 +5,6 @@ import { createTask } from '@/infra/task/createTask'
 import { getTasks } from '@/infra/task/getTasks'
 import { useClientFetch } from '@/infra/lib/useClientFetch'
 import { format } from 'date-fns'
-import { Task } from '@/domain/Task'
 
 export const useGetTasks = (userId: number) => {
   const apiClient = useClientFetch()
@@ -26,13 +25,8 @@ export const useAddTask = (userId: number) => {
   const { showError, showSuccess } = useAlert()
 
   const { mutate } = useMutation((task: TaskIntent) => createTask(task, apiClient), {
-    onSuccess: (data) => {
-      queryClient.setQueryData<Array<Task>>(['tasks', userId], (oldData) => {
-        if (oldData) {
-          return [...oldData, data]
-        }
-        return [data]
-      })
+    onSuccess: () => {
+      queryClient.invalidateQueries(['tasks', userId])
       showSuccess('Task added succesfully')
     },
     onError: () => {
