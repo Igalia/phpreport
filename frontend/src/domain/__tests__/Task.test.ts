@@ -14,8 +14,6 @@ describe('Task', () => {
           startTime: '11:12',
           endTime: '11:14',
           id: 18,
-          init: 672,
-          end: 674,
           projectName: 'Holidays',
           customerName: 'Internal'
         },
@@ -29,8 +27,6 @@ describe('Task', () => {
           startTime: '11:17',
           endTime: '11:19',
           id: 19,
-          init: 677,
-          end: 679,
           projectName: 'Holidays',
           customerName: 'Internal'
         }
@@ -68,8 +64,6 @@ describe('Task', () => {
             startTime: '11:12',
             endTime: '11:14',
             id: 18,
-            init: 672,
-            end: 674,
             projectName: 'Holidays',
             customerName: 'Internal'
           },
@@ -83,8 +77,6 @@ describe('Task', () => {
             startTime: '11:17',
             endTime: '11:19',
             id: 19,
-            init: 677,
-            end: 679,
             projectName: 'Holidays',
             customerName: 'Internal'
           }
@@ -116,8 +108,6 @@ describe('Task', () => {
               startTime: '11:12',
               endTime: '11:14',
               id: 18,
-              init: 672,
-              end: 674,
               projectName: 'Holidays',
               customerName: 'Internal'
             }
@@ -137,8 +127,6 @@ describe('Task', () => {
             startTime: '11:12',
             endTime: '11:14',
             id: 18,
-            init: 672,
-            end: 674,
             projectName: 'Holidays',
             customerName: 'Internal'
           },
@@ -152,8 +140,6 @@ describe('Task', () => {
             startTime: '11:17',
             endTime: '11:19',
             id: 19,
-            init: 677,
-            end: 679,
             projectName: 'Holidays',
             customerName: 'Internal'
           }
@@ -185,8 +171,6 @@ describe('Task', () => {
               startTime: '11:12',
               endTime: '11:14',
               id: 18,
-              init: 672,
-              end: 674,
               projectName: 'Holidays',
               customerName: 'Internal'
             }
@@ -206,8 +190,6 @@ describe('Task', () => {
             startTime: '11:12',
             endTime: '11:14',
             id: 18,
-            init: 672,
-            end: 674,
             projectName: 'Holidays',
             customerName: 'Internal'
           },
@@ -221,8 +203,6 @@ describe('Task', () => {
             startTime: '11:17',
             endTime: '11:19',
             id: 19,
-            init: 677,
-            end: 679,
             projectName: 'Holidays',
             customerName: 'Internal'
           }
@@ -254,8 +234,6 @@ describe('Task', () => {
               startTime: '11:17',
               endTime: '11:19',
               id: 19,
-              init: 677,
-              end: 679,
               projectName: 'Holidays',
               customerName: 'Internal'
             }
