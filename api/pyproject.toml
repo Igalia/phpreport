@@ -18,6 +18,7 @@ dependencies = [
     "pydantic == 2.4.2",
     "psycopg2-binary == 2.9.6",
     "alembic == 1.10.4",
+    "alembic_utils == 0.8.2",
     "sqlalchemy == 2.0.12",
     "fastapi >= 0.95.2",
     "tox==4.6.3",
