@@ -116,6 +116,21 @@ alembic revision --autogenerate -m "Migrations description"
 
 For more details check the alembic documentation.
 
+### History tracking in database
+As part of the migrations, an `archive` table is added to the database along with a function to log to this table and a trigger to captures changes on the `project` table. A trigger using this function can be added to track the history of any table. To do so, create a migration with the following (with the `customer` table used as an example):
+```py
+    customer_trigger = PGTrigger(
+        schema="public",
+        signature="trg_make_archive_of_changes_for_customers",
+        on_entity="public.customer",
+        definition="""
+        after insert or delete or update on
+            public.customer for each row execute function make_archive_of_changes('Customer')
+        """
+    )
+    op.create_entity(customer_trigger)
+```
+
 ## Setting up the files
 
 Clone the PhpReport repository `https://github.com/Igalia/phpreport` in
