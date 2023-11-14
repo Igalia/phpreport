@@ -1,6 +1,6 @@
 import { TaskList } from '../TaskList'
 import { screen, renderWithUser, within } from '@/test-utils/test-utils'
-import { useGetTasks } from '../hooks/useTask'
+import { useGetTasks, useDeleteTask } from '../hooks/useTask'
 import { Task } from '@/domain/Task'
 
 jest.mock('../hooks/useTask')
@@ -42,6 +42,7 @@ describe('TaskList', () => {
       }
     ]
     ;(useGetTasks as jest.Mock).mockReturnValue(tasks)
+    ;(useDeleteTask as jest.Mock).mockReturnValue({ removeTask: () => {} })
   })
 
   it('renders a list of tasks with name, customer name, task type and the task duration', () => {
@@ -65,5 +66,16 @@ describe('TaskList', () => {
         })
       ).toBeInTheDocument()
     })
+  })
+
+  it('deletes the task from the list', async () => {
+    const deleteTask = jest.fn()
+    ;(useDeleteTask as jest.Mock).mockReturnValue({ deleteTask })
+
+    const { user } = setupTaskList()
+
+    await user.click(screen.getByRole('button', { name: 'Delete task 18' }))
+
+    expect(deleteTask).toBeCalledWith(18)
   })
 })
