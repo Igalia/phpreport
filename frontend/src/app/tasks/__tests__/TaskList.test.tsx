@@ -68,14 +68,39 @@ describe('TaskList', () => {
     })
   })
 
-  it('deletes the task from the list', async () => {
-    const deleteTask = jest.fn()
-    ;(useDeleteTask as jest.Mock).mockReturnValue({ deleteTask })
+  describe('When the trash icon is clicked', () => {
+    it('opens the delete confirmation modal', async () => {
+      const { user } = setupTaskList()
 
-    const { user } = setupTaskList()
+      await user.click(screen.getByRole('button', { name: 'Delete task 18' }))
 
-    await user.click(screen.getByRole('button', { name: 'Delete task 18' }))
+      expect(screen.getByRole('heading', { name: 'Confirm Deletion' })).toBeInTheDocument()
+    })
 
-    expect(deleteTask).toBeCalledWith(18)
+    it('deletes the task from the list', async () => {
+      const deleteTask = jest.fn()
+      ;(useDeleteTask as jest.Mock).mockReturnValue({ deleteTask })
+
+      const { user } = setupTaskList()
+
+      await user.click(screen.getByRole('button', { name: 'Delete task 18' }))
+
+      await user.click(screen.getByRole('button', { name: 'Delete' }))
+
+      expect(deleteTask).toBeCalledWith(18)
+    })
+
+    it('closes the modal without submit if cancel is clicked', async () => {
+      const deleteTask = jest.fn()
+      ;(useDeleteTask as jest.Mock).mockReturnValue({ deleteTask })
+
+      const { user } = setupTaskList()
+
+      await user.click(screen.getByRole('button', { name: 'Delete task 18' }))
+
+      await user.click(screen.getByRole('button', { name: 'Cancel' }))
+
+      expect(deleteTask).not.toBeCalled()
+    })
   })
 })
