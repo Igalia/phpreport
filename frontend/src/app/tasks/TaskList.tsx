@@ -13,6 +13,7 @@ export const TaskList = () => {
     <Box
       component="ul"
       sx={{
+        width: '100%',
         maxWidth: { xs: '100%', sm: '558px' },
         display: 'flex',
         flexDirection: 'column',

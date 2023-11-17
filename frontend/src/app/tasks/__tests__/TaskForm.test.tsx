@@ -29,9 +29,32 @@ const setupTaskForm = () => {
     { name: 'mock task type 2', slug: 'mock-test-2', active: true }
   ]
 
-  return renderWithUser(<TaskForm projects={projects} taskTypes={taskTypes} />, {
-    advanceTimers: jest.advanceTimersByTime
-  })
+  const templates = [
+    {
+      name: 'string',
+      story: 'string',
+      description: 'string',
+      taskType: 'string',
+      userId: 0,
+      projectId: 0,
+      isGlobal: true,
+      startTime: 'string',
+      endTime: 'string',
+      id: 0
+    }
+  ]
+
+  return renderWithUser(
+    <TaskForm
+      projects={projects}
+      taskList={<div>Task List</div>}
+      templates={templates}
+      taskTypes={taskTypes}
+    />,
+    {
+      advanceTimers: jest.advanceTimersByTime
+    }
+  )
 }
 
 describe('TaskForm', () => {
