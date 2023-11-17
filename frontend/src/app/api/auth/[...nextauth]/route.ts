@@ -2,6 +2,52 @@ import NextAuth, { NextAuthOptions } from 'next-auth'
 import KeycloakProvider from 'next-auth/providers/keycloak'
 import { fetchFactory } from '@/infra/lib/apiClient'
 import { getCurrentUser } from '@/infra/user/getCurrentUser'
+import { JWT } from 'next-auth/jwt'
+
+/**
+ * Takes a token, and returns a new token with updated
+ * `accessToken` and `accessTokenExpires`. If an error occurs,
+ * returns the old token and an error property
+ */
+async function refreshAccessToken(token: JWT) {
+  try {
+    const url = `${process.env.OIDC_TOKEN_ENDPOINT}`
+
+    const params = {
+      grant_type: 'refresh_token',
+      client_id: process.env.OIDC_CLIENT_ID!,
+      client_secret: process.env.OIDC_CLIENT_SECRET!,
+      refresh_token: token.refreshToken!
+    }
+
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: new URLSearchParams(params),
+      method: 'POST'
+    })
+
+    const refreshedTokens = await response.json()
+
+    if (!response.ok) {
+      throw refreshedTokens
+    }
+
+    return {
+      ...token,
+      accessToken: refreshedTokens.access_token,
+      accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
+      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken // Fall back to old refresh token
+    }
+  } catch (error) {
+    return {
+      ...token,
+      error: 'RefreshAccessTokenError'
+    }
+  }
+}
+
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -21,11 +67,15 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       session.accessToken = token.accessToken
       session.user = { ...session.user, ...token.user }
+      session.accessTokenExpires = token.accessTokenExpires
+      session.refreshToken = token.refreshToken
       return session
     },
     async jwt({ token, account, profile }) {
       if (account && profile) {
         token.accessToken = account.access_token
+        token.accessTokenExpires = Date.now() + account.expires_at * 1000
+        token.refreshToken = account.refresh_token
         token.id = profile.id
 
         const apiClient = fetchFactory({ baseURL: process.env.API_BASE!, token: token.accessToken })
@@ -34,7 +84,13 @@ export const authOptions: NextAuthOptions = {
 
         token.user = user
       }
-      return token
+      // Return previous token if the access token has not expired yet
+      if (Date.now() < token.accessTokenExpires!) {
+        return token
+      }
+
+      // Access token has expired, try to update it
+      return refreshAccessToken(token)
     }
   }
 }
