@@ -8,6 +8,8 @@ declare module 'next-auth' {
   interface Session {
     accessToken?: string
     user: User & DefaultSession['user']
+    accessTokenExpires?: number
+    refreshToken?: string
   }
 
   /**
@@ -16,6 +18,7 @@ declare module 'next-auth' {
    */
   interface Account {
     access_token: string
+    expires_at: number
   }
 
   /** The OAuth profile returned from your provider */
@@ -30,5 +33,7 @@ declare module 'next-auth/jwt' {
     id?: string
     accessToken?: string
     user?: User
+    accessTokenExpires?: number
+    refreshToken?: string
   }
 }
