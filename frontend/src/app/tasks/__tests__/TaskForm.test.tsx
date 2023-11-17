@@ -1,8 +1,10 @@
 import { TaskForm } from '../TaskForm'
 import { screen, renderWithUser, act } from '@/test-utils/test-utils'
 import { useAddTask, useGetTasks } from '../hooks/useTask'
+import { useGetCurrentUser } from '@/hooks/useGetCurrentUser/useGetCurrentUser'
 
 jest.mock('../hooks/useTask')
+jest.mock('@/hooks/useGetCurrentUser/useGetCurrentUser')
 
 const setupTaskForm = () => {
   const projects = [
@@ -25,15 +27,16 @@ const setupTaskForm = () => {
     { name: 'mock task type 2', slug: 'mock-test-2', active: true }
   ]
 
-  return renderWithUser(<TaskForm userId={0} projects={projects} taskTypes={taskTypes} />, {
+  return renderWithUser(<TaskForm projects={projects} taskTypes={taskTypes} />, {
     advanceTimers: jest.advanceTimersByTime
   })
 }
 
-describe('TasksPage', () => {
+describe('TaskForm', () => {
   beforeEach(() => {
     ;(useAddTask as jest.Mock).mockReturnValue({ addTask: () => {} })
     ;(useGetTasks as jest.Mock).mockReturnValue([])
+    ;(useGetCurrentUser as jest.Mock).mockReturnValue({ id: 0 })
 
     jest.useFakeTimers()
     jest.spyOn(global, 'setInterval')
