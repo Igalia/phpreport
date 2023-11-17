@@ -1,6 +1,7 @@
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import KeycloakProvider from 'next-auth/providers/keycloak'
-
+import { fetchFactory } from '@/infra/lib/apiClient'
+import { getCurrentUser } from '@/infra/user/getCurrentUser'
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -19,6 +20,7 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken
+      session.user = { ...session.user, ...token.user }
       return session
     },
     async jwt({ token, account, profile }) {
@@ -26,14 +28,11 @@ export const authOptions: NextAuthOptions = {
         token.accessToken = account.access_token
         token.id = profile.id
 
-        const headers = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token.accessToken}`
-        }
-        const response = await fetch(`${process.env.API_BASE}/v1/users/me`, { headers: { ...headers } })
-        const result = await response.json()
+        const apiClient = fetchFactory({ baseURL: process.env.API_BASE!, token: token.accessToken })
 
-        token.user = result
+        const user = await getCurrentUser(apiClient)
+
+        token.user = user
       }
       return token
     }
