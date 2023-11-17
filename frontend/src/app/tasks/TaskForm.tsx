@@ -18,10 +18,9 @@ import { TimePicker } from './components/TimePicker'
 type TaskFormProps = {
   projects: Array<Project>
   taskTypes: Array<TaskType>
-  userId: number
 }
 
-export const TaskForm = ({ projects, taskTypes, userId }: TaskFormProps) => {
+export const TaskForm = ({ projects, taskTypes }: TaskFormProps) => {
   const {
     task,
     handleChange,
@@ -32,7 +31,7 @@ export const TaskForm = ({ projects, taskTypes, userId }: TaskFormProps) => {
     selectStartTime,
     handleSubmit,
     formRef
-  } = useTaskForm({ userId })
+  } = useTaskForm()
 
   return (
     <Stack

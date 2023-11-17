@@ -6,9 +6,11 @@ import { getTasks } from '@/infra/task/getTasks'
 import { deleteTask } from '@/infra/task/deleteTask'
 import { useClientFetch } from '@/infra/lib/useClientFetch'
 import { format } from 'date-fns'
+import { useGetCurrentUser } from '@/hooks/useGetCurrentUser/useGetCurrentUser'
 
-export const useGetTasks = (userId: number) => {
+export const useGetTasks = () => {
   const apiClient = useClientFetch()
+  const { id: userId } = useGetCurrentUser()
   const today = format(new Date(), 'yyyy-MM-dd')
 
   const { data } = useQuery({
@@ -20,10 +22,11 @@ export const useGetTasks = (userId: number) => {
   return data
 }
 
-export const useAddTask = (userId: number) => {
+export const useAddTask = () => {
   const apiClient = useClientFetch()
   const queryClient = useQueryClient()
   const { showError, showSuccess } = useAlert()
+  const { id: userId } = useGetCurrentUser()
 
   const { mutate } = useMutation((task: TaskIntent) => createTask(task, apiClient), {
     onSuccess: () => {
@@ -38,9 +41,10 @@ export const useAddTask = (userId: number) => {
   return { addTask: mutate }
 }
 
-export const useDeleteTask = (userId: number) => {
+export const useDeleteTask = () => {
   const apiClient = useClientFetch()
   const queryClient = useQueryClient()
+  const { id: userId } = useGetCurrentUser()
   const { showError, showSuccess } = useAlert()
 
   const { mutate } = useMutation((taskId: number) => deleteTask(taskId, apiClient), {

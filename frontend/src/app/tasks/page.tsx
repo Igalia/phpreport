@@ -3,22 +3,16 @@ import { TaskList } from './TaskList'
 import { TaskForm } from './TaskForm'
 import { getProjects } from '@/infra/project/getProjects'
 import { getTaskTypes } from '@/infra/taskType/getTaskTypes'
-import { getCurrentUser } from '@/infra/user/getCurrentUser'
 import { serverFetch } from '@/infra/lib/serverFetch'
 
 const getPageData = async () => {
   const apiClient = await serverFetch()
 
-  return await Promise.all([
-    getProjects(apiClient),
-    getTaskTypes(apiClient),
-    getCurrentUser(apiClient)
-  ])
+  return await Promise.all([getProjects(apiClient), getTaskTypes(apiClient)])
 }
 
-
 export default async function Tasks() {
-  const [projects, taskTypes, currentUser] = await getPageData()
+  const [projects, taskTypes] = await getPageData()
 
   return (
     <Box
@@ -31,8 +25,8 @@ export default async function Tasks() {
         padding: { xs: '0 8px', sm: 0 }
       }}
     >
-      <TaskForm projects={projects} taskTypes={taskTypes} userId={currentUser.id} />
-      <TaskList userId={currentUser.id} />
+      <TaskForm projects={projects} taskTypes={taskTypes} />
+      <TaskList />
     </Box>
   )
 }

@@ -5,12 +5,14 @@ import { useEffect, useRef, useCallback } from 'react'
 import { useAddTask, useGetTasks } from './useTask'
 import { TaskIntent, getOverlappingTasks } from '@/domain/Task'
 import { useAlert } from '@/ui/Alert/useAlert'
+import { useGetCurrentUser } from '@/hooks/useGetCurrentUser/useGetCurrentUser'
 
-export const useTaskForm = ({ userId }: { userId: TaskIntent['userId'] }) => {
+export const useTaskForm = () => {
   const formRef = useRef<HTMLFormElement>(null)
-  const { addTask } = useAddTask(userId)
+  const { id: userId } = useGetCurrentUser()
+  const { addTask } = useAddTask()
   const { showError } = useAlert()
-  const tasks = useGetTasks(userId)
+  const tasks = useGetTasks()
 
   const { startTimer, stopTimer, seconds, minutes, hours, isTimerRunning } = useTimer()
   const { formState, handleChange, resetForm } = useForm<TaskIntent>({

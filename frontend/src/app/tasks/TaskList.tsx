@@ -5,13 +5,9 @@ import Box from '@mui/joy/Box'
 import { useGetTasks, useDeleteTask } from './hooks/useTask'
 import { TaskBox } from './components/Task'
 
-type TaskListProps = {
-  userId: number
-}
-
-export const TaskList = ({ userId }: TaskListProps) => {
-  const tasks = useGetTasks(userId)
-  const { deleteTask } = useDeleteTask(userId)
+export const TaskList = () => {
+  const tasks = useGetTasks()
+  const { deleteTask } = useDeleteTask()
 
   return (
     <Box
