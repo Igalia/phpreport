@@ -124,13 +124,6 @@ export const TaskForm = ({ projects, taskTypes }: TaskFormProps) => {
       />
       <Divider />
       <Stack sx={{ flexDirection: { xs: 'column', sm: 'row' }, gap: '16px' }}>
-        <Select
-          sx={{ width: { xs: '100%', sm: '264px' } }}
-          name="moreActions"
-          label="More Actions"
-          options={[]}
-          value=""
-        />
         <Stack
           sx={{
             alignSelf: 'flex-end',
