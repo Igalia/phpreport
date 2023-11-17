@@ -6,6 +6,7 @@ import { useAddTask, useGetTasks } from './useTask'
 import { TaskIntent, getOverlappingTasks } from '@/domain/Task'
 import { useAlert } from '@/ui/Alert/useAlert'
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser/useGetCurrentUser'
+import { convertTimeToMinutes, getTimeDifference } from '../utils/time'
 
 export const useTaskForm = () => {
   const formRef = useRef<HTMLFormElement>(null)
@@ -53,6 +54,8 @@ export const useTaskForm = () => {
 
   const onStartTimer = () => {
     handleChange('startTime', format(new Date(), 'HH:mm'))
+    handleChange('endTime', '')
+
     setDate()
     startTimer()
   }
@@ -82,14 +85,28 @@ export const useTaskForm = () => {
   }, [handleSubmit])
 
   const toggleTimer = () => (isTimerRunning ? onStopTimer() : onStartTimer())
-  const loggedTime = `${hours}h ${minutes}m ${seconds}s`
+
+  const makeLoggedTime = () => {
+    if (isTimerRunning) {
+      return `${hours}h ${minutes}m ${seconds}s`
+    }
+
+    const startMinutes = convertTimeToMinutes(formState.startTime)
+    const endMinutes = convertTimeToMinutes(formState.endTime)
+
+    if (endMinutes - startMinutes <= 0 || Number.isNaN(endMinutes) || Number.isNaN(startMinutes)) {
+      return '0h 0m 0s'
+    }
+
+    return `${getTimeDifference(startMinutes, endMinutes)} 0s`
+  }
 
   return {
     task: formState,
     handleChange,
     resetForm,
     toggleTimer,
-    loggedTime,
+    loggedTime: makeLoggedTime(),
     isTimerRunning,
     selectStartTime,
     handleSubmit,
