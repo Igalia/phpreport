@@ -1,14 +1,14 @@
 export type Project = {
   id: number
-  area_id: number
-  customer_id: number
+  areaId: number
+  customerId: number
   description: string
-  is_active: boolean
+  isActive: boolean
   init: string | null
   end: string | null
   invoice: number | null
-  estimated_hours: number | null
-  moved_hours: number | null
-  project_type: string | null
-  schedule_type: string | null
+  estimatedHours: number | null
+  movedHours: number | null
+  projectType: string | null
+  scheduleType: string | null
 }

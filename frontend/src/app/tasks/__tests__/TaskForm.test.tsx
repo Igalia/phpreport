@@ -10,15 +10,17 @@ const setupTaskForm = () => {
   const projects = [
     {
       id: 1,
-      is_active: true,
+      isActive: true,
       invoice: null,
-      estimated_hours: null,
-      moved_hours: null,
+      init: '2023-11-17',
+      end: '2023-11-17',
+      estimatedHours: null,
+      movedHours: null,
       description: 'Holidays',
-      project_type: null,
-      schedule_type: null,
-      customer_id: 1,
-      area_id: 1
+      projectType: null,
+      scheduleType: null,
+      customerId: 1,
+      areaId: 1
     }
   ]
 
