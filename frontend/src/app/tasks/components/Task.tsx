@@ -10,21 +10,7 @@ import { ScreenReaderOnly } from '@/ui/ScreenReaderOnly/ScreenReaderOnly'
 import { ConfirmationModal } from '@/ui/ConfirmationModal/ConfirmationModal'
 import { styled } from '@mui/joy/styles'
 import { Task } from '@/domain/Task'
-
-const getTimeDifference = (startTime: string, endTime: string) => {
-  const [startHour, startMinute] = startTime.split(':')
-  const [endHour, endMinute] = endTime.split(':')
-
-  const time =
-    parseInt(endHour) * 60 +
-    parseInt(endMinute) -
-    (parseInt(startHour) * 60 + parseInt(startMinute))
-
-  const hours = Math.floor(time / 60)
-  const minutes = time % 60
-
-  return `${hours}h ${minutes}m`
-}
+import { getTimeDifference, convertTimeToMinutes } from '../utils/time'
 
 type TaskProps = {
   task: Task
@@ -33,6 +19,13 @@ type TaskProps = {
 
 export const TaskBox = ({ task, deleteTask }: TaskProps) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+
+  const timeDifference = () => {
+    const startMinutes = convertTimeToMinutes(task.startTime)
+    const endMinutes = convertTimeToMinutes(task.endTime)
+
+    return getTimeDifference(startMinutes, endMinutes)
+  }
 
   return (
     <Box
@@ -53,7 +46,7 @@ export const TaskBox = ({ task, deleteTask }: TaskProps) => {
         </Typography>
         <Typography textColor="#1E2AA5">{task.taskType}</Typography>
         <Typography textColor="#1E2AA5" fontWeight="bold">
-          {task.startTime}-{task.endTime} ({getTimeDifference(task.startTime, task.endTime)})
+          {task.startTime}-{task.endTime} ({timeDifference()})
         </Typography>
       </Box>
       <Box display="flex" gap="24px">
