@@ -25,7 +25,7 @@
     "eslint-config-next": "13.4.19",
     "jwt-decode": "^3.1.2",
     "next": "13.4.19",
-    "next-auth": "^4.23.2",
+    "next-auth": "^4.24.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-imask": "^7.1.3",
