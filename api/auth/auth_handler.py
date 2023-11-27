@@ -3,6 +3,8 @@ import jwt
 from jwt import PyJWKClient
 from datetime import datetime, timedelta
 from decouple import config
+from fastapi import HTTPException
+
 
 JWT_SECRET = config("JWT_SECRET")
 JWT_ALGORITHM = config("JWT_ALGORITHM")
@@ -23,7 +25,10 @@ def decode_token(token: str) -> dict:
         jwks_client = PyJWKClient(OIDC_CERTS_URL)
         test = jwks_client.get_signing_key_from_jwt(token)
         signing_key = test.key
-    decoded_token = jwt.decode(token, signing_key, audience=JWT_AUDIENCE, algorithms=[JWT_ALGORITHM])
+    try:
+        decoded_token = jwt.decode(token, signing_key, audience=JWT_AUDIENCE, algorithms=[JWT_ALGORITHM])
+    except jwt.exceptions.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired. Please authenticate again.")
     return decoded_token if decoded_token["exp"] >= time.time() else None
 
 
