@@ -56,6 +56,11 @@
             $requestUri = ConfigurationParametersManager::getParameter('OIDC_TOKEN_ENDPOINT');
             $ch = curl_init();
             $params = "username=" . $userLogin . "&password=" . $userPassword . "&grant_type=password&client_id=" . $clientId . "&client_secret=" . $clientSecret;
+            if(isset($_GET['totp'])){
+                $totp = $_GET['totp'];
+                $params = $params . '&totp=' . $totp;
+            }
+
             $headers = array(
                 "Content-type: application/x-www-form-urlencoded"
             );
