@@ -48,7 +48,6 @@ async function refreshAccessToken(token: JWT) {
   }
 }
 
-
 export const authOptions: NextAuthOptions = {
   providers: [
     KeycloakProvider({
@@ -69,12 +68,19 @@ export const authOptions: NextAuthOptions = {
       session.user = { ...session.user, ...token.user }
       session.accessTokenExpires = token.accessTokenExpires
       session.refreshToken = token.refreshToken
+
       return session
     },
-    async jwt({ token, account, profile }) {
+    async jwt({ token, account, profile, trigger }) {
+      if (trigger === 'update' && Date.now() > token.accessTokenExpires!) {
+        const newToken = await refreshAccessToken(token)
+
+        return newToken
+      }
+
       if (account && profile) {
         token.accessToken = account.access_token
-        token.accessTokenExpires = Date.now() + account.expires_at * 1000
+        token.accessTokenExpires = account.expires_at * 1000
         token.refreshToken = account.refresh_token
         token.id = profile.id
 
@@ -84,13 +90,8 @@ export const authOptions: NextAuthOptions = {
 
         token.user = user
       }
-      // Return previous token if the access token has not expired yet
-      if (Date.now() < token.accessTokenExpires!) {
-        return token
-      }
 
-      // Access token has expired, try to update it
-      return refreshAccessToken(token)
+      return token
     }
   }
 }
