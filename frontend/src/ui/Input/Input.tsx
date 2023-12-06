@@ -30,7 +30,7 @@ export const Input = ({ sx, onChange, endDecorator, ...inputProps }: InputProps)
       slots={{ input: InnerInput }}
       slotProps={{ input: inputProps }}
       sx={{
-        '--Input-minHeight': '56px',
+        '--Input-minHeight': '40px',
         '--Input-radius': '6px',
         ...sx
       }}

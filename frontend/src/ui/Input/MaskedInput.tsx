@@ -54,7 +54,7 @@ export const MaskedInput = ({
         }
       }}
       sx={{
-        '--Input-minHeight': '56px',
+        '--Input-minHeight': '40px',
         '--Input-radius': '6px',
         ...sx
       }}

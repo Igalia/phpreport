@@ -11,7 +11,7 @@ export const theme = extendTheme({
     JoyAutocomplete: {
       styleOverrides: {
         root: () => ({
-          height: '56px',
+          height: '40px',
           borderRadius: '8px'
         })
       }
@@ -19,7 +19,7 @@ export const theme = extendTheme({
     JoyInput: {
       styleOverrides: {
         root: () => ({
-          height: '56px',
+          height: '40px',
           borderRadius: '8px'
         })
       }
