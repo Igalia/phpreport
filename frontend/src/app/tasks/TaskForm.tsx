@@ -8,7 +8,7 @@ import { Input } from '@/ui/Input/Input'
 import { TextArea } from '@/ui/TextArea/TextArea'
 import Typography from '@mui/joy/Typography'
 import Divider from '@mui/joy/Divider'
-import { Play24Filled, RecordStop24Regular } from '@fluentui/react-icons'
+import { Play16Filled, RecordStop24Regular } from '@fluentui/react-icons'
 
 import { Project } from '@/domain/Project'
 import { TaskType } from '@/domain/TaskType'
@@ -60,14 +60,14 @@ export const TaskForm = ({ projects, taskTypes, templates, taskList }: TaskFormP
           placeholder="Select template"
           sx={{ width: '558px' }}
         />
-        <Button sx={{ width: '166px', display: 'flex', gap: '8px' }} onClick={toggleTimer}>
+        <Button sx={{ width: '120px', display: 'flex', gap: '8px' }} onClick={toggleTimer}>
           {isTimerRunning ? (
             <>
               <RecordStop24Regular /> Stop Timer
             </>
           ) : (
             <>
-              <Play24Filled /> Start Timer
+              <Play16Filled /> Start Timer
             </>
           )}
         </Button>
@@ -131,8 +131,8 @@ export const TaskForm = ({ projects, taskTypes, templates, taskList }: TaskFormP
               required
             />
 
-            <Stack bgcolor="#EFEFF4" width="166px" padding="4px 16px" borderRadius="8px">
-              <Typography textColor="#3D4248" fontWeight="600">
+            <Stack bgcolor="#EFEFF4" width="166px" padding="0px 16px" borderRadius="8px">
+              <Typography fontSize="sm" textColor="#3D4248" fontWeight="600">
                 Logged Time
               </Typography>
               <Typography textColor="#004c92" fontWeight="600">
