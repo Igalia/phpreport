@@ -166,11 +166,6 @@ class LoginManager
     if (empty($_SESSION['user']))
       return NULL;
 
-    if (strtolower(ConfigurationParametersManager::getParameter('USE_EXTERNAL_AUTHENTICATION')) === "true") {
-      if (!self::isTokenActive($_SESSION['api_token']) && !self::isTokenActive($_SESSION['refresh_token']))
-        return NULL;
-    }
-
     return $_SESSION['user'];
 
   }
