@@ -55,7 +55,7 @@ do {
         break;
     }
 
-    $taskTypes = makeAPIRequest("/v1/timelog/task_types/");
+    $taskTypes = makeAPIRequest("/v1/timelog/task_types");
     if (array_key_exists('token_refresh_error', $taskTypes)) {
         $response['success'] = false;
         $response['error'] = 'token_refresh_error';

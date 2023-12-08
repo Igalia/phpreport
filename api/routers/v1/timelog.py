@@ -35,17 +35,18 @@ router = APIRouter(
 
 
 @router.get(
-    "/task_types/",
+    "/task_types",
     response_model=List[TaskTypeItem],
     dependencies=[Depends(PermissionsValidator(required_permissions=["task_type:read"]))],
 )
 async def get_task_types(
     current_user=Depends(get_current_user),
     db: Session = Depends(get_db),
+    active: bool = True,
     skip: int = 0,
     limit: int = 100,
 ):
-    items = TaskTypeService(db).get_items()
+    items = TaskTypeService(db).get_items(active)
     return items
 
 

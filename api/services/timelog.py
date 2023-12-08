@@ -10,8 +10,11 @@ from schemas.validation import ValidatedObject
 
 
 class TaskTypeService(AppService):
-    def get_items(self) -> List[TaskType]:
-        task_types = self.db.query(TaskType).all() or []
+    def get_items(self, active) -> List[TaskType]:
+        query = self.db.query(TaskType)
+        if active:
+            query = query.filter(TaskType.active)
+        task_types = query.order_by(TaskType.name).all() or []
         return task_types
 
     def slug_is_valid(self, slug: str) -> bool:
