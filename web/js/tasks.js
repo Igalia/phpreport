@@ -1352,7 +1352,12 @@ Ext.onReady(function(){
                     // Create and populate a record
                     var newTask = new taskRecord();
                     newTask.set('projectId', templateValues['projectId']);
-                    newTask.set('ttype', templateValues['ttype']);
+                    if(templateValues && !taskTypeStore.data.items.includes(x => x.id == templateValues['ttype'])){
+                      let message = `Task type of ${templateValues['ttype']} is not valid. The task type may have been deactivated. Please choose another task type.`
+                      App.setAlert(false, message);
+                      } else {
+                        newTask.set('ttype', templateValues['ttype']);
+                    }
                     newTask.set('story', templateValues['story']);
                     newTask.set('text', templateValues['text']);
                     newTask.set('initTime', templateValues['initTime']);
