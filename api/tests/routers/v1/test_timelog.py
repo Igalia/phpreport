@@ -20,7 +20,10 @@ def test_get_task_types_authenticated(client: TestClient, get_regular_user_token
     task_types = response.json()
     assert task_types == expected_types
 
-def test_get_task_types_including_inactive_ones(client: TestClient, get_regular_user_token_headers: Dict[str, str]) -> None:
+
+def test_get_task_types_including_inactive_ones(
+    client: TestClient, get_regular_user_token_headers: Dict[str, str]
+) -> None:
     expected_types = [
         {"slug": "deprecated", "name": "Deprecated Type", "active": False},
         {"slug": "meeting", "name": "Meeting", "active": True},

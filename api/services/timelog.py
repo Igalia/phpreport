@@ -13,8 +13,7 @@ class TaskTypeService(AppService):
     def get_items(self, active) -> List[TaskType]:
         query = self.db.query(TaskType)
         if active:
-            print(active)
-            query = query.filter(TaskType.active == True)
+            query = query.filter(TaskType.active)
         task_types = query.order_by(TaskType.name).all() or []
         return task_types
 
