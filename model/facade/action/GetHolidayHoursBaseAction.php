@@ -138,13 +138,13 @@ abstract class GetHolidayHoursBaseAction extends Action
                 //if the reference data is in the future, then usedHours has to be 0 - we are not time travelers
                 if($referenceDate > new DateTime()){
                     $userUsedHours[$userVO->getLogin()] = 0;
+                    $userScheduledHours[$userVO->getLogin()] = $vacations;
                 }
                 else {
+                    //need to do this because we need to get hours for interval
                     $userUsedHours[$userVO->getLogin()] = $taskDao->getVacations($userVO, $reportInit, $referenceDate)["add_hours"] ?? 0;
+                    $userScheduledHours[$userVO->getLogin()] = $vacations - $userUsedHours[$userVO->getLogin()];
                 }
-
-                $userScheduledHours[$userVO->getLogin()] = $vacations - $userUsedHours[$userVO->getLogin()];
-
                 // The difference is the number of pending holiday hours
                 $userPendingHolidayHours[$userVO->getLogin()] = $holidayHours - $vacations;
             }

@@ -83,7 +83,7 @@ if (!$csvExport) {
                     $line["hoursDay"],
                     $line["availableHours"],
                     $line["usedHours"],
-                    $line["plannedHours"],
+                    $line["scheduledHours"],
                     $line["pendingHours"],
                     $line["percentage"]
                 ),
