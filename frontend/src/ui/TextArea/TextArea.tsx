@@ -8,7 +8,7 @@ type TextAreaProps = {
   label: string
   placeholder: string
   name: string
-  sx: SxProps
+  sx?: SxProps
   onChange: React.ChangeEventHandler<HTMLTextAreaElement> | undefined
   value: string
 }
@@ -27,7 +27,7 @@ const InnerTextarea = React.forwardRef<HTMLTextAreaElement, InnerTextAreaProps>(
   }
 )
 
-export const TextArea = ({ sx, label, placeholder, name, onChange, value }: TextAreaProps) => {
+export const TextArea = ({ sx = {}, label, placeholder, name, onChange, value }: TextAreaProps) => {
   return (
     <Textarea
       onChange={onChange}
