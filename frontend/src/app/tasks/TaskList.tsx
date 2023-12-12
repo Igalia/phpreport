@@ -2,12 +2,19 @@
 
 import Box from '@mui/joy/Box'
 
-import { useGetTasks, useDeleteTask } from './hooks/useTask'
-import { TaskBox } from './components/Task'
+import { Project } from '@/domain/Project'
+import { TaskType } from '@/domain/TaskType'
 
-export const TaskList = () => {
+import { useGetTasks } from './hooks/useTask'
+import { TaskBox } from './components/TaskBox'
+
+type TaskListProps = {
+  projects: Array<Project>
+  taskTypes: Array<TaskType>
+}
+
+export const TaskList = ({ projects, taskTypes }: TaskListProps) => {
   const tasks = useGetTasks()
-  const { deleteTask } = useDeleteTask()
 
   return (
     <Box
@@ -22,7 +29,13 @@ export const TaskList = () => {
       }}
     >
       {tasks.map((task) => (
-        <TaskBox key={task.id} task={task} deleteTask={deleteTask} />
+        <TaskBox
+          projects={projects}
+          taskTypes={taskTypes}
+          key={task.id}
+          task={task}
+          tasks={tasks}
+        />
       ))}
     </Box>
   )

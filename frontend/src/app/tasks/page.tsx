@@ -27,7 +27,7 @@ export default async function Tasks() {
       projects={projects}
       taskTypes={taskTypes}
       templates={templates}
-      taskList={<TaskList />}
+      taskList={<TaskList projects={projects} taskTypes={taskTypes} />}
     />
   )
 }
