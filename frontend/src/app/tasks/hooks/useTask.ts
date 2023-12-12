@@ -7,6 +7,7 @@ import { deleteTask } from '@/infra/task/deleteTask'
 import { useClientFetch } from '@/infra/lib/useClientFetch'
 import { format } from 'date-fns'
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser/useGetCurrentUser'
+import { editTask } from '@/infra/task/editTask'
 
 export const useGetTasks = () => {
   const apiClient = useClientFetch()
@@ -60,4 +61,32 @@ export const useDeleteTask = () => {
   })
 
   return { deleteTask: mutate }
+}
+
+export const useEditTask = ({ handleSuccess }: { handleSuccess: () => void }) => {
+  const apiClient = useClientFetch()
+  const { showError, showSuccess } = useAlert()
+  const { id: userId } = useGetCurrentUser()
+  const queryClient = useQueryClient()
+
+  const { mutate } = useMutation((task: Task) => editTask(task, apiClient), {
+    onSuccess: (data) => {
+      queryClient.setQueryData<Array<Task>>(['tasks', userId], (prevData) =>
+        prevData!.map((task) => {
+          if (task.id === data.id) {
+            return data
+          }
+
+          return task
+        })
+      )
+      showSuccess('Task succesfully edited')
+      handleSuccess()
+    },
+    onError: () => {
+      showError('Failed to edit task')
+    }
+  })
+
+  return { editTask: mutate }
 }
