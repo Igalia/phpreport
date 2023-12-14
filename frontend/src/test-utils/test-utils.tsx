@@ -2,11 +2,16 @@ import React, { ReactElement } from 'react'
 import { render, RenderOptions } from '@testing-library/react'
 
 import { CssVarsProvider } from '@mui/joy/styles'
+import { AlertProvider } from '@/ui/Alert/AlertProvider'
 import { theme } from '@/ui/theme'
 import userEvent, { Options } from '@testing-library/user-event'
 
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
-  return <CssVarsProvider theme={theme}>{children}</CssVarsProvider>
+  return (
+    <AlertProvider>
+      <CssVarsProvider theme={theme}>{children}</CssVarsProvider>
+    </AlertProvider>
+  )
 }
 
 const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
