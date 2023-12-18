@@ -8,7 +8,7 @@ import { Project } from '@/domain/Project'
 import { TaskType } from '@/domain/TaskType'
 import { Template } from '@/domain/Template'
 
-import { TaskList } from './TaskList'
+import { TaskList } from './components/TaskList'
 import { CreateTask } from './components/CreateTask'
 
 type DayViewProps = {

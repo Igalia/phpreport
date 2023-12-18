@@ -1,12 +1,12 @@
-import { TaskList } from '../TaskList'
+import { TaskList } from '../../components/TaskList'
 import { screen, renderWithUser, within } from '@/test-utils/test-utils'
-import { useGetTasks, useDeleteTask } from '../hooks/useTask'
+import { useGetTasks, useDeleteTask } from '../../hooks/useTask'
 import { Task } from '@/domain/Task'
 
-jest.mock('../hooks/useTask')
+jest.mock('../../hooks/useTask')
 
 const setupTaskList = () => {
-  return renderWithUser(<TaskList userId={0} />)
+  return renderWithUser(<TaskList projects={[]} taskTypes={[]} />)
 }
 
 describe('TaskList', () => {
