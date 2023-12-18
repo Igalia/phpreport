@@ -1,9 +1,9 @@
-import { TaskForm } from '../TaskForm'
+import { CreateTask } from '../../components/CreateTask'
 import { screen, renderWithUser, act } from '@/test-utils/test-utils'
-import { useAddTask, useGetTasks } from '../hooks/useTask'
+import { useAddTask, useGetTasks } from '../../hooks/useTask'
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser/useGetCurrentUser'
 
-jest.mock('../hooks/useTask')
+jest.mock('../../hooks/useTask')
 jest.mock('@/hooks/useGetCurrentUser/useGetCurrentUser')
 
 const setupTaskForm = () => {
@@ -45,12 +45,7 @@ const setupTaskForm = () => {
   ]
 
   return renderWithUser(
-    <TaskForm
-      projects={projects}
-      taskList={<div>Task List</div>}
-      templates={templates}
-      taskTypes={taskTypes}
-    />,
+    <CreateTask projects={projects} templates={templates} taskTypes={taskTypes} />,
     {
       advanceTimers: jest.advanceTimersByTime
     }
