@@ -1,9 +1,11 @@
 import { TaskList } from '../../components/TaskList'
 import { screen, renderWithUser, within } from '@/test-utils/test-utils'
-import { useGetTasks, useDeleteTask } from '../../hooks/useTask'
+import { useGetTasks } from '../../hooks/useGetTasks'
+import { useDeleteTask } from '../../hooks/useDeleteTask'
 import { Task } from '@/domain/Task'
 
-jest.mock('../../hooks/useTask')
+jest.mock('../../hooks/useGetTasks')
+jest.mock('../../hooks/useDeleteTask')
 
 const setupTaskList = () => {
   return renderWithUser(<TaskList projects={[]} taskTypes={[]} />)
@@ -41,7 +43,7 @@ describe('TaskList', () => {
         customerName: 'Igalia'
       }
     ]
-    ;(useGetTasks as jest.Mock).mockReturnValue(tasks)
+    ;(useGetTasks as jest.Mock).mockReturnValue({ tasks })
     ;(useDeleteTask as jest.Mock).mockReturnValue({ removeTask: () => {} })
   })
 

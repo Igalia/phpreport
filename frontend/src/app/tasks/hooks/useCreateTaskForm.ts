@@ -1,19 +1,23 @@
-import { useForm } from '@/hooks/useForm/useForm'
-import { useTimer } from '@/hooks/useTimer/useTimer'
 import { format } from 'date-fns'
 import { useEffect, useRef, useCallback } from 'react'
-import { useAddTask, useGetTasks } from './useTask'
-import { TaskIntent, getOverlappingTasks } from '@/domain/Task'
-import { useAlert } from '@/ui/Alert/useAlert'
+
+import { useForm } from '@/hooks/useForm/useForm'
+import { useTimer } from '@/hooks/useTimer/useTimer'
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser/useGetCurrentUser'
+
+import { useGetTasks } from './useGetTasks'
+import { useCreateTask } from './useCreateTask'
+
+import { useAlert } from '@/ui/Alert/useAlert'
+import { TaskIntent, getOverlappingTasks } from '@/domain/Task'
 import { convertTimeToMinutes, getTimeDifference } from '../utils/time'
 
 export const useTaskForm = () => {
   const formRef = useRef<HTMLFormElement>(null)
   const { id: userId } = useGetCurrentUser()
-  const { addTask } = useAddTask()
+  const { addTask } = useCreateTask()
   const { showError } = useAlert()
-  const tasks = useGetTasks()
+  const { tasks } = useGetTasks()
 
   const { startTimer, stopTimer, seconds, minutes, hours, isTimerRunning } = useTimer()
   const { formState, handleChange, resetForm } = useForm<TaskIntent>({

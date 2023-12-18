@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import { useAlert } from '@/ui/Alert/useAlert'
 import { useForm } from '@/hooks/useForm/useForm'
 import { Task, getOverlappingTasks } from '@/domain/Task'
-import { useEditTask } from './useTask'
+import { useEditTask } from './useEditTask'
 import { Project } from '@/domain/Project'
 
 type UseEditTaskFormProps = {
