@@ -25,10 +25,8 @@ some are used to fill the information about the task:
 
 - Time: fill the start and end dates in.
 - Project: project the task belongs to. You may search by the project
-  or the customer name. There is one special entry in the combo box,
-  _Load all projects_, that would let you load the complete list of
-  projects in the system; users will only see projects they are
-  assigned to by default.
+  or the customer name, users will only see projects they are
+  assigned to.
 - Story: you can fill this field with a keyword to help you to
   differentiate tasks inside the same project.
 - Description: the big text area in the center can be used to write a
