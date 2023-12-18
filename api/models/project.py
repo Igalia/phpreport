@@ -35,4 +35,4 @@ class ProjectAssignment(Base):
     __tablename__ = "project_usr"
 
     user = Column("usrid", Integer, ForeignKey("usr.id"), nullable=False, primary_key=True)
-    project = Column("projectid", Integer, ForeignKey("project.id"), nullable=False)
+    project = Column("projectid", Integer, ForeignKey("project.id"), nullable=False, primary_key=True)
