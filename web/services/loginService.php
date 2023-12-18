@@ -55,10 +55,17 @@
             $clientSecret = ConfigurationParametersManager::getParameter('JWT_SECRET');
             $requestUri = ConfigurationParametersManager::getParameter('OIDC_TOKEN_ENDPOINT');
             $ch = curl_init();
-            $params = "username=" . $userLogin . "&password=" . $userPassword . "&grant_type=password&client_id=" . $clientId . "&client_secret=" . $clientSecret;
+            $data = array(
+                'username'=>$userLogin,
+                'password'=>$userPassword,
+                'grant_type'=>'password',
+                'client_id'=>$clientId,
+                'client_secret'=>$clientSecret,
+            );
+
             if(isset($_GET['totp'])){
                 $totp = $_GET['totp'];
-                $params = $params . '&totp=' . $totp;
+                $data['totp'] = $totp;
             }
 
             $headers = array(
@@ -67,7 +74,7 @@
 
             curl_setopt($ch, CURLOPT_URL, $requestUri);
             curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $result = curl_exec($ch);
@@ -106,10 +113,8 @@
         $string = $string . "<login><sessionId>$sessionId</sessionId></login>";
 
     }
-    catch(IncorrectLoginException $exc){
-
-    $string = $string . "<login><error id='1'>" . $exc->getMessage() . "</error></login>";
-
+    catch(Exception $exc){
+        $string = $string . "<login><error id='1'>" . $exc->getMessage() . $result .  "</error></login>";
     }
 
    // make it into a proper XML document with header etc
