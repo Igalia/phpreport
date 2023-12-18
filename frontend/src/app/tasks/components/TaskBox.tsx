@@ -16,7 +16,7 @@ import { Task } from '@/domain/Task'
 import { getTimeDifference, convertTimeToMinutes } from '../utils/time'
 
 import { EditTask } from './EditTask'
-import { useDeleteTask } from '../hooks/useTask'
+import { useDeleteTask } from '../hooks/useDeleteTask'
 
 type TaskProps = {
   task: Task

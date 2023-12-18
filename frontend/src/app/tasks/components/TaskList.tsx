@@ -5,7 +5,7 @@ import Box from '@mui/joy/Box'
 import { Project } from '@/domain/Project'
 import { TaskType } from '@/domain/TaskType'
 
-import { useGetTasks } from '../hooks/useTask'
+import { useGetTasks } from '../hooks/useGetTasks'
 import { TaskBox } from './TaskBox'
 import { SxProps } from '@mui/joy/styles/types'
 
@@ -16,7 +16,7 @@ type TaskListProps = {
 }
 
 export const TaskList = ({ projects, taskTypes, sx }: TaskListProps) => {
-  const tasks = useGetTasks()
+  const { tasks } = useGetTasks()
 
   return (
     <Box

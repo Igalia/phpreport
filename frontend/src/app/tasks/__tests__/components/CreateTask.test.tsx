@@ -1,9 +1,12 @@
 import { CreateTask } from '../../components/CreateTask'
 import { screen, renderWithUser, act } from '@/test-utils/test-utils'
-import { useAddTask, useGetTasks } from '../../hooks/useTask'
+import { useCreateTask } from '../../hooks/useCreateTask'
+import { useGetTasks } from '../../hooks/useGetTasks'
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser/useGetCurrentUser'
 
-jest.mock('../../hooks/useTask')
+jest.mock('../../hooks/useCreateTask')
+jest.mock('../../hooks/useGetTasks')
+
 jest.mock('@/hooks/useGetCurrentUser/useGetCurrentUser')
 
 const setupTaskForm = () => {
@@ -54,8 +57,8 @@ const setupTaskForm = () => {
 
 describe('TaskForm', () => {
   beforeEach(() => {
-    ;(useAddTask as jest.Mock).mockReturnValue({ addTask: () => {} })
-    ;(useGetTasks as jest.Mock).mockReturnValue([])
+    ;(useCreateTask as jest.Mock).mockReturnValue({ addTask: () => {} })
+    ;(useGetTasks as jest.Mock).mockReturnValue({ tasks: [] })
     ;(useGetCurrentUser as jest.Mock).mockReturnValue({ id: 0 })
 
     jest.useFakeTimers()
@@ -70,7 +73,7 @@ describe('TaskForm', () => {
   describe('required fields', () => {
     it("doesn't submit if it doesn't have a selected project", async () => {
       const addTask = jest.fn()
-      ;(useAddTask as jest.Mock).mockReturnValue({ addTask })
+      ;(useCreateTask as jest.Mock).mockReturnValue({ addTask })
 
       const { user } = setupTaskForm()
 
@@ -87,7 +90,7 @@ describe('TaskForm', () => {
 
     it("doesn't submit if it doesn't have a startTime", async () => {
       const addTask = jest.fn()
-      ;(useAddTask as jest.Mock).mockReturnValue({ addTask })
+      ;(useCreateTask as jest.Mock).mockReturnValue({ addTask })
 
       const { user } = setupTaskForm()
 
@@ -104,7 +107,7 @@ describe('TaskForm', () => {
 
     it("doesn't submit if it doesn't have a endTime", async () => {
       const addTask = jest.fn()
-      ;(useAddTask as jest.Mock).mockReturnValue({ addTask })
+      ;(useCreateTask as jest.Mock).mockReturnValue({ addTask })
 
       const { user } = setupTaskForm()
 
@@ -251,7 +254,7 @@ describe('TaskForm', () => {
 
   it('submits the form when clicking Save', async () => {
     const addTask = jest.fn()
-    ;(useAddTask as jest.Mock).mockReturnValue({ addTask })
+    ;(useCreateTask as jest.Mock).mockReturnValue({ addTask })
 
     const { user } = setupTaskForm()
 
@@ -287,7 +290,7 @@ describe('TaskForm', () => {
 
   it('submits the form when pressing ctrl+S', async () => {
     const addTask = jest.fn()
-    ;(useAddTask as jest.Mock).mockReturnValue({ addTask })
+    ;(useCreateTask as jest.Mock).mockReturnValue({ addTask })
 
     const { user } = setupTaskForm()
 
@@ -323,7 +326,7 @@ describe('TaskForm', () => {
 
   it('submits the form when pressing Enter', async () => {
     const addTask = jest.fn()
-    ;(useAddTask as jest.Mock).mockReturnValue({ addTask })
+    ;(useCreateTask as jest.Mock).mockReturnValue({ addTask })
 
     const { user } = setupTaskForm()
 
@@ -359,22 +362,24 @@ describe('TaskForm', () => {
 
   it("doesn't submit if it has overlapping tasks", async () => {
     const addTask = jest.fn()
-    ;(useAddTask as jest.Mock).mockReturnValue({ addTask })
-    ;(useGetTasks as jest.Mock).mockReturnValue([
-      {
-        date: '2023-01-01',
-        story: '',
-        description: 'test',
-        taskType: null,
-        projectId: 1,
-        userId: 4,
-        startTime: '12:12',
-        endTime: '13:14',
-        id: 18,
-        projectName: 'Holidays',
-        customerName: 'Internal'
-      }
-    ])
+    ;(useCreateTask as jest.Mock).mockReturnValue({ addTask })
+    ;(useGetTasks as jest.Mock).mockReturnValue({
+      tasks: [
+        {
+          date: '2023-01-01',
+          story: '',
+          description: 'test',
+          taskType: null,
+          projectId: 1,
+          userId: 4,
+          startTime: '12:12',
+          endTime: '13:14',
+          id: 18,
+          projectName: 'Holidays',
+          customerName: 'Internal'
+        }
+      ]
+    })
 
     const { user } = setupTaskForm()
 

@@ -1,8 +1,8 @@
 import { EditTask } from '../../components/EditTask'
 import { screen, renderWithUser } from '@/test-utils/test-utils'
-import { useEditTask } from '../../hooks/useTask'
+import { useEditTask } from '../../hooks/useEditTask'
 
-jest.mock('../../hooks/useTask')
+jest.mock('../../hooks/useEditTask')
 
 const setupEditTaskForm = ({ closeForm = () => {} }: { closeForm?: () => void }) => {
   const tasks = [
