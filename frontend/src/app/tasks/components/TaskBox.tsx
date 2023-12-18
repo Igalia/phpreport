@@ -43,7 +43,6 @@ export const TaskBox = ({ task, projects, taskTypes, tasks }: TaskProps) => {
       sx={{
         backgroundColor: '#A8AEEB',
         minHeight: '96px',
-        width: { xs: '100%', sm: '558px' },
         borderRadius: '8px',
         padding: '16px',
         display: 'flex',

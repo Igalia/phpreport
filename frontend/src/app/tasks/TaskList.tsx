@@ -7,25 +7,26 @@ import { TaskType } from '@/domain/TaskType'
 
 import { useGetTasks } from './hooks/useTask'
 import { TaskBox } from './components/TaskBox'
+import { SxProps } from '@mui/joy/styles/types'
 
 type TaskListProps = {
   projects: Array<Project>
   taskTypes: Array<TaskType>
+  sx?: SxProps
 }
 
-export const TaskList = ({ projects, taskTypes }: TaskListProps) => {
+export const TaskList = ({ projects, taskTypes, sx }: TaskListProps) => {
   const tasks = useGetTasks()
 
   return (
     <Box
       component="ul"
       sx={{
-        width: '100%',
-        maxWidth: { xs: '100%', sm: '558px' },
         display: 'flex',
         flexDirection: 'column',
         gap: '16px',
-        listStyle: 'none'
+        listStyle: 'none',
+        ...sx
       }}
     >
       {tasks.map((task) => (
