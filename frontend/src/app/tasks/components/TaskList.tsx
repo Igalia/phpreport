@@ -5,8 +5,8 @@ import Box from '@mui/joy/Box'
 import { Project } from '@/domain/Project'
 import { TaskType } from '@/domain/TaskType'
 
-import { useGetTasks } from './hooks/useTask'
-import { TaskBox } from './components/TaskBox'
+import { useGetTasks } from '../hooks/useTask'
+import { TaskBox } from './TaskBox'
 import { SxProps } from '@mui/joy/styles/types'
 
 type TaskListProps = {
