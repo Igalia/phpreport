@@ -57,11 +57,11 @@ class SyncCalendarAction extends Action
 
         $client->setCalendar($arrayOfCalendars[ConfigurationParametersManager::getParameter('CALENDAR_ID')]);
 
-        $lastYear = date("Y") - 1;
         $nextYear = date("Y") + 1;
-        $start = gmdate("Ymd\THis\Z", strtotime($lastYear . "-01-01"));
-        $end = gmdate("Ymd\THis\Z", strtotime($nextYear . "-12-31"));
-        $currentEvents = $client->getEvents($start, $end);
+
+        $startSyncPeriod = gmdate("Ymd\THis\Z", date(strtotime("-3 months")));
+        $endSyncPeriod = gmdate("Ymd\THis\Z", strtotime($nextYear . "-12-31"));
+        $currentEvents = $client->getEvents($startSyncPeriod, $endSyncPeriod);
         foreach ($currentEvents as $event) {
             if (strstr($event->getData(), $this->user->getLogin() . "-phpreport")) {
                 $client->delete($event->getHref());
@@ -69,7 +69,7 @@ class SyncCalendarAction extends Action
         }
 
         foreach ($this->datesRanges as $range) {
-            if (!is_array($range) || !isset($range['start'])) continue;
+            if (!is_array($range) || !isset($range['start']) || $range['start'] < $startSyncPeriod) continue;
 
             $start = str_replace("-", "", $range['start']);
             $end = str_replace("-", "", $range['end']);
