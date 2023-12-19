@@ -39,7 +39,7 @@ export const TaskIntent = z
   .object({
     userId: z.number(),
     projectId: z.string().min(1, { message: 'Project is required' }),
-    taskType: z.string().optional(),
+    taskType: z.string().nullable(),
     story: z.string(),
     description: z.string(),
     startTime: z.string().min(1, { message: 'Start time is required' }),
