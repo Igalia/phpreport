@@ -1,9 +1,11 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Date, Double
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Date, DateTime, Double
 from sqlalchemy.orm import relationship, Mapped
 from sqlalchemy.ext.hybrid import hybrid_property
-from models.customer import Customer
 
 from db.base_class import Base
+from helpers.time import total_hours_between_dates
+from models.customer import Customer
+from models.user import User
 
 
 class Project(Base):
@@ -36,3 +38,36 @@ class ProjectAssignment(Base):
 
     user = Column("usrid", Integer, ForeignKey("usr.id"), nullable=False, primary_key=True)
     project = Column("projectid", Integer, ForeignKey("project.id"), nullable=False, primary_key=True)
+
+
+class ProjectAllocation(Base):
+    __tablename__ = "project_allocation"
+
+    id = Column(
+        Integer,
+        primary_key=True,
+        autoincrement=True,
+        nullable=False,
+    )
+    user_id = Column(Integer, ForeignKey("usr.id"), nullable=False)
+    project_id = Column(Integer, ForeignKey("project.id"), nullable=False)
+    start_date = Column(Date, nullable=False)
+    end_date = Column(Date, nullable=False)
+    hours_per_day = Column(Double(precision=8), nullable=False)
+    fte = Column(Double(precision=8), nullable=False)
+    is_tentative = Column(Boolean)
+    is_billable = Column(Boolean)
+    notes = Column("text", String)
+    created_at = Column(DateTime)
+    created_by = Column(String(length=100))
+    modified_at = Column(DateTime)
+    modified_by = Column(String(length=100))
+    user: Mapped["User"] = relationship(foreign_keys=[user_id])
+
+    @hybrid_property
+    def username(self):
+        return self.user.login
+
+    @property
+    def total_hours(self):
+        return total_hours_between_dates(self.start_date, self.end_date, self.hours_per_day)
