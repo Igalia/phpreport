@@ -1,7 +1,7 @@
 import { Options, Option } from './types'
 
 export const getDisplayValue = (value: string, options: Options) => {
-  if (options[0] === 'string') {
+  if (typeof options[0] === 'string') {
     return value
   }
 
