@@ -31,7 +31,9 @@ export const CreateTask = ({ projects, taskTypes, templates }: CreateTaskProps) 
     isTimerRunning,
     selectStartTime,
     handleSubmit,
-    formRef
+    formRef,
+    selectTemplate,
+    templateName
   } = useTaskForm()
 
   return (
@@ -39,8 +41,10 @@ export const CreateTask = ({ projects, taskTypes, templates }: CreateTaskProps) 
       <Select
         name="templates"
         label="Select template"
-        value=""
-        onChange={() => {}}
+        value={templateName}
+        onChange={(templateId) => {
+          selectTemplate(parseInt(templateId), templates)
+        }}
         options={templates.map((template) => ({
           value: template.id.toString(),
           label: template.name

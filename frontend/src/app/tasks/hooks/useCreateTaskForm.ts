@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useState } from 'react'
 
 import { useForm } from '@/hooks/useForm/useForm'
 import { useTimer } from '@/hooks/useTimer/useTimer'
@@ -9,6 +9,7 @@ import { useGetTasks } from './useGetTasks'
 import { useCreateTask } from './useCreateTask'
 
 import { useAlert } from '@/ui/Alert/useAlert'
+import { Template } from '@/domain/Template'
 import { TaskIntent, getOverlappingTasks } from '@/domain/Task'
 import { convertTimeToMinutes, getTimeDifference } from '../utils/time'
 
@@ -18,9 +19,10 @@ export const useTaskForm = () => {
   const { addTask } = useCreateTask()
   const { showError } = useAlert()
   const { tasks } = useGetTasks()
+  const [templateName, setTemplateName] = useState('')
 
   const { startTimer, stopTimer, seconds, minutes, hours, isTimerRunning } = useTimer()
-  const { formState, handleChange, resetForm } = useForm<TaskIntent>({
+  const { formState, handleChange, resetForm, setFormState } = useForm<TaskIntent>({
     initialValues: {
       userId,
       projectId: '',
@@ -29,7 +31,7 @@ export const useTaskForm = () => {
       description: '',
       startTime: '',
       endTime: '',
-      date: ''
+      date: format(new Date(), 'yyyy-MM-dd')
     }
   })
 
@@ -54,19 +56,31 @@ export const useTaskForm = () => {
     addTask(formState)
   }, [addTask, formState, showError, tasks])
 
-  const setDate = () => handleChange('date', format(new Date(), 'yyyy-MM-dd'))
+  const selectTemplate = (templateId: number, templates: Array<Template>) => {
+    const template = templates.find((t) => t.id === templateId)
+    if (template) {
+      setTemplateName(template.name)
+      setFormState((prevState) => ({
+        ...prevState,
+        taskType: template.taskType,
+        description: template.description || '',
+        startTime: template.startTime,
+        endTime: template.endTime,
+        projectId: template.projectId.toString(),
+        story: template.story || ''
+      }))
+    }
+  }
 
   const onStartTimer = () => {
     handleChange('startTime', format(new Date(), 'HH:mm'))
     handleChange('endTime', '')
 
-    setDate()
     startTimer()
   }
 
   const selectStartTime = (option: string) => {
     handleChange('startTime', option)
-    setDate()
   }
 
   const onStopTimer = () => {
@@ -114,6 +128,8 @@ export const useTaskForm = () => {
     isTimerRunning,
     selectStartTime,
     handleSubmit,
-    formRef
+    formRef,
+    selectTemplate,
+    templateName
   }
 }
