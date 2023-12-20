@@ -349,6 +349,8 @@ function addNewTaskIfEmpty() {
     }
 }
 
+let projectsList = [];
+
 /*  Class that stores a taskRecord element and shows it on screen.
     It keeps the taskRecord in synch with the content of the form on screen,
     in real-time (as soon as it changes). */
@@ -460,14 +462,7 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     remoteSort: false,
                     listeners: {
                         'load': function (store) {
-                            var dummyRecord = new projectRecord({
-                                id: -1,                  // some invalid id
-                                fullDescription: "Load all projects",
-                                customerName: ""
-                            });
-
-                            store.add(dummyRecord);
-                            store.commitChanges();
+                            projectsList = this.parent.projectComboBox.store.data.items;
 
                             //the value of projectComboBox has to be set after loading the data on this store
                             if ((this.findExact("id", this.parent.taskRecord.data['projectId']) == -1) &&
@@ -1351,12 +1346,18 @@ Ext.onReady(function(){
 
                     // Create and populate a record
                     var newTask = new taskRecord();
-                    newTask.set('projectId', templateValues['projectId']);
-                    if(templateValues && !taskTypeStore.data.items.some(x => x.id == templateValues['ttype'])){
+                    if(templateValues && templateValues['ttype'] && !taskTypeStore.data.items.some(x => x.id == templateValues['ttype'])){
                       let message = `Task type of ${templateValues['ttype']} is not valid. The task type may have been deactivated. Please choose another task type.`
                       App.setAlert(false, message);
                       } else {
                         newTask.set('ttype', templateValues['ttype']);
+                    }
+
+                    if(templateValues && !projectsList.some(x => x.id == templateValues['projectId'])){
+                        let message = `You are not assigned to this project. Please select another project or contact the system administrators.`
+                        App.setAlert(false, message);
+                    } else {
+                        newTask.set('projectId', templateValues['projectId']);
                     }
                     newTask.set('story', templateValues['story']);
                     newTask.set('text', templateValues['text']);

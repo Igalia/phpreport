@@ -195,7 +195,7 @@ def upgrade() -> None:
         sa.Column('projectid', sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(['projectid'], ['project.id'], ),
         sa.ForeignKeyConstraint(['usrid'], ['usr.id'], ),
-        sa.PrimaryKeyConstraint('usrid')
+        sa.PrimaryKeyConstraint('usrid', 'projectid')
         )
 
     # ----------------------------------------------------------------------
