@@ -13,5 +13,5 @@ export const useForm = <T>({ initialValues }: UseFormProps<T>) => {
 
   const resetForm = useCallback(() => setFormState(initialValues), [initialValues])
 
-  return { handleChange, formState, resetForm }
+  return { handleChange, formState, resetForm, setFormState }
 }
