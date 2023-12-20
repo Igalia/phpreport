@@ -1,12 +1,12 @@
 export type Template = {
   id: number
   name: string
-  story: string
-  description: string
-  taskType: string
-  userId: number
-  projectId: number
+  story: string | null
+  description: string | null
+  taskType: string | null
+  userId: number | null
+  projectId: number | null
   isGlobal: boolean
-  startTime: string
-  endTime: string
+  startTime: string | null
+  endTime: string | null
 }
