@@ -22,11 +22,12 @@ type EditTaskProps = {
 }
 
 export const EditTask = ({ task, tasks, projects, taskTypes, closeForm }: EditTaskProps) => {
-  const { handleChange, handleProject, formState, handleSubmit, resetForm } = useEditTaskForm({
-    task,
-    tasks,
-    closeForm
-  })
+  const { handleChange, handleProject, formState, handleSubmit, resetForm, formRef } =
+    useEditTaskForm({
+      task,
+      tasks,
+      closeForm
+    })
 
   return (
     <Stack
@@ -34,6 +35,7 @@ export const EditTask = ({ task, tasks, projects, taskTypes, closeForm }: EditTa
         e.preventDefault()
         handleSubmit()
       }}
+      ref={formRef}
       component="form"
       gap="8px"
       width="400px"
