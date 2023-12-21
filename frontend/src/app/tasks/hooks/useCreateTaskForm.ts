@@ -102,7 +102,7 @@ export const useTaskForm = () => {
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === 's' && event.ctrlKey) {
+      if (event.key === 's' && event.ctrlKey && formRef.current?.contains(document.activeElement)) {
         event.preventDefault()
         formRef.current?.requestSubmit()
       }
