@@ -64,8 +64,8 @@ export const useTaskForm = () => {
         ...prevState,
         taskType: template.taskType,
         description: template.description || '',
-        startTime: template.startTime,
-        endTime: template.endTime,
+        startTime: template.startTime || '',
+        endTime: template.endTime || '',
         projectId: template.projectId.toString(),
         story: template.story || ''
       }))

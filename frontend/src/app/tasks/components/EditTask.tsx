@@ -79,10 +79,10 @@ export const EditTask = ({ task, tasks, projects, taskTypes, closeForm }: EditTa
         onChange={(e) => handleChange('description', e.target.value)}
         label="Task description"
         placeholder="Task description..."
-        value={formState.description}
+        value={formState.description || ''}
       />
       <Input
-        value={formState.story}
+        value={formState.story || ''}
         onChange={(e) => handleChange('story', e.target.value)}
         name="story"
         placeholder="Story"

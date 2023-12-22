@@ -135,7 +135,7 @@ export const CreateTask = ({ projects, taskTypes, templates }: CreateTaskProps) 
           label="Task description"
           sx={{ minHeight: '208px' }}
           placeholder="Task description..."
-          value={task.description}
+          value={task.description || ''}
         ></TextArea>
         <Select
           name="taskType"
@@ -146,7 +146,7 @@ export const CreateTask = ({ projects, taskTypes, templates }: CreateTaskProps) 
           placeholder="Select task type"
         />
         <Input
-          value={task.story}
+          value={task.story || ''}
           onChange={(e) => handleChange('story', e.target.value)}
           name="story"
           placeholder="Story"
