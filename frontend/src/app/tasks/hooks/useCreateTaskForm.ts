@@ -63,6 +63,8 @@ export const useTaskForm = () => {
     handleChange('projectName', value)
     if (project) {
       handleChange('projectId', project.id)
+    } else {
+      handleChange('projectId', null)
     }
   }
 

@@ -1,7 +1,7 @@
-import { Task } from '@/domain/Task'
+import { Task, TaskIntent } from '@/domain/Task'
 import { ApiClient } from '../lib/apiClient'
 
-export const editTask = async (task: Task, apiClient: ApiClient): Promise<Task> => {
+export const editTask = async (task: TaskIntent, apiClient: ApiClient): Promise<Task> => {
   return apiClient(`/v1/timelog/tasks/${task.id}`, {
     method: 'PUT',
     body: JSON.stringify({

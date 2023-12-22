@@ -6,37 +6,23 @@ function getMinutes(time: string) {
   return hours * 60 + minutes
 }
 
-const timeValidation = (startTime: string, endTime: string, ctx: z.RefinementCtx) => {
-  if (getMinutes(startTime) > getMinutes(endTime)) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: 'End time must be after Start time'
-    })
-  }
+export type Task = {
+  id: number
+  userId: number
+  projectId: number
+  taskType: string | null
+  story: string | null
+  description: string | null
+  startTime: string
+  endTime: string
+  date: string
+  customerName: string
+  projectName: string
 }
-
-export const Task = z
-  .object({
-    id: z.number(),
-    userId: z.number(),
-    projectId: z.number(),
-    taskType: z.string().nullable(),
-    story: z.string().nullable(),
-    description: z.string().nullable(),
-    startTime: z.string().min(1, { message: 'Start time is required' }),
-    endTime: z.string().min(1, { message: 'End time is required ' }),
-    date: z.string(),
-    customerName: z.string(),
-    projectName: z.string()
-  })
-  .superRefine((obj, ctx) => {
-    timeValidation(obj.startTime, obj.endTime, ctx)
-  })
-
-export type Task = z.infer<typeof Task>
 
 export const TaskIntent = z
   .object({
+    id: z.number().optional(),
     userId: z.number(),
     projectId: z.number().nullable(),
     projectName: z.string(),
@@ -48,7 +34,13 @@ export const TaskIntent = z
     date: z.string()
   })
   .superRefine((obj, ctx) => {
-    timeValidation(obj.startTime, obj.endTime, ctx)
+    if (getMinutes(obj.startTime) > getMinutes(obj.endTime)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'End time must be after Start time'
+      })
+    }
+
     if (obj.projectId === null) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,

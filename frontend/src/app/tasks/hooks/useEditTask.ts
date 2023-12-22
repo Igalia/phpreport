@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Task } from '@/domain/Task'
+import { TaskIntent, Task } from '@/domain/Task'
 import { useAlert } from '@/ui/Alert/useAlert'
 import { useClientFetch } from '@/infra/lib/useClientFetch'
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser/useGetCurrentUser'
@@ -11,7 +11,7 @@ export const useEditTask = ({ handleSuccess }: { handleSuccess: () => void }) =>
   const { id: userId } = useGetCurrentUser()
   const queryClient = useQueryClient()
 
-  const { mutate } = useMutation((task: Task) => editTask(task, apiClient), {
+  const { mutate } = useMutation((task: TaskIntent) => editTask(task, apiClient), {
     onSuccess: (data) => {
       queryClient.setQueryData<Array<Task>>(['tasks', userId], (prevData) =>
         prevData!.map((task) => {

@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { useAlert } from '@/ui/Alert/useAlert'
 import { useForm } from '@/hooks/useForm/useForm'
-import { Task, getOverlappingTasks } from '@/domain/Task'
+import { Task, TaskIntent, getOverlappingTasks } from '@/domain/Task'
 import { useEditTask } from './useEditTask'
 import { Project } from '@/domain/Project'
 
@@ -13,14 +13,14 @@ type UseEditTaskFormProps = {
 }
 
 export const useEditTaskForm = ({ task, tasks, closeForm }: UseEditTaskFormProps) => {
-  const { formState, handleChange, resetForm } = useForm<Task>({
+  const { formState, handleChange, resetForm } = useForm<TaskIntent>({
     initialValues: task
   })
   const { showError } = useAlert()
   const { editTask } = useEditTask({ handleSuccess: closeForm })
 
   const handleSubmit = useCallback(() => {
-    const validation = Task.safeParse(formState)
+    const validation = TaskIntent.safeParse(formState)
 
     if (!validation.success) {
       validation.error.issues.map(({ message }) => {
@@ -48,6 +48,8 @@ export const useEditTaskForm = ({ task, tasks, closeForm }: UseEditTaskFormProps
     handleChange('projectName', value)
     if (project) {
       handleChange('projectId', project.id)
+    } else {
+      handleChange('projectId', null)
     }
   }
 
