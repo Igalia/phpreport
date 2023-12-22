@@ -33,6 +33,7 @@ export const CreateTask = ({ projects, taskTypes, templates }: CreateTaskProps) 
     handleSubmit,
     formRef,
     selectTemplate,
+    handleProject,
     templateName
   } = useTaskForm()
 
@@ -82,15 +83,12 @@ export const CreateTask = ({ projects, taskTypes, templates }: CreateTaskProps) 
         ref={formRef}
       >
         <Select
-          onChange={(value) => handleChange('projectId', value)}
-          value={task.projectId}
+          onChange={(value) => handleProject(value, projects)}
+          value={task.projectName}
           name="projectId"
           label="Select project"
           placeholder="Select project"
-          options={projects.map((project) => ({
-            label: project.description,
-            value: project.id.toString()
-          }))}
+          options={projects.map((project) => project.description)}
           required
         />
         <Stack flexDirection="row" sx={{ gap: { xs: '8px', sm: '30px' } }}>
