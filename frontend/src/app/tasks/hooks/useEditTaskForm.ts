@@ -45,9 +45,9 @@ export const useEditTaskForm = ({ task, tasks, closeForm }: UseEditTaskFormProps
 
   const handleProject = (value: string, projects: Array<Project>) => {
     const project = projects.find((project) => project.description === value)
+    handleChange('projectName', value)
     if (project) {
       handleChange('projectId', project.id)
-      handleChange('projectName', value)
     }
   }
 

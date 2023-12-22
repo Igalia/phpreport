@@ -38,7 +38,8 @@ export type Task = z.infer<typeof Task>
 export const TaskIntent = z
   .object({
     userId: z.number(),
-    projectId: z.string().min(1, { message: 'Project is required' }),
+    projectId: z.number().nullable(),
+    projectName: z.string(),
     taskType: z.string().nullable(),
     story: z.string().nullable(),
     description: z.string().nullable(),
@@ -48,6 +49,12 @@ export const TaskIntent = z
   })
   .superRefine((obj, ctx) => {
     timeValidation(obj.startTime, obj.endTime, ctx)
+    if (obj.projectId === null) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Project is required'
+      })
+    }
   })
 export type TaskIntent = z.infer<typeof TaskIntent>
 

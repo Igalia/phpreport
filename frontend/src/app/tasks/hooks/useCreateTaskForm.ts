@@ -10,6 +10,7 @@ import { useCreateTask } from './useCreateTask'
 
 import { useAlert } from '@/ui/Alert/useAlert'
 import { Template } from '@/domain/Template'
+import { Project } from '@/domain/Project'
 import { TaskIntent, getOverlappingTasks } from '@/domain/Task'
 import { convertTimeToMinutes, getTimeDifference } from '../utils/time'
 
@@ -25,7 +26,8 @@ export const useTaskForm = () => {
   const { formState, handleChange, resetForm, setFormState } = useForm<TaskIntent>({
     initialValues: {
       userId,
-      projectId: '',
+      projectId: null,
+      projectName: '',
       taskType: '',
       story: '',
       description: '',
@@ -56,6 +58,14 @@ export const useTaskForm = () => {
     addTask(formState)
   }, [addTask, formState, showError, tasks])
 
+  const handleProject = (value: string, projects: Array<Project>) => {
+    const project = projects.find((project) => project.description === value)
+    handleChange('projectName', value)
+    if (project) {
+      handleChange('projectId', project.id)
+    }
+  }
+
   const selectTemplate = (templateId: number, templates: Array<Template>) => {
     const template = templates.find((t) => t.id === templateId)
     if (template) {
@@ -66,7 +76,7 @@ export const useTaskForm = () => {
         description: template.description || '',
         startTime: template.startTime || '',
         endTime: template.endTime || '',
-        projectId: template.projectId.toString(),
+        projectId: template.projectId,
         story: template.story || ''
       }))
     }
@@ -127,6 +137,7 @@ export const useTaskForm = () => {
     loggedTime: makeLoggedTime(),
     isTimerRunning,
     selectStartTime,
+    handleProject,
     handleSubmit,
     formRef,
     selectTemplate,
