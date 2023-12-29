@@ -6,7 +6,9 @@ export const getTemplates = async (
   { userId }: { userId: number }
 ): Promise<Array<Template>> => {
   const params = new URLSearchParams({ user_id: userId.toString() })
-  const response = await apiClient(`/v1/timelog/templates?${params}`)
+  const response = await apiClient(`/v1/timelog/templates?${params}`, {
+    next: { tags: ['templates'] }
+  })
 
   if (!response.ok) {
     throw new Error('Failed to fetch Templates')
