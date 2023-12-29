@@ -68,12 +68,18 @@ export const useTaskForm = () => {
     }
   }
 
-  const selectTemplate = (templateId: number, templates: Array<Template>) => {
+  const selectTemplate = (
+    templateId: number,
+    templates: Array<Template>,
+    projects: Array<Project>
+  ) => {
     const template = templates.find((t) => t.id === templateId)
     if (template) {
+      const project = projects.find((project) => project.id === template.projectId)
       setTemplateName(template.name)
       setFormState((prevState) => ({
         ...prevState,
+        projectName: project?.description || '',
         taskType: template.taskType,
         description: template.description || '',
         startTime: template.startTime || '',
