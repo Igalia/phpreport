@@ -4,15 +4,20 @@ import { useState } from 'react'
 import Box from '@mui/joy/Box'
 import Button from '@mui/joy/Button'
 import Typography from '@mui/joy/Typography'
-import { Delete24Filled, Edit24Filled } from '@fluentui/react-icons'
+import {
+  Delete24Filled,
+  Edit24Filled,
+  ArrowMaximize24Filled,
+  ArrowMinimize24Filled
+} from '@fluentui/react-icons'
 
 import { Project } from '@/domain/Project'
 import { TaskType } from '@/domain/TaskType'
+import { Task } from '@/domain/Task'
 
 import { ScreenReaderOnly } from '@/ui/ScreenReaderOnly/ScreenReaderOnly'
 import { ConfirmationModal } from '@/ui/ConfirmationModal/ConfirmationModal'
 import { styled } from '@mui/joy/styles'
-import { Task } from '@/domain/Task'
 import { getTimeDifference, convertTimeToMinutes } from '../utils/time'
 
 import { EditTask } from './EditTask'
@@ -30,6 +35,7 @@ export const TaskBox = ({ task, projects, taskTypes, tasks }: TaskProps) => {
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [editMode, setEditMode] = useState(false)
+  const [expandedTask, setExpandedTask] = useState(false)
 
   const timeDifference = () => {
     const startMinutes = convertTimeToMinutes(task.startTime)
@@ -68,11 +74,22 @@ export const TaskBox = ({ task, projects, taskTypes, tasks }: TaskProps) => {
             <Typography textColor="#1E2AA5" fontWeight="bold">
               {task.startTime}-{task.endTime} ({timeDifference()})
             </Typography>
+            {expandedTask && (
+              <>
+                <Typography textColor="#1E2AA5">{task.description}</Typography>
+                <Typography textColor="#1E2AA5">{task.story}</Typography>
+              </>
+            )}
           </>
         )}
       </Box>
       <Box display="flex" gap="8px">
-        <IconButton onClick={() => setEditMode(true)}>
+        <IconButton
+          onClick={() => {
+            setEditMode(true)
+            setExpandedTask(false)
+          }}
+        >
           <Edit24Filled color="#2f3338" />
           <ScreenReaderOnly>Edit task</ScreenReaderOnly>
         </IconButton>
@@ -80,6 +97,16 @@ export const TaskBox = ({ task, projects, taskTypes, tasks }: TaskProps) => {
           <Delete24Filled color="#2f3338" />
           <ScreenReaderOnly>Delete task {task.id}</ScreenReaderOnly>
         </IconButton>
+
+        <IconButton onClick={() => setExpandedTask((prevState) => !prevState)}>
+          {expandedTask ? (
+            <ArrowMinimize24Filled color="#2f3338" />
+          ) : (
+            <ArrowMaximize24Filled color="#2f3338" />
+          )}
+          <ScreenReaderOnly>Expand Task</ScreenReaderOnly>
+        </IconButton>
+
         <ConfirmationModal
           open={deleteModalOpen}
           closeModal={() => setDeleteModalOpen(false)}
