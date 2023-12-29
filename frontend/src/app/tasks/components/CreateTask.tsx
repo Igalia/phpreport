@@ -44,7 +44,7 @@ export const CreateTask = ({ projects, taskTypes, templates }: CreateTaskProps) 
         label="Select template"
         value={templateName}
         onChange={(templateId) => {
-          selectTemplate(parseInt(templateId), templates)
+          selectTemplate(parseInt(templateId), templates, projects)
         }}
         options={templates.map((template) => ({
           value: template.id.toString(),
