@@ -8,7 +8,8 @@ import {
   Delete24Filled,
   Edit24Filled,
   ArrowMaximize24Filled,
-  ArrowMinimize24Filled
+  ArrowMinimize24Filled,
+  SaveCopy24Filled
 } from '@fluentui/react-icons'
 
 import { Project } from '@/domain/Project'
@@ -22,6 +23,7 @@ import { getTimeDifference, convertTimeToMinutes } from '../utils/time'
 
 import { EditTask } from './EditTask'
 import { useDeleteTask } from '../hooks/useDeleteTask'
+import { SaveTemplateModal } from './SaveTemplateModal'
 
 type TaskProps = {
   task: Task
@@ -34,6 +36,7 @@ export const TaskBox = ({ task, projects, taskTypes, tasks }: TaskProps) => {
   const { deleteTask } = useDeleteTask()
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [templateModalOpen, setTemplateModalOpen] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const [expandedTask, setExpandedTask] = useState(false)
 
@@ -106,7 +109,15 @@ export const TaskBox = ({ task, projects, taskTypes, tasks }: TaskProps) => {
           )}
           <ScreenReaderOnly>Expand Task</ScreenReaderOnly>
         </IconButton>
-
+        <IconButton onClick={() => setTemplateModalOpen(true)}>
+          <SaveCopy24Filled color="#2f3338" />
+          <ScreenReaderOnly>Save task as template</ScreenReaderOnly>
+        </IconButton>
+        <SaveTemplateModal
+          task={task}
+          open={templateModalOpen}
+          closeModal={() => setTemplateModalOpen(false)}
+        />
         <ConfirmationModal
           open={deleteModalOpen}
           closeModal={() => setDeleteModalOpen(false)}
