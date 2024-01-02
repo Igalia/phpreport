@@ -11,7 +11,7 @@ const queryClient = new QueryClient()
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
-    <SessionProvider basePath="/web/v2/api/auth">
+    <SessionProvider basePath="/api/auth">
       <RefreshSession>
         <QueryClientProvider client={queryClient}>
           <AlertProvider>

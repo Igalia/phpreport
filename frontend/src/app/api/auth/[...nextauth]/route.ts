@@ -57,11 +57,11 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   pages: {
-    error: '/web/v2/auth/error'
+    error: '/auth/error'
   },
   callbacks: {
     async redirect({ baseUrl }) {
-      return `${baseUrl}/web/v2/`
+      return baseUrl
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken
