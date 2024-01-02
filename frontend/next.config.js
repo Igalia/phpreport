@@ -1,6 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: "/web/v2"
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/tasks',
+        permanent: true
+      }
+    ]
+  }
 }
 
 module.exports = nextConfig
