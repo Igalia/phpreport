@@ -10,7 +10,7 @@ import { useCreateTask } from './useCreateTask'
 
 import { useAlert } from '@/ui/Alert/useAlert'
 import { Template } from '@/domain/Template'
-import { Project } from '@/domain/Project'
+
 import { TaskIntent, getOverlappingTasks } from '@/domain/Task'
 import { convertTimeToMinutes, getTimeDifference } from '../utils/time'
 
@@ -20,14 +20,13 @@ export const useTaskForm = () => {
   const { addTask } = useCreateTask()
   const { showError } = useAlert()
   const { tasks } = useGetTasks()
-  const [templateName, setTemplateName] = useState('')
+  const [template, setTemplate] = useState<Template | null>(null)
 
   const { startTimer, stopTimer, seconds, minutes, hours, isTimerRunning } = useTimer()
   const { formState, handleChange, resetForm, setFormState } = useForm<TaskIntent>({
     initialValues: {
       userId,
       projectId: null,
-      projectName: '',
       taskType: '',
       story: '',
       description: '',
@@ -58,28 +57,11 @@ export const useTaskForm = () => {
     addTask(formState)
   }, [addTask, formState, showError, tasks])
 
-  const handleProject = (value: string, projects: Array<Project>) => {
-    const project = projects.find((project) => project.description === value)
-    handleChange('projectName', value)
-    if (project) {
-      handleChange('projectId', project.id)
-    } else {
-      handleChange('projectId', null)
-    }
-  }
-
-  const selectTemplate = (
-    templateId: number,
-    templates: Array<Template>,
-    projects: Array<Project>
-  ) => {
-    const template = templates.find((t) => t.id === templateId)
+  const selectTemplate = (template: Template | null) => {
+    setTemplate(template)
     if (template) {
-      const project = projects.find((project) => project.id === template.projectId)
-      setTemplateName(template.name)
       setFormState((prevState) => ({
         ...prevState,
-        projectName: project?.description || '',
         taskType: template.taskType,
         description: template.description || '',
         startTime: template.startTime || '',
@@ -145,10 +127,9 @@ export const useTaskForm = () => {
     loggedTime: makeLoggedTime(),
     isTimerRunning,
     selectStartTime,
-    handleProject,
     handleSubmit,
     formRef,
     selectTemplate,
-    templateName
+    template
   }
 }
