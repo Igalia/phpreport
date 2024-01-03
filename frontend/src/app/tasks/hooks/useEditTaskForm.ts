@@ -4,7 +4,6 @@ import { useAlert } from '@/ui/Alert/useAlert'
 import { useForm } from '@/hooks/useForm/useForm'
 import { Task, TaskIntent, getOverlappingTasks } from '@/domain/Task'
 import { useEditTask } from './useEditTask'
-import { Project } from '@/domain/Project'
 
 type UseEditTaskFormProps = {
   task: Task
@@ -45,16 +44,6 @@ export const useEditTaskForm = ({ task, tasks, closeForm }: UseEditTaskFormProps
     editTask(formState)
   }, [editTask, formState, showError, tasks])
 
-  const handleProject = (value: string, projects: Array<Project>) => {
-    const project = projects.find((project) => project.description === value)
-    handleChange('projectName', value)
-    if (project) {
-      handleChange('projectId', project.id)
-    } else {
-      handleChange('projectId', null)
-    }
-  }
-
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.key === 's' && event.ctrlKey && formRef.current?.contains(document.activeElement)) {
@@ -69,5 +58,5 @@ export const useEditTaskForm = ({ task, tasks, closeForm }: UseEditTaskFormProps
     }
   }, [handleSubmit])
 
-  return { formState, handleChange, handleSubmit, resetForm, handleProject, formRef }
+  return { formState, handleChange, handleSubmit, resetForm, formRef }
 }
