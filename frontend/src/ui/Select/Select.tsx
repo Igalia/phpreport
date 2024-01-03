@@ -1,50 +1,63 @@
 import * as React from 'react'
-import { Input } from '@/ui/Input/Input'
-import { SxProps } from '@mui/joy/styles/types'
-import { BaseSelect } from './BaseSelect'
-import { Options } from './types'
 
-type SelectProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
-  sx?: SxProps
-  options: Options
+import Autocomplete from '@mui/joy/Autocomplete'
+import Box from '@mui/joy/Box'
+import { styled } from '@mui/joy/styles'
+import { AutocompleteProps } from '@mui/joy/Autocomplete'
+
+type SelectProps<T> = {
   label: string
-  value: string
-  onChange?: (value: string) => void
-}
+} & AutocompleteProps<T, undefined, undefined, undefined>
 
-export const Select = ({
-  sx,
-  value,
-  onChange,
+export const Select = <T,>({
   options,
+  sx,
+  onChange,
   name,
+  value,
   label,
-  placeholder,
+  loading,
+  getOptionLabel,
   disabled,
-  required
-}: SelectProps) => {
+  required,
+  getOptionKey
+}: SelectProps<T>) => {
+  const selectButtonId = `select-button-${name}`
+  const selectLabelId = `select-label-${name}`
+
   return (
-    <BaseSelect
-      options={options}
-      name={name}
-      value={value}
-      onChange={onChange}
-      disabled={disabled}
-      renderInput={(props) => (
-        <Input
-          {...props}
-          placeholder={placeholder}
-          onChange={(e) => {
-            if (props.onChange) {
-              props.onChange(e.target.value)
-            }
-          }}
-          name={name}
-          sx={sx}
-          label={label}
-          required={required}
-        />
-      )}
-    />
+    <Box sx={{ position: 'relative', zIndex: 0 }}>
+      <StyledLabel htmlFor={selectButtonId} id={selectLabelId}>
+        {label}
+      </StyledLabel>
+      <Autocomplete
+        id={selectButtonId}
+        onChange={onChange}
+        name={name}
+        value={value}
+        sx={sx}
+        options={options}
+        autoSelect
+        autoHighlight
+        slotProps={{ input: { sx: { pt: '10px' } } }}
+        loading={loading}
+        getOptionLabel={getOptionLabel}
+        disabled={disabled}
+        required={required}
+        getOptionKey={getOptionKey}
+      />
+    </Box>
   )
 }
+
+const StyledLabel = styled('label')(({ theme }) => ({
+  position: 'absolute',
+  lineHeight: 1,
+  color: theme.vars.palette.text.tertiary,
+  fontWeight: theme.vars.fontWeight.md,
+  transition: 'all 150ms cubic-bezier(0.4, 0, 0.2, 1)',
+  top: '0.5rem',
+  left: '0.75rem',
+  fontSize: '0.75rem',
+  zIndex: 1
+}))
