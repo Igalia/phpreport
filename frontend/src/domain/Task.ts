@@ -25,7 +25,6 @@ export const TaskIntent = z
     id: z.number().optional(),
     userId: z.number(),
     projectId: z.number().nullable(),
-    projectName: z.string(),
     taskType: z.string().nullable(),
     story: z.string().nullable(),
     description: z.string().nullable(),
