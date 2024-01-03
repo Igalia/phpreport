@@ -22,12 +22,11 @@ type EditTaskProps = {
 }
 
 export const EditTask = ({ task, tasks, projects, taskTypes, closeForm }: EditTaskProps) => {
-  const { handleChange, handleProject, formState, handleSubmit, resetForm, formRef } =
-    useEditTaskForm({
-      task,
-      tasks,
-      closeForm
-    })
+  const { handleChange, formState, handleSubmit, resetForm, formRef } = useEditTaskForm({
+    task,
+    tasks,
+    closeForm
+  })
 
   return (
     <Stack
@@ -41,20 +40,24 @@ export const EditTask = ({ task, tasks, projects, taskTypes, closeForm }: EditTa
       width="400px"
     >
       <Select
-        onChange={(value) => handleProject(value, projects)}
-        value={formState.projectName}
+        onChange={(_, newValue) => {
+          handleChange('projectId', newValue?.id || null)
+        }}
+        value={projects.find(({ id }) => id === formState.projectId) || null}
         name="projectId"
         label="Select project"
         placeholder="Select project"
-        options={projects.map((project) => project.description)}
+        options={projects}
+        getOptionLabel={(project) => project.description}
         required
       />
       <Select
         name="taskType"
         label="Select task type"
-        value={formState.taskType || ''}
-        onChange={(value) => handleChange('taskType', value)}
-        options={taskTypes.map((taskType) => taskType.slug)}
+        value={taskTypes.find(({ slug }) => slug === formState.taskType) || null}
+        onChange={(_, newValue) => handleChange('taskType', newValue?.slug || null)}
+        options={taskTypes}
+        getOptionLabel={(taskType) => taskType.name}
         placeholder="Select task type"
       />
       <Box display="flex" gap="8px">
