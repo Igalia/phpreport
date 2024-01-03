@@ -1,10 +1,8 @@
-import Stack from '@mui/joy/Stack'
-import Button from '@mui/joy/Button'
+import { Stack, Button, Typography, Divider } from '@mui/joy'
+
 import { Select } from '@/ui/Select/Select'
 import { Input } from '@/ui/Input/Input'
 import { TextArea } from '@/ui/TextArea/TextArea'
-import Typography from '@mui/joy/Typography'
-import Divider from '@mui/joy/Divider'
 
 import { Play16Filled, RecordStop24Regular } from '@fluentui/react-icons'
 
@@ -33,8 +31,7 @@ export const CreateTask = ({ projects, taskTypes, templates }: CreateTaskProps) 
     handleSubmit,
     formRef,
     selectTemplate,
-    handleProject,
-    templateName
+    template
   } = useTaskForm()
 
   return (
@@ -42,16 +39,15 @@ export const CreateTask = ({ projects, taskTypes, templates }: CreateTaskProps) 
       <Select
         name="templates"
         label="Select template"
-        value={templateName}
-        onChange={(templateId) => {
-          selectTemplate(parseInt(templateId), templates, projects)
+        value={template}
+        onChange={(_, newValue) => {
+          selectTemplate(newValue)
         }}
-        options={templates.map((template) => ({
-          value: template.id.toString(),
-          label: template.name
-        }))}
+        options={templates}
+        getOptionLabel={(template) => template.name}
         placeholder="Select template"
         sx={{ gridArea: 'select-template' }}
+        getOptionKey={(template) => template.id}
       />
       <Button
         sx={{
@@ -83,12 +79,15 @@ export const CreateTask = ({ projects, taskTypes, templates }: CreateTaskProps) 
         ref={formRef}
       >
         <Select
-          onChange={(value) => handleProject(value, projects)}
-          value={task.projectName}
+          onChange={(_, newValue) => {
+            handleChange('projectId', newValue?.id || null)
+          }}
+          value={projects.find(({ id }) => id === task.projectId) || null}
           name="projectId"
           label="Select project"
           placeholder="Select project"
-          options={projects.map((project) => project.description)}
+          options={projects}
+          getOptionLabel={(project) => project.description}
           required
         />
         <Stack flexDirection="row" sx={{ gap: { xs: '8px', sm: '30px' } }}>
@@ -138,9 +137,10 @@ export const CreateTask = ({ projects, taskTypes, templates }: CreateTaskProps) 
         <Select
           name="taskType"
           label="Select task type"
-          value={task.taskType || ''}
-          onChange={(value) => handleChange('taskType', value)}
-          options={taskTypes.map((taskType) => ({ label: taskType.name, value: taskType.slug }))}
+          value={taskTypes.find(({ slug }) => slug === task.taskType) || null}
+          onChange={(_, newValue) => handleChange('taskType', newValue?.slug || null)}
+          options={taskTypes}
+          getOptionLabel={(taskType) => taskType.name}
           placeholder="Select task type"
         />
         <Input
