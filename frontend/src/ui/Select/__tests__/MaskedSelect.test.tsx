@@ -1,4 +1,4 @@
-import { Select } from '../Select'
+import { MaskedSelect } from '../MaskedSelect'
 import { screen, renderWithUser, act } from '@/test-utils/test-utils'
 import { Options } from '../types'
 
@@ -23,7 +23,14 @@ const setupBaseSelect = ({
   label?: string
 }) => {
   return renderWithUser(
-    <Select value={value} label={label} name={name} onChange={onChange} options={options} />
+    <MaskedSelect
+      mask={/./}
+      value={value}
+      label={label}
+      name={name}
+      onChange={onChange}
+      options={options}
+    />
   )
 }
 
@@ -350,8 +357,6 @@ describe('Select', () => {
         const selectInput = screen.getByRole('combobox', { name: 'Select Option' })
 
         await user.click(selectInput)
-
-        await user.keyboard('{ArrowDown}')
 
         await user.keyboard('{Enter}')
 
