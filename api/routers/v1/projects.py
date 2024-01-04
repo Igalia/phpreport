@@ -1,12 +1,14 @@
+from datetime import date
 from typing import List
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from models.project import Project
-from schemas.project import Project as ProjectSchema
+from schemas.project import Project as ProjectSchema, ProjectAllocationInDb, BaseProjectAllocation
 from services.projects import ProjectService
 
 from db.db_connection import get_db
+from dependencies import get_current_user
 from auth.auth_bearer import BearerToken
 
 router = APIRouter(
@@ -28,3 +30,35 @@ async def get_projects(db: Session = Depends(get_db), offset: int = 0, limit: in
 @router.get("/{project_id}", response_model=ProjectSchema)
 async def get_project(project_id: int, db: Session = Depends(get_db)):
     return db.query(Project).filter(Project.id == project_id).first()
+
+
+@router.get("/{project_id}/allocations", dependencies=[Depends(BearerToken())])
+async def get_project_allocations(
+    project_id: int,
+    start: date = date.today(),
+    end: date = date.today(),
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    return ProjectService(db).get_project_allocations(project_id, start, end)
+
+
+@router.post(
+    "/{project_id}/allocations",
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(BearerToken())],
+    response_model=ProjectAllocationInDb,
+)
+async def add_project_allocations(
+    project_id: int,
+    allocation: BaseProjectAllocation,
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """
+    Create a project allocation. Required fields are: `projecId` that comes from the url,
+    `userId`, `hoursPerDay`, `startDate`, and `endDate`.
+    """
+    # TODO we need to validate for overlapping, overbooking, etc
+    result = ProjectService(db).create_project_allocation(allocation, current_user.username)
+    return result

@@ -1,7 +1,7 @@
 from datetime import date
 from pydantic import ConfigDict, BaseModel
 from pydantic.alias_generators import to_camel
-from typing import Optional
+from typing import Optional, Dict
 
 
 class Project(BaseModel):
@@ -18,4 +18,30 @@ class Project(BaseModel):
     customer_id: int
     customer_name: Optional[str] = None
     area_id: int
+
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
+
+
+class BaseProjectAllocation(BaseModel):
+    user_id: int
+    project_id: int
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
+    hours_per_day: Optional[float] = None
+    fte: Optional[float] = None
+    is_tentative: Optional[bool] = None
+    is_billable: Optional[bool] = None
+    notes: Optional[str] = None
+
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
+
+
+class ProjectAllocationInDb(BaseProjectAllocation):
+    id: int
+    total_hours: float
+    username: str
+
+
+class ProjectAllocationPerUser(BaseModel):
+    username: str
+    hours: Dict
