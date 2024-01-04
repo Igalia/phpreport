@@ -1,6 +1,6 @@
 from models.area import Area
 from models.customer import Customer
-from models.project import Project
+from models.project import Project, ProjectAllocation
 from models.timelog import Task, TaskType, Template
 from models.user import User, UserGroup, UserRoles
 from models.sector import Sector
@@ -109,6 +109,22 @@ DATA = [
                 "customer_id": 1,
                 "is_active": True,
             },
+        ],
+    ),
+    (
+        ProjectAllocation,
+        [
+            {
+                "user_id": 1,
+                "project_id": 1,
+                "start_date": "2024-01-01",
+                "end_date": "2024-01-05",
+                "hours_per_day": 8.0,
+                "fte": 1.0,
+                "is_tentative": False,
+                "is_billable": True,
+                "notes": "test",
+            }
         ],
     ),
     (
