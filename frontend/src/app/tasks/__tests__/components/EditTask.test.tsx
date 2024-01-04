@@ -16,7 +16,6 @@ const setupEditTaskForm = ({ closeForm = () => {} }: { closeForm?: () => void })
       startTime: '13:50',
       endTime: '14:00',
       id: 0,
-      projectName: 'Holidays',
       customerName: 'customer'
     }
   ]
@@ -31,7 +30,6 @@ const setupEditTaskForm = ({ closeForm = () => {} }: { closeForm?: () => void })
     startTime: '13:50',
     endTime: '14:00',
     id: 0,
-    projectName: 'Holidays',
     customerName: 'customer'
   }
 
@@ -151,7 +149,7 @@ describe('EditTask', () => {
 
       await user.clear(screen.getByRole('combobox', { name: 'Select task type' }))
       await user.click(screen.getByRole('combobox', { name: 'Select task type' }))
-      await user.click(screen.getByRole('option', { name: 'mock-test-2' }))
+      await user.click(screen.getByRole('option', { name: 'mock task type 2' }))
 
       await user.type(screen.getByRole('textbox', { name: 'Story' }), '!')
 
@@ -167,8 +165,7 @@ describe('EditTask', () => {
         taskType: 'mock-test-2',
         userId: 0,
         id: 0,
-        projectId: 1,
-        projectName: 'Holidays'
+        projectId: 1
       })
     })
   })

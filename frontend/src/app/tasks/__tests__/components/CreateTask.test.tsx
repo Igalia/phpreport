@@ -281,7 +281,6 @@ describe('TaskForm', () => {
       description: 'description!',
       endTime: '13:00',
       projectId: 1,
-      projectName: 'Holidays',
       startTime: '12:00',
       story: 'story!',
       taskType: 'mock-test',
@@ -318,7 +317,6 @@ describe('TaskForm', () => {
       description: 'description!',
       endTime: '13:00',
       projectId: 1,
-      projectName: 'Holidays',
       startTime: '12:00',
       story: 'story!',
       taskType: 'mock-test',
@@ -355,7 +353,6 @@ describe('TaskForm', () => {
       description: 'description!',
       endTime: '13:00',
       projectId: 1,
-      projectName: 'Holidays',
       startTime: '12:00',
       story: 'story!',
       taskType: 'mock-test',
@@ -378,7 +375,6 @@ describe('TaskForm', () => {
           startTime: '12:12',
           endTime: '13:14',
           id: 18,
-          projectName: 'Holidays',
           customerName: 'Internal'
         }
       ]
