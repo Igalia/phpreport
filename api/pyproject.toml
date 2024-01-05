@@ -15,7 +15,7 @@ readme = "README.md"
 dependencies = [
     "PyJWT == 2.7.0",
     "python-decouple == 3.8",
-    "pydantic == 2.4.2",
+    "pydantic == 2.5.2",
     "psycopg2-binary == 2.9.6",
     "alembic == 1.10.4",
     "alembic_utils == 0.8.2",
