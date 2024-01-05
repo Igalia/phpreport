@@ -37,7 +37,9 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Se
         capacities=[],
     )
     for c in user_in_db.capacities:
-        cap = UserCapacity(capacity=c.capacity, start=c.start, end=c.end, is_current=c.is_current)
+        cap = UserCapacity(
+            capacity=c.capacity, start=c.start, end=c.end, is_current=c.is_current, aggregates=c.aggregates
+        )
         user.capacities.append(cap)
 
     if USE_OIDC_ROLES:
