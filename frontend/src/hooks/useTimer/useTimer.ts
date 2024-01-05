@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 export const useTimer = () => {
   const [time, setTime] = useState(0)
   const [isTimerRunning, setIsTimerRunning] = useState(false)
 
-  const startTimer = () => setIsTimerRunning(true)
-  const stopTimer = () => {
+  const startTimer = useCallback(() => setIsTimerRunning(true), [])
+  const stopTimer = useCallback(() => {
     setIsTimerRunning(false)
     setTime(0)
-  }
+  }, [])
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined
