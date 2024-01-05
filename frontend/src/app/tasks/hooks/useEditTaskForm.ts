@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback } from 'react'
 
 import { useAlert } from '@/ui/Alert/useAlert'
 import { useForm } from '@/hooks/useForm/useForm'
@@ -12,10 +12,9 @@ type UseEditTaskFormProps = {
 }
 
 export const useEditTaskForm = ({ task, tasks, closeForm }: UseEditTaskFormProps) => {
-  const { formState, handleChange, resetForm } = useForm<TaskIntent>({
+  const { formState, handleChange, resetForm, formRef } = useForm<TaskIntent>({
     initialValues: task
   })
-  const formRef = useRef<HTMLFormElement>(null)
 
   const { showError } = useAlert()
   const { editTask } = useEditTask({ handleSuccess: closeForm })
@@ -43,20 +42,6 @@ export const useEditTaskForm = ({ task, tasks, closeForm }: UseEditTaskFormProps
 
     editTask(formState)
   }, [editTask, formState, showError, tasks])
-
-  useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === 's' && event.ctrlKey && formRef.current?.contains(document.activeElement)) {
-        event.preventDefault()
-        formRef.current?.requestSubmit()
-      }
-    }
-    document.addEventListener('keydown', handleKeyPress)
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyPress)
-    }
-  }, [handleSubmit])
 
   return { formState, handleChange, handleSubmit, resetForm, formRef }
 }
