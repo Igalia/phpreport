@@ -10,6 +10,7 @@ import { Template } from '@/domain/Template'
 
 import { TaskList } from './components/TaskList'
 import { CreateTask } from './components/CreateTask'
+import { CreateTaskFormProvider } from './providers/CreateTaskFormProvider'
 
 type DayViewProps = {
   projects: Array<Project>
@@ -37,11 +38,13 @@ export const DayView = ({ projects, taskTypes, templates }: DayViewProps) => {
         rowGap: '16px'
       }}
     >
-      <CreateTask projects={projects} taskTypes={taskTypes} templates={templates} />
+      <CreateTaskFormProvider>
+        <CreateTask projects={projects} taskTypes={taskTypes} templates={templates} />
 
-      <Divider sx={{ gridArea: 'divider' }} />
+        <Divider sx={{ gridArea: 'divider' }} />
 
-      <TaskList sx={{ gridArea: 'task-list' }} projects={projects} taskTypes={taskTypes} />
+        <TaskList sx={{ gridArea: 'task-list' }} projects={projects} taskTypes={taskTypes} />
+      </CreateTaskFormProvider>
     </Box>
   )
 }

@@ -9,7 +9,8 @@ import {
   Edit24Filled,
   ArrowMaximize24Filled,
   ArrowMinimize24Filled,
-  SaveCopy24Filled
+  SaveCopy24Filled,
+  Copy24Filled
 } from '@fluentui/react-icons'
 
 import { Project } from '@/domain/Project'
@@ -24,6 +25,7 @@ import { getTimeDifference, convertTimeToMinutes } from '../utils/time'
 import { EditTask } from './EditTask'
 import { useDeleteTask } from '../hooks/useDeleteTask'
 import { SaveTemplateModal } from './SaveTemplateModal'
+import { useCreateTaskForm } from '../hooks/useCreateTaskForm'
 
 type TaskProps = {
   task: Task
@@ -34,6 +36,7 @@ type TaskProps = {
 
 export const TaskBox = ({ task, projects, taskTypes, tasks }: TaskProps) => {
   const { deleteTask } = useDeleteTask()
+  const { cloneTask } = useCreateTaskForm()
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [templateModalOpen, setTemplateModalOpen] = useState(false)
@@ -86,7 +89,7 @@ export const TaskBox = ({ task, projects, taskTypes, tasks }: TaskProps) => {
           </>
         )}
       </Box>
-      <Box display="flex" gap="8px">
+      <Box display="flex" gap="8px" flexDirection={editMode ? 'column' : 'row'}>
         <IconButton
           onClick={() => {
             setEditMode(true)
@@ -100,7 +103,14 @@ export const TaskBox = ({ task, projects, taskTypes, tasks }: TaskProps) => {
           <Delete24Filled color="#2f3338" />
           <ScreenReaderOnly>Delete task {task.id}</ScreenReaderOnly>
         </IconButton>
-
+        <IconButton onClick={() => setTemplateModalOpen(true)}>
+          <SaveCopy24Filled color="#2f3338" />
+          <ScreenReaderOnly>Save task as template</ScreenReaderOnly>
+        </IconButton>
+        <IconButton onClick={() => cloneTask(task)}>
+          <Copy24Filled color="#2f3338" />
+          <ScreenReaderOnly>Clone Task</ScreenReaderOnly>
+        </IconButton>
         <IconButton onClick={() => setExpandedTask((prevState) => !prevState)}>
           {expandedTask ? (
             <ArrowMinimize24Filled color="#2f3338" />
@@ -108,10 +118,6 @@ export const TaskBox = ({ task, projects, taskTypes, tasks }: TaskProps) => {
             <ArrowMaximize24Filled color="#2f3338" />
           )}
           <ScreenReaderOnly>Expand Task</ScreenReaderOnly>
-        </IconButton>
-        <IconButton onClick={() => setTemplateModalOpen(true)}>
-          <SaveCopy24Filled color="#2f3338" />
-          <ScreenReaderOnly>Save task as template</ScreenReaderOnly>
         </IconButton>
         <SaveTemplateModal
           task={task}
