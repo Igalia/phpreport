@@ -29,12 +29,11 @@ import { useCreateTaskForm } from '../hooks/useCreateTaskForm'
 
 type TaskProps = {
   task: Task
-  tasks: Array<Task>
   projects: Array<Project>
   taskTypes: Array<TaskType>
 }
 
-export const TaskBox = ({ task, projects, taskTypes, tasks }: TaskProps) => {
+export const TaskBox = ({ task, projects, taskTypes }: TaskProps) => {
   const { deleteTask } = useDeleteTask()
   const { cloneTask } = useCreateTaskForm()
 
@@ -66,7 +65,6 @@ export const TaskBox = ({ task, projects, taskTypes, tasks }: TaskProps) => {
         {editMode ? (
           <EditTask
             closeForm={() => setEditMode(false)}
-            tasks={tasks}
             task={task}
             projects={projects}
             taskTypes={taskTypes}

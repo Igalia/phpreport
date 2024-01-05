@@ -3,15 +3,21 @@ import { TaskIntent, Task } from '@/domain/Task'
 import { useAlert } from '@/ui/Alert/useAlert'
 import { useClientFetch } from '@/infra/lib/useClientFetch'
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser/useGetCurrentUser'
-import { editTask } from '@/infra/task/editTask'
+import { makeEditTask } from '@/infra/task/editTask'
+import { useGetTasks } from './useGetTasks'
+import { BaseError } from '@/_lib/errors/BaseError'
 
-export const useEditTask = ({ handleSuccess }: { handleSuccess: () => void }) => {
+type UseEditTaskProps = { handleSuccess: () => void }
+
+export const useEditTask = ({ handleSuccess }: UseEditTaskProps) => {
   const apiClient = useClientFetch()
+  const editTask = makeEditTask(apiClient)
+  const { tasks } = useGetTasks()
   const { showError, showSuccess } = useAlert()
   const { id: userId } = useGetCurrentUser()
   const queryClient = useQueryClient()
 
-  const { mutate } = useMutation((task: TaskIntent) => editTask(task, apiClient), {
+  const { mutate } = useMutation((task: TaskIntent) => editTask(task, tasks), {
     onSuccess: (data) => {
       queryClient.setQueryData<Array<Task>>(['tasks', userId], (prevData) =>
         prevData!.map((task) => {
@@ -25,8 +31,13 @@ export const useEditTask = ({ handleSuccess }: { handleSuccess: () => void }) =>
       showSuccess('Task succesfully edited')
       handleSuccess()
     },
-    onError: () => {
-      showError('Failed to edit task')
+    onError: (e) => {
+      if (e instanceof BaseError) {
+        showError(e.message)
+        return
+      }
+
+      throw e
     }
   })
 

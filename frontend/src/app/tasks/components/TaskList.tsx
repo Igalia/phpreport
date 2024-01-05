@@ -30,13 +30,7 @@ export const TaskList = ({ projects, taskTypes, sx }: TaskListProps) => {
       }}
     >
       {tasks.map((task) => (
-        <TaskBox
-          projects={projects}
-          taskTypes={taskTypes}
-          key={task.id}
-          task={task}
-          tasks={tasks}
-        />
+        <TaskBox projects={projects} taskTypes={taskTypes} key={task.id} task={task} />
       ))}
     </Box>
   )

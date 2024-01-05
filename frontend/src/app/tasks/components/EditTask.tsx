@@ -15,16 +15,14 @@ import { useEditTaskForm } from '../hooks/useEditTaskForm'
 
 type EditTaskProps = {
   task: Task
-  tasks: Array<Task>
   projects: Array<Project>
   taskTypes: Array<TaskType>
   closeForm: () => void
 }
 
-export const EditTask = ({ task, tasks, projects, taskTypes, closeForm }: EditTaskProps) => {
+export const EditTask = ({ task, projects, taskTypes, closeForm }: EditTaskProps) => {
   const { handleChange, formState, handleSubmit, resetForm, formRef } = useEditTaskForm({
     task,
-    tasks,
     closeForm
   })
 
