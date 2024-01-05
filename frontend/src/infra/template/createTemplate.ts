@@ -27,7 +27,7 @@ export const makeCreateTemplate = (apiClient: ApiClient) => async (template: Tem
       throw createTemplateError()
     }
 
-    return { data: (await response.json()) as Template }
+    return (await response.json()) as Template
   } catch (e) {
     throw createTemplateError()
   }
