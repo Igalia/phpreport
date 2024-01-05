@@ -7,7 +7,8 @@ import { TextArea } from '@/ui/TextArea/TextArea'
 import { Play16Filled, RecordStop24Regular } from '@fluentui/react-icons'
 
 import { TimePicker } from '../components/TimePicker'
-import { useTaskForm } from '../hooks/useCreateTaskForm'
+import { useCreateTaskForm } from '../hooks/useCreateTaskForm'
+import { useTaskFormTimer } from '../hooks/useTaskFormTimer'
 
 import { Project } from '@/domain/Project'
 import { TaskType } from '@/domain/TaskType'
@@ -20,19 +21,13 @@ type CreateTaskProps = {
 }
 
 export const CreateTask = ({ projects, taskTypes, templates }: CreateTaskProps) => {
-  const {
-    task,
+  const { task, handleChange, resetForm, handleSubmit, formRef, selectTemplate, template } =
+    useCreateTaskForm()
+  const { loggedTime, toggleTimer, isTimerRunning } = useTaskFormTimer({
     handleChange,
-    resetForm,
-    toggleTimer,
-    loggedTime,
-    isTimerRunning,
-    selectStartTime,
-    handleSubmit,
-    formRef,
-    selectTemplate,
-    template
-  } = useTaskForm()
+    startTime: task.startTime,
+    endTime: task.endTime
+  })
 
   return (
     <>
@@ -51,7 +46,7 @@ export const CreateTask = ({ projects, taskTypes, templates }: CreateTaskProps) 
       />
       <Button
         sx={{
-          width: { xs: '100%', sm: '120px' },
+          width: { xs: '100%', sm: '125px' },
           display: 'flex',
           gap: '8px',
           gridArea: 'start-timer'
@@ -95,7 +90,9 @@ export const CreateTask = ({ projects, taskTypes, templates }: CreateTaskProps) 
             name="startTime"
             label="From"
             value={task.startTime}
-            onChange={selectStartTime}
+            onChange={(option: string) => {
+              handleChange('startTime', option)
+            }}
             sx={{ width: { xs: '120px', sm: '166px' } }}
             disabled={isTimerRunning}
             required
