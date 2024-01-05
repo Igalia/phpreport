@@ -1,5 +1,6 @@
 from typing import List
 from sqlalchemy import Date, Column, ForeignKey, Integer, String, Numeric, UniqueConstraint, CheckConstraint
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from sqlalchemy.ext.hybrid import hybrid_property
 from db.base_class import Base
@@ -69,6 +70,7 @@ class UserCapacity(Base):
     start = Column("init_date", Date, nullable=False)
     end = Column("end_date", Date, nullable=True)
     user_id = Column("usrid", Integer, ForeignKey("usr.id"), nullable=False)
+    yearly_expected_and_vacation = Column("yearly_expected_and_vacation", JSONB, nullable=True)
 
     @hybrid_property
     def is_current(self):
