@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useRef, useEffect } from 'react'
 
 type UseFormProps<T> = {
   initialValues: T
@@ -13,5 +13,21 @@ export const useForm = <T>({ initialValues }: UseFormProps<T>) => {
 
   const resetForm = useCallback(() => setFormState(initialValues), [initialValues])
 
-  return { handleChange, formState, resetForm, setFormState }
+  const formRef = useRef<HTMLFormElement>(null)
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 's' && event.ctrlKey && formRef.current?.contains(document.activeElement)) {
+        event.preventDefault()
+        formRef.current?.requestSubmit()
+      }
+    }
+    document.addEventListener('keydown', handleKeyPress)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress)
+    }
+  }, [])
+
+  return { handleChange, formState, resetForm, setFormState, formRef }
 }
