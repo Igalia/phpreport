@@ -49,13 +49,19 @@ export const TaskIntent = z
   })
 export type TaskIntent = z.infer<typeof TaskIntent>
 
+type AnyTask = Task | TaskIntent
+
 export const getOverlappingTasks = (
-  { startTime, endTime, date }: { startTime: string; endTime: string; date: string },
+  { startTime, endTime, date, id }: AnyTask,
   tasks: Array<Task>
 ) => {
   let message = ''
 
   const overlappingTasks = tasks.filter((task) => {
+    if (id === task.id) {
+      return false
+    }
+
     const haveEqualDate = task.date === date
     const overlapsTasksDuration =
       getMinutes(endTime) > getMinutes(task.startTime) &&
@@ -74,4 +80,22 @@ export const getOverlappingTasks = (
   })
 
   return { overlappingTasks, message }
+}
+
+export const validateTask = (task: AnyTask, tasks: Array<Task>) => {
+  const validation = TaskIntent.safeParse(task)
+
+  if (!validation.success) {
+    const error = validation.error.issues.reduce((acc, issue) => `${acc} ${issue.message}`, '')
+
+    return { success: false, message: error }
+  }
+
+  const { overlappingTasks, message } = getOverlappingTasks(task, tasks)
+
+  if (overlappingTasks.length > 0) {
+    return { success: false, message }
+  }
+
+  return { success: true, message: 'Valid task' }
 }
