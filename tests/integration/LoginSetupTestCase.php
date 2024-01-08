@@ -55,6 +55,22 @@ class LoginSetupTestCase extends TestCase {
 
     public function setUp(): void
     {
+        $parameters[] = \ConfigurationParametersManager::getParameter('DB_HOST');
+        $parameters[] = \ConfigurationParametersManager::getParameter('DB_PORT');
+        $parameters[] = \ConfigurationParametersManager::getParameter('DB_USER');
+        $parameters[] = \ConfigurationParametersManager::getParameter('DB_NAME');
+        $parameters[] = \ConfigurationParametersManager::getParameter('DB_PASSWORD');
+        $parameters[] = \ConfigurationParametersManager::getParameter('EXTRA_DB_CONNECTION_PARAMETERS');
+
+        $connectionString = "host=$parameters[0] port=$parameters[1] user=$parameters[2] dbname=$parameters[3] password=$parameters[4] $parameters[5]";
+
+        $connect = pg_connect($connectionString);
+
+        $new_pass = md5('admin');
+        $result = pg_query($connect, $query="UPDATE usr SET password = '". $new_pass . "' where login = 'admin'");
+        if ($result == NULL) error_log("ERROR: Could not run query: $query");
+        pg_freeresult($result);
+
         $xml = $this->makeRequest("/web/services/loginService.php");
         $this->sessionId = $xml->sessionId;
     }
