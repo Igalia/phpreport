@@ -4,13 +4,11 @@ import { useCallback, useState, createContext, PropsWithChildren, RefObject, use
 import { useForm } from '@/hooks/useForm/useForm'
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser/useGetCurrentUser'
 
-import { useGetTasks } from '../hooks/useGetTasks'
 import { useCreateTask } from '../hooks/useCreateTask'
 
-import { useAlert } from '@/ui/Alert/useAlert'
 import { Template } from '@/domain/Template'
 
-import { TaskIntent, Task, getOverlappingTasks } from '@/domain/Task'
+import { TaskIntent, Task } from '@/domain/Task'
 
 type CreateTaskFormContext = {
   task: TaskIntent
@@ -28,8 +26,6 @@ export const CreateTaskFormContext = createContext({} as CreateTaskFormContext)
 export const CreateTaskFormProvider = ({ children }: PropsWithChildren) => {
   const { id: userId } = useGetCurrentUser()
   const { addTask } = useCreateTask()
-  const { showError } = useAlert()
-  const { tasks } = useGetTasks()
   const [template, setTemplate] = useState<Template | null>(null)
 
   const { formState, handleChange, resetForm, setFormState, formRef } = useForm<TaskIntent>({
@@ -46,25 +42,8 @@ export const CreateTaskFormProvider = ({ children }: PropsWithChildren) => {
   })
 
   const handleSubmit = useCallback(() => {
-    const validation = TaskIntent.safeParse(formState)
-
-    if (!validation.success) {
-      validation.error.issues.map(({ message }) => {
-        showError(message)
-      })
-
-      return
-    }
-
-    const { message } = getOverlappingTasks(formState, tasks)
-
-    if (message.length > 0) {
-      showError(message)
-      return
-    }
-
     addTask(formState)
-  }, [addTask, formState, showError, tasks])
+  }, [addTask, formState])
 
   const selectTemplate = useCallback(
     (template: Template | null) => {
