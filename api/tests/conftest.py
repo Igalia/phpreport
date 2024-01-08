@@ -1,8 +1,10 @@
 from typing import Dict, Generator
 import pytest
 from fastapi.testclient import TestClient
+import sqlalchemy as sa
 from sqlalchemy.orm import sessionmaker
-
+from alembic.config import Config
+from alembic.command import upgrade
 from api.main import app
 from auth.auth_handler import create_access_token
 from db import base  # noqa
@@ -30,15 +32,23 @@ def client() -> Generator:
         yield c
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture()
 def init_db():
-    # Drop and create all the tables to start
-    # with the db clean before the tests
-    Base.metadata.drop_all(bind=test_engine)
-    Base.metadata.create_all(bind=test_engine)
+    alembic_config = Config("alembic.ini")
+    upgrade(alembic_config, "head")
+    yield
+
+
+@pytest.fixture(autouse=True)
+def add_data(init_db):
     db = TestingSessionLocal()
 
     # Clean up tables before importing the initial data
+    for table in reversed(Base.metadata.sorted_tables):
+        clear_and_reseed = sa.text(f"TRUNCATE {table.name} RESTART IDENTITY CASCADE")
+        db.execute(clear_and_reseed)
+        db.commit()
+
     for model, entries in DATA:
         # Insert the data
         for entry in entries:

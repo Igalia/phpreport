@@ -1,9 +1,7 @@
 version: "3"
 services:
   test_db:
-    build:
-      context: ../
-      dockerfile: docker/test.db.Dockerfile
+    image: postgres:13.9
     container_name: test-db
     ports:
       - "5432:5432"
