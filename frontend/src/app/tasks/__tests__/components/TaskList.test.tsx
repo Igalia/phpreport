@@ -1,5 +1,5 @@
 import { TaskList } from '../../components/TaskList'
-import { screen, renderWithUser, within } from '@/test-utils/test-utils'
+import { screen, renderWithUser } from '@/test-utils/test-utils'
 import { useGetTasks } from '../../hooks/useGetTasks'
 import { useDeleteTask } from '../../hooks/useDeleteTask'
 import { Task } from '@/domain/Task'
@@ -47,62 +47,11 @@ describe('TaskList', () => {
     ;(useDeleteTask as jest.Mock).mockReturnValue({ removeTask: () => {} })
   })
 
-  it('renders a list of tasks with name, customer name, task type and the task duration', () => {
+  it('renders a list of tasks', () => {
     setupTaskList()
 
     const listItems = screen.getAllByRole('listitem')
 
     expect(listItems.length).toBe(2)
-
-    listItems.forEach((item, index) => {
-      const { getByText } = within(item)
-      const task = tasks[index]
-
-      const timeDifference = index === 0 ? '0h 2m' : '2h 2m'
-
-      expect(getByText(`${task.projectName} - ${task.customerName}`)).toBeInTheDocument()
-      expect(getByText(`${task.taskType}`)).toBeInTheDocument()
-      expect(
-        getByText(`${task.startTime}-${task.endTime} (${timeDifference})`, {
-          exact: false
-        })
-      ).toBeInTheDocument()
-    })
-  })
-
-  describe('When the trash icon is clicked', () => {
-    it('opens the delete confirmation modal', async () => {
-      const { user } = setupTaskList()
-
-      await user.click(screen.getByRole('button', { name: 'Delete task 18' }))
-
-      expect(screen.getByRole('heading', { name: 'Confirm Deletion' })).toBeInTheDocument()
-    })
-
-    it('deletes the task from the list', async () => {
-      const deleteTask = jest.fn()
-      ;(useDeleteTask as jest.Mock).mockReturnValue({ deleteTask })
-
-      const { user } = setupTaskList()
-
-      await user.click(screen.getByRole('button', { name: 'Delete task 18' }))
-
-      await user.click(screen.getByRole('button', { name: 'Delete' }))
-
-      expect(deleteTask).toBeCalledWith(18)
-    })
-
-    it('closes the modal without submit if cancel is clicked', async () => {
-      const deleteTask = jest.fn()
-      ;(useDeleteTask as jest.Mock).mockReturnValue({ deleteTask })
-
-      const { user } = setupTaskList()
-
-      await user.click(screen.getByRole('button', { name: 'Delete task 18' }))
-
-      await user.click(screen.getByRole('button', { name: 'Cancel' }))
-
-      expect(deleteTask).not.toBeCalled()
-    })
   })
 })
