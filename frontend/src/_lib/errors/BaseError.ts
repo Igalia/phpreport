@@ -18,6 +18,8 @@ export class BaseError<M> extends Error implements Exception<M> {
     this.meta = props.meta
     this.message = props.message
 
-    Error.captureStackTrace(this, BaseError)
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, BaseError)
+    }
   }
 }
