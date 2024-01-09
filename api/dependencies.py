@@ -38,7 +38,12 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Se
     )
     for c in user_in_db.capacities:
         cap = UserCapacity(
-            capacity=c.capacity, start=c.start, end=c.end, is_current=c.is_current, aggregates=c.aggregates
+            capacity=c.capacity,
+            start=c.start,
+            end=c.end,
+            user_id=c.user_id,
+            is_current=c.is_current,
+            yearly_expected_and_vacation=c.yearly_expected_and_vacation,
         )
         user.capacities.append(cap)
 
