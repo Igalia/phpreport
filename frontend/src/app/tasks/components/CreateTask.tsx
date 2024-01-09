@@ -21,8 +21,16 @@ type CreateTaskProps = {
 }
 
 export const CreateTask = ({ projects, taskTypes, templates }: CreateTaskProps) => {
-  const { task, handleChange, resetForm, handleSubmit, formRef, selectTemplate, template } =
-    useCreateTaskForm()
+  const {
+    task,
+    handleChange,
+    resetForm,
+    handleSubmit,
+    formRef,
+    selectTemplate,
+    template,
+    isLoading
+  } = useCreateTaskForm()
   const { loggedTime, toggleTimer, isTimerRunning } = useTaskFormTimer({
     handleChange,
     startTime: task.startTime,
@@ -160,8 +168,8 @@ export const CreateTask = ({ projects, taskTypes, templates }: CreateTaskProps) 
             <Button variant="outlined" onClick={resetForm} sx={{ width: '82px' }}>
               Clear
             </Button>
-            <Button sx={{ width: '82px' }} type="submit">
-              Save
+            <Button disabled={isLoading} sx={{ width: '82px' }} type="submit">
+              {isLoading ? 'Saving...' : 'Save'}
             </Button>
           </Stack>
         </Stack>

@@ -19,13 +19,14 @@ type CreateTaskFormContext = {
   selectTemplate: (template: Template | null) => void
   template: Template | null
   cloneTask: (task: Task) => void
+  isLoading: boolean
 }
 
 export const CreateTaskFormContext = createContext({} as CreateTaskFormContext)
 
 export const CreateTaskFormProvider = ({ children }: PropsWithChildren) => {
   const { id: userId } = useGetCurrentUser()
-  const { addTask } = useCreateTask()
+  const { addTask, isLoading } = useCreateTask()
   const [template, setTemplate] = useState<Template | null>(null)
 
   const { formState, handleChange, resetForm, setFormState, formRef } = useForm<TaskIntent>({
@@ -42,8 +43,8 @@ export const CreateTaskFormProvider = ({ children }: PropsWithChildren) => {
   })
 
   const handleSubmit = useCallback(() => {
-    addTask(formState)
-  }, [addTask, formState])
+    addTask({ task: formState, handleSuccess: resetForm })
+  }, [addTask, formState, resetForm])
 
   const selectTemplate = useCallback(
     (template: Template | null) => {
@@ -85,9 +86,20 @@ export const CreateTaskFormProvider = ({ children }: PropsWithChildren) => {
       formRef,
       selectTemplate,
       template,
-      cloneTask
+      cloneTask,
+      isLoading
     }),
-    [cloneTask, formRef, formState, handleChange, handleSubmit, resetForm, selectTemplate, template]
+    [
+      cloneTask,
+      formRef,
+      formState,
+      handleChange,
+      handleSubmit,
+      resetForm,
+      selectTemplate,
+      template,
+      isLoading
+    ]
   )
 
   return <CreateTaskFormContext.Provider value={value}>{children}</CreateTaskFormContext.Provider>
