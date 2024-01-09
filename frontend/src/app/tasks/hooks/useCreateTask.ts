@@ -15,20 +15,24 @@ export const useCreateTask = () => {
   const { id: userId } = useGetCurrentUser()
   const { tasks } = useGetTasks()
 
-  const { mutate } = useMutation((task: TaskIntent) => createTask(task, tasks), {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['tasks', userId])
-      showSuccess('Task added succesfully')
-    },
-    onError: (e) => {
-      if (e instanceof BaseError) {
-        showError(e.message)
-        return
+  const { mutate, isLoading } = useMutation(
+    ({ task }: { task: TaskIntent; handleSuccess: () => void }) => createTask(task, tasks),
+    {
+      onSuccess: (_, { handleSuccess }) => {
+        handleSuccess()
+        queryClient.invalidateQueries(['tasks', userId])
+        showSuccess('Task added succesfully')
+      },
+      onError: (e) => {
+        if (e instanceof BaseError) {
+          showError(e.message)
+          return
+        }
+
+        throw e
       }
-
-      throw e
     }
-  })
+  )
 
-  return { addTask: mutate }
+  return { addTask: mutate, isLoading }
 }

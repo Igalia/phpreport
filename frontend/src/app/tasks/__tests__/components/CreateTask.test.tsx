@@ -279,7 +279,7 @@ describe('TaskForm', () => {
 
     await user.click(screen.getByRole('button', { name: 'Save' }))
 
-    expect(addTask).toHaveBeenCalledWith({
+    expect(addTask.mock.lastCall[0].task).toEqual({
       date: '2023-01-01',
       description: 'description!',
       endTime: '13:00',
@@ -315,7 +315,7 @@ describe('TaskForm', () => {
 
     await user.keyboard('{Control>}s')
 
-    expect(addTask).toHaveBeenCalledWith({
+    expect(addTask.mock.lastCall[0].task).toEqual({
       date: '2023-01-01',
       description: 'description!',
       endTime: '13:00',
@@ -351,7 +351,7 @@ describe('TaskForm', () => {
 
     await user.keyboard('{Enter}')
 
-    expect(addTask).toHaveBeenCalledWith({
+    expect(addTask.mock.lastCall[0].task).toEqual({
       date: '2023-01-01',
       description: 'description!',
       endTime: '13:00',
