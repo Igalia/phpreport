@@ -1,15 +1,16 @@
 from typing import List, Optional
-from decimal import Decimal
-from pydantic import ConfigDict, BaseModel, Field
+from pydantic import ConfigDict, BaseModel, JsonValue
 from pydantic.alias_generators import to_camel
 from datetime import date
 
 
 class UserCapacity(BaseModel):
-    capacity: Decimal = Field(max_digits=4, decimal_places=2)
+    capacity: float
     start: Optional[date] = None
     end: Optional[date] = None
+    user_id: Optional[int] = None
     is_current: Optional[bool] = None
+    yearly_expected_and_vacation: Optional[JsonValue] = None
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
 
