@@ -4,12 +4,7 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import Box from '@mui/joy/Box'
 import Image from 'next/image'
-import {
-  TaskListSquareAdd24Filled,
-  Beach24Filled,
-  DataArea24Filled,
-  DataPie24Filled
-} from '@fluentui/react-icons'
+import { TaskListSquareAdd24Filled, DataPie24Filled } from '@fluentui/react-icons'
 import fullLogo from '@/assets/images/full_logo.png'
 import { styled } from '@mui/joy/styles'
 import Link from 'next/link'
@@ -74,21 +69,9 @@ export const Sidebar = ({ expanded, toggleSidebar }: SidebarProps) => {
             </NavLink>
           </Box>
           <Box component="li">
-            <NavLink href="/vacation">
-              <Beach24Filled color="white" />
-              <Typography textColor="white">Vacation Management</Typography>
-            </NavLink>
-          </Box>
-          <Box component="li">
-            <NavLink href="/reports">
-              <DataArea24Filled color="white" />
-              <Typography textColor="white">Reports</Typography>
-            </NavLink>
-          </Box>
-          <Box component="li">
-            <NavLink href="/data-managment">
+            <NavLink href="/planner">
               <DataPie24Filled color="white" />
-              <Typography textColor="white">Data Management</Typography>
+              <Typography textColor="white">Project Planner</Typography>
             </NavLink>
           </Box>
         </Stack>
