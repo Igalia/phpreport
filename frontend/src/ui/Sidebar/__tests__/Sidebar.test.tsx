@@ -12,9 +12,7 @@ describe('Sidebar', () => {
     render(<Sidebar />)
 
     expect(screen.getByRole('link', { name: 'Tasks' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Vacation Management' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Reports' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Data Management' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Project Planner' })).toBeInTheDocument()
   })
 
   it('renders the dark-mode switch', () => {
