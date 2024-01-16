@@ -86,3 +86,35 @@ def test_create_project_allocation(client: TestClient, get_regular_user_token_he
         }
     ]
     assert allocations == expected_response
+
+
+def test_get_project_stats(client: TestClient, get_regular_user_token_headers: Dict[str, str]) -> None:
+    # Add full year allocation for 1 FTE
+    allocation_payload = {
+        "userId": 1,
+        "projectId": 2,
+        "startDate": "2024-01-01",
+        "endDate": "2024-12-31",
+        "hoursPerDay": 8.0,
+        "fte": 1,
+        "isTentative": False,
+        "isBillable": True,
+        "notes": "test",
+    }
+    response = client.post(
+        f"{API_BASE_URL}/v1/projects/2/allocations",
+        headers=get_regular_user_token_headers,
+        params={"user_id": 1},
+        json=allocation_payload,
+    )
+    assert response.status_code == HTTPStatus.CREATED
+
+    response = client.get(
+        f"{API_BASE_URL}/v1/projects/2/stats?start=2024-01-01&end=2024-12-31",
+        headers=get_regular_user_token_headers,
+        params={"user_id": 1},
+    )
+    assert response.status_code == HTTPStatus.OK
+    allocations = response.json()
+    expected_response = {"avgFTE": 1.0, "loggedHours": 0.0, "plannedHours": 2096.0}
+    assert allocations == expected_response
