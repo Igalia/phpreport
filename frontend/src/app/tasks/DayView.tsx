@@ -22,7 +22,6 @@ export const DayView = ({ projects, taskTypes, templates }: DayViewProps) => {
   return (
     <Box
       sx={{
-        padding: { xs: '0 8px', sm: '0 32px' },
         display: 'grid',
         gridTemplateAreas: {
           xs: "'select-template start-timer''divider divider''create-task-form create-task-form''task-list task-list'",
@@ -32,8 +31,6 @@ export const DayView = ({ projects, taskTypes, templates }: DayViewProps) => {
           xs: '1fr',
           sm: '558px 558px'
         },
-        margin: '0 auto',
-        maxWidth: '1146px',
         columnGap: '30px',
         rowGap: '16px'
       }}
