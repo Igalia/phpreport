@@ -43,6 +43,17 @@ async def get_project_allocations(
     return ProjectService(db).get_project_allocations(project_id, start, end)
 
 
+@router.get("/{project_id}/stats", dependencies=[Depends(BearerToken())])
+async def get_project_stats(
+    project_id: int,
+    start: date = date.today(),
+    end: date = date.today(),
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    return ProjectService(db).get_project_stats(project_id, start, end)
+
+
 @router.post(
     "/{project_id}/allocations",
     status_code=status.HTTP_201_CREATED,
