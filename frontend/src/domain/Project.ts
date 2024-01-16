@@ -12,3 +12,9 @@ export type Project = {
   projectType: string | null
   scheduleType: string | null
 }
+
+export type ProjectStats = {
+  loggedHours: number
+  plannedHours: number
+  avgFTE: number
+}

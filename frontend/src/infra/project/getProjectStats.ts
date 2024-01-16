@@ -1,9 +1,10 @@
 import { format } from 'date-fns'
 import { ApiClient } from '@/infra/lib/apiClient'
+import { ProjectStats } from '@/domain/Project'
 
 export const makeGetProjectStats =
   (apiClient: ApiClient) =>
-  async (projectId: string): Promise<any> => {
+  async (projectId: string): Promise<ProjectStats> => {
     const today = new Date()
     // TODO start getting the date range dynamically
     const firstDayOfYear = new Date(today.getFullYear(), 0, 1)

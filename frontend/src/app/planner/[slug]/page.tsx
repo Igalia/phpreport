@@ -1,21 +1,19 @@
-import { Breadcrumbs, Chip, Typography } from '@mui/joy'
-import Link from 'next/link'
+import { Breadcrumbs, Chip, Link, Typography } from '@mui/joy'
 
-import { getProjectAllocation } from '@/infra/projectAllocation/getProjectAllocation'
-import { getProjects } from '@/infra/project/getProjects'
-
+import { makeGetProject } from '@/infra/project/getProject'
 import { serverFetch } from '@/infra/lib/serverFetch'
+import { Planner } from './components/Planner'
+import { makeGetProjectStats } from '@/infra/project/getProjectStats'
 
 const getPageData = async (id: string) => {
   const apiClient = await serverFetch()
-  return await Promise.all([getProjectAllocation(apiClient, id), getProjects(apiClient)])
+  const getProject = makeGetProject(apiClient)
+  const getProjectStats = makeGetProjectStats(apiClient)
+  return await Promise.all([getProject(id), getProjectStats(id)])
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  const [projectAllocations, projects] = await getPageData(params.slug)
-
-  const project = projects.find((p) => p.id === Number(params.slug))
-  const projectStats = { plannedHours: projectAllocations?.plannedHours }
+  const [project, projectStats] = await getPageData(params.slug)
 
   return (
     <>
@@ -31,6 +29,16 @@ export default async function Page({ params }: { params: { slug: string } }) {
         </Typography>
         <Typography>Resource Planner</Typography>
       </Breadcrumbs>
+      {project ? (
+        <Planner projectMetada={project} projectStats={projectStats} />
+      ) : (
+        <div>
+          <p>Project not found.</p>
+          <Link href="/planner" underline="always">
+            Please select a Project.
+          </Link>
+        </div>
+      )}
     </>
   )
 }
