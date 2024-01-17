@@ -8,6 +8,7 @@ from sqlalchemy import (
     ForeignKey,
     CheckConstraint,
     UniqueConstraint,
+    FetchedValue,
 )
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import relationship, Mapped
@@ -33,6 +34,7 @@ class Task(Base):
     phase = Column(String(length=15), nullable=True)
     onsite = Column(Boolean, default=False, nullable=False)
     updated_at = Column(postgresql.TIMESTAMP(), nullable=True)
+    task_total_minutes = Column(Integer, server_default=FetchedValue())
     end_after_init_task = CheckConstraint("_end >= init AND init >= 0", name="end_after_init_task")
     user_id = Column("usrid", Integer, ForeignKey("usr.id"), nullable=False)
     project_id = Column("projectid", Integer, ForeignKey("project.id"), nullable=False)
