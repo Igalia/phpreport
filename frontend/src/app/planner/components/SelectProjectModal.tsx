@@ -21,11 +21,6 @@ export const SelectProjectModal = ({ open, projects }: SelectProjectProps) => {
       aria-labelledby="confirmation-modal-title"
     >
       <Sheet
-        variant="outlined"
-        component="form"
-        action={() => {
-          router.push(`/planner/${selectedProject?.id}`)
-        }}
         sx={{
           minWidth: 300,
           minHeight: 200,
@@ -58,7 +53,11 @@ export const SelectProjectModal = ({ open, projects }: SelectProjectProps) => {
           autoSelect
           autoComplete
         />
-        <Button type="submit" disabled={!selectedProject} sx={{ margin: 'auto 0 0' }}>
+        <Button
+          disabled={!selectedProject}
+          sx={{ margin: 'auto 0 0' }}
+          onClick={() => router.push(`/planner/${selectedProject?.id}`)}
+        >
           Select Project
         </Button>
       </Sheet>
