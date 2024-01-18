@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Autocomplete, Sheet, Typography, Modal } from '@mui/joy'
+import { Autocomplete, FormControl, FormLabel, Sheet, Modal } from '@mui/joy'
 
 import { Button } from '@mui/joy'
 import { Project } from '@/domain/Project'
@@ -29,33 +29,29 @@ export const SelectProjectModal = ({ open, projects }: SelectProjectProps) => {
           boxShadow: 'lg',
           display: 'flex',
           flexDirection: 'column',
+          justifyContent: 'center',
           gap: '8px'
         }}
       >
-        <Typography
-          component="h2"
-          id="confirmation-modal-title"
-          level="h4"
-          textColor="inherit"
-          fontWeight="lg"
-        >
-          Select Project To Manage
-        </Typography>
-        <Autocomplete
-          name="project"
-          value={selectedProject}
-          onChange={(_, newValue) => {
-            setSelectedProject(newValue)
-          }}
-          options={projects}
-          getOptionLabel={(project) => project.description}
-          getOptionKey={(project) => project.id}
-          autoSelect
-          autoComplete
-        />
+        <FormControl>
+          <FormLabel id="confirmation-modal-title" sx={{ fontSize: '1.2rem' }}>
+            Select Project To Manage
+          </FormLabel>
+          <Autocomplete
+            name="project"
+            value={selectedProject}
+            onChange={(_, newValue) => {
+              setSelectedProject(newValue)
+            }}
+            options={projects}
+            getOptionLabel={(project) => project.description}
+            getOptionKey={(project) => project.id}
+            autoSelect
+            autoComplete
+          />
+        </FormControl>
         <Button
           disabled={!selectedProject}
-          sx={{ margin: 'auto 0 0' }}
           onClick={() => router.push(`/planner/${selectedProject?.id}`)}
         >
           Select Project
