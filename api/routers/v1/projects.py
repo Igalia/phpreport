@@ -32,7 +32,7 @@ async def get_project(project_id: int, db: Session = Depends(get_db)):
     return db.query(Project).filter(Project.id == project_id).first()
 
 
-@router.get("/{project_id}/allocations", dependencies=[Depends(BearerToken())])
+@router.get("/{project_id}/allocations")
 async def get_project_allocations(
     project_id: int,
     start: date = date.today(),
@@ -43,7 +43,7 @@ async def get_project_allocations(
     return ProjectService(db).get_project_allocations(project_id, start, end)
 
 
-@router.get("/{project_id}/stats", dependencies=[Depends(BearerToken())])
+@router.get("/{project_id}/stats")
 async def get_project_stats(
     project_id: int,
     start: date = date.today(),
@@ -57,7 +57,6 @@ async def get_project_stats(
 @router.post(
     "/{project_id}/allocations",
     status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(BearerToken())],
     response_model=ProjectAllocationInDb,
 )
 async def add_project_allocations(
