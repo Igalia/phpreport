@@ -361,7 +361,10 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         $conditions = "TRUE";
 
         if ($userLogin) {
-            $userCondition = "project.id IN (SELECT projectid FROM project_usr LEFT JOIN usr ON project_usr.usrid=usr.id " . "WHERE login=" . DBPostgres::checkStringNull( $userLogin ) . ") ";
+            // if filtering by user return the projects the user is assigned to but also the leave projects
+            // since everyone should be able to use them even if not assigned to
+            $userCondition = "(project.id IN (SELECT projectid FROM project_usr LEFT JOIN usr ON project_usr.usrid=usr.id " . "WHERE login=" . DBPostgres::checkStringNull( $userLogin ) . ") ";
+            $userCondition .= " OR project.type = 'leave') ";
         }
         if ($active) {
             $activeCondition = "activation='True'";
