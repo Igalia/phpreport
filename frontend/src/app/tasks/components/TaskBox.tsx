@@ -2,14 +2,11 @@
 import { useState } from 'react'
 
 import Box from '@mui/joy/Box'
-import Button from '@mui/joy/Button'
 import Typography from '@mui/joy/Typography'
 import {
-  Delete24Filled,
   Edit24Filled,
   ArrowMaximize24Filled,
   ArrowMinimize24Filled,
-  SaveCopy24Filled,
   Copy24Filled
 } from '@fluentui/react-icons'
 
@@ -17,134 +14,108 @@ import { Project } from '@/domain/Project'
 import { TaskType } from '@/domain/TaskType'
 import { Task } from '@/domain/Task'
 
-import { ScreenReaderOnly } from '@/ui/ScreenReaderOnly/ScreenReaderOnly'
-import { ConfirmationModal } from '@/ui/ConfirmationModal/ConfirmationModal'
-import { styled } from '@mui/joy/styles'
 import { getTimeDifference, convertTimeToMinutes } from '../utils/time'
 
 import { EditTask } from './EditTask'
-import { useDeleteTask } from '../hooks/useDeleteTask'
+import { DeleteTask } from './DeleteTask'
 import { SaveTemplateModal } from './SaveTemplateModal'
 import { useCreateTaskForm } from '../hooks/useCreateTaskForm'
+import { IconButton } from './IconButton'
+import { styled } from '@mui/joy'
 
-type TaskProps = {
+type TaskBoxProps = {
   task: Task
   projects: Array<Project>
   taskTypes: Array<TaskType>
 }
 
-export const TaskBox = ({ task, projects, taskTypes }: TaskProps) => {
-  const { deleteTask } = useDeleteTask()
+type SimpleTaskBoxProps = {
+  task: Task
+}
+
+const timeDifference = ({ startTime, endTime }: { startTime: string; endTime: string }) => {
+  const startMinutes = convertTimeToMinutes(startTime)
+  const endMinutes = convertTimeToMinutes(endTime)
+
+  return getTimeDifference(startMinutes, endMinutes)
+}
+
+export const SimpleTaskBox = ({ task }: SimpleTaskBoxProps) => {
+  return (
+    <TaskWrapper component="li" display="flex" flexDirection="column">
+      <Typography textColor="#1E2AA5">
+        {task.projectName} - {task.customerName}
+      </Typography>
+      <Typography textColor="#1E2AA5">{task.taskType}</Typography>
+      <Typography textColor="#1E2AA5" fontWeight="bold">
+        {task.startTime}-{task.endTime} ({timeDifference(task)})
+      </Typography>
+    </TaskWrapper>
+  )
+}
+
+export const TaskBox = ({ task, projects, taskTypes }: TaskBoxProps) => {
   const { cloneTask } = useCreateTaskForm()
 
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
-  const [templateModalOpen, setTemplateModalOpen] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const [expandedTask, setExpandedTask] = useState(false)
 
-  const timeDifference = () => {
-    const startMinutes = convertTimeToMinutes(task.startTime)
-    const endMinutes = convertTimeToMinutes(task.endTime)
-
-    return getTimeDifference(startMinutes, endMinutes)
-  }
-
   return (
-    <Box
+    <TaskWrapper
       sx={{
-        backgroundColor: '#A8AEEB',
-        minHeight: '96px',
-        borderRadius: '8px',
-        padding: '16px',
-        display: 'flex',
-        justifyContent: 'space-between'
+        minHeight: '96px'
       }}
       component="li"
     >
-      <Box display="flex" flexDirection="column" gap={editMode ? '8px' : 0}>
-        {editMode ? (
-          <EditTask
-            closeForm={() => setEditMode(false)}
-            task={task}
-            projects={projects}
-            taskTypes={taskTypes}
-          />
-        ) : (
-          <>
-            <Typography textColor="#1E2AA5">
-              {task.projectName} - {task.customerName}
-            </Typography>
-            <Typography textColor="#1E2AA5">{task.taskType}</Typography>
-            <Typography textColor="#1E2AA5" fontWeight="bold">
-              {task.startTime}-{task.endTime} ({timeDifference()})
-            </Typography>
-            {expandedTask && (
-              <>
-                <Typography textColor="#1E2AA5">{task.description}</Typography>
-                <Typography textColor="#1E2AA5">{task.story}</Typography>
-              </>
-            )}
-          </>
-        )}
-      </Box>
+      {editMode ? (
+        <EditTask
+          closeForm={() => setEditMode(false)}
+          task={task}
+          projects={projects}
+          taskTypes={taskTypes}
+        />
+      ) : (
+        <Box display="flex" flexDirection="column">
+          <Typography textColor="#1E2AA5">
+            {task.projectName} - {task.customerName}
+          </Typography>
+          <Typography textColor="#1E2AA5">{task.taskType}</Typography>
+          <Typography textColor="#1E2AA5" fontWeight="bold">
+            {task.startTime}-{task.endTime} ({timeDifference(task)})
+          </Typography>
+          {expandedTask && (
+            <>
+              <Typography textColor="#1E2AA5">{task.description}</Typography>
+              <Typography textColor="#1E2AA5">{task.story}</Typography>
+            </>
+          )}
+        </Box>
+      )}
       <Box display="flex" gap="8px" flexDirection={editMode ? 'column' : 'row'}>
         <IconButton
           onClick={() => {
             setEditMode(true)
-            setExpandedTask(false)
           }}
-        >
-          <Edit24Filled color="#2f3338" />
-          <ScreenReaderOnly>Edit task</ScreenReaderOnly>
-        </IconButton>
-        <IconButton onClick={() => setDeleteModalOpen(true)}>
-          <Delete24Filled color="#2f3338" />
-          <ScreenReaderOnly>Delete task {task.id}</ScreenReaderOnly>
-        </IconButton>
-        <IconButton onClick={() => setTemplateModalOpen(true)}>
-          <SaveCopy24Filled color="#2f3338" />
-          <ScreenReaderOnly>Save task as template</ScreenReaderOnly>
-        </IconButton>
-        <IconButton onClick={() => cloneTask(task)}>
-          <Copy24Filled color="#2f3338" />
-          <ScreenReaderOnly>Clone Task</ScreenReaderOnly>
-        </IconButton>
-        <IconButton onClick={() => setExpandedTask((prevState) => !prevState)}>
-          {expandedTask ? (
-            <ArrowMinimize24Filled color="#2f3338" />
-          ) : (
-            <ArrowMaximize24Filled color="#2f3338" />
-          )}
-          <ScreenReaderOnly>Expand Task</ScreenReaderOnly>
-        </IconButton>
-        <SaveTemplateModal
-          task={task}
-          open={templateModalOpen}
-          closeModal={() => setTemplateModalOpen(false)}
+          icon={Edit24Filled}
+          description="Edit task"
         />
-        <ConfirmationModal
-          open={deleteModalOpen}
-          closeModal={() => setDeleteModalOpen(false)}
-          confirmAction={() => {
-            setDeleteModalOpen(false)
-            deleteTask(task.id)
-          }}
-          title="Confirm Deletion"
-          content="This task will be deleted"
-          confirmText="Delete"
+        <IconButton description="Clone Task" icon={Copy24Filled} onClick={() => cloneTask(task)} />
+        <DeleteTask taskId={task.id} />
+        <SaveTemplateModal task={task} />
+        <IconButton
+          description="Expand Task"
+          icon={expandedTask ? ArrowMinimize24Filled : ArrowMaximize24Filled}
+          onClick={() => setExpandedTask((prevState) => !prevState)}
         />
       </Box>
-    </Box>
+    </TaskWrapper>
   )
 }
 
-const IconButton = styled(Button)`
-  background: transparent;
-  padding: 0;
-  height: 24px;
-  width: 24px;
-
-  &:hover {
-    background: transparent;
-  }
+const TaskWrapper = styled(Box)`
+  background-color: #a8aeeb;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
 `

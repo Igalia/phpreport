@@ -53,7 +53,7 @@ describe('TaskBox', () => {
     it('Opens the delete confirmation modal', async () => {
       const { user } = setupTaskBox()
 
-      await user.click(screen.getByRole('button', { name: 'Delete task 18' }))
+      await user.click(screen.getByRole('button', { name: 'Delete task' }))
 
       expect(screen.getByRole('heading', { name: 'Confirm Deletion' })).toBeInTheDocument()
     })
@@ -64,7 +64,7 @@ describe('TaskBox', () => {
 
       const { user } = setupTaskBox()
 
-      await user.click(screen.getByRole('button', { name: 'Delete task 18' }))
+      await user.click(screen.getByRole('button', { name: 'Delete task' }))
 
       await user.click(screen.getByRole('button', { name: 'Delete' }))
 
@@ -77,7 +77,7 @@ describe('TaskBox', () => {
 
       const { user } = setupTaskBox()
 
-      await user.click(screen.getByRole('button', { name: 'Delete task 18' }))
+      await user.click(screen.getByRole('button', { name: 'Delete task' }))
 
       await user.click(screen.getByRole('button', { name: 'Cancel' }))
 
