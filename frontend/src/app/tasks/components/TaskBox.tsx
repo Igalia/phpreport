@@ -42,11 +42,21 @@ const timeDifference = ({ startTime, endTime }: { startTime: string; endTime: st
 
 export const SimpleTaskBox = ({ task }: SimpleTaskBoxProps) => {
   return (
-    <TaskWrapper component="li" display="flex" flexDirection="column">
-      <Typography textColor="#1E2AA5">
+    <TaskWrapper
+      sx={{ maxWidth: { xs: '250px', sm: 'auto' } }}
+      width="100%"
+      display="flex"
+      flexDirection="column"
+    >
+      <Typography
+        sx={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}
+        textColor="#1E2AA5"
+      >
         {task.projectName} - {task.customerName}
       </Typography>
-      <Typography textColor="#1E2AA5">{task.taskType}</Typography>
+      <Typography textColor="#1E2AA5" sx={{ display: { xs: 'none', sm: 'block' } }}>
+        {task.taskType}
+      </Typography>
       <Typography textColor="#1E2AA5" fontWeight="bold">
         {task.startTime}-{task.endTime} ({timeDifference(task)})
       </Typography>

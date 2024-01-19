@@ -25,7 +25,7 @@ export const Sidebar = ({ expanded, toggleSidebar }: SidebarProps) => {
         width: { xs: '100vw', sm: expanded ? 336 : 73 },
         transition: { xs: 'height 0.6s', sm: 'width 0.6s' },
         position: 'fixed',
-        zIndex: 1,
+        zIndex: 999,
         top: 0,
         left: 0,
         bgcolor: '#001C37',

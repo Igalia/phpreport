@@ -43,7 +43,7 @@ export default async function WeekView() {
   )
 
   return (
-    <Stack direction="row" alignItems="stretch" height="100%">
+    <Stack sx={{ flexDirection: { xs: 'column', sm: 'row' } }} alignItems="stretch" height="100%">
       {dateRange.map((date) => {
         const formattedDate = format(date, 'eeee, do')
         const dateTasks = groupedTasks[format(date, 'yyyy-MM-dd')]
@@ -53,21 +53,34 @@ export default async function WeekView() {
             sx={{
               backgroundColor: isSameDay(date, today) ? ' #E6EFF8' : '#fff',
               flex: '1',
-              ':first-of-type': {
-                borderLeft: '1px solid #C4C6D0'
-              },
               borderTop: '1px solid #C4C6D0',
-              borderBottom: '1px solid #C4C6D0',
+              borderBottom: { xs: 'none', sm: '1px solid #C4C6D0' },
               borderRight: '1px solid #C4C6D0',
+              borderLeft: { xs: '1px solid #C4C6D0', sm: 'none' },
               display: 'flex',
-              flexDirection: 'column',
-              minHeight: 'calc(100vh - 79px)',
-              gap: '8px'
+              flexDirection: { xs: 'row', sm: 'column' },
+              minHeight: { xs: 'auto', sm: 'calc(100vh - 79px)' },
+              minWidth: { xs: 'calc(100vw - 16px)', sm: 'auto' },
+              alignItems: { xs: 'stretch', sm: 'initial' },
+              overflow: 'auto',
+              gap: '8px',
+              ':last-of-type': {
+                borderBottom: '1px solid #C4C6D0',
+                borderRight: { xs: '1px solid #C4C6D0', sm: 'none' }
+              }
             }}
             component="ul"
             key={formattedDate}
           >
-            <Box padding="22px 16px" borderBottom="1px solid #C4C6D0">
+            <Box
+              sx={{
+                padding: '22px 16px',
+                width: { xs: '160px', sm: 'auto' },
+                minWidth: { xs: '160px', sm: 'auto' },
+                borderBottom: { xs: 'none', sm: '1px solid #C4C6D0' },
+                borderRight: { xs: '1px solid #C4C6D0', sm: 'none' }
+              }}
+            >
               <Typography fontWeight="600">{formattedDate}</Typography>
               <Typography fontWeight="600" textColor="#004c92">
                 {dateTasks?.time ? convertMinutesToTime(dateTasks.time) : '0h 0m'}
@@ -76,7 +89,16 @@ export default async function WeekView() {
 
             {dateTasks?.tasks.map((task) => {
               return (
-                <Box sx={{ padding: '0px 8px' }} key={task.id}>
+                <Box
+                  sx={{
+                    padding: { xs: '8px 0', sm: '0px 8px' },
+                    display: 'flex',
+                    minWidth: { xs: 'fit-content', sm: 'auto' },
+                    alignItems: 'center'
+                  }}
+                  component="li"
+                  key={task.id}
+                >
                   <SimpleTaskBox task={task} />
                 </Box>
               )
