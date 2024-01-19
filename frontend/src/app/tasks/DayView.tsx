@@ -24,21 +24,24 @@ export const DayView = ({ projects, taskTypes, templates }: DayViewProps) => {
       sx={{
         display: 'grid',
         gridTemplateAreas: {
-          xs: "'select-template start-timer''divider divider''create-task-form create-task-form''task-list task-list'",
-          sm: "'select-template start-timer''divider divider''create-task-form task-list'"
+          xs: "'divider-1 divider-1''select-template start-timer''divider-2 divider-2''create-task-form create-task-form''task-list task-list'",
+          sm: "'divider-1 divider-1''select-template start-timer''divider-2 divider-2''create-task-form task-list'"
         },
         gridTemplateColumns: {
           xs: '1fr',
           sm: '558px 558px'
         },
         columnGap: '30px',
-        rowGap: '16px'
+        rowGap: '16px',
+        margin: '0 auto'
       }}
     >
+      <Divider sx={{ gridArea: 'divider-1' }} />
+
       <CreateTaskFormProvider>
         <CreateTask projects={projects} taskTypes={taskTypes} templates={templates} />
 
-        <Divider sx={{ gridArea: 'divider' }} />
+        <Divider sx={{ gridArea: 'divider-2' }} />
 
         <TaskList sx={{ gridArea: 'task-list' }} projects={projects} taskTypes={taskTypes} />
       </CreateTaskFormProvider>
