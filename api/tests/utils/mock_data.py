@@ -1,6 +1,6 @@
 from models.area import Area
 from models.customer import Customer
-from models.project import Project, ProjectAllocation
+from models.project import Project, ProjectAllocation, ProjectAssignment
 from models.timelog import Task, TaskType, Template
 from models.user import User, UserGroup, UserRoles
 from models.sector import Sector
@@ -124,6 +124,15 @@ DATA = [
                 "is_tentative": False,
                 "is_billable": True,
                 "notes": "test",
+            }
+        ],
+    ),
+    (
+        ProjectAssignment,
+        [
+            {
+                "user": 2,
+                "project": 1,
             }
         ],
     ),
