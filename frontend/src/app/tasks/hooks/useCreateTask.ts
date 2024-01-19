@@ -6,6 +6,7 @@ import { useClientFetch } from '@/infra/lib/useClientFetch'
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser/useGetCurrentUser'
 import { useGetTasks } from './useGetTasks'
 import { BaseError } from '@/_lib/errors/BaseError'
+import { revalidateTag } from 'next/cache'
 
 export const useCreateTask = () => {
   const apiClient = useClientFetch()
@@ -22,6 +23,7 @@ export const useCreateTask = () => {
         handleSuccess()
         queryClient.invalidateQueries(['tasks', userId])
         showSuccess('Task added succesfully')
+        revalidateTag('tags')
       },
       onError: (e) => {
         if (e instanceof BaseError) {

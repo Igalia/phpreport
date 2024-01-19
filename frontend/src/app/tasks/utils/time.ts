@@ -4,11 +4,15 @@ export const convertTimeToMinutes = (time: string) => {
   return parseInt(hour) * 60 + parseInt(minute)
 }
 
+export const convertMinutesToTime = (timeInMinutes: number) => {
+  const hours = Math.floor(timeInMinutes / 60)
+  const minutes = timeInMinutes % 60
+
+  return `${hours}h ${minutes}m`
+}
+
 export const getTimeDifference = (startMinutes: number, endMinutes: number) => {
   const timeDiff = endMinutes - startMinutes
 
-  const hours = Math.floor(timeDiff / 60)
-  const minutes = timeDiff % 60
-
-  return `${hours}h ${minutes}m`
+  return convertMinutesToTime(timeDiff)
 }

@@ -11,7 +11,7 @@ export const makeGetTasks =
       start: startTime,
       end: endTime
     })
-    const response = await apiClient(`/v1/timelog/tasks?${params}`)
+    const response = await apiClient(`/v1/timelog/tasks?${params}`, { next: { tags: ['tasks'] } })
 
     if (!response.ok) {
       throw new Error('Failed to fetch Tasks')
