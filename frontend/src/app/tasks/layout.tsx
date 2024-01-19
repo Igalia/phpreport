@@ -1,7 +1,7 @@
 'use client'
 
 import { PropsWithChildren } from 'react'
-import { Tabs, TabList, Tab, Box, Divider } from '@mui/joy'
+import { Tabs, TabList, Tab, Box } from '@mui/joy'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -11,30 +11,33 @@ export default function TasksLayout({ children }: PropsWithChildren) {
   return (
     <Box
       sx={{
-        display: 'grid',
+        display: 'flex',
         padding: { xs: '0 8px', sm: '0' },
+        gridTemplateRows: '33px 1fr',
         margin: '0 auto',
-        maxWidth: '1146px',
-        rowGap: '16px'
+        minHeight: 'calc(100vh - 30px)',
+        rowGap: '16px',
+        flexDirection: 'column'
       }}
     >
-      <Tabs
-        sx={{
-          borderRadius: '8px',
-          border: '1px solid #C4C6D0',
-          width: 'fit-content',
-          paddding: '1px'
-        }}
-        size="md"
-        value={pathname}
-      >
-        <TabList disableUnderline>
-          <TimeViewTab path="/tasks">Day</TimeViewTab>
-          <TimeViewTab path="/tasks/week">Week</TimeViewTab>
-          <TimeViewTab path="/tasks/month">Month</TimeViewTab>
-        </TabList>
-      </Tabs>
-      <Divider />
+      <Box sx={{ maxWidth: '1146px', margin: '0 auto', width: '100%' }}>
+        <Tabs
+          sx={{
+            borderRadius: '8px',
+            border: '1px solid #C4C6D0',
+            width: 'fit-content',
+            paddding: '1px'
+          }}
+          size="md"
+          value={pathname}
+        >
+          <TabList disableUnderline>
+            <TimeViewTab path="/tasks">Day</TimeViewTab>
+            <TimeViewTab path="/tasks/week">Week</TimeViewTab>
+            <TimeViewTab path="/tasks/month">Month</TimeViewTab>
+          </TabList>
+        </Tabs>
+      </Box>
       {children}
     </Box>
   )
