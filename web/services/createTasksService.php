@@ -29,6 +29,7 @@
     define('PHPREPORT_ROOT', __DIR__ . '/../../');
     include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
     include_once(PHPREPORT_ROOT . '/model/facade/TasksFacade.php');
+    include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
     include_once(PHPREPORT_ROOT . '/model/vo/TaskVO.php');
     include_once(PHPREPORT_ROOT . '/model/OperationResult.php');
 
@@ -207,9 +208,15 @@
 
                 $taskVO->setUserId($user->getId());
 
-                if (is_null($taskVO->getProjectId()))
+                // Get projects user is assigned to to make sure they can log time to them
+                $projects = ProjectsFacade::GetAllProjects($user->getLogin());
+                $projectIdList = [];
+                foreach ($projects as $project) {
+                    $projectIdList[] = $project->getId();
+                }
+                if (is_null($taskVO->getProjectId()) || !in_array($taskVO->getProjectId(), $projectIdList))
                 {
-                    $string = "<return service='createTasks'><success>false</success><error id='4'>projectId is not valid</error></return>";
+                    $string = "<return service='createTasks'><success>false</success><error id='4'>Project is not valid or you are not allowed to log time to this project</error></return>";
                     break;
                 }
                 //Support 0-hour tasks: reparse end time if initTime == 0 to the end so that order of parse doesn't cause error if end time added before init time by users
