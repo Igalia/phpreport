@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 from decouple import config
 from db.db_connection import get_db
 from auth.auth_handler import decode_token
-from schemas.user import AppUser, UserCapacity
+from schemas.user import AppUser
 from services.user import UserService
 
 
@@ -20,32 +20,12 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl=OIDC_TOKEN_ENDPOINT)
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)) -> AppUser:
     decoded = decode_token(token)
     username = decoded[OIDC_USERNAME_PROPERTY]
-    user_in_db = UserService(db).get_user(username=username)
-    if not user_in_db:
+    user = UserService(db).get_user(username=username)
+    if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="You are not an authorized user.",
         )
-    user = AppUser(
-        id=user_in_db.id,
-        username=username,
-        email=decoded["email"],
-        first_name=decoded["given_name"],
-        last_name=decoded["family_name"],
-        roles=[],
-        authorized_scopes=[],
-        capacities=[],
-    )
-    for c in user_in_db.capacities:
-        cap = UserCapacity(
-            capacity=c.capacity,
-            start=c.start,
-            end=c.end,
-            user_id=c.user_id,
-            is_current=c.is_current,
-            yearly_expected_and_vacation=c.yearly_expected_and_vacation,
-        )
-        user.capacities.append(cap)
 
     if USE_OIDC_ROLES:
         user.roles = decoded[OIDC_ROLES_PROPERTY].copy()
