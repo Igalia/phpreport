@@ -1,5 +1,5 @@
 from typing import List
-from sqlalchemy import Date, Column, ForeignKey, Integer, String, Numeric, UniqueConstraint, CheckConstraint
+from sqlalchemy import Boolean, Date, Column, ForeignKey, Integer, String, Numeric, UniqueConstraint, CheckConstraint
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -13,6 +13,11 @@ class User(Base):
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     password = Column(String(length=256), nullable=True)
     login = Column(String(length=100), nullable=False, unique=True)
+    email = Column(String(length=100), unique=True)
+    first_name = Column(String(length=100))
+    last_name = Column(String(length=100))
+    avatar_url = Column(String(length=500))
+    is_active = Column(Boolean, default=True)
     capacities: Mapped[List["UserCapacity"]] = relationship()
 
 
