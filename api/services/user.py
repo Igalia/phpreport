@@ -29,9 +29,12 @@ class UserProfile:
 
 
 class UserService(AppService):
-    def get_users(self) -> List[User]:
-        users = self.db.query(User).all() or []
-        return users
+    def get_users(self, active) -> List[User]:
+        query = self.db.query(User)
+        if active:
+            query = query.filter(User.is_active)
+        users = query.all() or []
+        return [UserProfile(user) for user in users]
 
     def get_user(self, username: str) -> AppUser:
         user_in_db = self.db.query(User).filter(User.login == username).first() or None
