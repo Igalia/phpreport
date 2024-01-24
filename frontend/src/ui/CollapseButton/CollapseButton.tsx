@@ -13,11 +13,12 @@ type CollapseButtonProps = {
 export const CollapseButton = ({ onClick, sx, iconSx }: CollapseButtonProps) => {
   return (
     <Button
+      variant="soft"
+      color="neutral"
       size="sm"
       onClick={onClick}
       sx={{
         borderRadius: '50%',
-        bgcolor: 'white',
         width: 32,
         height: 32,
         alignItems: 'center',

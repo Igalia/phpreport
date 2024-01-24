@@ -13,7 +13,7 @@ export const ContentSidebar = ({ children, expanded, toggleContentBar }: Content
   return (
     <Box
       sx={{
-        height: { xs: expanded ? '60px' : '320px', sm: '100vh' },
+        height: { xs: expanded ? '50vh' : '33px', sm: '100vh' },
         width: { xs: '100vw', sm: expanded ? '320px' : '60px' },
         transition: { xs: 'height 0.6s', sm: 'width 0.6s' },
         bgcolor: 'white',
@@ -21,15 +21,18 @@ export const ContentSidebar = ({ children, expanded, toggleContentBar }: Content
         position: { xs: 'relative', sm: 'fixed' },
         zIndex: 1,
         top: { xs: 'unset', sm: '0' },
-        right: 0
+        right: 0,
+        overflowY: 'auto',
+        overflowX: 'hidden'
       }}
     >
       <CollapseButton
         sx={{
-          left: { xs: '0px', sm: '-16px' },
-          right: { xs: '0px', sm: 'unset' },
-          top: { xs: '-16px', sm: '61px' },
-          margin: '0 auto'
+          borderRadius: 0,
+          margin: '0 auto',
+          width: '100%',
+          position: 'unset',
+          boxShadow: '0px 2px 4px #00000029',
         }}
         iconSx={{
           transform: { xs: 'rotateZ(90deg)', sm: 'rotateZ(180deg)' },
