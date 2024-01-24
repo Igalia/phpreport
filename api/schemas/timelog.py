@@ -7,7 +7,7 @@ from pydantic import (
     model_validator,
 )
 from pydantic.alias_generators import to_camel
-from typing import Optional, Any
+from typing import Optional, Any, List
 from typing_extensions import Annotated
 from helpers.time import time_string_to_int
 
@@ -152,3 +152,35 @@ class Task(TaskBase):
     id: int
     project_name: str
     customer_name: Optional[str] = None
+
+
+class ProjectTaskSummary(BaseModel):
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
+    project_id: Optional[int] = None
+    project: Optional[str] = None
+    today_total: Optional[int] = None
+    today_text: Optional[str] = None
+    week_total: Optional[int] = None
+    week_text: Optional[str] = None
+    is_vacation: bool
+
+
+class Summary(BaseModel):
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
+    today: Optional[int] = 0
+    week: Optional[int] = 0
+    today_text: Optional[str] = None
+    week_text: Optional[str] = None
+    project_summaries: List[ProjectTaskSummary] = None
+    vacation_available: Optional[int] = None
+    vacation_available_text: Optional[str] = None
+    vacation_used: Optional[int] = None
+    vacation_used_text: Optional[str] = None
+    vacation_scheduled: Optional[int] = None
+    vacation_scheduled_text: Optional[str] = None
+    vacation_pending: Optional[int] = None
+    vacation_pending_text: Optional[str] = None
+    expected_hours_year: Optional[float] = None
+    expected_hours_to_date: Optional[float] = None
+    expected_hours_week: Optional[float] = None
+    worked_hours_year: Optional[float] = None

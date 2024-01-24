@@ -1,5 +1,7 @@
+from typing import List
 from datetime import timedelta, date
 import math
+from models.user import UserCapacity
 
 
 def time_string_to_int(time_string: str) -> int:
@@ -55,8 +57,22 @@ def vacation_int_to_string(time_minutes: int, user_capacity: float) -> str:
 
     return f"{vacation_time_string}"
 
+
 def get_start_and_end_date_of_isoweek(current_date: date) -> []:
     weekday = current_date.isoweekday()
     start = current_date - timedelta(days=weekday)
     end = start + timedelta(days=6)
     return [start, end]
+
+
+def get_expected_worked_hours(user_capacities: List[UserCapacity], start_date: date, end_date: date) -> float:
+    end_date = end_date + timedelta(days=1)
+    days_in_range = (start_date + timedelta(x) for x in range((end_date - start_date).days))
+    expected = 0
+    for day in days_in_range:
+        if day.weekday() > 4:
+            continue
+        capacity = [x.capacity for x in user_capacities if day >= x.start and day <= x.end]
+        if capacity:
+            expected = expected + capacity[0]
+    return expected
