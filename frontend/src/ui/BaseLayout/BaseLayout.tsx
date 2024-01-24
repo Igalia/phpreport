@@ -1,15 +1,12 @@
 'use client'
 import { useState } from 'react'
 import { styled } from '@mui/joy/styles'
-
 import { Sidebar } from '@/ui/Sidebar/Sidebar'
-import { ContentSidebar } from '@/ui/ContentSidebar/ContentSidebar'
 import { Alert } from '@/ui/Alert/Alert'
+
 
 export const BaseLayout = ({ children }: { children: React.ReactNode }) => {
   const [navBarExpanded, setNavBarExpanded] = useState(false)
-  const [contentBarExpanded, setContentBarExpanded] = useState(false)
-
   return (
     <>
       <SkipNavigation href="#main-content">Skip Navigation</SkipNavigation>
@@ -21,7 +18,6 @@ export const BaseLayout = ({ children }: { children: React.ReactNode }) => {
         sx={{
           transition: 'margin .6s',
           ml: { sm: navBarExpanded ? '336px' : '73px' },
-          mr: { sm: contentBarExpanded ? '320px' : '60px' },
           mt: { xs: navBarExpanded ? '280px' : '73px', sm: '0' }
         }}
         id="main-content"
@@ -29,12 +25,6 @@ export const BaseLayout = ({ children }: { children: React.ReactNode }) => {
       >
         {children}
       </Main>
-      <ContentSidebar
-        expanded={contentBarExpanded}
-        toggleContentBar={() => setContentBarExpanded((prevState) => !prevState)}
-      >
-        <div style={{ color: 'black' }}>Right Sidebar</div>
-      </ContentSidebar>
       <Alert />
     </>
   )

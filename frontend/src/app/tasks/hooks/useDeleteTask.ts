@@ -17,7 +17,8 @@ export const useDeleteTask = () => {
       queryClient.setQueryData<Array<Task>>(['tasks', userId], (prevData) =>
         prevData!.filter((prevData) => prevData.id !== taskId)
       )
-      showSuccess('Task succesfully removed')
+      queryClient.invalidateQueries(['workSummary', userId])
+      showSuccess('Task successfully removed')
     },
     onError: () => {
       showError('Failed to remove task')

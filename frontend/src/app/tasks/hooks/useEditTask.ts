@@ -28,7 +28,8 @@ export const useEditTask = ({ handleSuccess }: UseEditTaskProps) => {
           return task
         })
       )
-      showSuccess('Task succesfully edited')
+      queryClient.invalidateQueries(['workSummary', userId])
+      showSuccess('Task successfully edited')
       handleSuccess()
     },
     onError: (e) => {
