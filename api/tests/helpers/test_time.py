@@ -41,7 +41,7 @@ def test_vacation_int_to_string() -> None:
     time_minutes = 1285
     user_capacity = 8.0
 
-    assert vacation_int_to_string(time_minutes, user_capacity) == "2 days, 5 h, 25 m (21h 25m)"
+    assert vacation_int_to_string(time_minutes, user_capacity) == "2 days 5 h 25 m (21 h 25 m)"
 
 
 def test_get_start_and_end_date_of_week() -> None:

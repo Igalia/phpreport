@@ -414,7 +414,7 @@ def test_create_task(client: TestClient, get_regular_user_token_headers: Dict[st
     assert response.status_code == HTTPStatus.CREATED
 
     expected_response = {
-        "id": 3,
+        "id": 4,
         "date": "2023-10-21",
         "story": "project",
         "description": "Adding tests",
@@ -574,3 +574,160 @@ def test_user_cannot_create_task_with_overlapping_hours(
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
     error_message = response.json()
     assert error_message["detail"] == "Task from 20:30 to 23:00 overlaps an existing task from 20:00 to 22:00."
+
+
+def test_get_summary_fulltime_worker_entire_year(
+    client: TestClient, get_regular_user_token_headers: Dict[str, str]
+) -> None:
+    # there are 260 work days in 2023, user_id 1 has a capacity of 8.0 hrs/day
+    # so 260 * 8 = 2080, which would be expected work hours for year
+    # the config entry in mock_data sets company alloted vacation to 200 hours
+    # The user has the 8.0 hr/day capacity for all of 2023, so they would receive
+    # the full 200 hours of vacation as alloted by the company
+    # 200 * 60 = 12000, so this user should have 12000 vacation minutes
+    # There are 210 work days between 2023-01-01 and 2023-10-20 (the ref_date we use here)
+    # 210 * 8  = 1680, which would be the expected hours to date
+    expected_summary = {
+        "today": 120,
+        "week": 120,
+        "todayText": "2h 00m",
+        "weekText": "2h 00m",
+        "projectSummaries": [
+            {
+                "projectId": 2,
+                "project": "Internal",
+                "todayTotal": 120,
+                "todayText": "2h 0m",
+                "weekTotal": 120,
+                "weekText": "2h 0m",
+                "isVacation": False,
+            }
+        ],
+        "vacationAvailable": 12000,
+        "vacationAvailableText": "25 days (200 h)",
+        "vacationUsed": 0,
+        "vacationUsedText": "None",
+        "vacationScheduled": 0,
+        "vacationScheduledText": "None",
+        "vacationPending": 12000,
+        "vacationPendingText": "25 days (200 h)",
+        "expectedHoursYear": 2080.0,
+        "expectedHoursToDate": 1680.0,
+        "expectedHoursWeek": 40.0,
+        "workedHoursYear": 2.0,
+    }
+
+    response = client.get(
+        f"{API_BASE_URL}/v1/timelog/summary",
+        headers=get_regular_user_token_headers,
+        params={"ref_date": "2023-10-20"},
+    )
+    assert response.status_code == HTTPStatus.OK
+    summary = response.json()
+    assert summary == expected_summary
+
+
+def test_get_summary_parttime_worker_entire_year(
+    client: TestClient, get_admin_user_token_headers: Dict[str, str]
+) -> None:
+    # there are 260 work days in 2023, user_id 2 has a capacity of 6.0 hrs/day
+    # so 260 * 6 = 1560, which would be expected work hours for year
+    # the config entry in mock_data sets company alloted vacation to 200 hours
+    # The user has the 6.0 hr/day capacity for all of 2023, so they would receive
+    # workable days user has in capacity / workable days for year
+    # * (daily capacity * 5 / company_fte) * company_vacation
+    # (260/260) * (6.0 * 5 / 40) * 200  = 150
+    # 150 * 60 = 9000, so this user should have 9000 vacation minutes
+    # There are 210 work days between 2023-01-01 and 2023-10-20 (the ref_date we use here)
+    # 210 * 6  = 1260, which would be the expected hours to date
+    expected_summary = {
+        "today": 120,
+        "week": 120,
+        "todayText": "2h 00m",
+        "weekText": "2h 00m",
+        "projectSummaries": [
+            {
+                "projectId": 2,
+                "project": "Internal",
+                "todayTotal": 120,
+                "todayText": "2h 0m",
+                "weekTotal": 120,
+                "weekText": "2h 0m",
+                "isVacation": False,
+            }
+        ],
+        "vacationAvailable": 9000,
+        "vacationAvailableText": "25 days (150 h)",
+        "vacationUsed": 0,
+        "vacationUsedText": "None",
+        "vacationScheduled": 0,
+        "vacationScheduledText": "None",
+        "vacationPending": 9000,
+        "vacationPendingText": "25 days (150 h)",
+        "expectedHoursYear": 1560.0,
+        "expectedHoursToDate": 1260.0,
+        "expectedHoursWeek": 30.0,
+        "workedHoursYear": 2.0,
+    }
+
+    response = client.get(
+        f"{API_BASE_URL}/v1/timelog/summary",
+        headers=get_admin_user_token_headers,
+        params={"ref_date": "2023-10-20"},
+    )
+    assert response.status_code == HTTPStatus.OK
+    summary = response.json()
+    assert summary == expected_summary
+
+
+def test_get_summary_fulltime_worker_partial_year(
+    client: TestClient, get_manager_user_token_headers: Dict[str, str]
+) -> None:
+    # there are 130 work days in 2023 for the Manager's capacity (H2 2023)
+    # so 130 * 8 = 1040, which would be expected work hours for year
+    # the config entry in mock_data sets company alloted vacation to 200 hours
+    # The user has the 8.0 hr/day capacity for part of 2023, so they would receive
+    # workable days user has in capacity / workable days for year
+    # * (daily capacity * 5 / company_fte) * company_vacation
+    # (130/260) * (8.0 * 5 / 40) * 200  = 100.82
+    # 100.82 * 60 = 6049, so this user should have 6049 vacation minutes
+    # There are 80 work days between 2023-07-01 9start of user capacity) and 2023-10-20 (the ref_date we use here)
+    # 80 * 8  = 640, which would be the expected hours to date
+    expected_summary = {
+        "today": 120,
+        "week": 120,
+        "todayText": "2h 00m",
+        "weekText": "2h 00m",
+        "projectSummaries": [
+            {
+                "projectId": 2,
+                "project": "Internal",
+                "todayTotal": 120,
+                "todayText": "2h 0m",
+                "weekTotal": 120,
+                "weekText": "2h 0m",
+                "isVacation": False,
+            }
+        ],
+        "vacationAvailable": 6049,
+        "vacationAvailableText": "12 days 4 h 49 m (100 h 49 m)",
+        "vacationUsed": 0,
+        "vacationUsedText": "None",
+        "vacationScheduled": 0,
+        "vacationScheduledText": "None",
+        "vacationPending": 6049,
+        "vacationPendingText": "12 days 4 h 49 m (100 h 49 m)",
+        "expectedHoursYear": 1040.0,
+        "expectedHoursToDate": 640,
+        "expectedHoursWeek": 40.0,
+        "workedHoursYear": 2.0,
+    }
+
+    response = client.get(
+        f"{API_BASE_URL}/v1/timelog/summary",
+        headers=get_manager_user_token_headers,
+        params={"ref_date": "2023-10-20"},
+    )
+    assert response.status_code == HTTPStatus.OK
+    summary = response.json()
+    assert summary == expected_summary
