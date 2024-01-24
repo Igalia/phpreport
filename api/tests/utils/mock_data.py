@@ -4,9 +4,27 @@ from models.project import Project, ProjectAllocation, ProjectAssignment
 from models.timelog import Task, TaskType, Template
 from models.user import User, UserGroup, UserRoles
 from models.sector import Sector
+from models.config import Config
 
 
 DATA = [
+    (
+        Config,
+        [
+            {
+                "version": "3",
+                "block_tasks_by_time_enabled": False,
+                "block_tasks_by_time_number_of_days": 0,
+                "block_tasks_by_day_limit_enabled": False,
+                "block_tasks_by_day_limit_number_of_days": 0,
+                "block_tasks_by_date_enabled": False,
+                "block_tasks_by_date_date": "2000-01-01",
+                "vacation_project_id": 1,
+                "yearly_vacation_hours": 200,
+                "company_fte": 40,
+            }
+        ],
+    ),
     (
         User,
         [
