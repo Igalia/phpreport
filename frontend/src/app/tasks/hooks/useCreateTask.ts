@@ -22,6 +22,7 @@ export const useCreateTask = () => {
       onSuccess: (_, { handleSuccess }) => {
         handleSuccess()
         queryClient.invalidateQueries(['tasks', userId])
+        queryClient.invalidateQueries(['workSummary', userId])
         showSuccess('Task added succesfully')
         revalidateTag('tags')
       },
