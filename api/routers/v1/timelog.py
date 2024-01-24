@@ -12,6 +12,7 @@ from schemas.timelog import (
     Task as TaskSchema,
     TaskNew as TaskNewSchema,
     TaskUpdate as TaskUpdateSchema,
+    Summary,
 )
 from schemas.validation import ValidatedObject
 from schemas.user import AppUser
@@ -21,7 +22,13 @@ from services.config import ConfigService
 from db.db_connection import get_db
 from auth.auth_bearer import BearerToken
 from dependencies import get_current_user, PermissionsValidator
-from helpers.time import time_string_to_int
+from helpers.time import (
+    time_string_to_int,
+    int_to_time_long_string,
+    get_start_and_end_date_of_isoweek,
+    vacation_int_to_string,
+    get_expected_worked_hours,
+)
 
 router = APIRouter(
     prefix="/timelog",
@@ -271,6 +278,66 @@ async def delete_task(task_id: int, current_user=Depends(get_current_user), db: 
         )
     TaskService(db).delete_task(task_id)
     return
+
+
+@router.get("/summary", response_model=Summary)
+async def get_user_work_summary(
+    ref_date: date = date.today(), current_user=Depends(get_current_user), db: Session = Depends(get_db)
+):
+    [week_start, week_end] = get_start_and_end_date_of_isoweek(ref_date)
+    if ref_date != date.today():
+        current_capacity = [cap for cap in current_user.capacities if cap.start <= ref_date and cap.end >= ref_date]
+    else:
+        current_capacity = [cap for cap in current_user.capacities if cap.is_current]
+    summary = Summary(
+        today=TaskService(db).get_tasks_sum(current_user.id, ref_date, ref_date),
+        week=TaskService(db).get_tasks_sum(current_user.id, week_start, week_end),
+        project_summaries=TaskService(db).get_task_totals_projects(current_user.id, ref_date),
+        vacation_available=0,
+        expected_hours_year=0,
+        expected_hours_week=get_expected_worked_hours(current_user.capacities, week_start, week_end),
+        worked_hours_year=TaskService(db).get_tasks_sum(current_user.id, ref_date.replace(month=1, day=1), ref_date)
+        / 60,
+        vacation_used=TaskService(db).get_vacation_used(current_user.id, ref_date),
+        vacation_scheduled=TaskService(db).get_vacation_scheduled(current_user.id, ref_date),
+    )
+
+    for c in current_user.capacities:
+        for a in c.yearly_expected_and_vacation:
+            if str(ref_date.year) in a:
+                this_year = str(ref_date.year)
+                summary.vacation_available += a[this_year]["availableVacation"]
+                summary.expected_hours_year += a[this_year]["expectedHours"]
+
+    # round to nearest minute instead of accounting for seconds
+    summary.vacation_available = round(summary.vacation_available * 60)
+    summary.today_text = int_to_time_long_string(summary.today) if summary.today is not None else "0h 0m"
+    summary.week_text = int_to_time_long_string(summary.week) if summary.week is not None else "0h 0m"
+    summary.vacation_scheduled_text = (
+        vacation_int_to_string(summary.vacation_scheduled, current_capacity[0].capacity)
+        if summary.vacation_scheduled is not None
+        else "0h 0m"
+    )
+    summary.vacation_used_text = (
+        vacation_int_to_string(summary.vacation_used, current_capacity[0].capacity)
+        if summary.vacation_used is not None
+        else "0h 0m"
+    )
+    summary.vacation_available_text = (
+        vacation_int_to_string(summary.vacation_available, current_capacity[0].capacity)
+        if summary.vacation_available is not None
+        else "0h 0m"
+    )
+    summary.vacation_pending = summary.vacation_available - summary.vacation_used - summary.vacation_scheduled
+    summary.vacation_pending_text = (
+        vacation_int_to_string(summary.vacation_pending, current_capacity[0].capacity)
+        if summary.vacation_pending is not None
+        else "0h 0m"
+    )
+    year_start = ref_date.replace(month=1, day=1)
+    summary.expected_hours_to_date = get_expected_worked_hours(current_user.capacities, year_start, ref_date)
+
+    return summary
 
 
 def validate_task(task_to_validate: TaskSchema, db: Session):

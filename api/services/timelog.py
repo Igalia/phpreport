@@ -1,11 +1,12 @@
 from typing import List
-from datetime import date, datetime
-from sqlalchemy import or_
+from datetime import date, datetime, timedelta
+from sqlalchemy import or_, func
 from fastapi.encoders import jsonable_encoder
 
 from services.main import AppService
 from models.timelog import TaskType, Template, Task
-from schemas.timelog import TemplateNew, TemplateUpdate, TaskNew, TaskUpdate
+from models.config import Config
+from schemas.timelog import TemplateNew, TemplateUpdate, TaskNew, TaskUpdate, ProjectTaskSummary
 from schemas.validation import ValidatedObject
 
 
@@ -137,3 +138,69 @@ class TaskService(AppService):
                     f" {user_task_for_day.start_time} to {user_task_for_day.end_time}."
                 )
         return validated_task
+
+    def get_tasks_sum(self, user_id: int, start: date, end: date) -> int:
+        task_sum = (
+            self.db.query(func.sum(Task.task_total_minutes).label("task_sum"))
+            .filter(Task.user_id == user_id, Task.date.between(start, end))
+            .first()[0]
+        )
+        if task_sum is None:
+            task_sum = 0
+        return task_sum
+
+    def get_task_totals_projects(self, user_id: int, current_date: date) -> List[ProjectTaskSummary]:
+        totals = self.db.query(
+            func.public.get_user_project_summaries(user_id, current_date).table_valued(
+                "project_id", "project", "today_total", "today_text", "week_total", "week_text", "is_vacation"
+            )
+        ).all()
+        project_totals_list = []
+
+        for total in totals:
+            project_totals_list.append(
+                ProjectTaskSummary(
+                    project_id=total[0],
+                    project=total[1],
+                    today_total=total[2] or 0,
+                    today_text=total[3],
+                    week_total=total[4] or 0,
+                    week_text=total[5],
+                    is_vacation=total[6],
+                )
+            )
+
+        return project_totals_list
+
+    def get_vacation_used(self, user_id: int, ref_date: date) -> int:
+        config = self.db.query(Config).first()
+        year_start = ref_date.replace(month=1, day=1)
+        used = (
+            self.db.query(func.sum(Task.task_total_minutes).label("vacation_used"))
+            .filter(
+                Task.user_id == user_id,
+                Task.project_id == config.vacation_project_id,
+                Task.date.between(year_start, ref_date),
+            )
+            .first()[0]
+        )
+        if used is None:
+            used = 0
+        return used
+
+    def get_vacation_scheduled(self, user_id: int, ref_date: date) -> int:
+        config = self.db.query(Config).first()
+        tomorrow = ref_date + timedelta(days=1)
+        yearEnd = ref_date.replace(month=12, day=31)
+        scheduled = (
+            self.db.query(func.sum(Task.task_total_minutes).label("vacation_sum"))
+            .filter(
+                Task.user_id == user_id,
+                Task.project_id == config.vacation_project_id,
+                Task.date.between(tomorrow, yearEnd),
+            )
+            .first()[0]
+        )
+        if scheduled is None:
+            scheduled = 0
+        return scheduled
