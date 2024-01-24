@@ -2,7 +2,7 @@ from models.area import Area
 from models.customer import Customer
 from models.project import Project, ProjectAllocation, ProjectAssignment
 from models.timelog import Task, TaskType, Template
-from models.user import User, UserGroup, UserRoles
+from models.user import User, UserGroup, UserRoles, UserCapacity
 from models.sector import Sector
 from models.config import Config
 
@@ -220,6 +220,24 @@ DATA = [
                 "user_id": 2,
                 "project_id": 2,
             },
+            {
+                "date": "2023-10-20",
+                "init": 1200,
+                "end": 1320,
+                "story": "that project",
+                "task_type": "project",
+                "description": "Managing that awesome project",
+                "user_id": 3,
+                "project_id": 2,
+            },
+        ],
+    ),
+    (
+        UserCapacity,
+        [
+            {"capacity": 8.00, "start": "2023-01-01", "end": "2023-12-31", "user_id": 1},
+            {"capacity": 6.00, "start": "2023-01-01", "end": "2023-12-31", "user_id": 2},
+            {"capacity": 8.00, "start": "2023-07-01", "end": "2023-12-31", "user_id": 3},
         ],
     ),
 ]

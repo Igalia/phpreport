@@ -108,3 +108,35 @@ def get_user_missing_scopes_token_headers(client: TestClient) -> Dict[str, str]:
     token = create_access_token(user)
     headers = {"Authorization": f"Bearer {token}"}
     return headers
+
+
+@pytest.fixture(scope="module")
+def get_admin_user_token_headers(client: TestClient) -> Dict[str, str]:
+    user = {
+        "aud": "account",
+        "roles": ["Admin User"],
+        "name": "RuPaul",
+        "preferred_username": "admin",
+        "given_name": "Paul",
+        "family_name": "Ru",
+        "email": "rupaul@dragrace.tv",
+    }
+    token = create_access_token(user)
+    headers = {"Authorization": f"Bearer {token}"}
+    return headers
+
+
+@pytest.fixture(scope="module")
+def get_manager_user_token_headers(client: TestClient) -> Dict[str, str]:
+    user = {
+        "aud": "account",
+        "roles": ["Manager User"],
+        "name": "Jean-Luc Picard",
+        "preferred_username": "manager",
+        "given_name": "Jean-Luc",
+        "family_name": "Picard",
+        "email": "jlp@enterprise-d.com",
+    }
+    token = create_access_token(user)
+    headers = {"Authorization": f"Bearer {token}"}
+    return headers
