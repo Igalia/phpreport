@@ -82,6 +82,7 @@ export const Sidebar = ({ expanded, toggleSidebar }: SidebarProps) => {
             transition: 'transform 0.6s',
             transformOrigin: '20px',
             mr: '4px',
+            mb: '9px',
             gridArea: 'switch',
             ...(!expanded && {
               transform: { sm: 'rotate(-90deg)' }

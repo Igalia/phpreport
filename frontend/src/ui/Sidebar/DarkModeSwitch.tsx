@@ -16,7 +16,7 @@ type SwitchComponentProps = {
 }
 
 const TrackText = ({ icon: Icon, children, sx }: SwitchComponentProps) => (
-  <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: '24px', ...sx }}>
+  <Box sx={{ display: { xs: 'none'}, alignItems: 'center', gap: '24px', ...sx }}>
     <Icon color="#00396d" />
     <Typography sx={{ color: '#b3cfe9' }}>{children}</Typography>
   </Box>
@@ -36,7 +36,7 @@ const SwitchThumb = ({ icon: Icon, children }: SwitchComponentProps) => (
     }}
   >
     <Icon color="#b3cfe9" />
-    <Typography sx={{ display: { xs: 'none', sm: 'block' }, color: '#F0F3F7' }}>
+    <Typography sx={{ display: { xs: 'none'}, color: '#F0F3F7' }}>
       {children}
     </Typography>
   </Box>
@@ -83,12 +83,12 @@ export const DarkModeSwitch = ({ sx }: DarkModeSwitchProps) => {
             '--Switch-trackBackground': '#030D1A'
           }
         },
-        '--Switch-thumbWidth': { xs: '40px', sm: '148px' },
-        '--Switch-thumbSize': { xs: '20px', sm: '30px' },
-        '--Switch-trackWidth': { xs: '60px', sm: '260px' },
-        '--Switch-thumbRadius': { xs: '', sm: '20px' },
-        '--Switch-trackHeight': { xs: '', sm: '40px' },
-        '--Switch-trackRadius': { xs: '', sm: '25px' },
+        '--Switch-thumbWidth': { xs: '40px'},
+        '--Switch-thumbSize': { xs: '20px' },
+        '--Switch-trackWidth': { xs: '60px' },
+        '--Switch-thumbRadius': { xs: '' },
+        '--Switch-trackHeight': { xs: '' },
+        '--Switch-trackRadius': { xs: '' },
         ...sx
       }}
     />
