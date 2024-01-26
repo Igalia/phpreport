@@ -1,21 +1,21 @@
 import { DayView } from './DayView'
-import { getProjects } from '@/infra/project/getProjects'
-import { getTaskTypes } from '@/infra/taskType/getTaskTypes'
+import { makeGetProjects } from '@/infra/project/getProjects'
+import { makeGetTaskTypes } from '@/infra/taskType/getTaskTypes'
+import { makeGetTemplates } from '@/infra/template/getTemplates'
 import { serverFetch } from '@/infra/lib/serverFetch'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { getServerSession } from 'next-auth'
-import { getTemplates } from '@/infra/template/getTemplates'
 
 const getPageData = async () => {
   const apiClient = await serverFetch()
   const session = await getServerSession(authOptions)
   const { id: userId } = session!.user
 
-  return await Promise.all([
-    getProjects(apiClient),
-    getTaskTypes(apiClient),
-    getTemplates(apiClient, { userId })
-  ])
+  const getProjects = makeGetProjects(apiClient)
+  const getTaskTypes = makeGetTaskTypes(apiClient)
+  const getTemplates = makeGetTemplates(apiClient)
+
+  return await Promise.all([getProjects(), getTaskTypes(), getTemplates({ userId })])
 }
 
 export default async function Tasks() {

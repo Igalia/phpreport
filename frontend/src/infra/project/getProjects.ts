@@ -1,7 +1,7 @@
 import { ApiClient } from '@/infra/lib/apiClient'
 import { Project } from '@/domain/Project'
 
-export const getProjects = async (apiClient: ApiClient): Promise<Array<Project>> => {
+export const makeGetProjects = (apiClient: ApiClient) => async (): Promise<Array<Project>> => {
   const response = await apiClient('/v1/projects/')
 
   if (!response.ok) {
