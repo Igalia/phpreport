@@ -1,7 +1,7 @@
 import { User } from '@/domain/User'
 import { ApiClient } from '../lib/apiClient'
 
-export const getCurrentUser = async (apiClient: ApiClient): Promise<User> => {
+export const makeGetCurrentUser = (apiClient: ApiClient) => async (): Promise<User> => {
   const response = await apiClient('/v1/users/me')
 
   if (!response.ok) {

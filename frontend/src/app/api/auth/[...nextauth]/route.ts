@@ -1,7 +1,7 @@
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import KeycloakProvider from 'next-auth/providers/keycloak'
 import { fetchFactory } from '@/infra/lib/apiClient'
-import { getCurrentUser } from '@/infra/user/getCurrentUser'
+import { makeGetCurrentUser } from '@/infra/user/getCurrentUser'
 import { JWT } from 'next-auth/jwt'
 
 /**
@@ -86,7 +86,8 @@ export const authOptions: NextAuthOptions = {
 
         const apiClient = fetchFactory({ baseURL: process.env.API_BASE!, token: token.accessToken })
 
-        const user = await getCurrentUser(apiClient)
+        const getCurrentUser = makeGetCurrentUser(apiClient)
+        const user = await getCurrentUser()
 
         token.user = user
       }
