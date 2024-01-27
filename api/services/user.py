@@ -43,3 +43,11 @@ class UserService(AppService):
     def get_user_roles(self, user_id: int) -> List[UserRoles]:
         roles = self.db.query(UserRoles).filter(UserRoles.user_id == user_id).all() or []
         return roles
+
+    def update_user(self, username: str, **kwargs) -> AppUser:
+        user_in_db = self.db.query(User).filter(User.login == username).first() or None
+        for param, value in kwargs.items():
+            setattr(user_in_db, param, value)
+        self.db.commit()
+        self.db.refresh(user_in_db)
+        return UserProfile(user_in_db)
