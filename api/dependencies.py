@@ -1,3 +1,4 @@
+from hashlib import md5
 from typing import Annotated, List
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -26,7 +27,28 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Se
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="You are not an authorized user.",
         )
-
+    update_user = False
+    if not user.first_name or user.first_name != decoded["given_name"]:
+        update_user = True
+        user.first_name = decoded["given_name"]
+    if not user.last_name or user.last_name != decoded["family_name"]:
+        update_user = True
+        user.last_name = decoded["family_name"]
+    if not user.email or user.email != decoded["email"]:
+        update_user = True
+        user.email = decoded["email"]
+    if not user.avatar_url:
+        update_user = True
+        hashed_username = md5(user.email.encode("utf-8"))
+        user.avatar_url = f"https://gravatar.com/avatar/{hashed_username.hexdigest()}?s=80"
+    if update_user:
+        UserService(db).update_user(
+            username=user.username,
+            email=user.email,
+            first_name=user.first_name,
+            last_name=user.last_name,
+            avatar_url=user.avatar_url,
+        )
     if USE_OIDC_ROLES:
         user.roles = decoded[OIDC_ROLES_PROPERTY].copy()
         user.authorized_scopes = decoded["scopes"].copy()
