@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { StyledLabel, StyledInput } from './styles'
 import JoyInput from '@mui/joy/Input'
+import { Box } from '@mui/joy'
 import { SxProps } from '@mui/joy/styles/types'
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
@@ -14,10 +15,11 @@ const InnerInput = React.forwardRef<HTMLInputElement, InputProps>(function Inner
   { label, ...props },
   ref
 ) {
-  const id = React.useId()
+  const reactId = React.useId()
+  const id = props.id || reactId
   return (
     <React.Fragment>
-      <StyledInput {...props} ref={ref} id={id} />
+      <StyledInput id={id} ref={ref} {...props} />
       <StyledLabel htmlFor={id}>{label}</StyledLabel>
     </React.Fragment>
   )
