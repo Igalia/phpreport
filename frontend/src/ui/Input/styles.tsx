@@ -1,4 +1,5 @@
 import { styled } from '@mui/joy/styles'
+import { SxProps } from '@mui/joy/styles/types'
 
 export const StyledLabel = styled('label')(({ theme }) => ({
   position: 'absolute',
@@ -9,7 +10,7 @@ export const StyledLabel = styled('label')(({ theme }) => ({
   transition: 'all 150ms cubic-bezier(0.4, 0, 0.2, 1)'
 }))
 
-export const StyledInput = styled('input')({
+export const inputStyle: SxProps = {
   border: 'none', // remove the native input border
   minWidth: 0, // remove the native input width
   outline: 0, // remove the native input outline
@@ -47,4 +48,6 @@ export const StyledInput = styled('input')({
     borderTopLeftRadius: 'calc(var(--Input-radius) - var(--variant-borderWidth, 0px))',
     borderBottomLeftRadius: 'calc(var(--Input-radius) - var(--variant-borderWidth, 0px))'
   }
-})
+}
+
+export const StyledInput = styled('input')(inputStyle)

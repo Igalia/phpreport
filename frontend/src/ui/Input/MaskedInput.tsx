@@ -1,8 +1,8 @@
 import * as React from 'react'
-import JoyInput from '@mui/joy/Input'
+import { Box, Input as JoyInput } from '@mui/joy'
 import { SxProps } from '@mui/joy/styles/types'
 import { IMaskMixin, IMaskInput } from 'react-imask'
-import { StyledLabel, StyledInput } from './styles'
+import { StyledLabel, inputStyle } from './styles'
 
 export type Mask = React.ComponentProps<typeof IMaskInput>['mask']
 
@@ -17,7 +17,7 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 type InnerInputProps = React.InputHTMLAttributes<HTMLInputElement> & InputProps
 
 const MixinInput = IMaskMixin(({ inputRef, ...props }) => {
-  return <StyledInput ref={inputRef} {...props} />
+  return <Box component="input" sx={inputStyle} ref={inputRef} {...props} />
 })
 
 const MaskedInputAdapter = React.forwardRef<HTMLElement, InnerInputProps>(function MaskedInput(
@@ -28,6 +28,8 @@ const MaskedInputAdapter = React.forwardRef<HTMLElement, InnerInputProps>(functi
 
   return (
     <>
+      {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+      {/* @ts-ignore */}
       <MixinInput {...props} inputRef={ref} id={id} onAccept={onAccept} />
       <StyledLabel htmlFor={id}>{label}</StyledLabel>
     </>
