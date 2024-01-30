@@ -1,22 +1,26 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 
 export const useTimer = () => {
   const [time, setTime] = useState(0)
-  const [isTimerRunning, setIsTimerRunning] = useState(false)
+  const [startTime, setStartTime] = useState(0)
 
-  const startTimer = useCallback(() => setIsTimerRunning(true), [])
+  const startTimer = useCallback(() => {
+    setStartTime(Date.now())
+  }, [])
   const stopTimer = useCallback(() => {
-    setIsTimerRunning(false)
+    setStartTime(0)
     setTime(0)
   }, [])
+
+  const isTimerRunning = useMemo(() => startTime > 0, [startTime])
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined
     if (isTimerRunning) {
-      intervalId = setInterval(() => setTime((prevTime) => prevTime + 1), 1000)
+      intervalId = setInterval(() => setTime((Date.now() - startTime) / 1000), 1000)
     }
     return () => clearInterval(intervalId)
-  }, [isTimerRunning])
+  }, [isTimerRunning, startTime])
 
   const seconds = Math.floor(time % 60)
   const minutes = Math.floor((time / 60) % 60)
