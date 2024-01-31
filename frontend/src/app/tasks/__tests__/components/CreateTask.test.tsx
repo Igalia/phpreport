@@ -67,6 +67,7 @@ describe('TaskForm', () => {
     jest.useFakeTimers()
     jest.spyOn(global, 'setInterval')
     jest.setSystemTime(new Date('January 01, 2023 23:15:00'))
+    window.localStorage.clear()
   })
 
   afterEach(() => {

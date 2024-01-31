@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { TaskIntent } from '@/domain/Task'
 import { useForm } from '@/hooks/useForm/useForm'
 import { useTimer } from '@/hooks/useTimer/useTimer'
@@ -12,22 +12,30 @@ type UseTaskFormTimerProps = {
 }
 
 export const useTaskFormTimer = ({ handleChange, startTime, endTime }: UseTaskFormTimerProps) => {
-  const { startTimer, stopTimer, seconds, minutes, hours, isTimerRunning } = useTimer()
+  const {
+    startTimer,
+    stopTimer,
+    seconds,
+    minutes,
+    hours,
+    isTimerRunning,
+    startTime: initialTimerValue
+  } = useTimer()
+
+  useEffect(() => {
+    if (isTimerRunning) {
+      handleChange('startTime', format(initialTimerValue, 'HH:mm'))
+      handleChange('endTime', '')
+    }
+  }, [handleChange, initialTimerValue, isTimerRunning])
 
   const toggleTimer = useCallback(() => {
-    const onStartTimer = () => {
-      handleChange('startTime', format(new Date(), 'HH:mm'))
-      handleChange('endTime', '')
-
-      startTimer()
-    }
-
     const onStopTimer = () => {
       handleChange('endTime', format(new Date(), 'HH:mm'))
       stopTimer()
     }
 
-    return isTimerRunning ? onStopTimer() : onStartTimer()
+    return isTimerRunning ? onStopTimer() : startTimer()
   }, [handleChange, isTimerRunning, startTimer, stopTimer])
 
   const loggedTime = useCallback(() => {
