@@ -5,6 +5,7 @@ describe('useTimer', () => {
   beforeAll(() => {
     jest.useFakeTimers()
     jest.spyOn(global, 'setInterval')
+    window.localStorage.clear()
   })
 
   it('should start the timer', () => {
@@ -54,5 +55,26 @@ describe('useTimer', () => {
 
     expect(result.current.seconds).toBe(0)
     expect(result.current.isTimerRunning).toBe(false)
+  })
+
+  it('adds the startTime to the local storage', () => {
+    const { result } = renderHook(() => useTimer())
+
+    act(() => {
+      result.current.startTimer()
+    })
+
+    expect(window.localStorage.getItem('timer_start')).toBe(result.current.startTime.toString())
+  })
+
+  it('clears the startTime on the local storage', () => {
+    const { result } = renderHook(() => useTimer())
+
+    act(() => {
+      result.current.startTimer()
+      result.current.stopTimer()
+    })
+
+    expect(window.localStorage.getItem('timer_start')).toBe(null)
   })
 })

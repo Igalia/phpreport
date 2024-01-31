@@ -2,12 +2,15 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 
 export const useTimer = () => {
   const [time, setTime] = useState(0)
-  const [startTime, setStartTime] = useState(0)
+  const [startTime, setStartTime] = useState(Number(localStorage.getItem('timer_start')) || 0)
 
   const startTimer = useCallback(() => {
+    localStorage.setItem('timer_start', Date.now().toString())
     setStartTime(Date.now())
   }, [])
+
   const stopTimer = useCallback(() => {
+    localStorage.removeItem('timer_start')
     setStartTime(0)
     setTime(0)
   }, [])
@@ -26,5 +29,5 @@ export const useTimer = () => {
   const minutes = Math.floor((time / 60) % 60)
   const hours = Math.floor((time / 3600) % 60)
 
-  return { startTimer, stopTimer, seconds, minutes, hours, isTimerRunning }
+  return { startTimer, stopTimer, seconds, minutes, hours, isTimerRunning, startTime }
 }
