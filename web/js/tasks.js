@@ -65,7 +65,8 @@ var projectRecord = new Ext.data.Record.create([
     {name:'id'},
     {name:'description'},
     {name:'fullDescription'},
-    {name:'customerName'}
+    {name:'customerName'},
+    {name:'type'}
 ]);
 /* Schema of the information of the personal summary */
 var summaryRecord = new Ext.data.Record.create([
@@ -463,6 +464,13 @@ var TaskPanel = Ext.extend(Ext.Panel, {
                     listeners: {
                         'load': function (store) {
                             projectsList = this.parent.projectComboBox.store.data.items;
+                            projectsList.sort((a, b) => {
+                                //assign sort points based on whether project is leave, then by description
+                                const pointsA = (a.data.type === "leave" ? -2 : 0) + (a.data.description > b.data.description ? -1 : 0);
+                                const pointsB = (b.data.type === "leave" ? -2 : 0) + (b.data.description > a.data.description ? -1 : 0);
+
+                                return pointsB - pointsA;
+                            })
 
                             //the value of projectComboBox has to be set after loading the data on this store
                             if ((this.findExact("id", this.parent.taskRecord.data['projectId']) == -1) &&
