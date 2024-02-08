@@ -1,6 +1,5 @@
 'use client'
 import { useState } from 'react';
-import Box from '@mui/joy/Box';
 import Stack from '@mui/joy/Stack';
 import AccordionGroup from '@mui/joy/AccordionGroup';
 import Accordion from '@mui/joy/Accordion'
@@ -80,7 +79,7 @@ export const WorkSummaryPanel = ({contentSidebarExpanded} : WorkSummaryProps) =>
               </List>
               <Divider sx={{my: 1}} orientation='horizontal'/>
               <Typography level="title-sm" sx={{my:1}}>Hours by project</Typography>
-              <Table aria-label="hours by project for today and current week" sx={{mt: 1, '& .vacation':{bgcolor: 'primary.softBg'} ,'& thead th:nth-child(1)': { width: '45%' }}}>
+              <Table aria-label="hours by project for today and current week" sx={{mt: 1, '& .vacation':{bgcolor: 'primary.softBg'} ,'& thead th:nth-of-type(1)': { width: '45%' }}}>
                 <thead>
                   <tr>
                     <th>Project</th>

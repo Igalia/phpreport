@@ -1,4 +1,4 @@
-import { useFormStatus } from 'react-dom'
+import { experimental_useFormStatus as useFormStatus } from 'react-dom'
 import { Button } from '@mui/joy'
 import { PropsWithChildren } from 'react'
 import { SxProps } from '@mui/joy/styles/types'

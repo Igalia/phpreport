@@ -1,6 +1,6 @@
 import { makeGetTasks } from '@/infra/task/getTasks'
 import { serverFetch } from '@/infra/lib/serverFetch'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions'
 import { getServerSession } from 'next-auth'
 
 import { Task } from '@/domain/Task'

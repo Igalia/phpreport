@@ -1,4 +1,4 @@
-import { Breadcrumbs, Chip, Link, Typography } from '@mui/joy'
+import { Breadcrumbs, Link, Typography } from '@mui/joy'
 
 import { makeGetProject } from '@/infra/project/getProject'
 import { serverFetch } from '@/infra/lib/serverFetch'
