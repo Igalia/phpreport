@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { StyledLabel, StyledInput } from './styles'
 import JoyInput from '@mui/joy/Input'
-import { Box } from '@mui/joy'
 import { SxProps } from '@mui/joy/styles/types'
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {

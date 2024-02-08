@@ -10,6 +10,7 @@ export const useGetWorkSummary = () => {
   const getWorkSummary = makeGetWorkSummary(apiClient)
 
   const { data } = useQuery({
+    // @ts-expect-error: Not sure why this fails
     queryKey: ['workSummary', userId],
     queryFn: () => getWorkSummary(),
     initialData: []

@@ -3,7 +3,7 @@ import { makeGetProjects } from '@/infra/project/getProjects'
 import { makeGetTaskTypes } from '@/infra/taskType/getTaskTypes'
 import { makeGetTemplates } from '@/infra/template/getTemplates'
 import { serverFetch } from '@/infra/lib/serverFetch'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions'
 import { getServerSession } from 'next-auth'
 
 const getPageData = async () => {

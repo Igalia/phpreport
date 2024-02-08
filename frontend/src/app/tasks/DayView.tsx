@@ -33,7 +33,9 @@ export const DayView = ({ projects, taskTypes, templates }: DayViewProps) => {
         },
         columnGap: '30px',
         rowGap: '16px',
-        margin: '0 auto'
+        margin: '0 auto',
+        maxWidth: '1146px',
+        width: '100%'
       }}
     >
       <Divider sx={{ gridArea: 'divider-1' }} />

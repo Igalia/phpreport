@@ -1,0 +1,37 @@
+version: "3"
+services:
+  db:
+    image: postgres:13
+    container_name: phpreport-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: phpreport
+      POSTGRES_USER: phpreport
+      POSTGRES_DB: phpreport
+  api:
+    build:
+      context: ../
+      dockerfile: docker/prod.api.Dockerfile
+    container_name: phpreport-api
+    env_file:
+      - ../.env
+    ports:
+      - "8555:8555"
+    depends_on:
+      - db
+  frontend:
+    build:
+      context: ../
+      dockerfile: docker/prod.frontend.Dockerfile
+    container_name: phpreport-frontend
+    env_file:
+      - ../frontend/.env.local
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+volumes:
+  pgdata:
