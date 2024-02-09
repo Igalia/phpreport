@@ -135,12 +135,14 @@
                 $projectName = $projectVO->getDescription();
             } else $projectName = "-- Unknown --";
 
+            $customerName = $projectVO->getCustomerName();
+
             $record = array();
 
             $totalHours[$projectName] = 0;
 
             $record['project'] = $projectName;
-
+            $record['customer'] = $customerName;
             $record['id'] = $projectId;
 
             $totalHours[$projectName] += round($hours, 2, PHP_ROUND_HALF_DOWN);
@@ -171,6 +173,11 @@
 
         $metaData['fields'][] = $field;
 
+        $field['name'] = "customer";
+        $field['type'] = "string";
+
+        $metaData['fields'][] = $field;
+
         $field['name'] = "total";
         $field['type'] = "float";
 
@@ -183,6 +190,12 @@
 
         $column['header'] = "Project";
         $column['dataIndex'] = "project";
+        $column['sortable'] = true;
+
+        $response['columns'][] = $column;
+
+        $column['header'] = "Customer";
+        $column['dataIndex'] = "customer";
         $column['sortable'] = true;
 
         $response['columns'][] = $column;
