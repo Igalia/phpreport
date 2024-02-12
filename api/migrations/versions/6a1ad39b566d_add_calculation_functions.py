@@ -1,7 +1,7 @@
 """Add calculation functions
 
 Revision ID: 6a1ad39b566d
-Revises: 2ac6108453f3
+Revises: cf4f31d5cd2d
 Create Date: 2024-01-05 11:07:57.026492
 
 """
