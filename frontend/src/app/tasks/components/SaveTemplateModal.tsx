@@ -35,7 +35,6 @@ export const SaveTemplateModal = ({ task }: SaveAsTemplateProps) => {
           variant="outlined"
           component="form"
           action={async (formData: FormData) => {
-            console.log('test')
             const template = await createTemplate(task, formData)
             if (template.error) {
               showError(template.error)
