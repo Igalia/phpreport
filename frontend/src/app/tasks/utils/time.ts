@@ -1,3 +1,5 @@
+import { parseISO } from 'date-fns'
+
 export const convertTimeToMinutes = (time: string) => {
   const [hour, minute] = time.split(':')
 
@@ -15,4 +17,8 @@ export const getTimeDifference = (startMinutes: number, endMinutes: number) => {
   const timeDiff = endMinutes - startMinutes
 
   return convertMinutesToTime(timeDiff)
+}
+
+export const getDateFromParam = (dateParam?: string | null) => {
+  return dateParam ? parseISO(dateParam) : new Date()
 }
