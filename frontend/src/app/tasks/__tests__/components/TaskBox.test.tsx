@@ -1,10 +1,10 @@
 import { renderWithUser, screen } from '@/test-utils/test-utils'
 import { TaskBox } from '../../components/TaskBox'
 import { useDeleteTask } from '../../hooks/useDeleteTask'
-import { useCreateTaskForm } from '../../hooks/useCreateTaskForm'
+import { useCreateTaskForm } from '../../day/[[...date]]/hooks/useCreateTaskForm'
 
 jest.mock('../../hooks/useDeleteTask')
-jest.mock('../../hooks/useCreateTaskForm')
+jest.mock('../../day/[[...date]]/hooks/useCreateTaskForm')
 
 const setupTaskBox = () => {
   const task = {

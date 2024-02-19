@@ -3,10 +3,12 @@ import { screen, renderWithUser, act } from '@/test-utils/test-utils'
 import { useCreateTask } from '../../hooks/useCreateTask'
 import { useGetTasks } from '../../hooks/useGetTasks'
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser/useGetCurrentUser'
-import { CreateTaskFormProvider } from '../../providers/CreateTaskFormProvider'
+import { useDateParam } from '../../hooks/useDateParam'
+import { CreateTaskFormProvider } from '../../day/[[...date]]/providers/CreateTaskFormProvider'
 
 jest.mock('../../hooks/useCreateTask')
 jest.mock('../../hooks/useGetTasks')
+jest.mock('../../hooks/useDateParam')
 
 jest.mock('@/hooks/useGetCurrentUser/useGetCurrentUser')
 
@@ -60,14 +62,14 @@ const setupTaskForm = () => {
 
 describe('TaskForm', () => {
   beforeEach(() => {
-    ;(useCreateTask as jest.Mock).mockReturnValue({ addTask: () => {} })
-    ;(useGetTasks as jest.Mock).mockReturnValue({ tasks: [] })
-    ;(useGetCurrentUser as jest.Mock).mockReturnValue({ id: 0 })
-
     jest.useFakeTimers()
     jest.spyOn(global, 'setInterval')
     jest.setSystemTime(new Date('January 01, 2023 23:15:00'))
     window.localStorage.clear()
+    ;(useCreateTask as jest.Mock).mockReturnValue({ addTask: () => {} })
+    ;(useGetTasks as jest.Mock).mockReturnValue({ tasks: [] })
+    ;(useGetCurrentUser as jest.Mock).mockReturnValue({ id: 0 })
+    ;(useDateParam as jest.Mock).mockReturnValue({ date: new Date('January 01, 2023') })
   })
 
   afterEach(() => {
