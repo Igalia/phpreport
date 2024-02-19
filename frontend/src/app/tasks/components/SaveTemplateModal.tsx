@@ -34,6 +34,16 @@ export const SaveTemplateModal = ({ task }: SaveAsTemplateProps) => {
         <Sheet
           variant="outlined"
           component="form"
+          action={async (formData: FormData) => {
+            console.log('test')
+            const template = await createTemplate(task, formData)
+            if (template.error) {
+              showError(template.error)
+            } else {
+              showSuccess('Template created')
+            }
+            closeModal()
+          }}
           sx={{
             minWidth: 300,
             minHeight: 200,
@@ -45,15 +55,6 @@ export const SaveTemplateModal = ({ task }: SaveAsTemplateProps) => {
             gap: '8px'
           }}
         >
-          <form action={async (formData: FormData) => {
-            const template = await createTemplate(task, formData)
-            if (template.error) {
-              showError(template.error)
-            } else {
-              showSuccess('Template created')
-            }
-            closeModal()
-          }}>
           <ModalClose></ModalClose>
           <Typography
             component="h2"
@@ -66,7 +67,6 @@ export const SaveTemplateModal = ({ task }: SaveAsTemplateProps) => {
           </Typography>
           <Input name="name" label="Template name" required />
           <SubmitButton sx={{ margin: 'auto 0 0' }}>Save template</SubmitButton>
-          </form>
         </Sheet>
       </Modal>
     </>
