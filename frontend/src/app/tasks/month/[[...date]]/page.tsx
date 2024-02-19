@@ -5,21 +5,20 @@ import {
   lastDayOfWeek,
   format,
   eachDayOfInterval,
-  isSameDay,
+  isToday,
   isSameMonth
 } from 'date-fns'
-import { Box, Typography } from '@mui/joy'
-import { getTasksGroupedByDate } from '../actions/getTasksGroupedByDate'
-import { convertMinutesToTime } from '../utils/time'
-import { SimpleTaskBox } from '../components/TaskBox'
+import { Typography, Box } from '@mui/joy'
 import { Fragment } from 'react'
+import { getTasksGroupedByDate } from '../../actions/getTasksGroupedByDate'
+import { getDateFromParam, convertMinutesToTime } from '../../utils/time'
+import { WeekDays } from './components/WeekDays'
+import { SimpleTaskBox } from '../../components/TaskBox'
 
-const WEEK_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-
-export default async function MonthView() {
-  const today = new Date()
-  const firstDayOfFirstWeek = startOfWeek(startOfMonth(today))
-  const lastDayOfLastWeek = lastDayOfWeek(lastDayOfMonth(today))
+export default async function MonthView({ params }: { params: { date?: string } }) {
+  const selectedDate = getDateFromParam(params.date && params.date[0])
+  const firstDayOfFirstWeek = startOfWeek(startOfMonth(selectedDate))
+  const lastDayOfLastWeek = lastDayOfWeek(lastDayOfMonth(selectedDate))
   const dateRange = eachDayOfInterval({ start: firstDayOfFirstWeek, end: lastDayOfLastWeek })
 
   const groupedTasks = await getTasksGroupedByDate(
@@ -30,8 +29,12 @@ export default async function MonthView() {
 
   return (
     <>
-      <Typography sx={{ fontSize: { xs: 'lg', sm: 'xl4' } }} level="h1" textAlign="center">
-        {format(today, 'MMMM yyy')}
+      <Typography
+        sx={{ fontSize: { xs: 'lg', sm: 'xl4' }, margin: '0 auto 16px' }}
+        level="h1"
+        textAlign="center"
+      >
+        {format(selectedDate, 'MMMM yyy')}
       </Typography>
       <Box
         sx={{
@@ -41,31 +44,7 @@ export default async function MonthView() {
         alignItems="stretch"
         height="100%"
       >
-        {WEEK_DAYS.map((day, index) => {
-          const isToday = index === today.getDay()
-          return (
-            <Typography
-              sx={{
-                textAlign: 'center',
-                padding: { xs: '8px', sm: '22px 16px' },
-                borderBottom: '1px solid #C4C6D0',
-                borderTop: '1px solid #C4C6D0',
-                borderRight: '1px solid #C4C6D0',
-                ':first-of-type': { borderLeft: '1px solid #C4C6D0' },
-                ':nth-of-type(7n)': { borderRight: { sm: 'none' }, borderLeft: { sm: 'none' } },
-                fontWeight: '600',
-                backgroundColor: isToday ? '#E6EFF8' : '#fff',
-                color: isToday ? '#004c92' : 'auto',
-                fontSize: { xs: '0px', sm: '1rem' },
-                ':first-letter': { fontSize: '1rem' }
-              }}
-              component="div"
-              key="day"
-            >
-              {day}
-            </Typography>
-          )
-        })}
+        <WeekDays />
 
         {dateRange.map((date) => {
           const formattedDate = format(date, 'yyyy-MM-dd')
@@ -74,7 +53,7 @@ export default async function MonthView() {
           return (
             <Box
               sx={{
-                backgroundColor: isSameDay(date, today) ? ' #E6EFF8' : '#fff',
+                backgroundColor: isToday(date) ? ' #E6EFF8' : '#fff',
                 padding: { xs: '4px', sm: '22px 16px' },
                 height: { xs: '77px', sm: '185px' },
                 borderBottom: '1px solid #C4C6D0',
@@ -99,10 +78,10 @@ export default async function MonthView() {
                   sx={{ display: { xs: 'block', sm: 'none ' }, fontSize: 'sm' }}
                   fontWeight="600"
                 >
-                  {format(date, isSameMonth(date, today) ? 'dd' : 'MMM dd')}
+                  {format(date, isSameMonth(date, selectedDate) ? 'dd' : 'MMM dd')}
                 </Typography>
                 <Typography sx={{ display: { xs: 'none', sm: 'block ' } }} fontWeight="600">
-                  {format(date, isSameMonth(date, today) ? 'do' : 'MMMM do')}
+                  {format(date, isSameMonth(date, selectedDate) ? 'do' : 'MMMM do')}
                 </Typography>
                 <Typography
                   sx={{ fontSize: { xs: '0.7rem', sm: '1rem' } }}
