@@ -7,6 +7,8 @@ import { Task } from '@/domain/Task'
 
 import { convertTimeToMinutes } from '../utils/time'
 
+export type TasksGroupedByDate = Record<Task['date'], { tasks: Array<Task>; time: number }>
+
 export const getTasksGroupedByDate = async (startTime: string, endTime: string, limit?: number) => {
   const apiClient = await serverFetch()
   const getTasks = makeGetTasks(apiClient)
@@ -16,7 +18,7 @@ export const getTasksGroupedByDate = async (startTime: string, endTime: string, 
   const tasks = await getTasks({ userId, startTime, endTime, limit })
 
   // Group tasks by date and add the total time for that date
-  return tasks.reduce<Record<Task['date'], { tasks: Array<Task>; time: number }>>((acc, task) => {
+  return tasks.reduce<TasksGroupedByDate>((acc, task) => {
     const startTime = convertTimeToMinutes(task.startTime)
     const endTime = convertTimeToMinutes(task.endTime)
     const timeDiff = endTime - startTime
