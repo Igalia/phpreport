@@ -1,13 +1,13 @@
-import { format, eachDayOfInterval, startOfWeek, add, isSameDay } from 'date-fns'
+import { format, eachDayOfInterval, startOfWeek, add, isToday } from 'date-fns'
 import { Typography, Box, Stack } from '@mui/joy'
-import { SimpleTaskBox } from '../components/TaskBox'
-import { convertMinutesToTime } from '../utils/time'
+import { SimpleTaskBox } from '../../components/TaskBox'
+import { convertMinutesToTime, getDateFromParam } from '../../utils/time'
 
-import { getTasksGroupedByDate } from '../actions/getTasksGroupedByDate'
+import { getTasksGroupedByDate } from '../../actions/getTasksGroupedByDate'
 
-export default async function WeekView() {
-  const today = new Date()
-  const firstDayofWeek = startOfWeek(today)
+export default async function WeekView({ params }: { params: { date?: string } }) {
+  const selectedDate = getDateFromParam(params.date && params.date[0])
+  const firstDayofWeek = startOfWeek(selectedDate)
   const lastDayOfWeek = add(firstDayofWeek, { days: 6 })
   const dateRange = eachDayOfInterval({ start: firstDayofWeek, end: lastDayOfWeek })
   const groupedTasks = await getTasksGroupedByDate(
@@ -17,7 +17,11 @@ export default async function WeekView() {
 
   return (
     <>
-      <Typography sx={{ fontSize: { xs: 'lg', sm: 'xl4' } }} level="h1" textAlign="center">
+      <Typography
+        sx={{ fontSize: { xs: 'lg', sm: 'xl4' }, margin: '0 auto 16px' }}
+        level="h1"
+        textAlign="center"
+      >
         {format(firstDayofWeek, 'MMMM dd, yyyy')} - {format(lastDayOfWeek, 'MMMM dd, yyyy')}
       </Typography>
       <Stack sx={{ flexDirection: { xs: 'column', sm: 'row' } }} alignItems="stretch" height="100%">
@@ -28,7 +32,7 @@ export default async function WeekView() {
           return (
             <Box
               sx={{
-                backgroundColor: isSameDay(date, today) ? ' #E6EFF8' : '#fff',
+                backgroundColor: isToday(date) ? ' #E6EFF8' : '#fff',
                 flex: '1',
                 borderTop: '1px solid #C4C6D0',
                 borderBottom: { xs: 'none', sm: '1px solid #C4C6D0' },
