@@ -63,7 +63,7 @@ export const Sidebar = ({ expanded, toggleSidebar }: SidebarProps) => {
           spacing={2}
         >
           <Box component="li">
-            <NavLink href="/tasks">
+            <NavLink href="/tasks/day">
               <TaskListSquareAdd24Filled color="white" />
               <Typography textColor="white">Tasks</Typography>
             </NavLink>

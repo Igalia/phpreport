@@ -19,7 +19,7 @@ import { getTimeDifference, convertTimeToMinutes } from '../utils/time'
 import { EditTask } from './EditTask'
 import { DeleteTask } from './DeleteTask'
 import { SaveTemplateModal } from './SaveTemplateModal'
-import { useCreateTaskForm } from '../hooks/useCreateTaskForm'
+import { useCreateTaskForm } from '../day/[[...date]]/hooks/useCreateTaskForm'
 import { IconButton } from './IconButton'
 import { styled } from '@mui/joy'
 

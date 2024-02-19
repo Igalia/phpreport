@@ -1,6 +1,6 @@
 'use client'
 
-import Box from '@mui/joy/Box'
+import { Box, Skeleton } from '@mui/joy'
 
 import { Project } from '@/domain/Project'
 import { TaskType } from '@/domain/TaskType'
@@ -16,7 +16,7 @@ type TaskListProps = {
 }
 
 export const TaskList = ({ projects, taskTypes, sx }: TaskListProps) => {
-  const { tasks } = useGetTasks()
+  const { tasks, isLoading } = useGetTasks()
 
   return (
     <Box
@@ -26,9 +26,11 @@ export const TaskList = ({ projects, taskTypes, sx }: TaskListProps) => {
         flexDirection: 'column',
         gap: '16px',
         listStyle: 'none',
+        position: 'relative',
         ...sx
       }}
     >
+      <Skeleton width="100%" height="96px" loading={isLoading} />
       {tasks.map((task) => (
         <TaskBox projects={projects} taskTypes={taskTypes} key={task.id} task={task} />
       ))}

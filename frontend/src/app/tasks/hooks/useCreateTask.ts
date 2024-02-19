@@ -6,7 +6,8 @@ import { useClientFetch } from '@/infra/lib/useClientFetch'
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser/useGetCurrentUser'
 import { useGetTasks } from './useGetTasks'
 import { BaseError } from '@/_lib/errors/BaseError'
-import { revalidateTag } from 'next/cache'
+import { useDateParam } from './useDateParam'
+import { format } from 'date-fns'
 
 export const useCreateTask = () => {
   const apiClient = useClientFetch()
@@ -15,16 +16,16 @@ export const useCreateTask = () => {
   const { showError, showSuccess } = useAlert()
   const { id: userId } = useGetCurrentUser()
   const { tasks } = useGetTasks()
+  const { date } = useDateParam()
 
   const { mutate, isLoading } = useMutation(
     ({ task }: { task: TaskIntent; handleSuccess: () => void }) => createTask(task, tasks),
     {
       onSuccess: (_, { handleSuccess }) => {
         handleSuccess()
-        queryClient.invalidateQueries(['tasks', userId])
         queryClient.invalidateQueries(['workSummary', userId])
+        queryClient.invalidateQueries(['tasks', userId, format(date, 'yyyy-MM-dd')])
         showSuccess('Task added succesfully')
-        revalidateTag('tags')
       },
       onError: (e) => {
         if (e instanceof BaseError) {

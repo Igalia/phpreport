@@ -1,14 +1,23 @@
 import { format } from 'date-fns'
-import { useCallback, useState, createContext, PropsWithChildren, RefObject, useMemo } from 'react'
+import {
+  useCallback,
+  useState,
+  createContext,
+  PropsWithChildren,
+  RefObject,
+  useMemo,
+  useEffect
+} from 'react'
 
 import { useForm } from '@/hooks/useForm/useForm'
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser/useGetCurrentUser'
 
-import { useCreateTask } from '../hooks/useCreateTask'
+import { useCreateTask } from '../../../hooks/useCreateTask'
 
 import { Template } from '@/domain/Template'
 
 import { TaskIntent, Task } from '@/domain/Task'
+import { useDateParam } from '../../../hooks/useDateParam'
 
 type CreateTaskFormContext = {
   task: TaskIntent
@@ -28,6 +37,7 @@ export const CreateTaskFormProvider = ({ children }: PropsWithChildren) => {
   const { id: userId } = useGetCurrentUser()
   const { addTask, isLoading } = useCreateTask()
   const [template, setTemplate] = useState<Template | null>(null)
+  const { date } = useDateParam()
 
   const { formState, handleChange, resetForm, setFormState, formRef } = useForm<TaskIntent>({
     initialValues: {
@@ -38,9 +48,13 @@ export const CreateTaskFormProvider = ({ children }: PropsWithChildren) => {
       description: '',
       startTime: '',
       endTime: '',
-      date: format(new Date(), 'yyyy-MM-dd')
+      date: format(date, 'yyyy-MM-dd')
     }
   })
+
+  useEffect(() => {
+    handleChange('date', format(date, 'yyyy-MM-dd'))
+  }, [date, handleChange])
 
   const handleSubmit = useCallback(() => {
     addTask({ task: formState, handleSuccess: resetForm })
