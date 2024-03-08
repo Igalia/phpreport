@@ -18,561 +18,586 @@
  */
 
 Ext.onReady(function () {
-    var App = new Ext.App({});
+  var App = new Ext.App({});
 
-    /* Schema of the information about customers */
-    var customerRecord = new Ext.data.Record.create([
-        {name:'id'},
-        {name:'name'},
-    ]);
+  /* Schema of the information about customers */
+  var customerRecord = new Ext.data.Record.create([{ name: 'id' }, { name: 'name' }]);
 
-    /* Schema of the information about projects */
-    var projectRecord = new Ext.data.Record.create([
-        {name:'id'},
-        {name:'description'},
-        {name:'customerName'}
-    ]);
+  /* Schema of the information about projects */
+  var projectRecord = new Ext.data.Record.create([
+    { name: 'id' },
+    { name: 'description' },
+    { name: 'customerName' }
+  ]);
 
-    //schema of the information about users
-    var userRecord = new Ext.data.Record.create([
-        {name: 'id', type: 'int'},
-        {name: "login", type: 'string'}
-    ]);
+  //schema of the information about users
+  var userRecord = new Ext.data.Record.create([
+    { name: 'id', type: 'int' },
+    { name: 'login', type: 'string' }
+  ]);
 
-    // store to load users
-    var usersStore = new Ext.data.Store({
-        id: 'usersStore',
-        autoLoad: true,  //initial data are loaded in the application init
-        autoSave: false, //if set true, changes will be sent instantly
-        baseParams: {
-        },
-        proxy: new Ext.data.HttpProxy({
-            method: 'GET',
-            api: {
-                read: {url: 'services/getAllUsersService.php'}
-            },
-        }),
-        storeId: 'users',
-        reader:new Ext.data.XmlReader({
-            record: 'user',
-            idProperty:'id'
-        }, userRecord),
-        remoteSort: false,
-        sortInfo: {
-            field: 'login',
-            direction: 'ASC',
-        },
-        listeners: {
-            'load': function () {
-                /* Set the default value of the combobox to the logged in user on load */
-                Ext.getCmp('userLogin').setValue(userId);
-            }
-        },
-    });
-
-    /* Store object for customers */
-    var customersStore = new Ext.data.Store({
-        autoLoad: true,
-        autoSave: false,
-        baseParams: {
-            'order': 'name',
-        },
-        proxy: new Ext.data.HttpProxy({
-            url: 'services/getUserCustomersService.php',
-            method: 'GET'
-        }),
-        reader: new Ext.data.XmlReader(
-            {record: 'customer', id:'id'}, customerRecord),
-        remoteSort: false,
-    });
-
-    /* Store object for the projects */
-    var projectsStore = new Ext.data.Store({
-        parent: this,
-        autoLoad: true,
-        autoSave: false,
-        baseParams: {
-            'order': 'description',
-        },
-        filter: function(property, value, anyMatch, caseSensitive) {
-            var fn;
-            if (((property == 'description') || (property == 'customerName')) && !Ext.isEmpty(value, false)) {
-                value = this.data.createValueMatcher(value, anyMatch, caseSensitive);
-                fn = function(r){
-                    return value.test(r.data['description']) || value.test(r.data['customerName']);
-                };
-            } else {
-                fn = this.createFilterFn(property, value, anyMatch, caseSensitive);
-            }
-            return fn ? this.filterBy(fn) : this.clearFilter();
-        },
-        proxy: new Ext.data.HttpProxy({
-            url: 'services/getProjectsService.php',
-            method: 'GET'
-        }),
-        reader: new Ext.data.XmlReader(
-            {record: 'project', id:'id'}, projectRecord),
-        remoteSort: false,
-        sortInfo: {
-            field: 'description',
-            direction: 'ASC',
-        },
-    });
-
-    /* Store object and data for task types */
-    var taskTypeStore = new Ext.data.JsonStore({
-        fields: [
-            'value',
-            'displayText'
-        ],
-        root: 'records',
-        idProperty: 'value',
-        successProperty: 'success',
-        url: 'services/getTaskTypes.php',
-        autoLoad: 'true',
-    });
-
-    /* Renderer to show the project name in the grid */
-    function projectRenderer(id) {
-        var record =  projectsStore.getById(id);
-        if (record) {
-            return record.get('description');
-        }
-        return id;
-    };
-
-    /* Renderer for html */
-    function descriptionRenderer(text){
-        return Ext.util.Format.htmlEncode(text)
+  // store to load users
+  var usersStore = new Ext.data.Store({
+    id: 'usersStore',
+    autoLoad: true, //initial data are loaded in the application init
+    autoSave: false, //if set true, changes will be sent instantly
+    baseParams: {},
+    proxy: new Ext.data.HttpProxy({
+      method: 'GET',
+      api: {
+        read: { url: 'services/getAllUsersService.php' }
+      }
+    }),
+    storeId: 'users',
+    reader: new Ext.data.XmlReader(
+      {
+        record: 'user',
+        idProperty: 'id'
+      },
+      userRecord
+    ),
+    remoteSort: false,
+    sortInfo: {
+      field: 'login',
+      direction: 'ASC'
+    },
+    listeners: {
+      load: function () {
+        /* Set the default value of the combobox to the logged in user on load */
+        Ext.getCmp('userLogin').setValue(userId);
+      }
     }
+  });
 
-    /* Renderer to show the task type in the grid */
-    function taskTypeRenderer(value) {
-        var record =  taskTypeStore.getById(value);
-        if (record) {
-            return record.get('displayText');
-        }
-        return value;
-    };
+  /* Store object for customers */
+  var customersStore = new Ext.data.Store({
+    autoLoad: true,
+    autoSave: false,
+    baseParams: {
+      order: 'name'
+    },
+    proxy: new Ext.data.HttpProxy({
+      url: 'services/getUserCustomersService.php',
+      method: 'GET'
+    }),
+    reader: new Ext.data.XmlReader({ record: 'customer', id: 'id' }, customerRecord),
+    remoteSort: false
+  });
 
-    filtersPanelItems = [{
-            fieldLabel: 'User',
-            name: 'user',
-            xtype: 'combo',
-            allowBlank: false,
-            autoLoad: true,
-            typeAhead: true,
-            mode: 'local',
-            store: usersStore,
-            valueField: 'id',
-            displayField: 'login',
-            triggerAction: 'all',
-            forceSelection: true,
-            id: 'userLogin'
-        },{
-            fieldLabel: 'Dates between',
-            name: 'start',
-            xtype: 'datefieldplus',
-            format: 'd/m/Y',
-            startDay: 1,
-            useQuickTips: false,
-            id: 'startDate',
-            listeners: {
-                'change': function (field, newValue, oldValue) {
-                    if(!field.isValid()) return;
-                    var date = field.parseDate(newValue);
-                    Ext.getCmp('endDate').setMinValue(date);
-                }
-            }
-        },{
-            fieldLabel: 'and',
-            name: 'end',
-            xtype: 'datefieldplus',
-            format: 'd/m/Y',
-            startDay: 1,
-            useQuickTips: false,
-            id: 'endDate',
-            listeners: {
-                'change': function (field, newValue, oldValue) {
-                    if(!field.isValid()) return;
-                    var date = field.parseDate(newValue);
-                    Ext.getCmp('startDate').setMaxValue(date);
-                }
-            }
-        },{
-            fieldLabel: 'Task description',
-            name: 'filterText',
-            xtype: 'combo',
-            id: 'filterText',
-            store: ['[empty]', '[not empty]'],
-            triggerAction:'all',
-            forceSelection: false,
-            autoSelect: false,
-        },{
-            fieldLabel: 'Project',
-            name: 'project',
-            xtype: 'combo',
-            id: 'project',
-            store: projectsStore,
-            mode: 'local',
-            valueField: 'id',
-            typeAhead: false,
-            triggerAction: 'all',
-            displayField: 'description',
-            forceSelection: true,
-            tpl: '<tpl for=".">' +
-                    '<div class="x-combo-list-item" > <tpl>{description} </tpl>' +
-                        '<tpl if="customerName">- {customerName}</tpl>' +
-                    '</div>' +
-                '</tpl>',
-            listeners: {
-                'select': function (combo, record, index) {
-                    selectText = record.data['description'];
-
-                    // We take customer name from the select combo, and injects its id to the taskRecord
-                    if (record.data['customerName']) {
-                        selectText = record.data['description'] + " - " + record.data['customerName'];
-                    }
-
-                    this.setValue(selectText);
-                    combo.value = record.id;
-                }
-            }
-        },{
-            fieldLabel: 'Customer',
-            name: 'customer',
-            xtype: 'combo',
-            id: 'customer',
-            store: customersStore,
-            mode: 'local',
-            valueField: 'id',
-            displayField: 'name',
-            typeAhead: true,
-            triggerAction: 'all',
-            displayField: 'name',
-            forceSelection: true,
-        },{
-            fieldLabel: 'Task type',
-            name: 'type',
-            xtype: 'combo',
-            id: 'type',
-            store: taskTypeStore,
-            mode: 'local',
-            valueField: 'value',
-            displayField: 'displayText',
-            typeAhead: true,
-            triggerAction: 'all',
-            forceSelection: true,
-        },{
-            fieldLabel: 'Telework',
-            name: 'telework',
-            xtype: 'combo',
-            id: 'telework',
-            mode: 'local',
-            triggerAction:'all',
-            store: ['yes', 'no'],
-        },{
-            fieldLabel: 'Onsite',
-            name: 'onsite',
-            xtype: 'combo',
-            id: 'onsite',
-            mode: 'local',
-            triggerAction:'all',
-            store: ['yes', 'no'],
-        },{
-            fieldLabel: 'Story',
-            name: 'filterStory',
-            xtype: 'combo',
-            id: 'filterStory',
-            store: ['[empty]', '[not empty]'],
-            triggerAction:'all',
-            forceSelection: false,
-            autoSelect: false,
-        }]
-
-    /* Panel containing all the search parameters */
-    var filtersPanel = new Ext.FormPanel({
-        labelWidth: 100,
-        frame: true,
-        width: 350,
-        renderTo: 'content',
-        defaults: {width: 230},
-        items: filtersPanelItems,
-
-        buttons: [{
-            text: 'Find tasks',
-            handler: findTasks,
-        }],
-
-        keys: [{
-            key: [Ext.EventObject.ENTER],
-            handler: findTasks,
-        }],
-    });
-    /* Allow listing of user tasks of other users only for an admin user */
-    if ( admin == "" ) {
-        Ext.getCmp('userLogin').setDisabled(true);
-    }
-
-    /* Handler to invoke the search service */
-    function findTasks () {
-        if (Ext.getCmp('userLogin').getRawValue() == ""){
-            App.setAlert(false, "Check For Invalid Field Values");
-            return;
-        }
-        var baseParams = {
-            userId: Ext.getCmp('userLogin').getValue(),
-            dateFormat: "m/d/Y",
+  /* Store object for the projects */
+  var projectsStore = new Ext.data.Store({
+    parent: this,
+    autoLoad: true,
+    autoSave: false,
+    baseParams: {
+      order: 'description'
+    },
+    filter: function (property, value, anyMatch, caseSensitive) {
+      var fn;
+      if ((property == 'description' || property == 'customerName') && !Ext.isEmpty(value, false)) {
+        value = this.data.createValueMatcher(value, anyMatch, caseSensitive);
+        fn = function (r) {
+          return value.test(r.data['description']) || value.test(r.data['customerName']);
         };
-
-        if (Ext.getCmp('startDate').getRawValue() != "") {
-            var date = Ext.getCmp('startDate').getValue();
-            baseParams.filterStartDate = (date.getMonth()+1) + "/" +
-                date.getDate() + "/" + date.getFullYear();
-        }
-        if (Ext.getCmp('endDate').getRawValue() != "") {
-            var date = Ext.getCmp('endDate').getValue();
-            baseParams.filterEndDate = (date.getMonth()+1) + "/" +
-                date.getDate() + "/" + date.getFullYear();
-        }
-        if (Ext.getCmp('filterText').getRawValue() != "") {
-            //this field is the selector for two different, incompatible
-            //parameters in the service
-            var value = Ext.getCmp('filterText').getValue();
-            if (value == '[empty]') {
-                baseParams.emptyText = true;
-            }
-            else if (value == '[not empty]') {
-                baseParams.emptyText = false;
-            }
-            else {
-                baseParams.filterText = value;
-            }
-        }
-        if (Ext.getCmp('project').getRawValue() != "") {
-            var value = Ext.getCmp('project').getValue();
-            baseParams.projectId = value;
-        }
-        if (Ext.getCmp('customer').getRawValue() != "") {
-            var value = Ext.getCmp('customer').getValue();
-            baseParams.customerId = value;
-        }
-        if (Ext.getCmp('type').getRawValue() != "") {
-            var value = Ext.getCmp('type').getValue();
-            baseParams.type = value;
-        }
-        if (Ext.getCmp('filterStory').getRawValue() != "") {
-            //this field is the selector for two different, incompatible
-            //parameters in the service
-            var value = Ext.getCmp('filterStory').getValue();
-            if (value == '[empty]') {
-                baseParams.emptyStory = true;
-            }
-            else if (value == '[not empty]') {
-                baseParams.emptyStory = false;
-            }
-            else {
-                baseParams.filterStory = value;
-            }
-        }
-        if (Ext.getCmp('telework').getRawValue() != "") {
-            var value = Ext.getCmp('telework').getValue();
-            baseParams.telework = (value == 'yes')? true : false;
-        }
-        if (Ext.getCmp('onsite').getRawValue() != "") {
-            var value = Ext.getCmp('onsite').getValue();
-            baseParams.onsite = (value == 'yes')? true : false;
-        }
-
-        tasksStore.baseParams = baseParams;
-        tasksStore.load();
+      } else {
+        fn = this.createFilterFn(property, value, anyMatch, caseSensitive);
+      }
+      return fn ? this.filterBy(fn) : this.clearFilter();
+    },
+    proxy: new Ext.data.HttpProxy({
+      url: 'services/getProjectsService.php',
+      method: 'GET'
+    }),
+    reader: new Ext.data.XmlReader({ record: 'project', id: 'id' }, projectRecord),
+    remoteSort: false,
+    sortInfo: {
+      field: 'description',
+      direction: 'ASC'
     }
+  });
 
-    taskRecordColumns = [
-        {name:'id'},
-        {name:'date'},
-        {name:'initTime'},
-        {name:'endTime'},
-        {name:'hours'},
-        {name:'story'},
-        {name:'telework'},
-        {name:'onsite'},
-        {name:'ttype'},
-        {name:'text'},
-        {name:'phase'},
-        {name:'userId'},
-        {name:'projectId'}
+  /* Store object and data for task types */
+  var taskTypeStore = new Ext.data.JsonStore({
+    fields: ['value', 'displayText'],
+    root: 'records',
+    idProperty: 'value',
+    successProperty: 'success',
+    url: 'services/getTaskTypes.php',
+    autoLoad: 'true'
+  });
+
+  /* Renderer to show the project name in the grid */
+  function projectRenderer(id) {
+    var record = projectsStore.getById(id);
+    if (record) {
+      return record.get('description');
+    }
+    return id;
+  }
+
+  /* Renderer for html */
+  function descriptionRenderer(text) {
+    return Ext.util.Format.htmlEncode(text);
+  }
+
+  /* Renderer to show the task type in the grid */
+  function taskTypeRenderer(value) {
+    var record = taskTypeStore.getById(value);
+    if (record) {
+      return record.get('displayText');
+    }
+    return value;
+  }
+
+  filtersPanelItems = [
+    {
+      fieldLabel: 'User',
+      name: 'user',
+      xtype: 'combo',
+      allowBlank: false,
+      autoLoad: true,
+      typeAhead: true,
+      mode: 'local',
+      store: usersStore,
+      valueField: 'id',
+      displayField: 'login',
+      triggerAction: 'all',
+      forceSelection: true,
+      id: 'userLogin'
+    },
+    {
+      fieldLabel: 'Dates between',
+      name: 'start',
+      xtype: 'datefieldplus',
+      format: 'd/m/Y',
+      startDay: 1,
+      useQuickTips: false,
+      id: 'startDate',
+      listeners: {
+        change: function (field, newValue, oldValue) {
+          if (!field.isValid()) return;
+          var date = field.parseDate(newValue);
+          Ext.getCmp('endDate').setMinValue(date);
+        }
+      }
+    },
+    {
+      fieldLabel: 'and',
+      name: 'end',
+      xtype: 'datefieldplus',
+      format: 'd/m/Y',
+      startDay: 1,
+      useQuickTips: false,
+      id: 'endDate',
+      listeners: {
+        change: function (field, newValue, oldValue) {
+          if (!field.isValid()) return;
+          var date = field.parseDate(newValue);
+          Ext.getCmp('startDate').setMaxValue(date);
+        }
+      }
+    },
+    {
+      fieldLabel: 'Task description',
+      name: 'filterText',
+      xtype: 'combo',
+      id: 'filterText',
+      store: ['[empty]', '[not empty]'],
+      triggerAction: 'all',
+      forceSelection: false,
+      autoSelect: false
+    },
+    {
+      fieldLabel: 'Project',
+      name: 'project',
+      xtype: 'combo',
+      id: 'project',
+      store: projectsStore,
+      mode: 'local',
+      valueField: 'id',
+      typeAhead: false,
+      triggerAction: 'all',
+      displayField: 'description',
+      forceSelection: true,
+      tpl:
+        '<tpl for=".">' +
+        '<div class="x-combo-list-item" > <tpl>{description} </tpl>' +
+        '<tpl if="customerName">- {customerName}</tpl>' +
+        '</div>' +
+        '</tpl>',
+      listeners: {
+        select: function (combo, record, index) {
+          selectText = record.data['description'];
+
+          // We take customer name from the select combo, and injects its id to the taskRecord
+          if (record.data['customerName']) {
+            selectText = record.data['description'] + ' - ' + record.data['customerName'];
+          }
+
+          this.setValue(selectText);
+          combo.value = record.id;
+        }
+      }
+    },
+    {
+      fieldLabel: 'Customer',
+      name: 'customer',
+      xtype: 'combo',
+      id: 'customer',
+      store: customersStore,
+      mode: 'local',
+      valueField: 'id',
+      displayField: 'name',
+      typeAhead: true,
+      triggerAction: 'all',
+      displayField: 'name',
+      forceSelection: true
+    },
+    {
+      fieldLabel: 'Task type',
+      name: 'type',
+      xtype: 'combo',
+      id: 'type',
+      store: taskTypeStore,
+      mode: 'local',
+      valueField: 'value',
+      displayField: 'displayText',
+      typeAhead: true,
+      triggerAction: 'all',
+      forceSelection: true
+    },
+    {
+      fieldLabel: 'Telework',
+      name: 'telework',
+      xtype: 'combo',
+      id: 'telework',
+      mode: 'local',
+      triggerAction: 'all',
+      store: ['yes', 'no']
+    },
+    {
+      fieldLabel: 'Onsite',
+      name: 'onsite',
+      xtype: 'combo',
+      id: 'onsite',
+      mode: 'local',
+      triggerAction: 'all',
+      store: ['yes', 'no']
+    },
+    {
+      fieldLabel: 'Story',
+      name: 'filterStory',
+      xtype: 'combo',
+      id: 'filterStory',
+      store: ['[empty]', '[not empty]'],
+      triggerAction: 'all',
+      forceSelection: false,
+      autoSelect: false
+    }
+  ];
+
+  /* Panel containing all the search parameters */
+  var filtersPanel = new Ext.FormPanel({
+    labelWidth: 100,
+    frame: true,
+    width: 350,
+    renderTo: 'content',
+    defaults: { width: 230 },
+    items: filtersPanelItems,
+
+    buttons: [
+      {
+        text: 'Find tasks',
+        handler: findTasks
+      }
+    ],
+
+    keys: [
+      {
+        key: [Ext.EventObject.ENTER],
+        handler: findTasks
+      }
     ]
+  });
+  /* Allow listing of user tasks of other users only for an admin user */
+  if (admin == '') {
+    Ext.getCmp('userLogin').setDisabled(true);
+  }
 
-    /* Schema of the information about tasks */
-    var taskRecord = new Ext.data.Record.create(taskRecordColumns);
+  /* Handler to invoke the search service */
+  function findTasks() {
+    if (Ext.getCmp('userLogin').getRawValue() == '') {
+      App.setAlert(false, 'Check For Invalid Field Values');
+      return;
+    }
+    var baseParams = {
+      userId: Ext.getCmp('userLogin').getValue(),
+      dateFormat: 'm/d/Y'
+    };
 
-    /* Proxy to the services related with load/save Projects */
-    var proxy = new Ext.data.HttpProxy({
-        api: {
-            read: {url: 'services/getTasksFiltered.php', method: 'GET'},
-        },
-    });
-
-    /* Store object for the tasks */
-    var tasksStore = new Ext.data.Store({
-        id: 'tasksStore',
-        autoLoad: false,
-        autoSave: false,
-        storeId: 'tasks',
-        proxy: proxy,
-        reader: new Ext.data.XmlReader(
-                {record: 'task', idProperty:'id' }, taskRecord),
-        remoteSort: false,
-        sortInfo: {
-            field: 'date',
-            direction: 'ASC',
-        },
-    });
-
-    columnModelItems = [
-        {
-            header: 'Date',
-            xtype: 'datecolumn',
-            format: 'd/m/Y',
-            sortable: true,
-            dataIndex: 'date',
-        },{
-            header: 'Init time',
-            sortable: true,
-            dataIndex: 'initTime',
-        },{
-            header: 'End time',
-            sortable: true,
-            dataIndex: 'endTime',
-        },{
-            header: 'Hours',
-            sortable: true,
-            dataIndex: 'hours',
-        }, {
-            header: "Project",
-            sortable: true,
-            dataIndex: 'projectId',
-            renderer: projectRenderer,
-        },{
-            header: "Task type",
-            sortable: true,
-            dataIndex: 'ttype',
-            renderer: taskTypeRenderer,
-        },{
-            header: 'Telework',
-            sortable: true,
-            dataIndex: 'telework',
-            xtype: 'booleancolumn',
-            trueText: "<span style='color:green;'>Yes</span>",
-            falseText: "<span style='color:red;'>No</span>",
-        },{
-            header: 'Onsite',
-            sortable: true,
-            dataIndex: 'onsite',
-            xtype: 'booleancolumn',
-            trueText: "<span style='color:green;'>Yes</span>",
-            falseText: "<span style='color:red;'>No</span>",
-        },{
-            header: 'Description',
-            sortable: true,
-            dataIndex: 'text',
-            renderer: descriptionRenderer
-        },{
-            header: 'Story',
-            sortable: true,
-            dataIndex: 'story',
-        }
-    ]
-
-    var columnModel = new Ext.grid.ColumnModel(columnModelItems);
-
-    // setup the panel for the grid of tasks
-    var tasksGrid = new Ext.grid.GridPanel({
-        id: 'tasksGrid',
-        renderTo: 'content',
-        frame: true,
-        height: 500,
-        width: '100%',
-        iconCls: 'silk-book',
-        store: tasksStore,
-        frame: true,
-        title: 'Tasks',
-        style: 'margin-top: 10px',
-        renderTo: 'content',
-        loadMask: true,
-        stripeRows: true,
-        colModel: columnModel,
-        columnLines: true,
-        buttons: [{
-            text: 'Standard view',
-            handler: showStandardView,
-        },{
-            text: 'Extended view',
-            handler: showExtendedView,
-        }],
-        bbar: [{
-            xtype: 'button',
-            text: 'Download as CSV',
-            handler: function () {
-                urlParams = "format=csv&showProjectNames=true";
-                for (var parameter in tasksStore.baseParams) {
-                    urlParams += "&" + parameter + "=" +
-                        tasksStore.baseParams[parameter];
-                }
-                window.open("services/getTasksFiltered.php?" + urlParams);
-            }
-        }],
-    });
-
-    //function to show only a subset of columns and hide the others
-    function showStandardView() {
-        columnModel.setHidden(0, false);  //date
-        columnModel.setHidden(1, true);  //init
-        columnModel.setHidden(2, true);  //end
-        columnModel.setHidden(3, false);  //hours
-        columnModel.setHidden(4, false);  //project
-        columnModel.setHidden(5, true); //task type
-        columnModel.setHidden(6, true);   //telework
-        columnModel.setHidden(7, true);   //onsite
-        columnModel.setHidden(8, false);  //description
-        columnModel.setHidden(9, false);   //story
-        columnModel.setColumnWidth(0, 80);
-        columnModel.setColumnWidth(1, 55);
-        columnModel.setColumnWidth(2, 55);
-        columnModel.setColumnWidth(3, 55);
-        columnModel.setColumnWidth(4, 200);
-        columnModel.setColumnWidth(5, 120);
-        columnModel.setColumnWidth(8, 435);
-        columnModel.setColumnWidth(9, 120);
+    if (Ext.getCmp('startDate').getRawValue() != '') {
+      var date = Ext.getCmp('startDate').getValue();
+      baseParams.filterStartDate =
+        date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear();
+    }
+    if (Ext.getCmp('endDate').getRawValue() != '') {
+      var date = Ext.getCmp('endDate').getValue();
+      baseParams.filterEndDate =
+        date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear();
+    }
+    if (Ext.getCmp('filterText').getRawValue() != '') {
+      //this field is the selector for two different, incompatible
+      //parameters in the service
+      var value = Ext.getCmp('filterText').getValue();
+      if (value == '[empty]') {
+        baseParams.emptyText = true;
+      } else if (value == '[not empty]') {
+        baseParams.emptyText = false;
+      } else {
+        baseParams.filterText = value;
+      }
+    }
+    if (Ext.getCmp('project').getRawValue() != '') {
+      var value = Ext.getCmp('project').getValue();
+      baseParams.projectId = value;
+    }
+    if (Ext.getCmp('customer').getRawValue() != '') {
+      var value = Ext.getCmp('customer').getValue();
+      baseParams.customerId = value;
+    }
+    if (Ext.getCmp('type').getRawValue() != '') {
+      var value = Ext.getCmp('type').getValue();
+      baseParams.type = value;
+    }
+    if (Ext.getCmp('filterStory').getRawValue() != '') {
+      //this field is the selector for two different, incompatible
+      //parameters in the service
+      var value = Ext.getCmp('filterStory').getValue();
+      if (value == '[empty]') {
+        baseParams.emptyStory = true;
+      } else if (value == '[not empty]') {
+        baseParams.emptyStory = false;
+      } else {
+        baseParams.filterStory = value;
+      }
+    }
+    if (Ext.getCmp('telework').getRawValue() != '') {
+      var value = Ext.getCmp('telework').getValue();
+      baseParams.telework = value == 'yes' ? true : false;
+    }
+    if (Ext.getCmp('onsite').getRawValue() != '') {
+      var value = Ext.getCmp('onsite').getValue();
+      baseParams.onsite = value == 'yes' ? true : false;
     }
 
-    //function to show all the columns
-    function showExtendedView() {
-        columnModel.setHidden(0, false);  //date
-        columnModel.setHidden(1, false);  //init
-        columnModel.setHidden(2, false);  //end
-        columnModel.setHidden(3, false);  //hours
-        columnModel.setHidden(4, false);  //project
-        columnModel.setHidden(5, false); //task type
-        columnModel.setHidden(6, false);   //telework
-        columnModel.setHidden(7, false);   //onsite
-        columnModel.setHidden(8, false);  //description
-        columnModel.setHidden(9, false);   //story
-        columnModel.setColumnWidth(0, 80);
-        columnModel.setColumnWidth(1, 55);
-        columnModel.setColumnWidth(2, 55);
-        columnModel.setColumnWidth(3, 55);
-        columnModel.setColumnWidth(4, 200);
-        columnModel.setColumnWidth(5, 100);
-        columnModel.setColumnWidth(6, 80);
-        columnModel.setColumnWidth(7, 50);
-        columnModel.setColumnWidth(8, 435);
-        columnModel.setColumnWidth(9, 100);
+    tasksStore.baseParams = baseParams;
+    tasksStore.load();
+  }
+
+  taskRecordColumns = [
+    { name: 'id' },
+    { name: 'date' },
+    { name: 'initTime' },
+    { name: 'endTime' },
+    { name: 'hours' },
+    { name: 'story' },
+    { name: 'telework' },
+    { name: 'onsite' },
+    { name: 'ttype' },
+    { name: 'text' },
+    { name: 'phase' },
+    { name: 'userId' },
+    { name: 'projectId' }
+  ];
+
+  /* Schema of the information about tasks */
+  var taskRecord = new Ext.data.Record.create(taskRecordColumns);
+
+  /* Proxy to the services related with load/save Projects */
+  var proxy = new Ext.data.HttpProxy({
+    api: {
+      read: { url: 'services/getTasksFiltered.php', method: 'GET' }
     }
+  });
 
-    //hide the advanced columns
-    showStandardView();
+  function getMinutes(time) {
+    const hours = Number(time.split(':')[0]);
+    const minutes = Number(time.split(':')[1]);
+    return hours * 60 + minutes;
+  }
+  let taskHoursTotalDisplay = '';
+  /* Store object for the tasks */
+  var tasksStore = new Ext.data.Store({
+    id: 'tasksStore',
+    autoLoad: false,
+    autoSave: false,
+    storeId: 'tasks',
+    proxy: proxy,
+    reader: new Ext.data.XmlReader({ record: 'task', idProperty: 'id' }, taskRecord),
+    remoteSort: false,
+    sortInfo: {
+      field: 'date',
+      direction: 'ASC'
+    },
+    listeners: {
+      load: function (store, records, options) {
+        let total = 0;
+        records.forEach((task) => {
+          let minutes = getMinutes(task.data.hours);
+          total += minutes;
+        });
+        let totalString = (total / 60).toFixed(2).toString();
+        taskHoursTotalDisplay = totalString;
+        document.getElementsByClassName('exportable-footer')[0].innerHTML =
+          `Total hours: ${taskHoursTotalDisplay}`;
+      }
+    }
+  });
 
-    Ext.getCmp("startDate").focus();
+  columnModelItems = [
+    {
+      header: 'Date',
+      xtype: 'datecolumn',
+      format: 'd/m/Y',
+      sortable: true,
+      dataIndex: 'date'
+    },
+    {
+      header: 'Init time',
+      sortable: true,
+      dataIndex: 'initTime'
+    },
+    {
+      header: 'End time',
+      sortable: true,
+      dataIndex: 'endTime'
+    },
+    {
+      header: 'Hours',
+      sortable: true,
+      dataIndex: 'hours'
+    },
+    {
+      header: 'Project',
+      sortable: true,
+      dataIndex: 'projectId',
+      renderer: projectRenderer
+    },
+    {
+      header: 'Task type',
+      sortable: true,
+      dataIndex: 'ttype',
+      renderer: taskTypeRenderer
+    },
+    {
+      header: 'Telework',
+      sortable: true,
+      dataIndex: 'telework',
+      xtype: 'booleancolumn',
+      trueText: "<span style='color:green;'>Yes</span>",
+      falseText: "<span style='color:red;'>No</span>"
+    },
+    {
+      header: 'Onsite',
+      sortable: true,
+      dataIndex: 'onsite',
+      xtype: 'booleancolumn',
+      trueText: "<span style='color:green;'>Yes</span>",
+      falseText: "<span style='color:red;'>No</span>"
+    },
+    {
+      header: 'Description',
+      sortable: true,
+      dataIndex: 'text',
+      renderer: descriptionRenderer
+    },
+    {
+      header: 'Story',
+      sortable: true,
+      dataIndex: 'story'
+    }
+  ];
+
+  var columnModel = new Ext.grid.ColumnModel(columnModelItems);
+
+  // setup the panel for the grid of tasks
+  var tasksGrid = new Ext.ux.ExportableGridPanel({
+    id: 'tasksGrid',
+    renderTo: 'content',
+    frame: true,
+    height: 500,
+    width: '100%',
+    iconCls: 'silk-book',
+    store: tasksStore,
+    frame: true,
+    title: 'Tasks',
+    style: 'margin-top: 10px',
+    renderTo: 'content',
+    loadMask: true,
+    stripeRows: true,
+    colModel: columnModel,
+    columnLines: true,
+    buttons: [
+      {
+        text: 'Standard view',
+        handler: showStandardView
+      },
+      {
+        text: 'Extended view',
+        handler: showExtendedView
+      }
+    ],
+    footerStyle: 'color: #15428b; font-size: 12px; font-weight: bold; padding-left: 4px'
+  });
+
+  //function to show only a subset of columns and hide the others
+  function showStandardView() {
+    columnModel.setHidden(0, false); //date
+    columnModel.setHidden(1, true); //init
+    columnModel.setHidden(2, true); //end
+    columnModel.setHidden(3, false); //hours
+    columnModel.setHidden(4, false); //project
+    columnModel.setHidden(5, true); //task type
+    columnModel.setHidden(6, true); //telework
+    columnModel.setHidden(7, true); //onsite
+    columnModel.setHidden(8, false); //description
+    columnModel.setHidden(9, false); //story
+    columnModel.setColumnWidth(0, 80);
+    columnModel.setColumnWidth(1, 55);
+    columnModel.setColumnWidth(2, 55);
+    columnModel.setColumnWidth(3, 55);
+    columnModel.setColumnWidth(4, 200);
+    columnModel.setColumnWidth(5, 120);
+    columnModel.setColumnWidth(8, 435);
+    columnModel.setColumnWidth(9, 120);
+  }
+
+  //function to show all the columns
+  function showExtendedView() {
+    columnModel.setHidden(0, false); //date
+    columnModel.setHidden(1, false); //init
+    columnModel.setHidden(2, false); //end
+    columnModel.setHidden(3, false); //hours
+    columnModel.setHidden(4, false); //project
+    columnModel.setHidden(5, false); //task type
+    columnModel.setHidden(6, false); //telework
+    columnModel.setHidden(7, false); //onsite
+    columnModel.setHidden(8, false); //description
+    columnModel.setHidden(9, false); //story
+    columnModel.setColumnWidth(0, 80);
+    columnModel.setColumnWidth(1, 55);
+    columnModel.setColumnWidth(2, 55);
+    columnModel.setColumnWidth(3, 55);
+    columnModel.setColumnWidth(4, 200);
+    columnModel.setColumnWidth(5, 100);
+    columnModel.setColumnWidth(6, 80);
+    columnModel.setColumnWidth(7, 50);
+    columnModel.setColumnWidth(8, 435);
+    columnModel.setColumnWidth(9, 100);
+  }
+
+  //hide the advanced columns
+  showStandardView();
+
+  Ext.getCmp('startDate').focus();
 });

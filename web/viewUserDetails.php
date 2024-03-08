@@ -18,19 +18,19 @@
  * along with PhpReport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-    define('PHPREPORT_ROOT', __DIR__ . '/../');
+define('PHPREPORT_ROOT', __DIR__ . '/../');
 
-    /* We check authentication and authorization */
-    require_once(PHPREPORT_ROOT . '/web/auth.php');
+/* We check authentication and authorization */
+require_once(PHPREPORT_ROOT . '/web/auth.php');
 
-    /* Include the generic header and sidebar*/
-    define('PAGE_TITLE', "PhpReport - User Details");
-    include_once("include/header.php");
-    include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
-    include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
-    include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
+/* Include the generic header and sidebar*/
+define('PAGE_TITLE', "PhpReport - User Details");
+include_once("include/header.php");
+include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
+include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
+include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 
-    $userToShow = $_SESSION['user'];
+$userToShow = $_SESSION['user'];
 
 ?>
 <script src="js/include/DateIntervalForm.js"></script>
@@ -160,14 +160,16 @@
           }
         });
 
+        let taskHoursTotalDisplay = '';
+
         var grid = new Ext.ux.DynamicGridPanel({
             id: 'my-grid',
             storeUrl: 'services/getUserProjectCustomerReportJsonService.php?<?php
 
-                if ($sid!="")
-                    echo "&sid=" . $sid;
+            if ($sid != "")
+                echo "&sid=" . $sid;
 
-                echo "&uid=" . $userToShow->getId(); ?>',
+            echo "&uid=" . $userToShow->getId(); ?>',
 
             rowNumberer: false,
             checkboxSelModel: false,
@@ -176,10 +178,19 @@
             frame: false,
             title: 'User Project Worked Hours Report',
             iconCls: 'icon-grid',
+            footerStyle: 'color: #15428b; font-size: 12px; font-weight: bold; padding-left: 4px'
         });
 
 
             grid.store.on('load', function(){
+                let total = 0;
+                grid.store.data.items.forEach((task) => {
+                    total += task.data.total;
+                });
+                let totalString = (total).toFixed(2).toString();
+                taskHoursTotalDisplay = totalString;
+                document.getElementsByClassName('exportable-footer')[0].innerHTML =
+                `Total hours: ${taskHoursTotalDisplay}`;
               /**
                * Thats the magic!
                *
@@ -198,6 +209,7 @@
                 Ext.each(grid.store.reader.jsonData.columns, function(column){
                   columns.push(column);
                 });
+
 
               /**
                * Setting column model configuration
@@ -219,8 +231,8 @@
 
                 grid.store.proxy.conn.url= 'services/getUserProjectCustomerReportJsonService.php?<?php
 
-                    if ($sid!="")
-                        echo "&sid=" . $sid;?>' + '&uid=' + Ext.getCmp('userLogin').getValue()
+                if ($sid != "")
+                    echo "&sid=" . $sid; ?>' + '&uid=' + Ext.getCmp('userLogin').getValue()
 
                 + '&init=' + init.getFullYear() + "-" + (init.getMonth()+1) + "-" + init.getDate()  + "&end=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
 
@@ -246,3 +258,4 @@
 /* Include the footer to close the header */
 include("include/footer.php");
 ?>
+

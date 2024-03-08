@@ -24,29 +24,33 @@
  * @param columnModel with column data.
  * @return string in CSV format.
  */
-function fromStoreToCSV(store, columnModel) {
-    var csv = "";
+function fromStoreToCSV(store, columnModel, totalRow = null) {
+  var csv = '';
 
-    var columns = columnModel.getColumnsBy(function (c) {
-        return !c.hidden;
+  var columns = columnModel.getColumnsBy(function (c) {
+    return !c.hidden;
+  });
+
+  // header with column names
+  Ext.each(columns, function (column) {
+    csv += column.header + ',';
+  });
+  csv += '\n';
+
+  // data
+  store.each(function (record) {
+    Ext.each(columns, function (column) {
+      var item = store.fields.get(column.dataIndex);
+      csv += record.data[item.name] + ',';
     });
+    csv += '\n';
+  });
 
-    // header with column names
-    Ext.each(columns, function(column) {
-        csv += column.header + ",";
-    });
-    csv += "\n";
+  if (totalRow) {
+    csv += `\n\n ${totalRow}`;
+  }
 
-    // data
-    store.each(function (record) {
-        Ext.each(columns, function(column) {
-            var item = store.fields.get(column.dataIndex);
-            csv += record.data[item.name] + ",";
-        });
-        csv += "\n";
-    });
-
-    return csv;
+  return csv;
 }
 
 /**
@@ -56,29 +60,37 @@ function fromStoreToCSV(store, columnModel) {
  * @extends Ext.GridPanel
  */
 Ext.ux.ExportableGridPanel = Ext.extend(Ext.grid.GridPanel, {
+  initComponent: function () {
+    Ext.apply(this, {
+      bbar: [
+        {
+          xtype: 'button',
+          text: 'Download as CSV',
+          handler: function () {
+            //FIXME there must be a better way to get the grid
+            var gridComponent = this.ownerCt.ownerCt;
+            const linkSource = `data:text/csv;charset=UTF-8,${encodeURIComponent(
+              fromStoreToCSV(
+                gridComponent.getStore(),
+                gridComponent.getColumnModel(),
+                gridComponent.footer.dom.innerHTML
+              )
+            )}`;
+            const downloadLink = document.createElement('a');
+            downloadLink.href = linkSource;
+            downloadLink.download = `${this.ownerCt.ownerCt.title.replace(/ /g, '')}.csv`;
+            downloadLink.click();
+          }
+        }
+      ],
+      footerCfg: {
+        tag: 'span',
+        cls: 'exportable-footer x-toolbar x-small-editor x-toolbar-layout-ct',
+        html: ''
+      }
+    });
 
-    initComponent: function () {
-        Ext.apply(this, {
-            bbar: [
-                {
-                    xtype: 'button',
-                    text: 'Download as CSV',
-                    handler: function () {
-                        //FIXME there must be a better way to get the grid
-                        var gridComponent = this.ownerCt.ownerCt;
-                        const linkSource = `data:text/csv;charset=UTF-8,${encodeURIComponent(
-                            fromStoreToCSV(gridComponent.getStore(), gridComponent.getColumnModel()))}`;
-                        const downloadLink = document.createElement("a");
-                        downloadLink.href = linkSource;
-                        downloadLink.download = `${this.ownerCt.ownerCt.title.replace(/ /g, '')}.csv`;
-                        downloadLink.click();
-                    }
-                },
-            ],
-        });
-
-        /* call the superclass to preserve base class functionality */
-        Ext.ux.ExportableGridPanel.superclass.initComponent.apply(this, arguments);
-    },
-
+    /* call the superclass to preserve base class functionality */
+    Ext.ux.ExportableGridPanel.superclass.initComponent.apply(this, arguments);
+  }
 });
