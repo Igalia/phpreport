@@ -22,7 +22,8 @@ namespace Phpreport\Web\services;
 
 use Phpreport\Model\facade;
 
-if (!defined('PHPREPORT_ROOT')) define('PHPREPORT_ROOT', __DIR__ . '/../../');
+if (!defined('PHPREPORT_ROOT'))
+    define('PHPREPORT_ROOT', __DIR__ . '/../../');
 
 include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
@@ -31,8 +32,7 @@ include_once(PHPREPORT_ROOT . '/model/facade/UsersFacade.php');
 include_once(PHPREPORT_ROOT . '/model/vo/UserVO.php');
 require_once(PHPREPORT_ROOT . '/util/LoginManager.php');
 
-class HolidayService
-{
+class HolidayService {
     private \LoginManager $loginManager;
     private string $sid;
 
@@ -44,9 +44,9 @@ class HolidayService
         $this->sid = $sid;
     }
 
-    function isWeekend(string $date): bool
+    function isWeekend(string $date) : bool
     {
-        return (date('N', strtotime($date)) >= 6);
+        return(date('N', strtotime($date)) >= 6);
     }
 
     /** Group dates into date ranges
@@ -78,7 +78,7 @@ class HolidayService
      *    ]
      * ]
      */
-    public function datesToRanges(array $vacations): array
+    public function datesToRanges(array $vacations) : array
     {
         if (count($vacations) == 0) {
             return [];
@@ -113,7 +113,7 @@ class HolidayService
     /**
      * Function used to pretty print time. From hours to Days d hours:minutes
      */
-    static function formatHours(float $time, float $journey, int $limit): string
+    static function formatHours(float $time, float $journey, int $limit) : string
     {
         $negative = ($time < 0);
         $work_days = false;
@@ -153,11 +153,11 @@ class HolidayService
         return $formatedHours;
     }
 
-    static function getWeeksFromYear($year = NULL): array
+    static function getWeeksFromYear($year = NULL) : array
     {
         $weeks = [];
         $year = $year ?? date('Y');
-        $first_week = (int)date('W', mktime(0, 0, 0, 1, 1, $year));
+        $first_week = (int) date('W', mktime(0, 0, 0, 1, 1, $year));
         $last_week = (int) date('W', mktime(0, 0, 0, 12, 31, $year));
         if ($first_week == 52 || $first_week == 53) {
             $weeks[($year - 1) . "W" . $first_week] = 0;
@@ -177,9 +177,10 @@ class HolidayService
         return $weeks;
     }
 
-    static function groupByWeeks(array $leavesDetails, $weeks = []): array
+    static function groupByWeeks(array $leavesDetails, $weeks = []) : array
     {
-        if (count($leavesDetails) == 0) return [];
+        if (count($leavesDetails) == 0)
+            return [];
         $dates = array_keys($leavesDetails);
         $previous_week = date("o\WW", strtotime($dates[0]));
         $weeks[$previous_week] = $leavesDetails[$dates[0]]['amount'] ?? 1;
@@ -196,13 +197,17 @@ class HolidayService
         return $weeks;
     }
 
-    static function mapHalfLeaves($dates, array $journeyHistories): array
+    static function mapHalfLeaves($dates, array $journeyHistories) : array
     {
         foreach ($dates as $day => $duration) {
-            $validJourney = array_filter($journeyHistories, fn ($history) => $history->dateBelongsToHistory(
-                date_create($day)
-            ));
-            if (count($validJourney) == 0) continue;
+            $validJourney = array_filter(
+                $journeyHistories,
+                fn($history) => $history->dateBelongsToHistory(
+                    date_create($day)
+                )
+            );
+            if (count($validJourney) == 0)
+                continue;
             $validJourney = array_pop($validJourney);
             if (($validJourney->getJourney() * 60) > ($duration['end'] - $duration['init'])) {
                 $dates[$day]['isPartialLeave'] = True;
@@ -212,7 +217,7 @@ class HolidayService
         return $dates;
     }
 
-    static function getDaysBetweenDates(string $init, string $end): array
+    static function getDaysBetweenDates(string $init, string $end) : array
     {
         $begin = new \DateTime($init);
         $end = new \DateTime($end);
@@ -229,7 +234,7 @@ class HolidayService
         return $dates;
     }
 
-    public function getUserVacationsRanges(string $init = NULL, string $end = NULL, $sid = NULL, $userLogin = NULL): array
+    public function getUserVacationsRanges(string $init = NULL, string $end = NULL, $sid = NULL, $userLogin = NULL) : array
     {
         if (!$this->loginManager::isLogged($sid)) {
             return ['error' => 'User not logged in'];
@@ -257,12 +262,12 @@ class HolidayService
         ];
     }
 
-    public function deleteVacations(array $daysToDelete, \UserVO $userVO, int $holidayProjectId): array
+    public function deleteVacations(array $daysToDelete, \UserVO $userVO, int $holidayProjectId) : array
     {
         $failed = [];
         foreach ($daysToDelete as &$day) {
             $tasks = \TasksFacade::GetUserTasksByLoginDate($userVO, new \DateTime($day));
-            $holidayTasks = array_filter($tasks, fn ($task) => $task->getProjectId() == $holidayProjectId);
+            $holidayTasks = array_filter($tasks, fn($task) => $task->getProjectId() == $holidayProjectId);
             if (\TasksFacade::DeleteReports($holidayTasks) == -1)
                 $failed[] = $day;
         }
@@ -273,17 +278,21 @@ class HolidayService
         ];
     }
 
-    public function createVacations(array $daysToCreate, \UserVO $userVO, int $holidayProjectId, string $description = ''): array
+    public function createVacations(array $daysToCreate, \UserVO $userVO, int $holidayProjectId, string $description = '') : array
     {
         $journeyHistories = \UsersFacade::GetUserJourneyHistories($userVO->getLogin());
         $failed = [];
         foreach ($daysToCreate as &$day) {
-            if ($this->isWeekend($day)) continue;
+            if ($this->isWeekend($day))
+                continue;
 
             $currentDay = date_create($day);
-            $validJourney = array_filter($journeyHistories, fn ($history) =>  $history->dateBelongsToHistory(
-                $currentDay
-            ));
+            $validJourney = array_filter(
+                $journeyHistories,
+                fn($history) => $history->dateBelongsToHistory(
+                    $currentDay
+                )
+            );
             if (count($validJourney) != 1) {
                 $failed[] = $day;
                 continue;
@@ -309,7 +318,7 @@ class HolidayService
         ];
     }
 
-    public function updateUserVacations(array $vacations, string $init, string $end): array
+    public function updateUserVacations(array $vacations, string $init, string $end) : array
     {
         if (!$this->loginManager::isLogged()) {
             return ['error' => 'User not logged in'];
@@ -327,11 +336,13 @@ class HolidayService
         $userVO->setLogin($_SESSION['user']->getLogin());
         $userVO->setId($_SESSION['user']->getId());
 
-        $existingVacations = array_keys(\UsersFacade::GetScheduledHolidays(
-            date_create($init),
-            date_create($end),
-            $userVO
-        ));
+        $existingVacations = array_keys(
+            \UsersFacade::GetScheduledHolidays(
+                date_create($init),
+                date_create($end),
+                $userVO
+            )
+        );
         $holidayProjectId = \TasksFacade::GetVacationsProjectId();
         $daysToDelete = array_diff($existingVacations, $vacations);
         $resultDeleted = $this->deleteVacations($daysToDelete, $userVO, $holidayProjectId);
@@ -346,7 +357,7 @@ class HolidayService
         ];
     }
 
-    public function updateLongLeaves(string $init, string $end, string $user, string $projectId, string $description = ''): array
+    public function updateLongLeaves(string $init, string $end, string $user, string $projectId, string $description = '') : array
     {
         if (!$this->loginManager::isLogged($this->sid)) {
             return ['error' => 'User not logged in'];
@@ -390,7 +401,7 @@ class HolidayService
         return ['message' => 'Calendar synced'];
     }
 
-    public function retrieveHolidaysSummary(string $year = NULL): array
+    public function retrieveHolidaysSummary(string $year = NULL) : array
     {
         if (!$this->loginManager::isLogged()) {
             return ['error' => 'User not logged in'];
@@ -406,6 +417,13 @@ class HolidayService
 
         $users = \UsersFacade::GetAllActiveUsers($filterEmployees = true);
         $weeks = $this::getWeeksFromYear($year);
+        $weeksStartDays = [];
+        foreach (array_keys($weeks) as $week) {
+            $yearOfWeek = explode('W', $week)[0];
+            $weekNumber = explode('W', $week)[1];
+            $weekStartDate = date('M d', strtotime($yearOfWeek . '-W' . $weekNumber . '-1'));
+            $weeksStartDays[] = array("week" => $yearOfWeek . "W" . $weekNumber, "weekStartDate" => $weekStartDate);
+        }
         $holidays = [];
         foreach ($users as &$user) {
             $holidays[$user->getLogin()] = \UsersFacade::GetHolidaySummaryReport(
@@ -420,7 +438,8 @@ class HolidayService
         asort($holidays);
         return [
             "holidays" => $holidays,
-            "weeks" => $weeks
+            "weeks" => $weeks,
+            "weeksStartDays" => $weeksStartDays
         ];
     }
 }

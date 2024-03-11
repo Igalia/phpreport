@@ -66,7 +66,7 @@ include_once("include/header.php");
                 <th>Scheduled (hours)</th>
                 <th>Pending (hours)</th>
                 <th>% planned</th>
-                <th v-for="week in weeks" :key="week">{{week}}</th>
+                <th v-for="week in weeks" :key="week">{{ weeksStartDays.find(x => x.week == week)?.weekStartDate }}<br> {{week}}</th>
             </thead>
             <tbody>
                 <tr v-for="row in displayData" :key="row.user">
@@ -94,3 +94,4 @@ include_once("include/header.php");
 <?php
 include("include/footer.php");
 ?>
+
