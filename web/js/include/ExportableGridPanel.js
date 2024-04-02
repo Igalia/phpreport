@@ -46,9 +46,9 @@ function fromStoreToCSV(store, columnModel, totalRow = null) {
     csv += '\n';
   });
 
-  if (totalRow) {
-    csv += `\n\n ${totalRow}`;
-  }
+  // if (totalRow) {
+  //   csv += `\n\n ${totalRow}`;
+  // }
 
   return csv;
 }
