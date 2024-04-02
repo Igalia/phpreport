@@ -521,7 +521,7 @@ Ext.onReady(function () {
   var columnModel = new Ext.grid.ColumnModel(columnModelItems);
 
   // setup the panel for the grid of tasks
-  var tasksGrid = new Ext.ux.ExportableGridPanel({
+  var tasksGrid = new Ext.grid.GridPanel({
     id: 'tasksGrid',
     renderTo: 'content',
     frame: true,
@@ -537,17 +537,37 @@ Ext.onReady(function () {
     stripeRows: true,
     colModel: columnModel,
     columnLines: true,
-    buttons: [
+    bbar: [
       {
-        text: 'Standard view',
+        xtype: 'button',
+        text: 'Download as CSV',
+        handler: function () {
+          urlParams = 'format=csv&showProjectNames=true';
+          for (var parameter in tasksStore.baseParams) {
+            urlParams += '&' + parameter + '=' + tasksStore.baseParams[parameter];
+          }
+          window.open('services/getTasksFiltered.php?' + urlParams);
+        }
+      },
+      {
+        xtype: 'button',
+        text: 'Standard View',
         handler: showStandardView
       },
       {
-        text: 'Extended view',
+        xtype: 'button',
+        text: 'Extended View',
         handler: showExtendedView
       }
     ],
-    footerStyle: 'color: #15428b; font-size: 12px; font-weight: bold; padding-left: 4px'
+    bbarCfg: {
+      cls: 'button-bar'
+    },
+    footerCfg: {
+      tag: 'div',
+      cls: 'exportable-footer'
+    },
+    footerStyle: 'color: #15428b; font-size: 12px; font-weight: bold; padding: 4px;'
   });
 
   //function to show only a subset of columns and hide the others
