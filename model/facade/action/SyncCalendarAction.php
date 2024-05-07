@@ -69,7 +69,8 @@ class SyncCalendarAction extends Action
         }
 
         foreach ($this->datesRanges as $range) {
-            if (!is_array($range) || !isset($range['start']) || $range['start'] < $startSyncPeriod) continue;
+            if (!is_array($range) || !isset($range['start']) || gmdate("Ymd\THis\Z", strtotime($range['start'])) < $startSyncPeriod)
+                continue;
 
             $start = str_replace("-", "", $range['start']);
             $end = str_replace("-", "", $range['end']);
