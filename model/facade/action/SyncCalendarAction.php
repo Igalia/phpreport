@@ -59,7 +59,7 @@ class SyncCalendarAction extends Action
 
         $nextYear = date("Y") + 1;
 
-        $startSyncPeriod = gmdate("Ymd\THis\Z", date(strtotime("-3 months")));
+        $startSyncPeriod = gmdate("Ymd\THis\Z", date(strtotime("-1 months")));
         $endSyncPeriod = gmdate("Ymd\THis\Z", strtotime($nextYear . "-12-31"));
         $currentEvents = $client->getEvents($startSyncPeriod, $endSyncPeriod);
         foreach ($currentEvents as $event) {
