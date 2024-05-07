@@ -94,7 +94,7 @@ class GetHolidaySummaryReportAction extends GetHolidayHoursBaseAction
             'usedHours' => round($usedHours, 2),
             'pendingHours' => round($summary['pendingHours'][$this->user->getLogin()], 2),
             'scheduledHours' => round($summary['scheduledHours'][$this->user->getLogin()] - $usedHours, 2),
-            'percentage' =>  $summary['availableHours'][$this->user->getLogin()] ? round(($summary['usedHours'][$this->user->getLogin()] / $summary['availableHours'][$this->user->getLogin()]) * 100, 2) : 0,
+            'percentage' =>  $summary['availableHours'][$this->user->getLogin()] ? round(($usedHours / $summary['availableHours'][$this->user->getLogin()]) * 100, 2) : 0,
             'hoursDay' => $validJourney,
             'holidays' => $leaves,
         ];
