@@ -23,18 +23,18 @@ define('PHPREPORT_ROOT', __DIR__ . '/../');
 $sid = $_GET["sid"] ?? NULL;
 
 /* We check authentication and authorization */
-require_once(PHPREPORT_ROOT . '/web/auth.php');
+require_once (PHPREPORT_ROOT . '/web/auth.php');
 
 /* Include the generic header and sidebar*/
 define('PAGE_TITLE', "PhpReport - Projects Evaluation");
-include_once("include/header.php");
-include_once(PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
-include_once(PHPREPORT_ROOT . '/util/UnknownParameterException.php');
-include_once(PHPREPORT_ROOT . '/util/LoginManager.php');
-include_once(PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
-include_once(PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
-include_once(PHPREPORT_ROOT . '/model/facade/AdminFacade.php');
-include_once(PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
+include_once ("include/header.php");
+include_once (PHPREPORT_ROOT . '/util/ConfigurationParametersManager.php');
+include_once (PHPREPORT_ROOT . '/util/UnknownParameterException.php');
+include_once (PHPREPORT_ROOT . '/util/LoginManager.php');
+include_once (PHPREPORT_ROOT . '/model/vo/ProjectVO.php');
+include_once (PHPREPORT_ROOT . '/model/facade/ProjectsFacade.php');
+include_once (PHPREPORT_ROOT . '/model/facade/AdminFacade.php');
+include_once (PHPREPORT_ROOT . '/web/services/WebServicesFunctions.php');
 
 // We retrieve the Areas
 $areas = AdminFacade::GetAllAreas();
@@ -44,10 +44,10 @@ $areas = AdminFacade::GetAllAreas();
 <script>
 
 Ext.onReady(function(){
+    let taskHoursTotalDisplayGrid1 = '';
+    <?php if ($sid) { ?>
 
-    <?php if ($sid) {?>
-
-    var sessionId = <?php echo $sid;?>;
+                                var sessionId = <?php echo $sid; ?>;
 
     <?php } ?>
 
@@ -57,7 +57,7 @@ Ext.onReady(function(){
         data : [
         <?php
 
-        foreach((array)$areas as $area) {
+        foreach ((array) $areas as $area) {
             $areaName = json_encode($area->getName());
             echo "[{$area->getId()}, {$areaName}],";
         }
@@ -105,8 +105,8 @@ Ext.onReady(function(){
 
     function loadProjects() {
         var baseParams = {
-            <?php if ($sid) {?>
-                'sid': sessionId,
+            <?php if ($sid) { ?>
+                                            'sid': sessionId,
             <?php } ?>
         };
         baseParams.returnExtendedInfo = true;
@@ -283,6 +283,17 @@ Ext.onReady(function(){
             field: 'init',
             direction: 'DESC',
         },
+        listeners: {
+            load: function (store, records, options) {
+                let total = 0;
+                records.forEach((item) => {
+                total += item.data.workedHours;
+                });
+                taskHoursTotalDisplay = total.toFixed(2).toString();
+                document.getElementsByClassName('exportable-footer')[0].innerHTML =
+                `Total worked hours: ${taskHoursTotalDisplay}`;
+            }
+        }
     });
 
     var projectColModel =  new Ext.grid.ColumnModel([
@@ -417,7 +428,12 @@ Ext.onReady(function(){
             disabled: true,
             iconCls: 'silk-book-go',
             handler: onDetails
-        }]
+        }],
+        footerCfg: {
+            tag: 'div',
+            cls: 'exportable-footer'
+        },
+        footerStyle: 'color: #15428b; font-size: 12px; font-weight: bold; padding: 4px;'
     });
 
     // event handler for double-click on a project
@@ -528,5 +544,6 @@ Ext.onReady(function(){
 <div id="variables"/>
 <?php
 /* Include the footer to close the header */
-include("include/footer.php");
+include ("include/footer.php");
 ?>
+
