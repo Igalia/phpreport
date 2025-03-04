@@ -86,7 +86,9 @@ class PostgreSQLProjectDAO extends ProjectDAO {
 
         $projectVO->setInvoice($row['invoice']);
         $projectVO->setEstHours($row['est_hours']);
+        if (isset($row['areaid'])) {
         $projectVO->setAreaId($row['areaid']);
+        }
         $projectVO->setType($row['type']);
         $projectVO->setDescription($row['description']);
         $projectVO->setMovedHours($row['moved_hours']);
@@ -225,7 +227,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
             "WHERE project.id= {$projectId} ".
             "GROUP BY project.id, project.description, project.activation, ".
                 "project.init, project._end, project.invoice, ".
-                "project.est_hours, project.areaid, project.description, ".
+                "project.est_hours, project.description, ".
                 "project.type, project.moved_hours, project.sched_type, ".
                 "project.customerid, customer.name";
         $result = $this->customExecute($sql);
@@ -384,7 +386,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
             $conditions .= " AND project.activation = " . $activation;
         }
         if ($areaId != null) {
-            $conditions .= " AND project.areaid = $areaId";
+            $conditions .= " AND project_area.area_id = $areaId";
         }
         if ($type != null) {
             $conditions .= " AND project.type = '$type'";
@@ -399,26 +401,29 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         }
 
         if ($returnExtendedInfo) {
-            $sql = "SELECT project.*, customer.name AS customer_name,
+            $sql = "SELECT project.*, area.id AS areaid, customer.name AS customer_name,
                 SUM((task._end-task.init)/60.0) AS worked_hours,
                 SUM(((task._end-task.init)/60.0) * hour_cost) AS total_cost
                 FROM project
                 LEFT JOIN customer ON project.customerid=customer.id
                 LEFT JOIN task ON project.id = task.projectid
                 LEFT JOIN hour_cost_history ON hour_cost_history.usrid = task.usrid
+                LEFT JOIN project_area ON project.id = project_area.project_id
+                LEFT JOIN area ON project_area.area_id = area.id
                 AND task._date >= hour_cost_history.init_date
                 AND task._date <= hour_cost_history.end_date
                 WHERE $conditions AND $activeCondition AND $userCondition
                 GROUP BY project.id, project.description, project.activation,
                 project.init, project._end, project.invoice, project.est_hours,
-                project.areaid, project.description, project.type,
-                project.moved_hours, project.sched_type, project.customerid, customer_name
+                project.description, project.type,
+                project.moved_hours, project.sched_type, project.customerid, customer_name, area.id
                 ORDER BY " . $orderField . " ASC";
             $result = $this->customExecute($sql);
         } else {
-            $sql = "SELECT project.*, customer.name AS customer_name FROM
+            $sql = "SELECT project.*, project_area.area_id AS areaid, customer.name AS customer_name FROM
                     project LEFT JOIN customer
                     ON project.customerid=customer.id
+                    LEFT JOIN project_area ON project_area.project_id = project.id
                     WHERE " . $activeCondition . " AND " . $userCondition . " AND " . $conditions . "
                     ORDER BY $orderField ASC";
             $result = $this->execute($sql);
@@ -441,7 +446,7 @@ class PostgreSQLProjectDAO extends ProjectDAO {
         $sql = "SELECT project.*, SUM((task._end-task.init)/60.0) AS worked_hours, SUM(((task._end-task.init)/60.0) * hour_cost) AS total_cost FROM project LEFT JOIN task ON project.id = task.projectid LEFT JOIN hour_cost_history ON hour_cost_history.usrid = task.usrid AND task._date >= hour_cost_history.init_date AND task._date <= hour_cost_history.end_date ";
         if ($active)
             $sql = $sql . " WHERE project.activation= 'True'";
-        $sql = $sql . " GROUP BY project.id, project.description, project.activation, project.init, project._end, project.invoice, project.est_hours, project.areaid, project.description, project.type, project.moved_hours, project.sched_type ORDER BY project." . $orderField . " ASC";
+        $sql = $sql . " GROUP BY project.id, project.description, project.activation, project.init, project._end, project.invoice, project.est_hours, project.description, project.type, project.moved_hours, project.sched_type ORDER BY project." . $orderField . " ASC";
         return $this->customExecute($sql);
     }
 
@@ -472,7 +477,6 @@ class PostgreSQLProjectDAO extends ProjectDAO {
                 ", _end=:end" .
                 ", invoice=:invoice" .
                 ", est_hours=:est_hours" .
-                ", areaid=:areaid" .
                 ", customerid=:customerid" .
                 ", type=:type" .
                 ", description=:description" .
@@ -490,7 +494,6 @@ class PostgreSQLProjectDAO extends ProjectDAO {
             $statement->bindValue(":end", $endDateFormatted, PDO::PARAM_STR);
             $statement->bindValue(":invoice", $projectVO->getInvoice(), PDO::PARAM_STR);
             $statement->bindValue(":est_hours", $projectVO->getEstHours(), PDO::PARAM_STR);
-            $statement->bindValue(":areaid", $projectVO->getAreaId(), PDO::PARAM_INT);
             $statement->bindValue(":customerid", $projectVO->getCustomerId(), PDO::PARAM_INT);
             $statement->bindValue(":description", $projectVO->getDescription(), PDO::PARAM_STR);
             $statement->bindValue(":type", $projectVO->getType(), PDO::PARAM_STR);
@@ -500,8 +503,15 @@ class PostgreSQLProjectDAO extends ProjectDAO {
 
             $statement->execute();
 
+            // update project_area table
+            $sql = "UPDATE project_area SET area_id = :areaid WHERE project_id = :id";
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":areaid", $projectVO->getAreaId(), PDO::PARAM_INT);
+            $statement->bindValue(":id", $projectVO->getId(), PDO::PARAM_INT);
+            $statement->execute();
+
             $result->setIsSuccessful(true);
-            $result->setMessage('Project created successfully.');
+            $result->setMessage('Project updated successfully.');
             $result->setResponseCode(200);
         }
         catch (PDOException $ex) {
@@ -550,10 +560,9 @@ class PostgreSQLProjectDAO extends ProjectDAO {
     public function create(ProjectVO $projectVO) {
         $result = new OperationResult(false);
 
-        $sql = "INSERT INTO project (activation, init, _end, invoice, est_hours,
-        areaid, customerid, type, description, moved_hours, sched_type) VALUES(
+        $sql = "INSERT INTO project (activation, init, _end, invoice, est_hours, customerid, type, description, moved_hours, sched_type) VALUES(
             :activation, :init, :end, :invoice, :est_hours,
-        :areaid, :customerid, :type, :description, :moved_hours, :sched_type)";
+            :customerid, :type, :description, :moved_hours, :sched_type)";
 
         $initDateFormatted = (is_null($projectVO->getInit())) ? null : DBPostgres::formatDate($projectVO->getInit());
         $endDateFormatted = (is_null($projectVO->getEnd())) ? null : DBPostgres::formatDate($projectVO->getEnd());
@@ -565,7 +574,6 @@ class PostgreSQLProjectDAO extends ProjectDAO {
             $statement->bindValue(":end", $endDateFormatted, PDO::PARAM_STR);
             $statement->bindValue(":invoice", $projectVO->getInvoice(), PDO::PARAM_STR);
             $statement->bindValue(":est_hours", $projectVO->getEstHours(), PDO::PARAM_STR);
-            $statement->bindValue(":areaid", $projectVO->getAreaId(), PDO::PARAM_INT);
             $statement->bindValue(":customerid", $projectVO->getCustomerId(), PDO::PARAM_INT);
             $statement->bindValue(":type", $projectVO->getType(), PDO::PARAM_STR);
             $statement->bindValue(":description", $projectVO->getDescription(), PDO::PARAM_STR);
@@ -574,6 +582,13 @@ class PostgreSQLProjectDAO extends ProjectDAO {
             $statement->execute();
 
             $projectVO->setId($this->pdo->lastInsertId('project_id_seq'));
+
+            // update project_area table
+            $sql = "INSERT INTO project_area (project_id, area_id) VALUES (:id, :areaid)";
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(":id", $projectVO->getId(), PDO::PARAM_INT);
+            $statement->bindValue(":areaid", $projectVO->getAreaId(), PDO::PARAM_INT);
+            $statement->execute();
 
             $result->setIsSuccessful(true);
             $result->setMessage('Project created successfully.');
