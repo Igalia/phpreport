@@ -3,11 +3,13 @@
 import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import Box from '@mui/joy/Box'
+import Avatar from '@mui/joy/Avatar'
 import Image from 'next/image'
 import { TaskListSquareAdd24Filled, DataPie24Filled } from '@fluentui/react-icons'
 import fullLogo from '@/assets/images/full_logo.png'
 import { styled } from '@mui/joy/styles'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import { DarkModeSwitch } from './DarkModeSwitch'
 import { CollapseButton } from '../CollapseButton/CollapseButton'
 import { SxProps } from '@mui/joy/styles/types'
@@ -18,6 +20,9 @@ type SidebarProps = {
 }
 
 export const Sidebar = ({ expanded, toggleSidebar }: SidebarProps) => {
+  const { data: session } = useSession()
+  const user = session?.user
+
   return (
     <Box
       sx={{
@@ -75,6 +80,36 @@ export const Sidebar = ({ expanded, toggleSidebar }: SidebarProps) => {
             </NavLink>
           </Box>
         </Stack>
+        {user?.firstName && (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '30px',
+              padding: '0 4px',
+              gridArea: 'user',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            <Avatar
+              size="sm"
+              sx={{
+                bgcolor: '#00396d',
+                color: 'white',
+                minWidth: '32px',
+                width: '32px',
+                height: '32px',
+                fontSize: '14px'
+              }}
+            >
+              {user.firstName[0]}
+              {user.lastName?.[0] ?? ''}
+            </Avatar>
+            <Typography textColor="white" noWrap>
+              {user.firstName} {user.lastName}
+            </Typography>
+          </Box>
+        )}
         <DarkModeSwitch
           sx={{
             mt: 'auto',
@@ -113,10 +148,12 @@ const navGridStyle: SxProps = {
   gridTemplateAreas: {
     xs: `
       'logo switch'
-      'nav nav'`,
+      'nav nav'
+      'user user'`,
     sm: `
       'logo'
       'nav'
+      'user'
       'switch'
     `
   },
