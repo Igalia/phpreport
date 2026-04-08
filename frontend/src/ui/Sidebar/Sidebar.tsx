@@ -4,7 +4,7 @@ import Stack from '@mui/joy/Stack'
 import Typography from '@mui/joy/Typography'
 import Box from '@mui/joy/Box'
 import Image from 'next/image'
-import { TaskListSquareAdd24Filled, DataPie24Filled } from '@fluentui/react-icons'
+import { TaskListSquareAdd24Filled, DataPie24Filled, Open24Filled } from '@fluentui/react-icons'
 import fullLogo from '@/assets/images/full_logo.png'
 import { styled } from '@mui/joy/styles'
 import Link from 'next/link'
@@ -17,7 +17,22 @@ type SidebarProps = {
   toggleSidebar: () => void
 }
 
+function getSupportLinks() {
+  const urls = (process.env.NEXT_PUBLIC_ISSUE_TRACKER_LINKS_URL ?? '')
+    .split(',')
+    .map((s) => s.trim())
+  const texts = (process.env.NEXT_PUBLIC_ISSUE_TRACKER_LINKS_TEXT ?? '')
+    .split(',')
+    .map((s) => s.trim())
+
+  return urls
+    .map((url, i) => ({ url, text: texts[i] || url }))
+    .filter((link) => link.url)
+}
+
 export const Sidebar = ({ expanded, toggleSidebar }: SidebarProps) => {
+  const supportLinks = getSupportLinks()
+
   return (
     <Box
       sx={{
@@ -75,6 +90,28 @@ export const Sidebar = ({ expanded, toggleSidebar }: SidebarProps) => {
             </NavLink>
           </Box>
         </Stack>
+        {supportLinks.length > 0 && (
+          <Stack
+            sx={{
+              svg: { minWidth: '32px' },
+              whiteSpace: 'nowrap',
+              padding: '0 4px',
+              listStyleType: 'none',
+              gridArea: 'links'
+            }}
+            component="ul"
+            spacing={2}
+          >
+            {supportLinks.map((link) => (
+              <Box component="li" key={link.url}>
+                <ExternalLink href={link.url} target="_blank" rel="noopener noreferrer">
+                  <Open24Filled color="white" />
+                  <Typography textColor="white">{link.text}</Typography>
+                </ExternalLink>
+              </Box>
+            ))}
+          </Stack>
+        )}
         <DarkModeSwitch
           sx={{
             mt: 'auto',
@@ -106,6 +143,12 @@ const NavLink = styled(Link)`
   align-items: center;
 `
 
+const ExternalLink = styled('a')`
+  display: flex;
+  gap: 30px;
+  align-items: center;
+`
+
 const navGridStyle: SxProps = {
   overflow: 'hidden',
   height: '100%',
@@ -113,10 +156,12 @@ const navGridStyle: SxProps = {
   gridTemplateAreas: {
     xs: `
       'logo switch'
-      'nav nav'`,
+      'nav nav'
+      'links links'`,
     sm: `
       'logo'
       'nav'
+      'links'
       'switch'
     `
   },
