@@ -60,7 +60,8 @@ export const authOptions: NextAuthOptions = {
     error: '/auth/error'
   },
   callbacks: {
-    async redirect({ baseUrl }) {
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith(baseUrl)) return url
       return baseUrl
     },
     async session({ session, token }) {

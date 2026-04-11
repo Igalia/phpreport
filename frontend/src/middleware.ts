@@ -20,7 +20,9 @@ export async function middleware(request: NextRequest) {
   const isAccessTokenValid = token?.accessToken && validateToken(token.accessToken)
 
   if (!isAccessTokenValid && !isAllowed) {
-    return NextResponse.redirect(new URL('/api/auth/signin', request.url))
+    const signInUrl = new URL('/api/auth/signin', request.url)
+    signInUrl.searchParams.set('callbackUrl', path)
+    return NextResponse.redirect(signInUrl)
   }
   if (isAccessTokenValid) {
     if (!token.user?.id) {
